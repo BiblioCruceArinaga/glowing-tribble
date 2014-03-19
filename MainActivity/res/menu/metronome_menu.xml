@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+  	    
+    <item 
+        android:id="@+id/metronome_tempo" 
+        android:title="@string/tempo" 
+        android:showAsAction="always" >
+    </item>
+
+    <item 
+        android:id="@+id/metronome_menu_back" 
+        android:title="@string/metronome_back" 
+        android:icon="@drawable/back_button" 
+        android:showAsAction="always">
+    </item>
+
+    <item 
+        android:id="@+id/metronome_menu_pause" 
+        android:title="@string/metronome_pause" 
+        android:icon="@drawable/pause_button" 
+        android:showAsAction="always">
+    </item>
+
+    <item 
+        android:id="@+id/metronome_menu_stop" 
+        android:title="@string/metronome_stop" 
+        android:icon="@drawable/stop_button" 
+        android:showAsAction="always">
+    </item>
+ 	
+ 	<!-- Espaciar de esta manera es una locura. Hay que cambiarlo -->
+ 	<item 
+        android:id="@+id/space_metronome" 
+        android:title="@null" 
+        android:showAsAction="always">
+    </item>
+ 	<!--  -->
+ 	
+ 	<item 
+        android:id="@+id/close_metronome" 
+        android:title="@string/close_metronome" 
+        android:showAsAction="always">
+    </item>
+</menu>

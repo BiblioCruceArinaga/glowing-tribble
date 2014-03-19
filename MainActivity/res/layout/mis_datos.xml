@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/misDatosNombre"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="37dp"
+        android:textSize="16sp"
+        android:text="@string/mis_datos_nombre" />
+    
+    <TextView
+        android:id="@+id/misDatosEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_below="@id/misDatosNombre"
+        android:textSize="16sp"
+        android:text="@string/mis_datos_email" />
+    
+    <TextView
+        android:id="@+id/misDatosClave"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="20dp"
+        android:layout_below="@id/misDatosEmail"
+        android:textSize="16sp"
+        android:text="@string/mis_datos_clave" />
+    
+    <EditText 
+        android:id="@+id/misDatosClaveVieja"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/mis_datos_clave_vieja"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_below="@id/misDatosClave"
+        android:inputType="textPassword"
+        />
+    
+    <EditText 
+        android:id="@+id/misDatosClaveNueva"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/mis_datos_clave_nueva"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_below="@id/misDatosClaveVieja"
+        android:inputType="textPassword"
+        />
+    
+    <EditText 
+        android:id="@+id/misDatosClaveRepetir"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/mis_datos_clave_repetir"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_below="@id/misDatosClaveNueva"
+        android:inputType="textPassword"
+        />
+    
+    <Button 
+        android:id="@+id/misDatosBoton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/misDatosClaveRepetir"
+        android:layout_marginTop="10dp"
+        android:layout_centerHorizontal="true"
+        android:text="@string/mis_datos_boton"
+        />
+
+</RelativeLayout>
