@@ -50,27 +50,16 @@ public class Login extends FragmentActivity {
 	public static String FName;
 	public static String FMail;
 
-	private EditText Mail;
-	private EditText Pass;
-	private Button Login;
+	private EditText Mail, Pass;
+	private Button Login, Registro;
 	private TextView OlvidaPass;
-	private EditText Mail_OlvidoPass;
-	private Button Registro;
-	private EditText Nombre_Registro;
-	private EditText Mail_Registro;
-	private EditText Pass_Registro;
-	private EditText ConfiPass_Registro;
-	private Button Confirm_Login;
-	private Button Cancel_Login;
-	private Button Confirm_OlvidoPass;
-	private Button Cancel_OlvidoPass;
-	private Button Confirm_Reg;
-	private Button Cancel_Reg;
+	private EditText Mail_OlvidoPass, Nombre_Registro, Mail_Registro, Pass_Registro, ConfiPass_Registro;	
+	private Button Confirm_Login, Cancel_Login;
+	private Button Confirm_OlvidoPass, Cancel_OlvidoPass;
+	private Button Confirm_Reg, Cancel_Reg;
 	private ProgressDialog PDialog;
 	private HttpPostAux HPA =  new HttpPostAux();
-	private Dialog LPDialog;
-	private Dialog LDialog;
-	private Dialog RDialog;
+	private Dialog LPDialog, LDialog, RDialog;
 	private String usuario = "";
 	private String passw = "";
 	private String pass = "";
@@ -78,8 +67,8 @@ public class Login extends FragmentActivity {
 	private String mail = "";
 	private String name = "";	
 	
-	private String URL_connect = "http://10.0.2.2/login-mobile";
-	private String URL_Check_Facebook = "http://10.0.2.2/login-facebook-mobile";
+	private String URL_connect = "http://www.scores.rising.es/login-mobile";
+	private String URL_Check_Facebook = "http://www.scores.rising.es/login-facebook-mobile";
 		
 	//  Recibir la señal del proceso que termina el registro
 	private OnTaskCompleted listener = new OnTaskCompleted() {
@@ -101,10 +90,14 @@ public class Login extends FragmentActivity {
 			Pass_Registro.setText("");
 			ConfiPass_Registro.setText("");
 			
-			if (details == 0) 
-				Toast.makeText(getApplicationContext(), R.string.err_reg, Toast.LENGTH_LONG).show();
-			else
-				Toast.makeText(getApplicationContext(), R.string.err_reg_mail, Toast.LENGTH_LONG).show();
+			if(details == 4){
+				Toast.makeText(getApplicationContext(), R.string.err_net, Toast.LENGTH_LONG).show();
+			}else{
+				if (details == 0) 
+					Toast.makeText(getApplicationContext(), R.string.err_reg, Toast.LENGTH_LONG).show();
+				else
+					Toast.makeText(getApplicationContext(), R.string.err_reg_mail, Toast.LENGTH_LONG).show();
+			}
 		}
 	};
 	
@@ -142,7 +135,7 @@ public class Login extends FragmentActivity {
 			@Override
 			public void onClick(View v) {
 				
-				LDialog = new Dialog(Login.this);
+				LDialog = new Dialog(Login.this, R.style.cust_dialog);
 				
 				LDialog.setContentView(R.layout.login_dialog);
 				LDialog.setTitle(R.string.login_title);
@@ -196,7 +189,7 @@ public class Login extends FragmentActivity {
 			@Override
 			public void onClick(View v) {
 				
-				LPDialog = new Dialog(Login.this);
+				LPDialog = new Dialog(Login.this, R.style.cust_dialog);
 				
 				LPDialog.setContentView(R.layout.olvidopass_dialog);
 				LPDialog.setTitle(R.string.olvido_title);
@@ -240,7 +233,7 @@ public class Login extends FragmentActivity {
 			@Override
 			public void onClick(View v) {
 				
-				RDialog = new Dialog(Login.this);
+				RDialog = new Dialog(Login.this, R.style.cust_dialog);
 				
 				RDialog.setContentView(R.layout.registro_dialog);
 				RDialog.setTitle(R.string.registro_title);

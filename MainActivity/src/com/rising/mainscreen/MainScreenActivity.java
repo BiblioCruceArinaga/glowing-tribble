@@ -196,7 +196,7 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 			    	   		for(int i = 0; i < mSelected.size(); i++){
 			    	   			if(mSelected.get(i)){
 			    	   				f_toDelete = new File(Environment.getExternalStorageDirectory() + 
-			    	   						"/SmartScores/scores/" + ficheros[i]);
+			    	   						"/RisingScores/scores/" + ficheros[i]);
 			    	     	   		
 			    	   				Log.d("Path", f_toDelete.getAbsolutePath());
 			    	   				
@@ -526,7 +526,7 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 	}
 	
 	private void createScoreFolder(){
-		File file=new File(Environment.getExternalStorageDirectory() + "/SmartScores/scores/");
+		File file=new File(Environment.getExternalStorageDirectory() + "/RisingScores/scores/");
         if(!file.exists()) {
             boolean res = file.mkdirs();
             if (!res) {
@@ -541,7 +541,7 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 	}
 	
 	private String[] leeFicheros(){
-		File f = new File(Environment.getExternalStorageDirectory() + "/SmartScores/scores/");
+		File f = new File(Environment.getExternalStorageDirectory() + "/RisingScores/scores/");
 		String[] lista = f.list();
 		//Habría que poner algo de seguridad y que solo muestre los archivos acabados en smts
 		return lista;

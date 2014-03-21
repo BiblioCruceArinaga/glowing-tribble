@@ -12,7 +12,7 @@
 	        <ImageView
 		        android:id="@+id/imagenPartitura_profile"
 		        android:layout_width="200dp"
-		        android:layout_height="380dp"
+		        android:layout_height="340dp"
 		        android:layout_marginLeft="30dp"
 		        android:layout_marginTop="30dp"
 		        android:contentDescription="@string/contentDescription"
@@ -27,21 +27,20 @@
 	           <TextView
 			        android:id="@+id/nombrePartitura_profile"
 			        android:layout_width="match_parent"
-			        android:layout_height="170dp"
-			        android:layout_marginTop="30dp"
-			        android:layout_marginRight="30dp"
+			        android:layout_height="wrap_content"
+			        android:layout_marginTop="44dp"
 			        android:ellipsize="end"
-			        android:maxLines="4"
+			        android:maxLines="1"
 			        android:scrollHorizontally="true"
-			        android:text="Concierto para piano"
+			        android:text="Sinfonía Nº6, 'Pastoral'"
 			        android:textColor="#000"
-			        android:textSize="45sp"
+			        android:textSize="50sp"
 			        android:textStyle="bold" />
 	            
 	           <TextView
 			        android:id="@+id/autorPartitura_profile"
 			        android:layout_width="match_parent"
-			        android:layout_height="70dp"
+			        android:layout_height="wrap_content"
 			        android:layout_marginTop="10dp"
 			        android:textStyle="italic"
 			        android:text="Ludwig Van Beethoven"
@@ -52,7 +51,7 @@
 			        android:id="@+id/anoPartitura_profile"
 			        android:layout_width="match_parent"
 			        android:layout_height="wrap_content"
-			        android:layout_marginTop="10dp"
+			        android:layout_marginTop="20dp"
 			        android:textSize="30sp" 
 			        android:text="1869"
 			        android:textColor="#000" />  
@@ -61,7 +60,7 @@
 			        android:id="@+id/instrumentoPartitura_profile"
 			        android:layout_width="match_parent"
 			        android:layout_height="wrap_content"
-			        android:layout_marginTop="20dp"
+			        android:layout_marginTop="50dp"
 			        android:textSize="30sp" 
 			        android:text="Piano"
 			        android:textColor="#000" />    

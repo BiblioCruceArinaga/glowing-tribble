@@ -42,6 +42,7 @@
     	<string name="pass_registro">Contraseña</string>
     	<string name="confipass_registro">Confirmar contraseña</string>
     	<string name="confirm_registro">Registrarse</string>
+    	<string name="err_net">Hubo un error en la red y no fue posible enviar los datos. Por favor, inténtalo de nuevo más tarde.</string>
     	<string name="err_pass">Las contraseñas no coinciden</string>
     	<string name="err_reg">Hubo un error al intentar efectuar el registro. 
     	    Por favor, inténtalo de nuevo más tarde.</string>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background_scoresapp"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/textoEliminarCuenta"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="#222"
+        android:textSize="20sp"
+        android:layout_marginTop="90dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginBottom="15dp"
+        android:text="@string/esta_seguro" />
+    
+    <EditText 
+        android:id="@+id/claveEliminarCuenta"
+        android:inputType="textPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+       	android:textColorHint="#DDD"
+        android:textColor="#DDD"
+        android:textColorHighlight="#DDD"
+        android:textSize="25sp"
+        android:layout_margin="15dp"
+        android:hint="@string/eliminar_cuenta_clave"
+        />
+    
+    <Button 
+        android:id="@+id/botonEliminarCuenta"
+        android:layout_width="450dp"
+        android:layout_height="100dp"
+        android:background="@drawable/stores_buttons"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:textSize="30sp"
+        android:textColor="#DDD"
+        android:layout_marginTop="50dp"
+        android:text="@string/eliminar_cuenta"
+        />
+
+</LinearLayout>

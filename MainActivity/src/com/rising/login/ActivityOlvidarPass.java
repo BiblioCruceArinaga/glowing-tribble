@@ -19,7 +19,7 @@ import com.rising.conexiones.HttpPostAux;
 public class ActivityOlvidarPass {
 
 	//Se inicializa un string con la dirección en la base de datos del archivo a consultar y la clase HttpPostAux.	
-	String URL_connect = "http://10.0.2.2/recuperar-clave-mobile";
+	String URL_connect = "http://www.scores.rising.es/recuperar-clave-mobile";
 	HttpPostAux postAux = new HttpPostAux();
 	
     public int mailStatus(String mail) {

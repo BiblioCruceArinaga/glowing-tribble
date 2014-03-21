@@ -22,7 +22,7 @@ public class ActivityRegistro {
     }
 	
 	//  Se inicializa un string con la dirección en la base de datos del archivo a consultar y la clase HttpPostAux.	
-	String URL_connect = "http://10.0.2.2/registro-mobile";
+	String URL_connect = "http://www.scores.rising.es/registro-mobile";
 	HttpPostAux postAux = new HttpPostAux();
 	
     //  Este método valida el estado del logueo. Solamente necesita como parametros el usuario y passw
@@ -96,6 +96,10 @@ public class ActivityRegistro {
 				    case 3:
 				    	Log.e("regstatus ", "registrado, mail no enviado");
 				    	listener.onTaskCompleted(result);
+				    	break;
+				    case 4:
+				    	Log.e("regstatus", "falló el envio de datos");
+				    	listener.onTaskFailed(result);
 				    	break;
 				    default:
 				    	break;
