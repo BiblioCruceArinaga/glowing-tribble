@@ -91,7 +91,7 @@ public class MainActivity extends Activity {
 	
 	//  M�todo que controla el dialog de las opciones del metr�nomo
 	private void metronome_options(int value){
-		MDialog = new Dialog(MainActivity.this);
+		MDialog = new Dialog(MainActivity.this, R.style.cust_dialog);
 		
 		MDialog.setContentView(R.layout.metronome_dialog);
 		MDialog.setTitle(R.string.metronome);
@@ -214,7 +214,7 @@ public class MainActivity extends Activity {
         		case R.id.close_metronome:
         			s.Metronome_Stop();
         			mode.finish();
-        			tempo = 0;
+        			tempo = 120;
         			break;
         		
         		case R.id.metronome_menu_back:    

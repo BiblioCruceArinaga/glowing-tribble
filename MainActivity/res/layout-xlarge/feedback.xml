@@ -30,14 +30,15 @@
 
     <Button 
         android:id="@+id/feedbackBoton"
-        android:layout_width="450dp"
-        android:layout_height="100dp"
+        android:layout_width="350dp"
+        android:layout_height="50dp"
         android:background="@drawable/stores_buttons"
         android:layout_gravity="center"
         android:gravity="center"
         android:textSize="30sp"
         android:textColor="#DDD"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginBottom="40dp"
         android:text="@string/feedback_boton" />
 
 </LinearLayout>

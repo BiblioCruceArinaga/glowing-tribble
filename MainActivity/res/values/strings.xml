@@ -316,9 +316,9 @@
     <string name="action_settings">Preferencias</string>
     	
     <string name="about">Acerca de Smartscores</string>
-	    <string name="version">Versión: Alpha 1.0</string>
-	    <string name="acerca_de">Smartscores ha sido desarrollado por RISING S.C.P.</string>	
-	    <string name="visitanos">Visita nuestra web: smartscores.es</string>
+	    <string name="version">Versión: Beta 0.1 </string>
+	    <string name="acerca_de">Scores ha sido desarrollado por RISING S.C.P.</string>	
+	    <string name="visitanos">Visita nuestra web: scores.rising.es</string>
     
     <!-- Pantalla tienda -->
     	<string name="store">Tienda</string>

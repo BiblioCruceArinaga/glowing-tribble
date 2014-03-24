@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/background_scoresapp"
     android:orientation="vertical" >
 
     <TextView
@@ -10,7 +11,8 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="37dp"
-        android:textSize="16sp"
+        android:textColor="#222"
+        android:textSize="20sp"
         android:text="@string/mis_datos_nombre" />
     
     <TextView
@@ -19,8 +21,8 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="8dp"
-        android:layout_below="@id/misDatosNombre"
-        android:textSize="16sp"
+        android:textSize="20sp"
+        android:textColor="#222"
         android:text="@string/mis_datos_email" />
     
     <TextView
@@ -29,8 +31,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="20dp"
-        android:layout_below="@id/misDatosEmail"
-        android:textSize="16sp"
+        android:textSize="20sp"
         android:text="@string/mis_datos_clave" />
     
     <EditText 
@@ -40,7 +41,6 @@
         android:hint="@string/mis_datos_clave_vieja"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="8dp"
-        android:layout_below="@id/misDatosClave"
         android:inputType="textPassword"
         />
     
@@ -51,7 +51,6 @@
         android:hint="@string/mis_datos_clave_nueva"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="8dp"
-        android:layout_below="@id/misDatosClaveVieja"
         android:inputType="textPassword"
         />
     
@@ -62,18 +61,20 @@
         android:hint="@string/mis_datos_clave_repetir"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="8dp"
-        android:layout_below="@id/misDatosClaveNueva"
         android:inputType="textPassword"
         />
     
     <Button 
         android:id="@+id/misDatosBoton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/misDatosClaveRepetir"
-        android:layout_marginTop="10dp"
-        android:layout_centerHorizontal="true"
+         android:layout_width="350dp"
+        android:layout_height="50dp"
+        android:background="@drawable/stores_buttons"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:textSize="30sp"
+        android:textColor="#DDD"
+        android:layout_marginTop="50dp"
         android:text="@string/mis_datos_boton"
         />
 
-</RelativeLayout>
+</LinearLayout>

@@ -10,9 +10,11 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -21,6 +23,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.AbsListView.MultiChoiceModeListener;
 import android.widget.AdapterView;
@@ -40,6 +43,7 @@ import com.rising.login.SessionManager;
 import com.rising.mainscreen.ChangePassword.OnPasswordChanging;
 import com.rising.mainscreen.EraseAccount.OnTaskCompleted;
 import com.rising.mainscreen.SendFeedback.OnSendingFeedback;
+import com.rising.store.MainActivityStore;
 
 public class MainScreenActivity extends Activity implements OnQueryTextListener{
 
@@ -48,6 +52,7 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 	String[] ficheros;
 	String[] Titles;
 	String[] Authors;
+	String[] Instrument;
 	private File f_toDelete;
 	private boolean delete;
 	HashMap<Integer, Boolean> mSelected;	
@@ -171,9 +176,10 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 		else {
 			Titles = ScoreTitle(ficheros);
 			Authors = ScoreAuthor(ficheros);
+			Instrument = ScoreInstrument(ficheros);
 					
 			for (int i = 0; i < ficherosLength; i++){
-				 Score ss = new Score(Authors[i], Titles[i], R.drawable.cover);
+				 Score ss = new Score(Authors[i], Titles[i], R.drawable.cover, Instrument[i]);
 				 arraylist.add(ss);
 			}
 			s_adapter = new ScoresAdapter(this, arraylist);
@@ -330,10 +336,28 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 		return false;
 	}
 	
+	public boolean isOnline() {
+		ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+		try {
+			return cm.getActiveNetworkInfo().isConnectedOrConnecting();
+		} catch(NullPointerException n) {
+			return false;
+		}
+	}
+	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 
 	    switch (item.getItemId()) {
+		case R.id.store_button:
+			if(isOnline()){
+				Intent i = new Intent(MainScreenActivity.this, MainActivityStore.class);
+				startActivity(i);
+			}else{
+				Toast.makeText(this, R.string.connection_err, Toast.LENGTH_LONG).show();	
+			}
+			return true;
+	    	
 			case R.id.sort_author:
 				listarAutores();
 				return true;
@@ -357,7 +381,7 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 	            return true;
             
 	        case R.id.about:
-	        	MDialog = new Dialog(MainScreenActivity.this);
+	        	MDialog = new Dialog(MainScreenActivity.this, R.style.cust_dialog);
 	    		MDialog.setContentView(R.layout.about);
 	    		MDialog.setTitle(R.string.about);
 	    		MDialog.getWindow().setLayout(LayoutParams.MATCH_PARENT,LayoutParams.WRAP_CONTENT);
@@ -365,7 +389,7 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 	            return true;
 	            
 	        case R.id.terminos_condiciones:
-	        	MDialog = new Dialog(MainScreenActivity.this);
+	        	MDialog = new Dialog(MainScreenActivity.this, R.style.cust_dialog);
 	    		MDialog.setContentView(R.layout.terminos_condiciones);
 	    		MDialog.setTitle(R.string.terminos_condiciones);
 	    		MDialog.getWindow().setLayout(LayoutParams.MATCH_PARENT,LayoutParams.WRAP_CONTENT);
@@ -373,7 +397,7 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 	            return true;
 	            
 	        case R.id.condiciones_compra:
-	        	MDialog = new Dialog(MainScreenActivity.this);
+	        	MDialog = new Dialog(MainScreenActivity.this, R.style.cust_dialog);
 	    		MDialog.setContentView(R.layout.condiciones_compra);
 	    		MDialog.setTitle(R.string.condiciones_compra);
 	    		MDialog.getWindow().setLayout(LayoutParams.MATCH_PARENT,LayoutParams.WRAP_CONTENT);
@@ -381,7 +405,7 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 	            return true;
 	            
 	        case R.id.feedback:
-	        	MDialog = new Dialog(MainScreenActivity.this);
+	        	MDialog = new Dialog(MainScreenActivity.this, R.style.cust_dialog);
 	    		MDialog.setContentView(R.layout.feedback);
 	    		MDialog.setTitle(R.string.feedback);
 	    		MDialog.getWindow().setLayout(LayoutParams.MATCH_PARENT,LayoutParams.WRAP_CONTENT);
@@ -409,7 +433,7 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 	            return true;
 	            
 	        case R.id.mis_datos:
-	        	MDialog = new Dialog(MainScreenActivity.this);
+	        	MDialog = new Dialog(MainScreenActivity.this, R.style.cust_dialog);
 	    		MDialog.setContentView(R.layout.mis_datos);
 	    		MDialog.setTitle(R.string.mis_datos);
 	    		MDialog.getWindow().setLayout(LayoutParams.MATCH_PARENT,LayoutParams.WRAP_CONTENT);
@@ -421,7 +445,7 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 	    		email.setText(email.getText() + " " + session.getMail());
 	    		
 	    		if (fid > -1) {
-	    			MDialog.getWindow().setLayout(LayoutParams.MATCH_PARENT,260);
+	    			MDialog.getWindow().setLayout(LayoutParams.MATCH_PARENT,240);
 	    		}
 	    		else {
 	    			nombre.setVisibility(View.INVISIBLE);
@@ -473,7 +497,7 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 	            return true;
 	            
 	        case R.id.eliminar_cuenta:
-	        	MDialog = new Dialog(MainScreenActivity.this);
+	        	MDialog = new Dialog(MainScreenActivity.this, R.style.cust_dialog);
 	    		MDialog.setContentView(R.layout.eliminar_cuenta);
 	    		MDialog.setTitle(R.string.eliminar_cuenta);
 	    		MDialog.getWindow().setLayout(LayoutParams.MATCH_PARENT,LayoutParams.WRAP_CONTENT);
@@ -548,7 +572,7 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 	}
 	
 	private String[] ScoreTitle(String[] ArrayScores){
-		//Ejemplo. Para-Elisa_Ludwig-Van-Beethoven.
+		//Ejemplo. Para-Elisa_Ludwig-Van-Beethoven*Piano.
 		
 		String[] title;
 		int len;
@@ -565,6 +589,8 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 	}
 	
 	private String[] ScoreAuthor(String[] ArrayScores){
+		//Ejemplo. Para-Elisa_Ludwig-Van-Beethoven*Piano.
+		
 		String[] author;
 		int len;
 		if (ArrayScores != null) len = ArrayScores.length;
@@ -573,17 +599,46 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 		
 		for(int i =0; i < len; i++){
 			int index = ArrayScores[i].indexOf("_");
-			int indexdot = ArrayScores[i].indexOf(".");
+			int indexdot = ArrayScores[i].indexOf("*");
 			author[i] = ArrayScores[i].substring(index + 1, indexdot).replace('-', ' ');
 		}
 		
 		return author;
 	}
 
+	private String[] ScoreInstrument(String[] ArrayScores){
+		//Ejemplo. Para-Elisa_Ludwig-Van-Beethoven*Piano.
+		
+		String[] ins;
+		int len;
+		if (ArrayScores != null) len = ArrayScores.length;
+		else len = 0;
+		ins = new String[len];
+		
+		for(int i =0; i < len; i++){
+			int index = ArrayScores[i].indexOf("*");
+			int indexdot = ArrayScores[i].indexOf(".");
+			ins[i] = ArrayScores[i].substring(index + 1, indexdot).replace('-', ' ');
+		}
+		
+		return ins;
+	}
+	
 	private void interfazCuandoNoHayPartituras() {
 		TextView textoColeccionVacia = (TextView) findViewById(R.id.textoColeccionVacia);
 		textoColeccionVacia.setVisibility(0);
 		Button tienda = (Button) findViewById(R.id.tienda);
+		tienda.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				if(isOnline()){
+					Intent i = new Intent(MainScreenActivity.this, MainActivityStore.class);
+					startActivity(i);
+				}				
+			}
+			
+		});
 		tienda.setVisibility(0);
 		scores_gallery = (GridView) findViewById(R.id.gV_scores);
 		scores_gallery.setVisibility(8);
@@ -617,9 +672,10 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 		ArrayList<String> al = new ArrayList<String>();
 		al.addAll(hs);
 		for (int i=0; i<size; i++) items[i] = al.get(i);
-
+Log.i("Instrumentos", al.get(0) + ", " + s_adapter.getItemInstrument(0) + ", " + s_adapter.getItemInstrument(1));
 	    AlertDialog.Builder builder = new AlertDialog.Builder(this);
 	    builder.setTitle(R.string.instrument_dialog_title);
+	    
 	    builder.setItems(items, new DialogInterface.OnClickListener() {
 	        public void onClick(DialogInterface dialog, int item) {
 	            s_adapter.filter(s_adapter.getItemInstrument(item));
@@ -641,12 +697,14 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 		
 		Titles = new String[ficheros.length];
 		Authors = new String[ficheros.length];
+		Instrument = new String[ficheros.length];
 
 		Titles = ScoreTitle(ficheros);
 		Authors = ScoreAuthor(ficheros);
+		Instrument = ScoreInstrument(ficheros);
 				
 		for (int i = 0; i < ficheros.length; i++){
-			 Score ss = new Score(Authors[i], Titles[i], R.drawable.scores_image);
+			 Score ss = new Score(Authors[i], Titles[i], R.drawable.scores_image, Instrument[i]);
 	         
 			 // Binds all strings into an array
 			 arraylist.add(ss);

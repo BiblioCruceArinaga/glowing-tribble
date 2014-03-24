@@ -299,6 +299,8 @@ public class Login extends FragmentActivity {
 		//Acciones al presionar sobre el botón de Facebook
 		authButton = (LoginButton) findViewById(R.id.button_login_f);
 
+		authButton.setReadPermissions(Arrays.asList("email"));
+		
 	    authButton.setOnErrorListener(new OnErrorListener() {
 	       
 	       @Override
@@ -306,9 +308,7 @@ public class Login extends FragmentActivity {
 	         
 	       }
 	    });
-	    
-	    authButton.setReadPermissions(Arrays.asList("email"));
-	        
+	    	        
 	    authButton.setSessionStatusCallback(new Session.StatusCallback() {
 
 			@Override
@@ -491,7 +491,7 @@ public class Login extends FragmentActivity {
 	        	}
 	        	case 1: {
 	        		session.createLoginSession(FMail, FName, FId);
-	                Intent i=new Intent(Login.this, MainScreenActivity.class);
+	                Intent i=new Intent(Login.this, MainScreenActivity.class);        
 	                startActivity(i);
 	                finish();
 	        		break;

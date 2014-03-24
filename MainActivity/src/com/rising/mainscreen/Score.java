@@ -6,10 +6,10 @@ public class Score implements Comparable<Object> {
   	private String Instrument;
     private int image;
  
-    public Score(String Author, String Title, int image) {
+    public Score(String Author, String Title, int image, String Instrument) {
         this.Author = Author;
         this.Title = Title;
-        this.Instrument = "Piano";
+        this.Instrument = Instrument;
         this.image = image;
     }
  

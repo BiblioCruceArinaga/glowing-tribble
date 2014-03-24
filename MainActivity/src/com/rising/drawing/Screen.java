@@ -884,7 +884,7 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback {
 	
 	//  Devuelve, para el fichero recibido por par�metro, su stream para leerlo
 	public void abrirFichero() throws StreamCorruptedException, IOException {
-		File f = new File(Environment.getExternalStorageDirectory() + "/SmartScores/scores/" + score);
+		File f = new File(Environment.getExternalStorageDirectory() + "/RisingScores/scores/" + score);
         FileInputStream is = new FileInputStream(f);
 		ois = new ObjectInputStream(is);
 	}
