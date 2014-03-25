@@ -175,8 +175,8 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 			infoFicheros = darInfoFicheros(ficheros);
 			
 			for (int i = 0; i < ficherosLength; i++){
-				 Score ss = new Score(infoFicheros[0][i], 
-						 infoFicheros[1][i], R.drawable.cover, infoFicheros[2][i]);
+				 Score ss = new Score(infoFicheros[1][i], 
+						 infoFicheros[0][i], R.drawable.cover, infoFicheros[2][i]);
 				 arraylist.add(ss);
 			}
 			s_adapter = new ScoresAdapter(this, arraylist);
@@ -567,60 +567,6 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 		//Habría que poner algo de seguridad y que solo muestre los archivos acabados en smts
 		return lista;
 	}
-	/*
-	private String[] ScoreTitle(String[] ArrayScores){
-		//Ejemplo. Para-Elisa_Ludwig-Van-Beethoven*Piano.
-		
-		String[] title;
-		int len;
-		if (ArrayScores != null) len = ArrayScores.length;
-		else len = 0;
-		title = new String[len];
-		
-		for(int i=0; i < len; i++){
-			int index = ArrayScores[i].indexOf("_");
-			title[i] = ArrayScores[i].substring(0, index).replace('-', ' ');
-		}
-		
-		return title;
-	}
-	
-	private String[] ScoreAuthor(String[] ArrayScores){
-		//Ejemplo. Para-Elisa_Ludwig-Van-Beethoven*Piano.
-		
-		String[] author;
-		int len;
-		if (ArrayScores != null) len = ArrayScores.length;
-		else len = 0;
-		author = new String[len];
-		
-		for(int i =0; i < len; i++){
-			int index = ArrayScores[i].indexOf("_");
-			int indexdot = ArrayScores[i].indexOf("*");
-			author[i] = ArrayScores[i].substring(index + 1, indexdot).replace('-', ' ');
-		}
-		
-		return author;
-	}
-
-	private String[] ScoreInstrument(String[] ArrayScores){
-		//Ejemplo. Para-Elisa_Ludwig-Van-Beethoven*Piano.
-		
-		String[] ins;
-		int len;
-		if (ArrayScores != null) len = ArrayScores.length;
-		else len = 0;
-		ins = new String[len];
-		
-		for(int i =0; i < len; i++){
-			int index = ArrayScores[i].indexOf("*");
-			int indexdot = ArrayScores[i].indexOf(".");
-			ins[i] = ArrayScores[i].substring(index + 1, indexdot).replace('-', ' ');
-		}
-		
-		return ins;
-	}
-	*/
 	
 	//  Extrae el autor, el nombre y el instrumento de
 	//  todas las partituras existentes en el dispositivo
@@ -636,9 +582,9 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 		for(int i=0; i < len; i++){
 			String[] dataSplit = ArrayScores[i].split("_");
 			
-			res[0][i] = dataSplit[0];	//  Autor
-			res[1][i] = dataSplit[1];	//  Nombre de la obra
-			res[2][i] = dataSplit[2];	//  Instrumento
+			res[0][i] = dataSplit[0].replace("-", " ");	//  Nombre de la obra
+			res[1][i] = dataSplit[1].replace("-", " ");	//  Autor
+			res[2][i] = dataSplit[2].substring(0, dataSplit[2].indexOf("."));	//  Instrumento
 		}
 		
 		return res;
@@ -692,7 +638,7 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 		ArrayList<String> al = new ArrayList<String>();
 		al.addAll(hs);
 		for (int i=0; i<size; i++) items[i] = al.get(i);
-Log.i("Instrumentos", al.get(0) + ", " + s_adapter.getItemInstrument(0) + ", " + s_adapter.getItemInstrument(1));
+
 	    AlertDialog.Builder builder = new AlertDialog.Builder(this);
 	    builder.setTitle(R.string.instrument_dialog_title);
 	    
@@ -717,8 +663,8 @@ Log.i("Instrumentos", al.get(0) + ", " + s_adapter.getItemInstrument(0) + ", " +
 		ficheros = leeFicheros();
 				
 		for (int i = 0; i < ficheros.length; i++){
-			 Score ss = new Score(infoFicheros[0][i], 
-					 infoFicheros[1][i], R.drawable.scores_image, infoFicheros[2][i]);
+			 Score ss = new Score(infoFicheros[1][i], 
+					 infoFicheros[0][i], R.drawable.scores_image, infoFicheros[2][i]);
 	         
 			 // Binds all strings into an array
 			 arraylist.add(ss);
