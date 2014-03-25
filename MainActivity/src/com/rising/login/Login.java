@@ -67,8 +67,8 @@ public class Login extends FragmentActivity {
 	private String mail = "";
 	private String name = "";	
 	
-	private String URL_connect = "http://www.scores.rising.es/login-mobile";
-	private String URL_Check_Facebook = "http://www.scores.rising.es/login-facebook-mobile";
+	private String URL_connect = "http://10.0.2.2/login-mobile";
+	private String URL_Check_Facebook = "http://10.0.2.2/login-facebook-mobile";
 		
 	//  Recibir la señal del proceso que termina el registro
 	private OnTaskCompleted listener = new OnTaskCompleted() {
@@ -299,8 +299,6 @@ public class Login extends FragmentActivity {
 		//Acciones al presionar sobre el botón de Facebook
 		authButton = (LoginButton) findViewById(R.id.button_login_f);
 
-		authButton.setReadPermissions(Arrays.asList("email"));
-		
 	    authButton.setOnErrorListener(new OnErrorListener() {
 	       
 	       @Override
@@ -308,7 +306,9 @@ public class Login extends FragmentActivity {
 	         
 	       }
 	    });
-	    	        
+	    
+	    authButton.setReadPermissions(Arrays.asList("email"));
+	        
 	    authButton.setSessionStatusCallback(new Session.StatusCallback() {
 
 			@Override
@@ -491,7 +491,7 @@ public class Login extends FragmentActivity {
 	        	}
 	        	case 1: {
 	        		session.createLoginSession(FMail, FName, FId);
-	                Intent i=new Intent(Login.this, MainScreenActivity.class);        
+	                Intent i=new Intent(Login.this, MainScreenActivity.class);
 	                startActivity(i);
 	                finish();
 	        		break;
