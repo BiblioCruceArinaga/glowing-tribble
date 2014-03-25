@@ -102,6 +102,8 @@ public class ActivityRegistro {
 				    	listener.onTaskFailed(result);
 				    	break;
 				    default:
+				    	Log.e("regstatus ", "invalido");
+				    	listener.onTaskFailed(0);
 				    	break;
 			    }
 	    	}

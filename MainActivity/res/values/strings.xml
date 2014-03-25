@@ -108,6 +108,7 @@
     	</string>
     	<string name="feedback_boton">Enviar feedback</string>
     	<string name="feedback_enviado">Feedback enviado. Gracias por ayudarnos a mejorar.</string>
+    
     <string name="terminos_condiciones">Términos y condiciones</string>
     	<string name="terminos">
     	    CONDICIONES DE USO DE LA APLICACIÓN\n\n
@@ -209,6 +210,7 @@
 			otorgados al usuario, lo que significa que el usuario deberá dejar de utilizar el software.\n\n
     	    
     	</string>
+    
     <string name="condiciones_compra">Condiciones de compra</string>
     	<string name="condiciones">
     	    CONDICIONES DE COMPRA\n\n
