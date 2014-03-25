@@ -49,10 +49,10 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 
 	SessionManager session;
 	Login login;
+	
 	String[] ficheros;
-	String[] Titles;
-	String[] Authors;
-	String[] Instrument;
+	String[][] infoFicheros;
+	
 	private File f_toDelete;
 	private boolean delete;
 	HashMap<Integer, Boolean> mSelected;	
@@ -164,8 +164,6 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 		int ficherosLength;
 		if (ficheros != null) ficherosLength = ficheros.length;
 		else ficherosLength = 0;
-		Titles = new String[ficherosLength];
-		Authors = new String[ficherosLength];
 		
 		//  No hay partituras, mostramos un mensaje al usuario
 		if (ficherosLength == 0) {
@@ -174,12 +172,11 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 		
 		//  Cargamos la galería de partituras
 		else {
-			Titles = ScoreTitle(ficheros);
-			Authors = ScoreAuthor(ficheros);
-			Instrument = ScoreInstrument(ficheros);
-					
+			infoFicheros = darInfoFicheros(ficheros);
+			
 			for (int i = 0; i < ficherosLength; i++){
-				 Score ss = new Score(Authors[i], Titles[i], R.drawable.cover, Instrument[i]);
+				 Score ss = new Score(infoFicheros[0][i], 
+						 infoFicheros[1][i], R.drawable.cover, infoFicheros[2][i]);
 				 arraylist.add(ss);
 			}
 			s_adapter = new ScoresAdapter(this, arraylist);
@@ -570,7 +567,7 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 		//Habría que poner algo de seguridad y que solo muestre los archivos acabados en smts
 		return lista;
 	}
-	
+	/*
 	private String[] ScoreTitle(String[] ArrayScores){
 		//Ejemplo. Para-Elisa_Ludwig-Van-Beethoven*Piano.
 		
@@ -622,6 +619,29 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 		}
 		
 		return ins;
+	}
+	*/
+	
+	//  Extrae el autor, el nombre y el instrumento de
+	//  todas las partituras existentes en el dispositivo
+	private String[][] darInfoFicheros(String[] ArrayScores) {
+		String[][] res;
+		
+		int len;
+		if (ArrayScores != null) len = ArrayScores.length;
+		else len = 0;
+		
+		res = new String[3][len];
+		
+		for(int i=0; i < len; i++){
+			String[] dataSplit = ArrayScores[i].split("_");
+			
+			res[0][i] = dataSplit[0];	//  Autor
+			res[1][i] = dataSplit[1];	//  Nombre de la obra
+			res[2][i] = dataSplit[2];	//  Instrumento
+		}
+		
+		return res;
 	}
 	
 	private void interfazCuandoNoHayPartituras() {
@@ -691,20 +711,14 @@ Log.i("Instrumentos", al.get(0) + ", " + s_adapter.getItemInstrument(0) + ", " +
 		s_adapter.showAll();
 	}
 	
-	//Método que coge los archivos de las partituras en el dispositivo y los muestra en la pantalla principal
+	//  Método que coge los archivos de las partituras en el 
+	//  dispositivo y los muestra en la pantalla principal
 	public void ColocarFicheros(){ 
 		ficheros = leeFicheros();
-		
-		Titles = new String[ficheros.length];
-		Authors = new String[ficheros.length];
-		Instrument = new String[ficheros.length];
-
-		Titles = ScoreTitle(ficheros);
-		Authors = ScoreAuthor(ficheros);
-		Instrument = ScoreInstrument(ficheros);
 				
 		for (int i = 0; i < ficheros.length; i++){
-			 Score ss = new Score(Authors[i], Titles[i], R.drawable.scores_image, Instrument[i]);
+			 Score ss = new Score(infoFicheros[0][i], 
+					 infoFicheros[1][i], R.drawable.scores_image, infoFicheros[2][i]);
 	         
 			 // Binds all strings into an array
 			 arraylist.add(ss);
