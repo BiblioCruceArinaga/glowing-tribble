@@ -8,10 +8,25 @@
     <ImageView
         android:id="@+id/iV_Logo"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:layout_marginTop="30dp"
+        android:layout_height="400dp"
+        android:layout_margin="30dp"
         android:contentDescription="@string/logo"
         android:src="@drawable/scoreslogo" />
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Beta"
+        android:layout_gravity="right"
+        android:gravity="right"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="-120dp"
+        android:layout_marginBottom="40dp"
+        android:textColor="#222"
+        android:textSize="30sp"
+        
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <TextView
         android:id="@+id/tV_slogan"
@@ -19,31 +34,30 @@
         android:layout_height="wrap_content"
         android:layout_gravity="right"
         android:gravity="right"
-        android:layout_marginRight="30dp"
-        android:layout_marginTop="-50dp"
-        android:textSize="30sp"
-        android:textColor="#222"
+        android:layout_marginRight="40dp"
+        android:layout_marginTop="-40dp"
+        android:textSize="40sp"
         android:textStyle="bold"
-        
+        android:textColor="#222"
         android:text="@string/slogan"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <Button
         android:id="@+id/button_login"
         android:background="@drawable/back_buttons"
-        android:layout_width="350dp"
-        android:layout_height="80dp"
+        android:layout_width="430dp"
+        android:layout_height="100dp"
         android:gravity="center"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="100dp"
         android:layout_gravity="center"
         android:textColor="#FFF"
-        android:textSize="30sp"
+        android:textSize="40sp"
         android:text="@string/login" />
     
     <com.facebook.widget.LoginButton
        	android:id="@+id/button_login_f"
-        android:layout_width="350dp"
-        android:layout_height="80dp"
+        android:layout_width="430dp"
+        android:layout_height="100dp"
         android:gravity="center"
         android:layout_gravity="center"
         android:layout_marginTop="10dp" />
@@ -53,8 +67,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/registrate"
-        android:textSize="20sp"
-        android:layout_marginTop="40dp"
+        android:textSize="30sp"
+        android:layout_marginTop="50dp"
         android:layout_gravity="center"
         android:gravity="center"
         android:textAppearance="?android:attr/textAppearanceMedium" />
@@ -63,20 +77,20 @@
     	android:id="@+id/b_registro"
         android:background="@drawable/back_buttons"
         android:text="@string/registro"
-        android:layout_width="350dp"
-        android:layout_height="80dp"
+        android:layout_width="430dp"
+        android:layout_height="100dp"
         android:gravity="center"
         android:layout_marginTop="10dp"
         android:layout_gravity="center"
         android:textColor="#FFF"
-        android:textSize="30sp" />
+        android:textSize="40sp" />
                 
 	<TextView
     	android:id="@+id/tv_olvido_pass"
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
 	    android:text="@string/olvida_pass"
-	    android:layout_marginTop="50dp"
+	    android:layout_marginTop="80dp"
 	    android:layout_gravity="center"
 	    android:gravity="center"
 	    android:textAppearance="?android:attr/textAppearanceLarge" />

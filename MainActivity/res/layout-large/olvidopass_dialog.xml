@@ -4,53 +4,38 @@
     android:layout_height="match_parent"
     android:background="@drawable/background_scoresapp"
     android:orientation="vertical" >
-
-    <EditText
-        android:id="@+id/et_mail"
+    
+	 <EditText
+        android:id="@+id/et_mail_olvidopass"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
-        android:layout_marginBottom="15dp"
+        android:layout_marginBottom="30dp"
         android:textSize="24sp"
-        android:hint="@string/mail"
-        android:textColorHint="#DDD"
-        android:textColor="#DDD"
-        android:textColorHighlight="#DDD"
-        android:inputType="textEmailAddress" >
+        android:inputType="textEmailAddress"
+        android:hint="@string/mail_olvido_pass" >
 
         <requestFocus />
     </EditText>
-
-    <EditText
-        android:id="@+id/et_pass"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:layout_marginBottom="30dp"
-        android:textSize="24sp"
-        android:hint="@string/pass"
-        android:textColorHint="#DDD"
-        android:textColor="#DDD"
-        android:textColorHighlight="#DDD"
-        android:inputType="textPassword" />
-
-    <LinearLayout
+    
+	<LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal" >
 
         <Button
-            android:id="@+id/b_confirm_login"
+            android:id="@+id/b_confirm_olpass"
+            style="?android:attr/buttonBarButtonStyle"
             android:layout_width="0dp"
             android:layout_height="70dp"
             android:textColor="#EEE"
             android:background="@drawable/stores_buttons"
             android:textSize="30sp"
             android:layout_weight="1"
-            android:text="@string/confirm_login" />
+            android:text="@string/confirm_olvidopass" />
 
         <Button
-            android:id="@+id/b_cancel_login"
+            android:id="@+id/b_cancel_olpass"
             style="?android:attr/buttonBarButtonStyle"
             android:layout_width="0dp"
             android:layout_height="70dp"
@@ -61,5 +46,4 @@
             android:text="@string/cancel" />
 
     </LinearLayout>
-
 </LinearLayout>

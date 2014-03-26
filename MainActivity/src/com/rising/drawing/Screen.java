@@ -690,6 +690,8 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback {
 	            drawToCanvas(canvas);
 	            if (mostrarBarraLateral) dibujarBarraLateral(canvas);
 	            canvas.restore();
+	            
+	            Log.i("Canvas Draw", "Dibujando. Offset = " + _yoffset + "\n");
         	}
 
         }catch(IOException IOE){
@@ -1566,9 +1568,16 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback {
 	}
 	
 	public void Metronome_Back(){
-		_yoffset = 0;
-		limiteVisibleArriba = 0;
-		limiteVisibleAbajo = altoPantalla;
+		Thread hilo = new Thread(new Runnable(){
+    		public void run() {	
+    			_yoffset = indicesPulsos.get(0)[1];
+    			limiteVisibleArriba = indicesPulsos.get(0)[1];
+    			limiteVisibleAbajo = indicesPulsos.get(0)[2];
+    			
+    			Log.i("Metronome Back", "Metronome Back pulsado. Offset = " + _yoffset + "\n");
+    		}
+		});
+		hilo.start();
 	}
 	
 	private class Metronomo implements Runnable {
