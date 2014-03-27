@@ -175,8 +175,7 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 			infoFicheros = darInfoFicheros(ficheros);
 			
 			for (int i = 0; i < ficherosLength; i++){
-				 Score ss = new Score(infoFicheros[1][i], 
-						 infoFicheros[0][i], R.drawable.cover, infoFicheros[2][i]);
+				 Score ss = new Score(infoFicheros[1][i], infoFicheros[0][i], R.drawable.cover, infoFicheros[2][i]);
 				 arraylist.add(ss);
 			}
 			s_adapter = new ScoresAdapter(this, arraylist);

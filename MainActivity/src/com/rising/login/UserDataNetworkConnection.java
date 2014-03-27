@@ -39,15 +39,15 @@ public class UserDataNetworkConnection extends AsyncTask<String, Integer, String
 	//  Informaci�n obtenida de la base de datos
 	ArrayList<DatosUsuario> resultado = new ArrayList<DatosUsuario>();
 	
-	public interface OnTaskCompleted{
-        void onTaskCompleted();
+	public interface OnLoginCompleted{
+        void onLoginCompleted();
     }
 	
-	private OnTaskCompleted listener;
+	private OnLoginCompleted listenerUser;
 	
-	public UserDataNetworkConnection(OnTaskCompleted listener2, Context ctx) {
+	public UserDataNetworkConnection(OnLoginCompleted listener2, Context ctx) {
 		this.context = ctx;
-		this.listener = listener2;
+		this.listenerUser = listener2;
 	}
 		
 	// Do the long-running work in here
@@ -112,7 +112,6 @@ public class UserDataNetworkConnection extends AsyncTask<String, Integer, String
 		    	nombre = json_data.getString("Name");
 		    	mail = json_data.getString("Mail");
 		    	money = json_data.getDouble("Money");
-		    			    	
 		        resultado.add(new DatosUsuario(id,nombre,money, mail));
 		        
 		    }
@@ -149,7 +148,7 @@ public class UserDataNetworkConnection extends AsyncTask<String, Integer, String
 
     // This is called when doInBackground() is finished
     protected void onPostExecute(String result) {
-    	if (listener != null) listener.onTaskCompleted();
+    	if (listenerUser != null) listenerUser.onLoginCompleted();
     }
     
     // Devolver la informaci�n le�da de la base de datos

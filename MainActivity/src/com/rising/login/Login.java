@@ -36,8 +36,10 @@ import com.facebook.widget.LoginButton;
 import com.facebook.widget.LoginButton.OnErrorListener;
 import com.rising.conexiones.HttpPostAux;
 import com.rising.mainscreen.MainScreenActivity;
+import com.rising.store.DatosUsuario;
 import com.rising.login.ActivityRegistro;
 import com.rising.login.ActivityRegistro.OnTaskCompleted;
+import com.rising.login.UserDataNetworkConnection.OnLoginCompleted;
 
 //Clase login. Permite al usuario introducir correo electrónico y contraseña, registrarse o recuperar 
 //la contraseña olvidada.
@@ -46,6 +48,7 @@ public class Login extends FragmentActivity {
 	
 	SessionManager session;
 	LoginButton authButton;
+	Configuration conf = new Configuration(this);
 	public static String FId;
 	public static String FName;
 	public static String FMail;
@@ -67,9 +70,27 @@ public class Login extends FragmentActivity {
 	private String mail = "";
 	private String name = "";	
 	
-	private String URL_connect = "http://10.0.2.2/login-mobile";
-	private String URL_Check_Facebook = "http://10.0.2.2/login-facebook-mobile";
+	private String URL_connect = "http://www.scores.rising.es/login-mobile";
+	private String URL_Check_Facebook = "http://www.scores.rising.es/login-facebook-mobile";
 		
+	public static UserDataNetworkConnection dunc;
+	public static ArrayList<DatosUsuario> userData;
+	
+	private OnLoginCompleted listenerUser = new OnLoginCompleted(){
+		public void onLoginCompleted(){
+			
+			userData = dunc.devolverDatos();
+
+            conf.setUserId(userData.get(0).getId());
+            
+            conf.setUserName(userData.get(0).getName());
+
+            conf.setUserEmail(userData.get(0).getMail());
+            
+            conf.setUserMoney(userData.get(0).getMoney());
+		}
+	};
+	
 	//  Recibir la señal del proceso que termina el registro
 	private OnTaskCompleted listener = new OnTaskCompleted() {
 	    public void onTaskCompleted(int details) {  
@@ -109,6 +130,7 @@ public class Login extends FragmentActivity {
 		setContentView(R.layout.login_layout);
 							    	
 		session = new SessionManager(getApplicationContext());
+		dunc = new UserDataNetworkConnection(listenerUser, getApplicationContext());
 		
 		if (session.isLoggedIn()) {
 			Intent i = new Intent(Login.this, MainScreenActivity.class);
@@ -156,8 +178,7 @@ public class Login extends FragmentActivity {
 			        	Log.i("Login", "Mail: " + usuario + ", Pass: " + passw);
 			        					        	
 		        		if (checkLoginData(usuario, passw)==true) {
-		        			Log.i("Contra", passw);
-
+		        			
 		        			new asynclogin().execute(usuario,passw);    
 		        			Pass.setText("");		        			
 		        		}else{
@@ -435,8 +456,12 @@ public class Login extends FragmentActivity {
         protected void onPostExecute(Integer result) {
         	PDialog.dismiss();
             Log.e("onPostExecute=",""+result);
-              
+            
+            userData = new ArrayList<DatosUsuario>();
+            
             if (result == 1) {
+            	dunc.execute(usuario);
+            	
             	session.createLoginSession(user, "", "-1");            	
     			Intent i=new Intent(Login.this, MainScreenActivity.class);
     			startActivity(i); 

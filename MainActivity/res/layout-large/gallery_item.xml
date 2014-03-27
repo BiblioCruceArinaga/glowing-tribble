@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="270dp"
-    android:layout_marginBottom="5dp"
-    android:layout_marginTop="5dp">
+    android:layout_height="270dp" >
 
     <ImageView
         android:id="@+id/iV_score"
@@ -11,7 +9,6 @@
         android:layout_height="270dp"
 		android:layout_marginLeft="5dp"
 		android:layout_marginRight="5dp"
-		android:layout_marginTop="15dp"
         android:layout_gravity="bottom"
         android:gravity="bottom"
         android:background="?android:attr/activatedBackgroundIndicator"
@@ -22,11 +19,9 @@
         android:layout_width="wrap_content"
         android:layout_height="270dp"
 		android:layout_marginTop="-50dp"
-		android:layout_marginLeft="20dp"
-		android:layout_marginRight="20dp"
-        android:layout_gravity="center"
+        android:layout_gravity="center" 
         android:gravity="center"
-        android:textSize="25sp"
+        android:textSize="30sp"
         android:textStyle="bold"
         android:textColor="#222"
         android:text="RED"
@@ -36,9 +31,7 @@
         android:id="@+id/tV_score_author"
         android:layout_width="wrap_content"
         android:layout_height="270dp"
-		android:layout_marginBottom="-80dp"
-		android:layout_marginLeft="20dp"
-		android:layout_marginRight="20dp"
+		android:layout_marginBottom="-50dp"
         android:layout_gravity="center"
         android:gravity="center"
         android:textSize="20sp"

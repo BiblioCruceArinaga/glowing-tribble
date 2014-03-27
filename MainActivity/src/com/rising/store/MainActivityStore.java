@@ -85,6 +85,7 @@ public class MainActivityStore extends FragmentActivity implements OnQueryTextLi
 	    
 	    MenuItem item = menu.findItem(R.id.money);
         item.setTitle("" + conf.getUserMoney()  + "€");
+        Log.i("Conf", "Conf User: " + conf.getUserName() + ", Conf Money: " + conf.getUserMoney());
 	    	    
 		return true;
 	}

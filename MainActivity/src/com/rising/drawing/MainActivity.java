@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.graphics.Canvas;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -27,6 +28,7 @@ public class MainActivity extends Activity {
 
     ScreenThread myScreenThread;
     SurfaceHolder holder;
+	Canvas canvas;
 	Screen s;
 	private Dialog MDialog;
 	private Dialog CDialog;
@@ -37,6 +39,8 @@ public class MainActivity extends Activity {
 	String score;
 	private boolean play;
 	private boolean stop = false;
+
+	private ActionMode mActionMode;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState){
@@ -109,7 +113,7 @@ public class MainActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				tempo = metronome_speed.getValue();
-				MainActivity.this.startActionMode(new ActionBarCallBack());
+				mActionMode = MainActivity.this.startActionMode(new ActionBarCallBack());
 				DialogCountdown();
 				MDialog.dismiss();
 			}

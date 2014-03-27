@@ -9,13 +9,12 @@
         android:id="@+id/et_mail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:layout_marginBottom="15dp"
-        android:textSize="24sp"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="5dp"
+        android:textSize="20sp"
         android:hint="@string/mail"
-        android:textColorHint="#DDD"
-        android:textColor="#DDD"
-        android:textColorHighlight="#DDD"
+        android:textColorHint="#CCC"
+        android:textColor="#EEE"
         android:inputType="textEmailAddress" >
 
         <requestFocus />
@@ -25,13 +24,12 @@
         android:id="@+id/et_pass"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:layout_marginBottom="30dp"
-        android:textSize="24sp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="15dp"
+        android:textSize="20sp"
         android:hint="@string/pass"
-        android:textColorHint="#DDD"
-        android:textColor="#DDD"
-        android:textColorHighlight="#DDD"
+        android:textColorHint="#CCC"
+        android:textColor="#EEE"
         android:inputType="textPassword" />
 
     <LinearLayout
@@ -41,11 +39,12 @@
 
         <Button
             android:id="@+id/b_confirm_login"
+            style="?android:attr/buttonBarButtonStyle"
             android:layout_width="0dp"
-            android:layout_height="70dp"
-            android:textColor="#EEE"
+            android:layout_height="50dp"
+			android:textColor="#EEE"
             android:background="@drawable/stores_buttons"
-            android:textSize="30sp"
+            android:textSize="25sp"
             android:layout_weight="1"
             android:text="@string/confirm_login" />
 
@@ -53,10 +52,10 @@
             android:id="@+id/b_cancel_login"
             style="?android:attr/buttonBarButtonStyle"
             android:layout_width="0dp"
-            android:layout_height="70dp"
-            android:textColor="#EEE"
+            android:layout_height="50dp"
+			android:textColor="#EEE"
             android:background="@drawable/stores_buttons"
-            android:textSize="30sp"
+            android:textSize="25sp"
             android:layout_weight="1"
             android:text="@string/cancel" />
 
