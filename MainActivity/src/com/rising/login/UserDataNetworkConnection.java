@@ -112,6 +112,7 @@ public class UserDataNetworkConnection extends AsyncTask<String, Integer, String
 		    	nombre = json_data.getString("Name");
 		    	mail = json_data.getString("Mail");
 		    	money = json_data.getDouble("Money");
+		    	Log.i("Money", "" + money);
 		        resultado.add(new DatosUsuario(id,nombre,money, mail));
 		        
 		    }

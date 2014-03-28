@@ -154,7 +154,7 @@ public class ScoreProfile extends Activity{
 	        		//Aquí tiene lugar la descarga y la compra, y el registro de la compra en la base de datos
 	 				if(price.equals(0.0)){	
 	 						     				
-	     				Log.i("BuyScore", "" + new CustomAdapter(ctx, null).new AsyncBuyScore().execute(Id_User, Id_Score));
+	     				//Log.i("BuyScore", "" + new CustomAdapter(ctx, null).new AsyncBuyScore().execute(Id_User, Id_Score));
 		     			
 	     				//Primero usuario y luego partitura
 	     				if(new AsyncBuyScore().execute(Id_User, Id_Score).equals("Valido") ){

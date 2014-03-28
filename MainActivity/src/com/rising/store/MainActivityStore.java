@@ -68,7 +68,7 @@ public class MainActivityStore extends FragmentActivity implements OnQueryTextLi
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt("tab", getActionBar().getSelectedNavigationIndex());
-    }
+    }   
 	
 	public void getFragment(Fragment fragment){
 		this.f = fragment.toString();

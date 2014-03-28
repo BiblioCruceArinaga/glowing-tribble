@@ -131,7 +131,7 @@ public class FreeNetworkConnection extends AsyncTask<String, Integer, String>{
 		    	precio = (float) json_data.getDouble("Price");
 		    	description = json_data.getString("Description");		    	
 		    	year = json_data.getInt("Year");
-		    	comprado = true;
+		    	comprado = false;
 		    	URL = json_data.getString("URL");
 		    	
 		        resultado.add(new PartituraTienda(id,nombre,autor,instrumento,precio, description, year, comprado, URL));

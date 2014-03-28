@@ -9,6 +9,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.ExecutionException;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -16,6 +17,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -43,12 +45,13 @@ public class CustomAdapter extends BaseAdapter {
 	//Declaro variables  
 	Context ctx;
 	LayoutInflater inflater;
-	
 	String Id_User = "";
 	String Id_Score = "";
 	
 	private List<PartituraTienda> lista;
 	Configuration conf;
+	Dialog BDialog;
+	Button Confirm_Buy, Cancel_Buy;
     private ArrayList<PartituraTienda> infoPartituras;
 	ProgressDialog mProgressDialog;
 	String URL_Buy = "http://www.scores.rising.es/store-buyscore";
@@ -96,9 +99,10 @@ public class CustomAdapter extends BaseAdapter {
 
 		conf = new Configuration(ctx);
 		final ViewHolder holder;
-        
+		        
         // Lanza la descarga 
         final AsyncDownload downloadTask = new AsyncDownload(ctx);
+        final AsyncBuyScore buyScore = new AsyncBuyScore();
 		 
         if (view == null) {
         	holder = new ViewHolder();
@@ -129,13 +133,13 @@ public class CustomAdapter extends BaseAdapter {
 	        }
 	    }
 	         
-         // instantiate it within the onCreate method
- 		 mProgressDialog.setMessage("Descargando");
- 		 mProgressDialog.setIndeterminate(true);
- 		 mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
- 		 mProgressDialog.setCancelable(true);
+        // instantiate it within the onCreate method
+	    mProgressDialog.setMessage("Descargando");
+ 		mProgressDialog.setIndeterminate(true);
+ 		mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+ 		mProgressDialog.setCancelable(true);
          
-         holder.botonInfo.setOnClickListener(new OnClickListener(){
+        holder.botonInfo.setOnClickListener(new OnClickListener(){
         	 
 			@Override
 			public void onClick(View v) {
@@ -154,7 +158,7 @@ public class CustomAdapter extends BaseAdapter {
         	
          });
          
-         holder.botonCompra.setOnClickListener(new OnClickListener(){
+        holder.botonCompra.setOnClickListener(new OnClickListener(){
 
         	 @Override
  			public void onClick(View v) {
@@ -177,31 +181,106 @@ public class CustomAdapter extends BaseAdapter {
      				});
      				
         		}else{
-        		
-	        		//Aquí tiene lugar la descarga y la compra, y el registro de la compra en la base de datos
-	 				if(lista.get(position).getPrecio() == 0.0){	
-	 						     				
-	     				Log.i("BuyScore", "" + new AsyncBuyScore().execute(Id_User, Id_Score));
-		     			
-	     				//Primero usuario y luego partitura
-	     				if(new AsyncBuyScore().execute(Id_User, Id_Score).equals("Valido") ){
-	     					
-		     				//Hay que poner algo aquí para que cuando falle la aplicación no se cierre     				
-		     				downloadTask.execute(lista.get(position).getUrl());
-		     				Log.i("URL", lista.get(position).getUrl());
-		     				
-		     				mProgressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-		     				    @Override
-		     				    public void onCancel(DialogInterface dialog) {
-		     				    	downloadTask.cancel(true);
-		     				    }
-		     				});
-	     				}	
-	     				
-	 				}else{
-	 					Toast.makeText(ctx, "¡Paga!", Toast.LENGTH_LONG).show();				
-	 					
-	 				}
+        		        			
+        			//Se le pregunta al usuario si realmente desea comprar la partitura
+     				BDialog = new Dialog(ctx, R.style.cust_dialog);
+     				BDialog.setContentView(R.layout.buy_dialog);
+     				BDialog.setTitle(R.string.confirm_buy);
+     											
+     				Confirm_Buy = (Button)BDialog.findViewById(R.id.b_confirm_buy);
+     				Cancel_Buy = (Button)BDialog.findViewById(R.id.b_cancel_buy);
+     				
+     				Confirm_Buy.setOnClickListener(new OnClickListener(){
+     					
+						@Override
+						public void onClick(View arg0) {
+							
+							//Aquí tiene lugar la descarga y la compra, y el registro de la compra en la base de datos
+			 				if(lista.get(position).getPrecio() == 0.0){	
+			 						     							     							     				
+			     				//Primero usuario y luego partitura
+			     				try {
+									if(buyScore.execute(Id_User, Id_Score).get().equals("Val")){
+										Log.i("Registro compra", "Registro compra gratis");
+										BDialog.dismiss();
+										
+										//Hay que poner algo aquí para que cuando falle la aplicación no se cierre     				
+										downloadTask.execute(lista.get(position).getUrl());
+										Log.i("URL", lista.get(position).getUrl());
+										
+										mProgressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+										    @Override
+										    public void onCancel(DialogInterface dialog) {
+										    	downloadTask.cancel(true);
+										    }
+										});
+									}
+								} catch (InterruptedException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								} catch (ExecutionException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}	
+			     				
+			 				}else{
+			 								 								 					
+			 					Log.i("Prices", "Partitura: " + lista.get(position).getPrecio() + ", User: " + conf.getUserMoney());
+			 					 			
+				     			if(lista.get(position).getPrecio() < conf.getUserMoney()){		 					
+			     							     								     				
+					     			//Primero usuario y luego partitura
+				     				try {
+										if(buyScore.execute(Id_User, Id_Score).get().equals("Val")){
+											Log.i("Registro compra", "Registro compra con dinero");
+											BDialog.dismiss();
+											
+											//Hay que poner algo aquí para que cuando falle la aplicación no se cierre     				
+											downloadTask.execute(lista.get(position).getUrl());
+											Log.i("URL", lista.get(position).getUrl());
+											
+											/**
+											Esto es provicional. No debe hacerse así, debe actualizarse desde la base de datos
+											**/
+											conf.setUserMoney(conf.getUserMoney() - lista.get(position).getPrecio());				  
+											
+											mProgressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+											    @Override
+											    public void onCancel(DialogInterface dialog) {
+											    	downloadTask.cancel(true);
+											    }
+											});	
+										}
+									} catch (InterruptedException e) {
+										// TODO Auto-generated catch block
+										e.printStackTrace();
+									} catch (ExecutionException e) {
+										// TODO Auto-generated catch block
+										e.printStackTrace();
+									}
+			 					}else{
+			 						
+			 						//Debería ser un dialog con un botón que acceda a la tienda de saldo
+			 						Toast.makeText(ctx, R.string.no_money, Toast.LENGTH_LONG).show();
+			 					}
+			 					
+			 				}
+							
+			 				
+						}
+     					
+     				});
+        			
+     				Cancel_Buy.setOnClickListener(new OnClickListener(){
+
+						@Override
+						public void onClick(View v) {
+							BDialog.dismiss();							
+						}
+     					
+     				});
+     				
+        			BDialog.show();
         		}
  			}
         	 
@@ -375,6 +454,7 @@ public class CustomAdapter extends BaseAdapter {
 			    	
 			    }else{// [{"logstatus":"1"}]
 			    	 Log.e("BuyStatus ", "Valido");
+			    	 
 			    	return "Val";
 			    } 
 			}else{	
@@ -384,6 +464,12 @@ public class CustomAdapter extends BaseAdapter {
 				
 			}
 			return null;
+		}
+		
+		@Override
+		protected void onPostExecute(String result) {
+			super.onPostExecute(result);
+			
 		}
 		
 	}
