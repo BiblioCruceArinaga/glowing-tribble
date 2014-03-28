@@ -322,13 +322,13 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 
 	@Override
 	public boolean onQueryTextChange(String newText) {
-		s_adapter.filter(newText);
+		if (s_adapter != null) s_adapter.filter(newText);
 		return false;
 	}
 	
 	@Override
 	public boolean onQueryTextSubmit(String text) {
-		s_adapter.filter(text); 
+		if (s_adapter != null) s_adapter.filter(text); 
 		return false;
 	}
 	
@@ -345,14 +345,14 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 	public boolean onOptionsItemSelected(MenuItem item) {
 
 	    switch (item.getItemId()) {
-		case R.id.store_button:
-			if(isOnline()){
-				Intent i = new Intent(MainScreenActivity.this, MainActivityStore.class);
-				startActivity(i);
-			}else{
-				Toast.makeText(this, R.string.connection_err, Toast.LENGTH_LONG).show();	
-			}
-			return true;
+			case R.id.store_button:
+				if(isOnline()){
+					Intent i = new Intent(MainScreenActivity.this, MainActivityStore.class);
+					startActivity(i);
+				}else{
+					Toast.makeText(this, R.string.connection_err, Toast.LENGTH_LONG).show();	
+				}
+				return true;
 	    	
 			case R.id.sort_author:
 				listarAutores();
@@ -610,50 +610,54 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 	}
 	
 	private void listarAutores() {
-		int size = s_adapter.getCount();
-		final CharSequence[] items = new CharSequence[size];
-		for (int i=0; i<size; i++) items[i] = s_adapter.getItemAuthor(i);
-
-	    AlertDialog.Builder builder = new AlertDialog.Builder(this);
-	    builder.setTitle(R.string.author_dialog_title);
-	    builder.setItems(items, new DialogInterface.OnClickListener() {
-	        public void onClick(DialogInterface dialog, int item) {
-	            s_adapter.filter(s_adapter.getItemAuthor(item));
-	        }
-	    }).show();
+		if (s_adapter != null) {
+			int size = s_adapter.getCount();
+			final CharSequence[] items = new CharSequence[size];
+			for (int i=0; i<size; i++) items[i] = s_adapter.getItemAuthor(i);
+	
+		    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		    builder.setTitle(R.string.author_dialog_title);
+		    builder.setItems(items, new DialogInterface.OnClickListener() {
+		        public void onClick(DialogInterface dialog, int item) {
+		            s_adapter.filter(s_adapter.getItemAuthor(item));
+		        }
+		    }).show();
+		}
 	}
 	
 	private void listarInstrumentos() {
-		int size = s_adapter.getCount();
-		
-		//  Evitar repeticiones
-		LinkedHashSet<String> hs = new LinkedHashSet<String>();
-		for (int i=0; i<size; i++) {
-			hs.add(s_adapter.getItemInstrument(i));
+		if (s_adapter != null) {
+			int size = s_adapter.getCount();
+			
+			//  Evitar repeticiones
+			LinkedHashSet<String> hs = new LinkedHashSet<String>();
+			for (int i=0; i<size; i++) {
+				hs.add(s_adapter.getItemInstrument(i));
+			}
+			
+			size = hs.size();
+			final CharSequence[] items = new CharSequence[size];
+			ArrayList<String> al = new ArrayList<String>();
+			al.addAll(hs);
+			for (int i=0; i<size; i++) items[i] = al.get(i);
+	
+		    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		    builder.setTitle(R.string.instrument_dialog_title);
+		    
+		    builder.setItems(items, new DialogInterface.OnClickListener() {
+		        public void onClick(DialogInterface dialog, int item) {
+		            s_adapter.filter(s_adapter.getItemInstrument(item));
+		        }
+		    }).show();
 		}
-		
-		size = hs.size();
-		final CharSequence[] items = new CharSequence[size];
-		ArrayList<String> al = new ArrayList<String>();
-		al.addAll(hs);
-		for (int i=0; i<size; i++) items[i] = al.get(i);
-
-	    AlertDialog.Builder builder = new AlertDialog.Builder(this);
-	    builder.setTitle(R.string.instrument_dialog_title);
-	    
-	    builder.setItems(items, new DialogInterface.OnClickListener() {
-	        public void onClick(DialogInterface dialog, int item) {
-	            s_adapter.filter(s_adapter.getItemInstrument(item));
-	        }
-	    }).show();
 	}
 	
 	private void ordenarPorNombre() {
-		s_adapter.sortByName();
+		if (s_adapter != null) s_adapter.sortByName();
 	}
 	
 	private void mostrarTodas() {
-		s_adapter.showAll();
+		if (s_adapter != null) s_adapter.showAll();
 	}
 	
 	//  Método que coge los archivos de las partituras en el 

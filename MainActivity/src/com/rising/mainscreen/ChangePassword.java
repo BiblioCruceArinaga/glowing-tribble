@@ -27,7 +27,7 @@ public class ChangePassword extends AsyncTask<String, String, Integer> {
 	
 	private HttpPostAux HPA =  new HttpPostAux();
 	private ProgressDialog PDialog;
-	private final String URL_Password_Change = "http://10.0.2.2/cambiar-clave-mobile";
+	private final String URL_Password_Change = "http://scores.rising.es/cambiar-clave-mobile";
 	
 	public ChangePassword(Context ctx, OnPasswordChanging listener) {
 		this.ctx = ctx;

@@ -27,7 +27,7 @@ public class SendFeedback extends AsyncTask<String, String, Integer> {
 	
 	private HttpPostAux HPA =  new HttpPostAux();
 	private ProgressDialog PDialog;
-	private final String URL_Send_Feedback = "http://10.0.2.2/enviar-feedback-mobile";
+	private final String URL_Send_Feedback = "http://scores.rising.es/enviar-feedback-mobile";
 	
 	public SendFeedback(Context ctx, OnSendingFeedback listener) {
 		this.ctx = ctx;

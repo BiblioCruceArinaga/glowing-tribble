@@ -27,7 +27,7 @@ public class EraseAccount extends AsyncTask<String, String, Integer> {
 	
 	private HttpPostAux HPA =  new HttpPostAux();
 	private ProgressDialog PDialog;
-	private final String URL_Erase_Account = "http://10.0.2.2/eliminar-cuenta-mobile";
+	private final String URL_Erase_Account = "http://scores.rising.es/eliminar-cuenta-mobile";
 	
 	public EraseAccount(Context ctx, OnTaskCompleted listener) {
 		this.ctx = ctx;
