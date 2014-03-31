@@ -56,6 +56,7 @@ public class MainActivity extends Activity {
 		
 		ActionBar aBar = getActionBar();	
 		aBar.setTitle(R.string.pa);	
+		aBar.setIcon(R.drawable.ic_menu);
 		aBar.setDisplayHomeAsUpEnabled(true);			
 	}
 	

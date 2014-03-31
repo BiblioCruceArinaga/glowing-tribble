@@ -160,6 +160,7 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 		
 		ActionBar action = getActionBar();
 		action.setTitle(R.string.titulo_coleccion);
+		action.setIcon(R.drawable.ic_menu);
 
 		int ficherosLength;
 		if (ficheros != null) ficherosLength = ficheros.length;

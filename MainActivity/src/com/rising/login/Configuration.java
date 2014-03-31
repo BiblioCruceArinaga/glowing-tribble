@@ -34,7 +34,7 @@ public class Configuration {
 	}
 		
 	public float getUserMoney(){
-		return getSettings().getFloat(KEY_MONEY, 0);
+		return getSettings().getFloat(KEY_MONEY, 0);	
 	}
 	
 	public void setUserEmail(String email){

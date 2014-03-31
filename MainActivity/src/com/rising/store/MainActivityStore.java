@@ -46,6 +46,7 @@ public class MainActivityStore extends FragmentActivity implements OnQueryTextLi
 		setContentView(R.layout.activity_main_store);		
 				
     	ABar = getActionBar();
+    	ABar.setIcon(R.drawable.ic_menu);
     	ABar.setTitle(R.string.store);
     	ABar.setDisplayHomeAsUpEnabled(true); 
     	ABar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS); 
@@ -58,6 +59,7 @@ public class MainActivityStore extends FragmentActivity implements OnQueryTextLi
 	//Vuelve (o lo pretende) a colocar los archivos que encuentre en el dispositivo en la pantalla principal
 	@Override
 	public void onBackPressed() {
+	   //super.onBackPressed();
 	   Log.d("CDA", "onBackPressed Called");
 	   Intent setIntent = new Intent(this, MainScreenActivity.class);
 	   new MainScreenActivity().ColocarFicheros();

@@ -120,9 +120,9 @@
 			2. DEFINICIÓN\n\n
 			
 			2.1. La APLICACIÓN ofrece al usuario el acceso a una tienda online (en adelante, la 
-			TIENDA) desde la cual el usuario podrá adquirir las partituras existentes en el 
-			catálogo ofrecido por RISING. El usuario podrá descargar en su dispositivo las 
-			partituras que haya adquirido y las podrá utilizar de dos formas posibles: 
+			TIENDA) desde la cual el usuario podrá adquirir al precio dictado en la misma las 
+			partituras existentes en el catálogo ofrecido por RISING. El usuario podrá descargar 
+			en su dispositivo las partituras que haya adquirido y las podrá utilizar de dos formas posibles: 
 			moviéndolas manualmente o seleccionando una velocidad de metrónomo a partir de la 
 			cual la partitura se moverá automáticamente durante toda la pieza.\n\n
 			
@@ -182,7 +182,7 @@
 			6.2. Para poder utilizar la APLICACIÓN, el usuario debe tener un dispositivo móvil compatible, 
 			con conexión a internet y que cumpla las especificaciones mínimas («Requisitos del software»).\n\n
 			
-			6.3. Los requisitos del software son los siguientes: Dispositivos Android OS con los 
+			6.3. Los requisitos del software son los siguientes: Dispositivos Android OS de más de 7 pulgadas y con los
 			sistemas operativos Android OS 4.1 a OS 4.4. Idiomas: español e inglés.\n\n
 			
 			7. ELIMINACIÓN DE LA CUENTA\n\n
@@ -245,17 +245,31 @@
 			RISING se reserva el derecho de modificar los precios en cualquier momento, siendo de aplicación dicha 
 			modificación para las partes desde que sea incorporada a la mencionada Web.\n\n
 			
-			4. ENTREGA\n\n
+			4. ADQUISICIÓN DE SALDO\n\n
+			
+			4.1. Para adquirir cualesquiera de los productos disponibles a través de la TIENDA, el CLIENTE tendrá
+			a su disposición dentro de la TIENDA una opción que le permitirá añadir saldo a su cuenta.\n\n
+			
+			4.2. Esta opción consistirá en que el CLIENTE abonará a RISING una cantidad monetaria que, después
+			del pago, será registrada en su cuenta como saldo virtual (en adelante, el SALDO). Este SALDO es el
+			que permitirá al CLIENTE adquirir partituras en la TIENDA.\n\n
+			
+			4.3. Si el CLIENTE no dispone de SALDO suficiente para adquirir una partitura, no podrá comprarla.
+			En tal caso, si el CLIENTE deseara adquirir dicha partitura, debería añadir más SALDO a su cuenta.\n\n
+			
+			4.4. RISING no admite devoluciones de saldo.\n\n
+			
+			5. ENTREGA\n\n
 			
 			La entrega de los productos adquiridos se producirá inmediatamente después de que se haya efectuado el pago de 
 			los mismos y desde la propia TIENDA. Adicionalmente se enviará un correo electrónico al cliente con información
 			relativa a su compra, así como con la factura de la misma.\n\n
 			
-			5. DEVOLUCIÓN\n\n
+			6. DEVOLUCIÓN\n\n
 			
 			Al tratarse de productos y servicios en formato digital y por razones obvias, no se admiten devoluciones.\n\n
 			
-			6. GARANTÍA\n\n
+			7. GARANTÍA\n\n
 			
 			En caso de que por algún problema el producto adquirido no pudiese ser descargado o fuese técnicamente defectuoso 
 			de tal forma que fuese imposible su lectura y utilización, el CLIENTE deberá ponerse en contacto, antes de 15 días, 
@@ -268,7 +282,7 @@
 			ponerse en contacto con RISING y proporcionar la información necesaria tanto del producto cómo para la verificación 
 			de que este fue efectivamente adquirido en la TIENDA.\n\n
 			
-			7. FACTURACIÓN Y FORMA DE PAGO\n\n
+			8. FACTURACIÓN Y FORMA DE PAGO\n\n
 			
 			El CLIENTE realizará el pago de productos utilizando la pasarela de pago habilitada por RISING y gestionada por una 
 			entidad especializada. El pago se realiza en un servidor seguro. En el momento de realizar el pago, RISING emite la 
@@ -277,11 +291,11 @@
 			la entidad. RISING sólo recibe, por parte de dicha entidad, el código de autorización o en su defecto la causa del 
 			fallo de la operación (tarjeta denegada, caducada, etc.).\n\n
 			
-			8. JURISDICCIÓN Y LEGISLACIÓN APLICABLE\n\n
+			9. JURISDICCIÓN Y LEGISLACIÓN APLICABLE\n\n
 			
-			8.1. Las presentes Condiciones de Compra se regirán por lo dispuesto en la legislación española.\n\n
+			9.1. Las presentes Condiciones de Compra se regirán por lo dispuesto en la legislación española.\n\n
 
-			8.2 En el caso de que se produzca cualquier discrepancia o controversia con motivo de la interpretación o la 
+			9.2 En el caso de que se produzca cualquier discrepancia o controversia con motivo de la interpretación o la 
 			aplicación de las presentes Condiciones de Uso, RISING y el CLIENTE, con renuncia expresa a cualquier otro fuero 
 			que pudiera corresponderles, se someten a la jurisdicción de los Juzgados y Tribunales del domicilio de RISING. 
 			Y en el supuesto de que el CLIENTE tenga su domicilio fuera de España, RISING y el CLIENTE, con renuncia expresa 
