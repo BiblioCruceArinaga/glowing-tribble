@@ -3,7 +3,7 @@
 
     <!-- Pantalla Login -->
     <string name="app_name">Scores</string>
-    <string name="logo">El logo de SmartScores</string>
+    <string name="logo">El logo de Scores</string>
     <string name="login">Iniciar sesión</string>
     <string name="login_f">Iniciar sesión con Facebook</string>
     <string name="olvida_pass">¿Olvidaste la contraseña?</string>
@@ -331,7 +331,7 @@
     	
     <string name="action_settings">Preferencias</string>
     	
-    <string name="about">Acerca de Smartscores</string>
+    <string name="about">Acerca de Scores</string>
 	    <string name="version">Versión: Beta 0.1 </string>
 	    <string name="acerca_de">Scores ha sido desarrollado por RISING S.C.P.</string>	
 	    <string name="visitanos">Visita nuestra web: scores.rising.es</string>
