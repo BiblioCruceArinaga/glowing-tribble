@@ -1,0 +1,11 @@
+.metadata
+FacebookSDK/bin
+FacebookSDK/build.xml
+FacebookSDK/build.gradle
+FacebookSDK/gen
+FacebookSDK/project.properties
+MainActivity/bin
+MainActivity/proguard-project.txt
+MainActivity/gen
+MainActivity/lint.xml
+MainActivity/project.properties
