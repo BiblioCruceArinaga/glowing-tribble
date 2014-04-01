@@ -39,8 +39,6 @@ public class MainActivity extends Activity {
 	String score;
 	private boolean play;
 	private boolean stop = false;
-
-	private ActionMode mActionMode;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState){
@@ -114,7 +112,7 @@ public class MainActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				tempo = metronome_speed.getValue();
-				mActionMode = MainActivity.this.startActionMode(new ActionBarCallBack());
+				MainActivity.this.startActionMode(new ActionBarCallBack());
 				DialogCountdown();
 				MDialog.dismiss();
 			}

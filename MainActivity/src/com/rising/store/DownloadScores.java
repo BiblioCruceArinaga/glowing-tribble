@@ -7,6 +7,8 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import com.rising.drawing.R;
+
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
@@ -67,7 +69,8 @@ public class DownloadScores{
 
 	                // download the file
 	                input = connection.getInputStream();
-	                output = new FileOutputStream(Environment.getExternalStorageDirectory() + "/SmartScores/scores/" + FileName(url));
+	                output = new FileOutputStream(Environment.getExternalStorageDirectory() 
+	                		+ "/RisingScores/scores/" + FileName(url));
 
 	                byte data[] = new byte[4096];
 	                long total = 0;
@@ -104,35 +107,32 @@ public class DownloadScores{
 	        return null;
 	    }
 		
-		 @Override
-		    protected void onPreExecute() {
-		        super.onPreExecute();
-		        mProgressDialog.show();
-		    }
-
-		    @Override
-		    protected void onProgressUpdate(Integer... progress) {
-		        super.onProgressUpdate(progress);
-		        // if we get here, length is known, now set indeterminate to false
-		        mProgressDialog.setIndeterminate(false);
-		        mProgressDialog.setMax(100);
-		        mProgressDialog.setProgress(progress[0]);
-		    }
-
-		    @Override
-		    protected void onPostExecute(String result) {
-		        mProgressDialog.dismiss();
-		        if (result != null){
-		            Toast.makeText(context,"Download error: "+result, Toast.LENGTH_LONG).show();
-		        	Log.e("Error descarga", "Error descarga: " + result);
-		        }else{ 
-		            Toast.makeText(context,"File downloaded", Toast.LENGTH_SHORT).show();
-		            Log.i("Descarga", "Archivo descargado");		            
-		        }
-		    }
+		@Override
+		protected void onPreExecute() {
+		    super.onPreExecute();
+		    mProgressDialog.show();
+		}
 		
+		@Override
+		protected void onProgressUpdate(Integer... progress) {
+		    super.onProgressUpdate(progress);
+		    
+		    // if we get here, length is known, now set indeterminate to false
+			mProgressDialog.setIndeterminate(false);
+			mProgressDialog.setMax(100);
+			mProgressDialog.setProgress(progress[0]);
+		}
 		
-	}	
-	
-	
+		@Override
+		protected void onPostExecute(String result) {
+		    mProgressDialog.dismiss();
+		    if (result != null){
+		        Toast.makeText(context, R.string.errordownload + result, Toast.LENGTH_LONG).show();
+		    	Log.e("Error descarga", "Error descarga: " + result);
+		    }else{ 
+		        Toast.makeText(context, R.string.okdownload, Toast.LENGTH_SHORT).show();
+		        Log.i("Descarga", "Archivo descargado");		            
+		    }
+		}
+	}
 }

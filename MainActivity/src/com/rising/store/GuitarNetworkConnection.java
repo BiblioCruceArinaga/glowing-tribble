@@ -43,7 +43,7 @@ public class GuitarNetworkConnection extends AsyncTask<String, Integer, String>{
 	ArrayList<PartituraTienda> resultado = new ArrayList<PartituraTienda>();
 		
 	public interface OnTaskCompleted{
-        void onTaskCompleted();
+        void onTaskCompleted(Context context);
     }
 	
 	public interface OnTaskUncomplete{
@@ -174,7 +174,7 @@ public class GuitarNetworkConnection extends AsyncTask<String, Integer, String>{
 
     // This is called when doInBackground() is finished
     protected void onPostExecute(String result) {
-    	if (listener != null) listener.onTaskCompleted();
+    	if (listener != null) listener.onTaskCompleted(context);
     }
     
     // Devolver la informaci�n le�da de la base de datos

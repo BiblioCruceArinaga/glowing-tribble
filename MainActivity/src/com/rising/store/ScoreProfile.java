@@ -55,9 +55,9 @@ public class ScoreProfile extends Activity{
 	String Id_User = "";
 	String Id_Score = "";
 	
-	//private String style -> Dato para el futuro. Al final del perfil de la partitura se recomienda al usuario más del mismo estilo
-	
-	
+	//  private String style -> Dato para el futuro. 
+	//  Al final del perfil de la partitura se recomienda al usuario más del mismo estilo
+
 	//private ShareActionProvider share;
 	private DownloadScores download = new DownloadScores();
 	
@@ -73,6 +73,9 @@ public class ScoreProfile extends Activity{
 		super.onCreate(savedInstanceState);
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		setContentView(R.layout.score_profile_layout);
+		
+		ctx = getApplicationContext();
+		
 		// instantiate it within the onCreate method
 		mProgressDialog = new ProgressDialog(ScoreProfile.this);
 		mProgressDialog.setMessage("Descargando");
@@ -94,6 +97,7 @@ public class ScoreProfile extends Activity{
 		ActionBar ABar = getActionBar();
     	
     	ABar.setTitle(R.string.store);
+    	ABar.setIcon(R.drawable.ic_menu);
     	ABar.setDisplayHomeAsUpEnabled(true);
 		
 		TextView TV_Name = (TextView) findViewById(R.id.nombrePartitura_profile);
@@ -103,7 +107,7 @@ public class ScoreProfile extends Activity{
 		Button B_Price = (Button) findViewById(R.id.comprar_profile);
 		TextView TV_Description = (TextView) findViewById(R.id.tv_description_profile);
 				
-		//Cambiamos el texto de los TextView por el de la partitura seleccionada 
+		//  Cambiamos el texto de los TextView por el de la partitura seleccionada 
 		TV_Name.setText(name);
 		TV_Author.setText(author);
 		TV_Year.setText(year);
@@ -124,21 +128,22 @@ public class ScoreProfile extends Activity{
 
 			@Override
 			public void onClick(View v) {
-				
+				conf = new Configuration(ctx);
         		Id_User = conf.getUserId();
         		Id_Score = String.valueOf(Id);
-        		conf = new Configuration(ctx);
-                
+
                 // Lanza la descarga 
                 final AsyncDownload downloadTask = new AsyncDownload(ctx);
                 
                 Id_User = conf.getUserId();
         		Id_Score = String.valueOf(Id);
                 
-        		//Si la partitura ya está comprada lanza la descarga sin registrar la compra en la base de datos.
+        		//  Si la partitura ya está comprada lanza la descarga 
+        		//  sin registrar la compra en la base de datos.
         		if(comprado){
         			     				
-     				//Hay que poner algo aquí para que cuando falle la aplicación no se cierre     				
+     				//  Hay que poner algo aquí para que cuando 
+        			//  falle la aplicación no se cierre     				
      				downloadTask.execute(urlD);
      				Log.i("URL", urlD);
      				
@@ -151,15 +156,18 @@ public class ScoreProfile extends Activity{
      				
         		}else{
         		
-	        		//Aquí tiene lugar la descarga y la compra, y el registro de la compra en la base de datos
-	 				if(price.equals(0.0)){	
+	        		//  Aquí tiene lugar la descarga y la compra, y el 
+        			//  registro de la compra en la base de datos
+	 				if(price.equals("0.0")){	
 	 						     				
-	     				//Log.i("BuyScore", "" + new CustomAdapter(ctx, null).new AsyncBuyScore().execute(Id_User, Id_Score));
+	     				//  Log.i("BuyScore", "" + new CustomAdapter(ctx, null).new 
+	 					//  AsyncBuyScore().execute(Id_User, Id_Score));
 		     			
-	     				//Primero usuario y luego partitura
+	     				//  Primero usuario y luego partitura
 	     				if(new AsyncBuyScore().execute(Id_User, Id_Score).equals("Valido") ){
 	     					
-		     				//Hay que poner algo aquí para que cuando falle la aplicación no se cierre     				
+		     				//  Hay que poner algo aquí para que cuando 
+	     					//  falle la aplicación no se cierre     				
 		     				downloadTask.execute(urlD);
 		     				Log.i("URL", urlD);
 		     				
@@ -173,28 +181,25 @@ public class ScoreProfile extends Activity{
 	     				
 	 				}else{
 	 					Toast.makeText(ctx, "¡Paga!", Toast.LENGTH_LONG).show();				
-	 					
 	 				}
         		}
- 			
 			}
-        	 
         });
-		
 	} 
-
+	/*
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.menu_score_profile, menu); //Hacer un menú con el botón de compartir en todos sitios
+		getMenuInflater().inflate(R.menu.menu_score_profile, menu); 
+		//Hacer un menú con el botón de compartir en todos sitios
 		
-		/* Para cuando tengamos la tienda de partituras web se inplementará esto, no antes
+		// Para cuando tengamos la tienda de partituras web se inplementará esto, no antes
 		// Set up ShareActionProvider's default share intent
 	    MenuItem shareItem = menu.findItem(R.id.action_share);
 	    share = (ShareActionProvider) shareItem.getActionProvider();
         share.setShareHistoryFileName(ShareActionProvider.DEFAULT_SHARE_HISTORY_FILE_NAME);
 
         share.setShareIntent(createShareIntent());
-		 */
+		
 	    return super.onCreateOptionsMenu(menu);
 	}
 	
@@ -213,7 +218,7 @@ public class ScoreProfile extends Activity{
 	    }
 	}
 	
-	/*//Este método se utiliza en el menú. ShareActionProvider
+	//  Este método se utiliza en el menú. ShareActionProvider
 	private Intent createShareIntent() {
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
         shareIntent.setType("image/plain");
@@ -221,9 +226,9 @@ public class ScoreProfile extends Activity{
         shareIntent.putExtra(Intent.EXTRA_STREAM, uri);
         shareIntent.putExtra(Intent.EXTRA_TITLE, "This is an android icon");
         return shareIntent;
-    }*/
+    }
+    */
 	
-		
 	class AsyncDownload extends AsyncTask<String, Integer, String>{
 
 		private Context context;
@@ -253,7 +258,8 @@ public class ScoreProfile extends Activity{
 	                // expect HTTP 200 OK, so we don't mistakenly save error report 
 	                // instead of the file
 	                if (connection.getResponseCode() != HttpURLConnection.HTTP_OK)
-	                     return "Server returned HTTP " + connection.getResponseCode() + " " + connection.getResponseMessage();
+	                     return "Server returned HTTP " + connection.getResponseCode() 
+	                    		 + " " + connection.getResponseMessage();
 
 	                // this will be useful to display download percentage
 	                // might be -1: server did not report the length
@@ -261,7 +267,8 @@ public class ScoreProfile extends Activity{
 
 	                // download the file
 	                input = connection.getInputStream();
-	                output = new FileOutputStream(Environment.getExternalStorageDirectory() + "/SmartScores/scores/" + download.FileName(url));
+	                output = new FileOutputStream(Environment.getExternalStorageDirectory() 
+	                		+ "/RisingScores/scores/" + download.FileName(url));
 
 	                byte data[] = new byte[4096];
 	                long total = 0;
@@ -317,10 +324,10 @@ public class ScoreProfile extends Activity{
 		    protected void onPostExecute(String result) {
 		        mProgressDialog.dismiss();
 		        if (result != null){
-		            Toast.makeText(context,"Download error: "+result, Toast.LENGTH_LONG).show();
+		            Toast.makeText(context,R.string.errordownload + result, Toast.LENGTH_LONG).show();
 		        	Log.e("Error descarga", "Error descarga: " + result);
 		        }else{ 
-		            Toast.makeText(context,"File downloaded", Toast.LENGTH_SHORT).show();
+		            Toast.makeText(context,R.string.okdownload, Toast.LENGTH_SHORT).show();
 		            Log.i("Descarga", "Archivo descargado");		            
 		        }
 		    }

@@ -75,7 +75,7 @@ public class PianoFragment extends Fragment{
 		
 		ibnc.execute(new Configuration(rootView.getContext()).getUserId());
 	
-		progressDialog = ProgressDialog.show(rootView.getContext(), "", "Por favor, espere...");
+		progressDialog = ProgressDialog.show(rootView.getContext(), "", getString(R.string.pleasewait));
 		
 		pnc = new PianoNetworkConnection(listen, listener, rootView.getContext());
 		

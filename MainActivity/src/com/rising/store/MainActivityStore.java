@@ -27,15 +27,16 @@ public class MainActivityStore extends FragmentActivity implements OnQueryTextLi
 	String f;
 	static String s;
 		
-	//Poner tiempo máximo de conexión. Si no se conecta pasado ese tiempo, sale algo.
+	//  Poner tiempo máximo de conexión. Si no se conecta pasado ese tiempo, sale algo.
 	Bundle savedInstanceState;
 	MainActivityStore activity;
 	
-	//Con esta clase se guardan los datos del usuario en el dispositivo para posteriores consultas
+	//  Con esta clase se guardan los datos del usuario 
+	//  en el dispositivo para posteriores consultas
 	Configuration conf = new Configuration(this);
 	
-	//private CustomAdapter c_adapter;
-	//public float saldo = userData.get(0).getMoney();
+	//  private CustomAdapter c_adapter;
+	//  public float saldo = userData.get(0).getMoney();
 	
 	public static Context context;
 	

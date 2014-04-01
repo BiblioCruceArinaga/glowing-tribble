@@ -677,7 +677,8 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 
 	/*
 	private Bitmap imagen(){
-		File imgFile = new  File(Environment.getExternalStorageDirectory() + "/SmartScores/scores/paraelisa.png");
+		File imgFile = new  File(Environment.getExternalStorageDirectory() 
+			+ "/RisingScores/scores/paraelisa.png");
 		if(imgFile.exists()){
 			Log.d("¿Existe?", "Sí");
 		    Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());

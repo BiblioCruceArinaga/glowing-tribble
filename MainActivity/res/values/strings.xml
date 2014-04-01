@@ -338,6 +338,7 @@
     
     <!-- Pantalla tienda -->
     	<string name="store">Tienda</string>
+    	<string name="pleasewait">Por favor, espera...</string>
     	<string name="masinfo">+ Info</string>
     	<string name="free">Gratis</string>
     	<string name="download">Descargar</string>

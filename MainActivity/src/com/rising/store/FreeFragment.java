@@ -74,7 +74,7 @@ public class FreeFragment extends Fragment{
 		
 		ibnc.execute(new Configuration(rootView.getContext()).getUserId());
 		
-		progressDialog = ProgressDialog.show(rootView.getContext(), "", "Por favor, espere...");
+		progressDialog = ProgressDialog.show(rootView.getContext(), "", getString(R.string.pleasewait));
 		
 		fnc = new FreeNetworkConnection(listen, listener, rootView.getContext());
 		

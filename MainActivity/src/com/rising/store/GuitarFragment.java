@@ -6,6 +6,7 @@ import java.util.Locale;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -29,14 +30,16 @@ public class GuitarFragment extends Fragment{
 	static ProgressDialog progressDialog;
 	FragmentManager fm;
 			
-	//Esto cargará todo aquello que dependa del hilo para ejecutarse, y que de no ser así no interesa que se ejecute
+	//  Esto cargará todo aquello que dependa del hilo para ejecutarse, 
+	//  y que de no ser así no interesa que se ejecute
 	private OnTaskCompleted listener = new OnTaskCompleted() {
-	    public void onTaskCompleted() {     
-
+	    public void onTaskCompleted(Context context) {     
 	    	partiturasGuitar = gnc.devolverPartituras();
 	    	ICompra = ibnc.devolverCompra();
 	    		    		    	
-	    	//Trozo de código dónde se ve si la partitura ha sido comprada por el usuario. En tal caso se pone a true el valor "Comprado"
+	    	//  Trozo de código dónde se ve si la partitura ha 
+	    	//  sido comprada por el usuario. En tal caso se pone 
+	    	//  a true el valor "Comprado"
 	    	for(int i = 0; i < partiturasGuitar.size(); i++){
 		    	for(int j = 0; j < ICompra.size(); j++){	
 		    		if(partiturasGuitar.get(i).getId() == ICompra.get(j).getId_S()){
@@ -49,13 +52,13 @@ public class GuitarFragment extends Fragment{
 	    				        
 	    	Log.i("Guitar", partiturasGuitar + "");
 	    	
-		    guitarView.setAdapter(new CustomAdapter(getActivity(), partiturasGuitar));
+		    guitarView.setAdapter(new CustomAdapter(context, partiturasGuitar));
 		      		    
 		    onDestroyProgress();
 	    } 	
 	};
 	
-	//Esta interface cargará el método que cierra el hilo y da error
+	//  Esta interface cargará el método que cierra el hilo y da error
 	private OnTaskUncomplete listen = new OnTaskUncomplete(){
 		public void onTaskUncomplete(){
 			ConnectionExceptionHandle();
@@ -78,7 +81,7 @@ public class GuitarFragment extends Fragment{
 		
 		ibnc.execute(new Configuration(rootView.getContext()).getUserId());
 		
-		progressDialog = ProgressDialog.show(rootView.getContext(), "", "Por favor, espere...");
+		progressDialog = ProgressDialog.show(rootView.getContext(), "", getString(R.string.pleasewait));
 				
 		gnc = new GuitarNetworkConnection(listen, listener, rootView.getContext());
 		
