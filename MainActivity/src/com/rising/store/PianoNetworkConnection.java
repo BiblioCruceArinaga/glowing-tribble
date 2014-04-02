@@ -161,8 +161,7 @@ public class PianoNetworkConnection extends AsyncTask<String, Integer, String>{
             e1.printStackTrace();
             if(listen != null) listen.onTaskUncomplete();
         }
-		
-		
+				
     	return "";
     }
     

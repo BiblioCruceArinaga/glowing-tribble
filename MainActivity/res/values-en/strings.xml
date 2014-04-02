@@ -1,0 +1,388 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Pantalla Login -->
+    <string name="app_name">Scores</string>
+    <string name="logo">Scores” logo</string>
+    <string name="login">Login</string>
+    <string name="login_f">Login with Facebook</string>
+    <string name="olvida_pass">Forgot your password?</string>
+    <string name="registro">Sign up</string>
+    <string name="registrate">If you\'re still not a user, Sign up now!</string>
+    <string name="slogan">Scores of the future</string>
+    <string name="facebook_app_id">1439111256308763</string>
+        
+   		<!-- Dialogo inicio sesión -->
+    	<string name="mail">EMail</string>
+    	<string name="pass">Password</string>
+    	<string name="login_title">Login</string>
+    	<string name="err_campos_vacios">You should to complete all the fields</string>
+    	<string name="err_login_unknown_user">User name and/or password incorrect</string>
+    	<string name="err_not_active">This account is pending activation</string>
+    	<string name="err_login_unknown">There was an error. Please, try again</string>
+    	<string name="cancel">Cancel</string>
+    	<string name="confirm_login">Login</string>
+    	<string name="cerrar_sesion">Logout</string>
+    	
+    	<!-- Dialogo olvido contraseña -->
+    	<string name="olvido_title">Recover password</string>
+    	<string name="mail_olvido_pass">Introduce Email</string>
+    	<string name="confirm_olvidopass">Send</string>
+    	<string name="err_olvidopass_unknown">There was an error and could not recover the password.
+    	    Please, try again later</string>
+    	<string name="olvidopass_ok">We\'ve sent an email with instructions about your password</string>
+    	<string name="err_olvidopass_mail">﻿We didn\'t find any account associated with this email</string>
+    	<string name="err_olvidopass_mail_not_sent">﻿Your password was changed but couldn”t send it. 
+     Please, try again later</string>
+    	
+    	<!-- Dialogo registro usuario -->
+    	<string name="registro_title">Sign up</string>
+    	<string name="nombre_registro">Name</string>
+    	<string name="mail_registro">Email</string>
+    	<string name="pass_registro">Password</string>
+    	<string name="confipass_registro">Confirm password</string>
+    	<string name="confirm_registro">Sign up</string>
+    	<string name="err_net">﻿There was a network error and it wasn\'t possible to send data. Please, try again later.</string>
+    	<string name="err_pass">Passwords don\'t match</string>
+    	<string name="err_reg">﻿There was an error trying to do the registration. 
+    	    Please, try again later.</string>
+    	<string name="err_reg_mail">﻿This email is already in use, please choose another
+</string>
+    	<string name="ok_reg">An email have been sent</string>
+    	<string name="ok_reg_mail">﻿Registration is completed but could not send the confirmation email. We\'ll send it manually within a maximum of 24 hours.</string>
+    	
+	<!-- Pantalla principal -->
+    <string name="titulo_coleccion">My collection</string>
+    <string name="bin">Delete</string>
+    <string name="action_sort">Sort</string>
+    <string name="author">Author</string>
+    <string name="author_dialog_title">Select an author</string>
+    <string name="instrument">Instrument</string>
+    <string name="instrument_dialog_title">Select an instrument</string>
+    <string name="name">Sort by name</string>
+    <string name="show_all">Show all</string>
+    <string name="action_search">Search</string>
+    <string name="no_scores">Your scores collection is empty. 
+You can buy scores in our store.</string>
+    <string name="no_scores_button">Go to Score Store</string>
+    	    	
+    	<!-- Menú contextual -->
+    	<string name="select_all">Select all</string>
+    	<string name="select_none">Deselect all</string>
+    	<string name="title">Select scores</string>
+    	<string name="subtitle">1 score selected</string>
+    	<string name="subtitle2">scores selected</string>
+    	<string name="successDelete">Files deleted successfully</string>
+   	<string name="failDelete">An error occurred and we were unable to eliminate 
+     selected files</string>
+    
+    <!-- Pantalla partitura -->
+    <string name="metronome">Metronome</string>	
+    	<string name="metronome_pause">Pause</string>
+    	<string name="metronome_stop">Stop</string>
+    	<string name="metronome_play">Play</string>
+    	<string name="metronome_back">Back to top</string>
+    	<string name="close_metronome">Close metronome</string>
+    	<string name="tempo">Tempo</string>
+    <string name="pa">Score</string>
+    	
+    <string name="contentDescription">Image</string>
+
+    <!-- Menú principal contextual -->
+    <string name="mis_datos">My profile</string>
+    	<string name="mis_datos_nombre">Name:</string>
+    	<string name="mis_datos_email">Email:</string>
+    	<string name="mis_datos_clave">Change password</string>
+    	<string name="mis_datos_clave_vieja">Old password</string>
+    	<string name="mis_datos_clave_nueva">New password</string>
+    	<string name="mis_datos_clave_repetir">Confirm new password</string>
+    	<string name="mis_datos_boton">Change password</string>
+    	<string name="mis_datos_clave_cambiada">You password have been change</string>
+    	<string name="mis_datos_error_verif">We couldn\'t verify your identity</string>
+    	<string name="mis_datos_clave_erronea">Incorrect password</string>
+    
+    <string name="feedback">Feedback</string>
+    	<string name="feedback_envianos">
+		Send us those errors you\'ve found or suggestions you may have
+     		to improve implementation. Thank you very much.
+    	</string>
+    	<string name="feedback_boton">Send feedback</string>
+    	<string name="feedback_enviado">Feedback sent. Thank you for helping us to improve.</string>
+    
+    <string name="terminos_condiciones">Terms and conditions</string>
+    	<string name="terminos">
+    	    TERMS OF USE OF THE APPLICATION\n\n
+
+			1. ACCEPTANCE OF CONDITIONS OF USE\n\n
+			
+			When you install the APPLICATION, you accept the terms of use.\n\n
+			
+			2. DEFINITION\n\n
+			
+			2.1. The APPLICATION offers to the user access to an online store (hereinafter SHOP) 
+			from which the user can acquire at the price given in the SHOP, existing in the catalog 
+			offered by RISING scores. You may download scores you purchased on your device and 
+			can be used in two ways: by moving them manually or by selecting a metronome speed 
+			from which the score will automatically move throughout the piece.\n\n
+			
+			2.2. The APPLICATIOM is distributed for free. In addition, RISING will publish
+			APPLICATION periodic updates that not accrue any cost to the user.\n\n
+			
+			3. DATA PROTECTION\n\n
+			
+			Any personal information provided to RISING while using the APPLICATION only be 
+			used in accordance with the Privacy Policy RISING.\n\n
+			
+			4. LICENSE AND COPYRIGHT\n\n
+			
+			4.1. All trademarks, copyrights, database rights and other APPLICATION intellectual 
+			property, whatever its nature, as the source code are property of RISING.\n\n
+			
+			4.2. Hereby RISING offers a revocable, free, nonexclusive and international licence 
+			to use this APPLICATION on a personal or professional level within the limits set by these 
+			conditions.\n\n
+			
+			5. TERMS OF USE\n\n
+			
+			5.1. The user will not act or allow third parties acting on their behalf to:\n\n
+			
+				a) Make and distribute copies of the APPLICATION. \n\n
+				b) Attempting to copy, reproduce, alter, modify, reverse engineer, disassemble,
+				decompile, transfer, exchange or translate APPLICATION. \n\n
+				c) Create any kind of project derived from the APPLICATION. \n\n
+			
+			5.2. The application provides the user free for personal use and not commercial. 
+			RISING reserves the right to modify or disable the APPLICATION any time for any 
+			reason. \n\n
+			
+			5.3. You agree that the terms of the agreement with the vendor of your mobile network
+			("Mobile Service Provider") will continue to apply for the use of the APPLICATION.
+			Accordingly, the Supplier may charge for Mobile Services services
+			connection to the network while the APPLICATION remain connected to the network, or that
+			produce economic positions of others. The user accepts the responsibility of
+			charges that may arise. \n\n
+			
+			5.4. If the user is not the owner\'s billing phone or mobile device used to access to the 
+			APPLICATION, will assume that you have permission from the owner to use the APPLICATION. \n\n
+			
+			6. AVAILABILITY\n\n
+			
+			6.1. The application is available for mobile handheld devices operating with Android OS operating 
+			systems. RISING will make all reasonable efforts to APPLICATION is available at all time. However, 
+			you agree that the APPLICATION delivery will be made through internet and mobile networks and,
+			therefore, the quality and availability of the APPLICATIOM can be affected by factors beyond the control
+			responsible of RISING. \n\n
+			
+			6.2. To use the APPLICATION, the user must have a compatible mobile device with internet access 
+			and meets the minimum specifications ("Software Requirements"). \n\n
+			
+			6.3. The software requirements are: OS Android Devices over 7 inches and the Android OS 4.1 to OS 4.4 
+			operating systems. Languages: On devices with languages ​​not supported by the APPLICATION, this will 
+			be show in English. \n\n
+			
+			7. ACCOUNT DELETING\n\n
+			
+			3.2.7.1. You are permitted to terminate your account at any time through tool offered in the 
+			APPLICATION for this purpose, and without pre notice to RISING. \ n \ n
+
+			3.2.7.2. The account deletion by the user is an irreversible process that has result in the removal of all 
+			user information contained in the RISING database. This information includes the record of purchases 
+			made ​​by the user in the STORE. However, the scores that the user has downloaded to the device
+			have been acquired through the STORE not be removed from the device, but the user
+			must create a new account if want to use. \n\n
+
+			3.2.7.3. The account deletion by the user results in loss of balance that had accumulated in your account, 
+			as well as the end of their contractual relationship with RISING. \n\n
+			
+			8. TERMINATION\n\n
+			
+			8.1. RISING may terminate the use of the APPLICATION at any time, previous notice, which will be published on 
+			the BLOG. \n\n
+		    
+			8.2. At the end of such use, shall also order all rights and licenses granted to the user, which means that the user 
+			must stop using the software. \n\n
+    	</string>
+    
+    <string name="condiciones_compra">Term of purchase</string>
+    	<string name="condiciones">
+    	    TERMS OF PURCHASE\n\n
+
+			1. PURPOSE AND DESCRIPTION OF PRODUCTS\n\n
+
+			RISING S.C.P. (hereinafter RISING) is the creator and owner of the application Scores
+			(hereinafter, the APPLICATION) offered on the site www.scores.rising.es (hereinafter, the WEB)
+			generated and structured from software, design and content, along with other information
+			both own from reputable suppliers and offers online support (hereinafter STORE) 
+			in which the CUSTOMER can purchase sheet music in digital format
+			that can be used by the application itself. This Agreement regulates the provision and
+			supply to the CUSTOMER through the Internet telecommunications network, products
+			by RISING. The products are those that are available through the STORE and
+			in price lists contained in it, reserving however that company the right
+			to amend and revise such rates and products. \n\n
+			
+			2. GENERAL TERMS\n\n
+			
+			The order by the CUSTOMER of the products of the STORE presupposes the acceptance of these
+			Conditions of Purchase and Terms listed both in the  WEB  and in the APPLICATION, and is
+			perfected in the moment of the purchase order. \n\n
+
+			The presentation of products on the screen itself does not constitute an offer of sale itself from a
+			contractual point of view, but it is merely a showcase of the products available to the STORE. \n\n
+				
+			3. PRICE\n\n
+						
+			The cost of the products specified in the STORE will be established for each of them and force in
+			each time, which is accessible via the store and displayed on the information attached to the product.
+			RISING reserves the right to change prices at any time, being of application that modification to the 
+			parties since it is incorporated into the Web. \n\n
+			
+			4. ACQUISITION OF CREDIT\n\n
+			
+			4.1. To purchase any of the products available through the SHOP, the CLIENT will available in the STORE 
+			an option that will allow to add credit to the CLIENT\'s account. \n\n
+			
+			4.2. This option will consist that the CLIENT  shall pay to RISING a monetary amount that, after payment, will be 
+			posted to the CLIENT account as a virtual credit (hereinafter CREDIT). This is the CREDIT
+			that allow the CUSTOMER to purchase scores in the STORE. \n\n
+			
+			4.3. If the CLIENT does not have enough CRDIT to purchase a score, can not buy it.
+			In this case, if the CLIENT wish to acquire this score should add more CREDIT into the account. \n\n
+		
+			4.4. RISING don\'t handlecCREDIT returns.\n\n
+			
+			5. DELIVERY\n\n
+			
+			The delivery of products purchased will occur immediately after the payment has been made and 
+			from the STORE. Additionally, an email will be sent to the client with information of the purchase, 
+			as well as the bill itself \n\n
+			
+			6. RETURNS\n\n
+			
+			Being products and services in digital format and for obvious reasons, no returns allowed. \n\n
+			
+			7. WARRANTY\n\n
+			
+			In the case of a problem, the purchased product could not be downloaded or was technically defective
+			so it was impossible to read and use, the CLIENT must contact, before 15 days, with 
+			RISING (info@rising.es) to request a copy of these products. RISING provide copies of such
+			products provided only if the claim occurs within the 15 days mentioned. \n\n
+			
+			In case of loss or corruption of the acquired and paid files in the STORE, RISING provide a new copy
+			the CLIENT and will do up to 3 times as long as the product acquired for the CLIENT is current and not 
+			discontinued at the time of the application result. To make this possible delivery, the CLIENT must
+			contact with RISING and provide necessary information how to both product and verification
+			that this was actually purchased in the STORE. \n\n
+			
+			8. BILLING AND PAYMENT\n\n
+			
+			The CLIENT will make payment of products using the payment gateway enabled by RISING and managed by an
+			specialized entity. Payment is made on a secure server. At the time of payment, RISING emits and sends the bill
+			to the email address provided by the CLIENT. For security reasons, RISING does not store data of payment in 
+			any form, leaving the entire purchase process by the entity. RISING just received, by the entity, the authorization 
+			code or failing the cause of failure of the operation (card denied, expired, etc..). \n\n
+			
+			9. JURISDICTION AND APPLICABLE LAW\n\n
+			
+			9.1. The present Terms shall be governed by the provisions of Spanish legislation.\n\n
+
+			9.2. In the case that any discrepancy or dispute arising from the interpretation or Application of these 
+			Terms of Use, RISING and the CLIENT expressly waiving any other jurisdiction he could be entitled, 
+			subject to the jurisdiction of the Courts and Tribunals of RISING address. And in the case that the CLIENT is 
+			resident outside of Spain, RISING and CLIENT expressly waive any other jurisdiction that may apply, 
+			subject to the jurisdiction of the Courts of Las Palmas de Gran Canaria. \n\n    	    
+    	</string>
+
+    <string name="eliminar_cuenta">Delete account</string>
+    	<string name="esta_seguro">
+    	    Are you sure you want to delete your account? If you do it,
+     you will lose the credit associated with your account. This operation is irreversible.
+     If you still wish to continue, enter your password.
+    	</string>
+    	<string name="esta_seguro_facebook">
+	Are you sure you want to delete your account? If you do it,
+     you will lose the credit associated with your account. This operation is irreversible.
+    	</string>
+    	<string name="error_eliminar_cuenta">
+    	   There was an error and could not remove your account. You can try again later.
+    	</string>
+    	<string name="error_eliminar_cuenta_datos">Error, incorrect data</string>
+    	<string name="error_eliminar_cuenta_identidad">
+    	    We were unable to verify your identity securely. The operation has been canceled.
+    	</string>
+    	<string name="error_eliminar_cuenta_fallo_verif">
+    	   We were unable to verify this account. The operation has been canceled.
+    	</string>
+    	<string name="cuenta_eliminada">Your account have been delete successfully.</string>
+    	<string name="eliminar_cuenta_clave">Password</string>
+    	<string name="yes">Yes</string>
+    	<string name="no">No</string>
+    	
+    <string name="action_settings">Settings</string>
+    	
+    <string name="about">About Scores</string>
+	    <string name="version">Version: Beta 0.2 </string>
+	    <string name="acerca_de">Scores have been develop for RISING S.C.P.</string>	
+	    <string name="visitanos">Visit our site: scores.rising.es</string>
+    
+    <!-- Pantalla tienda -->
+    	<string name="store">Store</string>
+    	<string name="masinfo">+ Info</string>
+    	<string name="pleasewait">Please, wait...</string>
+    	<string name="free">Free</string>
+    	<string name="download">Download</string>
+    	<string name="coin">€</string>
+    	<string name="update">Update</string>
+    	<string name="store_error">The store is not available right now. Try again later.</string>
+    	<string name="retry">Retry</string>
+    	<string name="guitar">Guitar</string>
+    	<string name="piano">Piano</string>
+    	<string name="quest">Quest</string>
+    	<string name="okdownload">The score was downloaded successfully</string>
+    	<string name="errordownload">Failed to download the score</string>
+    	<string name="error_store">Network failed!</string>
+    	<string name="buy_agree">Want to buy this score?</string>
+    	<string name="confirm_buy">Confirm purchase</string>
+    	<string name="buy">Buy</string>
+    	<string name="no_money">You do not have enough credit to make the purchase. </string>
+    	
+    		<!-- Pantalla busqueda -->
+    		<string name="list">List</string>
+    	
+    		<!-- Pantalla saldo -->
+    		<string name="money">Credit</string>
+    		<string name="current_money">Current credit:  </string>
+    		<string name="free_money">Get free credit!</string>
+    		<string name="add5">Add 5</string>
+    		<string name="add10">Add 10 + 1 Free</string>
+    		<string name="add20">Add 20 + 2 Free</string>
+    		<string name="add50">Add 50 + 5 Free</string>
+    		<string name="add100">Add 100 + 10 Free</string>
+    		<string name="share_friends">Share with friends</string>
+    		<string name="share_social">Share in social networks</string>
+    		<string name="share_button">Share</string>
+    		<string name="friendmail">Enter the e-mail from a friend</string>
+    
+    		<!-- Pantalla encuesta -->
+    		<string name="quest_explain">In our efforts to improve and want to always bring you the best and right what
+ 	    	you need we bring you this short survey through which we can know what exactly we can offer you 
+		to make your experience in Scores the best.</string>	    	
+    			    	
+    		<string name="quest_instruments">What other instruments would you add to the store?</string>
+    		<string name="quest_scores">¿You think ?</string>	 
+    		<string name="quest_observations">If you have any other comments you can comment on:</string>   	
+    		<string name="quest_yes">Yes</string>
+    		<string name="quest_no">No</string>
+    		
+    <!-- Pantalla perfil partituras -->
+    	<string name="share">Share</string>
+
+    <!-- Pantalla preferencias -->	
+    	<string name="user_profile">User profile</string>
+    	<string name="feedback">Feedback</string>
+    	
+    <!-- Errores -->
+    	<string name="connection_err">An error occurred on the connection</string>
+    
+    	<string name="contentDescription">Image</string>
+
+</resources>
