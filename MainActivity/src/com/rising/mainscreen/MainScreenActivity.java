@@ -373,7 +373,6 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 
 	    	case R.id.session_button:
 	        	session.logoutUser();
-				//login.logoutFromFacebook();
 				finish();
 	            return true;
             
@@ -430,8 +429,14 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 	            return true;
 	            
 	        case R.id.mis_datos:
+	        	
 	        	MDialog = new Dialog(MainScreenActivity.this, R.style.cust_dialog);
-	    		MDialog.setContentView(R.layout.mis_datos);
+	        	
+	        	if(fid > -1){
+	        		MDialog.setContentView(R.layout.mis_datos_facebook);
+	        	}else{
+	        		MDialog.setContentView(R.layout.mis_datos);
+	        	}
 	    		MDialog.setTitle(R.string.mis_datos);
 	    		MDialog.getWindow().setLayout(LayoutParams.MATCH_PARENT,LayoutParams.WRAP_CONTENT);
 	    		MDialog.show();
@@ -440,14 +445,7 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 	    		TextView email = (TextView) MDialog.findViewById(R.id.misDatosEmail);
 	    		nombre.setText(nombre.getText() + " " + session.getName());
 	    		email.setText(email.getText() + " " + session.getMail());
-	    		
-	    		if (fid > -1) {
-	    			MDialog.getWindow().setLayout(LayoutParams.MATCH_PARENT,240);
-	    		}
-	    		else {
-	    			nombre.setVisibility(View.INVISIBLE);
-	    		}
-	    		
+	    			    		
 	    		final EditText claveVieja = (EditText) MDialog.findViewById(R.id.misDatosClaveVieja);
 	    	    final EditText claveNueva = (EditText) MDialog.findViewById(R.id.misDatosClaveNueva);
 	    	    final EditText claveRepetir = (EditText) MDialog.findViewById(R.id.misDatosClaveRepetir);

@@ -62,7 +62,7 @@ public class Login extends FragmentActivity {
 	private Button Confirm_Reg, Cancel_Reg;
 	private ProgressDialog PDialog;
 	private HttpPostAux HPA =  new HttpPostAux();
-	private Dialog LPDialog, LDialog, RDialog;
+	private Dialog LPDialog, LDialog, RDialog, EDialog;
 	private String usuario = "";
 	private String passw = "";
 	private String pass = "";
@@ -365,18 +365,35 @@ public class Login extends FragmentActivity {
 	
 	//  Mostrar errores
     public void errLogin(int code){
-    	switch (code) {
+    	EDialog = new Dialog(Login.this, R.style.cust_dialog);
+		EDialog.setContentView(R.layout.login_dialog);
+		TextView tv_E = (TextView)EDialog.findViewById(R.id.error_tV);
+		Button  Login_Error_Close_Button = (Button)EDialog.findViewById(R.id.error_button);
+		Login_Error_Close_Button.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				EDialog.dismiss();				
+			}
+			
+		});
+    	
+		switch (code) {
     		case 0:
-    			Toast.makeText(getApplicationContext(), R.string.err_campos_vacios, Toast.LENGTH_SHORT).show();
+				tv_E.setText(R.string.err_campos_vacios);
+				EDialog.show();
     			break;
     		case 2:
-    			Toast.makeText(getApplicationContext(), R.string.err_login_unknown_user, Toast.LENGTH_SHORT).show();
+    			tv_E.setText(R.string.err_login_unknown_user);
+				EDialog.show();
     			break;
     		case 3:
-    			Toast.makeText(getApplicationContext(), R.string.err_not_active, Toast.LENGTH_SHORT).show();
+    			tv_E.setText(R.string.err_not_active);
+				EDialog.show();
     			break;
     		default:
-    			Toast.makeText(getApplicationContext(), R.string.err_login_unknown, Toast.LENGTH_SHORT).show();
+    			tv_E.setText(R.string.err_login_unknown);
+				EDialog.show();
     	}
     }
 	

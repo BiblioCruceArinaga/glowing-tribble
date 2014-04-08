@@ -23,6 +23,7 @@
     	<string name="cancel">Cancel</string>
     	<string name="confirm_login">Login</string>
     	<string name="cerrar_sesion">Logout</string>
+    	<string name="close_d">Close</string>
     	
     	<!-- Dialogo olvido contraseña -->
     	<string name="olvido_title">Recover password</string>
@@ -320,7 +321,7 @@ You can buy scores in our store.</string>
     <string name="action_settings">Settings</string>
     	
     <string name="about">About Scores</string>
-	    <string name="version">Version: Beta 0.2 </string>
+	    <string name="version">Version: Beta 0.3 </string>
 	    <string name="acerca_de">Scores have been develop for RISING S.C.P.</string>	
 	    <string name="visitanos">Visit our site: scores.rising.es</string>
     
@@ -378,11 +379,8 @@ You can buy scores in our store.</string>
 
     <!-- Pantalla preferencias -->	
     	<string name="user_profile">User profile</string>
-    	<string name="feedback">Feedback</string>
-    	
+    	    	
     <!-- Errores -->
     	<string name="connection_err">An error occurred on the connection</string>
-    
-    	<string name="contentDescription">Image</string>
 
 </resources>

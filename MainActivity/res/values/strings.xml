@@ -23,6 +23,7 @@
     	<string name="cancel">Cancelar</string>
     	<string name="confirm_login">Iniciar</string>
     	<string name="cerrar_sesion">Cerrar Sesión</string>
+    	<string name="close_d">Cerrar</string>
     	
     	<!-- Dialogo olvido contraseña -->
     	<string name="olvido_title">Recuperar contraseña</string>
@@ -390,11 +391,8 @@
 
     <!-- Pantalla preferencias -->	
     	<string name="user_profile">Cuenta de usuario</string>
-    	<string name="feedback">Sugerencias</string>
     	
     <!-- Errores -->
     	<string name="connection_err">Ocurrió un error en la conexión</string>
-    
-    	<string name="contentDescription">Imagen</string>
 
 </resources>

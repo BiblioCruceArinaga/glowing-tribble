@@ -23,6 +23,7 @@
     	<string name="cancel">Cancelar</string>
     	<string name="confirm_login">Iniciar</string>
     	<string name="cerrar_sesion">Cerrar Sesión</string>
+    	<string name="close_d">Cerrar</string>
     	
     	<!-- Dialogo olvido contraseña -->
     	<string name="olvido_title">Recuperar contraseña</string>
@@ -332,7 +333,7 @@
     <string name="action_settings">Preferencias</string>
     	
     <string name="about">Acerca de Scores</string>
-	    <string name="version">Versión: Beta 0.2 </string>
+	    <string name="version">Versión: Beta 0.3 </string>
 	    <string name="acerca_de">Scores ha sido desarrollado por RISING S.C.P.</string>	
 	    <string name="visitanos">Visita nuestra web: scores.rising.es</string>
     
@@ -390,11 +391,8 @@
 
     <!-- Pantalla preferencias -->	
     	<string name="user_profile">Cuenta de usuario</string>
-    	<string name="feedback">Sugerencias</string>
-    	
+    	    	
     <!-- Errores -->
     	<string name="connection_err">Ocurrió un error en la conexión</string>
-    
-    	<string name="contentDescription">Imagen</string>
 
 </resources>
