@@ -5,12 +5,29 @@
     android:background="@drawable/background_scoresapp"
     android:orientation="vertical" >
 
+    <EditText
+        android:id="@+id/eT_metronome"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:textSize="30sp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="30dp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:inputType="numberSigned" >
+
+        <requestFocus />
+    </EditText>
+<!-- 
     <NumberPicker
         android:id="@+id/nm_metronome"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="0.21" />
+        android:layout_weight="0.21" >
 
+    </NumberPicker>
+-->
     <ImageButton
         android:id="@+id/playButton1"
         android:layout_width="80dp"

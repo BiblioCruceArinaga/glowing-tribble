@@ -19,6 +19,7 @@ import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
@@ -47,7 +48,7 @@ import com.rising.login.UserDataNetworkConnection.OnLoginCompleted;
 public class Login extends FragmentActivity {
 	
 	SessionManager session;
-	LoginButton authButton;
+	//LoginButton authButton;
 	Configuration conf = new Configuration(this);
 	public static String FId;
 	public static String FName;
@@ -318,19 +319,19 @@ public class Login extends FragmentActivity {
 		});
 		
 		//Acciones al presionar sobre el botÃ³n de Facebook
-		authButton = (LoginButton) findViewById(R.id.button_login_f);
+		//authButton = (LoginButton) findViewById(R.id.button_login_f);
 
-	    authButton.setOnErrorListener(new OnErrorListener() {
+	    /*authButton.setOnErrorListener(new OnErrorListener() {
 	       
 	       @Override
 	       public void onError(FacebookException error) {
 	         
 	       }
-	    });
+	    });*/
 	    
-	    authButton.setReadPermissions(Arrays.asList("email"));
+	    //authButton.setReadPermissions(Arrays.asList("email"));
 	        
-	    authButton.setSessionStatusCallback(new Session.StatusCallback() {
+	    /*authButton.setSessionStatusCallback(new Session.StatusCallback() {
 
 			@Override
 			public void call(Session session, SessionState state, Exception exception) {
@@ -354,7 +355,7 @@ public class Login extends FragmentActivity {
 					}).executeAsync(); 
 				}				
 			}         
-	    });  
+	    });  */
 	}
 	
 	@Override
@@ -365,36 +366,47 @@ public class Login extends FragmentActivity {
 	
 	//  Mostrar errores
     public void errLogin(int code){
+    	
     	EDialog = new Dialog(Login.this, R.style.cust_dialog);
-		EDialog.setContentView(R.layout.login_dialog);
+    	EDialog.getWindow();
+        EDialog.requestWindowFeature(Window.FEATURE_NO_TITLE); 
+		EDialog.setContentView(R.layout.login_error_dialog);
+		EDialog.getWindow().setLayout(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
+		
 		TextView tv_E = (TextView)EDialog.findViewById(R.id.error_tV);
+
+		Log.i("Entró", "Entró 1, código: " + code);
+		
+		switch (code) {
+			case 0:
+				tv_E.setText(R.string.err_campos_vacios);
+				break;
+			case 2:
+				tv_E.setText(R.string.err_login_unknown_user);
+				break;
+			case 3:
+				tv_E.setText(R.string.err_not_active);
+				break;
+			default:
+				tv_E.setText(R.string.err_login_unknown);
+		}
+		Log.i("Entró", "Entró 2");
 		Button  Login_Error_Close_Button = (Button)EDialog.findViewById(R.id.error_button);
+		
 		Login_Error_Close_Button.setOnClickListener(new OnClickListener(){
 
 			@Override
 			public void onClick(View v) {
+				Log.i("Entró", "Entró 4");
 				EDialog.dismiss();				
 			}
 			
 		});
     	
-		switch (code) {
-    		case 0:
-				tv_E.setText(R.string.err_campos_vacios);
-				EDialog.show();
-    			break;
-    		case 2:
-    			tv_E.setText(R.string.err_login_unknown_user);
-				EDialog.show();
-    			break;
-    		case 3:
-    			tv_E.setText(R.string.err_not_active);
-				EDialog.show();
-    			break;
-    		default:
-    			tv_E.setText(R.string.err_login_unknown);
-				EDialog.show();
-    	}
+		EDialog.show();
+		
+		Log.i("Entró", "Entró 5");
+		
     }
 	
     //  Este mÃ©todo valida que no haya ningun campo en blanco, 

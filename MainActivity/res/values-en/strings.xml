@@ -323,8 +323,9 @@ You can buy scores in our store.</string>
     <string name="about">About Scores</string>
 	    <string name="version">Version: Beta 0.3 </string>
 	    <string name="acerca_de">Scores have been develop for RISING S.C.P.</string>	
-	    <string name="visitanos">Visit our site: scores.rising.es</string>
-    
+	    <string name="visitanos">Visit our site: </string>
+    	<string name="web">scores.rising.es</string>
+	    
     <!-- Pantalla tienda -->
     	<string name="store">Store</string>
     	<string name="masinfo">+ Info</string>

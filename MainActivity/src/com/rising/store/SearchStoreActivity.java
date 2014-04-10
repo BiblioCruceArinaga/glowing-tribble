@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.widget.GridView;
 
 import com.rising.drawing.R;
+import com.rising.login.Configuration;
 import com.rising.store.SearchNetworkConnection.OnTaskCompleted;
 
 public class SearchStoreActivity extends Activity{
@@ -20,6 +21,8 @@ public class SearchStoreActivity extends Activity{
 	public String word; 
 	public CustomAdapter CAdapter;
 	public List<PartituraTienda> infoPart = new ArrayList<PartituraTienda>();
+	private static ArrayList<InfoCompra> ICompra = new ArrayList<InfoCompra>();
+	static InfoBuyNetworkConnection ibnc;
 	public SearchNetworkConnection snc;
 	
 	public ProgressDialog PDialog;
@@ -29,6 +32,16 @@ public class SearchStoreActivity extends Activity{
 	    public void onTaskCompleted() {     	    		
 	    	
 	    	infoPart = snc.devolverPartituras();
+	    	ICompra = ibnc.devolverCompra();
+	    	
+	    	//Trozo de código dónde se ve si la partitura ha sido comprada por el usuario. En tal caso se pone a true el valor "Comprado"
+	    	for(int i = 0; i < infoPart.size(); i++){
+		    	for(int j = 0; j < ICompra.size(); j++){	
+		    		if(infoPart.get(i).getId() == ICompra.get(j).getId_S()){
+		    			infoPart.get(i).setComprado(true);
+		    		}
+		    	}
+	    	}		    	
 		   		
 	    	GridView GV_Search = (GridView) findViewById(R.id.gV_search);
 				
@@ -56,6 +69,9 @@ public class SearchStoreActivity extends Activity{
         PDialog.show();
 		
 		snc = new SearchNetworkConnection(listener, this);
+		ibnc = new InfoBuyNetworkConnection(this);
+		
+		ibnc.execute(new Configuration(this).getUserId());
 		
 		snc.execute(word);
 	}   

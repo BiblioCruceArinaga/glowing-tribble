@@ -9,7 +9,8 @@
         android:id="@+id/logo"
         android:layout_width="250dp"
         android:layout_height="300dp"
-        android:layout_marginLeft="30dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="20dp"
         android:contentDescription="@string/logo"
         android:src="@drawable/scoreslogo" />
 
@@ -19,34 +20,52 @@
         android:orientation="vertical" >
         
         <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="25dp"
-        android:layout_marginTop="100dp"
-        android:textSize="20sp"
-        android:textColor="#222"
-        android:text="@string/version" />
+	        android:id="@+id/textView1"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_marginLeft="25dp"
+	        android:layout_marginTop="100dp"
+	        android:textSize="20sp"
+	        android:textColor="#222"
+	        android:text="@string/version" />
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="25dp"
-        android:layout_marginTop="16dp"
-        android:textSize="20sp"
-        android:textColor="#222"
-        android:text="@string/acerca_de" />
-
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="25dp"
-        android:layout_marginTop="19dp"
-        android:textSize="20sp"
-        android:textColor="#222"
-        android:text="@string/visitanos" />
+	    <TextView
+	        android:id="@+id/textView2"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_marginLeft="25dp"
+	        android:layout_marginTop="16dp"
+	        android:textSize="20sp"
+	        android:textColor="#222"
+	        android:text="@string/acerca_de" />
+	
+	    <LinearLayout
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content" >
+	        
+	        <TextView
+		        android:id="@+id/textView3"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_marginLeft="25dp"
+		        android:layout_marginTop="19dp"
+		        android:textSize="20sp"
+		        android:textColor="#222"
+		        android:text="@string/visitanos" />
+	        
+	        <TextView
+		        android:id="@+id/link"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_marginLeft="25dp"
+		        android:layout_marginTop="19dp"
+		        android:textSize="20sp"
+		        android:textColor="#222"
+		        android:text="@string/web" />
+	        
+	    </LinearLayout>
+    
+       
     </LinearLayout>    
 
 </LinearLayout>

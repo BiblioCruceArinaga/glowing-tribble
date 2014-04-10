@@ -335,7 +335,8 @@
     <string name="about">Acerca de Scores</string>
 	    <string name="version">Versión: Beta 0.3 </string>
 	    <string name="acerca_de">Scores ha sido desarrollado por RISING S.C.P.</string>	
-	    <string name="visitanos">Visita nuestra web: scores.rising.es</string>
+	    <string name="visitanos">Visita nuestra web: </string>
+	    <string name="web">scores.rising.es</string>
     
     <!-- Pantalla tienda -->
     	<string name="store">Tienda</string>

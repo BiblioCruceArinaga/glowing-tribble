@@ -6,25 +6,30 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Canvas;
+import android.graphics.Point;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.ActionMode;
+import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.SurfaceHolder;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
+import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.NumberPicker;
+import android.widget.SearchView.OnQueryTextListener;
 import android.widget.TextView;
 
 import com.rising.drawing.R;
 import com.rising.mainscreen.MainScreenActivity;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity{
 
     ScreenThread myScreenThread;
     SurfaceHolder holder;
@@ -33,7 +38,8 @@ public class MainActivity extends Activity {
 	private Dialog MDialog;
 	private Dialog CDialog;
 	private ImageButton playButton;
-	private NumberPicker metronome_speed;
+	//private NumberPicker metronome_speed;
+	private EditText et_metronome;
 	private TextView countdown;
 	private int tempo = 120;
 	String score;
@@ -78,11 +84,9 @@ public class MainActivity extends Activity {
 	    		return true;
 	    	
 	    	case android.R.id.home:
-	    		Intent i = new Intent(this, MainScreenActivity.class);
-	    		startActivity(i);
 	    		finish();
 	    		return true;
-
+	    		
 	    	default:
 	    		return true;
 	    }
@@ -90,30 +94,49 @@ public class MainActivity extends Activity {
 	
 	//  Mï¿½todo que controla el dialog de las opciones del metrï¿½nomo
 	private void metronome_options(int value){
-		MDialog = new Dialog(MainActivity.this);
+		WindowManager wm = (WindowManager) getSystemService(WINDOW_SERVICE);
+		Display display = wm.getDefaultDisplay();
+		Point screenSize = new Point();
+		display.getSize(screenSize);
+		int screenWith = screenSize.x;
+		int screenHeight = screenSize.y;
+		Log.i("Windowrrr", screenWith + ", " + screenHeight);
+		
+		MDialog = new Dialog(MainActivity.this,  R.style.cust_dialog);	
 		
 		MDialog.setContentView(R.layout.metronome_dialog);
 		MDialog.setTitle(R.string.metronome);
+				
+		//Cambios según la resolución de la pantalla
 		
+		if(screenWith <= 1200 && screenHeight <= 1850){
+			MDialog.getWindow().setLayout(600, 720);
+		}else{
+			
 		//  Cambia el tamaï¿½o de la ventana de diï¿½logo
-		MDialog.getWindow().setLayout(350, 420);
-									
+			MDialog.getWindow().setLayout(350, 470);
+		}		
+												
 		playButton = (ImageButton)MDialog.findViewById(R.id.playButton1);
-		metronome_speed = (NumberPicker)MDialog.findViewById(R.id.nm_metronome);
+		//metronome_speed = (NumberPicker)MDialog.findViewById(R.id.nm_metronome);
+		et_metronome = (EditText)MDialog.findViewById(R.id.eT_metronome);
 		
+		et_metronome.setText(String.valueOf(value));
+			/*	
 		metronome_speed.setMaxValue(300);
 		metronome_speed.setMinValue(1);
 		metronome_speed.setValue(value);
 		metronome_speed.setWrapSelectorWheel(true);
 		metronome_speed.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
-						
+			*/			
 		playButton.setOnClickListener(new OnClickListener(){
  
 			@Override
 			public void onClick(View v) {
-				tempo = metronome_speed.getValue();
+				//tempo = metronome_speed.getValue();
+				tempo = Integer.valueOf(et_metronome.getText().toString());
 				MainActivity.this.startActionMode(new ActionBarCallBack());
-				DialogCountdown();
+				DialogCountdown(); //En el futuro estaría bien que el usuario pueda elegir si aparece esto o no, y desde qué número cuenta. 
 				MDialog.dismiss();
 			}
 			
@@ -149,7 +172,7 @@ public class MainActivity extends Activity {
 		
 		CDialog.show();
 	}
-	
+		
 	//Cambia el icono entre el pause y el play dependiendo del estado del metrÃ³nomo
 	private void PlayButton_Status(MenuItem item){
 		if(play){
@@ -271,4 +294,6 @@ public class MainActivity extends Activity {
             return true;
         }
     }
+
+	
 }

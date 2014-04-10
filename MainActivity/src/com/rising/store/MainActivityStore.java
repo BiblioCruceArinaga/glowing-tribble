@@ -65,6 +65,7 @@ public class MainActivityStore extends FragmentActivity implements OnQueryTextLi
 	   Intent setIntent = new Intent(this, MainScreenActivity.class);
 	   new MainScreenActivity().ColocarFicheros();
 	   startActivity(setIntent);
+	   finish();
 	}
 	
     @Override
@@ -87,7 +88,7 @@ public class MainActivityStore extends FragmentActivity implements OnQueryTextLi
 	    searchView.setOnQueryTextListener(this);
 	    
 	    MenuItem item = menu.findItem(R.id.money);
-        item.setTitle("" + conf.getUserMoney()  + "€");
+        item.setTitle("" + conf.getUserMoney());
         Log.i("Conf", "Conf User: " + conf.getUserName() + ", Conf Money: " + conf.getUserMoney());
 	    	    
 		return true;

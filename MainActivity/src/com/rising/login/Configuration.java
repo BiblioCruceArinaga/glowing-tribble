@@ -1,5 +1,7 @@
 package com.rising.login;
 
+import java.text.DecimalFormat;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 
@@ -33,8 +35,8 @@ public class Configuration {
 		return getSettings().getString(KEY_NAME, null);  
 	}
 		
-	public float getUserMoney(){
-		return getSettings().getFloat(KEY_MONEY, 0);	
+	public float getUserMoney(){		
+		return Math.round(getSettings().getFloat(KEY_MONEY, 0));	
 	}
 	
 	public void setUserEmail(String email){

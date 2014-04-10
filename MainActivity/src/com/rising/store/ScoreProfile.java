@@ -186,7 +186,7 @@ public class ScoreProfile extends Activity{
 			}
         });
 	} 
-	/*
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.menu_score_profile, menu); 
@@ -194,12 +194,12 @@ public class ScoreProfile extends Activity{
 		
 		// Para cuando tengamos la tienda de partituras web se inplementará esto, no antes
 		// Set up ShareActionProvider's default share intent
-	    MenuItem shareItem = menu.findItem(R.id.action_share);
+	   /* MenuItem shareItem = menu.findItem(R.id.action_share);
 	    share = (ShareActionProvider) shareItem.getActionProvider();
         share.setShareHistoryFileName(ShareActionProvider.DEFAULT_SHARE_HISTORY_FILE_NAME);
 
         share.setShareIntent(createShareIntent());
-		
+		*/
 	    return super.onCreateOptionsMenu(menu);
 	}
 	
@@ -217,7 +217,7 @@ public class ScoreProfile extends Activity{
 	            return super.onOptionsItemSelected(item);
 	    }
 	}
-	
+	/*
 	//  Este método se utiliza en el menú. ShareActionProvider
 	private Intent createShareIntent() {
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
@@ -324,6 +324,8 @@ public class ScoreProfile extends Activity{
 		    protected void onPostExecute(String result) {
 		        mProgressDialog.dismiss();
 		        if (result != null){
+		        	
+		        	//Sustituir por dialog
 		            Toast.makeText(context,R.string.errordownload + result, Toast.LENGTH_LONG).show();
 		        	Log.e("Error descarga", "Error descarga: " + result);
 		        }else{ 

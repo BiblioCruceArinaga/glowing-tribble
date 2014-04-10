@@ -14,9 +14,11 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.os.Environment;
+import android.text.util.Linkify;
 import android.util.Log;
 import android.view.ActionMode;
 import android.view.Menu;
@@ -36,8 +38,8 @@ import android.widget.SearchView.OnQueryTextListener;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.rising.drawing.R;
 import com.rising.drawing.MainActivity;
+import com.rising.drawing.R;
 import com.rising.login.Login;
 import com.rising.login.SessionManager;
 import com.rising.mainscreen.ChangePassword.OnPasswordChanging;
@@ -350,6 +352,7 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 				if(isOnline()){
 					Intent i = new Intent(MainScreenActivity.this, MainActivityStore.class);
 					startActivity(i);
+					finish();
 				}else{
 					Toast.makeText(this, R.string.connection_err, Toast.LENGTH_LONG).show();	
 				}
@@ -381,8 +384,11 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 	    		MDialog.setContentView(R.layout.about);
 	    		MDialog.setTitle(R.string.about);
 	    		MDialog.getWindow().setLayout(LayoutParams.MATCH_PARENT,LayoutParams.WRAP_CONTENT);
+	    		TextView Link_Web = (TextView) MDialog.findViewById(R.id.link);
+	    		Link_Web.setLinkTextColor(Color.BLACK);
+	    		Linkify.addLinks(Link_Web, Linkify.ALL);
 	    		MDialog.show();
-	            return true;
+	    		return true;
 	            
 	        case R.id.terminos_condiciones:
 	        	MDialog = new Dialog(MainScreenActivity.this, R.style.cust_dialog);
@@ -538,7 +544,7 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 	    	    });
 	            
 	            return true;
-	            
+	        	            
 	        default:
 	            return super.onOptionsItemSelected(item);
 	    }
@@ -663,13 +669,13 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 	//  dispositivo y los muestra en la pantalla principal
 	public void ColocarFicheros(){ 
 		ficheros = leeFicheros();
+		infoFicheros = darInfoFicheros(ficheros);
 				
 		for (int i = 0; i < ficheros.length; i++){
-			 Score ss = new Score(infoFicheros[1][i], 
-					 infoFicheros[0][i], R.drawable.scores_image, infoFicheros[2][i]);
-	         
-			 // Binds all strings into an array
-			 arraylist.add(ss);
+			Score ss = new Score(infoFicheros[1][i], infoFicheros[0][i], R.drawable.scores_image, infoFicheros[2][i]);
+			
+			// Binds all strings into an array
+			arraylist.add(ss);
 		}
 	}
 
