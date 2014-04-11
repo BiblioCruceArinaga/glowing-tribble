@@ -31,8 +31,6 @@
 		        android:layout_width="225dp"
 		        android:layout_height="wrap_content"
 		        android:layout_marginTop="22dp"
-		        android:ellipsize="end"
-		        android:maxLines="1"
 		        android:scrollHorizontally="true"
 		        android:text="Sinfonía Nº6, 'Pastoral'"
 		        android:textColor="#000000"

@@ -50,8 +50,8 @@ public class CustomAdapter extends BaseAdapter {
 	
 	private List<PartituraTienda> lista;
 	Configuration conf;
-	Dialog BDialog;
-	Button Confirm_Buy, Cancel_Buy;
+	Dialog BDialog, NMDialog;
+	Button Confirm_Buy, Cancel_Buy, Buy_Money;
     private ArrayList<PartituraTienda> infoPartituras;
 	ProgressDialog mProgressDialog;
 	String URL_Buy = "http://www.scores.rising.es/store-buyscore";
@@ -129,7 +129,7 @@ public class CustomAdapter extends BaseAdapter {
 	    	if(lista.get(position).getPrecio() == 0.0){
 	        	holder.botonCompra.setText(R.string.free);
 	        }else{
-	        	holder.botonCompra.setText(lista.get(position).getPrecio() + "â‚¬");
+	        	holder.botonCompra.setText(lista.get(position).getPrecio() + "");
 	        }
 	    }
 	         
@@ -195,11 +195,16 @@ public class CustomAdapter extends BaseAdapter {
 						@Override
 						public void onClick(View arg0) {
 							
+							//-Si el precio es 0, se registra la compra, y se descarga la partitura. 
+							//-Si el precio es menor que el dinero que tiene el usuario, se registra la compra, se descargar, y se resta al dinero que ya se tenía el precio de la partitura
+							//-Si el precio es mayor al que tiene un usuario se abre un dialogo con un botón a la pantalla de compra de saldo
+							
 							//AquÃ­ tiene lugar la descarga y la compra, y el registro de la compra en la base de datos
 			 				if(lista.get(position).getPrecio() == 0.0){	
 			 						     							     							     				
-			     				//Primero usuario y luego partitura
 			     				try {
+			     					
+			     					//Si la compra es registrada se descarga la partitura
 									if(buyScore.execute(Id_User, Id_Score).get().equals("Val")){
 										Log.i("Registro compra", "Registro compra gratis");
 										BDialog.dismiss();
@@ -214,6 +219,8 @@ public class CustomAdapter extends BaseAdapter {
 										    	downloadTask.cancel(true);
 										    }
 										});
+									}else{
+										Toast.makeText(ctx, "Falló el registro de la compra", Toast.LENGTH_LONG).show();
 									}
 								} catch (InterruptedException e) {
 									e.printStackTrace();
@@ -248,6 +255,8 @@ public class CustomAdapter extends BaseAdapter {
 											    	downloadTask.cancel(true);
 											    }
 											});	
+										}else{
+											Toast.makeText(ctx, "Falló el registro de la compra", Toast.LENGTH_LONG).show();
 										}
 									} catch (InterruptedException e) {
 										// TODO Auto-generated catch block
@@ -258,8 +267,28 @@ public class CustomAdapter extends BaseAdapter {
 									}
 			 					}else{
 			 						
-			 						//DeberÃ­a ser un dialog con un botÃ³n que acceda a la tienda de saldo
-			 						Toast.makeText(ctx, R.string.no_money, Toast.LENGTH_LONG).show();
+			 						NMDialog = new Dialog(ctx, R.style.cust_dialog);
+			 						
+			 						NMDialog.setContentView(R.layout.no_money_dialog);
+			 						NMDialog.setTitle(R.string.not_enough_credit);
+			 						
+			 						Buy_Money = (Button)NMDialog.findViewById(R.id.b_buy_credit);
+			 						
+			 						Buy_Money.setOnClickListener(new OnClickListener(){
+
+										@Override
+										public void onClick(View v) {
+											/************************************************************************/
+											/*======================================================================
+											 			Terminar cuando se implemente el growth hacking
+											  =====================================================================*/
+											 /***********************************************************************/
+											
+										}
+			 							
+			 						});
+			 						
+			 						NMDialog.show();			 						
 			 					}
 			 					
 			 				}
@@ -404,10 +433,16 @@ public class CustomAdapter extends BaseAdapter {
 		    protected void onPostExecute(String result) {
 		    	
 		        mProgressDialog.dismiss();
+		        
+		        //Podrían sustituirse por Dialogs. 
 		        if (result != null){
+		        	
+		        	//Un dialog con los botones "Abrir partitura" y "Ok"
 		            Toast.makeText(context,R.string.errordownload, Toast.LENGTH_LONG).show();
 		        	Log.e("Error descarga", "Error descarga: " + result);
 		        }else{ 
+		        	
+		        	//Un dialog con los botones "Volver a intentar" y "Cancelar"
 		            Toast.makeText(context,R.string.okdownload, Toast.LENGTH_SHORT).show();
 		            Log.i("Descarga", "Archivo descargado");		            
 		        }

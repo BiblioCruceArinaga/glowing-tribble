@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
         android:layout_marginBottom="30dp"
-        android:textSize="24sp"
+        android:textSize="22sp"
         android:inputType="textEmailAddress"
         android:hint="@string/mail_olvido_pass" >
 
@@ -29,9 +29,9 @@
             android:layout_width="0dp"
             android:layout_height="70dp"
             android:layout_weight="1"
-            android:textColor="#000"
-            android:background="@drawable/dialog_button"
-            android:textSize="30sp"
+            android:textColor="#EEE"
+            android:background="@drawable/stores_buttons"
+            android:textSize="20sp"
             android:text="@string/confirm_olvidopass" />
 
         <Button
@@ -40,9 +40,9 @@
             android:layout_width="0dp"
             android:layout_height="70dp"
             android:layout_weight="1"
-            android:textColor="#000"
-            android:background="@drawable/dialog_button"
-            android:textSize="30sp"
+            android:textColor="#EEE"
+            android:background="@drawable/stores_buttons"
+            android:textSize="20sp"
             android:text="@string/cancel" />
 
     </LinearLayout>

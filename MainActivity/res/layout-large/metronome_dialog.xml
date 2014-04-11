@@ -19,7 +19,7 @@
 
         <requestFocus />
     </EditText>
-<!-- 
+
     <NumberPicker
         android:id="@+id/nm_metronome"
         android:layout_width="match_parent"
@@ -27,7 +27,7 @@
         android:layout_weight="0.21" >
 
     </NumberPicker>
--->
+
     <ImageButton
         android:id="@+id/playButton1"
         android:layout_width="80dp"

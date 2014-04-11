@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
         android:layout_marginBottom="15dp"
-        android:textSize="24sp"
+        android:textSize="22sp"
         android:hint="@string/mail"
         android:textColorHint="#DDD"
         android:textColor="#DDD"
@@ -27,7 +27,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
         android:layout_marginBottom="30dp"
-        android:textSize="24sp"
+        android:textSize="22sp"
         android:hint="@string/pass"
         android:textColorHint="#DDD"
         android:textColor="#DDD"
@@ -45,7 +45,7 @@
             android:layout_height="70dp"
             android:textColor="#EEE"
             android:background="@drawable/stores_buttons"
-            android:textSize="30sp"
+            android:textSize="20sp"
             android:layout_weight="1"
             android:text="@string/confirm_login" />
 
@@ -56,7 +56,7 @@
             android:layout_height="70dp"
             android:textColor="#EEE"
             android:background="@drawable/stores_buttons"
-            android:textSize="30sp"
+            android:textSize="20sp"
             android:layout_weight="1"
             android:text="@string/cancel" />
 

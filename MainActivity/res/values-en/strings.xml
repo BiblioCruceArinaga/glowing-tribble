@@ -345,8 +345,10 @@ You can buy scores in our store.</string>
     	<string name="buy_agree">Want to buy this score?</string>
     	<string name="confirm_buy">Confirm purchase</string>
     	<string name="buy">Buy</string>
+    	<string name="not_enough_credit">Insufficient credit</string>
     	<string name="no_money">You do not have enough credit to make the purchase. </string>
-    	
+    	<string name="buy_credit">Buy credit</string>
+    	    	
     		<!-- Pantalla busqueda -->
     		<string name="list">List</string>
     	

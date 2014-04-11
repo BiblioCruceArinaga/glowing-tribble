@@ -38,7 +38,7 @@ public class MainActivity extends Activity{
 	private Dialog MDialog;
 	private Dialog CDialog;
 	private ImageButton playButton;
-	//private NumberPicker metronome_speed;
+	private NumberPicker metronome_speed;
 	private EditText et_metronome;
 	private TextView countdown;
 	private int tempo = 120;
@@ -118,23 +118,23 @@ public class MainActivity extends Activity{
 		}		
 												
 		playButton = (ImageButton)MDialog.findViewById(R.id.playButton1);
-		//metronome_speed = (NumberPicker)MDialog.findViewById(R.id.nm_metronome);
+		metronome_speed = (NumberPicker)MDialog.findViewById(R.id.nm_metronome);
 		et_metronome = (EditText)MDialog.findViewById(R.id.eT_metronome);
 		
-		et_metronome.setText(String.valueOf(value));
-			/*	
+		//et_metronome.setText(String.valueOf(value));
+				
 		metronome_speed.setMaxValue(300);
 		metronome_speed.setMinValue(1);
 		metronome_speed.setValue(value);
 		metronome_speed.setWrapSelectorWheel(true);
 		metronome_speed.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
-			*/			
+						
 		playButton.setOnClickListener(new OnClickListener(){
  
 			@Override
 			public void onClick(View v) {
-				//tempo = metronome_speed.getValue();
-				tempo = Integer.valueOf(et_metronome.getText().toString());
+				tempo = metronome_speed.getValue();
+				//tempo = Integer.valueOf(et_metronome.getText().toString());
 				MainActivity.this.startActionMode(new ActionBarCallBack());
 				DialogCountdown(); //En el futuro estaría bien que el usuario pueda elegir si aparece esto o no, y desde qué número cuenta. 
 				MDialog.dismiss();

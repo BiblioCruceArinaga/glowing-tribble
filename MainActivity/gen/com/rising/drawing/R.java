@@ -251,7 +251,7 @@ containing a value of this type.
         public static final int com_facebook_list_section_header_background=0x7f020027;
         public static final int com_facebook_loginbutton_silver=0x7f020028;
         public static final int com_facebook_logo=0x7f020029;
-        public static final int com_facebook_picker_default_separator_color=0x7f020079;
+        public static final int com_facebook_picker_default_separator_color=0x7f02007a;
         public static final int com_facebook_picker_item_background=0x7f02002a;
         public static final int com_facebook_picker_list_focused=0x7f02002b;
         public static final int com_facebook_picker_list_longpressed=0x7f02002c;
@@ -291,79 +291,81 @@ containing a value of this type.
         public static final int menu_dropdown_panel_tabs=0x7f02004e;
         public static final int mezzoforte=0x7f02004f;
         public static final int money=0x7f020050;
-        public static final int natural=0x7f020051;
-        public static final int noterest16=0x7f020052;
-        public static final int noterest32=0x7f020053;
-        public static final int noterest64=0x7f020054;
-        public static final int pause_button=0x7f020055;
-        public static final int play_button=0x7f020056;
-        public static final int progress_bg_tabs=0x7f020057;
-        public static final int progress_horizontal_tabs=0x7f020058;
-        public static final int progress_primary_tabs=0x7f020059;
-        public static final int progress_secondary_tabs=0x7f02005a;
-        public static final int prueba=0x7f02005b;
-        public static final int quarterrest=0x7f02005c;
-        public static final int rectangle=0x7f02005d;
-        public static final int scores_image=0x7f02005e;
-        public static final int scoreslogo=0x7f02005f;
-        public static final int selectable_background_tabs=0x7f020060;
-        public static final int selector=0x7f020061;
-        public static final int sharp=0x7f020062;
-        public static final int spinner_ab_default_tabs=0x7f020063;
-        public static final int spinner_ab_disabled_tabs=0x7f020064;
-        public static final int spinner_ab_focused_tabs=0x7f020065;
-        public static final int spinner_ab_pressed_tabs=0x7f020066;
-        public static final int spinner_background_ab_tabs=0x7f020067;
-        public static final int stop_button=0x7f020068;
-        public static final int store_products=0x7f020069;
-        public static final int stores_buttons=0x7f02006a;
-        public static final int stores_image=0x7f02006b;
-        public static final int tab_indicator_ab_tabs=0x7f02006c;
-        public static final int tab_selected_focused_tabs=0x7f02006d;
-        public static final int tab_selected_pressed_tabs=0x7f02006e;
-        public static final int tab_selected_tabs=0x7f02006f;
-        public static final int tab_unselected_focused_tabs=0x7f020070;
-        public static final int tab_unselected_pressed_tabs=0x7f020071;
-        public static final int tab_unselected_tabs=0x7f020072;
-        public static final int trebleclef=0x7f020073;
-        public static final int tremolo=0x7f020074;
-        public static final int tremolobar=0x7f020075;
-        public static final int vibrato=0x7f020076;
-        public static final int whitehead=0x7f020077;
-        public static final int wholenote=0x7f020078;
+        public static final int money_ico=0x7f020051;
+        public static final int natural=0x7f020052;
+        public static final int noterest16=0x7f020053;
+        public static final int noterest32=0x7f020054;
+        public static final int noterest64=0x7f020055;
+        public static final int pause_button=0x7f020056;
+        public static final int play_button=0x7f020057;
+        public static final int progress_bg_tabs=0x7f020058;
+        public static final int progress_horizontal_tabs=0x7f020059;
+        public static final int progress_primary_tabs=0x7f02005a;
+        public static final int progress_secondary_tabs=0x7f02005b;
+        public static final int prueba=0x7f02005c;
+        public static final int quarterrest=0x7f02005d;
+        public static final int rectangle=0x7f02005e;
+        public static final int scores_image=0x7f02005f;
+        public static final int scoreslogo=0x7f020060;
+        public static final int selectable_background_tabs=0x7f020061;
+        public static final int selector=0x7f020062;
+        public static final int sharp=0x7f020063;
+        public static final int spinner_ab_default_tabs=0x7f020064;
+        public static final int spinner_ab_disabled_tabs=0x7f020065;
+        public static final int spinner_ab_focused_tabs=0x7f020066;
+        public static final int spinner_ab_pressed_tabs=0x7f020067;
+        public static final int spinner_background_ab_tabs=0x7f020068;
+        public static final int stop_button=0x7f020069;
+        public static final int store_products=0x7f02006a;
+        public static final int stores_buttons=0x7f02006b;
+        public static final int stores_image=0x7f02006c;
+        public static final int tab_indicator_ab_tabs=0x7f02006d;
+        public static final int tab_selected_focused_tabs=0x7f02006e;
+        public static final int tab_selected_pressed_tabs=0x7f02006f;
+        public static final int tab_selected_tabs=0x7f020070;
+        public static final int tab_unselected_focused_tabs=0x7f020071;
+        public static final int tab_unselected_pressed_tabs=0x7f020072;
+        public static final int tab_unselected_tabs=0x7f020073;
+        public static final int trebleclef=0x7f020074;
+        public static final int tremolo=0x7f020075;
+        public static final int tremolobar=0x7f020076;
+        public static final int vibrato=0x7f020077;
+        public static final int whitehead=0x7f020078;
+        public static final int wholenote=0x7f020079;
     }
     public static final class id {
-        public static final int about=0x7f060087;
-        public static final int action_search=0x7f060081;
-        public static final int action_search_store=0x7f06008b;
-        public static final int action_settings=0x7f06008d;
-        public static final int action_sort=0x7f06007c;
-        public static final int anoPartitura_profile=0x7f060070;
+        public static final int about=0x7f060089;
+        public static final int action_search=0x7f060083;
+        public static final int action_search_store=0x7f06008d;
+        public static final int action_settings=0x7f06008f;
+        public static final int action_sort=0x7f06007e;
+        public static final int anoPartitura_profile=0x7f060072;
         public static final int autorPartitura=0x7f060037;
-        public static final int autorPartitura_profile=0x7f06006f;
+        public static final int autorPartitura_profile=0x7f060071;
         public static final int b10=0x7f06005f;
         public static final int b100=0x7f060062;
         public static final int b20=0x7f060060;
         public static final int b5=0x7f06005e;
+        public static final int b_buy_credit=0x7f060064;
         public static final int b_cancel_buy=0x7f06000c;
         public static final int b_cancel_login=0x7f060042;
-        public static final int b_cancel_olpass=0x7f060065;
-        public static final int b_cancel_reg=0x7f06006c;
+        public static final int b_cancel_olpass=0x7f060067;
+        public static final int b_cancel_reg=0x7f06006e;
         public static final int b_confirm_buy=0x7f06000b;
         public static final int b_confirm_login=0x7f060041;
-        public static final int b_confirm_olpass=0x7f060064;
-        public static final int b_confirm_reg=0x7f06006b;
-        public static final int b_registro=0x7f06004a;
-        public static final int b_retry_store=0x7f060079;
+        public static final int b_confirm_olpass=0x7f060066;
+        public static final int b_confirm_reg=0x7f06006d;
+        public static final int b_registro=0x7f060049;
+        public static final int b_retry_store=0x7f06007b;
         public static final int b_share_friends=0x7f06002e;
         public static final int b_share_social=0x7f06002f;
         public static final int b_sharefriend_dialog=0x7f060031;
         public static final int botonEliminarCuenta=0x7f060026;
         public static final int bu50=0x7f060061;
         public static final int button_login=0x7f060047;
-        public static final int button_login_f=0x7f060048;
+        public static final int button_login_f=0x7f06004b;
         public static final int claveEliminarCuenta=0x7f060025;
-        public static final int close_metronome=0x7f060093;
+        public static final int close_metronome=0x7f060095;
         public static final int com_facebook_login_activity_progress_bar=0x7f06000f;
         public static final int com_facebook_picker_activity_circle=0x7f06000e;
         public static final int com_facebook_picker_checkbox=0x7f060011;
@@ -385,24 +387,24 @@ containing a value of this type.
         public static final int com_facebook_usersettingsfragment_logo_image=0x7f06001f;
         public static final int com_facebook_usersettingsfragment_profile_name=0x7f060020;
         public static final int comprar=0x7f06003a;
-        public static final int comprar_profile=0x7f060072;
-        public static final int condiciones_compra=0x7f060085;
+        public static final int comprar_profile=0x7f060074;
+        public static final int condiciones_compra=0x7f060087;
         public static final int count=0x7f060023;
-        public static final int discard=0x7f060094;
+        public static final int discard=0x7f060096;
         public static final int eT_metronome=0x7f060051;
         public static final int eT_sharefriend_dialog=0x7f060030;
-        public static final int eliminar_cuenta=0x7f060086;
+        public static final int eliminar_cuenta=0x7f060088;
         public static final int error_button=0x7f060044;
-        public static final int error_store=0x7f060076;
+        public static final int error_store=0x7f060078;
         public static final int error_tV=0x7f060043;
-        public static final int et_confipass_registro=0x7f06006a;
+        public static final int et_confipass_registro=0x7f06006c;
         public static final int et_mail=0x7f06003f;
-        public static final int et_mail_olvidopass=0x7f060063;
-        public static final int et_mail_registro=0x7f060068;
-        public static final int et_nombre_registro=0x7f060067;
+        public static final int et_mail_olvidopass=0x7f060065;
+        public static final int et_mail_registro=0x7f06006a;
+        public static final int et_nombre_registro=0x7f060069;
         public static final int et_pass=0x7f060040;
-        public static final int et_pass_registro=0x7f060069;
-        public static final int feedback=0x7f060083;
+        public static final int et_pass_registro=0x7f06006b;
+        public static final int feedback=0x7f060085;
         public static final int feedbackBoton=0x7f06002a;
         public static final int feedbackCajaTexto=0x7f060029;
         public static final int feedbackTexto=0x7f060028;
@@ -410,29 +412,29 @@ containing a value of this type.
         public static final int gV_fragments=0x7f06002b;
         public static final int gV_free_fragment=0x7f06002c;
         public static final int gV_guitar_fragment=0x7f06003b;
-        public static final int gV_piano_fragment=0x7f060066;
+        public static final int gV_piano_fragment=0x7f060068;
         public static final int gV_scores=0x7f06004e;
-        public static final int gV_search=0x7f060075;
+        public static final int gV_search=0x7f060077;
         public static final int iV_Logo=0x7f060045;
         public static final int iV_score=0x7f060032;
         public static final int imageButton1=0x7f06003c;
         public static final int imageButton2=0x7f06003d;
         public static final int imageButton3=0x7f06003e;
-        public static final int imageView1=0x7f06007a;
+        public static final int imageView1=0x7f06007c;
         public static final int imagenPartitura=0x7f060035;
-        public static final int imagenPartitura_profile=0x7f06006d;
+        public static final int imagenPartitura_profile=0x7f06006f;
         public static final int instrumentoPartitura=0x7f060038;
-        public static final int instrumentoPartitura_profile=0x7f060071;
+        public static final int instrumentoPartitura_profile=0x7f060073;
         public static final int large=0x7f060002;
         public static final int link=0x7f060007;
         public static final int login_button=0x7f060027;
         public static final int logo=0x7f060003;
         public static final int masInfo=0x7f060039;
-        public static final int metronome_button=0x7f060089;
-        public static final int metronome_menu_back=0x7f06008f;
-        public static final int metronome_menu_pause=0x7f060090;
-        public static final int metronome_menu_stop=0x7f060091;
-        public static final int metronome_tempo=0x7f06008e;
+        public static final int metronome_button=0x7f06008b;
+        public static final int metronome_menu_back=0x7f060091;
+        public static final int metronome_menu_pause=0x7f060092;
+        public static final int metronome_menu_stop=0x7f060093;
+        public static final int metronome_tempo=0x7f060090;
         public static final int misDatosBoton=0x7f060058;
         public static final int misDatosClave=0x7f060054;
         public static final int misDatosClaveNueva=0x7f060056;
@@ -442,35 +444,36 @@ containing a value of this type.
         public static final int misDatosFacebookEmail=0x7f06005a;
         public static final int misDatosFacebookNombre=0x7f060059;
         public static final int misDatosNombre=0x7f060052;
-        public static final int mis_datos=0x7f060082;
-        public static final int money=0x7f06008a;
+        public static final int mis_datos=0x7f060084;
+        public static final int money=0x7f06008c;
         public static final int nm_metronome=0x7f06004f;
         public static final int nombrePartitura=0x7f060036;
-        public static final int nombrePartitura_profile=0x7f06006e;
+        public static final int nombrePartitura_profile=0x7f060070;
         public static final int normal=0x7f060001;
         public static final int picker_subtitle=0x7f06001c;
         public static final int playButton1=0x7f060050;
-        public static final int s_all=0x7f060095;
-        public static final int s_none=0x7f060096;
+        public static final int s_all=0x7f060097;
+        public static final int s_none=0x7f060098;
         public static final int screen=0x7f060008;
-        public static final int session_button=0x7f060088;
-        public static final int show_all=0x7f060080;
+        public static final int session_button=0x7f06008a;
+        public static final int show_all=0x7f060082;
         public static final int small=0x7f060000;
-        public static final int sort_author=0x7f06007d;
-        public static final int sort_instrument=0x7f06007e;
-        public static final int sort_name=0x7f06007f;
-        public static final int space_metronome=0x7f060092;
-        public static final int store_button=0x7f06007b;
-        public static final int tV_error_store_1=0x7f060077;
-        public static final int tV_error_store_2=0x7f060078;
-        public static final int tV_registrate=0x7f060049;
+        public static final int sort_author=0x7f06007f;
+        public static final int sort_instrument=0x7f060080;
+        public static final int sort_name=0x7f060081;
+        public static final int space_metronome=0x7f060094;
+        public static final int store_button=0x7f06007d;
+        public static final int tV_error_store_1=0x7f060079;
+        public static final int tV_error_store_2=0x7f06007a;
+        public static final int tV_no_money=0x7f060063;
+        public static final int tV_registrate=0x7f060048;
         public static final int tV_score_author=0x7f060034;
         public static final int tV_score_title=0x7f060033;
         public static final int tV_slogan=0x7f060046;
         public static final int tVcurrent_money=0x7f06005b;
         public static final int tVfreeMoneyTitle=0x7f06002d;
         public static final int tVfree_money=0x7f06005d;
-        public static final int terminos_condiciones=0x7f060084;
+        public static final int terminos_condiciones=0x7f060086;
         public static final int textAreaScroller=0x7f060022;
         public static final int textView1=0x7f060004;
         public static final int textView2=0x7f060005;
@@ -479,11 +482,11 @@ containing a value of this type.
         public static final int textoEliminarCuenta=0x7f060024;
         public static final int tienda=0x7f06004d;
         public static final int tv_buy_agree=0x7f06000a;
-        public static final int tv_description_profile=0x7f060073;
+        public static final int tv_description_profile=0x7f060075;
         public static final int tv_money_unit=0x7f06005c;
-        public static final int tv_olvido_pass=0x7f06004b;
-        public static final int txt_search=0x7f060074;
-        public static final int update_store=0x7f06008c;
+        public static final int tv_olvido_pass=0x7f06004a;
+        public static final int txt_search=0x7f060076;
+        public static final int update_store=0x7f06008e;
     }
     public static final class layout {
         public static final int about=0x7f030000;
@@ -526,16 +529,17 @@ containing a value of this type.
         public static final int mis_datos=0x7f030025;
         public static final int mis_datos_facebook=0x7f030026;
         public static final int money_layout=0x7f030027;
-        public static final int olvidopass_dialog=0x7f030028;
-        public static final int priano_fragment=0x7f030029;
-        public static final int quest_fragment=0x7f03002a;
-        public static final int registro_dialog=0x7f03002b;
-        public static final int score_profile_layout=0x7f03002c;
-        public static final int search_layout=0x7f03002d;
-        public static final int searchstore_layout=0x7f03002e;
-        public static final int store_error_layout=0x7f03002f;
-        public static final int terminos_condiciones=0x7f030030;
-        public static final int welcome_layout=0x7f030031;
+        public static final int no_money_dialog=0x7f030028;
+        public static final int olvidopass_dialog=0x7f030029;
+        public static final int priano_fragment=0x7f03002a;
+        public static final int quest_fragment=0x7f03002b;
+        public static final int registro_dialog=0x7f03002c;
+        public static final int score_profile_layout=0x7f03002d;
+        public static final int search_layout=0x7f03002e;
+        public static final int searchstore_layout=0x7f03002f;
+        public static final int store_error_layout=0x7f030030;
+        public static final int terminos_condiciones=0x7f030031;
+        public static final int welcome_layout=0x7f030032;
     }
     public static final class menu {
         public static final int main=0x7f0b0000;
@@ -555,11 +559,11 @@ containing a value of this type.
         public static final int action_search=0x7f090049;
         public static final int action_settings=0x7f09007a;
         public static final int action_sort=0x7f090042;
-        public static final int add10=0x7f090098;
-        public static final int add100=0x7f09009b;
-        public static final int add20=0x7f090099;
-        public static final int add5=0x7f090097;
-        public static final int add50=0x7f09009a;
+        public static final int add10=0x7f09009a;
+        public static final int add100=0x7f09009d;
+        public static final int add20=0x7f09009b;
+        public static final int add5=0x7f090099;
+        public static final int add50=0x7f09009c;
         /**  Pantalla Login 
  Pantalla Login 
  Pantalla Login 
@@ -570,6 +574,7 @@ containing a value of this type.
         public static final int bin=0x7f090041;
         public static final int buy=0x7f090091;
         public static final int buy_agree=0x7f09008f;
+        public static final int buy_credit=0x7f090094;
         public static final int cancel=0x7f090029;
         public static final int cerrar_sesion=0x7f09002b;
         public static final int close_d=0x7f09002c;
@@ -611,10 +616,10 @@ containing a value of this type.
  Errores 
  Errores 
          */
-        public static final int connection_err=0x7f0900a8;
+        public static final int connection_err=0x7f0900aa;
         public static final int contentDescription=0x7f09005b;
         public static final int cuenta_eliminada=0x7f090076;
-        public static final int current_money=0x7f090095;
+        public static final int current_money=0x7f090097;
         public static final int download=0x7f090084;
         public static final int eliminar_cuenta=0x7f09006f;
         public static final int eliminar_cuenta_clave=0x7f090077;
@@ -644,8 +649,8 @@ containing a value of this type.
         public static final int feedback_enviado=0x7f09006a;
         public static final int feedback_envianos=0x7f090068;
         public static final int free=0x7f090083;
-        public static final int free_money=0x7f090096;
-        public static final int friendmail=0x7f09009f;
+        public static final int free_money=0x7f090098;
+        public static final int friendmail=0x7f0900a1;
         public static final int guitar=0x7f090089;
         public static final int instrument=0x7f090045;
         public static final int instrument_dialog_title=0x7f090046;
@@ -653,7 +658,7 @@ containing a value of this type.
  Pantalla busqueda 
  Pantalla busqueda 
          */
-        public static final int list=0x7f090093;
+        public static final int list=0x7f090095;
         public static final int login=0x7f09001b;
         public static final int login_f=0x7f09001c;
         public static final int login_title=0x7f090024;
@@ -694,13 +699,14 @@ containing a value of this type.
  Pantalla saldo 
  Pantalla saldo 
          */
-        public static final int money=0x7f090094;
+        public static final int money=0x7f090096;
         public static final int name=0x7f090047;
         public static final int no=0x7f090079;
-        public static final int no_money=0x7f090092;
+        public static final int no_money=0x7f090093;
         public static final int no_scores=0x7f09004a;
         public static final int no_scores_button=0x7f09004b;
         public static final int nombre_registro=0x7f090035;
+        public static final int not_enough_credit=0x7f090092;
         public static final int ok_reg=0x7f09003e;
         public static final int ok_reg_mail=0x7f09003f;
         public static final int okdownload=0x7f09008c;
@@ -721,12 +727,12 @@ containing a value of this type.
  Pantalla encuesta 
  Pantalla encuesta 
          */
-        public static final int quest_explain=0x7f0900a0;
-        public static final int quest_instruments=0x7f0900a1;
-        public static final int quest_no=0x7f0900a5;
-        public static final int quest_observations=0x7f0900a3;
-        public static final int quest_scores=0x7f0900a2;
-        public static final int quest_yes=0x7f0900a4;
+        public static final int quest_explain=0x7f0900a2;
+        public static final int quest_instruments=0x7f0900a3;
+        public static final int quest_no=0x7f0900a7;
+        public static final int quest_observations=0x7f0900a5;
+        public static final int quest_scores=0x7f0900a4;
+        public static final int quest_yes=0x7f0900a6;
         public static final int registrate=0x7f09001f;
         public static final int registro=0x7f09001e;
         /**  Dialogo registro usuario 
@@ -745,10 +751,10 @@ containing a value of this type.
  Pantalla perfil partituras 
  Pantalla perfil partituras 
          */
-        public static final int share=0x7f0900a6;
-        public static final int share_button=0x7f09009e;
-        public static final int share_friends=0x7f09009c;
-        public static final int share_social=0x7f09009d;
+        public static final int share=0x7f0900a8;
+        public static final int share_button=0x7f0900a0;
+        public static final int share_friends=0x7f09009e;
+        public static final int share_social=0x7f09009f;
         public static final int show_all=0x7f090048;
         public static final int slogan=0x7f090020;
         /**  Pantalla tienda 
@@ -774,7 +780,7 @@ containing a value of this type.
  Pantalla preferencias 
  Pantalla preferencias 
          */
-        public static final int user_profile=0x7f0900a7;
+        public static final int user_profile=0x7f0900a9;
         public static final int version=0x7f09007c;
         public static final int visitanos=0x7f09007e;
         public static final int web=0x7f09007f;

@@ -357,7 +357,9 @@
     	<string name="buy_agree">¿Quieres comprar esta partitura?</string>
     	<string name="confirm_buy">Confirmar compra</string>
     	<string name="buy">Comprar</string>
+    	<string name="not_enough_credit">Saldo insuficiente</string>
     	<string name="no_money">No tienes saldo suficiente para hacer la compra. </string>
+    	<string name="buy_credit">Comprar saldo</string>   	
     	
     		<!-- Pantalla busqueda -->
     		<string name="list">Lista</string>
