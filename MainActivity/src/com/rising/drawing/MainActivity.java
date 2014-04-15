@@ -3,13 +3,14 @@ package com.rising.drawing;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.Intent;
+import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.graphics.Canvas;
 import android.graphics.Point;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.PowerManager;
 import android.util.Log;
 import android.view.ActionMode;
 import android.view.Display;
@@ -23,11 +24,7 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.NumberPicker;
-import android.widget.SearchView.OnQueryTextListener;
 import android.widget.TextView;
-
-import com.rising.drawing.R;
-import com.rising.mainscreen.MainScreenActivity;
 
 public class MainActivity extends Activity{
 
@@ -46,12 +43,20 @@ public class MainActivity extends Activity{
 	private boolean play;
 	private boolean stop = false;
 	
+	//Esto hace que no se apague la patalla hasta que se sale de la Activity
+	PowerManager pm;
+    PowerManager.WakeLock wl;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);	
 		Bundle b = this.getIntent().getExtras();
 		score = b.getString("score");
+		pm = (PowerManager)getSystemService(Context.POWER_SERVICE);
+		wl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, getClass().getName());
+		
+        wl.acquire();
 		
 		setContentView(new Screen(this, score));
 		
@@ -84,6 +89,7 @@ public class MainActivity extends Activity{
 	    		return true;
 	    	
 	    	case android.R.id.home:
+	    		wl.release();
 	    		finish();
 	    		return true;
 	    		

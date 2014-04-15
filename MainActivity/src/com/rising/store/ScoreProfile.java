@@ -36,6 +36,8 @@ import android.widget.Toast;
 import com.rising.drawing.R;
 import com.rising.conexiones.HttpPostAux;
 import com.rising.login.Configuration;
+import com.rising.store.DownloadScores.OnDownloadCompleted;
+import com.rising.store.DownloadScores.OnDownloadFailed;
 
 public class ScoreProfile extends Activity{
 	
@@ -59,7 +61,7 @@ public class ScoreProfile extends Activity{
 	//  Al final del perfil de la partitura se recomienda al usuario mÃ¡s del mismo estilo
 
 	//private ShareActionProvider share;
-	private DownloadScores download = new DownloadScores();
+	private DownloadScores download;
 	
 	String URL_Buy = "http://www.scores.rising.es/store-buyscore";
 	
@@ -68,12 +70,28 @@ public class ScoreProfile extends Activity{
 	// declare the dialog as a member field of your activity
 	ProgressDialog mProgressDialog;
 		
+	private OnDownloadCompleted listenerDownload = new OnDownloadCompleted(){
+		@Override
+		public void onDownloadCompleted() {
+			//Acciones a ejecutar cuando la descarga está completa
+		}
+		
+	};
+	
+	private OnDownloadFailed failedDownload = new OnDownloadFailed(){
+		@Override
+		public void onDownloadFailed() {
+			//Acciones a ejecutar cuando la descarga falló
+		}
+		
+	};	
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		setContentView(R.layout.score_profile_layout);
-		
+		download = new DownloadScores(listenerDownload, failedDownload, ctx);
 		ctx = getApplicationContext();
 		
 		// instantiate it within the onCreate method
@@ -268,7 +286,7 @@ public class ScoreProfile extends Activity{
 	                // download the file
 	                input = connection.getInputStream();
 	                output = new FileOutputStream(Environment.getExternalStorageDirectory() 
-	                		+ "/RisingScores/scores/" + download.FileName(url));
+	                		+ "/RisingScores/scores/" + download.FileNameURL(url));
 
 	                byte data[] = new byte[4096];
 	                long total = 0;

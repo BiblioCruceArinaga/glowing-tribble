@@ -10,8 +10,6 @@ import java.net.URL;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 
-import com.rising.drawing.R;
-
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
@@ -19,6 +17,8 @@ import android.os.Environment;
 import android.os.PowerManager;
 import android.util.Log;
 import android.widget.Toast;
+
+import com.rising.drawing.R;
 
 public class DownloadScores extends AsyncTask<String, Integer, String>{
 	
@@ -39,14 +39,26 @@ public class DownloadScores extends AsyncTask<String, Integer, String>{
         void onDownloadCompleted();
     }
 	
-	private OnDownloadCompleted listenerDownload;
-	
-	public DownloadScores(OnDownloadCompleted listener, Context ctx) {
-		this.context = ctx;
-		this.listenerDownload = listener;
+	public interface OnDownloadFailed{
+		void onDownloadFailed();
 	}
 	
-	public String FileName(URL urlComplete){
+	private OnDownloadFailed failedDownload;
+	
+	private OnDownloadCompleted listenerDownload;
+	
+	public DownloadScores(OnDownloadCompleted listener, OnDownloadFailed failed, Context ctx) {
+		this.context = ctx;
+		this.listenerDownload = listener;
+		this.failedDownload = failed;
+		mProgressDialog = new ProgressDialog(ctx);
+		mProgressDialog.setMessage("Descargando");
+ 		mProgressDialog.setIndeterminate(true);
+ 		mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+ 		mProgressDialog.setCancelable(true);
+	}
+	
+	public String FileNameURL(URL urlComplete){
 		
 		String urlCompleto = urlComplete.toString();
 		int position = urlCompleto.lastIndexOf('/');
@@ -55,7 +67,7 @@ public class DownloadScores extends AsyncTask<String, Integer, String>{
 		
 		return name;
 	}	
-	
+		
 	@Override
     protected String doInBackground(String... sUrl) {
     	
@@ -69,6 +81,7 @@ public class DownloadScores extends AsyncTask<String, Integer, String>{
             InputStream input = null;
             OutputStream output = null;
             HttpURLConnection connection = null;
+            
             try {
                 URL url = new URL(sUrl[0]);
                 connection = (HttpURLConnection) url.openConnection();
@@ -86,7 +99,7 @@ public class DownloadScores extends AsyncTask<String, Integer, String>{
                 // download the file
                 input = connection.getInputStream();
                 output = new FileOutputStream(Environment.getExternalStorageDirectory() 
-                		+ "/RisingScores/scores/" + FileName(url));
+                		+ "/RisingScores/scores/" + FileNameURL(url));
 
                 byte data[] = new byte[4096];
                 long total = 0;
@@ -117,6 +130,7 @@ public class DownloadScores extends AsyncTask<String, Integer, String>{
                 if (connection != null)
                     connection.disconnect();
             }
+            
         } finally {
             wl.release();
         }
@@ -146,11 +160,14 @@ public class DownloadScores extends AsyncTask<String, Integer, String>{
 	    //Podrían sustituirse por Dialogs. 
         if (result != null){
         	
+        	if(failedDownload != null) failedDownload.onDownloadFailed();
+        	        	
         	//Un dialog con los botones "Abrir partitura" y "Ok"
             Toast.makeText(context,R.string.errordownload, Toast.LENGTH_LONG).show();
         	Log.e("Error descarga", "Error descarga: " + result);
         }else{ 
-        	
+        	if (listenerDownload != null) listenerDownload.onDownloadCompleted();
+        	        	
         	//Un dialog con los botones "Volver a intentar" y "Cancelar"
             Toast.makeText(context,R.string.okdownload, Toast.LENGTH_SHORT).show();
             Log.i("Descarga", "Archivo descargado");		            

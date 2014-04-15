@@ -1,7 +1,6 @@
 package com.rising.login;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -26,21 +25,13 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.rising.drawing.R;
-import com.facebook.FacebookException;
-import com.facebook.Request;
-import com.facebook.Response;
 import com.facebook.Session;
-import com.facebook.SessionState;
-import com.facebook.model.GraphUser;
-import com.facebook.widget.LoginButton;
-import com.facebook.widget.LoginButton.OnErrorListener;
 import com.rising.conexiones.HttpPostAux;
-import com.rising.mainscreen.MainScreenActivity;
-import com.rising.store.DatosUsuario;
-import com.rising.login.ActivityRegistro;
+import com.rising.drawing.R;
 import com.rising.login.ActivityRegistro.OnTaskCompleted;
 import com.rising.login.UserDataNetworkConnection.OnLoginCompleted;
+import com.rising.mainscreen.MainScreenActivity;
+import com.rising.store.DatosUsuario;
 
 //Clase login. Permite al usuario introducir correo electrónico y contraseña, registrarse o recuperar 
 //la contraseña olvidada.

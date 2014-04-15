@@ -10,6 +10,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.rising.drawing.R;
+import com.rising.store.instruments.FreeFragment;
+import com.rising.store.instruments.GuitarFragment;
+import com.rising.store.instruments.PianoFragment;
 
 public class ErrorFragment extends Fragment{
 

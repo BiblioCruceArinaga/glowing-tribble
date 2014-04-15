@@ -54,7 +54,7 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 	
 	String[] ficheros;
 	String[][] infoFicheros;
-	
+	String path = "/RisingScores/scores/";
 	private File f_toDelete;
 	private boolean delete;
 	HashMap<Integer, Boolean> mSelected;	
@@ -313,7 +313,7 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 			});
 		}
 	}
-		
+			
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.main, menu);
@@ -565,8 +565,8 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
         }
 	}
 	
-	private String[] leeFicheros(){
-		File f = new File(Environment.getExternalStorageDirectory() + "/RisingScores/scores/");
+	public String[] leeFicheros(){
+		File f = new File(Environment.getExternalStorageDirectory() + path);
 		String[] lista = f.list();
 		//Habría que poner algo de seguridad y que solo muestre los archivos acabados en smts
 		return lista;

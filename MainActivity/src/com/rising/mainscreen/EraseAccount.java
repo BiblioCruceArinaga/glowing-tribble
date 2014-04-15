@@ -8,12 +8,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.rising.conexiones.HttpPostAux;
-
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
+
+import com.rising.conexiones.HttpPostAux;
 
 public class EraseAccount extends AsyncTask<String, String, Integer> {
 
@@ -25,7 +25,7 @@ public class EraseAccount extends AsyncTask<String, String, Integer> {
 	private Context ctx;
 	private OnTaskCompleted listener;
 	
-	private HttpPostAux HPA =  new HttpPostAux();
+	private HttpPostAux HPA;
 	private ProgressDialog PDialog;
 	private final String URL_Erase_Account = "http://scores.rising.es/eliminar-cuenta-mobile";
 	
@@ -40,6 +40,7 @@ public class EraseAccount extends AsyncTask<String, String, Integer> {
         PDialog.setIndeterminate(false);
         PDialog.setCancelable(false);
         PDialog.show();
+        HPA =  new HttpPostAux();
 	}
 	
 	@Override

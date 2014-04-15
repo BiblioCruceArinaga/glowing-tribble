@@ -19,6 +19,9 @@ import android.widget.Toast;
 import com.rising.drawing.R;
 import com.rising.login.Configuration;
 import com.rising.mainscreen.MainScreenActivity;
+import com.rising.store.instruments.FreeFragment;
+import com.rising.store.instruments.GuitarFragment;
+import com.rising.store.instruments.PianoFragment;
 
 public class MainActivityStore extends FragmentActivity implements OnQueryTextListener{
 
@@ -80,6 +83,8 @@ public class MainActivityStore extends FragmentActivity implements OnQueryTextLi
 		s = f.substring(0, i);
 	}
     
+	MenuItem item;
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.main_store, menu);
@@ -87,13 +92,17 @@ public class MainActivityStore extends FragmentActivity implements OnQueryTextLi
 	    
 	    searchView.setOnQueryTextListener(this);
 	    
-	    MenuItem item = menu.findItem(R.id.money);
-        item.setTitle("" + conf.getUserMoney());
-        Log.i("Conf", "Conf User: " + conf.getUserName() + ", Conf Money: " + conf.getUserMoney());
+	   UpdateMoney(menu, conf.getUserMoney());
 	    	    
 		return true;
 	}
 		
+	public void UpdateMoney(Menu menu, float money){
+		 item = menu.findItem(R.id.money);
+	     item.setTitle("" + money);
+	     Log.i("Conf", "Conf User: " + conf.getUserName() + ", Conf Money: " + conf.getUserMoney());
+	}
+	
 	//Al pulsar en el botón intro una vez escrita la palabra entra en este método, que envia la palabra a otro Activity para que este muestre 
 	//los resultados a partir de la palabra
 	@Override

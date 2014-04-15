@@ -559,11 +559,11 @@ containing a value of this type.
         public static final int action_search=0x7f090049;
         public static final int action_settings=0x7f09007a;
         public static final int action_sort=0x7f090042;
-        public static final int add10=0x7f09009a;
-        public static final int add100=0x7f09009d;
-        public static final int add20=0x7f09009b;
-        public static final int add5=0x7f090099;
-        public static final int add50=0x7f09009c;
+        public static final int add10=0x7f09009b;
+        public static final int add100=0x7f09009e;
+        public static final int add20=0x7f09009c;
+        public static final int add5=0x7f09009a;
+        public static final int add50=0x7f09009d;
         /**  Pantalla Login 
  Pantalla Login 
  Pantalla Login 
@@ -616,10 +616,10 @@ containing a value of this type.
  Errores 
  Errores 
          */
-        public static final int connection_err=0x7f0900aa;
+        public static final int connection_err=0x7f0900ab;
         public static final int contentDescription=0x7f09005b;
         public static final int cuenta_eliminada=0x7f090076;
-        public static final int current_money=0x7f090097;
+        public static final int current_money=0x7f090098;
         public static final int download=0x7f090084;
         public static final int eliminar_cuenta=0x7f09006f;
         public static final int eliminar_cuenta_clave=0x7f090077;
@@ -649,8 +649,8 @@ containing a value of this type.
         public static final int feedback_enviado=0x7f09006a;
         public static final int feedback_envianos=0x7f090068;
         public static final int free=0x7f090083;
-        public static final int free_money=0x7f090098;
-        public static final int friendmail=0x7f0900a1;
+        public static final int free_money=0x7f090099;
+        public static final int friendmail=0x7f0900a2;
         public static final int guitar=0x7f090089;
         public static final int instrument=0x7f090045;
         public static final int instrument_dialog_title=0x7f090046;
@@ -658,7 +658,7 @@ containing a value of this type.
  Pantalla busqueda 
  Pantalla busqueda 
          */
-        public static final int list=0x7f090095;
+        public static final int list=0x7f090096;
         public static final int login=0x7f09001b;
         public static final int login_f=0x7f09001c;
         public static final int login_title=0x7f090024;
@@ -699,7 +699,7 @@ containing a value of this type.
  Pantalla saldo 
  Pantalla saldo 
          */
-        public static final int money=0x7f090096;
+        public static final int money=0x7f090097;
         public static final int name=0x7f090047;
         public static final int no=0x7f090079;
         public static final int no_money=0x7f090093;
@@ -717,6 +717,7 @@ containing a value of this type.
          */
         public static final int olvido_title=0x7f09002d;
         public static final int olvidopass_ok=0x7f090031;
+        public static final int open=0x7f090095;
         public static final int pa=0x7f09005a;
         public static final int pass=0x7f090023;
         public static final int pass_registro=0x7f090037;
@@ -727,12 +728,12 @@ containing a value of this type.
  Pantalla encuesta 
  Pantalla encuesta 
          */
-        public static final int quest_explain=0x7f0900a2;
-        public static final int quest_instruments=0x7f0900a3;
-        public static final int quest_no=0x7f0900a7;
-        public static final int quest_observations=0x7f0900a5;
-        public static final int quest_scores=0x7f0900a4;
-        public static final int quest_yes=0x7f0900a6;
+        public static final int quest_explain=0x7f0900a3;
+        public static final int quest_instruments=0x7f0900a4;
+        public static final int quest_no=0x7f0900a8;
+        public static final int quest_observations=0x7f0900a6;
+        public static final int quest_scores=0x7f0900a5;
+        public static final int quest_yes=0x7f0900a7;
         public static final int registrate=0x7f09001f;
         public static final int registro=0x7f09001e;
         /**  Dialogo registro usuario 
@@ -751,10 +752,10 @@ containing a value of this type.
  Pantalla perfil partituras 
  Pantalla perfil partituras 
          */
-        public static final int share=0x7f0900a8;
-        public static final int share_button=0x7f0900a0;
-        public static final int share_friends=0x7f09009e;
-        public static final int share_social=0x7f09009f;
+        public static final int share=0x7f0900a9;
+        public static final int share_button=0x7f0900a1;
+        public static final int share_friends=0x7f09009f;
+        public static final int share_social=0x7f0900a0;
         public static final int show_all=0x7f090048;
         public static final int slogan=0x7f090020;
         /**  Pantalla tienda 
@@ -780,7 +781,7 @@ containing a value of this type.
  Pantalla preferencias 
  Pantalla preferencias 
          */
-        public static final int user_profile=0x7f0900a9;
+        public static final int user_profile=0x7f0900aa;
         public static final int version=0x7f09007c;
         public static final int visitanos=0x7f09007e;
         public static final int web=0x7f09007f;

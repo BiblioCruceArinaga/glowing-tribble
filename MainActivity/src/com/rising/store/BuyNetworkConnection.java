@@ -43,9 +43,16 @@ public class BuyNetworkConnection extends AsyncTask<String, Integer, String>{
 	
 	private OnBuyCompleted listenerBuy;
 	
-	public BuyNetworkConnection(OnBuyCompleted listener, Context ctx) {
+	public interface OnBuyFailed{
+        void onBuyFailed();
+    }
+	
+	private OnBuyFailed failedBuy;
+	
+	public BuyNetworkConnection(OnBuyCompleted listener, OnBuyFailed failed, Context ctx) {
 		this.context = ctx;
 		this.listenerBuy = listener;
+		this.failedBuy = failed;
 	}
 		
 	// Do the long-running work in here
@@ -137,7 +144,11 @@ public class BuyNetworkConnection extends AsyncTask<String, Integer, String>{
 
     // This is called when doInBackground() is finished
     protected void onPostExecute(String result) {
-    	if (listenerBuy != null) listenerBuy.onBuyCompleted();
+    	if(result != null){
+    		if (listenerBuy != null) listenerBuy.onBuyCompleted();
+    	}else{
+    		if (failedBuy != null) failedBuy.onBuyFailed();
+    	}
     }
     
     // Devolver la informaci�n le�da de la base de datos

@@ -360,6 +360,7 @@
     	<string name="not_enough_credit">Saldo insuficiente</string>
     	<string name="no_money">No tienes saldo suficiente para hacer la compra. </string>
     	<string name="buy_credit">Comprar saldo</string>
+    	<string name="open">Abrir</string>
     	
     	
     		<!-- Pantalla busqueda -->

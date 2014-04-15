@@ -56,7 +56,7 @@ public class HttpPostAux{
 	  	    HttpEntity entity = response.getEntity();
 	  	    is = entity.getContent();    	  	    
 	  	}catch(Exception e){
-	  	        Log.e("Log_Tag", "Error en la conexión HTTP: "+e.toString());
+	  		Log.e("Log_Tag", "Error en la conexión HTTP: "+e.toString());
 	  	}
     }
   
