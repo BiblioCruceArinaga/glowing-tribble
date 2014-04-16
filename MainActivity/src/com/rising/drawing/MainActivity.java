@@ -61,7 +61,7 @@ public class MainActivity extends Activity{
 		setContentView(new Screen(this, score));
 		
 		s = new Screen(this, score);
-		myScreenThread = new ScreenThread(holder, s);
+		if (s.isValidScreen()) myScreenThread = new ScreenThread(holder, s);
 		
 		ActionBar aBar = getActionBar();	
 		aBar.setTitle(R.string.pa);	
@@ -71,7 +71,6 @@ public class MainActivity extends Activity{
 	
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
-		
 		return super.onContextItemSelected(item);
 	}
 	
@@ -113,7 +112,7 @@ public class MainActivity extends Activity{
 		MDialog.setContentView(R.layout.metronome_dialog);
 		MDialog.setTitle(R.string.metronome);
 				
-		//Cambios según la resolución de la pantalla
+		//Cambios segï¿½n la resoluciï¿½n de la pantalla
 		
 		if(screenWith <= 1200 && screenHeight <= 1850){
 			MDialog.getWindow().setLayout(600, 720);
@@ -142,7 +141,7 @@ public class MainActivity extends Activity{
 				tempo = metronome_speed.getValue();
 				//tempo = Integer.valueOf(et_metronome.getText().toString());
 				MainActivity.this.startActionMode(new ActionBarCallBack());
-				DialogCountdown(); //En el futuro estaría bien que el usuario pueda elegir si aparece esto o no, y desde qué número cuenta. 
+				DialogCountdown(); //En el futuro estarï¿½a bien que el usuario pueda elegir si aparece esto o no, y desde quï¿½ nï¿½mero cuenta. 
 				MDialog.dismiss();
 			}
 			
@@ -171,7 +170,7 @@ public class MainActivity extends Activity{
 				play = true;
 				stop = false;
 				
-				s.Metronome_Play(tempo);
+				//s.Metronome_Play(tempo);
 			    CDialog.dismiss();
 			 }
 		}.start();
@@ -191,13 +190,13 @@ public class MainActivity extends Activity{
 		
 		if(play == false){
     		item.setIcon(R.drawable.play_button);
-    		s.Metronome_Pause();    		
+    		//s.Metronome_Pause();    		
     	}else{
     		item.setIcon(R.drawable.pause_button);
     		if(stop){
-    			s.Metronome_Play(tempo);
+    			//s.Metronome_Play(tempo);
     		}else{
-    			s.Metronome_Pause();
+    			//s.Metronome_Pause();
     		}
     	}
 	}
@@ -209,7 +208,7 @@ public class MainActivity extends Activity{
 		play = false;
 		
 		Menu menu = m.getMenu();
-		s.Metronome_Stop();
+		//s.Metronome_Stop();
         if(stop){
         	menu.getItem(2).setIcon(R.drawable.play_button);
     	}else{
@@ -240,13 +239,13 @@ public class MainActivity extends Activity{
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
         	switch(item.getItemId()){
         		case R.id.close_metronome:
-        			s.Metronome_Stop();
+        			//s.Metronome_Stop();
         			mode.finish();
         			tempo = 0;
         			break;
         		
         		case R.id.metronome_menu_back:    
-        			s.Metronome_Back();
+        			//s.Metronome_Back();
         			break;
         			
         		case R.id.metronome_menu_pause:
