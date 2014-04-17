@@ -39,8 +39,16 @@ public class Partitura {
         return string;
     }
     
+    public String getCreator() {
+    	return creator;
+    }
+    
     public int getStaves() {
     	return staves;
+    }
+    
+    public String getWork() {
+    	return work;
     }
     
     public void setCreator(ArrayList<Byte> creator) {

@@ -3,6 +3,8 @@ package com.rising.drawing;
 import java.util.ArrayList;
 
 public class Compas {
+	private ArrayList<Nota> notas;
+	
 	private ArrayList<ElementoGrafico> barlines;
 	private ArrayList<ElementoGrafico> clefs;
 
@@ -19,6 +21,8 @@ public class Compas {
 	private ElementoGrafico words;
 	
 	public Compas() {
+		notas = new ArrayList<Nota>();
+		
 		barlines = new ArrayList<ElementoGrafico>();
 		clefs = new ArrayList<ElementoGrafico>();
 		
@@ -41,6 +45,10 @@ public class Compas {
 	
 	public void addClef(ElementoGrafico clef) {
 		clefs.add(clef);
+	}
+	
+	public void addNote(Nota note) {
+		notas.add(note);
 	}
 	
 	public void setDynamics(ElementoGrafico dynamics) {

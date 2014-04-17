@@ -20,18 +20,23 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback {
 
 	private boolean isValidScreen = false;
 	private ObjectInputStream fichero = null;
+	private ScreenThread thread;
+	
 	private Partitura partitura;
 	private Compas compas;
-	private Nota nota;
 	
-	//  === Constructor y métodos heredados
+	private ArrayList<OrdenDibujo> ordenesDibujo;
+	
+	//  ========================================
+	//  Constructor y métodos heredados
+	//  ========================================
 	public Screen(Context context, String path){
 		super(context);
 		getHolder().addCallback(this);
 		
 		partitura = new Partitura();
 		compas = new Compas();
-		nota = new Nota();
+		ordenesDibujo = new ArrayList<OrdenDibujo>();
 
 		try {
 			File f = new File(Environment.getExternalStorageDirectory() + 
@@ -40,6 +45,7 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback {
 			fichero = new ObjectInputStream(is);
 			
 			cargarDatosDeFichero();
+			crearOrdenesDeDibujo();
 			
 		} catch (FileNotFoundException e) {
 			Log.i("FileNotFoundException: ", e.getMessage() + "\n");
@@ -54,10 +60,17 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback {
 	public void surfaceChanged(SurfaceHolder arg0, int arg1, int arg2, int arg3) {}
 
 	@Override
-	public void surfaceCreated(SurfaceHolder holder) {}
+	public void surfaceCreated(SurfaceHolder holder) {
+		thread = new ScreenThread(getHolder(), this);
+		thread.setRunning(true);
+		thread.start();	
+	}
 
 	@Override
-	public void surfaceDestroyed(SurfaceHolder holder) {}
+	public void surfaceDestroyed(SurfaceHolder holder) {
+		thread.setRunning(false);
+		thread = null;
+	}
 
 	@Override
 	public boolean onTouchEvent(MotionEvent e){		
@@ -74,49 +87,68 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback {
 
 	    return true;
 	}
-	//  ================================
+	//  ========================================
 	
-	//  === Métodos de gestión del fichero
+	
+	//  ========================================
+	//  Métodos de gestión del fichero
+	//  ========================================
 	private void cargarDatosDeFichero() throws IOException {
 		leerDatosBasicosDePartitura();
-		
+
 		byte byteLeido = 0;
 		while (byteLeido != -128) {
 			
 			switch (byteLeido) {
-				case 125:
-					//leerFiguraGraficaCompas();
-					break;
-					/*
 				case 126:
-					leerFiguraGraficaNota();
+					leerFiguraGraficaCompas();
 					break;
-					*/
+					
 				case 127:
 					partitura.addCompas(compas);
 					break;
 				
 				default:
-					leerInfoNota();
+					leerInfoNota(byteLeido);
 					break;
 			}
+			
+			byteLeido = fichero.readByte();
 		}
 		
 		isValidScreen = true;
 	}
 
+	private void crearOrdenesDeDibujo() {
+		OrdenDibujo ordenDibujo = new OrdenDibujo();
+		ordenDibujo.setOrden(DrawOrder.DRAW_TEXT);
+		ordenDibujo.setPaint(PaintOptions.SET_TEXT_SIZE, 40);
+		ordenDibujo.setTexto(partitura.getWork());
+		ordenDibujo.setX1(50);
+		ordenDibujo.setY1(50);
+		ordenesDibujo.add(ordenDibujo);
+		
+		ordenDibujo = new OrdenDibujo();
+		ordenDibujo.setOrden(DrawOrder.DRAW_TEXT);
+		ordenDibujo.setPaint(PaintOptions.SET_TEXT_SIZE, 30);
+		ordenDibujo.setTexto(partitura.getCreator());
+		ordenDibujo.setX1(150);
+		ordenDibujo.setY1(150);
+		ordenesDibujo.add(ordenDibujo);
+	}
+	
 	public boolean isValidScreen() {
 		return isValidScreen;
 	}
 	
-	private ArrayList<Byte> leerClave() throws IOException {
+	private ArrayList<Byte> leerClaves() throws IOException {
 		ArrayList<Byte> arrayBytes = new ArrayList<Byte>();
 		
 		byte pentagrama = 0;
 		byte clave = 0;
 		byte alteracion = 0;
 		
-		int numClefs = partitura.getStaves();
+		int numClefs = fichero.readByte();
 		for (int i=0; i<numClefs; i++) {
 			pentagrama = fichero.readByte();
 			clave = fichero.readByte();
@@ -192,13 +224,13 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback {
 				break;
 				
 			case 30:
-				elemento.addAllValues(leerClave());
+				elemento.addAllValues(leerClaves());
 				elemento.setPosition(leerHastaAlmohadilla());
 				compas.addClef(elemento);
 				break;
 				
 			case 31:
-				elemento.addAllValues(leerTempo());
+				elemento.addValue(fichero.readByte());
 				elemento.setPosition(leerHastaAlmohadilla());
 				compas.setTime(elemento);
 				break;
@@ -206,10 +238,6 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback {
 			default: 
 				break;
 		}
-	}
-	
-	private void leerFiguraGraficaNota() {
-		
 	}
 	
 	private ArrayList<Byte> leerHastaAlmohadilla() throws IOException {
@@ -225,23 +253,40 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback {
 		return bytesArray;
 	}
 	
-	private void leerInfoNota() {
+	private void leerInfoNota(byte nota) throws IOException {
+		byte octava = fichero.readByte();
+		byte figuracion = fichero.readByte();
+		byte union = fichero.readByte();
+		byte plica = fichero.readByte();
+		byte voz = fichero.readByte();
+		byte pentagrama = fichero.readByte();
 		
-	}
-	
-	private ArrayList<Byte> leerTempo() throws IOException {
-		ArrayList<Byte> arrayBytes = new ArrayList<Byte>();
-		
-		byte tempo = fichero.readByte();
-		arrayBytes.add(tempo);
-		
-		return arrayBytes;
+		ArrayList<Byte> figurasGraficas = leerHastaAlmohadilla();
+		ArrayList<Byte> posicionEjeX = leerHastaAlmohadilla();
+
+		compas.addNote(new Nota(nota, octava, figuracion, union, plica,
+				voz, pentagrama, figurasGraficas, posicionEjeX));
 	}
 	//  ================================
 	
-	//  === Método draw
+	//  ========================================
+	//  Método draw
+	//  ========================================
 	public void draw(Canvas canvas) {
-        
+		canvas.drawARGB(255, 255, 255, 255);
+		
+		int numOrdenes = ordenesDibujo.size();
+		for (int i=0; i<numOrdenes; i++) {
+			OrdenDibujo ordenDibujo = ordenesDibujo.get(i);
+			
+			switch(ordenDibujo.getOrden()) {
+				case DRAW_TEXT:
+					canvas.drawText(ordenDibujo.getTexto(), ordenDibujo.getX1(), 
+							ordenDibujo.getY1(), ordenDibujo.getPaint());
+					break;
+				default:
+					break;
+			}
+		}
     }
-	//  ================================
 }
