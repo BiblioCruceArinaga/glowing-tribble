@@ -1,0 +1,403 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Pantalla Login -->
+    <string name="app_name">Scores</string>
+    <string name="logo">El logo de Scores</string>
+    <string name="login">Iniciar sesión</string>
+    <string name="login_f">Iniciar sesión con Facebook</string>
+    <string name="olvida_pass">¿Olvidaste la contraseña?</string>
+    <string name="registro">Registrarse</string>
+    <string name="registrate">Si no eres usuario, ¡Registrate ya!</string>
+    <string name="slogan">Las partituras del futuro</string>
+    <string name="facebook_app_id">1439111256308763</string>
+        
+   		<!-- Dialogo inicio sesión -->
+    	<string name="mail">Correo electrónico</string>
+    	<string name="pass">Contraseña</string>
+    	<string name="login_title">Iniciar sesión</string>
+    	<string name="err_campos_vacios">Debes rellenar todos los campos</string>
+    	<string name="err_login_unknown_user">Nombre de usuario y/o contraseña erróneos</string>
+    	<string name="err_not_active">Esta cuenta está pendiente de activación</string>
+    	<string name="err_login_unknown">Hubo un error. Por favor, inténtalo de nuevo</string>
+    	<string name="cancel">Cancelar</string>
+    	<string name="confirm_login">Iniciar</string>
+    	<string name="cerrar_sesion">Cerrar Sesión</string>
+    	<string name="close_d">Cerrar</string>
+    	
+    	<!-- Dialogo olvido contraseña -->
+    	<string name="olvido_title">Recuperar contraseña</string>
+    	<string name="mail_olvido_pass">Introducir correo electrónico</string>
+    	<string name="confirm_olvidopass">Enviar</string>
+    	<string name="err_olvidopass_unknown">Hubo un error y no se pudo recuperar la contraseña.
+    	    Por favor, inténtalo de nuevo más tarde</string>
+    	<string name="olvidopass_ok">Te hemos enviado un correo electrónico con instrucciones sobre su contraseña</string>
+    	<string name="err_olvidopass_mail">No hemos encontrado ninguna cuenta asociada a este correo</string>
+    	<string name="err_olvidopass_mail_not_sent">Se cambió tu contraseña pero no pudimos enviártela. 
+    	    Por favor, inténtalo de nuevo más tarde</string>
+    	
+    	<!-- Dialogo registro usuario -->
+    	<string name="registro_title">Registrarse</string>
+    	<string name="nombre_registro">Nombre</string>
+    	<string name="mail_registro">Correo electrónico</string>
+    	<string name="pass_registro">Contraseña</string>
+    	<string name="confipass_registro">Confirmar contraseña</string>
+    	<string name="confirm_registro">Registrarse</string>
+    	<string name="err_net">Hubo un error en la red y no fue posible enviar los datos. Por favor, inténtalo de nuevo más tarde.</string>
+    	<string name="err_pass">Las contraseñas no coinciden</string>
+    	<string name="err_reg">Hubo un error al intentar efectuar el registro. 
+    	    Por favor, inténtalo de nuevo más tarde.</string>
+    	<string name="err_reg_mail">Este email ya se encuentra en uso, por favor elige otro</string>
+    	<string name="ok_reg">Se ha enviado un correo electrónico</string>
+    	<string name="ok_reg_mail">Se completó el registro pero no se pudo enviar el email de 
+    	    confirmación. Te lo enviaremos manualmente en un plazo máximo de 24 horas.</string>
+    	
+	<!-- Pantalla principal -->
+    <string name="titulo_coleccion">Mi colección</string>
+    <string name="bin">Delete</string>
+    <string name="action_sort">Ordenar</string>
+    <string name="author">Autor</string>
+    <string name="author_dialog_title">Elige un autor</string>
+    <string name="instrument">Instrumento</string>
+    <string name="instrument_dialog_title">Elige un instrumento</string>
+    <string name="name">Ordenar por nombre</string>
+    <string name="show_all">Mostrar todas</string>
+    <string name="action_search">Buscar</string>
+    <string name="no_scores">Tu colección de partituras está vacía. 
+        Puedes comprar partituras en nuestra tienda.</string>
+    <string name="no_scores_button">Ir a la tienda</string>
+    	    	
+    	<!-- Menú contextual -->
+    	<string name="select_all">Seleccionar todos</string>
+    	<string name="select_none">Deseleccionar todos</string>
+    	<string name="title">Selecciona partituras</string>
+    	<string name="subtitle">1 partitura seleccionada</string>
+    	<string name="subtitle2">partituras seleccionadas</string>
+    	<string name="successDelete">Archivos eliminados con éxito</string>
+    	<string name="failDelete">Sucedió un error y no se pudieron eliminar 
+    	    los archivos seleccionados</string>
+    
+    <!-- Pantalla partitura -->
+    <string name="metronome">Metrónomo</string>	
+    	<string name="metronome_pause">Pausa</string>
+    	<string name="metronome_stop">Para</string>
+    	<string name="metronome_play">Inicia</string>
+    	<string name="metronome_back">Volver al inicio</string>
+    	<string name="close_metronome">Cerrar metrónomo</string>
+    	<string name="tempo">Tempo</string>
+    <string name="pa">Partitura</string>
+    	
+    <string name="contentDescription">Imagen</string>
+
+    <!-- Menú principal contextual -->
+    <string name="mis_datos">Mis datos</string>
+    	<string name="mis_datos_nombre">Nombre:</string>
+    	<string name="mis_datos_email">Email:</string>
+    	<string name="mis_datos_clave">Cambiar contraseña</string>
+    	<string name="mis_datos_clave_vieja">Contraseña antigua</string>
+    	<string name="mis_datos_clave_nueva">Contraseña nueva</string>
+    	<string name="mis_datos_clave_repetir">Repetir contraseña nueva</string>
+    	<string name="mis_datos_boton">Cambiar contraseña</string>
+    	<string name="mis_datos_clave_cambiada">Se ha cambiado tu contraseña</string>
+    	<string name="mis_datos_error_verif">No hemos podido verificar su identidad</string>
+    	<string name="mis_datos_clave_erronea">Contraseña incorrecta</string>
+    
+    <string name="feedback">Feedback</string>
+    	<string name="feedback_envianos">
+    		Envíanos aquellos errores que hayas encontrado o sugerencias que tengas
+    		para mejorar la aplicación. Muchas gracias.
+    	</string>
+    	<string name="feedback_boton">Enviar feedback</string>
+    	<string name="feedback_enviado">Feedback enviado. Gracias por ayudarnos a mejorar.</string>
+    
+    <string name="terminos_condiciones">Términos y condiciones</string>
+    	<string name="terminos">
+    	    CONDICIONES DE USO DE LA APLICACIÓN\n\n
+
+			1. ACEPTACIÓN DE CONDICIONES DE USO\n\n
+			
+			Al instalar la APLICACIÓN, el usuario acepta las presentes condiciones de uso.\n\n
+			
+			2. DEFINICIÓN\n\n
+			
+			2.1. La APLICACIÓN ofrece al usuario el acceso a una tienda online (en adelante, la 
+			TIENDA) desde la cual el usuario podrá adquirir al precio dictado en la misma las 
+			partituras existentes en el catálogo ofrecido por RISING. El usuario podrá descargar 
+			en su dispositivo las partituras que haya adquirido y las podrá utilizar de dos formas posibles: 
+			moviéndolas manualmente o seleccionando una velocidad de metrónomo a partir de la 
+			cual la partitura se moverá automáticamente durante toda la pieza.\n\n
+			
+			2.2. La APLICACIÓN se distribuye de forma gratuita. Además, RISING publicará 
+			actualizaciones periódicas de la APLICACIÓN que tampoco devengarán coste alguno por 
+			parte del usuario.\n\n
+			
+			3. PROTECCIÓN DE DATOS\n\n
+			
+			Cualquier información personal que se facilite a RISING durante el uso de la 
+			APLICACIÓN se utilizará únicamente en conformidad con la política de privacidad 
+			de RISING.\n\n
+			
+			4. LICENCIA Y DERECHOS DE PROPIEDAD\n\n
+			
+			4.1. Todas las marcas, derechos de autor, bases de datos y otros derechos de 
+			propiedad intelectual de la APLICACIÓN, cualquiera que sea su naturaleza, así 
+			como el código fuente, son propiedad de RISING.\n\n
+			
+			4.2. Por el presente, RISING ofrece una licencia revocable, gratuita, no exclusiva 
+			y de carácter internacional para utilizar esta APLICACIÓN en el ámbito personal o 
+			profesional dentro de los límites establecidos por estas condiciones de la APLICACIÓN.\n\n
+			
+			5. CONDICIONES DE USO\n\n
+			
+			5.1. El usuario no actuará ni permitirá que terceras personas actúen en su nombre para:\n\n
+			
+			a) Hacer y distribuir copias de la APLICACIÓN.\n\n
+			b) Intentar copiar, reproducir, alterar, modificar, hacer ingeniería inversa, desarmar, 
+			descompilar, transferir, intercambiar o traducir la APLICACIÓN.\n\n
+			c) Crear ninguna clase de proyecto derivado de la APLICACIÓN.\n\n
+			
+			5.2. La APLICACIÓN se entrega al usuario de manera gratuita para su uso personal y no 
+			comercial. RISING se reserva el derecho a modificar o deshabilitar la APLICACIÓN en 
+			cualquier momento y por cualquier motivo.\n\n
+			
+			5.3. El usuario acepta que los términos del acuerdo con el proveedor de su red móvil 
+			(«Proveedor de Servicios Móviles») continuarán en vigor durante el uso de la APLICACIÓN. 
+			En consecuencia, es posible que el Proveedor de Servicios Móviles cobre por los servicios 
+			de conexión a la red mientras la APLICACIÓN permanezca conectada a la red, o que se 
+			produzcan cargos económicos de terceros. El usuario acepta la responsabilidad de los 
+			cargos que pudieran surgir.\n\n
+			
+			5.4. Si el usuario no es el titular de facturación del teléfono o dispositivo móvil 
+			utilizado para acceder a la APLICACIÓN, se asumirá que tiene permiso del titular para 
+			utilizar la APLICACIÓN.\n\n
+			
+			6. DISPONIBILIDAD\n\n
+			
+			6.1. La APLICACIÓN está disponible para los dispositivos móviles portátiles que funcionen 
+			con los sistemas operativos Android OS. RISING hará todos los esfuerzos razonables para 
+			que la APLICACIÓN esté disponible en todo momento. No obstante, el usuario acepta que la 
+			entrega de la APLICACIÓN se realizará a través de internet y de las redes móviles y que, 
+			en consecuencia, la calidad y disponibilidad de la APLICACIÓN pueden verse afectadas por 
+			factores ajenos al control responsable de RISING.\n\n
+			
+			6.2. Para poder utilizar la APLICACIÓN, el usuario debe tener un dispositivo móvil compatible, 
+			con conexión a internet y que cumpla las especificaciones mínimas («Requisitos del software»).\n\n
+			
+			6.3. Los requisitos del software son los siguientes: Dispositivos Android OS de más de 7 pulgadas y con los
+			sistemas operativos Android OS 4.1 a OS 4.4. Idiomas: español e inglés.\n\n
+			
+			7. ELIMINACIÓN DE LA CUENTA\n\n
+			
+			3.2.7.1. El usuario está facultado para dar de baja su cuenta en cualquier momento a través de 
+			la herramienta que se ofrece en la APLICACIÓN para tal fin, y sin necesidad de notificación 
+			previa a RISING.\n\n
+
+			3.2.7.2. La eliminación de la cuenta por parte del usuario es un proceso irreversible que tiene 
+			como consecuencia la eliminación de toda la información relativa al usuario contenida en la base 
+			de datos de RISING. Esta información incluye el registro de las compras efectuadas por el usuario 
+			en la TIENDA. No obstante, las partituras que el usuario tenga descargadas en su dispositivo por 
+			haber sido adquiridas a través de la TIENDA no serán eliminadas del dispositivo, aunque el usuario 
+			deberá crearse una nueva cuenta si quiere utilizarlas.\n\n
+
+			3.2.7.3. La eliminación de la cuenta por parte del usuario supone la pérdida del saldo que tuviera 
+			acumulado en su cuenta, así como el fin de su relación contractual con RISING.\n\n
+			
+			8. FINALIZACIÓN\n\n
+			
+			8.1. RISING puede finalizar el uso de la APLICACIÓN en cualquier momento previa notificación, 
+			que será publicada en su BLOG.\n\n
+		    
+			8.2. Al finalizar dicho uso, también se pondrá fin a todos los derechos y licencias 
+			otorgados al usuario, lo que significa que el usuario deberá dejar de utilizar el software.\n\n
+    	    
+    	</string>
+    
+    <string name="condiciones_compra">Condiciones de compra</string>
+    	<string name="condiciones">
+    	    CONDICIONES DE COMPRA\n\n
+
+			1. OBJETO Y DESCRIPCIÓN DE LOS PRODUCTOS\n\n
+
+			RISING S.C.P. (en adelante RISING) es el creador y propietario de la aplicación Scores 
+			(en adelante, la APLICACIÓN) ofrecida en el sitio www.scores.rising.es (en adelante, la WEB), 
+			generada y estructurada a partir de software, diseño y contenidos, junto con otras informaciones 
+			tanto propias como provenientes de proveedores de reconocido prestigio, y ofrece un soporte online
+			(en adelante, la TIENDA) en el cual el CLIENTE puede adquirir partituras musicales en formato digital
+			que pueden ser usadas mediante la propia APLICACIÓN. El presente contrato regula la prestación y 
+			suministro al CLIENTE, a través de la red de Telecomunicaciones Internet, de los productos 
+			por parte de RISING. Los productos son los que se pueden consultar a través de la propia TIENDA y 
+			en las listas de precios contenidas en el mismo, reservándose no obstante dicha sociedad el derecho 
+			a modificar y revisar dichas tarifas y productos.\n\n
+
+			2. CONDICIONES GENERALES\n\n
+			
+			La orden de compra por parte del CLIENTE de los productos de la TIENDA presupone la adhesión a las presentes 
+			Condiciones de Compra y a los Términos y Condiciones incluidos tanto en la WEB como en la APLICACIÓN, y se 
+			perfecciona en el momento mismo de la orden de compra.\n\n
+			
+			La presentación de productos en pantalla no constituye en sí una oferta de venta propiamente dicha desde un 
+			punto de vista contractual, sino que aquélla es meramente un escaparate de los productos de que dispone la 
+			TIENDA.\n\n
+			
+			3. PRECIO\n\n
+			
+			El coste de los productos incluidos en la TIENDA será el establecido para cada uno de ellos y vigente en 
+			cada momento, que se encuentra accesible a través de la TIENDA y se muestra en la información anexa al producto. 
+			RISING se reserva el derecho de modificar los precios en cualquier momento, siendo de aplicación dicha 
+			modificación para las partes desde que sea incorporada a la mencionada Web.\n\n
+			
+			4. ADQUISICIÓN DE SALDO\n\n
+			
+			4.1. Para adquirir cualesquiera de los productos disponibles a través de la TIENDA, el CLIENTE tendrá
+			a su disposición dentro de la TIENDA una opción que le permitirá añadir saldo a su cuenta.\n\n
+			
+			4.2. Esta opción consistirá en que el CLIENTE abonará a RISING una cantidad monetaria que, después
+			del pago, será registrada en su cuenta como saldo virtual (en adelante, el SALDO). Este SALDO es el
+			que permitirá al CLIENTE adquirir partituras en la TIENDA.\n\n
+			
+			4.3. Si el CLIENTE no dispone de SALDO suficiente para adquirir una partitura, no podrá comprarla.
+			En tal caso, si el CLIENTE deseara adquirir dicha partitura, debería añadir más SALDO a su cuenta.\n\n
+			
+			4.4. RISING no admite devoluciones de saldo.\n\n
+			
+			5. ENTREGA\n\n
+			
+			La entrega de los productos adquiridos se producirá inmediatamente después de que se haya efectuado el pago de 
+			los mismos y desde la propia TIENDA. Adicionalmente se enviará un correo electrónico al cliente con información
+			relativa a su compra, así como con la factura de la misma.\n\n
+			
+			6. DEVOLUCIÓN\n\n
+			
+			Al tratarse de productos y servicios en formato digital y por razones obvias, no se admiten devoluciones.\n\n
+			
+			7. GARANTÍA\n\n
+			
+			En caso de que por algún problema el producto adquirido no pudiese ser descargado o fuese técnicamente defectuoso 
+			de tal forma que fuese imposible su lectura y utilización, el CLIENTE deberá ponerse en contacto, antes de 15 días, 
+			con RISING (info@rising.es) para solicitar una copia de dichos productos. RISING suministrará copia de dichos 
+			productos siempre y cuando la reclamación se produzca dentro de los 15 días mencionados.\n\n
+			
+			En caso de pérdida o corrupción de los ficheros adquiridos y pagados en la TIENDA, RISING suministrará una nueva copia 
+			al CLIENTE y lo hará hasta un máximo de 3 veces siempre y cuando el producto que adquirió el CLIENTE esté vigente y 
+			no descatalogado en el momento de producirse la solicitud. Para que este suministro sea posible, el CLIENTE deberá 
+			ponerse en contacto con RISING y proporcionar la información necesaria tanto del producto cómo para la verificación 
+			de que este fue efectivamente adquirido en la TIENDA.\n\n
+			
+			8. FACTURACIÓN Y FORMA DE PAGO\n\n
+			
+			El CLIENTE realizará el pago de productos utilizando la pasarela de pago habilitada por RISING y gestionada por una 
+			entidad especializada. El pago se realiza en un servidor seguro. En el momento de realizar el pago, RISING emite la 
+			factura correspondiente al mismo y la envía a la dirección de correo electrónico indicada por el CLIENTE. Por razones 
+			de seguridad, RISING no almacena en ninguna forma los datos de pago, quedando todo el proceso de compra a cargo de 
+			la entidad. RISING sólo recibe, por parte de dicha entidad, el código de autorización o en su defecto la causa del 
+			fallo de la operación (tarjeta denegada, caducada, etc.).\n\n
+			
+			9. JURISDICCIÓN Y LEGISLACIÓN APLICABLE\n\n
+			
+			9.1. Las presentes Condiciones de Compra se regirán por lo dispuesto en la legislación española.\n\n
+
+			9.2 En el caso de que se produzca cualquier discrepancia o controversia con motivo de la interpretación o la 
+			aplicación de las presentes Condiciones de Uso, RISING y el CLIENTE, con renuncia expresa a cualquier otro fuero 
+			que pudiera corresponderles, se someten a la jurisdicción de los Juzgados y Tribunales del domicilio de RISING. 
+			Y en el supuesto de que el CLIENTE tenga su domicilio fuera de España, RISING y el CLIENTE, con renuncia expresa 
+			a cualquier otro fuero que pudiera corresponderles, se someten a la jurisdicción de los Juzgados y Tribunales de 
+			Las Palmas.\n\n
+    	    
+    	</string>
+
+    <string name="eliminar_cuenta">Eliminar cuenta</string>
+    	<string name="esta_seguro">
+    	    ¿Estás seguro de que deseas eliminar tu cuenta? Si lo haces, 
+    	    perderás el saldo asociado a tu cuenta. Esta operación es irreversible. 
+    	    Si aun así deseas continuar, introduce tu contraseña.
+    	</string>
+    	<string name="esta_seguro_facebook">
+    	    ¿Estás seguro de que deseas eliminar tu cuenta? Si lo haces, 
+    	    perderás el saldo asociado a tu cuenta. Esta operación es irreversible.
+    	</string>
+    	<string name="error_eliminar_cuenta">
+    	    Hubo un error y no pudimos eliminar tu cuenta. Puedes intentarlo de nuevo más tarde.
+    	</string>
+    	<string name="error_eliminar_cuenta_datos">Error, datos incorrectos</string>
+    	<string name="error_eliminar_cuenta_identidad">
+    	    No hemos podido verificar tu identidad de forma segura. La operación se ha cancelado.
+    	</string>
+    	<string name="error_eliminar_cuenta_fallo_verif">
+    	    No hemos podido identificar esta cuenta. La operación se ha cancelado.
+    	</string>
+    	<string name="cuenta_eliminada">Tu cuenta ha sido eliminada con éxito.</string>
+    	<string name="eliminar_cuenta_clave">Contraseña</string>
+    	<string name="yes">Sí</string>
+    	<string name="no">No</string>
+    	
+    <string name="action_settings">Preferencias</string>
+    	
+    <string name="about">Acerca de Scores</string>
+	    <string name="version">Versión: Beta 0.1 </string>
+	    <string name="acerca_de">Scores ha sido desarrollado por RISING S.C.P.</string>	
+	    <string name="visitanos">Visita nuestra web: </string>
+	    <string name="web">scores.rising.es</string>
+    
+    <!-- Pantalla tienda -->
+    	<string name="store">Tienda</string>
+    	<string name="pleasewait">Por favor, espera...</string>
+    	<string name="masinfo">+ Info</string>
+    	<string name="free">Gratis</string>
+    	<string name="download">Descargar</string>
+    	<string name="coin">€</string>
+    	<string name="update">Actualizar</string>
+    	<string name="store_error">La tienda no está disponible en estos momentos</string>
+    	<string name="retry">Reintentar</string>
+    	<string name="guitar">Guitarra</string>
+    	<string name="piano">Piano</string>
+    	<string name="quest">Encuesta</string>
+    	<string name="okdownload">La partitura se descargó con éxito</string>
+    	<string name="errordownload">Falló la descarga de la partitura</string>
+    	<string name="error_store">¡Falló la conexión!</string>
+    	<string name="buy_agree">¿Quieres comprar esta partitura?</string>
+    	<string name="confirm_buy">Confirmar compra</string>
+    	<string name="buy">Comprar</string>
+    	<string name="not_enough_credit">Saldo insuficiente</string>
+    	<string name="no_money">No tienes saldo suficiente para hacer la compra. </string>
+    	<string name="buy_credit">Comprar saldo</string>
+    	<string name="open">Abrir</string>
+    	
+    	
+    		<!-- Pantalla busqueda -->
+    		<string name="list">Lista</string>
+    	
+    		<!-- Pantalla saldo -->
+    		<string name="money">Saldo</string>
+    		<string name="current_money">Saldo actual:  </string>
+    		<string name="free_money">¡Obtén saldo gratis!</string>
+    		<string name="add5">Añadir 5€</string>
+    		<string name="add10">Añadir 10€ + 1€ Gratis</string>
+    		<string name="add20">Añadir 20€ + 2€ Gratis</string>
+    		<string name="add50">Añadir 50€ + 5€ Gratis</string>
+    		<string name="add100">Añadir 100€ + 10€ Gratis</string>
+    		<string name="share_friends">Comparte con amigos</string>
+    		<string name="share_social">Comparte en las redes</string>
+    		<string name="share_button">Compartir</string>
+    		<string name="friendmail">Escribe el correo electrónico de un amigo</string>
+    
+    		<!-- Pantalla encuesta -->
+    		<string name="quest_explain">En nuestro afán de mejorar y querer traerte siempre lo mejor y justo
+    		    lo que necesitas te presentamos esta pequeña encuesta gracias a la cual podremos saber qué es 
+    		    exáctamente lo que podemos ofrecerte para que tu experiencia en Scores sea la mejor.</string>	    	
+    			    	
+    		<string name="quest_instruments">¿Qué otro instrumento añadiría a la tienda?</string>
+    		<string name="quest_scores">¿Le parece ?</string>	 
+    		<string name="quest_observations">Si tiene alguna otra observación puede comentarla:</string>   	
+    		<string name="quest_yes">Sí</string>
+    		<string name="quest_no">No</string>
+    		
+    <!-- Pantalla perfil partituras -->
+    	<string name="share">Compartir</string>
+
+    <!-- Pantalla preferencias -->	
+    	<string name="user_profile">Cuenta de usuario</string>
+    	
+    <!-- Errores -->
+    	<string name="connection_err">Ocurrió un error en la conexión</string>
+
+</resources>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background_scoresapp"
+    android:orientation="vertical" >
+    
+	 <EditText
+        android:id="@+id/et_mail_olvidopass"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="30dp"
+        android:textSize="24sp"
+        android:inputType="textEmailAddress"
+        android:hint="@string/mail_olvido_pass" >
+
+        <requestFocus />
+    </EditText>
+    
+	<LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/b_confirm_olpass"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="0dp"
+            android:layout_height="70dp"
+            android:textColor="#EEE"
+            android:background="@drawable/stores_buttons"
+            android:textSize="30sp"
+            android:layout_weight="1"
+            android:text="@string/confirm_olvidopass" />
+
+        <Button
+            android:id="@+id/b_cancel_olpass"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="0dp"
+            android:layout_height="70dp"
+            android:textColor="#EEE"
+            android:background="@drawable/stores_buttons"
+            android:textSize="30sp"
+            android:layout_weight="1"
+            android:text="@string/cancel" />
+
+    </LinearLayout>
+</LinearLayout>

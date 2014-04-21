@@ -1,0 +1,73 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item android:id="@+id/store_button"
+          android:title="@string/store"
+          android:showAsAction="always"/>
+
+    <item android:id="@+id/action_sort"
+          android:title="@string/action_sort"
+          android:icon="@drawable/ic_menu_sort"
+          android:showAsAction="ifRoom">
+          
+        <menu>
+            <item 
+		        android:id="@+id/sort_author"
+		        android:title="@string/author"/>
+		    
+		    <item 
+		        android:id="@+id/sort_instrument"
+		        android:title="@string/instrument"/>
+		    
+		    <item 
+		        android:id="@+id/sort_name"
+		        android:title="@string/name"/>
+		    
+		    <item 
+		        android:id="@+id/show_all"
+		        android:title="@string/show_all"/>
+        </menu>
+    </item>
+
+    <item android:id="@+id/action_search"
+          android:title="@string/action_search"
+          android:icon="@android:drawable/ic_menu_search"
+          android:showAsAction="always" 
+          android:actionViewClass="android.widget.SearchView"/>
+    
+    <item 
+        android:id="@+id/mis_datos"
+        android:showAsAction="never"
+        android:title="@string/mis_datos"/>
+    
+    <item 
+        android:id="@+id/feedback"
+        android:showAsAction="never"
+        android:title="@string/feedback"/>
+    
+    <item 
+        android:id="@+id/terminos_condiciones"
+        android:showAsAction="never"
+        android:title="@string/terminos_condiciones"/>
+    
+    <item 
+        android:id="@+id/condiciones_compra"
+        android:showAsAction="never"
+        android:title="@string/condiciones_compra"/>
+    
+    <item 
+        android:id="@+id/eliminar_cuenta"
+        android:showAsAction="never"
+        android:title="@string/eliminar_cuenta"/>
+    
+    <item
+        android:id="@+id/about"
+        android:orderInCategory="100"
+        android:showAsAction="never"
+        android:title="@string/about"/>
+    
+    <item 
+        android:id="@+id/session_button"
+        android:showAsAction="never"
+        android:title="@string/cerrar_sesion"/>
+
+</menu>

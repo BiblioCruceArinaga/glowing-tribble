@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background_scoresapp"
+    android:orientation="vertical" >
+
+    <EditText
+        android:id="@+id/eT_sharefriend_dialog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:layout_marginRight="15dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginBottom="15dp"
+        android:layout_marginTop="380dp"
+        android:textColorHint="#DDD"
+        android:textColor="#DDD"
+        android:textColorHighlight="#DDD"
+        android:textSize="25sp"
+        android:inputType="textEmailAddress" >
+
+        <requestFocus />
+    </EditText>
+
+    <Button
+        android:id="@+id/b_sharefriend_dialog"
+        android:layout_width="450dp"
+        android:layout_height="100dp"
+        android:background="@drawable/stores_buttons"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:textSize="30sp"
+        android:textColor="#DDD"
+        android:layout_marginTop="50dp"        
+        android:text="@string/share_button" />
+    
+</LinearLayout>

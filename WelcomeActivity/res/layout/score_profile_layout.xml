@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background_scoresapp"
+    android:orientation="vertical" >
+
+    <LinearLayout
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content" >
+	
+	        <ImageView
+		        android:id="@+id/imagenPartitura_profile"
+		        android:layout_width="120dp"
+		        android:layout_height="170dp"
+		        android:layout_marginLeft="20dp"
+		        android:layout_marginTop="40dp"
+		        android:layout_marginBottom="30dp"
+		        android:contentDescription="@string/contentDescription"
+		        android:background="@drawable/scores_image" />
+	        
+	        <LinearLayout
+	            android:layout_width="match_parent"
+	            android:layout_height="match_parent"
+	            android:layout_marginLeft="10dp"
+	            android:orientation="vertical" >
+	            	            
+	           <TextView
+			        android:id="@+id/nombrePartitura_profile"
+			        android:layout_width="match_parent"
+			        android:layout_height="100dp"
+			        android:layout_marginTop="20dp"
+			        android:layout_marginRight="10dp"
+			        android:text="Sinfonía Nº6, 'Pastoral'"
+			        android:textColor="#222"
+			        android:textSize="20sp"
+			        android:textStyle="bold" />
+	            
+	           <TextView
+			        android:id="@+id/autorPartitura_profile"
+			        android:layout_width="match_parent"
+			        android:layout_height="50dp"
+			        android:layout_marginTop="10dp"
+			        android:layout_marginRight="10dp"
+			        android:textStyle="italic"
+			        android:text="Ludwig Van Beethoven"
+			        android:textColor="#222"
+			        android:textSize="18sp" />
+	                    
+	           <TextView
+			        android:id="@+id/anoPartitura_profile"
+			        android:layout_width="match_parent"
+			        android:layout_height="wrap_content"
+			        android:layout_marginTop="10dp"
+			        android:layout_marginRight="10dp"
+			        android:textSize="15sp" 
+			        android:text="1869"
+			        android:textColor="#222" />  
+	           
+	            <TextView
+			        android:id="@+id/instrumentoPartitura_profile"
+			        android:layout_width="match_parent"
+			        android:layout_height="wrap_content"
+			        android:layout_marginTop="10dp"
+			        android:layout_marginRight="10dp"
+			        android:textSize="15sp" 
+			        android:text="Piano"
+			        android:textColor="#222" />    
+	            
+	        </LinearLayout>
+	
+	    </LinearLayout>
+	
+	    <LinearLayout
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content" >
+	        
+	        <Button
+		        android:id="@+id/comprar_profile"
+		        android:layout_width="100dp"
+		        android:layout_height="50dp"
+		        android:background="@drawable/stores_buttons"
+		        android:layout_marginLeft="20dp"
+		        android:layout_marginRight="20dp"
+		        android:layout_marginTop="10dp"
+		        android:layout_marginBottom="10dp"
+		        android:text="1.99€"
+		        android:textSize="20sp" />
+	    </LinearLayout>
+	    
+	    <!-- Linea de separación -->
+	    <FrameLayout 
+	        android:layout_width="match_parent"
+	    	android:layout_height="2dp"
+	    	android:layout_marginTop="20dp"
+	    	android:layout_marginBottom="20dp"
+	    	android:layout_marginLeft="20dp"
+	    	android:layout_marginRight="10dp"
+	    	android:background="#222" >
+	    </FrameLayout>
+	    
+	    <!-- Descripción -->
+	    <FrameLayout
+	        android:layout_width="match_parent"
+	        android:layout_marginLeft="20dp"
+	        android:layout_marginRight="10dp"	        
+	        android:background="@drawable/description_style"
+	        android:layout_height="wrap_content" >
+	        
+	        <TextView
+	        android:id="@+id/tv_description_profile"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_marginLeft="20dp"
+	        android:layout_marginRight="10dp"
+	        android:layout_marginTop="20dp"
+	        android:layout_marginBottom="20dp"
+	        android:textColor="#222"
+	        android:textSize="15sp"
+	        android:text="Large Text"
+	        android:textAppearance="?android:attr/textAppearanceLarge" />
+	        
+	    </FrameLayout>
+           
+	    <!-- Linea de separación -->
+	    <FrameLayout
+	        android:layout_width="match_parent"
+	    	android:layout_height="2dp"
+	    	android:layout_marginLeft="20dp"
+	    	android:layout_marginRight="10dp"
+	    	android:layout_marginTop="20dp"
+	    	android:layout_marginBottom="20dp"
+	    	android:background="#222" >
+	    </FrameLayout>
+	    
+</LinearLayout>

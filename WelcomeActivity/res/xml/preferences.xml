@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <PreferenceCategory android:title="Cuenta">
+        <PreferenceScreen
+            android:key="User_profile"
+            android:title="@string/user_profile">
+        </PreferenceScreen>
+    </PreferenceCategory>
+    
+    <PreferenceCategory android:title="Feedback">
+        <PreferenceScreen
+            android:key="Feedback"
+            android:title="@string/feedback">
+        </PreferenceScreen>
+    </PreferenceCategory> 
+    
+    <PreferenceCategory android:title="Acerca de">
+    	<PreferenceScreen
+            android:key="conditions"
+            android:title="@string/condiciones" >
+            </PreferenceScreen>
+    </PreferenceCategory> 
+    
+</PreferenceScreen>
+
+<!-- 	
+	-Cuenta usuario
+		-Datos usuario
+		-Eliminar cuenta
+		
+	-Acerca de
+		-Versión de la app
+		-Terminos y condiciones, incluida las de compra
+	
+	-Feedback
+		-Cuadro de texto
+	-->
