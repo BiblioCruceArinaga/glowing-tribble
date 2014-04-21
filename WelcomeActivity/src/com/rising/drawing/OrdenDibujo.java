@@ -2,6 +2,7 @@ package com.rising.drawing;
 
 import android.graphics.Bitmap;
 import android.graphics.Paint;
+import android.graphics.Paint.Align;
 
 public class OrdenDibujo {
 	
@@ -14,6 +15,7 @@ public class OrdenDibujo {
 	private int y1;
 	private int x2;
 	private int y2;
+	private int radius;
 	
 	public OrdenDibujo() {
 		paint = new Paint();
@@ -25,6 +27,11 @@ public class OrdenDibujo {
 		x2 = -1;
 		y1 = -1;
 		y2 = -1;
+		radius = 0;
+	}
+	
+	public Bitmap getImagen() {
+		return imagen;
 	}
 	
 	public DrawOrder getOrden() {
@@ -35,6 +42,10 @@ public class OrdenDibujo {
 		return paint;
 	}
 	
+	public int getRadius() {
+		return radius;
+	}
+	
 	public String getTexto() {
 		return texto;
 	}
@@ -43,8 +54,20 @@ public class OrdenDibujo {
 		return x1;
 	}
 	
+	public int getX2() {
+		return x2;
+	}
+	
 	public int getY1() {
 		return y1;
+	}
+	
+	public int getY2() {
+		return y2;
+	}
+	
+	public void setImagen(Bitmap imagen) {
+		this.imagen = imagen;
 	}
 	
 	public void setPaint(PaintOptions option, int value) {
@@ -61,9 +84,16 @@ public class OrdenDibujo {
 			case SET_ARGB:
 				paint.setARGB(255, value, value, value);
 				break;
+			case SET_TEXT_ALIGN:
+				paint.setTextAlign(Align.CENTER);
+				break;
 			default: 
 				break;
 		}
+	}
+	
+	public void setRadius(int radius) {
+		this.radius = radius;
 	}
 	
 	public void setTexto(String texto) {
@@ -78,12 +108,12 @@ public class OrdenDibujo {
 		this.x1 = x1;
 	}
 	
-	public void setY1(int x2) {
-		this.x2 = x2;
+	public void setY1(int y1) {
+		this.y1 = y1;
 	}
 	
-	public void setX2(int y1) {
-		this.y1 = y1;
+	public void setX2(int x2) {
+		this.x2 = x2;
 	}
 	
 	public void setY2(int y2) {

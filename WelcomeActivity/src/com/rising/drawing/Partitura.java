@@ -39,6 +39,10 @@ public class Partitura {
         return string;
     }
     
+    public ArrayList<Compas> getCompases() {
+    	return this.compases;
+    }
+    
     public String getCreator() {
     	return creator;
     }
