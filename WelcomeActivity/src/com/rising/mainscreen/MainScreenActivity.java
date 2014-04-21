@@ -159,7 +159,7 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 		
 		session.checkLogin();
 		fid = session.getFacebookId();
-		
+			
 		ActionBar action = getActionBar();
 		action.setTitle(R.string.titulo_coleccion);
 		action.setIcon(R.drawable.ic_menu);
@@ -436,25 +436,25 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 	            
 	        case R.id.mis_datos:
 	        	
+	        	        	
 	        	MDialog = new Dialog(MainScreenActivity.this, R.style.cust_dialog);
+	        	MDialog.setTitle(R.string.mis_datos);
+	    		MDialog.getWindow().setLayout(LayoutParams.MATCH_PARENT,LayoutParams.WRAP_CONTENT);	        	
 	        	
 	        	if(fid > -1){
 	        		MDialog.setContentView(R.layout.mis_datos_facebook);
 	        	}else{
 	        		MDialog.setContentView(R.layout.mis_datos);
 	        	}
-	    		MDialog.setTitle(R.string.mis_datos);
-	    		MDialog.getWindow().setLayout(LayoutParams.MATCH_PARENT,LayoutParams.WRAP_CONTENT);
-	    		MDialog.show();
-	    		
-	    		TextView nombre = (TextView) MDialog.findViewById(R.id.misDatosNombre);
-	    		TextView email = (TextView) MDialog.findViewById(R.id.misDatosEmail);
-	    		nombre.setText(nombre.getText() + " " + session.getName());
-	    		email.setText(email.getText() + " " + session.getMail());
-	    			    		
+	        	
+	        	final TextView nombre = (TextView) MDialog.findViewById(R.id.misDatosNombre);
+	    		final TextView email = (TextView) MDialog.findViewById(R.id.misDatosEmail);
 	    		final EditText claveVieja = (EditText) MDialog.findViewById(R.id.misDatosClaveVieja);
 	    	    final EditText claveNueva = (EditText) MDialog.findViewById(R.id.misDatosClaveNueva);
 	    	    final EditText claveRepetir = (EditText) MDialog.findViewById(R.id.misDatosClaveRepetir);
+	    		
+	    		nombre.setText(nombre.getText() + " " + session.getName());
+	    		email.setText(email.getText() + " " + session.getMail());    		
 	    		
 	    		Button misDatosBoton = (Button)MDialog.findViewById(R.id.misDatosBoton);
 	    	    misDatosBoton.setOnClickListener(new Button.OnClickListener() {
@@ -495,6 +495,7 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 	    	    	
 	    	    });
 
+	    	    MDialog.show();
 	            return true;
 	            
 	        case R.id.eliminar_cuenta:
