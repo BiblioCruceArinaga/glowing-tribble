@@ -65,9 +65,9 @@ public class CustomAdapter extends BaseAdapter {
 			lista.get(selected).setComprado(true);
 			//Log.i("URL", lista.get(position).getUrl());
 			
-			Log.i("BuyComplete", "Aqu� 1");
+			Log.i("BuyComplete", "Aquí 1");
 			new MainActivityStore().StartMoneyUpdate(conf.getUserEmail());
-			Log.i("BuyComplete", "Aqu� 2");
+			Log.i("BuyComplete", "Aquí 2");
 			
 		}
 	};
@@ -162,7 +162,7 @@ public class CustomAdapter extends BaseAdapter {
             holder.intrumento = (TextView) view.findViewById(R.id.instrumentoPartitura);
             holder.botonCompra = (Button) view.findViewById(R.id.comprar);
             holder.botonInfo = (Button) view.findViewById(R.id.masInfo);         
-             
+            
             view.setTag(holder);
         }else{
         	holder = (ViewHolder) view.getTag();

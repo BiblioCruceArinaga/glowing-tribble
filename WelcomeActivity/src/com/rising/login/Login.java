@@ -1,6 +1,7 @@
 package com.rising.login;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -25,7 +26,14 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.FacebookException;
+import com.facebook.Request;
+import com.facebook.Response;
 import com.facebook.Session;
+import com.facebook.SessionState;
+import com.facebook.model.GraphUser;
+import com.facebook.widget.LoginButton;
+import com.facebook.widget.LoginButton.OnErrorListener;
 import com.rising.conexiones.HttpPostAux;
 import com.rising.drawing.R;
 import com.rising.login.ActivityRegistro.OnTaskCompleted;
@@ -39,7 +47,7 @@ import com.rising.store.DatosUsuario;
 public class Login extends FragmentActivity {
 	
 	SessionManager session;
-	//LoginButton authButton;
+	LoginButton authButton;
 	Configuration conf = new Configuration(this);
 	public static String FId;
 	public static String FName;
@@ -132,8 +140,7 @@ public class Login extends FragmentActivity {
 	
 		//  Datos login
 		Login = (Button) findViewById(R.id.button_login);
-		//  FButton = (com.facebook.widget.LoginButton) findViewById(R.id.button_login_f); 
-		
+				
 		//  Datos olvido pass
 		OlvidaPass = (TextView)findViewById(R.id.tv_olvido_pass);
 		
@@ -157,7 +164,7 @@ public class Login extends FragmentActivity {
 				Confirm_Login = (Button)LDialog.findViewById(R.id.b_confirm_login);
 				Cancel_Login = (Button)LDialog.findViewById(R.id.b_cancel_login);
 				Mail = (EditText)LDialog.findViewById(R.id.et_mail);
-				Pass = (EditText)LDialog.findViewById(R.id.et_pass); 
+				Pass = (EditText)LDialog.findViewById(R.id.et_pass);
 				
 				Confirm_Login.setOnClickListener(new OnClickListener(){
 
@@ -310,35 +317,36 @@ public class Login extends FragmentActivity {
 		});
 		
 		//Acciones al presionar sobre el botÃ³n de Facebook
-		//authButton = (LoginButton) findViewById(R.id.button_login_f);
+		authButton = (LoginButton) findViewById(R.id.button_login_f);
 
-	    /*authButton.setOnErrorListener(new OnErrorListener() {
+		authButton.setOnErrorListener(new OnErrorListener() {
 	       
 	       @Override
 	       public void onError(FacebookException error) {
-	         
+	         Log.e("FacebookError", error.toString());
 	       }
-	    });*/
+	    });
 	    
-	    //authButton.setReadPermissions(Arrays.asList("email"));
+	    authButton.setReadPermissions(Arrays.asList("email"));
 	        
-	    /*authButton.setSessionStatusCallback(new Session.StatusCallback() {
-
+	    authButton.setSessionStatusCallback(new Session.StatusCallback() {
+	    	
 			@Override
 			public void call(Session session, SessionState state, Exception exception) {
-				
+				Log.i("SÃ­, sÃ­", "LlegÃ³ aquÃ­ 1: " + session.toString() + ", Isopen?: " + session.isOpened());
 				if(session.isOpened()){
 					Request.newMeRequest(session, new Request.GraphUserCallback() {
 						
 						@Override
 						public void onCompleted(GraphUser user, Response response) {
 							if (user != null) {
+								Log.i("SÃ­, sÃ­", "LlegÃ³ aquÃ­ 2");
 								FId = user.getId();
 								FName = user.getFirstName() + " " + user.getLastName();
 								FMail = user.getProperty("email").toString();
 																
 								Log.d("User", FId + " - " + FMail);
-								
+								Log.i("SÃ­, sÃ­", "LlegÃ³ aquÃ­ 3");
 								new asyncFacebook_process().execute(FMail, FName, FId);
 							}
 							
@@ -346,7 +354,7 @@ public class Login extends FragmentActivity {
 					}).executeAsync(); 
 				}				
 			}         
-	    });  */
+	    });  
 	}
 	
 	@Override
@@ -366,7 +374,7 @@ public class Login extends FragmentActivity {
 		
 		TextView tv_E = (TextView)EDialog.findViewById(R.id.error_tV);
 
-		Log.i("Entró", "Entró 1, código: " + code);
+		Log.i("Entrï¿½", "Entrï¿½ 1, cï¿½digo: " + code);
 		
 		switch (code) {
 			case 0:
@@ -381,14 +389,14 @@ public class Login extends FragmentActivity {
 			default:
 				tv_E.setText(R.string.err_login_unknown);
 		}
-		Log.i("Entró", "Entró 2");
+		Log.i("Entrï¿½", "Entrï¿½ 2");
 		Button  Login_Error_Close_Button = (Button)EDialog.findViewById(R.id.error_button);
 		
 		Login_Error_Close_Button.setOnClickListener(new OnClickListener(){
 
 			@Override
 			public void onClick(View v) {
-				Log.i("Entró", "Entró 4");
+				Log.i("Entrï¿½", "Entrï¿½ 4");
 				EDialog.dismiss();				
 			}
 			
@@ -396,7 +404,7 @@ public class Login extends FragmentActivity {
     	
 		EDialog.show();
 		
-		Log.i("Entró", "Entró 5");
+		Log.i("Entrï¿½", "Entrï¿½ 5");
 		
     }
 	
