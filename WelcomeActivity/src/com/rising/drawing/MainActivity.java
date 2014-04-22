@@ -65,7 +65,7 @@ public class MainActivity extends Activity{
 		aBar.setDisplayHomeAsUpEnabled(true);
 		
 		DisplayMetrics dm = new DisplayMetrics();
-		getWindowManager().getDefaultDisplay().getMetrics(dm);;
+		getWindowManager().getDefaultDisplay().getMetrics(dm);
 		
 		s = new Screen(this, score, dm.widthPixels);
 		if (s.isValidScreen()) myScreenThread = new ScreenThread(holder, s);

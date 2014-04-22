@@ -47,6 +47,10 @@ public class Partitura {
     	return creator;
     }
     
+    public int getDivisions() {
+    	return divisions;
+    }
+    
     public int getStaves() {
     	return staves;
     }

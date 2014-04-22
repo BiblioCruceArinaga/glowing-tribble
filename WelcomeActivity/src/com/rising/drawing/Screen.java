@@ -25,9 +25,6 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback {
 	private Partitura partitura;
 	private Compas compas;
 	
-	private int margin_top;
-	private int width;
-	
 	private ArrayList<OrdenDibujo> ordenesDibujo;
 	
 	//  ========================================
@@ -41,9 +38,6 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback {
 		compas = new Compas();
 		ordenesDibujo = new ArrayList<OrdenDibujo>();
 		
-		margin_top = 50;
-		this.width = width;
-		
 		try {
 			File f = new File(Environment.getExternalStorageDirectory() + 
 					"/RisingScores/scores/" + path);
@@ -51,7 +45,9 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback {
 			fichero = new ObjectInputStream(is);
 			
 			cargarDatosDeFichero();
-			ordenesDibujo = DrawingMethods.crearOrdenesDeDibujo(partitura, margin_top, width);
+			
+			DrawingMethods metodosDibujo = new DrawingMethods(partitura, 50, width, getResources());
+			ordenesDibujo = metodosDibujo.crearOrdenesDeDibujo();
 			
 			isValidScreen = true;
 			

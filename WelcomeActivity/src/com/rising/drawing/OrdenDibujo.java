@@ -11,10 +11,10 @@ public class OrdenDibujo {
 	private Bitmap imagen;
 	private DrawOrder orden;
 	
-	private int x1;
-	private int y1;
-	private int x2;
-	private int y2;
+	private float x1;
+	private float y1;
+	private float x2;
+	private float y2;
 	private int radius;
 	
 	public OrdenDibujo() {
@@ -50,19 +50,19 @@ public class OrdenDibujo {
 		return texto;
 	}
 	
-	public int getX1() {
+	public float getX1() {
 		return x1;
 	}
 	
-	public int getX2() {
+	public float getX2() {
 		return x2;
 	}
 	
-	public int getY1() {
+	public float getY1() {
 		return y1;
 	}
 	
-	public int getY2() {
+	public float getY2() {
 		return y2;
 	}
 	
@@ -70,7 +70,7 @@ public class OrdenDibujo {
 		this.imagen = imagen;
 	}
 	
-	public void setPaint(PaintOptions option, int value) {
+	public void setPaint(PaintOptions option, float value) {
 		switch (option) {
 			case SET_STROKE_WIDTH:
 				paint.setStrokeWidth(value);
@@ -82,7 +82,7 @@ public class OrdenDibujo {
 				paint.setStyle(Paint.Style.FILL);
 				break;
 			case SET_ARGB:
-				paint.setARGB(255, value, value, value);
+				paint.setARGB(255, (int) value, (int) value, (int) value);
 				break;
 			case SET_TEXT_ALIGN:
 				paint.setTextAlign(Align.CENTER);
@@ -104,19 +104,19 @@ public class OrdenDibujo {
 		this.orden = orden;
 	}
 	
-	public void setX1(int x1) {
+	public void setX1(float x1) {
 		this.x1 = x1;
 	}
 	
-	public void setY1(int y1) {
+	public void setY1(float y1) {
 		this.y1 = y1;
 	}
 	
-	public void setX2(int x2) {
+	public void setX2(float x2) {
 		this.x2 = x2;
 	}
 	
-	public void setY2(int y2) {
+	public void setY2(float y2) {
 		this.y2 = y2;
 	}
 }
