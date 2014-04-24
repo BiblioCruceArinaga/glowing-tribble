@@ -31,15 +31,16 @@ public class MainActivityStore extends FragmentActivity implements OnQueryTextLi
 	String f;
 	static String s;
 	public MenuItem item;	
-	MoneyUpdateConnectionNetwork mucn;
 	
 	//  Poner tiempo máximo de conexión. Si no se conecta pasado ese tiempo, sale algo.
 	Bundle savedInstanceState;
 	MainActivityStore activity;
 	double d; 
+	MoneyUpdateConnectionNetwork mucn;
+	
 	//  Con esta clase se guardan los datos del usuario 
 	//  en el dispositivo para posteriores consultas
-	Configuration conf = new Configuration(this);
+	Configuration conf;
 		
 	public static Context context;
 			
@@ -56,15 +57,27 @@ public class MainActivityStore extends FragmentActivity implements OnQueryTextLi
 			//conf.setUserMoney();
 			//item.setTitle(""+conf.getUserMoney());
 			
-			invalidateOptionsMenu();			
-			Log.i("UpdateMoney", "Aqu� 2");
+			Log.i("UpdateMoney", "Aquí 2");
 		}
 	};
 	
 	public void StartMoneyUpdate(String user){
-		
+			
 		Log.i("User", "Mail: " + user);
-		new MoneyUpdateConnectionNetwork(moneyUpdate, context).execute(user);
+		//mucn.execute(user);
+		
+		Log.i("Aquí", "Llegó 1");
+		
+		//conf.setUserMoney(mucn.getMoney());
+				
+		//conf.setUserMoney(1.90);
+		
+		Log.i("Aquí", "Llegó 3");
+		
+		//this.invalidateOptionsMenu();	
+			
+		Log.i("Aquí", "Llegó 4");
+		
 		//d = new MoneyUpdateConnectionNetwork(moneyUpdate, context).getMoney();	
 	}
 	@Override
@@ -72,8 +85,9 @@ public class MainActivityStore extends FragmentActivity implements OnQueryTextLi
 		super.onCreate(savedInstanceState);
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		setContentView(R.layout.activity_main_store);		
-		
-		mucn = new MoneyUpdateConnectionNetwork(moneyUpdate, context);		
+		context = this;
+		conf = new Configuration(this);
+		mucn  = new MoneyUpdateConnectionNetwork(moneyUpdate, activity);
 		
     	ABar = getActionBar();
     	ABar.setIcon(R.drawable.ic_menu);

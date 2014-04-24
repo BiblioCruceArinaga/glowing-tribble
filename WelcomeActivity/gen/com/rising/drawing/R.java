@@ -335,159 +335,162 @@ containing a value of this type.
         public static final int wholenote=0x7f02007a;
     }
     public static final class id {
-        public static final int about=0x7f060089;
-        public static final int action_search=0x7f060083;
-        public static final int action_search_store=0x7f06008d;
-        public static final int action_settings=0x7f06008f;
-        public static final int action_sort=0x7f06007e;
-        public static final int anoPartitura_profile=0x7f060072;
-        public static final int autorPartitura=0x7f060037;
-        public static final int autorPartitura_profile=0x7f060071;
-        public static final int b10=0x7f06005f;
-        public static final int b100=0x7f060062;
-        public static final int b20=0x7f060060;
-        public static final int b5=0x7f06005e;
-        public static final int b_buy_credit=0x7f060064;
-        public static final int b_cancel_buy=0x7f06000c;
-        public static final int b_cancel_login=0x7f060042;
-        public static final int b_cancel_olpass=0x7f060067;
-        public static final int b_cancel_reg=0x7f06006e;
-        public static final int b_confirm_buy=0x7f06000b;
-        public static final int b_confirm_login=0x7f060041;
-        public static final int b_confirm_olpass=0x7f060066;
-        public static final int b_confirm_reg=0x7f06006d;
-        public static final int b_registro=0x7f06004a;
-        public static final int b_retry_store=0x7f06007b;
-        public static final int b_share_friends=0x7f06002e;
-        public static final int b_share_social=0x7f06002f;
-        public static final int b_sharefriend_dialog=0x7f060031;
-        public static final int botonEliminarCuenta=0x7f060026;
-        public static final int bu50=0x7f060061;
-        public static final int button_login=0x7f060047;
-        public static final int button_login_f=0x7f060048;
-        public static final int claveEliminarCuenta=0x7f060025;
-        public static final int close_metronome=0x7f060095;
-        public static final int com_facebook_login_activity_progress_bar=0x7f06000f;
-        public static final int com_facebook_picker_activity_circle=0x7f06000e;
-        public static final int com_facebook_picker_checkbox=0x7f060011;
-        public static final int com_facebook_picker_checkbox_stub=0x7f060015;
-        public static final int com_facebook_picker_divider=0x7f060019;
-        public static final int com_facebook_picker_done_button=0x7f060018;
-        public static final int com_facebook_picker_image=0x7f060012;
-        public static final int com_facebook_picker_list_section_header=0x7f060016;
-        public static final int com_facebook_picker_list_view=0x7f06000d;
-        public static final int com_facebook_picker_profile_pic_stub=0x7f060013;
-        public static final int com_facebook_picker_row_activity_circle=0x7f060010;
-        public static final int com_facebook_picker_search_text=0x7f06001e;
-        public static final int com_facebook_picker_title=0x7f060014;
-        public static final int com_facebook_picker_title_bar=0x7f06001b;
-        public static final int com_facebook_picker_title_bar_stub=0x7f06001a;
-        public static final int com_facebook_picker_top_bar=0x7f060017;
-        public static final int com_facebook_search_bar_view=0x7f06001d;
-        public static final int com_facebook_usersettingsfragment_login_button=0x7f060021;
-        public static final int com_facebook_usersettingsfragment_logo_image=0x7f06001f;
-        public static final int com_facebook_usersettingsfragment_profile_name=0x7f060020;
-        public static final int comprar=0x7f06003a;
-        public static final int comprar_profile=0x7f060074;
-        public static final int condiciones_compra=0x7f060087;
-        public static final int count=0x7f060023;
-        public static final int discard=0x7f060096;
-        public static final int eT_metronome=0x7f060051;
-        public static final int eT_sharefriend_dialog=0x7f060030;
-        public static final int eliminar_cuenta=0x7f060088;
-        public static final int error_button=0x7f060044;
-        public static final int error_store=0x7f060078;
-        public static final int error_tV=0x7f060043;
-        public static final int et_confipass_registro=0x7f06006c;
-        public static final int et_mail=0x7f06003f;
-        public static final int et_mail_olvidopass=0x7f060065;
-        public static final int et_mail_registro=0x7f06006a;
-        public static final int et_nombre_registro=0x7f060069;
-        public static final int et_pass=0x7f060040;
-        public static final int et_pass_registro=0x7f06006b;
-        public static final int feedback=0x7f060085;
-        public static final int feedbackBoton=0x7f06002a;
-        public static final int feedbackCajaTexto=0x7f060029;
-        public static final int feedbackTexto=0x7f060028;
-        public static final int fragment_container=0x7f060009;
-        public static final int gV_fragments=0x7f06002b;
-        public static final int gV_free_fragment=0x7f06002c;
-        public static final int gV_guitar_fragment=0x7f06003b;
-        public static final int gV_piano_fragment=0x7f060068;
-        public static final int gV_scores=0x7f06004e;
-        public static final int gV_search=0x7f060077;
-        public static final int iV_Logo=0x7f060045;
-        public static final int iV_score=0x7f060032;
-        public static final int imageButton1=0x7f06003c;
-        public static final int imageButton2=0x7f06003d;
-        public static final int imageButton3=0x7f06003e;
-        public static final int imageView1=0x7f06007c;
-        public static final int imagenPartitura=0x7f060035;
-        public static final int imagenPartitura_profile=0x7f06006f;
-        public static final int instrumentoPartitura=0x7f060038;
-        public static final int instrumentoPartitura_profile=0x7f060073;
+        public static final int about=0x7f06008c;
+        public static final int action_search=0x7f060086;
+        public static final int action_search_store=0x7f060090;
+        public static final int action_settings=0x7f060092;
+        public static final int action_sort=0x7f060081;
+        public static final int anoPartitura_profile=0x7f060075;
+        public static final int autorPartitura=0x7f060038;
+        public static final int autorPartitura_profile=0x7f060074;
+        public static final int b10=0x7f060062;
+        public static final int b100=0x7f060065;
+        public static final int b20=0x7f060063;
+        public static final int b5=0x7f060061;
+        public static final int b_buy_credit=0x7f060067;
+        public static final int b_cancel_buy=0x7f06000d;
+        public static final int b_cancel_login=0x7f060043;
+        public static final int b_cancel_olpass=0x7f06006a;
+        public static final int b_cancel_reg=0x7f060071;
+        public static final int b_confirm_buy=0x7f06000c;
+        public static final int b_confirm_login=0x7f060042;
+        public static final int b_confirm_olpass=0x7f060069;
+        public static final int b_confirm_reg=0x7f060070;
+        public static final int b_registro=0x7f06004b;
+        public static final int b_retry_store=0x7f06007e;
+        public static final int b_share_friends=0x7f06002f;
+        public static final int b_share_social=0x7f060030;
+        public static final int b_sharefriend_dialog=0x7f060032;
+        public static final int botonEliminarCuenta=0x7f060027;
+        public static final int bu50=0x7f060064;
+        public static final int button_login=0x7f060048;
+        public static final int button_login_f=0x7f060049;
+        public static final int claveEliminarCuenta=0x7f060026;
+        public static final int close_metronome=0x7f060098;
+        public static final int com_facebook_login_activity_progress_bar=0x7f060010;
+        public static final int com_facebook_picker_activity_circle=0x7f06000f;
+        public static final int com_facebook_picker_checkbox=0x7f060012;
+        public static final int com_facebook_picker_checkbox_stub=0x7f060016;
+        public static final int com_facebook_picker_divider=0x7f06001a;
+        public static final int com_facebook_picker_done_button=0x7f060019;
+        public static final int com_facebook_picker_image=0x7f060013;
+        public static final int com_facebook_picker_list_section_header=0x7f060017;
+        public static final int com_facebook_picker_list_view=0x7f06000e;
+        public static final int com_facebook_picker_profile_pic_stub=0x7f060014;
+        public static final int com_facebook_picker_row_activity_circle=0x7f060011;
+        public static final int com_facebook_picker_search_text=0x7f06001f;
+        public static final int com_facebook_picker_title=0x7f060015;
+        public static final int com_facebook_picker_title_bar=0x7f06001c;
+        public static final int com_facebook_picker_title_bar_stub=0x7f06001b;
+        public static final int com_facebook_picker_top_bar=0x7f060018;
+        public static final int com_facebook_search_bar_view=0x7f06001e;
+        public static final int com_facebook_usersettingsfragment_login_button=0x7f060022;
+        public static final int com_facebook_usersettingsfragment_logo_image=0x7f060020;
+        public static final int com_facebook_usersettingsfragment_profile_name=0x7f060021;
+        public static final int comprar=0x7f06003b;
+        public static final int comprar_profile=0x7f060077;
+        public static final int condiciones_compra=0x7f06008a;
+        public static final int count=0x7f060024;
+        public static final int discard=0x7f060099;
+        public static final int eT_metronome=0x7f060052;
+        public static final int eT_sharefriend_dialog=0x7f060031;
+        public static final int eliminar_cuenta=0x7f06008b;
+        public static final int error_button=0x7f060045;
+        public static final int error_store=0x7f06007b;
+        public static final int error_tV=0x7f060044;
+        public static final int et_confipass_registro=0x7f06006f;
+        public static final int et_mail=0x7f060040;
+        public static final int et_mail_olvidopass=0x7f060068;
+        public static final int et_mail_registro=0x7f06006d;
+        public static final int et_nombre_registro=0x7f06006c;
+        public static final int et_pass=0x7f060041;
+        public static final int et_pass_registro=0x7f06006e;
+        public static final int feedback=0x7f060088;
+        public static final int feedbackBoton=0x7f06002b;
+        public static final int feedbackCajaTexto=0x7f06002a;
+        public static final int feedbackTexto=0x7f060029;
+        public static final int fragment_container=0x7f06000a;
+        public static final int gV_fragments=0x7f06002c;
+        public static final int gV_free_fragment=0x7f06002d;
+        public static final int gV_guitar_fragment=0x7f06003c;
+        public static final int gV_piano_fragment=0x7f06006b;
+        public static final int gV_scores=0x7f06004f;
+        public static final int gV_search=0x7f06007a;
+        public static final int iV_Logo=0x7f060046;
+        public static final int iV_score=0x7f060033;
+        public static final int imageButton1=0x7f06003d;
+        public static final int imageButton2=0x7f06003e;
+        public static final int imageButton3=0x7f06003f;
+        public static final int imageView1=0x7f06007f;
+        public static final int imagenPartitura=0x7f060036;
+        public static final int imagenPartitura_profile=0x7f060072;
+        public static final int instrumentoPartitura=0x7f060039;
+        public static final int instrumentoPartitura_profile=0x7f060076;
         public static final int large=0x7f060002;
-        public static final int link=0x7f060007;
-        public static final int login_button=0x7f060027;
+        public static final int link=0x7f060008;
+        public static final int login_button=0x7f060028;
         public static final int logo=0x7f060003;
-        public static final int masInfo=0x7f060039;
-        public static final int metronome_button=0x7f06008b;
-        public static final int metronome_menu_back=0x7f060091;
-        public static final int metronome_menu_pause=0x7f060092;
-        public static final int metronome_menu_stop=0x7f060093;
-        public static final int metronome_tempo=0x7f060090;
-        public static final int misDatosBoton=0x7f060058;
-        public static final int misDatosClave=0x7f060054;
-        public static final int misDatosClaveNueva=0x7f060056;
-        public static final int misDatosClaveRepetir=0x7f060057;
-        public static final int misDatosClaveVieja=0x7f060055;
-        public static final int misDatosEmail=0x7f060053;
-        public static final int misDatosFacebookEmail=0x7f06005a;
-        public static final int misDatosFacebookNombre=0x7f060059;
-        public static final int misDatosNombre=0x7f060052;
-        public static final int mis_datos=0x7f060084;
-        public static final int money=0x7f06008c;
-        public static final int nm_metronome=0x7f06004f;
-        public static final int nombrePartitura=0x7f060036;
-        public static final int nombrePartitura_profile=0x7f060070;
+        public static final int masInfo=0x7f06003a;
+        public static final int metronome_button=0x7f06008e;
+        public static final int metronome_menu_back=0x7f060094;
+        public static final int metronome_menu_pause=0x7f060095;
+        public static final int metronome_menu_stop=0x7f060096;
+        public static final int metronome_tempo=0x7f060093;
+        public static final int misDatosBoton=0x7f06005a;
+        public static final int misDatosClave=0x7f060056;
+        public static final int misDatosClaveNueva=0x7f060058;
+        public static final int misDatosClaveRepetir=0x7f060059;
+        public static final int misDatosClaveVieja=0x7f060057;
+        public static final int misDatosEmail=0x7f060054;
+        public static final int misDatosFacebookEmail=0x7f06005c;
+        public static final int misDatosFacebookNombre=0x7f06005b;
+        public static final int misDatosFacebookSaldo=0x7f06005d;
+        public static final int misDatosNombre=0x7f060053;
+        public static final int misDatosSaldo=0x7f060055;
+        public static final int mis_datos=0x7f060087;
+        public static final int money=0x7f06008f;
+        public static final int nm_metronome=0x7f060050;
+        public static final int nombrePartitura=0x7f060037;
+        public static final int nombrePartitura_profile=0x7f060073;
         public static final int normal=0x7f060001;
-        public static final int picker_subtitle=0x7f06001c;
-        public static final int playButton1=0x7f060050;
-        public static final int s_all=0x7f060097;
-        public static final int s_none=0x7f060098;
-        public static final int screen=0x7f060008;
-        public static final int session_button=0x7f06008a;
-        public static final int show_all=0x7f060082;
+        public static final int picker_subtitle=0x7f06001d;
+        public static final int playButton1=0x7f060051;
+        public static final int s_all=0x7f06009a;
+        public static final int s_none=0x7f06009b;
+        public static final int screen=0x7f060009;
+        public static final int session_button=0x7f06008d;
+        public static final int show_all=0x7f060085;
         public static final int small=0x7f060000;
-        public static final int sort_author=0x7f06007f;
-        public static final int sort_instrument=0x7f060080;
-        public static final int sort_name=0x7f060081;
-        public static final int space_metronome=0x7f060094;
-        public static final int store_button=0x7f06007d;
-        public static final int tV_error_store_1=0x7f060079;
-        public static final int tV_error_store_2=0x7f06007a;
-        public static final int tV_no_money=0x7f060063;
-        public static final int tV_registrate=0x7f060049;
-        public static final int tV_score_author=0x7f060034;
-        public static final int tV_score_title=0x7f060033;
-        public static final int tV_slogan=0x7f060046;
-        public static final int tVcurrent_money=0x7f06005b;
-        public static final int tVfreeMoneyTitle=0x7f06002d;
-        public static final int tVfree_money=0x7f06005d;
-        public static final int terminos_condiciones=0x7f060086;
-        public static final int textAreaScroller=0x7f060022;
+        public static final int sort_author=0x7f060082;
+        public static final int sort_instrument=0x7f060083;
+        public static final int sort_name=0x7f060084;
+        public static final int space_metronome=0x7f060097;
+        public static final int store_button=0x7f060080;
+        public static final int tV_error_store_1=0x7f06007c;
+        public static final int tV_error_store_2=0x7f06007d;
+        public static final int tV_no_money=0x7f060066;
+        public static final int tV_registrate=0x7f06004a;
+        public static final int tV_score_author=0x7f060035;
+        public static final int tV_score_title=0x7f060034;
+        public static final int tV_slogan=0x7f060047;
+        public static final int tVcurrent_money=0x7f06005e;
+        public static final int tVfreeMoneyTitle=0x7f06002e;
+        public static final int tVfree_money=0x7f060060;
+        public static final int terminos_condiciones=0x7f060089;
+        public static final int textAreaScroller=0x7f060023;
         public static final int textView1=0x7f060004;
-        public static final int textView2=0x7f060005;
-        public static final int textView3=0x7f060006;
-        public static final int textoColeccionVacia=0x7f06004c;
-        public static final int textoEliminarCuenta=0x7f060024;
-        public static final int tienda=0x7f06004d;
-        public static final int tv_buy_agree=0x7f06000a;
-        public static final int tv_description_profile=0x7f060075;
-        public static final int tv_money_unit=0x7f06005c;
-        public static final int tv_olvido_pass=0x7f06004b;
-        public static final int txt_search=0x7f060076;
-        public static final int update_store=0x7f06008e;
+        public static final int textView11=0x7f060005;
+        public static final int textView2=0x7f060006;
+        public static final int textView3=0x7f060007;
+        public static final int textoColeccionVacia=0x7f06004d;
+        public static final int textoEliminarCuenta=0x7f060025;
+        public static final int tienda=0x7f06004e;
+        public static final int tv_buy_agree=0x7f06000b;
+        public static final int tv_description_profile=0x7f060078;
+        public static final int tv_money_unit=0x7f06005f;
+        public static final int tv_olvido_pass=0x7f06004c;
+        public static final int txt_search=0x7f060079;
+        public static final int update_store=0x7f060091;
     }
     public static final class layout {
         public static final int about=0x7f030000;
@@ -555,32 +558,34 @@ containing a value of this type.
         public static final int partitura=0x7f050000;
     }
     public static final class string {
-        public static final int about=0x7f09007b;
-        public static final int acerca_de=0x7f09007d;
-        public static final int action_search=0x7f090049;
-        public static final int action_settings=0x7f09007a;
-        public static final int action_sort=0x7f090042;
-        public static final int add10=0x7f09009b;
-        public static final int add100=0x7f09009e;
-        public static final int add20=0x7f09009c;
-        public static final int add5=0x7f09009a;
-        public static final int add50=0x7f09009d;
+        public static final int about=0x7f09007d;
+        public static final int acerca_de=0x7f09007f;
+        public static final int action_search=0x7f09004a;
+        public static final int action_settings=0x7f09007c;
+        public static final int action_sort=0x7f090043;
+        public static final int add10=0x7f09009d;
+        public static final int add100=0x7f0900a0;
+        public static final int add20=0x7f09009e;
+        public static final int add5=0x7f09009c;
+        public static final int add50=0x7f09009f;
         /**  Pantalla Login 
  Pantalla Login 
  Pantalla Login 
+ Pantalla Login 
          */
-        public static final int app_name=0x7f090019;
-        public static final int author=0x7f090043;
-        public static final int author_dialog_title=0x7f090044;
-        public static final int bin=0x7f090041;
-        public static final int buy=0x7f090091;
-        public static final int buy_agree=0x7f09008f;
-        public static final int buy_credit=0x7f090094;
-        public static final int cancel=0x7f090029;
-        public static final int cerrar_sesion=0x7f09002b;
-        public static final int close_d=0x7f09002c;
-        public static final int close_metronome=0x7f090058;
-        public static final int coin=0x7f090085;
+        public static final int app_name=0x7f09001a;
+        public static final int appversion=0x7f090019;
+        public static final int author=0x7f090044;
+        public static final int author_dialog_title=0x7f090045;
+        public static final int bin=0x7f090042;
+        public static final int buy=0x7f090093;
+        public static final int buy_agree=0x7f090091;
+        public static final int buy_credit=0x7f090096;
+        public static final int cancel=0x7f09002a;
+        public static final int cerrar_sesion=0x7f09002c;
+        public static final int close_d=0x7f09002d;
+        public static final int close_metronome=0x7f090059;
+        public static final int coin=0x7f090087;
         public static final int com_facebook_choose_friends=0x7f09000f;
         public static final int com_facebook_dialogloginactivity_ok_button=0x7f090000;
         public static final int com_facebook_internet_permission_error_message=0x7f090013;
@@ -606,187 +611,202 @@ containing a value of this type.
         public static final int com_facebook_usersettingsfragment_log_in_button=0x7f090008;
         public static final int com_facebook_usersettingsfragment_logged_in=0x7f090009;
         public static final int com_facebook_usersettingsfragment_not_logged_in=0x7f09000a;
-        public static final int condiciones=0x7f09006e;
-        public static final int condiciones_compra=0x7f09006d;
-        public static final int confipass_registro=0x7f090038;
-        public static final int confirm_buy=0x7f090090;
-        public static final int confirm_login=0x7f09002a;
-        public static final int confirm_olvidopass=0x7f09002f;
-        public static final int confirm_registro=0x7f090039;
+        public static final int condiciones=0x7f090070;
+        public static final int condiciones_compra=0x7f09006f;
+        public static final int confipass_registro=0x7f090039;
+        public static final int confirm_buy=0x7f090092;
+        public static final int confirm_login=0x7f09002b;
+        public static final int confirm_olvidopass=0x7f090030;
+        public static final int confirm_registro=0x7f09003a;
         /**  Errores 
  Errores 
  Errores 
+ Errores 
          */
-        public static final int connection_err=0x7f0900ab;
-        public static final int contentDescription=0x7f09005b;
-        public static final int cuenta_eliminada=0x7f090076;
-        public static final int current_money=0x7f090098;
-        public static final int download=0x7f090084;
-        public static final int eliminar_cuenta=0x7f09006f;
-        public static final int eliminar_cuenta_clave=0x7f090077;
-        public static final int err_campos_vacios=0x7f090025;
-        public static final int err_login_unknown=0x7f090028;
-        public static final int err_login_unknown_user=0x7f090026;
-        public static final int err_net=0x7f09003a;
-        public static final int err_not_active=0x7f090027;
-        public static final int err_olvidopass_mail=0x7f090032;
-        public static final int err_olvidopass_mail_not_sent=0x7f090033;
-        public static final int err_olvidopass_unknown=0x7f090030;
-        public static final int err_pass=0x7f09003b;
-        public static final int err_reg=0x7f09003c;
-        public static final int err_reg_mail=0x7f09003d;
-        public static final int error_eliminar_cuenta=0x7f090072;
-        public static final int error_eliminar_cuenta_datos=0x7f090073;
-        public static final int error_eliminar_cuenta_fallo_verif=0x7f090075;
-        public static final int error_eliminar_cuenta_identidad=0x7f090074;
-        public static final int error_store=0x7f09008e;
-        public static final int errordownload=0x7f09008d;
-        public static final int esta_seguro=0x7f090070;
-        public static final int esta_seguro_facebook=0x7f090071;
-        public static final int facebook_app_id=0x7f090021;
-        public static final int failDelete=0x7f090052;
-        public static final int feedback=0x7f090067;
-        public static final int feedback_boton=0x7f090069;
-        public static final int feedback_enviado=0x7f09006a;
-        public static final int feedback_envianos=0x7f090068;
-        public static final int free=0x7f090083;
-        public static final int free_money=0x7f090099;
-        public static final int friendmail=0x7f0900a2;
-        public static final int guitar=0x7f090089;
-        public static final int instrument=0x7f090045;
-        public static final int instrument_dialog_title=0x7f090046;
+        public static final int connection_err=0x7f0900ad;
+        public static final int contentDescription=0x7f09005c;
+        public static final int cuenta_eliminada=0x7f090078;
+        public static final int current_money=0x7f09009a;
+        public static final int download=0x7f090086;
+        public static final int eliminar_cuenta=0x7f090071;
+        public static final int eliminar_cuenta_clave=0x7f090079;
+        public static final int err_campos_vacios=0x7f090026;
+        public static final int err_login_unknown=0x7f090029;
+        public static final int err_login_unknown_user=0x7f090027;
+        public static final int err_net=0x7f09003b;
+        public static final int err_not_active=0x7f090028;
+        public static final int err_olvidopass_mail=0x7f090033;
+        public static final int err_olvidopass_mail_not_sent=0x7f090034;
+        public static final int err_olvidopass_unknown=0x7f090031;
+        public static final int err_pass=0x7f09003c;
+        public static final int err_reg=0x7f09003d;
+        public static final int err_reg_mail=0x7f09003e;
+        public static final int error_eliminar_cuenta=0x7f090074;
+        public static final int error_eliminar_cuenta_datos=0x7f090075;
+        public static final int error_eliminar_cuenta_fallo_verif=0x7f090077;
+        public static final int error_eliminar_cuenta_identidad=0x7f090076;
+        public static final int error_store=0x7f090090;
+        public static final int errordownload=0x7f09008f;
+        public static final int esta_seguro=0x7f090072;
+        public static final int esta_seguro_facebook=0x7f090073;
+        public static final int facebook_app_id=0x7f090022;
+        public static final int failDelete=0x7f090053;
+        public static final int feedback=0x7f090069;
+        public static final int feedback_boton=0x7f09006b;
+        public static final int feedback_enviado=0x7f09006c;
+        public static final int feedback_envianos=0x7f09006a;
+        public static final int free=0x7f090085;
+        public static final int free_money=0x7f09009b;
+        public static final int friendmail=0x7f0900a4;
+        public static final int guitar=0x7f09008b;
+        public static final int instrument=0x7f090046;
+        public static final int instrument_dialog_title=0x7f090047;
         /**  Pantalla busqueda 
  Pantalla busqueda 
  Pantalla busqueda 
+ Pantalla busqueda 
          */
-        public static final int list=0x7f090096;
-        public static final int login=0x7f09001b;
-        public static final int login_f=0x7f09001c;
-        public static final int login_title=0x7f090024;
-        public static final int logo=0x7f09001a;
+        public static final int list=0x7f090098;
+        public static final int login=0x7f09001c;
+        public static final int login_f=0x7f09001d;
+        public static final int login_title=0x7f090025;
+        public static final int logo=0x7f09001b;
         /**  Dialogo inicio sesión 
  Dialogo inicio sesión 
  Dialogo inicio sesión 
+ Dialogo inicio sesión 
          */
-        public static final int mail=0x7f090022;
-        public static final int mail_olvido_pass=0x7f09002e;
-        public static final int mail_registro=0x7f090036;
-        public static final int masinfo=0x7f090082;
+        public static final int mail=0x7f090023;
+        public static final int mail_olvido_pass=0x7f09002f;
+        public static final int mail_registro=0x7f090037;
+        public static final int masinfo=0x7f090084;
         /**  Pantalla partitura 
  Pantalla partitura 
  Pantalla partitura 
+ Pantalla partitura 
          */
-        public static final int metronome=0x7f090053;
-        public static final int metronome_back=0x7f090057;
-        public static final int metronome_pause=0x7f090054;
-        public static final int metronome_play=0x7f090056;
-        public static final int metronome_stop=0x7f090055;
+        public static final int metronome=0x7f090054;
+        public static final int metronome_back=0x7f090058;
+        public static final int metronome_pause=0x7f090055;
+        public static final int metronome_play=0x7f090057;
+        public static final int metronome_stop=0x7f090056;
         /**  Menú principal contextual 
  Menú principal contextual 
  Menú principal contextual 
+ Menú principal contextual 
          */
-        public static final int mis_datos=0x7f09005c;
-        public static final int mis_datos_boton=0x7f090063;
-        public static final int mis_datos_clave=0x7f09005f;
-        public static final int mis_datos_clave_cambiada=0x7f090064;
-        public static final int mis_datos_clave_erronea=0x7f090066;
-        public static final int mis_datos_clave_nueva=0x7f090061;
-        public static final int mis_datos_clave_repetir=0x7f090062;
-        public static final int mis_datos_clave_vieja=0x7f090060;
-        public static final int mis_datos_email=0x7f09005e;
-        public static final int mis_datos_error_verif=0x7f090065;
-        public static final int mis_datos_nombre=0x7f09005d;
+        public static final int mis_datos=0x7f09005d;
+        public static final int mis_datos_boton=0x7f090064;
+        public static final int mis_datos_clave=0x7f090060;
+        public static final int mis_datos_clave_cambiada=0x7f090065;
+        public static final int mis_datos_clave_erronea=0x7f090067;
+        public static final int mis_datos_clave_nueva=0x7f090062;
+        public static final int mis_datos_clave_repetir=0x7f090063;
+        public static final int mis_datos_clave_vieja=0x7f090061;
+        public static final int mis_datos_email=0x7f09005f;
+        public static final int mis_datos_error_verif=0x7f090066;
+        public static final int mis_datos_nombre=0x7f09005e;
+        public static final int mis_datos_saldo=0x7f090068;
         /**  Pantalla saldo 
  Pantalla saldo 
  Pantalla saldo 
+ Pantalla saldo 
          */
-        public static final int money=0x7f090097;
-        public static final int name=0x7f090047;
-        public static final int no=0x7f090079;
-        public static final int no_money=0x7f090093;
-        public static final int no_scores=0x7f09004a;
-        public static final int no_scores_button=0x7f09004b;
-        public static final int nombre_registro=0x7f090035;
-        public static final int not_enough_credit=0x7f090092;
-        public static final int ok_reg=0x7f09003e;
-        public static final int ok_reg_mail=0x7f09003f;
-        public static final int okdownload=0x7f09008c;
-        public static final int olvida_pass=0x7f09001d;
+        public static final int money=0x7f090099;
+        public static final int name=0x7f090048;
+        public static final int no=0x7f09007b;
+        public static final int no_money=0x7f090095;
+        public static final int no_scores=0x7f09004b;
+        public static final int no_scores_button=0x7f09004c;
+        public static final int nombre_registro=0x7f090036;
+        public static final int not_enough_credit=0x7f090094;
+        public static final int ok_reg=0x7f09003f;
+        public static final int ok_reg_mail=0x7f090040;
+        public static final int okdownload=0x7f09008e;
+        public static final int olvida_pass=0x7f09001e;
         /**  Dialogo olvido contraseña 
  Dialogo olvido contraseña 
  Dialogo olvido contraseña 
+ Dialogo olvido contraseña 
          */
-        public static final int olvido_title=0x7f09002d;
-        public static final int olvidopass_ok=0x7f090031;
-        public static final int open=0x7f090095;
-        public static final int pa=0x7f09005a;
-        public static final int pass=0x7f090023;
-        public static final int pass_registro=0x7f090037;
-        public static final int piano=0x7f09008a;
-        public static final int pleasewait=0x7f090081;
-        public static final int quest=0x7f09008b;
+        public static final int olvido_title=0x7f09002e;
+        public static final int olvidopass_ok=0x7f090032;
+        public static final int open=0x7f090097;
+        public static final int pa=0x7f09005b;
+        public static final int pass=0x7f090024;
+        public static final int pass_registro=0x7f090038;
+        public static final int piano=0x7f09008c;
+        public static final int pleasewait=0x7f090083;
+        public static final int quest=0x7f09008d;
         /**  Pantalla encuesta 
  Pantalla encuesta 
  Pantalla encuesta 
+ Pantalla encuesta 
          */
-        public static final int quest_explain=0x7f0900a3;
-        public static final int quest_instruments=0x7f0900a4;
-        public static final int quest_no=0x7f0900a8;
-        public static final int quest_observations=0x7f0900a6;
-        public static final int quest_scores=0x7f0900a5;
-        public static final int quest_yes=0x7f0900a7;
-        public static final int registrate=0x7f09001f;
-        public static final int registro=0x7f09001e;
+        public static final int quest_explain=0x7f0900a5;
+        public static final int quest_instruments=0x7f0900a6;
+        public static final int quest_no=0x7f0900aa;
+        public static final int quest_observations=0x7f0900a8;
+        public static final int quest_scores=0x7f0900a7;
+        public static final int quest_yes=0x7f0900a9;
+        public static final int registrate=0x7f090020;
+        public static final int registro=0x7f09001f;
         /**  Dialogo registro usuario 
  Dialogo registro usuario 
  Dialogo registro usuario 
+ Dialogo registro usuario 
          */
-        public static final int registro_title=0x7f090034;
-        public static final int retry=0x7f090088;
+        public static final int registro_title=0x7f090035;
+        public static final int retry=0x7f09008a;
         /**  Menú contextual 
  Menú contextual 
  Menú contextual 
+ Menú contextual 
          */
-        public static final int select_all=0x7f09004c;
-        public static final int select_none=0x7f09004d;
+        public static final int select_all=0x7f09004d;
+        public static final int select_none=0x7f09004e;
         /**  Pantalla perfil partituras 
  Pantalla perfil partituras 
  Pantalla perfil partituras 
+ Pantalla perfil partituras 
          */
-        public static final int share=0x7f0900a9;
-        public static final int share_button=0x7f0900a1;
-        public static final int share_friends=0x7f09009f;
-        public static final int share_social=0x7f0900a0;
-        public static final int show_all=0x7f090048;
-        public static final int slogan=0x7f090020;
+        public static final int share=0x7f0900ab;
+        public static final int share_button=0x7f0900a3;
+        public static final int share_friends=0x7f0900a1;
+        public static final int share_social=0x7f0900a2;
+        public static final int show_all=0x7f090049;
+        public static final int slogan=0x7f090021;
         /**  Pantalla tienda 
  Pantalla tienda 
  Pantalla tienda 
+ Pantalla tienda 
          */
-        public static final int store=0x7f090080;
-        public static final int store_error=0x7f090087;
-        public static final int subtitle=0x7f09004f;
-        public static final int subtitle2=0x7f090050;
-        public static final int successDelete=0x7f090051;
-        public static final int tempo=0x7f090059;
-        public static final int terminos=0x7f09006c;
-        public static final int terminos_condiciones=0x7f09006b;
-        public static final int title=0x7f09004e;
+        public static final int store=0x7f090082;
+        public static final int store_error=0x7f090089;
+        public static final int subtitle=0x7f090050;
+        public static final int subtitle2=0x7f090051;
+        public static final int successDelete=0x7f090052;
+        public static final int tempo=0x7f09005a;
+        public static final int terminos=0x7f09006e;
+        public static final int terminos_condiciones=0x7f09006d;
+        public static final int title=0x7f09004f;
         /**  Pantalla principal 
  Pantalla principal 
  Pantalla principal 
+ Pantalla principal 
          */
-        public static final int titulo_coleccion=0x7f090040;
-        public static final int update=0x7f090086;
+        public static final int titulo_coleccion=0x7f090041;
+        public static final int update=0x7f090088;
         /**  Pantalla preferencias 
  Pantalla preferencias 
  Pantalla preferencias 
+ Pantalla preferencias 
          */
-        public static final int user_profile=0x7f0900aa;
-        public static final int version=0x7f09007c;
-        public static final int visitanos=0x7f09007e;
-        public static final int web=0x7f09007f;
-        public static final int yes=0x7f090078;
+        public static final int user_profile=0x7f0900ac;
+        public static final int version=0x7f09007e;
+        public static final int visitanos=0x7f090080;
+        public static final int web=0x7f090081;
+        public static final int yes=0x7f09007a;
     }
     public static final class style {
         public static final int ActionBar_Solid_Tabs=0x7f0a000c;

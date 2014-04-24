@@ -1,7 +1,5 @@
 package com.rising.login;
 
-import java.text.DecimalFormat;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 

@@ -1,11 +1,6 @@
 package com.rising.store;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import java.io.File;
 import java.util.ArrayList;
 
 import org.apache.http.NameValuePair;
@@ -16,14 +11,15 @@ import org.json.JSONObject;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.PowerManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -33,9 +29,12 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.rising.drawing.R;
 import com.rising.conexiones.HttpPostAux;
+import com.rising.drawing.MainActivity;
+import com.rising.drawing.R;
 import com.rising.login.Configuration;
+import com.rising.store.BuyNetworkConnection.OnBuyCompleted;
+import com.rising.store.BuyNetworkConnection.OnBuyFailed;
 import com.rising.store.DownloadScores.OnDownloadCompleted;
 import com.rising.store.DownloadScores.OnDownloadFailed;
 
@@ -53,7 +52,11 @@ public class ScoreProfile extends Activity{
 	private String price;
 	private boolean comprado;
 	private String urlD;
-	
+	static String selectedURL = "";
+	private String path = "/RisingScores/scores/";
+	Dialog BDialog, NMDialog;
+	Button Confirm_Buy, Cancel_Buy, Buy_Money;
+		
 	String Id_User = "";
 	String Id_Score = "";
 	
@@ -62,37 +65,77 @@ public class ScoreProfile extends Activity{
 
 	//private ShareActionProvider share;
 	private DownloadScores download;
-	
+	BuyNetworkConnection bnc;
 	String URL_Buy = "http://www.scores.rising.es/store-buyscore";
 	
 	private HttpPostAux HPA =  new HttpPostAux();
 	
 	// declare the dialog as a member field of your activity
 	ProgressDialog mProgressDialog;
-		
-	private OnDownloadCompleted listenerDownload = new OnDownloadCompleted(){
+	
+	private OnBuyCompleted buyComplete = new OnBuyCompleted(){
+
 		@Override
-		public void onDownloadCompleted() {
-			//Acciones a ejecutar cuando la descarga est� completa
+		public void onBuyCompleted() {
+			//Hay que poner algo aquí para que cuando falle la aplicación no se cierre     				
+			download.execute(selectedURL);
+			
+			comprado = true;
+			//Log.i("URL", lista.get(position).getUrl());
+			
+			Log.i("BuyComplete", "Aquí 1");
+			//new MainActivityStore().StartMoneyUpdate(conf.getUserEmail());
+			Log.i("BuyComplete", "Aquí 2");
+			
+		}
+	};
+	
+	private OnBuyFailed failedBuy = new OnBuyFailed(){
+
+		@Override
+		public void onBuyFailed() {
+			Toast.makeText(ctx, "Falló", Toast.LENGTH_LONG).show();
 		}
 		
 	};
 	
+	private OnDownloadCompleted listenerDownload = new OnDownloadCompleted(){
+		@Override
+		public void onDownloadCompleted() {
+			Intent i = new Intent(ScoreProfile.this, MainActivityStore.class);
+			startActivity(i);
+			finish();
+		}
+		
+	};
+	
+	
 	private OnDownloadFailed failedDownload = new OnDownloadFailed(){
 		@Override
 		public void onDownloadFailed() {
-			//Acciones a ejecutar cuando la descarga fall�
+			//Acciones a ejecutar cuando la descarga fall�
 		}
 		
 	};	
+	
+	public String FileNameString(String urlComplete){
+		
+		String urlCompleto = urlComplete.toString();
+		int position = urlCompleto.lastIndexOf('/');
+		
+		String name = urlCompleto.substring(position + 1, urlCompleto.length());
+		
+		return name;
+	}
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		setContentView(R.layout.score_profile_layout);
-		download = new DownloadScores(listenerDownload, failedDownload, ctx);
 		ctx = getApplicationContext();
+		download = new DownloadScores(listenerDownload, failedDownload, this);
+		bnc = new BuyNetworkConnection(buyComplete, failedBuy, this);		
 		
 		// instantiate it within the onCreate method
 		mProgressDialog = new ProgressDialog(ScoreProfile.this);
@@ -133,7 +176,11 @@ public class ScoreProfile extends Activity{
 		TV_Description.setText(description);
 		
 		if(comprado){
-			B_Price.setText(R.string.download);
+			if(buscarArchivos(FileNameString(urlD))){
+				B_Price.setText(R.string.open);
+			}else{
+				B_Price.setText(R.string.download);
+	    	}
 		}else{
 			if(price.equals("0.0")){
 				B_Price.setText(R.string.free);
@@ -142,6 +189,16 @@ public class ScoreProfile extends Activity{
 			}
 		}
 		
+		
+		//Dialog que pregunta al usuario si quiere comprar la partitura
+ 		BDialog = new Dialog(ctx, R.style.cust_dialog);
+ 		BDialog.setContentView(R.layout.buy_dialog);
+		BDialog.setTitle(R.string.confirm_buy);
+										
+		Confirm_Buy = (Button)BDialog.findViewById(R.id.b_confirm_buy);
+		Cancel_Buy = (Button)BDialog.findViewById(R.id.b_cancel_buy);
+		
+			
 		B_Price.setOnClickListener(new OnClickListener(){
 
 			@Override
@@ -149,9 +206,6 @@ public class ScoreProfile extends Activity{
 				conf = new Configuration(ctx);
         		Id_User = conf.getUserId();
         		Id_Score = String.valueOf(Id);
-
-                // Lanza la descarga 
-                final AsyncDownload downloadTask = new AsyncDownload(ctx);
                 
                 Id_User = conf.getUserId();
         		Id_Score = String.valueOf(Id);
@@ -159,48 +213,93 @@ public class ScoreProfile extends Activity{
         		//  Si la partitura ya está comprada lanza la descarga 
         		//  sin registrar la compra en la base de datos.
         		if(comprado){
+        			//Si la partitura ya est� en el dispositivo la abre
+        			if(buscarArchivos(FileNameString(urlD))){
+        				
+        				//Log.i("Filename", FileNameString(lista.get(position).getUrl()) + ", Context: " + ctx);      				
+        				AbrirFichero(ctx, FileNameString(urlD));				
+        			}else{
+        				     				
+	     				download.execute(urlD);
+	     				//Log.i("URL", lista.get(position).getUrl());
+        			}  				
         			     				
-     				//  Hay que poner algo aquí para que cuando 
-        			//  falle la aplicación no se cierre     				
-     				downloadTask.execute(urlD);
-     				Log.i("URL", urlD);
-     				
      				mProgressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
      				    @Override
      				    public void onCancel(DialogInterface dialog) {
-     				    	downloadTask.cancel(true);
+     				    	download.cancel(true);
      				    }
      				});
      				
         		}else{
-        		
-	        		//  Aquí tiene lugar la descarga y la compra, y el 
-        			//  registro de la compra en la base de datos
-	 				if(price.equals("0.0")){	
-	 						     				
-	     				//  Log.i("BuyScore", "" + new CustomAdapter(ctx, null).new 
-	 					//  AsyncBuyScore().execute(Id_User, Id_Score));
-		     			
-	     				//  Primero usuario y luego partitura
-	     				if(new AsyncBuyScore().execute(Id_User, Id_Score).equals("Valido") ){
-	     					
-		     				//  Hay que poner algo aquí para que cuando 
-	     					//  falle la aplicación no se cierre     				
-		     				downloadTask.execute(urlD);
-		     				Log.i("URL", urlD);
-		     				
-		     				mProgressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-		     				    @Override
-		     				    public void onCancel(DialogInterface dialog) {
-		     				    	downloadTask.cancel(true);
-		     				    }
-		     				});
-	     				}	
-	     				
-	 				}else{
-	 					Toast.makeText(ctx, "¡Paga!", Toast.LENGTH_LONG).show();				
-	 				}
-        		}
+        			
+					//Se le pregunta al usuario si realmente desea comprar la partitura	
+					BDialog.show();
+					
+					Confirm_Buy.setOnClickListener(new OnClickListener(){
+							
+						@Override
+						public void onClick(View arg0) {
+										
+							selectedURL = urlD;
+							
+							//Aquí tiene lugar la descarga y la compra, y el registro de la compra en la base de datos
+							if(price.equals(0.0)){	
+									     							     							     							     					
+								bnc.execute(Id_User, Id_Score);
+				 			
+				 				BDialog.dismiss();
+										     						     								     							     							     				
+							}else{
+												 								 					
+									//Log.i("Prices", "Partitura: " + lista.get(position).getPrecio() + ", User: " + conf.getUserMoney());
+									 			
+				     			if(Integer.valueOf(price) < conf.getUserMoney()){		 					
+				 							     								     				
+					     			bnc.execute(Id_User, Id_Score);
+					     			
+					     			BDialog.dismiss();					     							     			
+									}else{
+										
+										NMDialog = new Dialog(ctx, R.style.cust_dialog);
+										
+										NMDialog.setContentView(R.layout.no_money_dialog);
+										NMDialog.setTitle(R.string.not_enough_credit);
+										
+										Buy_Money = (Button)NMDialog.findViewById(R.id.b_buy_credit);
+										
+										Buy_Money.setOnClickListener(new OnClickListener(){
+				
+										@Override
+										public void onClick(View v) {
+											/************************************************************************/
+											/*======================================================================
+											 			Terminar cuando se implemente el growth hacking
+											  =====================================================================*/
+											 /***********************************************************************/
+											
+										}
+											
+										});
+										
+										NMDialog.show();			 						
+									}
+									
+								}
+						}
+							
+						});
+					
+					Cancel_Buy.setOnClickListener(new OnClickListener(){
+				
+						@Override
+						public void onClick(View v) {
+							BDialog.dismiss();							
+						}
+							
+					});
+						
+				}
 			}
         });
 	} 
@@ -235,6 +334,26 @@ public class ScoreProfile extends Activity{
 	            return super.onOptionsItemSelected(item);
 	    }
 	}
+	
+	//Busca en el dispositivo archivos con el mismo nombre que el que se le pasa
+		public boolean buscarArchivos(String name){
+			//String[] ficheros = new MainScreenActivity().leeFicheros();
+			File f = new File(Environment.getExternalStorageDirectory() + path + name);
+			
+			if(f.exists()){
+				return true;
+			}else{
+				return false;
+			}
+		}
+		
+		public void AbrirFichero(Context ctx, String path){
+			Intent in = new Intent(ctx, MainActivity.class);
+			in.putExtra("score", path);
+			
+			startActivity(in);
+		}
+		
 	/*
 	//  Este método se utiliza en el menú. ShareActionProvider
 	private Intent createShareIntent() {
@@ -246,7 +365,7 @@ public class ScoreProfile extends Activity{
         return shareIntent;
     }
     */
-	
+	/*
 	class AsyncDownload extends AsyncTask<String, Integer, String>{
 
 		private Context context;
@@ -353,7 +472,7 @@ public class ScoreProfile extends Activity{
 		    }
 		
 		
-	}
+	}*/
 	
 	class AsyncBuyScore extends AsyncTask<String, String, String>{
 

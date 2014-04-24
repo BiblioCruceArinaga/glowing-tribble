@@ -157,18 +157,18 @@ public class DownloadScores extends AsyncTask<String, Integer, String>{
 	protected void onPostExecute(String result) {
 	    mProgressDialog.dismiss();
 	    
-	    //Podrían sustituirse por Dialogs. 
+	    //Podrï¿½an sustituirse por Dialogs. 
         if (result != null){
         	
         	if(failedDownload != null) failedDownload.onDownloadFailed();
         	        	
-        	//Un dialog con los botones "Abrir partitura" y "Ok"
+        	//Un dialog con los botones "Volver a intentar" y "Cancelar"
             Toast.makeText(context,R.string.errordownload, Toast.LENGTH_LONG).show();
         	Log.e("Error descarga", "Error descarga: " + result);
         }else{ 
         	if (listenerDownload != null) listenerDownload.onDownloadCompleted();
         	        	
-        	//Un dialog con los botones "Volver a intentar" y "Cancelar"
+        	//Un dialog con los botones "Abrir partitura" y "Ok"
             Toast.makeText(context,R.string.okdownload, Toast.LENGTH_SHORT).show();
             Log.i("Descarga", "Archivo descargado");		            
         }
