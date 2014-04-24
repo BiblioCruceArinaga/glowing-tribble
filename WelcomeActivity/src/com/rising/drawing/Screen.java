@@ -10,6 +10,7 @@ import java.util.ArrayList;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.os.Environment;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -24,13 +25,26 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback {
 	
 	private Partitura partitura;
 	private Compas compas;
-	
 	private ArrayList<OrdenDibujo> ordenesDibujo;
+	
+	//  Gestión del scroll
+	private boolean canvasDependentDataRecovered = false;
+    private static float yOffset = 0;
+    private float yPrevious = 0;
+    private float div = 0;
+    private static float limiteVisibleArriba = 0;
+    private static float limiteVisibleAbajo = 0;
+    private float finalScroll = 0;
+    private boolean mostrarBarraLateral = false;
+    private float offsetBarraLateral = 0;
+    private int tamanoBarraLateral = 0;
+    private float porcentajeAltura = 0;
+    private float altoPantalla = 0;
 	
 	//  ========================================
 	//  Constructor y métodos heredados
 	//  ========================================
-	public Screen(Context context, String path, int width){
+	public Screen(Context context, String path, int width, int densityDPI){
 		super(context);
 		getHolder().addCallback(this);
 		
@@ -46,10 +60,12 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback {
 			
 			cargarDatosDeFichero();
 			
-			DrawingMethods metodosDibujo = new DrawingMethods(partitura, 50, width, getResources());
-			ordenesDibujo = metodosDibujo.crearOrdenesDeDibujo();
-			
-			isValidScreen = true;
+			Config config = new Config(densityDPI, width);
+			DrawingMethods metodosDibujo = new DrawingMethods(partitura, config, getResources());
+			if (metodosDibujo.isValid()) {
+				ordenesDibujo = metodosDibujo.crearOrdenesDeDibujo();
+				isValidScreen = true;
+			}
 			
 		} catch (FileNotFoundException e) {
 			Log.i("FileNotFoundException: ", e.getMessage() + "\n");
@@ -80,11 +96,40 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback {
 	public boolean onTouchEvent(MotionEvent e){		
 		switch (e.getAction()){
 			case MotionEvent.ACTION_DOWN:
+				yPrevious = e.getY();
+	            mostrarBarraLateral = true;
 	            break;
-	        case MotionEvent.ACTION_MOVE:                      
+	            
+	        case MotionEvent.ACTION_MOVE:
+	        	yOffset += e.getY() - yPrevious;
+	            porcentajeAltura = - yOffset / finalScroll;
+	            offsetBarraLateral = -altoPantalla * porcentajeAltura;
+	            div = e.getY() - yPrevious;
+	            yPrevious = e.getY();
+	            limiteVisibleArriba += div;
+	            limiteVisibleAbajo += div;
+
+	            if (limiteVisibleArriba > 0) {
+	            	yOffset = 0;
+	            	div = 0;
+	            	limiteVisibleArriba = 0;
+	            	limiteVisibleAbajo = altoPantalla;
+	            }
+
+	            if (limiteVisibleAbajo < -finalScroll) {
+	            	yOffset = -finalScroll - altoPantalla;
+	            	div = 0;
+	            	limiteVisibleArriba = -finalScroll - altoPantalla;
+	            	limiteVisibleAbajo = -finalScroll;
+	            }
+
+	            mostrarBarraLateral = true;
 	            break;
+	            
 	        case MotionEvent.ACTION_UP:
+	        	mostrarBarraLateral = false;
 	        	break;
+	        	
 	        default:
 	        	break;
 	    }
@@ -100,16 +145,22 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback {
 	private void cargarDatosDeFichero() throws IOException {
 		leerDatosBasicosDePartitura();
 
-		byte byteLeido = 0;
+		byte byteLeido = fichero.readByte();
 		while (byteLeido != -128) {
 			
 			switch (byteLeido) {
+				case 125:
+					ArrayList<Byte> anchoCompas = leerHastaAlmohadilla();
+					compas.setAnchoCompas(anchoCompas);
+					break;
+			
 				case 126:
 					leerFiguraGraficaCompas();
 					break;
 					
 				case 127:
 					partitura.addCompas(compas);
+					compas = new Compas();
 					break;
 				
 				default:
@@ -132,7 +183,9 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback {
 		byte clave = 0;
 		byte alteracion = 0;
 		
-		int numClefs = fichero.readByte();
+		byte numClefs = fichero.readByte();
+		arrayBytes.add(numClefs);
+		
 		for (int i=0; i<numClefs; i++) {
 			pentagrama = fichero.readByte();
 			clave = fichero.readByte();
@@ -254,37 +307,66 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback {
 	//  ================================
 	
 	//  ========================================
-	//  Método draw
+	//  Métodos de dibujo
 	//  ========================================
 	public void draw(Canvas canvas) {
+		
+		//  Estos valores dependen del canvas y sólo deben recogerse una vez
+		if (!canvasDependentDataRecovered) {
+    		limiteVisibleAbajo = - canvas.getHeight();
+    		altoPantalla = limiteVisibleAbajo;
+    		
+    		finalScroll = partitura.getMarginBottom();
+    		tamanoBarraLateral = (int) ( (altoPantalla / finalScroll) * altoPantalla);
+    		
+    		canvasDependentDataRecovered = true;
+		}
+		
 		if (canvas != null) {
 			canvas.drawARGB(255, 255, 255, 255);
+			canvas.save();
+            canvas.translate(0, yOffset);
+            drawToCanvas(canvas);
+            if (mostrarBarraLateral) dibujarBarraLateral(canvas);
+            canvas.restore();
+		}
+    }
+	
+	private void drawToCanvas(Canvas canvas) {
+		int numOrdenes = ordenesDibujo.size();
+		for (int i=0; i<numOrdenes; i++) {
+			OrdenDibujo ordenDibujo = ordenesDibujo.get(i);
 			
-			int numOrdenes = ordenesDibujo.size();
-			for (int i=0; i<numOrdenes; i++) {
-				OrdenDibujo ordenDibujo = ordenesDibujo.get(i);
-				
-				switch (ordenDibujo.getOrden()) {
-					case DRAW_BITMAP:
-						canvas.drawBitmap(ordenDibujo.getImagen(), ordenDibujo.getX1(), 
-								ordenDibujo.getY1(), ordenDibujo.getPaint());
-						break;
-					case DRAW_CIRCLE:
-						canvas.drawCircle(ordenDibujo.getX1(), ordenDibujo.getY1(), 
-								ordenDibujo.getRadius(), ordenDibujo.getPaint());
-						break;
-					case DRAW_LINE:
-						canvas.drawLine(ordenDibujo.getX1(), ordenDibujo.getY1(), 
-								ordenDibujo.getX2(), ordenDibujo.getY2(), ordenDibujo.getPaint());
-						break;
-					case DRAW_TEXT:
-						canvas.drawText(ordenDibujo.getTexto(), ordenDibujo.getX1(), 
-								ordenDibujo.getY1(), ordenDibujo.getPaint());
-						break;
-					default:
-						break;
-				}
+			switch (ordenDibujo.getOrden()) {
+				case DRAW_BITMAP:
+					canvas.drawBitmap(ordenDibujo.getImagen(), ordenDibujo.getX1(), 
+							ordenDibujo.getY1(), ordenDibujo.getPaint());
+					break;
+				case DRAW_CIRCLE:
+					canvas.drawCircle(ordenDibujo.getX1(), ordenDibujo.getY1(), 
+							ordenDibujo.getRadius(), ordenDibujo.getPaint());
+					break;
+				case DRAW_LINE:
+					canvas.drawLine(ordenDibujo.getX1(), ordenDibujo.getY1(), 
+							ordenDibujo.getX2(), ordenDibujo.getY2(), ordenDibujo.getPaint());
+					break;
+				case DRAW_TEXT:
+					canvas.drawText(ordenDibujo.getTexto(), ordenDibujo.getX1(), 
+							ordenDibujo.getY1(), ordenDibujo.getPaint());
+					break;
+				default:
+					break;
 			}
 		}
+	}
+	
+	public void dibujarBarraLateral(Canvas canvas) {
+		int x_end = canvas.getWidth() - 30;
+		
+		Paint paint = new Paint();
+    	paint.setStrokeWidth(5);
+    	paint.setARGB(255, 0, 0, 0);
+    	canvas.drawLine(x_end, offsetBarraLateral - yOffset, 
+    			x_end, offsetBarraLateral + tamanoBarraLateral - yOffset, paint);
     }
 }

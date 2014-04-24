@@ -67,7 +67,7 @@ public class MainActivity extends Activity{
 		DisplayMetrics dm = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(dm);
 		
-		s = new Screen(this, score, dm.widthPixels);
+		s = new Screen(this, score, dm.widthPixels, dm.densityDpi);
 		if (s.isValidScreen()) myScreenThread = new ScreenThread(holder, s);
 		
 		setContentView(s);
@@ -101,7 +101,7 @@ public class MainActivity extends Activity{
 	    }
 	}
 	
-	//  M�todo que controla el dialog de las opciones del metr�nomo
+	//  Método que controla el dialog de las opciones del metrónomo
 	private void metronome_options(int value){
 		WindowManager wm = (WindowManager) getSystemService(WINDOW_SERVICE);
 		Display display = wm.getDefaultDisplay();

@@ -7,7 +7,7 @@ public class Partitura {
     private String creator;
     
     private int staves;
-    private int instrument;
+    private byte instrument;
     private int divisions;
 
     private ArrayList<Compas> compases;
@@ -49,6 +49,15 @@ public class Partitura {
     
     public int getDivisions() {
     	return divisions;
+    }
+    
+    public byte getInstrument() {
+    	return instrument;
+    }
+    
+    public int getMarginBottom() {
+    	int lastMarginY = compases.get(compases.size() - 1).getYFin();
+    	return lastMarginY + 100;
     }
     
     public int getStaves() {

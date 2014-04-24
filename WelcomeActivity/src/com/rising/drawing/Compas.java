@@ -1,5 +1,6 @@
 package com.rising.drawing;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
 public class Compas {
@@ -20,10 +21,14 @@ public class Compas {
 	private ElementoGrafico time;
 	private ElementoGrafico words;
 	
-	private float x_ini;
-	private float x_fin;
-	private float y_ini;
-	private float y_fin;
+	//  Este valor está expresado en unidades dependientes del valor divisions
+	//  de la partitura, y será usado posteriormente para calcular x_fin
+	private int anchoCompas;
+	
+	private int x_ini;
+	private int x_fin;
+	private int y_ini;
+	private int y_fin;
 	
 	public Compas() {
 		notas = new ArrayList<Nota>();
@@ -69,20 +74,39 @@ public class Compas {
 		return notas;
 	}
 	
-	public float getXIni() {
+	public int getAnchoCompas() {
+		return anchoCompas;
+	}
+	
+	public int getXIni() {
 		return x_ini;
 	}
 	
-	public float getXFin() {
+	public int getXFin() {
 		return x_fin;
 	}
 	
-	public float getYIni() {
+	public int getYIni() {
 		return y_ini;
 	}
 	
-	public float getYFin() {
+	public int getYFin() {
 		return y_fin;
+	}
+	
+	public void setAnchoCompas(ArrayList<Byte> arrayAnchoCompas) {
+		byte[] bytesArray = new byte[arrayAnchoCompas.size()];
+        int len = bytesArray.length;
+        for (int i=0; i<len; i++)
+            bytesArray[i] = arrayAnchoCompas.get(i);
+        
+        try {
+            String bytesString = new String(bytesArray, "UTF-8");
+            anchoCompas = Integer.parseInt(bytesString);
+        }
+        catch (UnsupportedEncodingException e) {
+            System.out.println(e.getMessage());
+        }
 	}
 	
 	public void setDynamics(ElementoGrafico dynamics) {
@@ -132,19 +156,19 @@ public class Compas {
 		this.words = words;
 	}
 	
-	public void setXIni(float x_ini) {
+	public void setXIni(int x_ini) {
 		this.x_ini = x_ini;
 	}
 	
-	public void setXFin(float x_fin) {
+	public void setXFin(int x_fin) {
 		this.x_fin = x_fin;
 	}
 	
-	public void setYIni(float y_ini) {
+	public void setYIni(int y_ini) {
 		this.y_ini = y_ini;
 	}
 	
-	public void setYFin(float y_fin) {
+	public void setYFin(int y_fin) {
 		this.y_fin = y_fin;
 	}
 }
