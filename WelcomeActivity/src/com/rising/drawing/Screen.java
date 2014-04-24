@@ -30,14 +30,14 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback {
 	//  ========================================
 	//  Constructor y métodos heredados
 	//  ========================================
-	public Screen(Context context, String path){
+	public Screen(Context context, String path, int width){
 		super(context);
 		getHolder().addCallback(this);
 		
 		partitura = new Partitura();
 		compas = new Compas();
 		ordenesDibujo = new ArrayList<OrdenDibujo>();
-
+		
 		try {
 			File f = new File(Environment.getExternalStorageDirectory() + 
 					"/RisingScores/scores/" + path);
@@ -45,7 +45,11 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback {
 			fichero = new ObjectInputStream(is);
 			
 			cargarDatosDeFichero();
-			crearOrdenesDeDibujo();
+			
+			DrawingMethods metodosDibujo = new DrawingMethods(partitura, 50, width, getResources());
+			ordenesDibujo = metodosDibujo.crearOrdenesDeDibujo();
+			
+			isValidScreen = true;
 			
 		} catch (FileNotFoundException e) {
 			Log.i("FileNotFoundException: ", e.getMessage() + "\n");
@@ -114,29 +118,9 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback {
 			}
 			
 			byteLeido = fichero.readByte();
-		}
-		
-		isValidScreen = true;
+		}	
 	}
 
-	private void crearOrdenesDeDibujo() {
-		OrdenDibujo ordenDibujo = new OrdenDibujo();
-		ordenDibujo.setOrden(DrawOrder.DRAW_TEXT);
-		ordenDibujo.setPaint(PaintOptions.SET_TEXT_SIZE, 40);
-		ordenDibujo.setTexto(partitura.getWork());
-		ordenDibujo.setX1(50);
-		ordenDibujo.setY1(50);
-		ordenesDibujo.add(ordenDibujo);
-		
-		ordenDibujo = new OrdenDibujo();
-		ordenDibujo.setOrden(DrawOrder.DRAW_TEXT);
-		ordenDibujo.setPaint(PaintOptions.SET_TEXT_SIZE, 30);
-		ordenDibujo.setTexto(partitura.getCreator());
-		ordenDibujo.setX1(150);
-		ordenDibujo.setY1(150);
-		ordenesDibujo.add(ordenDibujo);
-	}
-	
 	public boolean isValidScreen() {
 		return isValidScreen;
 	}
@@ -273,19 +257,33 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback {
 	//  Método draw
 	//  ========================================
 	public void draw(Canvas canvas) {
-		canvas.drawARGB(255, 255, 255, 255);
-		
-		int numOrdenes = ordenesDibujo.size();
-		for (int i=0; i<numOrdenes; i++) {
-			OrdenDibujo ordenDibujo = ordenesDibujo.get(i);
+		if (canvas != null) {
+			canvas.drawARGB(255, 255, 255, 255);
 			
-			switch(ordenDibujo.getOrden()) {
-				case DRAW_TEXT:
-					canvas.drawText(ordenDibujo.getTexto(), ordenDibujo.getX1(), 
-							ordenDibujo.getY1(), ordenDibujo.getPaint());
-					break;
-				default:
-					break;
+			int numOrdenes = ordenesDibujo.size();
+			for (int i=0; i<numOrdenes; i++) {
+				OrdenDibujo ordenDibujo = ordenesDibujo.get(i);
+				
+				switch (ordenDibujo.getOrden()) {
+					case DRAW_BITMAP:
+						canvas.drawBitmap(ordenDibujo.getImagen(), ordenDibujo.getX1(), 
+								ordenDibujo.getY1(), ordenDibujo.getPaint());
+						break;
+					case DRAW_CIRCLE:
+						canvas.drawCircle(ordenDibujo.getX1(), ordenDibujo.getY1(), 
+								ordenDibujo.getRadius(), ordenDibujo.getPaint());
+						break;
+					case DRAW_LINE:
+						canvas.drawLine(ordenDibujo.getX1(), ordenDibujo.getY1(), 
+								ordenDibujo.getX2(), ordenDibujo.getY2(), ordenDibujo.getPaint());
+						break;
+					case DRAW_TEXT:
+						canvas.drawText(ordenDibujo.getTexto(), ordenDibujo.getX1(), 
+								ordenDibujo.getY1(), ordenDibujo.getPaint());
+						break;
+					default:
+						break;
+				}
 			}
 		}
     }

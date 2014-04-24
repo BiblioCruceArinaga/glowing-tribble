@@ -11,6 +11,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.PowerManager;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.ActionMode;
 import android.view.Display;
@@ -57,16 +58,19 @@ public class MainActivity extends Activity{
 		wl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, getClass().getName());
 		
         wl.acquire();
-		
-		setContentView(new Screen(this, score));
-		
-		s = new Screen(this, score);
-		if (s.isValidScreen()) myScreenThread = new ScreenThread(holder, s);
-		
+
 		ActionBar aBar = getActionBar();	
 		aBar.setTitle(R.string.pa);	
 		aBar.setIcon(R.drawable.ic_menu);
-		aBar.setDisplayHomeAsUpEnabled(true);			
+		aBar.setDisplayHomeAsUpEnabled(true);
+		
+		DisplayMetrics dm = new DisplayMetrics();
+		getWindowManager().getDefaultDisplay().getMetrics(dm);
+		
+		s = new Screen(this, score, dm.widthPixels);
+		if (s.isValidScreen()) myScreenThread = new ScreenThread(holder, s);
+		
+		setContentView(s);
 	}
 	
 	@Override

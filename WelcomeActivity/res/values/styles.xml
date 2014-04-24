@@ -41,8 +41,7 @@
 	</style>
 	
 	<style name="ActionBar.Transparent.Tabs" parent="@android:style/Widget.Holo.ActionBar">
-        <item name="android:background">@drawable/ab_transparent_tabs</item>
-        <item name="android:progressBarStyle">@style/ProgressBar.Tabs</item>
+
     </style>
 
 	<style name="Tempo" parent="@android:style/TextAppearance.Medium">
@@ -52,8 +51,7 @@
 
 	<style name="myactionBarStyleWhite.midaTextViews" parent="android:style/TextAppearance.Holo.Widget.ActionBar.Title">
 	    <item name="android:textStyle">bold</item>
-	    <item name="android:textColor">@color/green</item>
-	    <item name="android:textSize">25sp</item>
+
 	</style>
 		
   	<color name="BLACK">#000000</color>

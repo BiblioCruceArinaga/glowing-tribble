@@ -20,6 +20,11 @@ public class Compas {
 	private ElementoGrafico time;
 	private ElementoGrafico words;
 	
+	private float x_ini;
+	private float x_fin;
+	private float y_ini;
+	private float y_fin;
+	
 	public Compas() {
 		notas = new ArrayList<Nota>();
 		
@@ -37,6 +42,11 @@ public class Compas {
 		repeatEnd = null;
 		time = null;
 		words = null;
+		
+		x_ini = -1;
+		x_fin = -1;
+		y_ini = -1;
+		y_fin = -1;
 	}
 	
 	public void addBarline(ElementoGrafico barline) {
@@ -49,6 +59,30 @@ public class Compas {
 	
 	public void addNote(Nota note) {
 		notas.add(note);
+	}
+	
+	public ArrayList<ElementoGrafico> getClaves() {
+		return clefs;
+	}
+	
+	public ArrayList<Nota> getNotas() {
+		return notas;
+	}
+	
+	public float getXIni() {
+		return x_ini;
+	}
+	
+	public float getXFin() {
+		return x_fin;
+	}
+	
+	public float getYIni() {
+		return y_ini;
+	}
+	
+	public float getYFin() {
+		return y_fin;
 	}
 	
 	public void setDynamics(ElementoGrafico dynamics) {
@@ -96,5 +130,21 @@ public class Compas {
 	
 	public void setWords(ElementoGrafico words) {
 		this.words = words;
+	}
+	
+	public void setXIni(float x_ini) {
+		this.x_ini = x_ini;
+	}
+	
+	public void setXFin(float x_fin) {
+		this.x_fin = x_fin;
+	}
+	
+	public void setYIni(float y_ini) {
+		this.y_ini = y_ini;
+	}
+	
+	public void setYFin(float y_fin) {
+		this.y_fin = y_fin;
 	}
 }
