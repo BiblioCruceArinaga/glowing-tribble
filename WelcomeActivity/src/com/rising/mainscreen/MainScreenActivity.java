@@ -40,6 +40,7 @@ import android.widget.Toast;
 
 import com.rising.drawing.MainActivity;
 import com.rising.drawing.R;
+import com.rising.login.Configuration;
 import com.rising.login.Login;
 import com.rising.login.SessionManager;
 import com.rising.mainscreen.ChangePassword.OnPasswordChanging;
@@ -51,7 +52,8 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 
 	SessionManager session;
 	Login login;
-	
+	Configuration conf;
+		
 	String[] ficheros;
 	String[][] infoFicheros;
 	String path = "/RisingScores/scores/";
@@ -152,14 +154,15 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 		createScoreFolder();
 						
 		mSelected = new HashMap<Integer, Boolean>();
-				
+		conf = new Configuration(this);
 		session = new SessionManager(getApplicationContext());
 		login = new Login();
 		ficheros = leeFicheros();
 		
 		session.checkLogin();
+		
 		fid = session.getFacebookId();
-			
+				
 		ActionBar action = getActionBar();
 		action.setTitle(R.string.titulo_coleccion);
 		action.setIcon(R.drawable.ic_menu);
@@ -375,8 +378,16 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 				return true;
 
 	    	case R.id.session_button:
-	        	session.logoutUser();
-				finish();
+	    		if(fid > -1){
+	    			session.LogOutFacebook();	    			
+	    		}else{
+	    			session.logoutUser();
+	    		}
+	    		conf.setUserEmail("");
+	    		conf.setUserId("");
+	    		conf.setUserMoney(0);
+	    		conf.setUserName("");
+	        	finish();
 	            return true;
             
 	        case R.id.about:
@@ -435,65 +446,73 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 	            return true;
 	            
 	        case R.id.mis_datos:
-	        	
-	        	        	
+	        		        	        	
 	        	MDialog = new Dialog(MainScreenActivity.this, R.style.cust_dialog);
 	        	MDialog.setTitle(R.string.mis_datos);
 	    		MDialog.getWindow().setLayout(LayoutParams.MATCH_PARENT,LayoutParams.WRAP_CONTENT);	        	
 	        	
 	        	if(fid > -1){
 	        		MDialog.setContentView(R.layout.mis_datos_facebook);
+	        		final TextView nombreF = (TextView) MDialog.findViewById(R.id.misDatosFacebookNombre);
+		    		final TextView emailF = (TextView) MDialog.findViewById(R.id.misDatosFacebookEmail);
+		    		final TextView saldoF = (TextView) MDialog.findViewById(R.id.misDatosFacebookSaldo);
+		    		
+		    		nombreF.setText(nombreF.getText() + " " + session.getName());
+		    		emailF.setText(emailF.getText() + " " + session.getMail()); 
+		    		saldoF.setText(saldoF.getText() + " " + conf.getUserMoney());
+	        		
 	        	}else{
 	        		MDialog.setContentView(R.layout.mis_datos);
-	        	}
-	        	
-	        	final TextView nombre = (TextView) MDialog.findViewById(R.id.misDatosNombre);
-	    		final TextView email = (TextView) MDialog.findViewById(R.id.misDatosEmail);
-	    		final EditText claveVieja = (EditText) MDialog.findViewById(R.id.misDatosClaveVieja);
-	    	    final EditText claveNueva = (EditText) MDialog.findViewById(R.id.misDatosClaveNueva);
-	    	    final EditText claveRepetir = (EditText) MDialog.findViewById(R.id.misDatosClaveRepetir);
-	    		
-	    		nombre.setText(nombre.getText() + " " + session.getName());
-	    		email.setText(email.getText() + " " + session.getMail());    		
-	    		
-	    		Button misDatosBoton = (Button)MDialog.findViewById(R.id.misDatosBoton);
-	    	    misDatosBoton.setOnClickListener(new Button.OnClickListener() {
+		        	
+		        	final TextView nombre = (TextView) MDialog.findViewById(R.id.misDatosNombre);
+		    		final TextView email = (TextView) MDialog.findViewById(R.id.misDatosEmail);
+		    		final TextView saldo = (TextView) MDialog.findViewById(R.id.misDatosSaldo);
+		    		final EditText claveVieja = (EditText) MDialog.findViewById(R.id.misDatosClaveVieja);
+		    	    final EditText claveNueva = (EditText) MDialog.findViewById(R.id.misDatosClaveNueva);
+		    	    final EditText claveRepetir = (EditText) MDialog.findViewById(R.id.misDatosClaveRepetir);
+		    	    
+		    		nombre.setText(nombre.getText() + " " + conf.getUserName());
+		    		email.setText(email.getText() + " " + conf.getUserEmail()); 
+		    		saldo.setText(saldo.getText() + " " + conf.getUserMoney());
+		    				    		
+		    		Button misDatosBoton = (Button)MDialog.findViewById(R.id.misDatosBoton);
+		    	    misDatosBoton.setOnClickListener(new Button.OnClickListener() {
 
-					@Override
-					public void onClick(View arg0) {
-						
-						//  Usuario normal
-						if (fid == -1) {
+						@Override
+						public void onClick(View arg0) {
 							
-							if ( 
-								( claveVieja.getText().length() == 0 ) ||
-								( claveNueva.getText().length() == 0 ) ||
-								( claveRepetir.getText().length() == 0 )
-							) {
-								Toast.makeText(getApplicationContext(), 
-									R.string.err_campos_vacios, Toast.LENGTH_LONG).show();
-							}
-							else {
-								if (!claveNueva.getText().toString().equals(
-										claveRepetir.getText().toString())) {
+							//  Usuario normal
+							if (fid == -1) {
+								
+								if ( 
+									( claveVieja.getText().length() == 0 ) ||
+									( claveNueva.getText().length() == 0 ) ||
+									( claveRepetir.getText().length() == 0 )
+								) {
 									Toast.makeText(getApplicationContext(), 
-										R.string.err_pass, Toast.LENGTH_LONG).show();
-								}
-								else {
-									new ChangePassword(MainScreenActivity.this, listenerPass).execute(
-										session.getMail(), 
-										claveVieja.getText().toString(), 
-										claveNueva.getText().toString());    
-				        			
-									claveVieja.setText("");
-									claveNueva.setText("");
-									claveRepetir.setText("");
+										R.string.err_campos_vacios, Toast.LENGTH_LONG).show();
+								} else {
+									if (!claveNueva.getText().toString().equals(
+											claveRepetir.getText().toString())) {
+										Toast.makeText(getApplicationContext(), 
+											R.string.err_pass, Toast.LENGTH_LONG).show();
+									}
+									else {
+										new ChangePassword(MainScreenActivity.this, listenerPass).execute(
+											session.getMail(), 
+											claveVieja.getText().toString(), 
+											claveNueva.getText().toString());    
+					        			
+										claveVieja.setText("");
+										claveNueva.setText("");
+										claveRepetir.setText("");
+									}
 								}
 							}
 						}
-					}
-	    	    	
-	    	    });
+		    	    	
+		    	    });
+	        	}
 
 	    	    MDialog.show();
 	            return true;

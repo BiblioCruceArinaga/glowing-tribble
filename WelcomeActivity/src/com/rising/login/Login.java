@@ -81,7 +81,11 @@ public class Login extends FragmentActivity {
 			
 			userData = dunc.devolverDatos();
 
+			Log.i("UserData", "" + dunc.devolverDatos().get(0).getMoney());
+			
             conf.setUserId(userData.get(0).getId());
+            
+            Log.i("Conf", userData.get(0).getMoney() + "");
             
             conf.setUserName(userData.get(0).getName());
 
@@ -328,33 +332,31 @@ public class Login extends FragmentActivity {
 	    });
 	    
 	    authButton.setReadPermissions(Arrays.asList("email"));
-	        
 	    authButton.setSessionStatusCallback(new Session.StatusCallback() {
 	    	
 			@Override
 			public void call(Session session, SessionState state, Exception exception) {
-				Log.i("Sí, sí", "Llegó aquí 1: " + session.toString() + ", Isopen?: " + session.isOpened());
+				
 				if(session.isOpened()){
 					Request.newMeRequest(session, new Request.GraphUserCallback() {
 						
 						@Override
 						public void onCompleted(GraphUser user, Response response) {
 							if (user != null) {
-								Log.i("Sí, sí", "Llegó aquí 2");
+								
 								FId = user.getId();
 								FName = user.getFirstName() + " " + user.getLastName();
 								FMail = user.getProperty("email").toString();
-																
-								Log.d("User", FId + " - " + FMail);
-								Log.i("Sí, sí", "Llegó aquí 3");
 								new asyncFacebook_process().execute(FMail, FName, FId);
+															
 							}
 							
 						}
 					}).executeAsync(); 
 				}				
 			}         
-	    });  
+	    }); 
+
 	}
 	
 	@Override
@@ -373,8 +375,6 @@ public class Login extends FragmentActivity {
 		EDialog.getWindow().setLayout(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
 		
 		TextView tv_E = (TextView)EDialog.findViewById(R.id.error_tV);
-
-		Log.i("Entr�", "Entr� 1, c�digo: " + code);
 		
 		switch (code) {
 			case 0:
@@ -389,23 +389,20 @@ public class Login extends FragmentActivity {
 			default:
 				tv_E.setText(R.string.err_login_unknown);
 		}
-		Log.i("Entr�", "Entr� 2");
+		
 		Button  Login_Error_Close_Button = (Button)EDialog.findViewById(R.id.error_button);
 		
 		Login_Error_Close_Button.setOnClickListener(new OnClickListener(){
 
 			@Override
 			public void onClick(View v) {
-				Log.i("Entr�", "Entr� 4");
+				
 				EDialog.dismiss();				
 			}
 			
 		});
     	
-		EDialog.show();
-		
-		Log.i("Entr�", "Entr� 5");
-		
+		EDialog.show();		
     }
 	
     //  Este método valida que no haya ningun campo en blanco, 
@@ -491,6 +488,7 @@ public class Login extends FragmentActivity {
             	dunc.execute(usuario);
             	
             	session.createLoginSession(user, "", "-1");            	
+            	//Session.setActiveSession(Session.getActiveSession());
     			Intent i=new Intent(Login.this, MainScreenActivity.class);
     			startActivity(i); 
     			finish();	
@@ -503,6 +501,15 @@ public class Login extends FragmentActivity {
     //  Gestión del login / registro mediante Facebook
     class asyncFacebook_process extends AsyncTask<String, String, Integer>{
 
+    	@Override
+    	protected void onPreExecute() {
+            PDialog = new ProgressDialog(Login.this);
+            PDialog.setMessage("Autentificando....");
+            PDialog.setIndeterminate(false);
+            PDialog.setCancelable(false);
+            PDialog.show();
+        }
+    	
 		@Override
 		protected Integer doInBackground(String... params) {
 			int status = -1;
@@ -543,6 +550,8 @@ public class Login extends FragmentActivity {
 	        		break;
 	        	}
 	        	case 1: {
+	        		dunc.execute(FMail);
+	            	
 	        		session.createLoginSession(FMail, FName, FId);
 	                Intent i=new Intent(Login.this, MainScreenActivity.class);
 	                startActivity(i);
@@ -554,7 +563,10 @@ public class Login extends FragmentActivity {
 	        		break;
 	        	}
 	        	case 3: {
+	        		dunc.execute(FMail);
+	        		
 	        		session.createLoginSession(FMail, FName, FId);
+	        		
 	                Intent i=new Intent(Login.this, MainScreenActivity.class);
 	                startActivity(i);
 	                finish();

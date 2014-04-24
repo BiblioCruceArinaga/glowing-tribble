@@ -8,7 +8,6 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 
 import com.facebook.Session;
-import com.facebook.internal.SessionTracker;
 import com.facebook.widget.LoginButton;
 
 public class SessionManager {
@@ -18,6 +17,7 @@ public class SessionManager {
 	LoginButton FLButton;
 	// Editor for Shared preferences
 	Editor editor;
+	Session fSession;
 	
 	// Context
 	Context context;
@@ -57,23 +57,33 @@ public class SessionManager {
 		
 		// Storing name in pref
 		editor.putString(KEY_NAME, name);
-		
+				
 		// Storing email in pref
 		editor.putString(KEY_EMAIL, email);
 		
 		// Storing Facebook Id in pref
 		editor.putString(KEY_FID, fid);
 		
+		if(!fid.equals("-1")){
+			Session fsesion = Session.getActiveSession();
+			
+			if(fsesion == null){
+				fsesion = new Session(context);
+				Session.setActiveSession(fsesion);
+			}
+		}
+		
 		// commit changes
 		editor.commit();
 	}	
 	
 	/**
-	 * Check login method wil check user login status
+	 * Check login method will check user login status
 	 * If false it will redirect user to login page
 	 * Else won't do anything
 	 * */
 	public void checkLogin(){
+		
 		// Check login status
 		if(!this.isLoggedIn()){
 			// user is not logged in redirect him to Login Activity
@@ -106,7 +116,6 @@ public class SessionManager {
 	}
 	
 	/**
-	 * 
 	 * @return Devuelve el nombre de este usuario
 	 */
 	public String getName() {
@@ -114,7 +123,6 @@ public class SessionManager {
 	}
 	
 	/**
-	 * 
 	 * @return Devuelve el email de este usuario
 	 */
 	public String getMail() {
@@ -122,7 +130,6 @@ public class SessionManager {
 	}
 	
 	/**
-	 * 
 	 * @return Devuelve el id de Facebook de este usuario
 	 */
 	public int getFacebookId() {
@@ -130,9 +137,24 @@ public class SessionManager {
 	}
 	
 	public void LogOutFacebook(){
-		SessionTracker st = new SessionTracker(context, null);
-		Session openSession = st.getOpenSession();
-		if (openSession != null) openSession.closeAndClearTokenInformation();
+				
+		if (Session.getActiveSession() != null){
+			
+	        Session.getActiveSession().closeAndClearTokenInformation();	
+	        editor.clear();
+	        editor.commit();
+	        
+	        // After logout redirect user to Login Activity
+			Intent i = new Intent(context, Login.class);
+			// Closing all the Activities
+			i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			
+			// Add new Flag to start new Activity
+			i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			
+			// Staring Login Activity
+			context.startActivity(i);
+		}
 	};
 	
 	/**
@@ -142,8 +164,6 @@ public class SessionManager {
 		// Clearing all data from Shared Preferences
 		editor.clear();
 		editor.commit();
-		
-		LogOutFacebook();
 		
 		// After logout redirect user to Login Activity
 		Intent i = new Intent(context, Login.class);
