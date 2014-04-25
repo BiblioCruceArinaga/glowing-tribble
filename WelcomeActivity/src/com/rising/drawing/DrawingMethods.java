@@ -23,6 +23,9 @@ public class DrawingMethods {
 
 	//  Variables para la gestión de las múltiples notas
 	private boolean octavarium = false;
+	private int y_anterior = 0;
+	private ArrayList<Integer> beams = new ArrayList<Integer>();
+	private boolean dibujarBeams = false;
 	
 	//  Bitmaps
 	private Bitmap trebleclef = null;
@@ -147,16 +150,20 @@ public class DrawingMethods {
 		dibujarTempo();
 		*/
 		
+		compas_margin_x += config.getMargenIzquierdoCompases();
+		
 		ArrayList<Nota> notas = compas.getNotas();
 		int numNotas = notas.size();
 		int mayorDistanciaX = 0;
 		int distanciaActualX = 0;
+		int primeraOrden = ordenesDibujo.size();
 		for (int i=0; i<numNotas; i++) {
 			distanciaActualX = crearOrdenesDeNota(notas.get(i));
 			
 			if (distanciaActualX > mayorDistanciaX) 
 				mayorDistanciaX = distanciaActualX;
 		}
+		int ultimaOrden = ordenesDibujo.size();
 		
 		/*
 		dibujarIntensidad();
@@ -167,7 +174,7 @@ public class DrawingMethods {
 
 		//  Final de este compás (e inicio del siguiente)
 		compas_margin_x += mayorDistanciaX;
-		compas_margin_x += config.getMargenLateralCompases();
+		compas_margin_x += config.getMargenDerechoCompases();
 		
 		compas.setXFin(compas_margin_x);
 		compas.setYFin(compas_margin_y + 
@@ -176,7 +183,7 @@ public class DrawingMethods {
 				(partitura.getStaves() - 1));
 
 		if (compas.getXFin() > config.getXFinalPentagramas()) {
-			moverCompasAlSiguienteRenglon(compas);
+			moverCompasAlSiguienteRenglon(compas, primeraOrden, ultimaOrden);
 		}
 		
 		dibujarLineasDePentagramaDeCompas(compas);
@@ -190,15 +197,52 @@ public class DrawingMethods {
 			posicionX = distanciaUnidadPosicion(posicionX);
 			
 			posicionY = dibujarCabezaDeNota(nota, posicionX);
-			dibujarPlicaDeNota(nota, posicionX, posicionY);
-			
+			if (dibujarPlicaDeNota(nota, posicionX, posicionY)) {
+				//  dibujarCorcheteDeNota();
+			}
+				
 			/*
-			dibujarCorcheteDeNota();
 			dibujarFigurasGraficasDeNota();
 			*/
+			
+			if (dibujarBeams) dibujarBeams(nota.getPlica() == 1);
 		}
 		
 		return posicionX;
+	}
+	
+	//  Esta implementación está ignorando las plicas dobles
+	private void dibujarBeams(boolean haciaArriba) {
+		int numBeams = beams.size();
+		int x_ini_beams = ordenesDibujo.get(beams.get(0)).getX1();
+		int x_fin_beams = ordenesDibujo.get(beams.get(beams.size() - 1)).getX1();
+		int y_beams = haciaArriba ? Integer.MAX_VALUE : 0;
+		
+		for (int i=0; i<numBeams; i++) {
+			if (haciaArriba) {
+				if (y_beams > ordenesDibujo.get(beams.get(i)).getY2())
+					y_beams = ordenesDibujo.get(beams.get(i)).getY2();
+			}
+			else {
+				if (y_beams < ordenesDibujo.get(beams.get(i)).getY2())
+					y_beams = ordenesDibujo.get(beams.get(i)).getY2();
+			}
+		}
+		
+		for (int i=0; i<numBeams; i++)
+			ordenesDibujo.get(beams.get(i)).setY2(y_beams);
+		
+		OrdenDibujo ordenDibujo = new OrdenDibujo();
+		ordenDibujo.setOrden(DrawOrder.DRAW_LINE);
+		ordenDibujo.setPaint(PaintOptions.SET_STROKE_WIDTH, config.getAnchoBeams());
+		ordenDibujo.setX1(x_ini_beams);
+		ordenDibujo.setY1(y_beams);
+		ordenDibujo.setX2(x_fin_beams);
+		ordenDibujo.setY2(y_beams);
+		ordenesDibujo.add(ordenDibujo);
+		
+		beams.clear();
+		dibujarBeams = false;
 	}
 	
 	private int dibujarCabezaDeNota(Nota nota, int posicion) {
@@ -209,34 +253,143 @@ public class DrawingMethods {
 		
 		int y = obtenerPosicionYDeNota(nota, claves[nota.getPentagrama() - 1], partitura.getInstrument());
 		ordenDibujo.setY1(y);
+		if (!nota.acorde()) y_anterior = y;
 		
 		ordenesDibujo.add(ordenDibujo);
+		dibujarLineasFueraDelPentagrama(compas_margin_x + posicion, y, nota.getPentagrama());
+		
 		return y;
 	}
 	
-	private void dibujarPlicaDeNota(Nota nota, int posicionX, int posicionY) {
-		byte plica = nota.getPlica();
+	//  Las notas que se dibujan fuera del pentagrama requieren que se dibujen 
+	//  unas pequeñas líneas debajo (o encima) que sirvan de orientación
+	private void dibujarLineasFueraDelPentagrama(int x, int y, int pentagrama) {
+		int y_margin_custom = compas_margin_y + 
+				(config.getDistanciaLineasPentagrama() * 4 + 
+						config.getDistanciaPentagramas()) * (pentagrama - 1);			
+
+		if (y == y_margin_custom + config.getDistanciaLineasPentagrama() * 4 + 
+				config.getDistanciaLineasPentagramaMitad()) {
+			crearOrdenDeDibujoLineaFueraDePentagrama(x, y_margin_custom +
+					config.getDistanciaLineasPentagrama() * 5);
+		}
+		if (y == y_margin_custom + config.getDistanciaLineasPentagrama() * 5) {
+
+		}
+		if (y == y_margin_custom + config.getDistanciaLineasPentagrama() * 5 + 
+				config.getDistanciaLineasPentagramaMitad()) {
+
+		}
+		if (y == y_margin_custom + config.getDistanciaLineasPentagrama() * 6) {
+
+		}
+		if (y == y_margin_custom + config.getDistanciaLineasPentagrama() * 6 + 
+				config.getDistanciaLineasPentagramaMitad()) {
+
+			crearOrdenDeDibujoLineaFueraDePentagrama(x, y_margin_custom +
+					config.getDistanciaLineasPentagrama() * 5);
+			crearOrdenDeDibujoLineaFueraDePentagrama(x, y_margin_custom +
+					config.getDistanciaLineasPentagrama() * 6);
+			crearOrdenDeDibujoLineaFueraDePentagrama(x, y_margin_custom +
+					config.getDistanciaLineasPentagrama() * 7);
+		}
+		if (y == y_margin_custom + config.getDistanciaLineasPentagrama() * 7) {
+
+		}
+		if (y == y_margin_custom + config.getDistanciaLineasPentagrama() * 7 + 
+				config.getDistanciaLineasPentagramaMitad()) {
+
+		}
+		if (y == y_margin_custom + config.getDistanciaLineasPentagrama() * 8) {
+
+		}
+		if (y == y_margin_custom - config.getDistanciaLineasPentagrama() - 
+				config.getDistanciaLineasPentagramaMitad()) {
+			
+			crearOrdenDeDibujoLineaFueraDePentagrama(x, y_margin_custom - 
+					config.getDistanciaLineasPentagrama());
+		}
+		if (y == y_margin_custom - config.getDistanciaLineasPentagrama() * 2) {
+			crearOrdenDeDibujoLineaFueraDePentagrama(x, y_margin_custom - 
+					config.getDistanciaLineasPentagrama());
+		}
+		if (y == y_margin_custom - config.getDistanciaLineasPentagrama() * 2 - 
+				config.getDistanciaLineasPentagramaMitad()) {
+			
+			crearOrdenDeDibujoLineaFueraDePentagrama(x, y_margin_custom - 
+					config.getDistanciaLineasPentagrama());
+			crearOrdenDeDibujoLineaFueraDePentagrama(x, y_margin_custom - 
+					config.getDistanciaLineasPentagrama() * 2);
+		}
+		if (y == y_margin_custom - config.getDistanciaLineasPentagrama() * 3) {
+			crearOrdenDeDibujoLineaFueraDePentagrama(x, y_margin_custom - 
+					config.getDistanciaLineasPentagrama());
+			crearOrdenDeDibujoLineaFueraDePentagrama(x, y_margin_custom - 
+					config.getDistanciaLineasPentagrama() * 2);
+		}
+		if (y == y_margin_custom - config.getDistanciaLineasPentagrama() * 3 - 
+				config.getDistanciaLineasPentagramaMitad()) {
+			
+			crearOrdenDeDibujoLineaFueraDePentagrama(x, y_margin_custom - 
+					config.getDistanciaLineasPentagrama());
+			crearOrdenDeDibujoLineaFueraDePentagrama(x, y_margin_custom - 
+					config.getDistanciaLineasPentagrama() * 2);
+			crearOrdenDeDibujoLineaFueraDePentagrama(x, y_margin_custom - 
+					config.getDistanciaLineasPentagrama() * 3);
+		}
+		if (y == y_margin_custom - config.getDistanciaLineasPentagrama() * 4) {
+
+		}
+		if (y == y_margin_custom - config.getDistanciaLineasPentagrama() * 4 - 
+				config.getDistanciaLineasPentagramaMitad()) {
+			
+		}
+	}
+	
+	//  Función auxiliar para las líneas de fuera del pentagrama
+	private void crearOrdenDeDibujoLineaFueraDePentagrama(int x, int y) {
+		OrdenDibujo ordenDibujo = new OrdenDibujo();
+		ordenDibujo.setOrden(DrawOrder.DRAW_LINE);
+		ordenDibujo.setPaint(PaintOptions.SET_STROKE_WIDTH, 1);
+		ordenDibujo.setX1(x - config.getMargenAnchoCabezaNota());
+		ordenDibujo.setY1(y);
+		ordenDibujo.setX2(x + config.getAnchoCabezaNota() + config.getMargenAnchoCabezaNota());
+		ordenDibujo.setY2(y);
+		ordenesDibujo.add(ordenDibujo);
+	}
+	
+	//  Esta implementación está ignorando las plicas dobles
+	private boolean dibujarPlicaDeNota(Nota nota, int posicionX, int posicionY) {
+		if (nota.getPlica() > 0) {
+			OrdenDibujo ordenDibujo = new OrdenDibujo();
+			ordenDibujo.setOrden(DrawOrder.DRAW_LINE);
+			ordenDibujo.setPaint(PaintOptions.SET_STROKE_WIDTH, 1);
+			ordenDibujo.setY1(posicionY + config.getMitadCabezaNota());
+			
+			if (nota.getPlica() == 1) {
+				ordenDibujo.setX1(compas_margin_x + posicionX + config.getAnchoCabezaNota());
+				ordenDibujo.setX2(compas_margin_x + posicionX + config.getAnchoCabezaNota());
+				
+				if (nota.acorde()) ordenDibujo.setY2(y_anterior);
+				else ordenDibujo.setY2(posicionY - config.getLongitudPlica());
+			}
+			if (nota.getPlica() == 2) {
+				ordenDibujo.setX1(compas_margin_x + posicionX);
+				ordenDibujo.setX2(compas_margin_x + posicionX);
+				
+				if (nota.acorde()) ordenDibujo.setY2(y_anterior + config.getLongitudPlica());
+				else ordenDibujo.setY2(posicionY + config.getMitadCabezaNota() + config.getLongitudPlica());
+			}
+			
+			ordenesDibujo.add(ordenDibujo);
+
+			if (nota.getUnion() > 0) {
+				beams.add(ordenesDibujo.size() - 1);
+				if (nota.getUnion() == 1) dibujarBeams = true;
+			}
+		}
 		
-		if ( (plica == 1) || (plica == 3) ) {
-			OrdenDibujo ordenDibujo = new OrdenDibujo();
-			ordenDibujo.setOrden(DrawOrder.DRAW_LINE);
-			ordenDibujo.setPaint(PaintOptions.SET_STROKE_WIDTH, 1);
-			ordenDibujo.setX1(compas_margin_x + posicionX + config.getAnchoCabezaNota());
-			ordenDibujo.setY1(posicionY + config.getMitadCabezaNota());
-			ordenDibujo.setX2(compas_margin_x + posicionX + config.getAnchoCabezaNota());
-			ordenDibujo.setY2(posicionY - config.getLongitudPlica());
-			ordenesDibujo.add(ordenDibujo);
-		}
-		if ( (plica == 2) || (plica == 3) ) {
-			OrdenDibujo ordenDibujo = new OrdenDibujo();
-			ordenDibujo.setOrden(DrawOrder.DRAW_LINE);
-			ordenDibujo.setPaint(PaintOptions.SET_STROKE_WIDTH, 1);
-			ordenDibujo.setX1(compas_margin_x + posicionX);
-			ordenDibujo.setY1(posicionY + config.getMitadCabezaNota());
-			ordenDibujo.setX2(compas_margin_x + posicionX);
-			ordenDibujo.setY2(posicionY + config.getMitadCabezaNota() + config.getLongitudPlica());
-			ordenesDibujo.add(ordenDibujo);
-		}
+		return nota.getUnion() == 0;
 	}
 	
 	private void dibujarClaves(ArrayList<ElementoGrafico> claves) {
@@ -339,21 +492,30 @@ public class DrawingMethods {
 		} while (pentagramas_pendientes > 0);
 	}
 	
-	private void moverCompasAlSiguienteRenglon(Compas compas) {
+	private void moverCompasAlSiguienteRenglon(Compas compas, int primeraOrden, int ultimaOrden) {
 		int distancia_x = compas.getXIni() - config.getXInicialPentagramas();
+		int distancia_y = (config.getDistanciaLineasPentagrama() * 4 + 
+				config.getDistanciaPentagramas()) * partitura.getStaves();
+		
 		compas.setXIni(config.getXInicialPentagramas());
 		compas.setXFin(compas.getXFin() - distancia_x);
 
 		compas_margin_x = compas.getXFin();
-		compas_margin_y = compas_margin_y + 
-				(config.getDistanciaLineasPentagrama() * 4 + 
-						config.getDistanciaPentagramas()) * partitura.getStaves();
+		compas_margin_y = compas_margin_y + distancia_y;
 		
 		compas.setYIni(compas_margin_y);
 		compas.setYFin(compas_margin_y + 
 				config.getDistanciaLineasPentagrama() * 4 + 
 				(config.getDistanciaPentagramas() + 
 						config.getDistanciaLineasPentagrama() * 4) * (partitura.getStaves() - 1));
+
+		for (int i=primeraOrden; i<ultimaOrden; i++) {
+			ordenesDibujo.get(i).setX1(ordenesDibujo.get(i).getX1() - distancia_x);
+			ordenesDibujo.get(i).setX2(ordenesDibujo.get(i).getX2() - distancia_x);
+			
+			ordenesDibujo.get(i).setY1(ordenesDibujo.get(i).getY1() + distancia_y);
+			ordenesDibujo.get(i).setY2(ordenesDibujo.get(i).getY2() + distancia_y);
+		}
 	}
 	
 	private Bitmap obtenerImagenDeClave(byte clave) {

@@ -14,11 +14,11 @@ public class Nota {
 	private byte pentagrama;
 	
 	ArrayList<Byte> figurasGraficas;
-	ArrayList<Byte> posicionEjeX;
+	ArrayList<Byte> posicion;
 	
 	public Nota(byte step, byte octava, byte figuracion, byte union,
 			byte plica, byte voz, byte pentagrama,
-			ArrayList<Byte> figurasGraficas, ArrayList<Byte> posicionEjeX) {
+			ArrayList<Byte> figurasGraficas, ArrayList<Byte> posicion) {
 		
 		this.step = step;
 		this.octava = octava;
@@ -29,7 +29,11 @@ public class Nota {
 		this.pentagrama = pentagrama;
 		
 		this.figurasGraficas = figurasGraficas;
-		this.posicionEjeX = posicionEjeX;
+		this.posicion = posicion;
+	}
+	
+	public boolean acorde() {
+		return figurasGraficas.contains((byte) 2);
 	}
 	
 	public byte getFiguracion() {
@@ -52,11 +56,15 @@ public class Nota {
 		return plica;
 	}
 	
+	public byte getUnion() {
+		return union;
+	}
+
 	public int getPosicion() {
-		byte[] bytesArray = new byte[posicionEjeX.size()];
+		byte[] bytesArray = new byte[posicion.size()];
         int len = bytesArray.length;
         for (int i=0; i<len; i++)
-            bytesArray[i] = posicionEjeX.get(i);
+            bytesArray[i] = posicion.get(i);
         
         try {
             String bytesString = new String(bytesArray, "UTF-8");

@@ -4,6 +4,7 @@ public class Config {
 	
 	private boolean supported = true;
 	
+	private int ancho_beams;
 	private int ancho_cabeza_nota;
 	private int distancia_lineas_pentagrama;
 	private int distancia_lineas_pentagrama_mitad;
@@ -11,9 +12,11 @@ public class Config {
 	private int x_inicial_pentagramas;
 	private int x_final_pentagramas;
 	private int longitud_plica;
+	private int margen_ancho_cabeza_nota;
 	private int margen_autor;
+	private int margen_derecho_compases;
 	private int margen_inferior_autor;
-	private int margen_lateral_compases;
+	private int margen_izquierdo_compases;
 	private int margen_obra;
 	private int margen_superior;
 	private int mitad_cabeza_nota;
@@ -30,6 +33,7 @@ public class Config {
 			case 160:
 				break;
 			case 213:
+				ancho_beams = 5;
 				ancho_cabeza_nota = 10;
 				distancia_lineas_pentagrama = 12;
 				distancia_lineas_pentagrama_mitad = 6;
@@ -37,9 +41,11 @@ public class Config {
 				x_inicial_pentagramas = 50;
 				x_final_pentagramas = width - x_inicial_pentagramas;
 				longitud_plica = 40;
+				margen_ancho_cabeza_nota = 5;
 				margen_autor = 120;
+				margen_derecho_compases = 30;
 				margen_inferior_autor = 230;
-				margen_lateral_compases = 30;
+				margen_izquierdo_compases = 30;
 				margen_obra = 60;
 				margen_superior = 50;
 				mitad_cabeza_nota = 6;
@@ -52,6 +58,7 @@ public class Config {
 			case 240:
 				break;
 			case 320:
+				ancho_beams = 8;
 				ancho_cabeza_nota = 26;
 				distancia_lineas_pentagrama = 19;
 				distancia_lineas_pentagrama_mitad = 9;
@@ -59,9 +66,11 @@ public class Config {
 				x_inicial_pentagramas = 80;
 				x_final_pentagramas = width - x_inicial_pentagramas;
 				longitud_plica = 60;
+				margen_ancho_cabeza_nota = 5;
 				margen_autor = 180;
+				margen_derecho_compases = 70;
 				margen_inferior_autor = 320;
-				margen_lateral_compases = 50;
+				margen_izquierdo_compases = 50;
 				margen_obra = 90;
 				margen_superior = 80;
 				mitad_cabeza_nota = 10;
@@ -78,6 +87,10 @@ public class Config {
 			default: 
 				supported = false;
 		}
+	}
+	
+	public int getAnchoBeams() {
+		return ancho_beams;
 	}
 	
 	public int getAnchoCabezaNota() {
@@ -100,6 +113,10 @@ public class Config {
 		return longitud_plica;
 	}
 	
+	public int getMargenAnchoCabezaNota() {
+		return margen_ancho_cabeza_nota;
+	}
+ 	
 	public int getMargenAutor() {
 		return margen_autor;
 	}
@@ -108,8 +125,12 @@ public class Config {
 		return margen_inferior_autor;
 	}
 	
-	public int getMargenLateralCompases() {
-		return margen_lateral_compases;
+	public int getMargenDerechoCompases() {
+		return margen_derecho_compases;
+	}
+	
+	public int getMargenIzquierdoCompases() {
+		return margen_izquierdo_compases;
 	}
 	
 	public int getMargenObra() {
