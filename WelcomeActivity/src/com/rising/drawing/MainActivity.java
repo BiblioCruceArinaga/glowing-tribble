@@ -44,7 +44,7 @@ public class MainActivity extends Activity{
 	private boolean play;
 	private boolean stop = false;
 	
-	//Esto hace que no se apague la patalla hasta que se sale de la Activity
+	//  Esto hace que no se apague la patalla hasta que se sale de la Activity
 	PowerManager pm;
     PowerManager.WakeLock wl;
 	
@@ -116,13 +116,10 @@ public class MainActivity extends Activity{
 		MDialog.setContentView(R.layout.metronome_dialog);
 		MDialog.setTitle(R.string.metronome);
 				
-		//Cambios seg�n la resoluci�n de la pantalla
-		
-		if(screenWith <= 1200 && screenHeight <= 1850){
+		//  Cambios según la resolución de la pantalla
+		if (screenWith <= 1200 && screenHeight <= 1850){
 			MDialog.getWindow().setLayout(600, 720);
 		}else{
-			
-		//  Cambia el tama�o de la ventana de di�logo
 			MDialog.getWindow().setLayout(350, 470);
 		}		
 												
@@ -145,7 +142,7 @@ public class MainActivity extends Activity{
 				tempo = metronome_speed.getValue();
 				//tempo = Integer.valueOf(et_metronome.getText().toString());
 				MainActivity.this.startActionMode(new ActionBarCallBack());
-				DialogCountdown(); //En el futuro estar�a bien que el usuario pueda elegir si aparece esto o no, y desde qu� n�mero cuenta. 
+				DialogCountdown(); 
 				MDialog.dismiss();
 			}
 			
@@ -153,13 +150,13 @@ public class MainActivity extends Activity{
 		MDialog.show();
 	}
 	
-	//Método que controla el dialog de la cuenta atr�s
+	//  Método que controla el dialog de la cuenta atrás
 	private void DialogCountdown(){
 		CDialog = new Dialog(MainActivity.this, android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
 		CDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		CDialog.setContentView(R.layout.countdown_dialog);
 		
-		//Cambia el tama�o de la ventana de dialogo
+		//  Cambia el tamaño de la ventana de diálogo
 		CDialog.getWindow().setLayout(200, 200);
 		CDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 				
@@ -182,7 +179,7 @@ public class MainActivity extends Activity{
 		CDialog.show();
 	}
 		
-	//Cambia el icono entre el pause y el play dependiendo del estado del metrónomo
+	//  Cambia el icono entre el pause y el play dependiendo del estado del metrónomo
 	private void PlayButton_Status(MenuItem item){
 		if(play){
 			play = false;
@@ -205,9 +202,8 @@ public class MainActivity extends Activity{
     	}
 	}
 	
-	//Si pulso el Stop todos los enables se ponen a True y el pause se cambia por el icono play
+	//  Si pulso el Stop todos los enables se ponen a True y el pause se cambia por el icono play
 	private void StopButton_Status(ActionMode m){
-
 		stop = true;
 		play = false;
 		
@@ -220,9 +216,8 @@ public class MainActivity extends Activity{
     	}
 	}
 	
-	// Habilita o deshabilita elementos seg�n est� o no activado el metr�nomo
+	//  Habilita o deshabilita elementos según esté o no activado el metrónomo
 	private void PlayItemsControl(ActionMode m){
-		
 		Menu menu = m.getMenu();
 		
 		if(stop && !play){
@@ -236,7 +231,7 @@ public class MainActivity extends Activity{
 		}
 	}
 	
-	//Esto abre la ActionBar contextual
+	//  Esto abre el ActionBar contextual
 	class ActionBarCallBack implements ActionMode.Callback {
 		  
         @Override
@@ -303,6 +298,4 @@ public class MainActivity extends Activity{
             return true;
         }
     }
-
-	
 }

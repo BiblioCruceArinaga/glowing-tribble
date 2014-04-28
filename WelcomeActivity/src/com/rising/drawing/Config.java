@@ -6,20 +6,24 @@ public class Config {
 	
 	private int ancho_beams;
 	private int ancho_cabeza_nota;
+	private int ancho_cabeza_nota_gracia;
 	private int distancia_lineas_pentagrama;
 	private int distancia_lineas_pentagrama_mitad;
 	private int distancia_pentagramas;
 	private int x_inicial_pentagramas;
 	private int x_final_pentagramas;
 	private int longitud_plica;
+	private int longitud_plica_nota_gracia;
 	private int margen_ancho_cabeza_nota;
 	private int margen_autor;
 	private int margen_derecho_compases;
 	private int margen_inferior_autor;
 	private int margen_izquierdo_compases;
+	private int margen_nota_gracia;
 	private int margen_obra;
 	private int margen_superior;
 	private int mitad_cabeza_nota;
+	private int mitad_cabeza_nota_gracia;
 	private int radio_puntillos;
 	private int tamano_letra_obra;
 	private int tamano_letra_autor;
@@ -35,20 +39,24 @@ public class Config {
 			case 213:
 				ancho_beams = 5;
 				ancho_cabeza_nota = 10;
+				ancho_cabeza_nota_gracia = 5;
 				distancia_lineas_pentagrama = 12;
 				distancia_lineas_pentagrama_mitad = 6;
 				distancia_pentagramas = 150;
 				x_inicial_pentagramas = 50;
 				x_final_pentagramas = width - x_inicial_pentagramas;
 				longitud_plica = 40;
+				longitud_plica_nota_gracia = 20;
 				margen_ancho_cabeza_nota = 5;
 				margen_autor = 120;
 				margen_derecho_compases = 30;
 				margen_inferior_autor = 230;
 				margen_izquierdo_compases = 30;
+				margen_nota_gracia = 6;
 				margen_obra = 60;
 				margen_superior = 50;
 				mitad_cabeza_nota = 6;
+				mitad_cabeza_nota_gracia = 3;
 				radio_puntillos = 5;
 				tamano_letra_obra = 50;
 				tamano_letra_autor = 30;
@@ -60,20 +68,24 @@ public class Config {
 			case 320:
 				ancho_beams = 8;
 				ancho_cabeza_nota = 26;
+				ancho_cabeza_nota_gracia = 15;
 				distancia_lineas_pentagrama = 19;
 				distancia_lineas_pentagrama_mitad = 9;
 				distancia_pentagramas = 200;
 				x_inicial_pentagramas = 80;
 				x_final_pentagramas = width - x_inicial_pentagramas;
 				longitud_plica = 60;
+				longitud_plica_nota_gracia = 30;
 				margen_ancho_cabeza_nota = 5;
 				margen_autor = 180;
 				margen_derecho_compases = 70;
 				margen_inferior_autor = 320;
 				margen_izquierdo_compases = 50;
+				margen_nota_gracia = 4;
 				margen_obra = 90;
 				margen_superior = 80;
 				mitad_cabeza_nota = 10;
+				mitad_cabeza_nota_gracia = 4;
 				radio_puntillos = 5;
 				tamano_letra_obra = 80;
 				tamano_letra_autor = 50;
@@ -97,6 +109,10 @@ public class Config {
 		return ancho_cabeza_nota;
 	}
 	
+	public int getAnchoCabezaNotaGracia() {
+		return ancho_cabeza_nota_gracia;
+	}
+	
 	public int getDistanciaLineasPentagrama() {
 		return distancia_lineas_pentagrama;
 	}
@@ -111,6 +127,10 @@ public class Config {
 	
 	public int getLongitudPlica() {
 		return longitud_plica;
+	}
+	
+	public int getLongitudPlicaNotaGracia() {
+		return longitud_plica_nota_gracia;
 	}
 	
 	public int getMargenAnchoCabezaNota() {
@@ -133,6 +153,10 @@ public class Config {
 		return margen_izquierdo_compases;
 	}
 	
+	public int getMargenNotaGracia() {
+		return margen_nota_gracia;
+	}
+	
 	public int getMargenObra() {
 		return margen_obra;
 	}
@@ -143,6 +167,10 @@ public class Config {
 	
 	public int getMitadCabezaNota() {
 		return mitad_cabeza_nota;
+	}
+	
+	public int getMitadCabezaNotaGracia() {
+		return mitad_cabeza_nota_gracia;
 	}
 	
 	public int getRadioPuntillos() {

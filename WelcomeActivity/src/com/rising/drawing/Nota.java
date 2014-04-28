@@ -36,6 +36,14 @@ public class Nota {
 		return figurasGraficas.contains((byte) 2);
 	}
 	
+	public boolean desplazadaALaIzquierda() {
+		return figurasGraficas.contains((byte) 24);
+	}
+	
+	public boolean desplazadaALaDerecha() {
+		return figurasGraficas.contains((byte) 25);
+	}
+	
 	public byte getFiguracion() {
 		return figuracion;
 	}
@@ -77,6 +85,6 @@ public class Nota {
 	}
 	
 	public boolean notaDeGracia() {
-		return figurasGraficas.contains((byte) 19) || figurasGraficas.contains((byte) 20);
+		return figurasGraficas.contains((byte) 18) || figurasGraficas.contains((byte) 19);
 	}
 }
