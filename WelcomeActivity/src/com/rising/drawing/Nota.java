@@ -87,6 +87,10 @@ public class Nota {
             return -1;
         }
 	}
+		
+	public boolean finDeTresillo() {
+		return figurasGraficas.contains((byte) 4);
+	}
 	
 	public boolean haciaArriba() {
 		return plica == 1;

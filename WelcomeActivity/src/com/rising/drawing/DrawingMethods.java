@@ -22,10 +22,13 @@ public class DrawingMethods {
 	private byte[] claves;
 
 	//  Variables para la gestión de las múltiples notas
+	private boolean buscandoOctavarium = false;
 	private boolean octavarium = false;
+	private int[] posicionesOctavarium = {0,0};
 	private int y_anterior = 0;
 	private ArrayList<Beam> beams = new ArrayList<Beam>();
 	private boolean dibujarBeams = false;
+	private int x_ini_tresillo = 0;
 	
 	//  Bitmaps
 	private Bitmap trebleclef = null;
@@ -142,23 +145,20 @@ public class DrawingMethods {
 	}
 	
 	private void crearOrdenesDeCompas(Compas compas) {
+		int primeraOrden = ordenesDibujo.size();
+		
 		compas.setXIni(compas_margin_x);
 		compas.setYIni(compas_margin_y);
 
-		/*
-		dibujarBarlines();
-		dibujarRepeticiones();
-		dibujarClaves(compas.getClaves());
-		dibujarTempo();
-		*/
-		
 		compas_margin_x += config.getMargenIzquierdoCompases();
+
+		if (compas.hayClaves()) 
+			dibujarClaves(compas.getClaves());
 		
 		ArrayList<Nota> notas = compas.getNotas();
 		int numNotas = notas.size();
 		int mayorDistanciaX = 0;
 		int distanciaActualX = 0;
-		int primeraOrden = ordenesDibujo.size();
 		for (int i=0; i<numNotas; i++) {
 			distanciaActualX = crearOrdenesDeNota(notas.get(i));
 			
@@ -166,13 +166,6 @@ public class DrawingMethods {
 				mayorDistanciaX = distanciaActualX;
 		}
 		int ultimaOrden = ordenesDibujo.size();
-		
-		/*
-		dibujarIntensidad();
-		dibujarPedales();
-		dibujarTexto();
-		dibujarEndings();
-		*/
 
 		//  Final de este compás (e inicio del siguiente)
 		compas_margin_x += mayorDistanciaX;
@@ -189,6 +182,104 @@ public class DrawingMethods {
 		}
 		
 		dibujarLineasDePentagramaDeCompas(compas);
+		
+		dibujarBarlines(compas);
+		dibujarTempo(compas);
+		//dibujarIntensidad();
+		//dibujarPedales();
+		//dibujarTexto();
+	}
+	
+	//  Esta implementación por ahora sólo considera el barline de fin de partitura
+	//  Si en el futuro se añadieran más barlines, habría que usar un switch en el bucle
+	private void dibujarBarlines(Compas compas) {
+		if (compas.hayBarlines()) {
+			ArrayList<ElementoGrafico> barlines = compas.getBarlines();
+			int numBarlines = barlines.size();
+			OrdenDibujo ordenDibujo = new OrdenDibujo();
+			
+			for (int i=0; i<numBarlines; i++) {
+				if (barlines.get(i).getValue(1) == 2) {
+					ordenDibujo = new OrdenDibujo();
+					ordenDibujo.setOrden(DrawOrder.DRAW_LINE);
+					ordenDibujo.setPaint(PaintOptions.SET_STROKE_WIDTH, 4);
+					ordenDibujo.setX1(compas.getXFin());
+					ordenDibujo.setY1(compas.getYIni());
+					ordenDibujo.setX2(compas.getXFin());
+					ordenDibujo.setY2(compas.getYFin());
+					ordenesDibujo.add(ordenDibujo);
+					
+					ordenDibujo = new OrdenDibujo();
+					ordenDibujo.setOrden(DrawOrder.DRAW_LINE);
+					ordenDibujo.setPaint(PaintOptions.SET_STROKE_WIDTH, 2);
+					ordenDibujo.setX1(compas.getXFin() - config.getMargenBarlines());
+					ordenDibujo.setY1(compas.getYIni());
+					ordenDibujo.setX2(compas.getXFin() - config.getMargenBarlines());
+					ordenDibujo.setY2(compas.getYFin());
+					ordenesDibujo.add(ordenDibujo);
+				}
+			}
+		}
+	}
+	
+	private void dibujarClaves(ArrayList<ElementoGrafico> claves) {
+		int numClefs = claves.size();
+		int x_position = -1;
+		int numClaves = -1;
+
+		for (int i=0; i<numClefs; i++) {
+			boolean claveNormalTratada = false;
+			
+			x_position = distanciaUnidadPosicion(claves.get(i).getPosition());
+			numClaves = claves.get(i).getValue(1);
+
+			for (int j=0; j<numClaves; j++) {
+				byte pentagrama = claves.get(i).getValue(2 + 3 * j);
+				byte clave = claves.get(i).getValue(3 + 3 * j);
+				byte alteracion = claves.get(i).getValue(4 + 3 * j);
+				
+				//  El margen Y depende del pentagrama al que pertenezca el compás
+				int marginY = compas_margin_y + 
+						(config.getDistanciaLineasPentagrama() * 4 + 
+								config.getDistanciaPentagramas()) * (pentagrama - 1);
+				
+				OrdenDibujo ordenDibujo = new OrdenDibujo();
+				switch (alteracion) {
+					case 0:
+						ordenDibujo.setOrden(DrawOrder.DRAW_BITMAP);
+						ordenDibujo.setImagen(obtenerImagenDeClave(clave));
+						ordenDibujo.setX1(compas_margin_x);
+						ordenDibujo.setY1(marginY + obtenerPosicionYDeClave(clave));
+						ordenesDibujo.add(ordenDibujo);
+						break;
+						
+					case 1:
+						posicionesOctavarium[0] = compas_margin_x + x_position;
+						buscandoOctavarium = true;
+						break;
+					
+					case -1:
+						posicionesOctavarium[1] = compas_margin_x + x_position;
+						break;
+						
+					default: 
+						break;
+				}
+				
+				//  Se asume lo de abajo
+				if (alteracion == 0) claveNormalTratada = true;
+			}
+			
+			//  Se asume que en un mismo compás nunca habrá una clave
+			//  y un octavarium al mismo tiempo. Si eso ocurriera, las
+			//  claves normales deberían mover la variable, pero los
+			//  octavarium no
+			if (claveNormalTratada) compas_margin_x += config.getAnchoClaves();
+		}
+	}
+	
+	private void dibujarTempo(Compas compas) {
+		
 	}
 	
 	private int crearOrdenesDeNota(Nota nota) {
@@ -202,30 +293,50 @@ public class DrawingMethods {
 			if (dibujarPlicaDeNota(nota, posicionX, posicionY)) {
 				dibujarCorcheteDeNota(nota, posicionX, posicionY);
 			}
-			dibujarFigurasGraficasDeNota(nota, posicionX, posicionY);
-			
+
+			int y_beams = 0;
 			if (dibujarBeams) {
 				boolean haciaArriba = nota.haciaArriba();
-				int y_beams = colocarBeamsALaMismaAltura(haciaArriba);
+				y_beams = colocarBeamsALaMismaAltura(haciaArriba);
 				dibujarBeams(y_beams, haciaArriba);
 			}
+			
+			dibujarFigurasGraficasDeNota(nota, posicionX, posicionY, y_beams);
 		}
 		
 		return posicionX;
 	}
 	
-	private void dibujarFigurasGraficasDeNota(Nota nota, int posicionX, int posicionY) {
+	private void dibujarFigurasGraficasDeNota(Nota nota, int posicionX, int posicionY, int y_beams) {
 		ArrayList<Byte> figurasGraficas = nota.getFigurasGraficas();
 		int numFiguras = figurasGraficas.size();
 		
 		for (int i=0; i<numFiguras; i++) 
-			dibujarFiguraGrafica(nota, figurasGraficas.get(i), posicionX, posicionY);
+			dibujarFiguraGrafica(nota, figurasGraficas.get(i), posicionX, posicionY, y_beams);
 	}
 
-	private void dibujarFiguraGrafica(Nota nota, byte figura, int posicionX, int posicionY) {
+	private void dibujarFiguraGrafica(Nota nota, byte figura, int posicionX, int posicionY, int y_beams) {
 		OrdenDibujo ordenDibujo = new OrdenDibujo();
 		
 		switch (figura) {
+			case 3:
+				x_ini_tresillo = compas_margin_x + posicionX;
+				break;
+				
+			case 4:
+				int margenTresillo = nota.haciaArriba() ? 
+						- config.getYTresilloArriba() : config.getYTresilloAbajo();
+				int x_tresillo = (compas_margin_x + posicionX + x_ini_tresillo) / 2;
+				if (nota.haciaArriba()) x_tresillo += config.getXTresillo();
+				
+				ordenDibujo.setOrden(DrawOrder.DRAW_TEXT);
+				ordenDibujo.setPaint(PaintOptions.SET_TEXT_SIZE, config.getTamanoLetraTresillo());
+				ordenDibujo.setTexto("3");
+				ordenDibujo.setX1(x_tresillo);
+				ordenDibujo.setY1(y_beams + margenTresillo);
+				ordenesDibujo.add(ordenDibujo);
+				break;
+		
 			case 5:
 				break;
 				
@@ -329,10 +440,9 @@ public class DrawingMethods {
 	
 	private void dibujarCorcheteDeNota(Nota nota, int posicionX, int posicionY) {
 		
-		//  En este caso no significa que la nota no pueda formar
-		//  parte de un acorde. Significa que si forma parte de un
-		//  acorde, su corchete ya fue dibujado, por lo que no hay
-		//  que dibujarlo de nuevo
+		//  En este caso no significa que la nota no pueda formar parte de un acorde. 
+		//  Significa que si forma parte de un acorde, su corchete ya fue dibujado, 
+		//  por lo que no hay que dibujarlo de nuevo
 		if (!nota.acorde() && !nota.silencio()) {
 			int anchoCabezaNota = nota.notaDeGracia() ? 
 					config.getAnchoCabezaNotaGracia() : config.getAnchoCabezaNota();
@@ -538,6 +648,10 @@ public class DrawingMethods {
 	}
 
 	private int dibujarCabezaDeNota(Nota nota, int posicion) {
+		if (buscandoOctavarium)
+			if (compas_margin_x + posicion == posicionesOctavarium[0]) 
+				octavarium = true;
+
 		OrdenDibujo ordenDibujo = new OrdenDibujo();
 		ordenDibujo.setOrden(DrawOrder.DRAW_BITMAP);
 		ordenDibujo.setImagen(obtenerImagenDeNota(nota));
@@ -551,10 +665,43 @@ public class DrawingMethods {
 		if (nota.notaDeGracia()) y += config.getMargenNotaGracia();
 		ordenDibujo.setY1(y);
 		if (!nota.acorde()) y_anterior = y;
-		
+
 		ordenesDibujo.add(ordenDibujo);
 		dibujarLineasFueraDelPentagrama(compas_margin_x + posicion, y, nota.getPentagrama());
+
+		if (buscandoOctavarium) {
+			if (compas_margin_x + posicion == posicionesOctavarium[1]) {
+				octavarium = false;
+				buscandoOctavarium = false;
+				
+				dibujarOctavarium();
+			}
+		}
+		
 		return y;
+	}
+	
+	private void dibujarOctavarium() {
+		
+		//  La primera figura es un 8, y no un punto. Por eso 
+		//  sacamos la primera iteración del bucle
+		OrdenDibujo ordenDibujo;
+		ordenDibujo = new OrdenDibujo();
+		ordenDibujo.setOrden(DrawOrder.DRAW_BITMAP);
+		ordenDibujo.setImagen(octavariumImage);
+		ordenDibujo.setX1(posicionesOctavarium[0]);
+		ordenDibujo.setY1(compas_margin_y - config.getDistanciaLineasPentagrama() * 6);
+		ordenesDibujo.add(ordenDibujo);
+		
+		for (int i=posicionesOctavarium[0] + 25; 
+				i<posicionesOctavarium[1] + config.getAnchoCabezaNota(); i+=25) {
+			ordenDibujo = new OrdenDibujo();
+			ordenDibujo.setOrden(DrawOrder.DRAW_CIRCLE);
+			ordenDibujo.setRadius(config.getRadioOctavarium());
+			ordenDibujo.setX1(i);
+			ordenDibujo.setY1(compas_margin_y - config.getDistanciaLineasPentagrama() * 6);
+			ordenesDibujo.add(ordenDibujo);
+		}
 	}
 	
 	//  Las notas que se dibujan fuera del pentagrama requieren que se dibujen 
@@ -635,7 +782,12 @@ public class DrawingMethods {
 					config.getDistanciaLineasPentagrama() * 3);
 		}
 		if (y == y_margin_custom - config.getDistanciaLineasPentagrama() * 4) {
-
+			crearOrdenDeDibujoLineaFueraDePentagrama(x, y_margin_custom - 
+					config.getDistanciaLineasPentagrama());
+			crearOrdenDeDibujoLineaFueraDePentagrama(x, y_margin_custom - 
+					config.getDistanciaLineasPentagrama() * 2);
+			crearOrdenDeDibujoLineaFueraDePentagrama(x, y_margin_custom - 
+					config.getDistanciaLineasPentagrama() * 3);
 		}
 		if (y == y_margin_custom - config.getDistanciaLineasPentagrama() * 4 - 
 				config.getDistanciaLineasPentagramaMitad()) {
@@ -696,63 +848,7 @@ public class DrawingMethods {
 		
 		return nota.getBeam() == 0;
 	}
-	
-	private void dibujarClaves(ArrayList<ElementoGrafico> claves) {
-		int numClefs = claves.size();
-		int x_position = -1;
-		int numClaves = -1;
-		
-		for (int i=0; i<numClefs; i++) {
-			x_position = distanciaUnidadPosicion(claves.get(i).getPosition());
-			numClaves = claves.get(i).getValue(1);
-			
-			for (int j=0; j<numClaves; j++) {
-				byte pentagrama = claves.get(i).getValue(2 + 3 * j);
-				byte clave = claves.get(i).getValue(3 + 3 * j);
-				byte alteracion = claves.get(i).getValue(4 + 3 * j);
-				
-				//  El margen Y depende del pentagrama al que pertenezca el compás
-				int marginY = compas_margin_y + 
-						(config.getDistanciaLineasPentagrama() * 4 + 
-								config.getDistanciaPentagramas()) * (pentagrama - 1);
-				
-				OrdenDibujo ordenDibujo = new OrdenDibujo();
-				switch (alteracion) {
-					case 0:
-						ordenDibujo.setOrden(DrawOrder.DRAW_BITMAP);
-						ordenDibujo.setImagen(obtenerImagenDeClave(clave));
-						ordenDibujo.setX1(compas_margin_x + x_position);
-						ordenDibujo.setY1(compas_margin_y);
-						ordenesDibujo.add(ordenDibujo);
-						break;
-						
-					case 1:
-						octavarium = true;
-	
-						ordenDibujo.setOrden(DrawOrder.DRAW_BITMAP);
-						ordenDibujo.setImagen(octavariumImage);
-						ordenDibujo.setX1(x_position);
-						ordenDibujo.setY1(marginY - config.getDistanciaLineasPentagrama() * 4);
-						ordenesDibujo.add(ordenDibujo);
-						break;
-					
-					case -1:
-						octavarium = false;
-	
-						ordenDibujo.setOrden(DrawOrder.DRAW_CIRCLE);
-						ordenDibujo.setRadius(config.getRadioPuntillos());
-						ordenDibujo.setX1(x_position);
-						ordenDibujo.setY1(marginY - config.getDistanciaLineasPentagrama() * 4);
-						ordenesDibujo.add(ordenDibujo);
-						break;
-						
-					default: 
-						break;
-				}
-			}
-		}
-	}
-	
+
 	private void dibujarLineasDePentagramaDeCompas(Compas compas) {
 		
 		//  Líneas laterales
@@ -821,6 +917,9 @@ public class DrawingMethods {
 			ordenesDibujo.get(i).setY1(ordenesDibujo.get(i).getY1() + distancia_y);
 			ordenesDibujo.get(i).setY2(ordenesDibujo.get(i).getY2() + distancia_y);
 		}
+		
+		posicionesOctavarium[0] -= distancia_x;
+		posicionesOctavarium[1] -= distancia_x;
 	}
 	
 	private Bitmap obtenerImagenDeClave(byte clave) {
@@ -874,7 +973,14 @@ public class DrawingMethods {
 		}
 	}
 	
-	public int obtenerPosicionYDeNota(Nota nota, byte clave, byte instrumento){
+	private int obtenerPosicionYDeClave(byte clave) {
+		switch (clave) {
+			case 1: return - config.getYClaveSolSegunda();
+			default: return 0;
+		}
+	}
+	
+	private int obtenerPosicionYDeNota(Nota nota, byte clave, byte instrumento){
 		int coo_y = 0;
 		int margenY = compas_margin_y + 
 				(config.getDistanciaLineasPentagrama() * 4 + 

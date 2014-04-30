@@ -78,6 +78,10 @@ public class Compas {
 		return anchoCompas;
 	}
 	
+	public ArrayList<ElementoGrafico> getBarlines() {
+		return barlines;
+	}
+	
 	public int getXIni() {
 		return x_ini;
 	}
@@ -92,6 +96,14 @@ public class Compas {
 	
 	public int getYFin() {
 		return y_fin;
+	}
+	
+	public boolean hayBarlines() {
+		return !barlines.isEmpty();
+	}
+	
+	public boolean hayClaves() {
+		return !clefs.isEmpty();
 	}
 	
 	public void setAnchoCompas(ArrayList<Byte> arrayAnchoCompas) {
