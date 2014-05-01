@@ -23,7 +23,7 @@ public class DrawingMethods {
 
 	//  Variables para la gestión de las múltiples notas
 	private boolean buscandoOctavarium = false;
-	private boolean octavarium = false;
+	private int octavarium = 0;
 	private int[] posicionesOctavarium = {0,0};
 	private int y_anterior = 0;
 	private ArrayList<Beam> beams = new ArrayList<Beam>();
@@ -35,6 +35,8 @@ public class DrawingMethods {
 	private Bitmap bassclef = null;
 	private Bitmap mezzoforte = null;
 	private Bitmap forte = null;
+	private Bitmap piano = null;
+	private Bitmap pianissimo = null;
 	private Bitmap rectangle = null;
 	private Bitmap quarterrest = null;
 	private Bitmap eighthrest = null;
@@ -57,6 +59,8 @@ public class DrawingMethods {
 	private Bitmap hammeron = null;
 	private Bitmap bend = null;
 	private Bitmap octavariumImage = null;
+	private Bitmap pedalStart = null;
+	private Bitmap pedalStop = null;
 	
 	public DrawingMethods(Partitura partitura, Config config, Resources resources) {
 		if (config.supported()) {
@@ -77,6 +81,8 @@ public class DrawingMethods {
 			bassclef = BitmapFactory.decodeResource(resources, R.drawable.bassclef);
 			mezzoforte = BitmapFactory.decodeResource(resources, R.drawable.mezzoforte);
 			forte = BitmapFactory.decodeResource(resources, R.drawable.forte);
+			piano = BitmapFactory.decodeResource(resources, R.drawable.piano);
+			pianissimo = BitmapFactory.decodeResource(resources, R.drawable.pianissimo);
 			rectangle = BitmapFactory.decodeResource(resources, R.drawable.rectangle);
 			quarterrest = BitmapFactory.decodeResource(resources, R.drawable.quarterrest);
 			eighthrest = BitmapFactory.decodeResource(resources, R.drawable.eighthrest);
@@ -99,6 +105,8 @@ public class DrawingMethods {
 			hammeron = BitmapFactory.decodeResource(resources, R.drawable.hammeron);
 			bend = BitmapFactory.decodeResource(resources, R.drawable.bend);
 			octavariumImage = BitmapFactory.decodeResource(resources, R.drawable.octavarium);
+			pedalStart = BitmapFactory.decodeResource(resources, R.drawable.pedalstart);
+			pedalStop = BitmapFactory.decodeResource(resources, R.drawable.pedalstop);
 			
 			isValid = true;
 		}
@@ -109,6 +117,8 @@ public class DrawingMethods {
 	}
 	
 	public ArrayList<OrdenDibujo> crearOrdenesDeDibujo() {
+		
+		desenrollarRepeticiones();
 		
 		//  Obra
 		OrdenDibujo ordenDibujo = new OrdenDibujo();
@@ -136,6 +146,59 @@ public class DrawingMethods {
 		return ordenesDibujo;
 	}
 	
+	//  Cambiamos la estructura de la partitura para que las repeticiones y endings
+	//  se muestren de corrido, de forma que no haya que dar saltos para leer la partitura
+	private void desenrollarRepeticiones() {
+		ArrayList<Compas> compases = partitura.getCompases();
+		ArrayList<Compas> nuevosCompases = new ArrayList<Compas>();
+		
+		int repeticionInicio = 0;
+		int repeticionFinal = 0;
+		int numCompases = compases.size();
+		
+		for (int i=0; i<numCompases; i++) {
+			nuevosCompases.add(compases.get(i));
+			
+			if (compases.get(i).hayRepeticionInicio()) 
+				repeticionInicio = i;
+			
+			if (compases.get(i).hayRepeticionFinal()) {
+				
+				repeticionFinal = i;
+				if (compases.get(i).hayEnding1()) 
+					repeticionFinal--;
+				
+				for (int j=repeticionInicio; j<=repeticionFinal; j++) {
+					nuevosCompases.add(compases.get(j));
+					
+					if (j == 0) {
+						nuevosCompases.get(nuevosCompases.size() - 1).clearClefs();
+						nuevosCompases.get(nuevosCompases.size() - 1).setTime(null);
+					}
+				}
+			}
+		}
+		
+		partitura.setCompases(nuevosCompases);
+	}
+	
+	//  Cada elemento de un ArrayList debe ser un objeto independiente. Esto
+	//  significa que no se puede asignar un compás a un compás viejo directamente,
+	//  ya que en tal caso el array lo considerará como el mismo objeto antiguo.
+	//  Por eso hace falta esta función, que crea un nuevo objeto compás y le
+	//  pasa todos los datos contenidos en el compás viejo
+	private Compas clonarCompas(Compas compasViejo) {
+		Compas compasNuevo = new Compas();
+		
+		ArrayList<Nota> notas = compasViejo.getNotas();
+		int numNotas = notas.size();
+		for (int i=0; i<numNotas; i++) {
+			compasNuevo.addNote(notas.get(i));
+		}
+		
+		return compasNuevo;
+	}
+	
 	private void crearOrdenesDeCompases() {
 		ArrayList<Compas> compases = partitura.getCompases();
 		int numCompases = compases.size();
@@ -152,8 +215,11 @@ public class DrawingMethods {
 
 		compas_margin_x += config.getMargenIzquierdoCompases();
 
-		if (compas.hayClaves()) 
-			dibujarClaves(compas.getClaves());
+		if (compas.hayClaves()) dibujarClaves(compas.getClaves());
+		if (compas.hayTempo()) dibujarTempo(compas);
+		if (compas.hayTexto()) dibujarTexto(compas);
+		if (compas.hayIntensidad()) dibujarIntensidad(compas);
+		if (compas.hayPedales()) dibujarPedales(compas);
 		
 		ArrayList<Nota> notas = compas.getNotas();
 		int numNotas = notas.size();
@@ -182,42 +248,35 @@ public class DrawingMethods {
 		}
 		
 		dibujarLineasDePentagramaDeCompas(compas);
-		
-		dibujarBarlines(compas);
-		dibujarTempo(compas);
-		//dibujarIntensidad();
-		//dibujarPedales();
-		//dibujarTexto();
+		if (compas.hayBarlines()) dibujarBarlines(compas);
 	}
 	
 	//  Esta implementación por ahora sólo considera el barline de fin de partitura
 	//  Si en el futuro se añadieran más barlines, habría que usar un switch en el bucle
 	private void dibujarBarlines(Compas compas) {
-		if (compas.hayBarlines()) {
-			ArrayList<ElementoGrafico> barlines = compas.getBarlines();
-			int numBarlines = barlines.size();
-			OrdenDibujo ordenDibujo = new OrdenDibujo();
-			
-			for (int i=0; i<numBarlines; i++) {
-				if (barlines.get(i).getValue(1) == 2) {
-					ordenDibujo = new OrdenDibujo();
-					ordenDibujo.setOrden(DrawOrder.DRAW_LINE);
-					ordenDibujo.setPaint(PaintOptions.SET_STROKE_WIDTH, 4);
-					ordenDibujo.setX1(compas.getXFin());
-					ordenDibujo.setY1(compas.getYIni());
-					ordenDibujo.setX2(compas.getXFin());
-					ordenDibujo.setY2(compas.getYFin());
-					ordenesDibujo.add(ordenDibujo);
-					
-					ordenDibujo = new OrdenDibujo();
-					ordenDibujo.setOrden(DrawOrder.DRAW_LINE);
-					ordenDibujo.setPaint(PaintOptions.SET_STROKE_WIDTH, 2);
-					ordenDibujo.setX1(compas.getXFin() - config.getMargenBarlines());
-					ordenDibujo.setY1(compas.getYIni());
-					ordenDibujo.setX2(compas.getXFin() - config.getMargenBarlines());
-					ordenDibujo.setY2(compas.getYFin());
-					ordenesDibujo.add(ordenDibujo);
-				}
+		ArrayList<ElementoGrafico> barlines = compas.getBarlines();
+		int numBarlines = barlines.size();
+		OrdenDibujo ordenDibujo = new OrdenDibujo();
+		
+		for (int i=0; i<numBarlines; i++) {
+			if (barlines.get(i).getValue(1) == 2) {
+				ordenDibujo = new OrdenDibujo();
+				ordenDibujo.setOrden(DrawOrder.DRAW_LINE);
+				ordenDibujo.setPaint(PaintOptions.SET_STROKE_WIDTH, 4);
+				ordenDibujo.setX1(compas.getXFin());
+				ordenDibujo.setY1(compas.getYIni());
+				ordenDibujo.setX2(compas.getXFin());
+				ordenDibujo.setY2(compas.getYFin());
+				ordenesDibujo.add(ordenDibujo);
+				
+				ordenDibujo = new OrdenDibujo();
+				ordenDibujo.setOrden(DrawOrder.DRAW_LINE);
+				ordenDibujo.setPaint(PaintOptions.SET_STROKE_WIDTH, 2);
+				ordenDibujo.setX1(compas.getXFin() - config.getMargenBarlines());
+				ordenDibujo.setY1(compas.getYIni());
+				ordenDibujo.setX2(compas.getXFin() - config.getMargenBarlines());
+				ordenDibujo.setY2(compas.getYFin());
+				ordenesDibujo.add(ordenDibujo);
 			}
 		}
 	}
@@ -279,9 +338,113 @@ public class DrawingMethods {
 	}
 	
 	private void dibujarTempo(Compas compas) {
+		switch (compas.getTime().getValue(1)) {
+			case 1:
+				dibujarTextoTempo("3", true);
+				dibujarTextoTempo("8", false);
+				break;
+			case 2:
+				dibujarTextoTempo("4", true);
+				dibujarTextoTempo("4", false);
+				break;
+			case 3:
+				dibujarTextoTempo("2", true);
+				dibujarTextoTempo("4", false);
+				break;
+			case 4:
+				dibujarTextoTempo("7", true);
+				dibujarTextoTempo("4", false);
+				break;
+			default:
+				break;
+		}
 		
+		compas_margin_x += config.getAnchoTempo();
 	}
 	
+	private void dibujarTextoTempo(String texto, boolean numerador) {
+		OrdenDibujo ordenDibujo = new OrdenDibujo();
+		ordenDibujo.setOrden(DrawOrder.DRAW_TEXT);
+		ordenDibujo.setPaint(PaintOptions.SET_TEXT_SIZE, config.getTamanoLetraTempo());
+		ordenDibujo.setTexto(texto);
+		ordenDibujo.setX1(compas_margin_x);
+		
+		if (numerador) ordenDibujo.setY1(compas_margin_y + config.getDistanciaLineasPentagrama() * 2);
+		else ordenDibujo.setY1(compas_margin_y + config.getDistanciaLineasPentagrama() * 4);
+		
+		ordenesDibujo.add(ordenDibujo);
+		
+		if (partitura.getStaves() == 2) {
+			int margenY = compas_margin_y + config.getDistanciaLineasPentagrama() * 4 + 
+					config.getDistanciaPentagramas();
+			
+			ordenDibujo = new OrdenDibujo();
+			ordenDibujo.setOrden(DrawOrder.DRAW_TEXT);
+			ordenDibujo.setPaint(PaintOptions.SET_TEXT_SIZE, config.getTamanoLetraTempo());
+			ordenDibujo.setTexto(texto);
+			ordenDibujo.setX1(compas_margin_x);
+			
+			if (numerador) ordenDibujo.setY1(margenY + config.getDistanciaLineasPentagrama() * 2);
+			else ordenDibujo.setY1(margenY + config.getDistanciaLineasPentagrama() * 4);
+			
+			ordenesDibujo.add(ordenDibujo);
+		}
+	}
+	
+	private void dibujarIntensidad(Compas compas) {
+		ElementoGrafico dynamics = compas.getIntensidad();
+		byte location = dynamics.getValue(0);
+		byte intensidad = dynamics.getValue(1);
+		int posicion = distanciaUnidadPosicion(dynamics.getPosition());
+		
+		OrdenDibujo ordenDibujo = new OrdenDibujo();
+		ordenDibujo.setOrden(DrawOrder.DRAW_BITMAP);
+		ordenDibujo.setImagen(obtenerImagenDeIntensidad(intensidad));
+		ordenDibujo.setX1(compas_margin_x + posicion);
+		ordenDibujo.setY1(obtenerYDeElementoGrafico(1, location));
+		ordenesDibujo.add(ordenDibujo);
+	}
+	
+	private void dibujarPedales(Compas compas) {
+		if (compas.hayPedalInicio()) {
+			ElementoGrafico dynamics = compas.getPedalInicio();
+			byte location = dynamics.getValue(0);
+			int posicion = distanciaUnidadPosicion(dynamics.getPosition());
+			
+			OrdenDibujo ordenDibujo = new OrdenDibujo();
+			ordenDibujo.setOrden(DrawOrder.DRAW_BITMAP);
+			ordenDibujo.setImagen(pedalStart);
+			ordenDibujo.setX1(compas_margin_x + posicion);
+			ordenDibujo.setY1(obtenerYDeElementoGrafico(2, location));
+			ordenesDibujo.add(ordenDibujo);
+		}
+		if (compas.hayPedalFin()) {
+			ElementoGrafico dynamics = compas.getPedalFin();
+			byte location = dynamics.getValue(0);
+			int posicion = distanciaUnidadPosicion(dynamics.getPosition());
+			
+			OrdenDibujo ordenDibujo = new OrdenDibujo();
+			ordenDibujo.setOrden(DrawOrder.DRAW_BITMAP);
+			ordenDibujo.setImagen(pedalStop);
+			ordenDibujo.setX1(compas_margin_x + posicion);
+			ordenDibujo.setY1(obtenerYDeElementoGrafico(2, location));
+			ordenesDibujo.add(ordenDibujo);
+		}
+	}
+	
+	private void dibujarTexto(Compas compas) {
+		String texto = compas.getWords();
+		int posicionX = distanciaUnidadPosicion(compas.getWordsPosition());
+		
+		OrdenDibujo ordenDibujo = new OrdenDibujo();
+		ordenDibujo.setOrden(DrawOrder.DRAW_TEXT);
+		ordenDibujo.setPaint(PaintOptions.SET_TEXT_SIZE, config.getTamanoLetraWords());
+		ordenDibujo.setTexto(texto);
+		ordenDibujo.setX1(compas_margin_x + posicionX);
+		ordenDibujo.setY1(obtenerYDeElementoGrafico(3, compas.getWordsLocation()));
+		ordenesDibujo.add(ordenDibujo);
+	}
+
 	private int crearOrdenesDeNota(Nota nota) {
 		int posicionX = nota.getPosicion();
 		int posicionY = 0;
@@ -406,7 +569,7 @@ public class DrawingMethods {
 				ordenDibujo.setOrden(DrawOrder.DRAW_CIRCLE);
 				ordenDibujo.setRadius(config.getRadioPuntillos());
 				ordenDibujo.setX1(compas_margin_x + posicionX + config.getXPuntillo());
-				ordenDibujo.setY1(posicionY + config.getMitadCabezaNota());
+				ordenDibujo.setY1(posicionY + config.getMitadCabezaNotaVertical());
 				ordenesDibujo.add(ordenDibujo);
 				break;
 				
@@ -650,8 +813,27 @@ public class DrawingMethods {
 	private int dibujarCabezaDeNota(Nota nota, int posicion) {
 		if (buscandoOctavarium)
 			if (compas_margin_x + posicion == posicionesOctavarium[0]) 
-				octavarium = true;
+				octavarium = 1;
 
+		int y = crearOrdenCabezaNota(nota, posicion);
+		dibujarLineasFueraDelPentagrama(compas_margin_x + posicion, y, nota.getPentagrama());
+
+		if (octavarium > 0) dibujarOctavarium(posicion);
+		
+		if (buscandoOctavarium) {
+			if (compas_margin_x + posicion == posicionesOctavarium[1]) {
+				octavarium = 0;
+				buscandoOctavarium = false;
+
+				posicionesOctavarium[0] = 0;
+				posicionesOctavarium[1] = 0;
+			}
+		}
+		
+		return y;
+	}
+	
+	private int crearOrdenCabezaNota(Nota nota, int posicion) {
 		OrdenDibujo ordenDibujo = new OrdenDibujo();
 		ordenDibujo.setOrden(DrawOrder.DRAW_BITMAP);
 		ordenDibujo.setImagen(obtenerImagenDeNota(nota));
@@ -667,38 +849,26 @@ public class DrawingMethods {
 		if (!nota.acorde()) y_anterior = y;
 
 		ordenesDibujo.add(ordenDibujo);
-		dibujarLineasFueraDelPentagrama(compas_margin_x + posicion, y, nota.getPentagrama());
-
-		if (buscandoOctavarium) {
-			if (compas_margin_x + posicion == posicionesOctavarium[1]) {
-				octavarium = false;
-				buscandoOctavarium = false;
-				
-				dibujarOctavarium();
-			}
-		}
-		
 		return y;
 	}
 	
-	private void dibujarOctavarium() {
-		
-		//  La primera figura es un 8, y no un punto. Por eso 
-		//  sacamos la primera iteración del bucle
-		OrdenDibujo ordenDibujo;
-		ordenDibujo = new OrdenDibujo();
-		ordenDibujo.setOrden(DrawOrder.DRAW_BITMAP);
-		ordenDibujo.setImagen(octavariumImage);
-		ordenDibujo.setX1(posicionesOctavarium[0]);
-		ordenDibujo.setY1(compas_margin_y - config.getDistanciaLineasPentagrama() * 6);
-		ordenesDibujo.add(ordenDibujo);
-		
-		for (int i=posicionesOctavarium[0] + 25; 
-				i<posicionesOctavarium[1] + config.getAnchoCabezaNota(); i+=25) {
-			ordenDibujo = new OrdenDibujo();
+	private void dibujarOctavarium(int posicion) {
+		if (octavarium == 1) {
+			OrdenDibujo ordenDibujo = new OrdenDibujo();
+			ordenDibujo.setOrden(DrawOrder.DRAW_BITMAP);
+			ordenDibujo.setImagen(octavariumImage);
+			ordenDibujo.setX1(posicionesOctavarium[0]);
+			ordenDibujo.setY1(compas_margin_y - 
+					config.getDistanciaLineasPentagrama() * 6 - config.getYOctavarium());
+			ordenesDibujo.add(ordenDibujo);
+			
+			octavarium++;
+		}
+		else {
+			OrdenDibujo ordenDibujo = new OrdenDibujo();
 			ordenDibujo.setOrden(DrawOrder.DRAW_CIRCLE);
 			ordenDibujo.setRadius(config.getRadioOctavarium());
-			ordenDibujo.setX1(i);
+			ordenDibujo.setX1(compas_margin_x + posicion + config.getXOctavarium());
 			ordenDibujo.setY1(compas_margin_y - config.getDistanciaLineasPentagrama() * 6);
 			ordenesDibujo.add(ordenDibujo);
 		}
@@ -811,7 +981,7 @@ public class DrawingMethods {
 	private boolean dibujarPlicaDeNota(Nota nota, int posicionX, int posicionY) {
 		if (nota.tienePlica()) {
 			int mitadCabezaNota = nota.notaDeGracia() ? 
-					config.getMitadCabezaNotaGracia() : config.getMitadCabezaNota();
+					config.getMitadCabezaNotaGracia() : config.getMitadCabezaNotaVertical();
 			int anchoCabezaNota = nota.notaDeGracia() ? 
 					config.getAnchoCabezaNotaGracia() : config.getAnchoCabezaNota();
 			int longitudPlica = nota.notaDeGracia() ? 
@@ -918,8 +1088,8 @@ public class DrawingMethods {
 			ordenesDibujo.get(i).setY2(ordenesDibujo.get(i).getY2() + distancia_y);
 		}
 		
-		posicionesOctavarium[0] -= distancia_x;
-		posicionesOctavarium[1] -= distancia_x;
+		if (posicionesOctavarium[0] != 0) posicionesOctavarium[0] -= distancia_x;
+		if (posicionesOctavarium[1] != 0) posicionesOctavarium[1] -= distancia_x;
 	}
 	
 	private Bitmap obtenerImagenDeClave(byte clave) {
@@ -941,6 +1111,21 @@ public class DrawingMethods {
 		else {
 			if (nota.haciaArriba()) return head;
 			else return headinv;
+		}
+	}
+	
+	private Bitmap obtenerImagenDeIntensidad(byte intensidad) {
+		switch (intensidad) {
+			case 1:
+				return forte;
+			case 2:
+				return mezzoforte;
+			case 3:
+				return piano;
+			case 4:
+				return pianissimo;
+			default:
+				return null;
 		}
 	}
 	
@@ -987,7 +1172,7 @@ public class DrawingMethods {
 						config.getDistanciaPentagramas()) * (nota.getPentagrama() - 1);
 		
 		byte octava = nota.getOctava();
-		if (octavarium) octava--;
+		if (octavarium > 0) octava--;
 		
 		if (nota.getStep() > 0) {
 
@@ -1778,6 +1963,42 @@ public class DrawingMethods {
 		}
 
 		return coo_y;
+	}
+	
+	private int obtenerYDeElementoGrafico(int tipoElemento, int location) {
+		switch (tipoElemento) {
+		
+			//  Intensidad
+			case 1:
+				switch (location) {
+					case 2:
+						return compas_margin_y + config.getDistanciaLineasPentagrama() * 6;
+					default:
+						return compas_margin_y - config.getDistanciaLineasPentagrama() * 6;
+				}
+				
+			//  Pedales
+			case 2:
+				switch (location) {
+					case 4:
+						return compas_margin_y + config.getDistanciaLineasPentagrama() * 4 + 
+							config.getDistanciaPentagramas() + config.getDistanciaLineasPentagrama() * 8;
+					default:
+						return compas_margin_y + config.getDistanciaLineasPentagrama() * 4 + 
+							config.getDistanciaPentagramas() + config.getDistanciaLineasPentagrama() * 8;
+				}
+				
+			//  Texto
+			case 3:
+				switch (location) {
+					case 1:
+						return compas_margin_y - config.getDistanciaLineasPentagrama();
+					default:
+						return compas_margin_y - config.getDistanciaLineasPentagrama();
+				}
+			default:
+				return 0;
+		}
 	}
 	
 	private int distanciaUnidadPosicion(int position) {

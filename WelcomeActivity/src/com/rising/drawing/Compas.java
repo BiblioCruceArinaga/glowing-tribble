@@ -66,16 +66,59 @@ public class Compas {
 		notas.add(note);
 	}
 	
+	public void clearClefs() {
+		clefs.clear();
+	}
+	
+	public int getAnchoCompas() {
+		return anchoCompas;
+	}
+	
 	public ArrayList<ElementoGrafico> getClaves() {
 		return clefs;
+	}
+	
+	public ElementoGrafico getIntensidad() {
+		return dynamics;
 	}
 	
 	public ArrayList<Nota> getNotas() {
 		return notas;
 	}
 	
-	public int getAnchoCompas() {
-		return anchoCompas;
+	public ElementoGrafico getPedalInicio() {
+		return pedalStart;
+	}
+	
+	public ElementoGrafico getPedalFin() {
+		return pedalStop;
+	}
+	
+	public ElementoGrafico getTime() {
+		return time;
+	}
+	
+	public String getWords() {
+		ArrayList<Byte> bytesWords = words.getValues();
+		byte[] bytesArray = new byte[bytesWords.size()];
+        int len = bytesArray.length;
+        for (int i=1; i<len; i++) bytesArray[i] = bytesWords.get(i);
+        
+        try {
+            return new String(bytesArray, "UTF-8");
+        }
+        catch (UnsupportedEncodingException e) {
+            System.out.println(e.getMessage());
+            return "";
+        }
+	}
+	
+	public byte getWordsLocation() {
+		return words.getValue(0);
+	}
+	
+	public int getWordsPosition() {
+		return words.getPosition();
 	}
 	
 	public ArrayList<ElementoGrafico> getBarlines() {
@@ -106,6 +149,45 @@ public class Compas {
 		return !clefs.isEmpty();
 	}
 	
+	//  Esta implementación de los ending está asumiendo que los
+	//  ending son de un compás de ancho máximo, y también que sólo
+	//  habrá dos ending seguidos como mucho
+	public boolean hayEnding1() {
+		return endingBegin && endingEnd;
+	}
+	
+	public boolean hayIntensidad() {
+		return dynamics != null;
+	}
+	
+	public boolean hayPedales() {
+		return pedalStart != null || pedalStop != null;
+	}
+	
+	public boolean hayPedalInicio() {
+		return pedalStart != null;
+	}
+	
+	public boolean hayPedalFin() {
+		return pedalStop != null;
+	}
+	
+	public boolean hayRepeticionInicio() {
+		return repeatBegin != null;
+	}
+	
+	public boolean hayRepeticionFinal() {
+		return repeatEnd != null;
+	}
+	
+	public boolean hayTempo() {
+		return time != null;
+	}
+	
+	public boolean hayTexto() {
+		return words != null;
+	}
+	
 	public void setAnchoCompas(ArrayList<Byte> arrayAnchoCompas) {
 		byte[] bytesArray = new byte[arrayAnchoCompas.size()];
         int len = bytesArray.length;
@@ -134,7 +216,7 @@ public class Compas {
 	}
 	
 	public void setRepeatOrEnding(ElementoGrafico repeatOrEnding) {
-		switch (repeatOrEnding.getValue(0)) {
+		switch (repeatOrEnding.getValue(1)) {
 			case 1:
 				repeatBegin = repeatOrEnding;
 				break;

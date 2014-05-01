@@ -9,6 +9,7 @@ public class Config {
 	private int ancho_cabeza_nota_gracia;
 	private int ancho_claves;
 	private int ancho_hooks;
+	private int ancho_tempo;
 	private int distancia_entre_beams;
 	private int distancia_lineas_pentagrama;
 	private int distancia_lineas_pentagrama_mitad;
@@ -28,14 +29,16 @@ public class Config {
 	private int margen_nota_gracia;
 	private int margen_obra;
 	private int margen_superior;
-	private int mitad_cabeza_nota;
+	private int mitad_cabeza_nota_vertical;
 	private int mitad_cabeza_nota_gracia;
 	private int radio_octavarium;
 	private int radio_puntillos;
 	private int radio_staccatos;
 	private int tamano_letra_obra;
 	private int tamano_letra_autor;
+	private int tamano_letra_tempo;
 	private int tamano_letra_tresillo;
+	private int tamano_letra_words;
 	private int unidad_desplazamiento;
 	private int width;
 	
@@ -47,6 +50,8 @@ public class Config {
 	private int x_fin_slash;
 	private int y_inicio_slash;
 	private int y_fin_slash;
+	private int x_octavarium;
+	private int y_octavarium;
 	private int x_puntillo;
 	private int y_puntillo_arriba;
 	private int y_puntillo_abajo;
@@ -69,6 +74,7 @@ public class Config {
 				ancho_cabeza_nota_gracia = 5;
 				ancho_claves = 30;
 				ancho_hooks = 16;
+				ancho_tempo = 20;
 				distancia_entre_beams = 5;
 				distancia_lineas_pentagrama = 12;
 				distancia_lineas_pentagrama_mitad = 6;
@@ -86,14 +92,16 @@ public class Config {
 				margen_nota_gracia = 6;
 				margen_obra = 60;
 				margen_superior = 50;
-				mitad_cabeza_nota = 6;
+				mitad_cabeza_nota_vertical = 6;
 				mitad_cabeza_nota_gracia = 3;
 				radio_octavarium = 3;
 				radio_puntillos = 4;
 				radio_staccatos = 4;
 				tamano_letra_obra = 50;
 				tamano_letra_autor = 30;
+				tamano_letra_tempo = 10;
 				tamano_letra_tresillo = 5;
+				tamano_letra_words = 30;
 				unidad_desplazamiento = 25;
 				this.width = width;
 				
@@ -107,9 +115,11 @@ public class Config {
 				x_fin_slash = 5;
 				y_inicio_slash = 5;
 				y_fin_slash = 10;
+				x_octavarium = 15;
+				y_octavarium = 8;
 				x_puntillo = ancho_cabeza_nota + 10;
-				y_puntillo_arriba = mitad_cabeza_nota - 10;
-				y_puntillo_abajo = mitad_cabeza_nota + 10;
+				y_puntillo_arriba = mitad_cabeza_nota_vertical - 10;
+				y_puntillo_abajo = mitad_cabeza_nota_vertical + 10;
 				x_staccato = 15;
 				y_staccato_arriba = 20;
 				y_staccato_abajo = 8;
@@ -125,10 +135,11 @@ public class Config {
 				ancho_cabeza_nota_gracia = 15;
 				ancho_claves = 88;
 				ancho_hooks = 16;
+				ancho_tempo = 65;
 				distancia_entre_beams = 12;
 				distancia_lineas_pentagrama = 19;
 				distancia_lineas_pentagrama_mitad = 9;
-				distancia_pentagramas = 200;
+				distancia_pentagramas = 240;
 				largo_imagen_corchete = 25;
 				largo_imagen_corchete_gracia = 5;
 				longitud_plica = 60;
@@ -142,7 +153,7 @@ public class Config {
 				margen_nota_gracia = 4;
 				margen_obra = 90;
 				margen_superior = 80;
-				mitad_cabeza_nota = 10;
+				mitad_cabeza_nota_vertical = 10;
 				mitad_cabeza_nota_gracia = 4;
 				radio_octavarium = 3;
 				radio_puntillos = 4;
@@ -150,6 +161,8 @@ public class Config {
 				tamano_letra_obra = 80;
 				tamano_letra_autor = 50;
 				tamano_letra_tresillo = 25;
+				tamano_letra_tempo = 45;
+				tamano_letra_words = 30;
 				unidad_desplazamiento = 200;
 				this.width = width;
 				
@@ -163,9 +176,11 @@ public class Config {
 				x_fin_slash = 5;
 				y_inicio_slash = 10;
 				y_fin_slash = 20;
+				x_octavarium = 15;
+				y_octavarium = 8;
 				x_puntillo = ancho_cabeza_nota + 10;
-				y_puntillo_arriba = mitad_cabeza_nota - 10;
-				y_puntillo_abajo = mitad_cabeza_nota + 10;
+				y_puntillo_arriba = mitad_cabeza_nota_vertical - 10;
+				y_puntillo_abajo = mitad_cabeza_nota_vertical + 10;
 				x_staccato = 15;
 				y_staccato_arriba = 28;
 				y_staccato_abajo = 14;
@@ -200,6 +215,10 @@ public class Config {
 	
 	public int getAnchoHooks() {
 		return ancho_hooks;
+	}
+	
+	public int getAnchoTempo() {
+		return ancho_tempo;
 	}
 
 	public int getDistanciaEntreBeams() {
@@ -270,8 +289,8 @@ public class Config {
 		return margen_superior;
 	}
 	
-	public int getMitadCabezaNota() {
-		return mitad_cabeza_nota;
+	public int getMitadCabezaNotaVertical() {
+		return mitad_cabeza_nota_vertical;
 	}
 	
 	public int getMitadCabezaNotaGracia() {
@@ -298,8 +317,16 @@ public class Config {
 		return tamano_letra_obra;
 	}
 	
+	public int getTamanoLetraTempo() {
+		return tamano_letra_tempo;
+	}
+	
 	public int getTamanoLetraTresillo() {
 		return tamano_letra_tresillo;
+	}
+	
+	public int getTamanoLetraWords() {
+		return tamano_letra_words;
 	}
 	
 	public int getUnidadDesplazamiento() {
@@ -351,6 +378,14 @@ public class Config {
 		return y_fin_slash;
 	}
 
+	public int getXOctavarium() {
+		return x_octavarium;
+	}
+	
+	public int getYOctavarium() {
+		return y_octavarium;
+	}
+	
 	public int getXPuntillo() {
 		return x_puntillo;
 	}

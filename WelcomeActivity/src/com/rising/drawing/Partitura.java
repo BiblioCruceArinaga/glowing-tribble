@@ -68,6 +68,15 @@ public class Partitura {
     	return work;
     }
     
+    public void setCompases(ArrayList<Compas> nuevosCompases) {
+    	compases.clear();
+    	
+    	int numCompases = nuevosCompases.size();
+    	for (int i=0; i<numCompases; i++) {
+    		compases.add(nuevosCompases.get(i));
+    	}
+    }
+    
     public void setCreator(ArrayList<Byte> creator) {
     	String creatorString = bytesArrayToString(creator);
         this.creator = creatorString;
