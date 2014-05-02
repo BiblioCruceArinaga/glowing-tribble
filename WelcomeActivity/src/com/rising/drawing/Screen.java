@@ -35,6 +35,7 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback {
     private static float limiteVisibleArriba = 0;
     private static float limiteVisibleAbajo = 0;
     private float finalScroll = 0;
+    private int margenFinalScroll = 0;
     private boolean mostrarBarraLateral = false;
     private float offsetBarraLateral = 0;
     private int tamanoBarraLateral = 0;
@@ -61,6 +62,8 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback {
 			cargarDatosDeFichero();
 			
 			Config config = new Config(densityDPI, width);
+			margenFinalScroll = config.getDistanciaPentagramas();
+			
 			DrawingMethods metodosDibujo = new DrawingMethods(partitura, config, getResources());
 			if (metodosDibujo.isValid()) {
 				ordenesDibujo = metodosDibujo.crearOrdenesDeDibujo();
@@ -316,7 +319,7 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback {
     		limiteVisibleAbajo = - canvas.getHeight();
     		altoPantalla = limiteVisibleAbajo;
     		
-    		finalScroll = partitura.getMarginBottom();
+    		finalScroll = partitura.getLastMarginY() + margenFinalScroll;
     		tamanoBarraLateral = (int) ( (altoPantalla / finalScroll) * altoPantalla);
     		
     		canvasDependentDataRecovered = true;

@@ -55,9 +55,8 @@ public class Partitura {
     	return instrument;
     }
     
-    public int getMarginBottom() {
-    	int lastMarginY = compases.get(compases.size() - 1).getYFin();
-    	return lastMarginY + 100;
+    public int getLastMarginY() {
+    	return compases.get(compases.size() - 1).getYFin();
     }
     
     public int getStaves() {

@@ -5,7 +5,6 @@ import java.util.ArrayList;
 
 public class Compas {
 	private ArrayList<Nota> notas;
-	
 	private ArrayList<ElementoGrafico> barlines;
 	private ArrayList<ElementoGrafico> clefs;
 
@@ -32,7 +31,6 @@ public class Compas {
 	
 	public Compas() {
 		notas = new ArrayList<Nota>();
-		
 		barlines = new ArrayList<ElementoGrafico>();
 		clefs = new ArrayList<ElementoGrafico>();
 		
@@ -74,31 +72,67 @@ public class Compas {
 		return anchoCompas;
 	}
 	
-	public ArrayList<ElementoGrafico> getClaves() {
+	public ArrayList<ElementoGrafico> getBarlines() {
+		return barlines;
+	}
+	
+	public ArrayList<ElementoGrafico> getClefs() {
 		return clefs;
 	}
 	
-	public ElementoGrafico getIntensidad() {
+	public ElementoGrafico getDynamics() {
 		return dynamics;
 	}
 	
+	public boolean getEndingBegin() {
+		return endingBegin;
+	}
+	
+	public boolean getEndingDis() {
+		return endingDis;
+	}
+	
+	public boolean getEndingEnd() {
+		return endingEnd;
+	}
+
 	public ArrayList<Nota> getNotas() {
 		return notas;
 	}
 	
-	public ElementoGrafico getPedalInicio() {
+	public ElementoGrafico getPedalStart() {
 		return pedalStart;
 	}
 	
-	public ElementoGrafico getPedalFin() {
+	public ElementoGrafico getPedalStop() {
 		return pedalStop;
+	}
+	
+	public ElementoGrafico getRepeatBegin() {
+		return repeatBegin;
+	}
+	
+	public ElementoGrafico getRepeatEnd() {
+		return repeatEnd;
 	}
 	
 	public ElementoGrafico getTime() {
 		return time;
 	}
 	
-	public String getWords() {
+	public ElementoGrafico getWords() {
+		return words;
+	}
+	
+	public byte getWordsLocation() {
+		return words.getValue(0);
+	}
+	
+	public int getWordsPosition() {
+		return words.getPosition();
+	}
+	
+	public String getWordsString() {
 		ArrayList<Byte> bytesWords = words.getValues();
 		byte[] bytesArray = new byte[bytesWords.size()];
         int len = bytesArray.length;
@@ -112,19 +146,7 @@ public class Compas {
             return "";
         }
 	}
-	
-	public byte getWordsLocation() {
-		return words.getValue(0);
-	}
-	
-	public int getWordsPosition() {
-		return words.getPosition();
-	}
-	
-	public ArrayList<ElementoGrafico> getBarlines() {
-		return barlines;
-	}
-	
+
 	public int getXIni() {
 		return x_ini;
 	}
@@ -145,8 +167,12 @@ public class Compas {
 		return !barlines.isEmpty();
 	}
 	
-	public boolean hayClaves() {
+	public boolean hayClefs() {
 		return !clefs.isEmpty();
+	}
+	
+	public boolean hayDynamics() {
+		return dynamics != null;
 	}
 	
 	//  Esta implementación de los ending está asumiendo que los
@@ -155,37 +181,37 @@ public class Compas {
 	public boolean hayEnding1() {
 		return endingBegin && endingEnd;
 	}
-	
-	public boolean hayIntensidad() {
-		return dynamics != null;
-	}
-	
+
 	public boolean hayPedales() {
 		return pedalStart != null || pedalStop != null;
 	}
 	
-	public boolean hayPedalInicio() {
+	public boolean hayPedalStart() {
 		return pedalStart != null;
 	}
 	
-	public boolean hayPedalFin() {
+	public boolean hayPedalStop() {
 		return pedalStop != null;
 	}
 	
-	public boolean hayRepeticionInicio() {
+	public boolean hayRepeatBegin() {
 		return repeatBegin != null;
 	}
 	
-	public boolean hayRepeticionFinal() {
+	public boolean hayRepeatEnd() {
 		return repeatEnd != null;
 	}
 	
-	public boolean hayTempo() {
+	public boolean hayTime() {
 		return time != null;
 	}
 	
-	public boolean hayTexto() {
+	public boolean hayWords() {
 		return words != null;
+	}
+	
+	public void setAnchoCompas(int anchoCompas) {
+		this.anchoCompas = anchoCompas;
 	}
 	
 	public void setAnchoCompas(ArrayList<Byte> arrayAnchoCompas) {
@@ -207,12 +233,32 @@ public class Compas {
 		this.dynamics = dynamics;
 	}
 	
+	public void setEndingBegin(boolean endingBegin) {
+		this.endingBegin = endingBegin;
+	}
+	
+	public void setEndingDis(boolean endingDis) {
+		this.endingDis = endingDis;
+	}
+	
+	public void setEndingEnd(boolean endingEnd) {
+		this.endingEnd = endingEnd;
+	}
+
 	public void setPedalStart(ElementoGrafico pedalStart) {
 		this.pedalStart = pedalStart;
 	}
 	
 	public void setPedalStop(ElementoGrafico pedalStop) {
 		this.pedalStop = pedalStop;
+	}
+	
+	public void setRepeatBegin(ElementoGrafico repeatBegin) {
+		this.repeatBegin = repeatBegin;
+	}
+	
+	public void setRepeatEnd(ElementoGrafico repeatEnd) {
+		this.repeatEnd = repeatEnd;
 	}
 	
 	public void setRepeatOrEnding(ElementoGrafico repeatOrEnding) {

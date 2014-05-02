@@ -157,19 +157,25 @@ public class DrawingMethods {
 		int numCompases = compases.size();
 		
 		for (int i=0; i<numCompases; i++) {
-			nuevosCompases.add(compases.get(i));
+			nuevosCompases.add(clonarCompas(compases.get(i)));
 			
-			if (compases.get(i).hayRepeticionInicio()) 
+			if (compases.get(i).hayRepeatBegin()) {
 				repeticionInicio = i;
+				nuevosCompases.get(nuevosCompases.size() - 1).setRepeatBegin(null);
+			}
 			
-			if (compases.get(i).hayRepeticionFinal()) {
+			if (compases.get(i).hayRepeatEnd()) {
+				nuevosCompases.get(nuevosCompases.size() - 1).setRepeatEnd(null);
 				
 				repeticionFinal = i;
-				if (compases.get(i).hayEnding1()) 
+				if (compases.get(i).hayEnding1()) {
 					repeticionFinal--;
+					nuevosCompases.get(nuevosCompases.size() - 1).setEndingBegin(false);
+					nuevosCompases.get(nuevosCompases.size() - 1).setEndingEnd(false);
+				}
 				
 				for (int j=repeticionInicio; j<=repeticionFinal; j++) {
-					nuevosCompases.add(compases.get(j));
+					nuevosCompases.add(clonarCompas(compases.get(j)));
 					
 					if (j == 0) {
 						nuevosCompases.get(nuevosCompases.size() - 1).clearClefs();
@@ -191,10 +197,40 @@ public class DrawingMethods {
 		Compas compasNuevo = new Compas();
 		
 		ArrayList<Nota> notas = compasViejo.getNotas();
-		int numNotas = notas.size();
-		for (int i=0; i<numNotas; i++) {
+		int num = notas.size();
+		for (int i=0; i<num; i++) {
 			compasNuevo.addNote(notas.get(i));
 		}
+		
+		ArrayList<ElementoGrafico> barlines = compasViejo.getBarlines();
+		num = barlines.size();
+		for (int i=0; i<num; i++) {
+			compasNuevo.addBarline(barlines.get(i));
+		}
+		
+		ArrayList<ElementoGrafico> clefs = compasViejo.getClefs();
+		num = clefs.size();
+		for (int i=0; i<num; i++) {
+			compasNuevo.addClef(clefs.get(i));
+		}
+		
+		compasNuevo.setEndingBegin(compasViejo.getEndingBegin());
+		compasNuevo.setEndingEnd(compasViejo.getEndingEnd());
+		compasNuevo.setEndingDis(compasViejo.getEndingDis());
+		compasNuevo.setRepeatBegin(compasViejo.getRepeatBegin());
+		compasNuevo.setRepeatEnd(compasViejo.getRepeatEnd());
+		compasNuevo.setDynamics(compasViejo.getDynamics());
+		compasNuevo.setPedalStart(compasViejo.getPedalStart());
+		compasNuevo.setPedalStop(compasViejo.getPedalStop());
+		compasNuevo.setTime(compasViejo.getTime());
+		compasNuevo.setWords(compasViejo.getWords());
+		
+		compasNuevo.setAnchoCompas(compasViejo.getAnchoCompas());
+		
+		compasNuevo.setXIni(compasViejo.getXIni());
+		compasNuevo.setXFin(compasViejo.getXFin());
+		compasNuevo.setYIni(compasViejo.getYIni());
+		compasNuevo.setYFin(compasViejo.getYFin());
 		
 		return compasNuevo;
 	}
@@ -215,10 +251,10 @@ public class DrawingMethods {
 
 		compas_margin_x += config.getMargenIzquierdoCompases();
 
-		if (compas.hayClaves()) dibujarClaves(compas.getClaves());
-		if (compas.hayTempo()) dibujarTempo(compas);
-		if (compas.hayTexto()) dibujarTexto(compas);
-		if (compas.hayIntensidad()) dibujarIntensidad(compas);
+		if (compas.hayClefs()) dibujarClaves(compas.getClefs());
+		if (compas.hayTime()) dibujarTempo(compas);
+		if (compas.hayWords()) dibujarTexto(compas);
+		if (compas.hayDynamics()) dibujarIntensidad(compas);
 		if (compas.hayPedales()) dibujarPedales(compas);
 		
 		ArrayList<Nota> notas = compas.getNotas();
@@ -245,6 +281,7 @@ public class DrawingMethods {
 
 		if (compas.getXFin() > config.getXFinalPentagramas()) {
 			moverCompasAlSiguienteRenglon(compas, primeraOrden, ultimaOrden);
+			reajustarCompases(0, 1);
 		}
 		
 		dibujarLineasDePentagramaDeCompas(compas);
@@ -392,7 +429,7 @@ public class DrawingMethods {
 	}
 	
 	private void dibujarIntensidad(Compas compas) {
-		ElementoGrafico dynamics = compas.getIntensidad();
+		ElementoGrafico dynamics = compas.getDynamics();
 		byte location = dynamics.getValue(0);
 		byte intensidad = dynamics.getValue(1);
 		int posicion = distanciaUnidadPosicion(dynamics.getPosition());
@@ -406,8 +443,8 @@ public class DrawingMethods {
 	}
 	
 	private void dibujarPedales(Compas compas) {
-		if (compas.hayPedalInicio()) {
-			ElementoGrafico dynamics = compas.getPedalInicio();
+		if (compas.hayPedalStart()) {
+			ElementoGrafico dynamics = compas.getPedalStart();
 			byte location = dynamics.getValue(0);
 			int posicion = distanciaUnidadPosicion(dynamics.getPosition());
 			
@@ -418,8 +455,8 @@ public class DrawingMethods {
 			ordenDibujo.setY1(obtenerYDeElementoGrafico(2, location));
 			ordenesDibujo.add(ordenDibujo);
 		}
-		if (compas.hayPedalFin()) {
-			ElementoGrafico dynamics = compas.getPedalFin();
+		if (compas.hayPedalStop()) {
+			ElementoGrafico dynamics = compas.getPedalStop();
 			byte location = dynamics.getValue(0);
 			int posicion = distanciaUnidadPosicion(dynamics.getPosition());
 			
@@ -433,7 +470,7 @@ public class DrawingMethods {
 	}
 	
 	private void dibujarTexto(Compas compas) {
-		String texto = compas.getWords();
+		String texto = compas.getWordsString();
 		int posicionX = distanciaUnidadPosicion(compas.getWordsPosition());
 		
 		OrdenDibujo ordenDibujo = new OrdenDibujo();
@@ -2004,4 +2041,9 @@ public class DrawingMethods {
 	private int distanciaUnidadPosicion(int position) {
 		return position * config.getUnidadDesplazamiento() / partitura.getDivisions();
 	}
+	
+	//  Reajusta el ancho de los compases entre indInicio e indFinal
+    private void reajustarCompases(int indInicio, int indFinal) {
+    	
+    }
 }
