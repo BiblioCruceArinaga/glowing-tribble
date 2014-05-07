@@ -151,12 +151,7 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback {
 		byte byteLeido = fichero.readByte();
 		while (byteLeido != -128) {
 			
-			switch (byteLeido) {
-				case 125:
-					ArrayList<Byte> anchoCompas = leerHastaAlmohadilla();
-					compas.setAnchoCompas(anchoCompas);
-					break;
-			
+			switch (byteLeido) {			
 				case 126:
 					leerFiguraGraficaCompas();
 					break;
@@ -258,9 +253,8 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback {
 				break;
 				
 			case 29:
-				elemento.addValue(fichero.readByte());
-				elemento.setPosition(leerHastaAlmohadilla());
-				compas.setRepeatOrEnding(elemento);
+				compas.setRepeatOrEnding(fichero.readByte());
+				leerHastaAlmohadilla();
 				break;
 				
 			case 30:

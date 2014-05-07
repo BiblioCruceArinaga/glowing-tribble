@@ -12,9 +12,13 @@ public class Nota {
 	private byte plica;
 	private byte voz;
 	private byte pentagrama;
+	private boolean octavarium;
 	
 	ArrayList<Byte> figurasGraficas;
 	ArrayList<Byte> posicion;
+	
+	private int x;
+	private int y;
 	
 	public Nota(byte step, byte octava, byte figuracion, byte beam,
 			byte plica, byte voz, byte pentagrama,
@@ -27,9 +31,13 @@ public class Nota {
 		this.plica = plica;
 		this.voz = voz;
 		this.pentagrama = pentagrama;
+		octavarium = false;
 		
 		this.figurasGraficas = figurasGraficas;
 		this.posicion = posicion;
+		
+		x = 0;
+		y = 0;
 	}
 	
 	public boolean acorde() {
@@ -52,6 +60,10 @@ public class Nota {
 		return figurasGraficas;
 	}
 	
+	public boolean getOctavarium() {
+		return octavarium;
+	}
+	
 	public byte getStep() {
 		return step;
 	}
@@ -71,6 +83,14 @@ public class Nota {
 	public byte getBeam() {
 		return beam;
 	}
+	
+	public byte getVoz() {
+		return voz;
+	}
+	
+	public ArrayList<Byte> getPosicionArray() {
+		return posicion;
+	}
 
 	public int getPosicion() {
 		byte[] bytesArray = new byte[posicion.size()];
@@ -87,6 +107,14 @@ public class Nota {
             return -1;
         }
 	}
+	
+	public int getX() {
+		return x;
+	}
+	
+	public int getY() {
+		return y;
+	}
 		
 	public boolean finDeTresillo() {
 		return figurasGraficas.contains((byte) 4);
@@ -98,6 +126,18 @@ public class Nota {
 	
 	public boolean notaDeGracia() {
 		return figurasGraficas.contains((byte) 18) || figurasGraficas.contains((byte) 19);
+	}
+	
+	public void setOctavarium(boolean octavarium) {
+		this.octavarium = octavarium;
+	}
+	
+	public void setX(int x) {
+		this.x = x;
+	}
+	
+	public void setY(int y) {
+		this.y = y;
 	}
 	
 	public boolean silencio() {

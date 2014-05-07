@@ -5,9 +5,9 @@ import java.util.ArrayList;
 /*
  * Clase genérica que representa cualquier figura gráfica
  * que pueda dibujarse en un compás: claves, tempos, indicaciones
- * textuales, etc. Con esta clase nos evitamos tener que crear
- * una clase distinta para cada tipo de elemento gráfico que
- * puede haber en una partitura.
+ * textuales, etc. En esta clase se guarda cualquier información
+ * leída del archivo tal cual se lee, es decir, en formato
+ * de bytes.
  * 
  * El array values almacena los bytes que representan la
  * información asociada al elemento gráfico. La manera en la que
@@ -27,10 +27,14 @@ import java.util.ArrayList;
  * resto de elementos gráficos (incluyendo las notas), podemos
  * saber si es, de izquierda a derecha, el primer elemento, el
  * segundo, el tercero, etc.
+ * 
+ * El entero x representa la posición real del elemento.
  */
 public class ElementoGrafico {
 	private ArrayList<Byte> values;
-    private int position;
+   
+	private int position;
+    private int x;
     
     public ElementoGrafico() {
         values = new ArrayList<Byte>();
@@ -58,8 +62,20 @@ public class ElementoGrafico {
         return values.get(index);
     }
     
+    public int getX() {
+    	return x;
+    }
+    
     public ArrayList<Byte> getValues() {
         return values;
+    }
+    
+    public void setX(int x) {
+    	this.x = x;
+    }
+    
+    public void setPosition(int position) {
+    	this.position = position;
     }
     
     public void setPosition(ArrayList<Byte> position) {

@@ -40,7 +40,11 @@ public class Partitura {
     }
     
     public ArrayList<Compas> getCompases() {
-    	return this.compases;
+    	return compases;
+    }
+    
+    public Compas getCompas(int index) {
+    	return compases.get(index);
     }
     
     public String getCreator() {

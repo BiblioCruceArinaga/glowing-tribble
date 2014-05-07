@@ -4,56 +4,75 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
 public class Compas {
-	private ArrayList<Nota> notas;
+
+	//  Información tal cual fue leída en el fichero
 	private ArrayList<ElementoGrafico> barlines;
 	private ArrayList<ElementoGrafico> clefs;
-
-    private boolean endingBegin;
-    private boolean endingEnd;
-    private boolean endingDis;
-	
 	private ElementoGrafico dynamics;
 	private ElementoGrafico pedalStart;
 	private ElementoGrafico pedalStop;
-	private ElementoGrafico repeatBegin;
-    private ElementoGrafico repeatEnd;
 	private ElementoGrafico time;
 	private ElementoGrafico words;
 	
-	//  Este valor está expresado en unidades dependientes del valor divisions
-	//  de la partitura, y será usado posteriormente para calcular x_fin
-	private int anchoCompas;
+	//  Información ya analizada
+	private ArrayList<Nota> notas;
+	private ArrayList<Clave> claves;
+	private Intensidad intensidad;
+	private Pedal pedalInicio;
+	private Pedal pedalFin;
+	private Tempo tempo;
+	private Texto texto;
 	
+	private boolean repeatBegin;
+    private boolean repeatEnd;
+    private boolean endingBegin;
+    private boolean endingEnd;
+    private boolean endingDis;
+
 	private int x_ini;
 	private int x_fin;
 	private int y_ini;
 	private int y_fin;
 	
+	//  Posición X donde empiezan a colocarse las notas 
+	private int x_ini_notas;
+	
 	public Compas() {
-		notas = new ArrayList<Nota>();
 		barlines = new ArrayList<ElementoGrafico>();
 		clefs = new ArrayList<ElementoGrafico>();
-		
-		endingBegin = false;
-		endingEnd = false;
-		endingDis = false;
-		
 		dynamics = null;
 		pedalStart = null;
 		pedalStop = null;
-		repeatBegin = null;
-		repeatEnd = null;
 		time = null;
 		words = null;
 		
+		notas = new ArrayList<Nota>();
+		claves = new ArrayList<Clave>();
+		intensidad = null;
+		pedalInicio = null;
+		pedalFin = null;
+		tempo = null;
+		texto = null;
+		
+		repeatBegin = false;
+		repeatEnd = false;
+		endingBegin = false;
+		endingEnd = false;
+		endingDis = false;
+
 		x_ini = -1;
 		x_fin = -1;
 		y_ini = -1;
 		y_fin = -1;
+		x_ini_notas = -1;
 	}
 	
 	public void addBarline(ElementoGrafico barline) {
 		barlines.add(barline);
+	}
+	
+	public void addClave(Clave clave) {
+		claves.add(clave);
 	}
 	
 	public void addClef(ElementoGrafico clef) {
@@ -68,12 +87,12 @@ public class Compas {
 		clefs.clear();
 	}
 	
-	public int getAnchoCompas() {
-		return anchoCompas;
-	}
-	
 	public ArrayList<ElementoGrafico> getBarlines() {
 		return barlines;
+	}
+	
+	public ArrayList<Clave> getClaves() {
+		return claves;
 	}
 	
 	public ArrayList<ElementoGrafico> getClefs() {
@@ -95,9 +114,25 @@ public class Compas {
 	public boolean getEndingEnd() {
 		return endingEnd;
 	}
+	
+	public Intensidad getIntensidad() {
+		return intensidad;
+	}
 
+	public Nota getNota(int index) {
+		return notas.get(index);
+	}
+	
 	public ArrayList<Nota> getNotas() {
 		return notas;
+	}
+	
+	public Pedal getPedalFin() {
+		return pedalFin;
+	}
+	
+	public Pedal getPedalInicio() {
+		return pedalInicio;
 	}
 	
 	public ElementoGrafico getPedalStart() {
@@ -108,12 +143,20 @@ public class Compas {
 		return pedalStop;
 	}
 	
-	public ElementoGrafico getRepeatBegin() {
+	public boolean getRepeatBegin() {
 		return repeatBegin;
 	}
 	
-	public ElementoGrafico getRepeatEnd() {
+	public boolean getRepeatEnd() {
 		return repeatEnd;
+	}
+	
+	public Tempo getTempo() {
+		return tempo;
+	}
+	
+	public Texto getTexto() {
+		return texto;
 	}
 	
 	public ElementoGrafico getTime() {
@@ -163,6 +206,10 @@ public class Compas {
 		return y_fin;
 	}
 	
+	public int getXIniNotas() {
+		return x_ini_notas;
+	}
+	
 	public boolean hayBarlines() {
 		return !barlines.isEmpty();
 	}
@@ -181,9 +228,25 @@ public class Compas {
 	public boolean hayEnding1() {
 		return endingBegin && endingEnd;
 	}
+	
+	public boolean hayIntensidad() {
+		return intensidad != null;
+	}
 
-	public boolean hayPedales() {
+	public boolean hayPedals() {
 		return pedalStart != null || pedalStop != null;
+	}
+	
+	public boolean hayPedales() {
+		return pedalFin != null || pedalInicio != null;
+	}
+	
+	public boolean hayPedalFin() {
+		return pedalFin != null;
+	}
+	
+	public boolean hayPedalInicio() {
+		return pedalInicio != null;
 	}
 	
 	public boolean hayPedalStart() {
@@ -194,12 +257,12 @@ public class Compas {
 		return pedalStop != null;
 	}
 	
-	public boolean hayRepeatBegin() {
-		return repeatBegin != null;
+	public boolean hayTempo() {
+		return tempo != null;
 	}
 	
-	public boolean hayRepeatEnd() {
-		return repeatEnd != null;
+	public boolean hayTexto() {
+		return texto != null;
 	}
 	
 	public boolean hayTime() {
@@ -210,23 +273,12 @@ public class Compas {
 		return words != null;
 	}
 	
-	public void setAnchoCompas(int anchoCompas) {
-		this.anchoCompas = anchoCompas;
-	}
-	
-	public void setAnchoCompas(ArrayList<Byte> arrayAnchoCompas) {
-		byte[] bytesArray = new byte[arrayAnchoCompas.size()];
-        int len = bytesArray.length;
-        for (int i=0; i<len; i++)
-            bytesArray[i] = arrayAnchoCompas.get(i);
-        
-        try {
-            String bytesString = new String(bytesArray, "UTF-8");
-            anchoCompas = Integer.parseInt(bytesString);
-        }
-        catch (UnsupportedEncodingException e) {
-            System.out.println(e.getMessage());
-        }
+	/**
+	 * 
+	 * @return Devuelve el número total de notas en el compás
+	 */
+	public int numeroDeNotas() {
+		return notas.size();
 	}
 	
 	public void setDynamics(ElementoGrafico dynamics) {
@@ -244,6 +296,18 @@ public class Compas {
 	public void setEndingEnd(boolean endingEnd) {
 		this.endingEnd = endingEnd;
 	}
+	
+	public void setIntensidad(Intensidad intensidad) {
+		this.intensidad = intensidad;
+	}
+	
+	public void setPedalFin(Pedal pedalFin) {
+		this.pedalFin = pedalFin;
+	}
+	
+	public void setPedalInicio(Pedal pedalInicio) {
+		this.pedalInicio = pedalInicio;
+	}
 
 	public void setPedalStart(ElementoGrafico pedalStart) {
 		this.pedalStart = pedalStart;
@@ -253,21 +317,21 @@ public class Compas {
 		this.pedalStop = pedalStop;
 	}
 	
-	public void setRepeatBegin(ElementoGrafico repeatBegin) {
+	public void setRepeatBegin(boolean repeatBegin) {
 		this.repeatBegin = repeatBegin;
 	}
 	
-	public void setRepeatEnd(ElementoGrafico repeatEnd) {
+	public void setRepeatEnd(boolean repeatEnd) {
 		this.repeatEnd = repeatEnd;
 	}
 	
-	public void setRepeatOrEnding(ElementoGrafico repeatOrEnding) {
-		switch (repeatOrEnding.getValue(1)) {
+	public void setRepeatOrEnding(byte repeatOrEnding) {
+		switch (repeatOrEnding) {
 			case 1:
-				repeatBegin = repeatOrEnding;
+				repeatBegin = true;
 				break;
 			case 2:
-				repeatEnd = repeatOrEnding;
+				repeatEnd = true;
 				break;
 			case 3:
 				endingBegin = true;
@@ -286,6 +350,14 @@ public class Compas {
 			default:
 				break;
 		}
+	}
+	
+	public void setTempo(Tempo tempo) {
+		this.tempo = tempo;
+	}
+	
+	public void setTexto(Texto texto) {
+		this.texto = texto;
 	}
 	
 	public void setTime(ElementoGrafico time) {
@@ -310,5 +382,9 @@ public class Compas {
 	
 	public void setYFin(int y_fin) {
 		this.y_fin = y_fin;
+	}
+	
+	public void setXIniNotas(int x_ini_notas) {
+		this.x_ini_notas = x_ini_notas;
 	}
 }

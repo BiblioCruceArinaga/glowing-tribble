@@ -1,20 +1,36 @@
 package com.rising.drawing;
 
+/*
+ * Esta clase almacena una posición de una nota
+ * que contiene beams, para posteriormente, tras
+ * los cálculos, dibujarlos
+ */
+
 public class Beam {
 
-	private int beam;
-	private int index;
+	private int compas;
+	private int nota;
+	private int y;
 	
-	public Beam(int beam, int index) {
-		this.beam = beam;
-		this.index = index;
+	public Beam(int compas, int nota) {
+		this.compas = compas;
+		this.nota = nota;
+		this.y = -1;
 	}
 	
-	public int getBeam() {
-		return beam;
+	public int getCompas() {
+		return compas;
 	}
 	
-	public int getIndex() {
-		return index;
+	public int getNota() {
+		return nota;
+	}
+	
+	public int getY() {
+		return y;
+	}
+	
+	public void setY(int y) {
+		this.y = y;
 	}
 }
