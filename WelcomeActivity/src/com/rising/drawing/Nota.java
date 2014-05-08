@@ -12,7 +12,11 @@ public class Nota {
 	private byte plica;
 	private byte voz;
 	private byte pentagrama;
-	private boolean octavarium;
+	
+	//  La posición x del octavarium depende de la de
+	//  la nota, y por tanto no necesitamos guardarla
+	private int octavarium;
+	private int y_octavarium;
 	
 	ArrayList<Byte> figurasGraficas;
 	ArrayList<Byte> posicion;
@@ -31,7 +35,9 @@ public class Nota {
 		this.plica = plica;
 		this.voz = voz;
 		this.pentagrama = pentagrama;
-		octavarium = false;
+		
+		octavarium = 0;
+		y_octavarium = -1;
 		
 		this.figurasGraficas = figurasGraficas;
 		this.posicion = posicion;
@@ -60,7 +66,7 @@ public class Nota {
 		return figurasGraficas;
 	}
 	
-	public boolean getOctavarium() {
+	public int getOctavarium() {
 		return octavarium;
 	}
 	
@@ -115,7 +121,11 @@ public class Nota {
 	public int getY() {
 		return y;
 	}
-		
+	
+	public int getYOctavarium() {
+		return y_octavarium;
+	}
+	
 	public boolean finDeTresillo() {
 		return figurasGraficas.contains((byte) 4);
 	}
@@ -128,7 +138,7 @@ public class Nota {
 		return figurasGraficas.contains((byte) 18) || figurasGraficas.contains((byte) 19);
 	}
 	
-	public void setOctavarium(boolean octavarium) {
+	public void setOctavarium(int octavarium) {
 		this.octavarium = octavarium;
 	}
 	
@@ -138,6 +148,10 @@ public class Nota {
 	
 	public void setY(int y) {
 		this.y = y;
+	}
+	
+	public void setYOctavarium(int y_octavarium) {
+		this.y_octavarium = y_octavarium;
 	}
 	
 	public boolean silencio() {

@@ -39,13 +39,23 @@ public class Partitura {
         return string;
     }
     
-    public ArrayList<Compas> getCompases() {
-    	return compases;
+    public void destruir() {
+    	work = null;
+    	creator = null;
+    	compases.clear();
+    	
+    	instrument = 0;
+    	divisions = 0;
+    	staves = 1;
     }
     
     public Compas getCompas(int index) {
     	return compases.get(index);
     }
+    
+    public ArrayList<Compas> getCompases() {
+    	return compases;
+    }   
     
     public String getCreator() {
     	return creator;

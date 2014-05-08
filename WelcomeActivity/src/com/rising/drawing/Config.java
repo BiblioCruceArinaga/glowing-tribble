@@ -10,6 +10,7 @@ public class Config {
 	private int ancho_claves;
 	private int ancho_hooks;
 	private int ancho_tempo;
+	private int distancia_corchetes;
 	private int distancia_entre_beams;
 	private int distancia_lineas_pentagrama;
 	private int distancia_lineas_pentagrama_mitad;
@@ -75,6 +76,7 @@ public class Config {
 				ancho_claves = 30;
 				ancho_hooks = 16;
 				ancho_tempo = 20;
+				distancia_corchetes = 15;
 				distancia_entre_beams = 5;
 				distancia_lineas_pentagrama = 12;
 				distancia_lineas_pentagrama_mitad = 6;
@@ -136,6 +138,7 @@ public class Config {
 				ancho_claves = 88;
 				ancho_hooks = 16;
 				ancho_tempo = 65;
+				distancia_corchetes = 15;
 				distancia_entre_beams = 12;
 				distancia_lineas_pentagrama = 19;
 				distancia_lineas_pentagrama_mitad = 9;
@@ -219,6 +222,10 @@ public class Config {
 	
 	public int getAnchoTempo() {
 		return ancho_tempo;
+	}
+	
+	public int getDistanciaCorchetes() {
+		return distancia_corchetes;
 	}
 
 	public int getDistanciaEntreBeams() {

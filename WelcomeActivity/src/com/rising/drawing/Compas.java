@@ -9,6 +9,7 @@ public class Compas {
 	private ArrayList<ElementoGrafico> barlines;
 	private ArrayList<ElementoGrafico> clefs;
 	private ElementoGrafico dynamics;
+	private ElementoGrafico metronome;
 	private ElementoGrafico pedalStart;
 	private ElementoGrafico pedalStop;
 	private ElementoGrafico time;
@@ -41,6 +42,7 @@ public class Compas {
 		barlines = new ArrayList<ElementoGrafico>();
 		clefs = new ArrayList<ElementoGrafico>();
 		dynamics = null;
+		metronome = null;
 		pedalStart = null;
 		pedalStop = null;
 		time = null;
@@ -117,6 +119,10 @@ public class Compas {
 	
 	public Intensidad getIntensidad() {
 		return intensidad;
+	}
+	
+	public ElementoGrafico getMetronome() {
+		return metronome;
 	}
 
 	public Nota getNota(int index) {
@@ -299,6 +305,10 @@ public class Compas {
 	
 	public void setIntensidad(Intensidad intensidad) {
 		this.intensidad = intensidad;
+	}
+	
+	public void setMetronome(ElementoGrafico metronome) {
+		this.metronome = metronome;
 	}
 	
 	public void setPedalFin(Pedal pedalFin) {

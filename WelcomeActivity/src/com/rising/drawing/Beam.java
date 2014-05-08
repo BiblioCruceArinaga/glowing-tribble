@@ -10,12 +10,10 @@ public class Beam {
 
 	private int compas;
 	private int nota;
-	private int y;
 	
 	public Beam(int compas, int nota) {
 		this.compas = compas;
 		this.nota = nota;
-		this.y = -1;
 	}
 	
 	public int getCompas() {
@@ -24,13 +22,5 @@ public class Beam {
 	
 	public int getNota() {
 		return nota;
-	}
-	
-	public int getY() {
-		return y;
-	}
-	
-	public void setY(int y) {
-		this.y = y;
 	}
 }

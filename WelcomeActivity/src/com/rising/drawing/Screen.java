@@ -28,19 +28,19 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback {
 	private ArrayList<OrdenDibujo> ordenesDibujo;
 	
 	//  Gestión del scroll
+	private float altoPantalla = 0;
 	private boolean canvasDependentDataRecovered = false;
-    private static float yOffset = 0;
-    private float yPrevious = 0;
-    private float div = 0;
-    private static float limiteVisibleArriba = 0;
+	private float div = 0;
+	private float finalScroll = 0;
+	private static float limiteVisibleArriba = 0;
     private static float limiteVisibleAbajo = 0;
-    private float finalScroll = 0;
     private int margenFinalScroll = 0;
     private boolean mostrarBarraLateral = false;
     private float offsetBarraLateral = 0;
-    private int tamanoBarraLateral = 0;
     private float porcentajeAltura = 0;
-    private float altoPantalla = 0;
+    private int tamanoBarraLateral = 0;
+    private static float yOffset = 0;
+    private float yPrevious = 0;
 	
 	//  ========================================
 	//  Constructor y métodos heredados
@@ -93,6 +93,30 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback {
 	public void surfaceDestroyed(SurfaceHolder holder) {
 		thread.setRunning(false);
 		thread = null;
+		
+		isValidScreen = false;
+		fichero = null;
+		
+		partitura.destruir();
+		partitura = null;
+		compas = null;
+		
+		ordenesDibujo.clear();
+		ordenesDibujo = null;
+		
+		altoPantalla = 0;
+		canvasDependentDataRecovered = false;
+		div = 0;
+		finalScroll = 0;
+		limiteVisibleArriba = 0;
+	    limiteVisibleAbajo = 0;
+	    margenFinalScroll = 0;
+	    mostrarBarraLateral = false;
+	    offsetBarraLateral = 0;
+	    porcentajeAltura = 0;
+	    tamanoBarraLateral = 0;
+	    yOffset = 0;
+	    yPrevious = 0;
 	}
 
 	@Override
@@ -228,6 +252,14 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback {
 				compas.setDynamics(elemento);
 				break;
 				
+			case 24:
+				elemento.addValue(figuraGrafica);
+				elemento.addValue(fichero.readByte());
+				elemento.addAllValues(leerHastaAlmohadilla());
+				elemento.setPosition(leerHastaAlmohadilla());
+				compas.setMetronome(elemento);
+				break;
+				
 			case 25:
 				elemento.addValue(figuraGrafica);
 				elemento.setPosition(leerHastaAlmohadilla());
@@ -308,18 +340,19 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback {
 	//  ========================================
 	public void draw(Canvas canvas) {
 		
-		//  Estos valores dependen del canvas y sólo deben recogerse una vez
-		if (!canvasDependentDataRecovered) {
-    		limiteVisibleAbajo = - canvas.getHeight();
-    		altoPantalla = limiteVisibleAbajo;
-    		
-    		finalScroll = partitura.getLastMarginY() + margenFinalScroll;
-    		tamanoBarraLateral = (int) ( (altoPantalla / finalScroll) * altoPantalla);
-    		
-    		canvasDependentDataRecovered = true;
-		}
-		
 		if (canvas != null) {
+		
+			//  Estos valores dependen del canvas y sólo deben recogerse una vez
+			if (!canvasDependentDataRecovered) {
+	    		limiteVisibleAbajo = - canvas.getHeight();
+	    		altoPantalla = limiteVisibleAbajo;
+	    		
+	    		finalScroll = partitura.getLastMarginY() + margenFinalScroll;
+	    		tamanoBarraLateral = (int) ( (altoPantalla / finalScroll) * altoPantalla);
+	    		
+	    		canvasDependentDataRecovered = true;
+			}
+		
 			canvas.drawARGB(255, 255, 255, 255);
 			canvas.save();
             canvas.translate(0, yOffset);
