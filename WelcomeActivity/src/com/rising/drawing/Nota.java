@@ -18,6 +18,10 @@ public class Nota {
 	private int octavarium;
 	private int y_octavarium;
 	
+	//  Este campo representará una inicio o un final
+	//  de ligadura de unión dependiendo del contexto
+	private byte ligadura;
+	
 	ArrayList<Byte> figurasGraficas;
 	ArrayList<Byte> posicion;
 	
@@ -38,6 +42,8 @@ public class Nota {
 		
 		octavarium = 0;
 		y_octavarium = -1;
+		
+		ligadura = 0;
 		
 		this.figurasGraficas = figurasGraficas;
 		this.posicion = posicion;
@@ -64,6 +70,10 @@ public class Nota {
 	
 	public ArrayList<Byte> getFigurasGraficas() {
 		return figurasGraficas;
+	}
+	
+	public byte getLigadura() {
+		return ligadura;
 	}
 	
 	public int getOctavarium() {
@@ -136,6 +146,10 @@ public class Nota {
 	
 	public boolean notaDeGracia() {
 		return figurasGraficas.contains((byte) 18) || figurasGraficas.contains((byte) 19);
+	}
+	
+	public void setLigadura(byte ligadura) {
+		this.ligadura = ligadura;
 	}
 	
 	public void setOctavarium(int octavarium) {

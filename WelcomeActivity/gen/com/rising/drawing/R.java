@@ -226,7 +226,7 @@ containing a value of this type.
         public static final int back_buttons=0x7f02000e;
         public static final int background_scoresapp=0x7f02000f;
         public static final int bassclef=0x7f020010;
-        public static final int bend=0x7f020011;
+        public static final int bendrelease=0x7f020011;
         public static final int blackhead=0x7f020012;
         public static final int blackheadlittle=0x7f020013;
         public static final int btn_cab_done_default_tabs=0x7f020014;

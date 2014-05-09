@@ -3,6 +3,7 @@ package com.rising.drawing;
 import android.graphics.Bitmap;
 import android.graphics.Paint;
 import android.graphics.Paint.Align;
+import android.graphics.RectF;
 
 public class OrdenDibujo {
 	
@@ -10,6 +11,7 @@ public class OrdenDibujo {
 	private String texto;
 	private Bitmap imagen;
 	private DrawOrder orden;
+	private RectF rectf;
 	
 	private int x1;
 	private int y1;
@@ -22,6 +24,7 @@ public class OrdenDibujo {
 		texto = "";
 		imagen = null;
 		orden = null;
+		rectf = null;
 		
 		x1 = -1;
 		x2 = -1;
@@ -44,6 +47,10 @@ public class OrdenDibujo {
 	
 	public int getRadius() {
 		return radius;
+	}
+	
+	public RectF getRectF() {
+		return rectf;
 	}
 	
 	public String getTexto() {
@@ -78,8 +85,8 @@ public class OrdenDibujo {
 			case SET_TEXT_SIZE:
 				paint.setTextSize(value);
 				break;
-			case SET_STYLE:
-				paint.setStyle(Paint.Style.FILL);
+			case SET_STYLE_STROKE:
+				paint.setStyle(Paint.Style.STROKE);
 				break;
 			case SET_ARGB:
 				paint.setARGB(255, (int) value, (int) value, (int) value);
@@ -94,6 +101,10 @@ public class OrdenDibujo {
 	
 	public void setRadius(int radius) {
 		this.radius = radius;
+	}
+	
+	public void setRectF(RectF rectf) {
+		this.rectf = rectf;
 	}
 	
 	public void setTexto(String texto) {

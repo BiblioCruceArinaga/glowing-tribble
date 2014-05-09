@@ -4,6 +4,7 @@ public class Config {
 	
 	private boolean supported = true;
 	
+	private int altura_arco_ligaduras;
 	private int ancho_beams;
 	private int ancho_cabeza_nota;
 	private int ancho_cabeza_nota_gracia;
@@ -46,11 +47,14 @@ public class Config {
 	private int x_accidental;
 	private int y_accidental;
 	private int y_accidental_flat;
+	private int y_bend;
 	private int y_clave_sol_segunda;
 	private int x_inicio_slash;
 	private int x_fin_slash;
 	private int y_inicio_slash;
 	private int y_fin_slash;
+	private int x_ligaduras;
+	private int y_ligaduras;
 	private int x_octavarium;
 	private int y_octavarium;
 	private int x_puntillo;
@@ -70,6 +74,7 @@ public class Config {
 			case 160:
 				break;
 			case 213:
+				altura_arco_ligaduras = 20;
 				ancho_beams = 5;
 				ancho_cabeza_nota = 10;
 				ancho_cabeza_nota_gracia = 5;
@@ -110,6 +115,7 @@ public class Config {
 				x_accidental = 10;
 				y_accidental = 10;
 				y_accidental_flat = 15;
+				y_bend = 40;
 				y_clave_sol_segunda = 15;
 				x_inicial_pentagramas = 50;
 				x_final_pentagramas = width - x_inicial_pentagramas;
@@ -117,6 +123,8 @@ public class Config {
 				x_fin_slash = 5;
 				y_inicio_slash = 5;
 				y_fin_slash = 10;
+				x_ligaduras = 20;
+				y_ligaduras = 10;
 				x_octavarium = 15;
 				y_octavarium = 8;
 				x_puntillo = ancho_cabeza_nota + 10;
@@ -129,9 +137,12 @@ public class Config {
 				y_tresillo_arriba = 7;
 				y_tresillo_abajo = 7;
 				break;
+				
 			case 240:
 				break;
+				
 			case 320:
+				altura_arco_ligaduras = 50;
 				ancho_beams = 8;
 				ancho_cabeza_nota = 26;
 				ancho_cabeza_nota_gracia = 15;
@@ -172,6 +183,7 @@ public class Config {
 				x_accidental = 16;
 				y_accidental = 10;
 				y_accidental_flat = 17;
+				y_bend = 40;
 				y_clave_sol_segunda = 63;
 				x_inicial_pentagramas = 80;
 				x_final_pentagramas = width - x_inicial_pentagramas;
@@ -179,6 +191,8 @@ public class Config {
 				x_fin_slash = 5;
 				y_inicio_slash = 10;
 				y_fin_slash = 20;
+				x_ligaduras = 20;
+				y_ligaduras = 10;
 				x_octavarium = 15;
 				y_octavarium = 8;
 				x_puntillo = ancho_cabeza_nota + 10;
@@ -198,6 +212,10 @@ public class Config {
 			default: 
 				supported = false;
 		}
+	}
+	
+	public int getAlturaArcoLigaduras() {
+		return altura_arco_ligaduras;
 	}
 	
 	public int getAnchoBeams() {
@@ -357,6 +375,10 @@ public class Config {
 		return y_accidental_flat;
 	}
 	
+	public int getYBend() {
+		return y_bend;
+	}
+	
 	public int getYClaveSolSegunda() {
 		return y_clave_sol_segunda;
 	}
@@ -383,6 +405,14 @@ public class Config {
 	
 	public int getYFinSlash() {
 		return y_fin_slash;
+	}
+	
+	public int getXLigaduras() {
+		return x_ligaduras;
+	}
+	
+	public int getYLigaduras() {
+		return y_ligaduras;
 	}
 
 	public int getXOctavarium() {

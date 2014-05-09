@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.RectF;
 
 public class DrawingMethods {
 	
@@ -30,9 +31,10 @@ public class DrawingMethods {
 	private boolean buscandoOctavarium = false;
 	private int octavarium = 0;
 	private int[] posicionesOctavarium = {0,0};
-	private ArrayList<Beam> beams = new ArrayList<Beam>();
+	private ArrayList<IndiceNota> beams = new ArrayList<IndiceNota>();
 	private int y_anterior = 0;
 	private int x_ini_tresillo = 0;
+	private ArrayList<IndiceNota> ligadurasInicio = new ArrayList<IndiceNota>();
 	
 	//  Bitmaps
 	private Bitmap trebleclef = null;
@@ -61,7 +63,7 @@ public class DrawingMethods {
 	private Bitmap vibrato = null;
 	private Bitmap tremolobar = null;
 	private Bitmap hammeron = null;
-	private Bitmap bend = null;
+	private Bitmap bendrelease = null;
 	private Bitmap octavariumImage = null;
 	private Bitmap pedalStart = null;
 	private Bitmap pedalStop = null;
@@ -105,7 +107,7 @@ public class DrawingMethods {
 			vibrato = BitmapFactory.decodeResource(resources, R.drawable.vibrato);
 			tremolobar = BitmapFactory.decodeResource(resources, R.drawable.tremolobar);
 			hammeron = BitmapFactory.decodeResource(resources, R.drawable.hammeron);
-			bend = BitmapFactory.decodeResource(resources, R.drawable.bend);
+			bendrelease = BitmapFactory.decodeResource(resources, R.drawable.bendrelease);
 			octavariumImage = BitmapFactory.decodeResource(resources, R.drawable.octavarium);
 			pedalStart = BitmapFactory.decodeResource(resources, R.drawable.pedalstart);
 			pedalStop = BitmapFactory.decodeResource(resources, R.drawable.pedalstop);
@@ -558,6 +560,8 @@ public class DrawingMethods {
 
 		compas.setXIni(config.getXInicialPentagramas());
 		compas.setXFin(compas.getXFin() - distancia_x);
+		if (compas.getXFin() > config.getXFinalPentagramas())
+			compas.setXFin(config.getXFinalPentagramas());
 		compas.setXIniNotas(compas.getXIniNotas() - distancia_x);
 		
 		if (compas.hayIntensidad()) {
@@ -1956,6 +1960,15 @@ public class DrawingMethods {
 			case 9:
 				break;
 
+			case 10:
+				ligadurasInicio.add(new IndiceNota(compasActual, notaActual, nota.getLigadura()));
+				break;
+				
+			case 11:
+				int indLigadura = encontrarIndiceLigadura(nota.getLigadura());
+				dibujarLigadura(indLigadura, posicionX);
+				break;
+			
 			case 12:
 				ordenDibujo.setOrden(DrawOrder.DRAW_BITMAP);
 				ordenDibujo.setImagen(sharp);
@@ -2022,13 +2035,22 @@ public class DrawingMethods {
 				ordenesDibujo.add(ordenDibujo);
 				break;
 
-			case 20:
-			case 21:
 			case 22:
-			case 23:
+				ordenDibujo.setOrden(DrawOrder.DRAW_BITMAP);
+				ordenDibujo.setImagen(bendrelease);
+				ordenDibujo.setX1(posicionX);
+				ordenDibujo.setY1(posicionY + config.getYBend());
+				ordenesDibujo.add(ordenDibujo);
 				break;
+				
 			case 26:
+				ordenDibujo.setOrden(DrawOrder.DRAW_BITMAP);
+				ordenDibujo.setImagen(vibrato);
+				ordenDibujo.setX1(posicionX);
+				ordenDibujo.setY1(posicionY + config.getYBend());
+				ordenesDibujo.add(ordenDibujo);
 				break;
+				
 			default:
 				break;
 		}
@@ -2038,8 +2060,18 @@ public class DrawingMethods {
 		ArrayList<Byte> figurasGraficas = nota.getFigurasGraficas();
 		int numFiguras = figurasGraficas.size();
 
-		for (int i=0; i<numFiguras; i++) 
-			dibujarFiguraGrafica(nota, figurasGraficas.get(i), nota.getX(), nota.getY(), y_beams);
+		for (int i=0; i<numFiguras; i++) {
+			
+			//  Las ligaduras requieren un byte extra que indica su número
+			if (esLigadura(figurasGraficas, i)) {
+				nota.setLigadura(figurasGraficas.get(i + 1));	
+				dibujarFiguraGrafica(nota, figurasGraficas.get(i++), nota.getX(), nota.getY(), y_beams);
+			}
+			
+			else {
+				dibujarFiguraGrafica(nota, figurasGraficas.get(i), nota.getX(), nota.getY(), y_beams);
+			}
+		}
 	}
 	
 	private void dibujarIntensidad(Compas compas) {
@@ -2051,6 +2083,42 @@ public class DrawingMethods {
 		ordenDibujo.setX1(intensidad.getX());
 		ordenDibujo.setY1(intensidad.getY());
 		ordenesDibujo.add(ordenDibujo);
+	}
+	
+	private void dibujarLigadura(int indLigadura, int xFinal) {
+		int compasNotaInicio = ligadurasInicio.get(indLigadura).getCompas();
+		int notaInicio = ligadurasInicio.get(indLigadura).getNota();
+		
+		Nota nota = partitura.getCompas(compasNotaInicio).getNota(notaInicio);
+		int xInicio = nota.getX();
+		int y = nota.getY();
+		
+		OrdenDibujo ordenDibujo = new OrdenDibujo();
+		ordenDibujo.setOrden(DrawOrder.DRAW_ARC);
+		ordenDibujo.setPaint(PaintOptions.SET_STYLE_STROKE, 0);
+		ordenDibujo.setPaint(PaintOptions.SET_STROKE_WIDTH, 2);
+		
+		if (xInicio < xFinal) {
+			RectF rectf = new RectF(xInicio + config.getAnchoCabezaNota() +
+					config.getXLigaduras(), y - config.getYLigaduras(), 
+					xFinal - config.getXLigaduras(), y + config.getAlturaArcoLigaduras());
+			ordenDibujo.setRectF(rectf);
+		}
+		
+		//  La ligadura es con una nota de un compás
+		//  que fue desplazado hacia abajo porque no cabía,
+		//  así que la dibujamos al frente
+		else {
+			Compas compas = partitura.getCompas(compasNotaInicio);
+
+			RectF rectf = new RectF(xInicio + config.getAnchoCabezaNota() + 
+					config.getXLigaduras(), y - config.getYLigaduras(), 
+					compas.getXFin(), y + config.getAlturaArcoLigaduras());
+			ordenDibujo.setRectF(rectf);
+		}
+		
+		ordenesDibujo.add(ordenDibujo);
+		ligadurasInicio.remove(indLigadura);
 	}
 	
 	private void dibujarLineasDePentagramaDeCompas(Compas compas) {
@@ -2398,13 +2466,33 @@ public class DrawingMethods {
 		ordenesDibujo.add(ordenDibujo);
 	}
 	
+	//  Busca, en el array de ligaduras de inicio, el índice
+	//  del elemento que contiene el inicio de esta ligadura
+	private int encontrarIndiceLigadura(byte ligadura) {
+		int numLigaduras = ligadurasInicio.size();
+		int indice = -1;
+		
+		for (int i=0; i<numLigaduras; i++) {
+			if (ligadurasInicio.get(i).getLigadura() == ligadura) {
+				indice = i;
+				break;
+			}
+		}
+		
+		return indice;
+	}
+	
+	private boolean esLigadura(ArrayList<Byte> figuras, int indFigura) {
+		return (figuras.get(indFigura) == 10) || (figuras.get(indFigura) == 11);
+	}
+	
 	//  Guarda las posiciones de las notas que tienen beams para,
 	//  más adelante, dibujar sus plicas a la altura del beam
 	private int gestionarBeams(Nota nota) {
 		boolean dibujarBeams = false;
 		
 		if (nota.getBeam() > 0) {
-			Beam beam = new Beam(compasActual, notaActual);
+			IndiceNota beam = new IndiceNota(compasActual, notaActual, (byte) 0);
 			beams.add(beam);
 			if ((nota.getBeam() == 1) || (nota.getBeam() == 4)) 
 				dibujarBeams = true;

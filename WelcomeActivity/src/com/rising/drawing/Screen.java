@@ -384,6 +384,9 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback {
 					canvas.drawText(ordenDibujo.getTexto(), ordenDibujo.getX1(), 
 							ordenDibujo.getY1(), ordenDibujo.getPaint());
 					break;
+				case DRAW_ARC:
+					canvas.drawArc(ordenDibujo.getRectF(), 0, -180, false, ordenDibujo.getPaint());
+					break;
 				default:
 					break;
 			}
