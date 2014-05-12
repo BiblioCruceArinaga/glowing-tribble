@@ -34,6 +34,8 @@ public class DrawingMethods {
 	private ArrayList<IndiceNota> beams = new ArrayList<IndiceNota>();
 	private int y_anterior = 0;
 	private int x_ini_tresillo = 0;
+	private int x_ini_slide = 0;
+	private int y_ini_slide = 0;
 	private ArrayList<IndiceNota> ligadurasInicio = new ArrayList<IndiceNota>();
 	
 	//  Bitmaps
@@ -334,15 +336,19 @@ public class DrawingMethods {
 		switch (compas.getTime().getValue(1)) {
 			case 1:
 				inicializarTempo(tempo, 3, 8);
+				config.unidadDesplazamientoCorcheas();
 				break;
 			case 2:
 				inicializarTempo(tempo, 4, 4);
+				config.unidadDesplazamientoNegras();
 				break;
 			case 3:
 				inicializarTempo(tempo, 2, 4);
+				config.unidadDesplazamientoNegras();
 				break;
 			case 4:
 				inicializarTempo(tempo, 7, 4);
+				config.unidadDesplazamientoNegras();
 				break;
 			default:
 				break;
@@ -530,10 +536,8 @@ public class DrawingMethods {
 				for (int j=repeticionInicio; j<=repeticionFinal; j++) {
 					nuevosCompases.add(clonarCompas(compases.get(j)));
 					
-					if (j == 0) {
-						nuevosCompases.get(nuevosCompases.size() - 1).clearClefs();
-						nuevosCompases.get(nuevosCompases.size() - 1).setTime(null);
-					}
+					nuevosCompases.get(nuevosCompases.size() - 1).clearClefs();
+					nuevosCompases.get(nuevosCompases.size() - 1).setTime(null);
 				}
 			}
 		}
@@ -1557,6 +1561,11 @@ public class DrawingMethods {
                 	partitura.getCompas(i).getPedalFin().setX(
                 			partitura.getCompas(i).getXIniNotas() + posicion);
                 }
+                
+                if (partitura.getCompas(i).hayTempo()) {
+                	partitura.getCompas(i).getTempo().setX(
+                			partitura.getCompas(i).getXIni() + config.getAnchoTempo());
+                }
             }
 
             for (int i=primerCompas; i<=ultimoCompas; i++) {
@@ -1937,9 +1946,21 @@ public class DrawingMethods {
 				ordenesDibujo.add(ordenDibujo);
 				break;
 
-			case 5:
+			case 6:
+				x_ini_slide = posicionX;
+				y_ini_slide = posicionY;
 				break;
-
+				
+			case 7:
+				ordenDibujo.setOrden(DrawOrder.DRAW_LINE);
+				ordenDibujo.setPaint(PaintOptions.SET_STROKE_WIDTH, 1);
+				ordenDibujo.setX1(x_ini_slide + config.getAnchoCabezaNota());
+				ordenDibujo.setY1(y_ini_slide + config.getMitadCabezaNotaVertical());
+				ordenDibujo.setX2(posicionX);
+				ordenDibujo.setY2(posicionY + config.getMitadCabezaNotaVertical());
+				ordenesDibujo.add(ordenDibujo);
+				break;
+				
 			case 8:
 				if (nota.haciaArriba()) {
 					ordenDibujo.setOrden(DrawOrder.DRAW_CIRCLE);
@@ -1958,6 +1979,12 @@ public class DrawingMethods {
 				break;
 
 			case 9:
+				ordenDibujo.setOrden(DrawOrder.DRAW_TEXT);
+				ordenDibujo.setPaint(PaintOptions.SET_TEXT_SIZE, config.getTamanoLetraTapping());
+				ordenDibujo.setTexto("T");
+				ordenDibujo.setX1(posicionX);
+				ordenDibujo.setY1(posicionY - config.getYTapping());
+				ordenesDibujo.add(ordenDibujo);
 				break;
 
 			case 10:
@@ -2050,6 +2077,32 @@ public class DrawingMethods {
 				ordenDibujo.setY1(posicionY + config.getYBend());
 				ordenesDibujo.add(ordenDibujo);
 				break;
+				
+			case 27:
+				ordenDibujo.setOrden(DrawOrder.DRAW_TEXT);
+				ordenDibujo.setPaint(PaintOptions.SET_TEXT_SIZE, config.getTamanoLetraPalmMute());
+				ordenDibujo.setTexto("P.M.");
+				ordenDibujo.setX1(posicionX);
+				ordenDibujo.setY1(posicionY - config.getYPalmMute());
+				ordenesDibujo.add(ordenDibujo);
+				break;
+				
+			case 28:
+				ordenDibujo.setOrden(DrawOrder.DRAW_TEXT);
+				ordenDibujo.setPaint(PaintOptions.SET_TEXT_SIZE, config.getTamanoLetraPalmMute());
+				ordenDibujo.setTexto("P.M.");
+				ordenDibujo.setX1(posicionX);
+				ordenDibujo.setY1(posicionY + config.getYPalmMute());
+				ordenesDibujo.add(ordenDibujo);
+				break;
+			
+			case 29:
+				ordenDibujo.setOrden(DrawOrder.DRAW_TEXT);
+				ordenDibujo.setPaint(PaintOptions.SET_TEXT_SIZE, config.getTamanoLetraTapping());
+				ordenDibujo.setTexto("T");
+				ordenDibujo.setX1(posicionX);
+				ordenDibujo.setY1(posicionY + config.getYTapping());
+				ordenesDibujo.add(ordenDibujo);
 				
 			default:
 				break;
@@ -2369,7 +2422,7 @@ public class DrawingMethods {
 	private boolean dibujarPlicaDeNota(Nota nota, int y_beams) {
 		if (nota.tienePlica()) {
 			int mitadCabezaNota = nota.notaDeGracia() ? 
-					config.getMitadCabezaNotaGracia() : config.getMitadCabezaNotaVertical();
+					config.getMitadCabezaNotaGraciaVertical() : config.getMitadCabezaNotaVertical();
 			int anchoCabezaNota = nota.notaDeGracia() ? 
 					config.getAnchoCabezaNotaGracia() : config.getAnchoCabezaNota();
 			int longitudPlica = nota.notaDeGracia() ? 

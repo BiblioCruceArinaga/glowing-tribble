@@ -3,6 +3,7 @@ package com.rising.drawing;
 public class Config {
 	
 	private boolean supported = true;
+	private int densityDPI = 0;
 	
 	private int altura_arco_ligaduras;
 	private int ancho_beams;
@@ -32,12 +33,14 @@ public class Config {
 	private int margen_obra;
 	private int margen_superior;
 	private int mitad_cabeza_nota_vertical;
-	private int mitad_cabeza_nota_gracia;
+	private int mitad_cabeza_nota_gracia_vertical;
 	private int radio_octavarium;
 	private int radio_puntillos;
 	private int radio_staccatos;
-	private int tamano_letra_obra;
 	private int tamano_letra_autor;
+	private int tamano_letra_obra;
+	private int tamano_letra_palm_mute;
+	private int tamano_letra_tapping;
 	private int tamano_letra_tempo;
 	private int tamano_letra_tresillo;
 	private int tamano_letra_words;
@@ -57,17 +60,21 @@ public class Config {
 	private int y_ligaduras;
 	private int x_octavarium;
 	private int y_octavarium;
+	private int y_palm_mute;
 	private int x_puntillo;
 	private int y_puntillo_arriba;
 	private int y_puntillo_abajo;
 	private int x_staccato;
 	private int y_staccato_arriba;
 	private int y_staccato_abajo;
+	private int y_tapping;
 	private int x_tresillo;
 	private int y_tresillo_arriba;
 	private int y_tresillo_abajo;
 	
 	public Config(int densityDPI, int width) {
+		this.densityDPI = densityDPI;
+		
 		switch (densityDPI) {
 			case 120:
 				break;
@@ -100,12 +107,14 @@ public class Config {
 				margen_obra = 60;
 				margen_superior = 50;
 				mitad_cabeza_nota_vertical = 6;
-				mitad_cabeza_nota_gracia = 3;
+				mitad_cabeza_nota_gracia_vertical = 3;
 				radio_octavarium = 3;
 				radio_puntillos = 4;
 				radio_staccatos = 4;
-				tamano_letra_obra = 50;
 				tamano_letra_autor = 30;
+				tamano_letra_obra = 50;
+				tamano_letra_palm_mute = 30;
+				tamano_letra_tapping = 30;
 				tamano_letra_tempo = 10;
 				tamano_letra_tresillo = 5;
 				tamano_letra_words = 30;
@@ -127,12 +136,14 @@ public class Config {
 				y_ligaduras = 10;
 				x_octavarium = 15;
 				y_octavarium = 8;
+				y_palm_mute = 15;
 				x_puntillo = ancho_cabeza_nota + 10;
 				y_puntillo_arriba = mitad_cabeza_nota_vertical - 10;
 				y_puntillo_abajo = mitad_cabeza_nota_vertical + 10;
 				x_staccato = 15;
 				y_staccato_arriba = 20;
 				y_staccato_abajo = 8;
+				y_tapping = 15;
 				x_tresillo = 6;
 				y_tresillo_arriba = 7;
 				y_tresillo_abajo = 7;
@@ -168,12 +179,14 @@ public class Config {
 				margen_obra = 90;
 				margen_superior = 80;
 				mitad_cabeza_nota_vertical = 10;
-				mitad_cabeza_nota_gracia = 4;
+				mitad_cabeza_nota_gracia_vertical = 4;
 				radio_octavarium = 3;
 				radio_puntillos = 4;
 				radio_staccatos = 4;
-				tamano_letra_obra = 80;
 				tamano_letra_autor = 50;
+				tamano_letra_obra = 80;
+				tamano_letra_palm_mute = 30;
+				tamano_letra_tapping = 30;
 				tamano_letra_tresillo = 25;
 				tamano_letra_tempo = 45;
 				tamano_letra_words = 30;
@@ -195,12 +208,14 @@ public class Config {
 				y_ligaduras = 10;
 				x_octavarium = 15;
 				y_octavarium = 8;
+				y_palm_mute = 50;
 				x_puntillo = ancho_cabeza_nota + 10;
 				y_puntillo_arriba = mitad_cabeza_nota_vertical - 10;
 				y_puntillo_abajo = mitad_cabeza_nota_vertical + 10;
 				x_staccato = 15;
 				y_staccato_arriba = 28;
 				y_staccato_abajo = 14;
+				y_tapping = 50;
 				x_tresillo = 18;
 				y_tresillo_arriba = 9;
 				y_tresillo_abajo = 26;
@@ -318,8 +333,8 @@ public class Config {
 		return mitad_cabeza_nota_vertical;
 	}
 	
-	public int getMitadCabezaNotaGracia() {
-		return mitad_cabeza_nota_gracia;
+	public int getMitadCabezaNotaGraciaVertical() {
+		return mitad_cabeza_nota_gracia_vertical;
 	}
 	
 	public int getRadioOctavarium() {
@@ -340,6 +355,14 @@ public class Config {
 	
 	public int getTamanoLetraObra() {
 		return tamano_letra_obra;
+	}
+	
+	public int getTamanoLetraPalmMute() {
+		return tamano_letra_palm_mute;
+	}
+	
+	public int getTamanoLetraTapping() {
+		return tamano_letra_tapping;
 	}
 	
 	public int getTamanoLetraTempo() {
@@ -423,6 +446,10 @@ public class Config {
 		return y_octavarium;
 	}
 	
+	public int getYPalmMute() {
+		return y_palm_mute;
+	}
+	
 	public int getXPuntillo() {
 		return x_puntillo;
 	}
@@ -447,6 +474,10 @@ public class Config {
 		return y_staccato_abajo;
 	}
 	
+	public int getYTapping() {
+		return y_tapping;
+	}
+	
 	public int getXTresillo() {
 		return x_tresillo;
 	}
@@ -457,6 +488,65 @@ public class Config {
 	
 	public int getYTresilloAbajo() {
 		return y_tresillo_abajo;
+	}
+	
+	/**
+	 * Cuando el tempo se mide en corcheas, el valor por defecto de
+	 * la unidad de desplazamiento es adecuado. Esta función existe
+	 * en caso de que hayamos leído compases medidos con negras
+	 * anteriormente y queramos volver a tempos medidos por corcheas
+	 * @param unidad_desplazamiento
+	 */
+	public void unidadDesplazamientoCorcheas() {
+		switch (densityDPI) {
+			case 120:
+				break;
+			case 160:
+				break;
+			case 213:
+				unidad_desplazamiento = 25;
+				break;
+			case 240:
+				break;
+			case 320:
+				unidad_desplazamiento = 200;
+				break;
+			case 400:
+				break;
+			case 480:
+				break;
+			default: 
+				supported = false;
+		}
+	}
+	
+	/**
+	 * Cuando el tempo se mide en negras, la unidad de desplazamiento debe
+	 * reducirse a la mitad, ya que de lo contrario los elementos se verían 
+	 * demasiado separados
+	 * @param unidad_desplazamiento
+	 */
+	public void unidadDesplazamientoNegras() {
+		switch (densityDPI) {
+			case 120:
+				break;
+			case 160:
+				break;
+			case 213:
+				unidad_desplazamiento = 12;
+				break;
+			case 240:
+				break;
+			case 320:
+				unidad_desplazamiento = 100;
+				break;
+			case 400:
+				break;
+			case 480:
+				break;
+			default: 
+				supported = false;
+		}
 	}
 	
 	/**
