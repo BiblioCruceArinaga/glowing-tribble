@@ -88,9 +88,6 @@ public class OrdenDibujo {
 			case SET_STYLE_STROKE:
 				paint.setStyle(Paint.Style.STROKE);
 				break;
-			case SET_ARGB:
-				paint.setARGB(255, (int) value, (int) value, (int) value);
-				break;
 			case SET_TEXT_ALIGN:
 				paint.setTextAlign(Align.CENTER);
 				break;

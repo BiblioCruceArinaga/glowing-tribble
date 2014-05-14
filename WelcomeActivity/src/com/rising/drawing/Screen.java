@@ -23,9 +23,10 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback {
 	private ObjectInputStream fichero = null;
 	private ScreenThread thread;
 	
-	private Partitura partitura;
-	private Compas compas;
-	private ArrayList<OrdenDibujo> ordenesDibujo;
+	private Partitura partitura = new Partitura();
+	private Compas compas = new Compas();
+	private ArrayList<OrdenDibujo> ordenesDibujo = new ArrayList<OrdenDibujo>();
+	private Metronomo metronomo = null;
 	
 	//  Gestión del scroll
 	private float altoPantalla = 0;
@@ -48,10 +49,6 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback {
 	public Screen(Context context, String path, int width, int densityDPI){
 		super(context);
 		getHolder().addCallback(this);
-		
-		partitura = new Partitura();
-		compas = new Compas();
-		ordenesDibujo = new ArrayList<OrdenDibujo>();
 		
 		try {
 			File f = new File(Environment.getExternalStorageDirectory() + 
@@ -93,6 +90,11 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback {
 	public void surfaceDestroyed(SurfaceHolder holder) {
 		thread.setRunning(false);
 		thread = null;
+		
+		if (metronomo != null) {
+			metronomo.onDestroy();
+			metronomo = null;
+		}
 		
 		isValidScreen = false;
 		fichero = null;
@@ -402,4 +404,142 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback {
     	canvas.drawLine(x_end, offsetBarraLateral - yOffset, 
     			x_end, offsetBarraLateral + tamanoBarraLateral - yOffset, paint);
     }
+	
+	/*
+	 * 
+	 * Gestión del metrónomo
+	 * 
+	 */
+	public void Metronome_Back(){
+		yOffset = 0;
+		limiteVisibleArriba = 0;
+		limiteVisibleAbajo = altoPantalla;
+	}
+	
+	public void Metronome_Pause(){
+		if (metronomo != null) {
+			if (metronomo.paused()) metronomo.onResume();
+			else metronomo.onPause();
+		}
+	}
+	
+	public void Metronome_Play(int bpm){
+		if (metronomo == null) {
+    		metronomo = new Metronomo(bpm);
+    		metronomo.run();
+		}
+	}
+
+	public void Metronome_Stop(){
+		if (metronomo != null) {
+			metronomo.onDestroy();
+			metronomo = null;
+		}
+	}
+	
+	public class Metronomo {
+		private Object mPauseLock;
+	    private boolean mPaused;
+	    private Thread th;
+	    private int mbpm;
+
+	    public Metronomo(int bpm) {
+	        mPauseLock = new Object();
+	        mPaused = false;
+	        mbpm = bpm;
+	    }
+
+	    public void run() {
+	    	th = new Thread(new Runnable(){
+	    		public void run() {	
+	                try {
+	                	final long speed = ((240000/mbpm)/4);
+	    				
+	                	int numCompases = partitura.getCompases().size();
+	                	for (int i=0; i<numCompases; i++) {
+	                		
+	                		int pulsos = partitura.getCompas(i).numeroDePulsos();
+	                		for (int j=0; j<pulsos; j++) {
+	                			colocarNuevoPulso(j + 1);
+	                			
+	                			Thread.sleep(speed);
+	                			
+	                			quitarPulsoAnterior();
+	                		}
+	                	}
+	                	
+	    				synchronized (mPauseLock) {
+	    	                while (mPaused) {
+	    	                    try {
+	    	                        mPauseLock.wait();
+	    	                    } catch (InterruptedException e) {
+	    	                    	quitarPulsoAnterior();
+	    	                    	Thread.currentThread().interrupt();
+	    	                    	mPauseLock.notifyAll();
+	    	                    	return;
+	    	                    }
+	    	                }
+	    	            }
+	                } 
+	                catch (InterruptedException e) {
+	    				e.printStackTrace();
+	    				Thread.currentThread().interrupt();
+		    		} catch (IndexOutOfBoundsException e) {
+	    				e.printStackTrace();
+	    			}
+	    		}
+	    	});
+	    	th.start();
+	    }
+
+	    /**
+	     * Call this on pause.
+	     */
+	    public void onPause() {
+	        synchronized (mPauseLock) {
+	            mPaused = true;
+	        }
+	    }
+
+	    /**
+	     * Call this on resume.
+	     */
+	    public void onResume() {
+	        synchronized (mPauseLock) {
+	            mPaused = false;
+	            mPauseLock.notifyAll();
+	        }
+	    }
+
+	    /**
+	     * Destroy metronome
+	     */
+	    public void onDestroy() {
+	    	mPaused = false;
+	    	th.interrupt();
+	    }
+
+	    /**
+	     * Know metronome state
+	     */
+	    public boolean paused() {
+	    	return this.mPaused;
+	    }
+	}
+	
+	//  Quita la orden de dibujo del pulso anterior
+	//  del array de órdenes de dibujo
+	private void quitarPulsoAnterior() {
+		ordenesDibujo.remove(ordenesDibujo.size() - 1);
+	}
+	
+	private void colocarNuevoPulso(int pulso) {
+		OrdenDibujo ordenDibujo = new OrdenDibujo();
+		ordenDibujo.setOrden(DrawOrder.DRAW_TEXT);
+		ordenDibujo.setPaint(PaintOptions.SET_TEXT_SIZE, 50);
+		ordenDibujo.setTexto(pulso + "");
+		ordenDibujo.setX1(500);
+		ordenDibujo.setY1(500);
+		ordenesDibujo.add(ordenDibujo);
+	}
 }

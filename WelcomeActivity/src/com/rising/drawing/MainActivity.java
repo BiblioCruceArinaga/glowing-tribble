@@ -171,7 +171,7 @@ public class MainActivity extends Activity{
 				play = true;
 				stop = false;
 				
-				//s.Metronome_Play(tempo);
+				s.Metronome_Play(tempo);
 			    CDialog.dismiss();
 			 }
 		}.start();
@@ -191,13 +191,13 @@ public class MainActivity extends Activity{
 		
 		if(play == false){
     		item.setIcon(R.drawable.play_button);
-    		//s.Metronome_Pause();    		
+    		s.Metronome_Pause();    		
     	}else{
     		item.setIcon(R.drawable.pause_button);
     		if(stop){
-    			//s.Metronome_Play(tempo);
+    			s.Metronome_Play(tempo);
     		}else{
-    			//s.Metronome_Pause();
+    			s.Metronome_Pause();
     		}
     	}
 	}
@@ -208,7 +208,7 @@ public class MainActivity extends Activity{
 		play = false;
 		
 		Menu menu = m.getMenu();
-		//s.Metronome_Stop();
+		s.Metronome_Stop();
         if(stop){
         	menu.getItem(2).setIcon(R.drawable.play_button);
     	}else{
@@ -238,13 +238,13 @@ public class MainActivity extends Activity{
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
         	switch(item.getItemId()){
         		case R.id.close_metronome:
-        			//s.Metronome_Stop();
+        			s.Metronome_Stop();
         			mode.finish();
         			tempo = 0;
         			break;
         		
         		case R.id.metronome_menu_back:    
-        			//s.Metronome_Back();
+        			s.Metronome_Back();
         			break;
         			
         		case R.id.metronome_menu_pause:

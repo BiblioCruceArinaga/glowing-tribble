@@ -21,7 +21,8 @@ public class DrawingMethods {
 	//  Variables para la gestión y el tratamiento dinámico de los múltiples compases
 	private int compas_margin_x = 0;
 	private int compas_margin_y = 0;
-	private ArrayList<Byte> clavesActuales;
+	private ArrayList<Byte> clavesActuales = new ArrayList<Byte>();
+	private Tempo tempoActual = null;
 	
 	private int compasActual = 0;
 	private int notaActual = 0;
@@ -79,10 +80,6 @@ public class DrawingMethods {
 			
 			compas_margin_x = config.getXInicialPentagramas();
 			compas_margin_y = config.getMargenSuperior();
-			
-			//  En el futuro, estos valores irán cambiando conforme se vayan
-			//  encontrando claves durante la lectura de la partitura
-			clavesActuales = new ArrayList<Byte>();
 
 			trebleclef = BitmapFactory.decodeResource(resources, R.drawable.trebleclef);
 			bassclef = BitmapFactory.decodeResource(resources, R.drawable.bassclef);
@@ -260,7 +257,7 @@ public class DrawingMethods {
 		compas_margin_x += config.getMargenIzquierdoCompases();
 
 		if (compas.hayClefs()) calcularClefs(compas);
-		if (compas.hayTime()) calcularTime(compas);
+		calcularTime(compas);
 		if (compas.hayWords()) calcularWords(compas);
 		if (compas.hayDynamics()) calcularDynamics(compas);
 		if (compas.hayPedals()) calcularPedals(compas);
@@ -332,31 +329,37 @@ public class DrawingMethods {
 	}
 	
 	private void calcularTime(Compas compas) {
-		Tempo tempo = new Tempo();
-		
-		switch (compas.getTime().getValue(1)) {
-			case 1:
-				inicializarTempo(tempo, 3, 8);
-				config.unidadDesplazamientoCorcheas();
-				break;
-			case 2:
-				inicializarTempo(tempo, 4, 4);
-				config.unidadDesplazamientoNegras();
-				break;
-			case 3:
-				inicializarTempo(tempo, 2, 4);
-				config.unidadDesplazamientoNegras();
-				break;
-			case 4:
-				inicializarTempo(tempo, 7, 4);
-				config.unidadDesplazamientoNegras();
-				break;
-			default:
-				break;
+		if (compas.hayTime()) {
+			Tempo tempo = new Tempo();
+			
+			switch (compas.getTime().getValue(1)) {
+				case 1:
+					inicializarTempo(tempo, 3, 8);
+					config.unidadDesplazamientoCorcheas();
+					break;
+				case 2:
+					inicializarTempo(tempo, 4, 4);
+					config.unidadDesplazamientoNegras();
+					break;
+				case 3:
+					inicializarTempo(tempo, 2, 4);
+					config.unidadDesplazamientoNegras();
+					break;
+				case 4:
+					inicializarTempo(tempo, 7, 4);
+					config.unidadDesplazamientoNegras();
+					break;
+				default:
+					break;
+			}
+			
+			compas.setTempo(tempo);
+			tempoActual = tempo;
+			compas_margin_x += config.getAnchoTempo();
 		}
-		
-		compas.setTempo(tempo);
-		compas_margin_x += config.getAnchoTempo();
+		else {
+			compas.setTempo(clonarTempo(tempoActual));
+		}
 	}
 	
 	private void calcularWords(Compas compas) {
@@ -443,6 +446,19 @@ public class DrawingMethods {
 		}
 	}
 
+	private Tempo clonarTempo(Tempo tempoViejo) {
+		Tempo tempoNuevo = new Tempo();
+		
+		tempoNuevo.setDibujar(false);
+		tempoNuevo.setNumerador(tempoViejo.getNumerador());
+		tempoNuevo.setDenominador(tempoViejo.getDenominador());
+		tempoNuevo.setX(tempoViejo.getX());
+		tempoNuevo.setYNumerador(tempoViejo.getYNumerador());
+		tempoNuevo.setYDenominador(tempoViejo.getYDenominador());
+		
+		return tempoNuevo;
+	}
+	
 	public ArrayList<OrdenDibujo> crearOrdenesDeDibujo() {
 		
 		desenrollarRepeticiones();
@@ -515,6 +531,7 @@ public class DrawingMethods {
 	}
 
 	private void inicializarTempo(Tempo tempo, int numerador, int denominador) {
+		tempo.setDibujar(true);
 		tempo.setNumerador(numerador);
 		tempo.setDenominador(denominador);
 		tempo.setX(compas_margin_x);
@@ -2465,42 +2482,44 @@ public class DrawingMethods {
 	}
 	
 	private void dibujarTempo(Compas compas) {
-		Tempo tempo = compas.getTempo();
-		
-		OrdenDibujo ordenDibujo = new OrdenDibujo();
-		ordenDibujo.setOrden(DrawOrder.DRAW_TEXT);
-		ordenDibujo.setPaint(PaintOptions.SET_TEXT_SIZE, config.getTamanoLetraTempo());
-		ordenDibujo.setTexto(tempo.getNumerador());
-		ordenDibujo.setX1(tempo.getX());
-		ordenDibujo.setY1(tempo.getYNumerador());
-		ordenesDibujo.add(ordenDibujo);
-		
-		ordenDibujo = new OrdenDibujo();
-		ordenDibujo.setOrden(DrawOrder.DRAW_TEXT);
-		ordenDibujo.setPaint(PaintOptions.SET_TEXT_SIZE, config.getTamanoLetraTempo());
-		ordenDibujo.setTexto(tempo.getDenominador());
-		ordenDibujo.setX1(tempo.getX());
-		ordenDibujo.setY1(tempo.getYDenominador());
-		ordenesDibujo.add(ordenDibujo);
-
-		if (partitura.getStaves() == 2) {
-			int margenY = config.getDistanciaLineasPentagrama() * 4 + config.getDistanciaPentagramas();
-
-			ordenDibujo = new OrdenDibujo();
+		if (compas.getTempo().dibujar()) {
+			Tempo tempo = compas.getTempo();
+			
+			OrdenDibujo ordenDibujo = new OrdenDibujo();
 			ordenDibujo.setOrden(DrawOrder.DRAW_TEXT);
 			ordenDibujo.setPaint(PaintOptions.SET_TEXT_SIZE, config.getTamanoLetraTempo());
-			ordenDibujo.setTexto(tempo.getNumerador());
+			ordenDibujo.setTexto(tempo.getNumeradorString());
 			ordenDibujo.setX1(tempo.getX());
-			ordenDibujo.setY1(tempo.getYNumerador() + margenY);
+			ordenDibujo.setY1(tempo.getYNumerador());
 			ordenesDibujo.add(ordenDibujo);
 			
 			ordenDibujo = new OrdenDibujo();
 			ordenDibujo.setOrden(DrawOrder.DRAW_TEXT);
 			ordenDibujo.setPaint(PaintOptions.SET_TEXT_SIZE, config.getTamanoLetraTempo());
-			ordenDibujo.setTexto(tempo.getDenominador());
+			ordenDibujo.setTexto(tempo.getDenominadorString());
 			ordenDibujo.setX1(tempo.getX());
-			ordenDibujo.setY1(tempo.getYDenominador() + margenY);
+			ordenDibujo.setY1(tempo.getYDenominador());
 			ordenesDibujo.add(ordenDibujo);
+	
+			if (partitura.getStaves() == 2) {
+				int margenY = config.getDistanciaLineasPentagrama() * 4 + config.getDistanciaPentagramas();
+	
+				ordenDibujo = new OrdenDibujo();
+				ordenDibujo.setOrden(DrawOrder.DRAW_TEXT);
+				ordenDibujo.setPaint(PaintOptions.SET_TEXT_SIZE, config.getTamanoLetraTempo());
+				ordenDibujo.setTexto(tempo.getNumeradorString());
+				ordenDibujo.setX1(tempo.getX());
+				ordenDibujo.setY1(tempo.getYNumerador() + margenY);
+				ordenesDibujo.add(ordenDibujo);
+				
+				ordenDibujo = new OrdenDibujo();
+				ordenDibujo.setOrden(DrawOrder.DRAW_TEXT);
+				ordenDibujo.setPaint(PaintOptions.SET_TEXT_SIZE, config.getTamanoLetraTempo());
+				ordenDibujo.setTexto(tempo.getDenominadorString());
+				ordenDibujo.setX1(tempo.getX());
+				ordenDibujo.setY1(tempo.getYDenominador() + margenY);
+				ordenesDibujo.add(ordenDibujo);
+			}
 		}
 	}
 	

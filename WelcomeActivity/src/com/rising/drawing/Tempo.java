@@ -2,6 +2,8 @@ package com.rising.drawing;
 
 public class Tempo {
 
+	private boolean dibujar;
+	
 	private int numerador;
 	private int denominador;
 	private int x;
@@ -9,6 +11,8 @@ public class Tempo {
 	private int y_denominador;
 	
 	public Tempo() {
+		dibujar = false;
+		
 		numerador = 0;
 		denominador = 0;
 		x = -1;
@@ -16,11 +20,23 @@ public class Tempo {
 		y_denominador = -1;
 	}
 	
-	public String getDenominador() {
+	public boolean dibujar() {
+		return dibujar;
+	}
+	
+	public int getDenominador() {
+		return denominador;
+	}
+	
+	public String getDenominadorString() {
 		return denominador + "";
 	}
 	
-	public String getNumerador() {
+	public int getNumerador() {
+		return numerador;
+	}
+	
+	public String getNumeradorString() {
 		return numerador + "";
 	}
 	
@@ -36,8 +52,23 @@ public class Tempo {
 		return y_numerador;
 	}
 	
+	public int numeroDePulsos() {
+		switch (denominador) {
+			case 4:
+				return numerador;
+			case 8:
+				return 3;
+			default:
+				return 0;
+		}
+	}
+	
 	public void setDenominador(int denominador) {
 		this.denominador = denominador;
+	}
+	
+	public void setDibujar(boolean dibujar) {
+		this.dibujar = dibujar;
 	}
 	
 	public void setNumerador(int numerador) {

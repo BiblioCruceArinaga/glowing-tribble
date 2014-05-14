@@ -278,13 +278,13 @@ public class Compas {
 	public boolean hayWords() {
 		return words != null;
 	}
-	
-	/**
-	 * 
-	 * @return Devuelve el número total de notas en el compás
-	 */
+
 	public int numeroDeNotas() {
 		return notas.size();
+	}
+	
+	public int numeroDePulsos() {
+		return tempo.numeroDePulsos();
 	}
 	
 	public void setDynamics(ElementoGrafico dynamics) {
