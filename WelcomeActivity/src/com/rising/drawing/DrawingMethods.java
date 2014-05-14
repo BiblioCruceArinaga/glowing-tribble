@@ -1,6 +1,7 @@
 package com.rising.drawing;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -367,38 +368,6 @@ public class DrawingMethods {
 		texto.setY(obtenerPosicionYDeElementoGrafico(3, compas.getWordsLocation()));
 		
 		compas.setTexto(texto);
-	}
-	
-	//  Para el compás representado por el índice index, devuelve
-	//  el número de elementos del compás. Por elemento se entiende
-	//  toda aquella agrupación de notas que comparten una misma x.
-	private int calcularXExtraParaCadaElemento(int index, int xFinal) {
-		int divisor0 = 0;
-        int divisor1 = 0;
-        int xAnterior = 0;
-        int pentagramaActual = 0;
-        int numNotas = partitura.getCompas(index).numeroDeNotas();
-        int lastX = 0;
-        
-        for (int k=0; k<numNotas; k++) {
-        	if (pentagramaActual != partitura.getCompas(index).getNota(k).getPentagrama()) {
-    			pentagramaActual = partitura.getCompas(index).getNota(k).getPentagrama();
-    			xAnterior = 0;
-    		}
-        	
-            if (xAnterior != partitura.getCompas(index).getNota(k).getX()) {
-                
-            	//  Se asume un máximo de 2 pentagramas en paralelo
-            	if (pentagramaActual == 0) divisor0++;
-                else divisor1++;
-
-                xAnterior = partitura.getCompas(index).getNota(k).getX();
-                if (xAnterior > lastX) lastX = xAnterior;
-            }
-        }
-
-        if (divisor0 > divisor1) return (xFinal - lastX) / divisor0;
-        else return (xFinal - lastX) / divisor1;
 	}
 
 	//  Cada elemento de un ArrayList debe ser un objeto independiente. Esto
@@ -1523,68 +1492,96 @@ public class DrawingMethods {
 	
 	private void reajustarCompases() {
 		int espacioADistribuir = config.getXFinalPentagramas() - partitura.getCompas(ultimoCompas).getXFin();
-        
-        //  Desplazamos el final del último compás y ahorramos trabajo
-        if (espacioADistribuir <= 38) {
-            partitura.getCompas(ultimoCompas).setXFin(
-            		partitura.getCompas(ultimoCompas).getXFin() + espacioADistribuir);
+
+    	int numCompases = (ultimoCompas - primerCompas) + 1;
+        int anchoParaCadaCompas = espacioADistribuir / numCompases;
+        int posicionX = partitura.getCompas(primerCompas).getXFin() + anchoParaCadaCompas;
+
+        //  Primer paso: reajustar ancho y posición de los compases
+        for (int i=primerCompas; i<=ultimoCompas; i++) {
+        	Compas compas = partitura.getCompas(i);
+        	if (i == primerCompas)
+        		compas.setXFin(posicionX);
+        	else {
+	        	int distanciaXIni = compas.getXIniNotas() - compas.getXIni();
+	        	
+	        	compas.setXIni(posicionX);
+	        	compas.setXIniNotas(posicionX + distanciaXIni);
+	            
+	        	posicionX = compas.getXFin() + anchoParaCadaCompas;
+	            if (i == ultimoCompas) posicionX = config.getXFinalPentagramas();
+	            compas.setXFin(posicionX);
+	            
+	            int numNotas = compas.numeroDeNotas();
+	            for (int j=0; j<numNotas; j++) {
+	            	compas.getNota(j).setX(compas.getNota(j).getX() + anchoParaCadaCompas);
+	            }
+        	}
         }
-        
-        //  Reajustamos los compases
-        else {
-        	int numCompases = (ultimoCompas - primerCompas) + 1;
-            int anchoParaCadaCompas = espacioADistribuir / numCompases;
-            int posicionX = partitura.getCompas(primerCompas).getXFin() + anchoParaCadaCompas;
-            int distanciaXIni = 0;
 
-            //  Primer paso: reajustar ancho y posición de los compases
-            partitura.getCompas(primerCompas).setXFin(posicionX);
-            
-            for (int i=primerCompas+1; i<=ultimoCompas; i++) {
-            	distanciaXIni = partitura.getCompas(i).getXIniNotas() - partitura.getCompas(i).getXIni();
-                partitura.getCompas(i).setXIni(posicionX);
-                partitura.getCompas(i).setXIniNotas(posicionX + distanciaXIni);
-                posicionX = partitura.getCompas(i).getXFin() + anchoParaCadaCompas;
-                if (i == ultimoCompas) posicionX = config.getXFinalPentagramas();
-                partitura.getCompas(i).setXFin(posicionX);
-                
-                if (partitura.getCompas(i).hayPedalInicio()) {
-                	int posicion = calcularPosicionX(
-                		partitura.getCompas(i).getPedalStart().getPosition());
-                	partitura.getCompas(i).getPedalInicio().setX(
-                			partitura.getCompas(i).getXIniNotas() + posicion);
-                }
-                
-                if (partitura.getCompas(i).hayPedalFin()) {
-                	int posicion = calcularPosicionX(
-                		partitura.getCompas(i).getPedalStop().getPosition());
-                	partitura.getCompas(i).getPedalFin().setX(
-                			partitura.getCompas(i).getXIniNotas() + posicion);
-                }
-                
-                if (partitura.getCompas(i).hayTempo()) {
-                	partitura.getCompas(i).getTempo().setX(
-                			partitura.getCompas(i).getXIni() + config.getAnchoTempo());
-                }
-            }
-
-            for (int i=primerCompas; i<=ultimoCompas; i++) {
-            	ArrayList<Nota> notas = partitura.getCompas(i).getNotas();
-            	int numNotas = notas.size();
-            	
-            	int xInicio = partitura.getCompas(i).getXIniNotas();
-            	//int xFinal = partitura.getCompas(i).getXFin() - config.getMargenDerechoCompases();
-            	//int distanciaExtraX = calcularXExtraParaCadaElemento(i, xFinal);
-            	//int multiplicador = 1;
-            	
-            	for (int j=0; j<numNotas; j++) {
-                    posicionX = xInicio + calcularPosicionX(partitura.getCompas(i).getNota(j).getPosicion());
-                    partitura.getCompas(i).getNota(j).setX(posicionX);
-            	}
-            }
+        //  Segundo paso: reajustar posición de las notas
+        for (int i=primerCompas; i<=ultimoCompas; i++) {
+        	Compas compas = partitura.getCompas(i);
+        	ArrayList<Integer> xDelCompas = saberNumeroDeElementosDeCompas(compas);
+        	
+        	int lastX = saberXMasGrande(compas);
+        	int anchoADistribuir = compas.getXFin() - config.getMargenDerechoCompases() - lastX;
+        	
+        	//  El primer elemento no lo vamos a mover, de ahí el -1
+        	int numElementos = xDelCompas.size() - 1;
+        	
+        	int anchoPorNota = 0;
+        	if (numElementos > 0)
+        		anchoPorNota = anchoADistribuir / numElementos;
+        	
+        	//  A cada elemento se le suma una distancia cada vez
+        	//  mayor, ya que de lo contrario sólo estaríamos
+        	//  desplazándolos todos pero manteniéndolos a la misma
+        	//  distancia entre sí mismos que antes
+        	ArrayList<Nota> notas = compas.getNotas();
+        	int numNotas = notas.size();
+        	int multiplicador = 0;
+        	for (int j=0;j<numNotas;j++) {
+        		
+        		//  Las X contenidas en el array xDelCompas están en orden
+        		//  de menor a mayor. Esto permite asociar automáticamente
+        		//  el índice de cada posición X con el multiplicador
+        		//  necesario para reajustar el elemento con ese valor de x
+        		multiplicador = xDelCompas.indexOf(notas.get(j).getX());
+    			notas.get(j).setX(notas.get(j).getX() + anchoPorNota * multiplicador);
+        	}
         }
 	}
-
+	
+	//  Devuelve un array con cada valor de X de cada elemento
+	//  del compás. Por elemento se entiende cualquier nota o
+	//  acorde que ocupe una posición X única en el compás
+	private ArrayList<Integer> saberNumeroDeElementosDeCompas(Compas compas) {
+		ArrayList<Integer> xEncontradas = new ArrayList<Integer>();
+		
+		ArrayList<Nota> notas = compas.getNotas();
+		int numNotas = notas.size();
+		for (int i=0; i<numNotas; i++)
+			if (!xEncontradas.contains(notas.get(i).getX()))
+				xEncontradas.add(notas.get(i).getX());
+		
+		Collections.sort(xEncontradas);
+		return xEncontradas;
+	}
+	
+	//  Devuelve la posición X de la nota más cercana al margen derecho
+	private int saberXMasGrande(Compas compas) {
+		int xMasGrande = 0;
+		
+		ArrayList<Nota> notas = compas.getNotas();
+		int numNotas = notas.size();
+		for (int i=0; i<numNotas; i++) {
+			if (xMasGrande < notas.get(i).getX())
+				xMasGrande = notas.get(i).getX();
+		}
+		
+		return xMasGrande;
+	}
 	
 	/*
 	 * 
