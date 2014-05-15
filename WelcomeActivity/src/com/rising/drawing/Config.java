@@ -38,8 +38,10 @@ public class Config {
 	private int radio_puntillos;
 	private int radio_staccatos;
 	private int tamano_letra_autor;
+	private int tamano_letra_bip_preparacion;
 	private int tamano_letra_obra;
 	private int tamano_letra_palm_mute;
+	private int tamano_letra_pulso;
 	private int tamano_letra_tapping;
 	private int tamano_letra_tempo;
 	private int tamano_letra_tresillo;
@@ -112,8 +114,10 @@ public class Config {
 				radio_puntillos = 4;
 				radio_staccatos = 4;
 				tamano_letra_autor = 30;
+				tamano_letra_bip_preparacion = 150;
 				tamano_letra_obra = 50;
 				tamano_letra_palm_mute = 30;
+				tamano_letra_pulso = 50;
 				tamano_letra_tapping = 30;
 				tamano_letra_tempo = 10;
 				tamano_letra_tresillo = 5;
@@ -184,8 +188,10 @@ public class Config {
 				radio_puntillos = 4;
 				radio_staccatos = 4;
 				tamano_letra_autor = 50;
+				tamano_letra_bip_preparacion = 300;
 				tamano_letra_obra = 80;
 				tamano_letra_palm_mute = 30;
+				tamano_letra_pulso = 50;
 				tamano_letra_tapping = 30;
 				tamano_letra_tresillo = 25;
 				tamano_letra_tempo = 45;
@@ -353,12 +359,20 @@ public class Config {
 		return tamano_letra_autor;
 	}
 	
+	public int getTamanoLetraBipPreparacion() {
+		return tamano_letra_bip_preparacion;
+	}
+	
 	public int getTamanoLetraObra() {
 		return tamano_letra_obra;
 	}
 	
 	public int getTamanoLetraPalmMute() {
 		return tamano_letra_palm_mute;
+	}
+	
+	public int getTamanoLetraPulso() {
+		return tamano_letra_pulso;
 	}
 	
 	public int getTamanoLetraTapping() {

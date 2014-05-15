@@ -11,6 +11,10 @@ import java.util.ArrayList;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.media.AudioManager;
+import android.media.SoundPool;
+import android.media.SoundPool.OnLoadCompleteListener;
+import android.media.ToneGenerator;
 import android.os.Environment;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -22,11 +26,19 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback {
 	private boolean isValidScreen = false;
 	private ObjectInputStream fichero = null;
 	private ScreenThread thread;
+	private Context context = null;
+	private Config config = null;
 	
 	private Partitura partitura = new Partitura();
 	private Compas compas = new Compas();
 	private ArrayList<OrdenDibujo> ordenesDibujo = new ArrayList<OrdenDibujo>();
+	
+	//  Metrónomo y su gestión
 	private Metronomo metronomo = null;
+	private OrdenDibujo bip = null;
+	
+	private int width = 0;
+	private int height = 0;
 	
 	//  Gestión del scroll
 	private float altoPantalla = 0;
@@ -51,6 +63,8 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback {
 		getHolder().addCallback(this);
 		
 		try {
+			this.context = context;
+			
 			File f = new File(Environment.getExternalStorageDirectory() + 
 					"/RisingScores/scores/" + path);
 	        FileInputStream is = new FileInputStream(f);
@@ -58,7 +72,7 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback {
 			
 			cargarDatosDeFichero();
 			
-			Config config = new Config(densityDPI, width);
+			config = new Config(densityDPI, width);
 			margenFinalScroll = config.getDistanciaPentagramas();
 			
 			DrawingMethods metodosDibujo = new DrawingMethods(partitura, config, getResources());
@@ -353,6 +367,9 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback {
 	    		tamanoBarraLateral = (int) ( (altoPantalla / finalScroll) * altoPantalla);
 	    		
 	    		canvasDependentDataRecovered = true;
+	    		
+	    		width = canvas.getWidth();
+	    		height = canvas.getHeight();
 			}
 		
 			canvas.drawARGB(255, 255, 255, 255);
@@ -393,6 +410,9 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback {
 					break;
 			}
 		}
+		
+		if (bip != null)
+			canvas.drawText(bip.getTexto(), bip.getX1(), bip.getY1(), bip.getPaint());
 	}
 	
 	public void dibujarBarraLateral(Canvas canvas) {
@@ -418,8 +438,10 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback {
 	
 	public void Metronome_Pause(){
 		if (metronomo != null) {
-			if (metronomo.paused()) metronomo.onResume();
-			else metronomo.onPause();
+			if (metronomo.paused()) 
+				metronomo.onResume();
+			else 
+				metronomo.onPause();
 		}
 	}
 	
@@ -434,6 +456,7 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback {
 		if (metronomo != null) {
 			metronomo.onDestroy();
 			metronomo = null;
+			bip = null;
 		}
 	}
 	
@@ -442,6 +465,10 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback {
 	    private boolean mPaused;
 	    private Thread th;
 	    private int mbpm;
+	    
+	    //  Bips sonoros del metrónomo
+	    SoundPool bipAgudo = null;
+	    SoundPool bipGrave = null;
 
 	    public Metronomo(int bpm) {
 	        mPauseLock = new Object();
@@ -454,32 +481,63 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback {
 	    		public void run() {	
 	                try {
 	                	final long speed = ((240000/mbpm)/4);
-	    				
+	                	int currentY = partitura.getCompas(0).getYIni();
+	                	
+	                	int distanciaDesplazamiento = currentY + 
+	                			config.getDistanciaLineasPentagrama() * 4 +
+	                			(config.getDistanciaPentagramas() + 
+	                			config.getDistanciaLineasPentagrama() * 4) * 
+	                			(partitura.getStaves() - 1);
+	                	boolean primerDesplazamientoRealizado = false;
+
+	                	bipsDePreparacion(speed, partitura.getCompas(0).numeroDePulsos());
+	                	
 	                	int numCompases = partitura.getCompases().size();
 	                	for (int i=0; i<numCompases; i++) {
+	                		Compas compas = partitura.getCompas(i);
 	                		
-	                		int pulsos = partitura.getCompas(i).numeroDePulsos();
-	                		for (int j=0; j<pulsos; j++) {
-	                			colocarNuevoPulso(j + 1);
+	                		//  Si ha cambiado la Y, hacemos scroll
+	                		if (currentY != compas.getYIni()) {
+	                			currentY = compas.getYIni();
+	                			hacerScroll(distanciaDesplazamiento);
 	                			
+	                			//  La distancia de desplazamiento en la primera iteración
+	                			//  es diferente al resto porque hay que contar con la
+	                			//  distancia extra del título de la obra y el nombre del
+	                			//  autor
+	                			if (!primerDesplazamientoRealizado) {
+	                				distanciaDesplazamiento = config.getDistanciaPentagramas() + 
+	        	                			config.getDistanciaLineasPentagrama() * 4 +
+	        	                			(config.getDistanciaPentagramas() + 
+	        	                			config.getDistanciaLineasPentagrama() * 4) * 
+	        	                			(partitura.getStaves() - 1);
+	                				
+	                				primerDesplazamientoRealizado = true;
+	                			}
+	                		}
+
+	                		int xPos = (compas.getXFin() - compas.getXIni()) / 2;
+	                		xPos += compas.getXIni();
+	                				
+	                		int pulsos = compas.numeroDePulsos();
+	                		for (int j=0; j<pulsos; j++) {
+	                			
+	                			emitirSonido(j, xPos, compas.getYIni());
 	                			Thread.sleep(speed);
 	                			
-	                			quitarPulsoAnterior();
+	                			synchronized (mPauseLock) {
+	    	    	                while (mPaused) {
+	    	    	                    try {
+	    	    	                        mPauseLock.wait();
+	    	    	                    } catch (InterruptedException e) {
+	    	    	                    	Thread.currentThread().interrupt();
+	    	    	                    	mPauseLock.notifyAll();
+	    	    	                    	return;
+	    	    	                    }
+	    	    	                }
+	    	    	            }
 	                		}
 	                	}
-	                	
-	    				synchronized (mPauseLock) {
-	    	                while (mPaused) {
-	    	                    try {
-	    	                        mPauseLock.wait();
-	    	                    } catch (InterruptedException e) {
-	    	                    	quitarPulsoAnterior();
-	    	                    	Thread.currentThread().interrupt();
-	    	                    	mPauseLock.notifyAll();
-	    	                    	return;
-	    	                    }
-	    	                }
-	    	            }
 	                } 
 	                catch (InterruptedException e) {
 	    				e.printStackTrace();
@@ -525,21 +583,90 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback {
 	    public boolean paused() {
 	    	return this.mPaused;
 	    }
-	}
-	
-	//  Quita la orden de dibujo del pulso anterior
-	//  del array de órdenes de dibujo
-	private void quitarPulsoAnterior() {
-		ordenesDibujo.remove(ordenesDibujo.size() - 1);
-	}
-	
-	private void colocarNuevoPulso(int pulso) {
-		OrdenDibujo ordenDibujo = new OrdenDibujo();
-		ordenDibujo.setOrden(DrawOrder.DRAW_TEXT);
-		ordenDibujo.setPaint(PaintOptions.SET_TEXT_SIZE, 50);
-		ordenDibujo.setTexto(pulso + "");
-		ordenDibujo.setX1(500);
-		ordenDibujo.setY1(500);
-		ordenesDibujo.add(ordenDibujo);
+	    
+	    //  El metrónomo no puede empezar de sopetón, ya que
+		//  desconcertaría al músico. Esta función emite unos
+		//  bips iniciales que orientan al músico sobre la 
+		//  velocidad a la que deberá empezar a tocar
+		private void bipsDePreparacion(long speed, int pulsos) throws InterruptedException {
+			for (int j=0; j<pulsos; j++) {
+				//emitirSonido(j, partitura.getCompas().getXIni(), 
+				//		partitura.getCompas(i).getYIni());
+				int numero = pulsos - j;
+				
+				if (bip == null) {
+					bip = new OrdenDibujo();
+					bip.setOrden(DrawOrder.DRAW_TEXT);
+					bip.setPaint(PaintOptions.SET_TEXT_SIZE, config.getTamanoLetraBipPreparacion());
+					bip.setPaint(PaintOptions.SET_ARGB_RED, -1);
+					bip.setPaint(PaintOptions.SET_TEXT_ALIGN, -1);
+					bip.setTexto(numero + "");
+					bip.setX1(width / 2);
+					bip.setY1(height / 2);
+				}
+				else
+					bip.setTexto(numero + "");
+				
+				Thread.sleep(speed);
+				
+				if (numero == 1) 
+					bip = null;
+			}
+		}
+		
+		private void emitirSonido(int pulso, int x, int y) {		
+			bip = new OrdenDibujo();
+			bip.setOrden(DrawOrder.DRAW_TEXT);
+			bip.setPaint(PaintOptions.SET_TEXT_SIZE, config.getTamanoLetraPulso());
+			bip.setPaint(PaintOptions.SET_ARGB_RED, -1);
+			bip.setTexto((pulso + 1) + "");
+			bip.setX1(x);
+			bip.setY1(y);
+			/*
+			MediaPlayer mp = MediaPlayer.create(context, R.raw.bip);
+			mp.start();
+			*/
+			
+			if (pulso == 0) {
+				bipAgudo = new SoundPool(5, AudioManager.STREAM_MUSIC , 0);
+				final int bip = bipAgudo.load(context, R.raw.bip, 0);
+				bipAgudo.setOnLoadCompleteListener(new OnLoadCompleteListener(){
+
+					@Override
+					public void onLoadComplete(SoundPool arg0, int arg1,
+							int arg2) {
+						// TODO Auto-generated method stub
+						bipAgudo.play(bip, 1, 1, 1, 0, 1);
+						
+						if (bipGrave != null) {
+							bipGrave.release();
+							bipGrave = null;
+						}
+					}
+				});
+			}
+			else {
+				bipGrave = new SoundPool(5, AudioManager.STREAM_MUSIC , 0);
+				final int bip = bipGrave.load(context, R.raw.bip, 0);
+				bipGrave.setOnLoadCompleteListener(new OnLoadCompleteListener(){
+
+					@Override
+					public void onLoadComplete(SoundPool arg0, int arg1,
+							int arg2) {
+						// TODO Auto-generated method stub
+						bipGrave.play(bip, 1, 1, 1, 0, 1);
+						
+						if (bipAgudo != null) {
+							bipAgudo.release();
+							bipAgudo = null;
+						}
+					}
+				});
+			}
+		}
+		
+		private void hacerScroll(int distanciaDesplazamiento) {
+			yOffset -= distanciaDesplazamiento;
+		}
 	}
 }

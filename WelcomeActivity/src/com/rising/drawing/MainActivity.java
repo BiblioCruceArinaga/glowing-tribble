@@ -140,80 +140,51 @@ public class MainActivity extends Activity{
 			@Override
 			public void onClick(View v) {
 				tempo = metronome_speed.getValue();
-				//tempo = Integer.valueOf(et_metronome.getText().toString());
-				MainActivity.this.startActionMode(new ActionBarCallBack());
-				DialogCountdown(); 
-				MDialog.dismiss();
-			}
-			
-		});
-		MDialog.show();
-	}
-	
-	//  Método que controla el dialog de la cuenta atrás
-	private void DialogCountdown(){
-		CDialog = new Dialog(MainActivity.this, android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
-		CDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		CDialog.setContentView(R.layout.countdown_dialog);
-		
-		//  Cambia el tamaño de la ventana de diálogo
-		CDialog.getWindow().setLayout(200, 200);
-		CDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 				
-		countdown = (TextView)CDialog.findViewById(R.id.count);
-		new CountDownTimer(4000, 1000){
-			
-			public void onTick(long millisUntilFinished) {
-			     countdown.setText("" + millisUntilFinished / 1000);
-			 }
-
-			public void onFinish() {
+				MainActivity.this.startActionMode(new ActionBarCallBack());
+				
 				play = true;
 				stop = false;
-				
 				s.Metronome_Play(tempo);
-			    CDialog.dismiss();
-			 }
-		}.start();
+				MDialog.dismiss();
+			}
+		});
 		
-		CDialog.show();
+		MDialog.show();
 	}
-		
+
 	//  Cambia el icono entre el pause y el play dependiendo del estado del metrónomo
 	private void PlayButton_Status(MenuItem item){
-		if(play){
+		if (play) {
 			play = false;
 			stop = false;
-		}else{
-			play = true;
-			
 		}
+		else
+			play = true;
 		
-		if(play == false){
+		if (!play){
     		item.setIcon(R.drawable.play_button);
     		s.Metronome_Pause();    		
     	}else{
     		item.setIcon(R.drawable.pause_button);
-    		if(stop){
+    		
+    		if (stop)
     			s.Metronome_Play(tempo);
-    		}else{
+    		else
     			s.Metronome_Pause();
-    		}
     	}
 	}
-	
-	//  Si pulso el Stop todos los enables se ponen a True y el pause se cambia por el icono play
+
 	private void StopButton_Status(ActionMode m){
 		stop = true;
 		play = false;
 		
 		Menu menu = m.getMenu();
 		s.Metronome_Stop();
-        if(stop){
+        if (stop)
         	menu.getItem(2).setIcon(R.drawable.play_button);
-    	}else{
+    	else
     		menu.getItem(2).setIcon(R.drawable.pause_button);
-    	}
 	}
 	
 	//  Habilita o deshabilita elementos según esté o no activado el metrónomo
@@ -223,11 +194,11 @@ public class MainActivity extends Activity{
 		if(stop && !play){
 			menu.getItem(0).setEnabled(true);
 			menu.getItem(1).setEnabled(true);
-			menu.getItem(5).setEnabled(true);
+			menu.getItem(4).setEnabled(true);
 		}else{
 			menu.getItem(0).setEnabled(false);
 			menu.getItem(1).setEnabled(false);
-			menu.getItem(5).setEnabled(false);
+			menu.getItem(4).setEnabled(false);
 		}
 	}
 	
@@ -240,7 +211,7 @@ public class MainActivity extends Activity{
         		case R.id.close_metronome:
         			s.Metronome_Stop();
         			mode.finish();
-        			tempo = 0;
+        			tempo = 120;
         			break;
         		
         		case R.id.metronome_menu_back:    
@@ -275,9 +246,6 @@ public class MainActivity extends Activity{
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
             mode.setTitle(R.string.metronome);
-                        
-        	//menu.add(0, 0, Menu.NONE, "custom").setActionView(R.layout.header).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-                        
             mode.getMenuInflater().inflate(R.menu.metronome_menu, menu);
                         
         	MenuItem item = menu.findItem(R.id.metronome_tempo);
@@ -287,8 +255,7 @@ public class MainActivity extends Activity{
         }
   
         @Override
-        public void onDestroyActionMode(ActionMode mode) {
-        }
+        public void onDestroyActionMode(ActionMode mode) {}
   
         @Override
         public boolean onPrepareActionMode(ActionMode mode, Menu menu) {

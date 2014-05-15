@@ -251,7 +251,7 @@ containing a value of this type.
         public static final int com_facebook_list_section_header_background=0x7f020027;
         public static final int com_facebook_loginbutton_silver=0x7f020028;
         public static final int com_facebook_logo=0x7f020029;
-        public static final int com_facebook_picker_default_separator_color=0x7f020084;
+        public static final int com_facebook_picker_default_separator_color=0x7f020083;
         public static final int com_facebook_picker_item_background=0x7f02002a;
         public static final int com_facebook_picker_list_focused=0x7f02002b;
         public static final int com_facebook_picker_list_longpressed=0x7f02002c;
@@ -337,11 +337,10 @@ containing a value of this type.
         public static final int tab_unselected_pressed_tabs=0x7f02007c;
         public static final int tab_unselected_tabs=0x7f02007d;
         public static final int trebleclef=0x7f02007e;
-        public static final int tremolo=0x7f02007f;
-        public static final int tremolobar=0x7f020080;
-        public static final int vibrato=0x7f020081;
-        public static final int whitehead=0x7f020082;
-        public static final int wholenote=0x7f020083;
+        public static final int tremolobar=0x7f02007f;
+        public static final int vibrato=0x7f020080;
+        public static final int whitehead=0x7f020081;
+        public static final int wholenote=0x7f020082;
     }
     public static final class id {
         public static final int about=0x7f06008c;
@@ -564,7 +563,8 @@ containing a value of this type.
         public static final int modal_details=0x7f0b0006;
     }
     public static final class raw {
-        public static final int partitura=0x7f050000;
+        public static final int bap=0x7f050000;
+        public static final int bip=0x7f050001;
     }
     public static final class string {
         public static final int about=0x7f09007d;

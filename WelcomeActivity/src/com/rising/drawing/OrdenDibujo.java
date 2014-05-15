@@ -91,6 +91,9 @@ public class OrdenDibujo {
 			case SET_TEXT_ALIGN:
 				paint.setTextAlign(Align.CENTER);
 				break;
+			case SET_ARGB_RED:
+				paint.setARGB(255, 255, 0, 0);
+				break;
 			default: 
 				break;
 		}
