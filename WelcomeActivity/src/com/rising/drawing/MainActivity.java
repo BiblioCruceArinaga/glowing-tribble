@@ -3,14 +3,10 @@ package com.rising.drawing;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.graphics.Canvas;
 import android.graphics.Point;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.os.CountDownTimer;
-import android.os.PowerManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.ActionMode;
@@ -20,12 +16,10 @@ import android.view.MenuItem;
 import android.view.SurfaceHolder;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.NumberPicker;
-import android.widget.TextView;
 
 public class MainActivity extends Activity{
 
@@ -34,19 +28,13 @@ public class MainActivity extends Activity{
 	Canvas canvas;
 	Screen s;
 	private Dialog MDialog;
-	private Dialog CDialog;
 	private ImageButton playButton;
 	private NumberPicker metronome_speed;
 	private EditText et_metronome;
-	private TextView countdown;
 	private int tempo = 120;
 	String score;
 	private boolean play;
 	private boolean stop = false;
-	
-	//  Esto hace que no se apague la patalla hasta que se sale de la Activity
-	PowerManager pm;
-    PowerManager.WakeLock wl;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState){
@@ -54,10 +42,6 @@ public class MainActivity extends Activity{
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);	
 		Bundle b = this.getIntent().getExtras();
 		score = b.getString("score");
-		pm = (PowerManager)getSystemService(Context.POWER_SERVICE);
-		wl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, getClass().getName());
-		
-        wl.acquire();
 
 		ActionBar aBar = getActionBar();	
 		aBar.setTitle(R.string.pa);	
@@ -66,7 +50,8 @@ public class MainActivity extends Activity{
 		
 		DisplayMetrics dm = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(dm);
-		
+		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
 		s = new Screen(this, score, dm.widthPixels, dm.densityDpi);
 		if (s.isValidScreen()) myScreenThread = new ScreenThread(holder, s);
 		
@@ -92,7 +77,6 @@ public class MainActivity extends Activity{
 	    		return true;
 	    	
 	    	case android.R.id.home:
-	    		wl.release();
 	    		finish();
 	    		return true;
 	    		

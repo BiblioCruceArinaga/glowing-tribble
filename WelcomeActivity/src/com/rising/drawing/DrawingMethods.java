@@ -63,7 +63,6 @@ public class DrawingMethods {
 	private Bitmap sharp = null;
 	private Bitmap flat = null;
 	private Bitmap natural = null;
-	private Bitmap ligato = null;
 	private Bitmap vibrato = null;
 	private Bitmap tremolobar = null;
 	private Bitmap hammeron = null;
@@ -103,7 +102,6 @@ public class DrawingMethods {
 			sharp = BitmapFactory.decodeResource(resources, R.drawable.sharp);
 			flat = BitmapFactory.decodeResource(resources, R.drawable.flat);
 			natural = BitmapFactory.decodeResource(resources, R.drawable.natural);
-			ligato = BitmapFactory.decodeResource(resources, R.drawable.ligato);
 			vibrato = BitmapFactory.decodeResource(resources, R.drawable.vibrato);
 			tremolobar = BitmapFactory.decodeResource(resources, R.drawable.tremolobar);
 			hammeron = BitmapFactory.decodeResource(resources, R.drawable.hammeron);
@@ -1517,6 +1515,7 @@ public class DrawingMethods {
         //  Primer paso: reajustar ancho y posición de los compases
         for (int i=primerCompas; i<=ultimoCompas; i++) {
         	Compas compas = partitura.getCompas(i);
+        	
         	if (i == primerCompas)
         		compas.setXFin(posicionX);
         	else {
@@ -1533,6 +1532,9 @@ public class DrawingMethods {
 	            for (int j=0; j<numNotas; j++) {
 	            	compas.getNota(j).setX(compas.getNota(j).getX() + anchoParaCadaCompas);
 	            }
+	            
+	            if (compas.hayTempo())
+	            	compas.getTempo().setX(compas.getXIniNotas() - config.getAnchoTempo());
         	}
         }
 

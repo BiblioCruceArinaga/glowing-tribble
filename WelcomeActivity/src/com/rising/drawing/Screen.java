@@ -13,8 +13,6 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.media.AudioManager;
 import android.media.SoundPool;
-import android.media.SoundPool.OnLoadCompleteListener;
-import android.media.ToneGenerator;
 import android.os.Environment;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -28,7 +26,7 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback {
 	private ScreenThread thread;
 	private Context context = null;
 	private Config config = null;
-	
+
 	private Partitura partitura = new Partitura();
 	private Compas compas = new Compas();
 	private ArrayList<OrdenDibujo> ordenesDibujo = new ArrayList<OrdenDibujo>();
@@ -469,11 +467,19 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback {
 	    //  Bips sonoros del metrónomo
 	    SoundPool bipAgudo = null;
 	    SoundPool bipGrave = null;
+	    int bipAgudoInt = 0;
+	    int bipGraveInt = 0;
 
 	    public Metronomo(int bpm) {
 	        mPauseLock = new Object();
 	        mPaused = false;
 	        mbpm = bpm;
+	        
+	        bipAgudo = new SoundPool(5, AudioManager.STREAM_MUSIC, 0);
+			bipAgudoInt = bipAgudo.load(context, R.raw.bip, 0);
+
+			bipGrave = new SoundPool(5, AudioManager.STREAM_MUSIC, 0);
+			bipGraveInt = bipGrave.load(context, R.raw.bap, 0);
 	    }
 
 	    public void run() {
@@ -627,42 +633,10 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback {
 			mp.start();
 			*/
 			
-			if (pulso == 0) {
-				bipAgudo = new SoundPool(5, AudioManager.STREAM_MUSIC , 0);
-				final int bip = bipAgudo.load(context, R.raw.bip, 0);
-				bipAgudo.setOnLoadCompleteListener(new OnLoadCompleteListener(){
-
-					@Override
-					public void onLoadComplete(SoundPool arg0, int arg1,
-							int arg2) {
-						// TODO Auto-generated method stub
-						bipAgudo.play(bip, 1, 1, 1, 0, 1);
-						
-						if (bipGrave != null) {
-							bipGrave.release();
-							bipGrave = null;
-						}
-					}
-				});
-			}
-			else {
-				bipGrave = new SoundPool(5, AudioManager.STREAM_MUSIC , 0);
-				final int bip = bipGrave.load(context, R.raw.bip, 0);
-				bipGrave.setOnLoadCompleteListener(new OnLoadCompleteListener(){
-
-					@Override
-					public void onLoadComplete(SoundPool arg0, int arg1,
-							int arg2) {
-						// TODO Auto-generated method stub
-						bipGrave.play(bip, 1, 1, 1, 0, 1);
-						
-						if (bipAgudo != null) {
-							bipAgudo.release();
-							bipAgudo = null;
-						}
-					}
-				});
-			}
+			if (pulso == 0)
+				bipAgudo.play(bipAgudoInt, 1, 1, 1, 0, 1);
+			else 
+				bipGrave.play(bipGraveInt, 1, 1, 1, 0, 1);
 		}
 		
 		private void hacerScroll(int distanciaDesplazamiento) {
