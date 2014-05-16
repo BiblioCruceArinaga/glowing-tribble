@@ -28,14 +28,6 @@
         android:showAsAction="always">
     </item>
  	
- 	<!-- Espaciar de esta manera es una locura. Hay que cambiarlo -->
- 	<item 
-        android:id="@+id/space_metronome" 
-        android:title="@null" 
-        android:showAsAction="always">
-    </item>
- 	<!--  -->
- 	
  	<item 
         android:id="@+id/close_metronome" 
         android:title="@string/close_metronome" 

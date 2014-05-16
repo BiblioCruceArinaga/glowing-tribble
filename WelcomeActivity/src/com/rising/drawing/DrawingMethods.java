@@ -64,8 +64,6 @@ public class DrawingMethods {
 	private Bitmap flat = null;
 	private Bitmap natural = null;
 	private Bitmap vibrato = null;
-	private Bitmap tremolobar = null;
-	private Bitmap hammeron = null;
 	private Bitmap bendrelease = null;
 	private Bitmap octavariumImage = null;
 	private Bitmap pedalStart = null;
@@ -103,8 +101,6 @@ public class DrawingMethods {
 			flat = BitmapFactory.decodeResource(resources, R.drawable.flat);
 			natural = BitmapFactory.decodeResource(resources, R.drawable.natural);
 			vibrato = BitmapFactory.decodeResource(resources, R.drawable.vibrato);
-			tremolobar = BitmapFactory.decodeResource(resources, R.drawable.tremolobar);
-			hammeron = BitmapFactory.decodeResource(resources, R.drawable.hammeron);
 			bendrelease = BitmapFactory.decodeResource(resources, R.drawable.bendrelease);
 			octavariumImage = BitmapFactory.decodeResource(resources, R.drawable.octavarium);
 			pedalStart = BitmapFactory.decodeResource(resources, R.drawable.pedalstart);

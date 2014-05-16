@@ -87,7 +87,8 @@
     	<string name="metronome_back">Volver al inicio</string>
     	<string name="close_metronome">Cerrar metrónomo</string>
     	<string name="tempo">Tempo</string>
-    <string name="pa">Partitura</string>
+    <string name="score">Partitura</string>
+    <string name="speed_allowed">Velocidad mínima: 1 bpm. Velocidad máxima: 300 bpm.</string>
     	
     <string name="contentDescription">Imagen</string>
 

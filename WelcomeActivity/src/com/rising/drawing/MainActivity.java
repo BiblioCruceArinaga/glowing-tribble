@@ -11,15 +11,19 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.ActionMode;
 import android.view.Display;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.SurfaceHolder;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnKeyListener;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.NumberPicker;
+import android.widget.NumberPicker.OnScrollListener;
+import android.widget.Toast;
 
 public class MainActivity extends Activity{
 
@@ -30,7 +34,7 @@ public class MainActivity extends Activity{
 	private Dialog MDialog;
 	private ImageButton playButton;
 	private NumberPicker metronome_speed;
-	private EditText et_metronome;
+	private EditText editText_metronome;
 	private int tempo = 120;
 	String score;
 	private boolean play;
@@ -44,7 +48,7 @@ public class MainActivity extends Activity{
 		score = b.getString("score");
 
 		ActionBar aBar = getActionBar();	
-		aBar.setTitle(R.string.pa);	
+		aBar.setTitle(R.string.score);	
 		aBar.setIcon(R.drawable.ic_menu);
 		aBar.setDisplayHomeAsUpEnabled(true);
 		
@@ -77,12 +81,18 @@ public class MainActivity extends Activity{
 	    		return true;
 	    	
 	    	case android.R.id.home:
+	    		s.Metronome_Stop();
 	    		finish();
 	    		return true;
 	    		
 	    	default:
 	    		return true;
 	    }
+	}
+
+	@Override
+	public void onActionModeFinished (ActionMode mode) {
+		s.Metronome_Stop();
 	}
 	
 	//  Método que controla el dialog de las opciones del metrónomo
@@ -96,41 +106,58 @@ public class MainActivity extends Activity{
 		Log.i("Windowrrr", screenWith + ", " + screenHeight);
 		
 		MDialog = new Dialog(MainActivity.this,  R.style.cust_dialog);	
-		
 		MDialog.setContentView(R.layout.metronome_dialog);
 		MDialog.setTitle(R.string.metronome);
 				
 		//  Cambios según la resolución de la pantalla
-		if (screenWith <= 1200 && screenHeight <= 1850){
+		if (screenWith <= 1200 && screenHeight <= 1850)
 			MDialog.getWindow().setLayout(600, 720);
-		}else{
-			MDialog.getWindow().setLayout(350, 470);
-		}		
-												
-		playButton = (ImageButton)MDialog.findViewById(R.id.playButton1);
+		else
+			MDialog.getWindow().setLayout(350, 470);	
+
+		editText_metronome = (EditText)MDialog.findViewById(R.id.eT_metronome);
+
 		metronome_speed = (NumberPicker)MDialog.findViewById(R.id.nm_metronome);
-		et_metronome = (EditText)MDialog.findViewById(R.id.eT_metronome);
-		
-		//et_metronome.setText(String.valueOf(value));
-				
 		metronome_speed.setMaxValue(300);
 		metronome_speed.setMinValue(1);
 		metronome_speed.setValue(value);
 		metronome_speed.setWrapSelectorWheel(true);
 		metronome_speed.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
-						
+		metronome_speed.setOnScrollListener(new OnScrollListener() {
+
+			@Override
+			public void onScrollStateChange(NumberPicker arg0, int arg1) {
+				// TODO Auto-generated method stub
+				editText_metronome.setText(arg0.getValue() + "");
+			}
+		});
+					
+		playButton = (ImageButton)MDialog.findViewById(R.id.playButton1);
 		playButton.setOnClickListener(new OnClickListener(){
  
 			@Override
 			public void onClick(View v) {
-				tempo = metronome_speed.getValue();
+				if (!editText_metronome.getText().toString().equals("")) {
+					tempo = Integer.parseInt(editText_metronome.getText().toString());
+				}
+				else {
+					tempo = metronome_speed.getValue();
+				}
 				
-				MainActivity.this.startActionMode(new ActionBarCallBack());
-				
-				play = true;
-				stop = false;
-				s.Metronome_Play(tempo);
-				MDialog.dismiss();
+				if ( (tempo > 0) && (tempo < 301) ) {
+					MainActivity.this.startActionMode(new ActionBarCallBack());
+					
+					play = true;
+					stop = false;
+					s.Metronome_Back();
+					s.Metronome_Play(tempo);
+					MDialog.dismiss();
+				}
+				else {
+					Toast toast1 = Toast.makeText(getApplicationContext(),
+				                    R.string.speed_allowed, Toast.LENGTH_SHORT);
+				    toast1.show();
+				}
 			}
 		});
 		
@@ -229,7 +256,7 @@ public class MainActivity extends Activity{
   
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-            mode.setTitle(R.string.metronome);
+            //mode.setTitle(R.string.metronome);
             mode.getMenuInflater().inflate(R.menu.metronome_menu, menu);
                         
         	MenuItem item = menu.findItem(R.id.metronome_tempo);
