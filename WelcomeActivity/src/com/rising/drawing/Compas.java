@@ -9,7 +9,6 @@ public class Compas {
 	private ArrayList<ElementoGrafico> barlines;
 	private ArrayList<ElementoGrafico> clefs;
 	private ElementoGrafico dynamics;
-	private ElementoGrafico metronome;
 	private ElementoGrafico pedalStart;
 	private ElementoGrafico pedalStop;
 	private ElementoGrafico time;
@@ -29,7 +28,11 @@ public class Compas {
     private boolean endingBegin;
     private boolean endingEnd;
     private boolean endingDis;
-
+    
+    //  Bpm y su posición en el array de órdenes de dibujo
+    private int bpm;
+    private int bpmIndex;
+    
 	private int x_ini;
 	private int x_fin;
 	private int y_ini;
@@ -42,7 +45,6 @@ public class Compas {
 		barlines = new ArrayList<ElementoGrafico>();
 		clefs = new ArrayList<ElementoGrafico>();
 		dynamics = null;
-		metronome = null;
 		pedalStart = null;
 		pedalStop = null;
 		time = null;
@@ -61,6 +63,9 @@ public class Compas {
 		endingBegin = false;
 		endingEnd = false;
 		endingDis = false;
+		
+		bpm = -1;
+		bpmIndex = -1;
 
 		x_ini = -1;
 		x_fin = -1;
@@ -93,6 +98,14 @@ public class Compas {
 		return barlines;
 	}
 	
+	public int getBpm() {
+		return bpm;
+	}
+	
+	public int getBpmIndex() {
+		return bpmIndex;
+	}
+	
 	public ArrayList<Clave> getClaves() {
 		return claves;
 	}
@@ -119,10 +132,6 @@ public class Compas {
 	
 	public Intensidad getIntensidad() {
 		return intensidad;
-	}
-	
-	public ElementoGrafico getMetronome() {
-		return metronome;
 	}
 
 	public Nota getNota(int index) {
@@ -287,6 +296,14 @@ public class Compas {
 		return tempo.numeroDePulsos();
 	}
 	
+	public void setBpm(int bpm) {
+		this.bpm = bpm;
+	}
+	
+	public void setBpmIndex(int bpmIndex) {
+		this.bpmIndex = bpmIndex;
+	}
+	
 	public void setDynamics(ElementoGrafico dynamics) {
 		this.dynamics = dynamics;
 	}
@@ -305,10 +322,6 @@ public class Compas {
 	
 	public void setIntensidad(Intensidad intensidad) {
 		this.intensidad = intensidad;
-	}
-	
-	public void setMetronome(ElementoGrafico metronome) {
-		this.metronome = metronome;
 	}
 	
 	public void setPedalFin(Pedal pedalFin) {

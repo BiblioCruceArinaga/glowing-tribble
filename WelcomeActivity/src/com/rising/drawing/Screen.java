@@ -8,9 +8,11 @@ import java.io.ObjectInputStream;
 import java.io.StreamCorruptedException;
 import java.util.ArrayList;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Environment;
@@ -18,6 +20,12 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.NumberPicker;
+import android.widget.Toast;
+import android.widget.NumberPicker.OnScrollListener;
 
 class Screen extends SurfaceView implements SurfaceHolder.Callback {
 
@@ -34,6 +42,7 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback {
 	//  Metrónomo y su gestión
 	private Metronomo metronomo = null;
 	private OrdenDibujo bip = null;
+	private Dialog MDialog = null;
 	
 	private int width = 0;
 	private int height = 0;
@@ -52,6 +61,7 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback {
     private int tamanoBarraLateral = 0;
     private static float yOffset = 0;
     private float yPrevious = 0;
+    private float yDown = 0;
 	
 	//  ========================================
 	//  Constructor y métodos heredados
@@ -69,6 +79,7 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback {
 			fichero = new ObjectInputStream(is);
 			
 			cargarDatosDeFichero();
+			fichero.close();
 			
 			config = new Config(densityDPI, width);
 			margenFinalScroll = config.getDistanciaPentagramas();
@@ -138,6 +149,7 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback {
 		switch (e.getAction()){
 			case MotionEvent.ACTION_DOWN:
 				yPrevious = e.getY();
+				yDown = yPrevious;
 	            mostrarBarraLateral = true;
 	            break;
 	            
@@ -169,6 +181,13 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback {
 	            
 	        case MotionEvent.ACTION_UP:
 	        	mostrarBarraLateral = false;
+	        	
+	        	if (yDown == e.getY()) {
+	        		if (MDialog == null) {
+	        			int compas = compasAPartirDeTap(e.getX(), - yOffset + yDown);
+	        			establecerVelocidadAlCompas(compas);
+	        		}
+	        	}
 	        	break;
 	        	
 	        default:
@@ -176,6 +195,21 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback {
 	    }
 
 	    return true;
+	}
+	
+	@Override
+	public boolean dispatchTouchEvent(MotionEvent ev) {
+		if (MDialog != null) {
+		    Rect dialogBounds = new Rect();
+		    MDialog.getWindow().getDecorView().getHitRect(dialogBounds);
+	
+		    if (!dialogBounds.contains((int) ev.getX(), (int) ev.getY())) {
+		        MDialog.dismiss();
+		        MDialog = null;
+		    }
+		}
+		
+	    return super.dispatchTouchEvent(ev);
 	}
 	//  ========================================
 	
@@ -208,6 +242,10 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback {
 		}	
 	}
 
+	public Config getConfig() {
+		return config;
+	}
+	
 	public boolean isValidScreen() {
 		return isValidScreen;
 	}
@@ -265,15 +303,7 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback {
 				elemento.setPosition(leerHastaAlmohadilla());
 				compas.setDynamics(elemento);
 				break;
-				
-			case 24:
-				elemento.addValue(figuraGrafica);
-				elemento.addValue(fichero.readByte());
-				elemento.addAllValues(leerHastaAlmohadilla());
-				elemento.setPosition(leerHastaAlmohadilla());
-				compas.setMetronome(elemento);
-				break;
-				
+
 			case 25:
 				elemento.addValue(figuraGrafica);
 				elemento.setPosition(leerHastaAlmohadilla());
@@ -383,6 +413,7 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback {
 		int numOrdenes = ordenesDibujo.size();
 		for (int i=0; i<numOrdenes; i++) {
 			OrdenDibujo ordenDibujo = ordenesDibujo.get(i);
+			if (ordenDibujo == null) continue;
 			
 			switch (ordenDibujo.getOrden()) {
 				case DRAW_BITMAP:
@@ -409,6 +440,7 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback {
 			}
 		}
 		
+		//  Dibuja el número rojo que marca los pulsos encima del compás
 		if (bip != null)
 			canvas.drawText(bip.getTexto(), bip.getX1(), bip.getY1(), bip.getPaint());
 	}
@@ -422,7 +454,7 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback {
     	canvas.drawLine(x_end, offsetBarraLateral - yOffset, 
     			x_end, offsetBarraLateral + tamanoBarraLateral - yOffset, paint);
     }
-	
+
 	/*
 	 * 
 	 * Gestión del metrónomo
@@ -486,7 +518,7 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback {
 	    	th = new Thread(new Runnable(){
 	    		public void run() {	
 	                try {
-	                	final long speed = ((240000/mbpm)/4);
+	                	long speed = ((240000/mbpm)/4);
 	                	int currentY = partitura.getCompas(0).getYIni();
 	                	
 	                	int distanciaDesplazamiento = currentY + 
@@ -502,6 +534,12 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback {
 	                	for (int i=0; i<numCompases; i++) {
 	                		Compas compas = partitura.getCompas(i);
 	                		
+	                		//  Si hay un bpm distinto para este compás...
+	                		if (compas.getBpm() != -1) {
+	                			mbpm = compas.getBpm();
+	                			speed = ((240000/mbpm)/4);
+	                		}
+	                			
 	                		//  Si ha cambiado la Y, hacemos scroll
 	                		if (currentY != compas.getYIni()) {
 	                			currentY = compas.getYIni();
@@ -619,7 +657,7 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback {
 					bip = null;
 			}
 		}
-		
+
 		private void emitirSonido(int pulso, int x, int y) {		
 			bip = new OrdenDibujo();
 			bip.setOrden(DrawOrder.DRAW_TEXT);
@@ -628,10 +666,6 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback {
 			bip.setTexto((pulso + 1) + "");
 			bip.setX1(x);
 			bip.setY1(y);
-			/*
-			MediaPlayer mp = MediaPlayer.create(context, R.raw.bip);
-			mp.start();
-			*/
 			
 			if (pulso == 0)
 				bipAgudo.play(bipAgudoInt, 1, 1, 1, 0, 1);
@@ -640,7 +674,122 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback {
 		}
 		
 		private void hacerScroll(int distanciaDesplazamiento) {
+			limiteVisibleArriba -= distanciaDesplazamiento;
+			limiteVisibleAbajo -= distanciaDesplazamiento;
 			yOffset -= distanciaDesplazamiento;
 		}
+	}
+	
+	/*
+	 * 
+	 * Gestión del establecimiento de una 
+	 * velocidad de metrónomo para cada compás
+	 * 
+	 */
+	
+	//  Devuelve el índice del compás que se encuentra
+	//  en la posición X e Y del tap del usuario
+	private int compasAPartirDeTap(float x, float y) {
+		ArrayList<Compas> compases = partitura.getCompases();
+		int numCompases = compases.size();
+		for (int i=0; i<numCompases; i++) {
+			if ( (compases.get(i).getYIni() <= y) && (y <= compases.get(i).getYFin()) ) {
+				if ( (compases.get(i).getXIni() <= x) && (x < compases.get(i).getXFin()) ) {
+					return i;
+				}
+			}
+		}
+		
+		return -1;
+	}
+	
+	private int dibujarBpm(Compas compas) {
+		OrdenDibujo ordenDibujo = new OrdenDibujo();
+		ordenDibujo.setOrden(DrawOrder.DRAW_TEXT);
+		ordenDibujo.setPaint(PaintOptions.SET_TEXT_SIZE, config.getTamanoLetraBpm());
+		ordenDibujo.setTexto("Bpm = " + compas.getBpm());
+		ordenDibujo.setX1(compas.getXIni());
+		ordenDibujo.setY1(compas.getYIni() - config.getYBpm());
+		ordenesDibujo.add(ordenDibujo);
+		
+		return ordenesDibujo.size() - 1;
+	}
+	
+	//  Prepara el diálogo que permitirá al usuario
+	//  escoger una velocidad de metrónomo para este compás
+	private void establecerVelocidadAlCompas(final int index) {
+		MDialog = new Dialog(context,  R.style.cust_dialog);	
+		MDialog.setContentView(R.layout.metronome_dialog_compas);
+		MDialog.setTitle("Elegir velocidad");
+		MDialog.getWindow().setLayout(config.getAnchoDialogBpm(), config.getAltoDialogBpm());	
+
+		final EditText editText_metronome = (EditText)MDialog.findViewById(R.id.eT_metronome);
+
+		final NumberPicker metronome_speed = (NumberPicker)MDialog.findViewById(R.id.nm_metronome);
+		metronome_speed.setMaxValue(300);
+		metronome_speed.setMinValue(1);
+		metronome_speed.setValue(120);
+		metronome_speed.setWrapSelectorWheel(true);
+		metronome_speed.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
+		metronome_speed.setOnScrollListener(new OnScrollListener() {
+
+			@Override
+			public void onScrollStateChange(NumberPicker arg0, int arg1) {
+				// TODO Auto-generated method stub
+				editText_metronome.setText(arg0.getValue() + "");
+			}
+		});
+					
+		ImageButton playButton = (ImageButton)MDialog.findViewById(R.id.playButton1);
+		playButton.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				int bpm = -1;
+				
+				if (!editText_metronome.getText().toString().equals(""))
+					bpm = Integer.parseInt(editText_metronome.getText().toString());
+				else 
+					bpm = metronome_speed.getValue();
+				
+				if ( (bpm < 1) || (bpm > 300) ) {
+					Toast toast1 = Toast.makeText(context,
+				                    R.string.speed_allowed, Toast.LENGTH_SHORT);
+				    toast1.show();
+				}
+				else {
+					Compas compas = partitura.getCompas(index);
+					
+					compas.setBpm(bpm);
+					if (compas.getBpmIndex() > -1)
+						ordenesDibujo.set(compas.getBpmIndex(), null);
+					int bpmIndex = dibujarBpm(compas);
+					compas.setBpmIndex(bpmIndex);
+					
+					MDialog.dismiss();
+					MDialog = null;
+				}
+			}
+		});
+		
+		ImageButton deleteButton = (ImageButton)MDialog.findViewById(R.id.playButton2);
+		deleteButton.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				Compas compas = partitura.getCompas(index);
+
+				if (compas.getBpmIndex() > -1) {
+					ordenesDibujo.set(compas.getBpmIndex(), null);
+					compas.setBpm(-1);
+					compas.setBpmIndex(-1);
+				}
+
+				MDialog.dismiss();
+				MDialog = null;
+			}
+		});
+		
+		MDialog.show();
 	}
 }

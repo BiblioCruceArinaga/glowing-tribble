@@ -11,13 +11,11 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.ActionMode;
 import android.view.Display;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.SurfaceHolder;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnKeyListener;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -39,6 +37,7 @@ public class MainActivity extends Activity{
 	String score;
 	private boolean play;
 	private boolean stop = false;
+	private Config config = null;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState){
@@ -57,7 +56,10 @@ public class MainActivity extends Activity{
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
 		s = new Screen(this, score, dm.widthPixels, dm.densityDpi);
-		if (s.isValidScreen()) myScreenThread = new ScreenThread(holder, s);
+		if (s.isValidScreen()) {
+			myScreenThread = new ScreenThread(holder, s);
+			config = s.getConfig();
+		}
 		
 		setContentView(s);
 	}
@@ -107,13 +109,8 @@ public class MainActivity extends Activity{
 		
 		MDialog = new Dialog(MainActivity.this,  R.style.cust_dialog);	
 		MDialog.setContentView(R.layout.metronome_dialog);
-		MDialog.setTitle(R.string.metronome);
-				
-		//  Cambios según la resolución de la pantalla
-		if (screenWith <= 1200 && screenHeight <= 1850)
-			MDialog.getWindow().setLayout(600, 720);
-		else
-			MDialog.getWindow().setLayout(350, 470);	
+		MDialog.setTitle(R.string.metronome);	
+		MDialog.getWindow().setLayout(config.getAnchoDialogBpm(), config.getAltoDialogBpm());
 
 		editText_metronome = (EditText)MDialog.findViewById(R.id.eT_metronome);
 
@@ -190,12 +187,10 @@ public class MainActivity extends Activity{
 		stop = true;
 		play = false;
 		
-		Menu menu = m.getMenu();
 		s.Metronome_Stop();
-        if (stop)
-        	menu.getItem(2).setIcon(R.drawable.play_button);
-    	else
-    		menu.getItem(2).setIcon(R.drawable.pause_button);
+		
+		Menu menu = m.getMenu();
+        menu.getItem(2).setIcon(R.drawable.play_button);
 	}
 	
 	//  Habilita o deshabilita elementos según esté o no activado el metrónomo
@@ -270,10 +265,14 @@ public class MainActivity extends Activity{
   
         @Override
         public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-        	play = true;
-        	stop = false;
-        	PlayItemsControl(mode);
-            return true;
+        	if (stop)
+        		return true;
+        	else {
+	        	play = true;
+	        	stop = false;
+	        	PlayItemsControl(mode);
+	            return true;
+        	}
         }
     }
 }

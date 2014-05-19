@@ -796,7 +796,6 @@ public class DrawingMethods {
 										case 3:
 										case 10:
 										case 17:
-										case 24:
 											coo_y = margenY + config.getDistanciaLineasPentagrama() * 4 + 
 												config.getDistanciaLineasPentagramaMitad();
 											break;
@@ -1824,7 +1823,7 @@ public class DrawingMethods {
 		
 		beams.clear();
 	}
-	
+
 	private void dibujarCabezaDeNota(Nota nota) {
 		OrdenDibujo ordenDibujo = new OrdenDibujo();
 		ordenDibujo.setOrden(DrawOrder.DRAW_BITMAP);

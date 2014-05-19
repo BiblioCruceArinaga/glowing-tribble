@@ -5,11 +5,13 @@ public class Config {
 	private boolean supported = true;
 	private int densityDPI = 0;
 	
+	private int alto_dialog_bpm;
 	private int altura_arco_ligaduras;
 	private int ancho_beams;
 	private int ancho_cabeza_nota;
 	private int ancho_cabeza_nota_gracia;
 	private int ancho_claves;
+	private int ancho_dialog_bpm;
 	private int ancho_hooks;
 	private int ancho_tempo;
 	private int distancia_corchetes;
@@ -39,6 +41,7 @@ public class Config {
 	private int radio_staccatos;
 	private int tamano_letra_autor;
 	private int tamano_letra_bip_preparacion;
+	private int tamano_letra_bpm;
 	private int tamano_letra_obra;
 	private int tamano_letra_palm_mute;
 	private int tamano_letra_pulso;
@@ -53,6 +56,7 @@ public class Config {
 	private int y_accidental;
 	private int y_accidental_flat;
 	private int y_bend;
+	private int y_bpm;
 	private int y_clave_sol_segunda;
 	private int x_inicio_slash;
 	private int x_fin_slash;
@@ -83,11 +87,13 @@ public class Config {
 			case 160:
 				break;
 			case 213:
+				alto_dialog_bpm = 720;
 				altura_arco_ligaduras = 20;
 				ancho_beams = 5;
 				ancho_cabeza_nota = 10;
 				ancho_cabeza_nota_gracia = 5;
 				ancho_claves = 30;
+				ancho_dialog_bpm = 600;
 				ancho_hooks = 16;
 				ancho_tempo = 20;
 				distancia_corchetes = 15;
@@ -115,6 +121,7 @@ public class Config {
 				radio_staccatos = 4;
 				tamano_letra_autor = 30;
 				tamano_letra_bip_preparacion = 150;
+				tamano_letra_bpm = 30;
 				tamano_letra_obra = 50;
 				tamano_letra_palm_mute = 30;
 				tamano_letra_pulso = 50;
@@ -129,6 +136,7 @@ public class Config {
 				y_accidental = 10;
 				y_accidental_flat = 15;
 				y_bend = 40;
+				y_bpm = 20;
 				y_clave_sol_segunda = 15;
 				x_inicial_pentagramas = 50;
 				x_final_pentagramas = width - x_inicial_pentagramas;
@@ -157,11 +165,13 @@ public class Config {
 				break;
 				
 			case 320:
+				alto_dialog_bpm = 800;
 				altura_arco_ligaduras = 50;
 				ancho_beams = 8;
 				ancho_cabeza_nota = 26;
 				ancho_cabeza_nota_gracia = 15;
 				ancho_claves = 88;
+				ancho_dialog_bpm = 600;
 				ancho_hooks = 16;
 				ancho_tempo = 65;
 				distancia_corchetes = 15;
@@ -189,6 +199,7 @@ public class Config {
 				radio_staccatos = 4;
 				tamano_letra_autor = 50;
 				tamano_letra_bip_preparacion = 300;
+				tamano_letra_bpm = 50;
 				tamano_letra_obra = 80;
 				tamano_letra_palm_mute = 30;
 				tamano_letra_pulso = 50;
@@ -203,6 +214,7 @@ public class Config {
 				y_accidental = 10;
 				y_accidental_flat = 17;
 				y_bend = 40;
+				y_bpm = 30;
 				y_clave_sol_segunda = 63;
 				x_inicial_pentagramas = 80;
 				x_final_pentagramas = width - x_inicial_pentagramas;
@@ -235,6 +247,10 @@ public class Config {
 		}
 	}
 	
+	public int getAltoDialogBpm() {
+		return alto_dialog_bpm;
+	}
+	
 	public int getAlturaArcoLigaduras() {
 		return altura_arco_ligaduras;
 	}
@@ -253,6 +269,10 @@ public class Config {
 	
 	public int getAnchoClaves() {
 		return ancho_claves;
+	}
+	
+	public int getAnchoDialogBpm() {
+		return ancho_dialog_bpm;
 	}
 	
 	public int getAnchoHooks() {
@@ -363,6 +383,10 @@ public class Config {
 		return tamano_letra_bip_preparacion;
 	}
 	
+	public int getTamanoLetraBpm() {
+		return tamano_letra_bpm;
+	}
+	
 	public int getTamanoLetraObra() {
 		return tamano_letra_obra;
 	}
@@ -414,6 +438,10 @@ public class Config {
 	
 	public int getYBend() {
 		return y_bend;
+	}
+	
+	public int getYBpm() {
+		return y_bpm;
 	}
 	
 	public int getYClaveSolSegunda() {
