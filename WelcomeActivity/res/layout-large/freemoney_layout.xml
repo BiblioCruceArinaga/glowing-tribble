@@ -17,6 +17,19 @@
         android:text="@string/free_money"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_marginTop="150dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:textColor="#222"
+        android:textSize="25sp"
+        android:text="@string/share_friends_text" />
+    
     <Button
         android:id="@+id/b_share_friends"
         android:layout_width="450dp"
@@ -25,9 +38,22 @@
         android:background="@drawable/stores_buttons"
         android:gravity="center"
         android:textSize="30sp"
-        android:layout_marginTop="150dp"
+        android:layout_marginTop="20dp"
         android:text="@string/share_friends" />
 
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="100dp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:textColor="#222"
+        android:textSize="25sp"
+        android:text="@string/share_social_text" />
+    
     <Button
         android:id="@+id/b_share_social"
         android:layout_width="450dp"
@@ -36,7 +62,7 @@
         android:layout_gravity="center"
         android:gravity="center"
         android:textSize="30sp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="20dp"
         android:text="@string/share_social" />
 
 </LinearLayout>

@@ -25,11 +25,11 @@ import android.widget.Toast;
 import com.rising.drawing.MainActivity;
 import com.rising.drawing.R;
 import com.rising.login.Configuration;
+import com.rising.money.MoneyActivity;
 import com.rising.store.BuyNetworkConnection.OnBuyCompleted;
 import com.rising.store.BuyNetworkConnection.OnBuyFailed;
 import com.rising.store.DownloadScores.OnDownloadCompleted;
 import com.rising.store.DownloadScores.OnDownloadFailed;
-import com.rising.store.MoneyUpdateConnectionNetwork.OnUpdateMoney;
 
 public class CustomAdapter extends BaseAdapter {
 
@@ -50,25 +50,18 @@ public class CustomAdapter extends BaseAdapter {
 	public static DownloadScores download;
 	static String selectedURL = "";
 	static int selected = -1; 
-	BuyNetworkConnection bnc;
-	MoneyUpdateConnectionNetwork mucn;
-	   	
-	private OnUpdateMoney moneyUpdate;
-	
+	BuyNetworkConnection bnc;	   	
+
+	//Registra la compra y procede con la descarga
 	private OnBuyCompleted buyComplete = new OnBuyCompleted(){
 
 		@Override
 		public void onBuyCompleted() {
-			//Hay que poner algo aquí para que cuando falle la aplicación no se cierre     				
+			((MainActivityStore) ctx).StartMoneyUpdate(conf.getUserEmail());
+			
 			download.execute(selectedURL);
 			
-			lista.get(selected).setComprado(true);
-			//Log.i("URL", lista.get(position).getUrl());
-			
-			Log.i("BuyComplete", "Aquí 1");
-			new MainActivityStore().StartMoneyUpdate(conf.getUserEmail());
-			Log.i("BuyComplete", "Aquí 2");
-			
+			lista.get(selected).setComprado(true);	
 		}
 	};
 	
@@ -76,17 +69,17 @@ public class CustomAdapter extends BaseAdapter {
 
 		@Override
 		public void onBuyFailed() {
-			Toast.makeText(ctx, "Fall�", Toast.LENGTH_LONG).show();
+			Toast.makeText(ctx, "Falló", Toast.LENGTH_LONG).show();
 		}
-		
 	};
 		
 	private OnDownloadCompleted listenerDownload = new OnDownloadCompleted(){
 		@Override
 		public void onDownloadCompleted() {
-			//Acciones a ejecutar cuando la descarga est� completa
 			
+			//Acciones a ejecutar cuando la descarga est� completa
 			holder.botonCompra.setText(R.string.open);	
+			holder.botonCompra.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);	
 		}
 	};
 			
@@ -96,9 +89,8 @@ public class CustomAdapter extends BaseAdapter {
 			//Acciones a ejecutar cuando la descarga fall�
 			
 			//Aqu� va un Dialog
-			Toast.makeText(ctx, "Fall� la descarga", Toast.LENGTH_LONG).show();
+			Toast.makeText(ctx, "Falló la descarga", Toast.LENGTH_LONG).show();
 		}
-		
 	};	
 		
 	public CustomAdapter(Context context, List<PartituraTienda> partituras) {
@@ -109,7 +101,7 @@ public class CustomAdapter extends BaseAdapter {
 		this.infoPartituras.addAll(partituras);
 		mProgressDialog = new ProgressDialog(ctx);
 	}
-	
+		
 	public class ViewHolder {
         TextView Author;
         TextView Title;
@@ -123,7 +115,7 @@ public class CustomAdapter extends BaseAdapter {
 	public int getCount() {
 		return lista.size();
 	}
-
+	
 	@Override
 	public PartituraTienda getItem(int position) {
 		return lista.get(position);
@@ -150,7 +142,6 @@ public class CustomAdapter extends BaseAdapter {
 		conf = new Configuration(ctx);
 		bnc = new BuyNetworkConnection(buyComplete, failedBuy, ctx);	
 		download = new DownloadScores(listenerDownload, failedDownload, ctx);
-		mucn = new MoneyUpdateConnectionNetwork(moneyUpdate, ctx);
 		selected = position;
 				
         if (view == null) {
@@ -161,7 +152,8 @@ public class CustomAdapter extends BaseAdapter {
             holder.Author = (TextView) view.findViewById(R.id.autorPartitura);
             holder.intrumento = (TextView) view.findViewById(R.id.instrumentoPartitura);
             holder.botonCompra = (Button) view.findViewById(R.id.comprar);
-            holder.botonInfo = (Button) view.findViewById(R.id.masInfo);         
+            holder.botonInfo = (Button) view.findViewById(R.id.masInfo);
+            holder.image = (ImageView) view.findViewById(R.id.imagenPartitura);
             
             view.setTag(holder);
         }else{
@@ -172,6 +164,7 @@ public class CustomAdapter extends BaseAdapter {
         holder.Author.setText(lista.get(position).getAutor());
         holder.intrumento.setText(lista.get(position).getInstrumento());
         
+        
 	    if(lista.get(position).getComprado()){    
 	    	if(buscarArchivos(FileNameString(lista.get(position).getUrl()))){
 				holder.botonCompra.setText(R.string.open);
@@ -181,23 +174,25 @@ public class CustomAdapter extends BaseAdapter {
 	    }else{
 	    	if(lista.get(position).getPrecio() == 0.0){
 	        	holder.botonCompra.setText(R.string.free);	        	
+	        	holder.botonCompra.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.money_ico, 0);
 	        }else{
 	        	holder.botonCompra.setText(lista.get(position).getPrecio() + "");
+	        	holder.botonCompra.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.money_ico, 0);
 	        }
 	    	
 	    }
 	         
         //ProgressDialog de la descarga
-	    mProgressDialog.setMessage("Descargando");
+	    mProgressDialog.setMessage(ctx.getString(R.string.downloading));
  		mProgressDialog.setIndeterminate(true);
  		mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
  		mProgressDialog.setCancelable(true);
  		mProgressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-			    @Override
-			    public void onCancel(DialogInterface dialog) {
-			    	download.cancel(true);
-			    }
-			}); 
+		    @Override
+		    public void onCancel(DialogInterface dialog) {
+		    	download.cancel(true);
+		    }
+		}); 
  		
  		//Dialog que pregunta al usuario si quiere comprar la partitura
  		BDialog = new Dialog(ctx, R.style.cust_dialog);
@@ -227,28 +222,7 @@ public class CustomAdapter extends BaseAdapter {
         	
          });
         
-        holder.botonCompra.setOnClickListener(new OnClickListener(){
-
-        	/*
-        	 * -Si la partitura ya est� comprada, lanza la descarga sin registrarla en la base de datos*
-        	 * 		-Si la partitura ya est� en el dispositivo, no la descarga, da la opci�n para abrirla directamente*
-        	 * 		-Si la descarga falla que no se cierre la aplicaci�n. 
-        	 * 		-Cuando se ha descargado que el bot�n cambie de "Descargar" a "Abrir"*
-        	 * -Si no est� comprada, en el bot�n aparece el precio, y al pulsarlo se abrir� un dialog.*
-        	 * 		-El dialog pregunta si desea comprar la partitura o no.* 
-        	 * 			-En caso negativo se cierra el dialog*
-        	 * 			-En caso afirmativo
-        	 * 				-Si el precio es 0
-        	 * 					-Se registra la compra*
-        	 * 					-Se descarga la partitura.* 
-        	 *				-Si el precio es menor que el dinero que tiene el usuario
-        	 *					-Se registra la compra*
-        	 *					-Se descargar la partitura*
-        	 *					-Se resta al dinero que ya se ten�a el precio de la partitura
-        	 *				-Si el precio es mayor al que tiene un usuario 
-        	 *					-Se abre un dialogo con un bot�n a la pantalla de compra de saldo
-        	 * */
-        	
+        holder.botonCompra.setOnClickListener(new OnClickListener(){    	
         	
         	 @Override
  			public void onClick(View v) {
@@ -260,14 +234,10 @@ public class CustomAdapter extends BaseAdapter {
         		if(lista.get(position).getComprado()){
         			
         			//Si la partitura ya est� en el dispositivo la abre
-        			if(buscarArchivos(FileNameString(lista.get(position).getUrl()))){
-        				
-        				//Log.i("Filename", FileNameString(lista.get(position).getUrl()) + ", Context: " + ctx);      				
-        				AbrirFichero(ctx, FileNameString(lista.get(position).getUrl()));				
+        			if(buscarArchivos(FileNameString(lista.get(position).getUrl()))){       				  				
+        				AbrirFichero(ctx, FileNameString(lista.get(position).getUrl()));	
         			}else{
-        				     				
 	     				download.execute(lista.get(position).getUrl());
-	     				//Log.i("URL", lista.get(position).getUrl());
         			}
         		}else{
         		        			
@@ -290,8 +260,6 @@ public class CustomAdapter extends BaseAdapter {
 			    							     						     								     							     							     				
 			 				}else{
 			 								 								 					
-			 					//Log.i("Prices", "Partitura: " + lista.get(position).getPrecio() + ", User: " + conf.getUserMoney());
-			 					 			
 				     			if(lista.get(position).getPrecio() < conf.getUserMoney()){		 					
 			     							     								     				
 					     			bnc.execute(Id_User, Id_Score);
@@ -310,12 +278,8 @@ public class CustomAdapter extends BaseAdapter {
 
 										@Override
 										public void onClick(View v) {
-											/************************************************************************/
-											/*======================================================================
-											 			Terminar cuando se implemente el growth hacking
-											  =====================================================================*/
-											 /***********************************************************************/
-											
+											Intent i = new Intent(ctx, MoneyActivity.class);
+											ctx.startActivity(i);
 										}
 			 							
 			 						});
@@ -366,7 +330,7 @@ public class CustomAdapter extends BaseAdapter {
 		}
 	}
 		
-	 // Método de filtrado
+	// Método de filtrado
     public void filter(String charText){
     	
     	charText = charText.toLowerCase(Locale.getDefault());

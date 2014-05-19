@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"    
+    android:background="@drawable/background_scoresapp"
+    android:orientation="horizontal" >
+
+    <ImageButton
+        android:id="@+id/ib_fb_social"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_marginTop="80dp"
+        android:layout_marginLeft="120dp"
+        android:layout_marginRight="70dp"
+        android:layout_marginBottom="80dp"
+        android:contentDescription="@string/contentDescription"
+        android:background="@drawable/fb_logo" />
+
+    <ImageButton
+        android:id="@+id/ib_twt_social"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_marginTop="80dp"
+        android:layout_marginLeft="70dp"
+        android:layout_marginRight="120dp"
+        android:layout_marginBottom="80dp"
+        android:contentDescription="@string/contentDescription"
+        android:background="@drawable/twt_logo" />
+
+</LinearLayout>

@@ -23,21 +23,29 @@ public class ActivityRegistro {
 	
 	//  Se inicializa un string con la dirección en la base de datos del archivo a consultar y la clase HttpPostAux.	
 	String URL_connect = "http://www.scores.rising.es/registro-mobile";
+	String URL_connect_en = "http://www.scores.rising.es/en/registro-mobile";
 	HttpPostAux postAux = new HttpPostAux();
 	
     //  Este método valida el estado del logueo. Solamente necesita como parametros el usuario y passw
-    public int regStatus(String mail, String name, String pass) {
+    public int regStatus(String mail, String name, String pass, String language) {
     	int status=-1;
-
+    	
     	ArrayList<NameValuePair> postparameters2send= new ArrayList<NameValuePair>();
      		
 		postparameters2send.add(new BasicNameValuePair("mail", mail));
 		postparameters2send.add(new BasicNameValuePair("name", name));
 		postparameters2send.add(new BasicNameValuePair("pass", pass));
-				  
-		//  Se realiza una peticion, y como respuesta se obtiene un array JSON
-      	JSONArray jData = postAux.getServerData(postparameters2send, URL_connect);
-
+		
+		JSONArray jData;
+		
+		if(language.equals("spanish")){
+			
+			//  Se realiza una peticion, y como respuesta se obtiene un array JSON
+			jData = postAux.getServerData(postparameters2send, URL_connect);
+		}else{
+			jData = postAux.getServerData(postparameters2send, URL_connect_en);
+		}
+		
 		if(jData!=null && jData.length() > 0){
 
 			JSONObject json_data;
@@ -61,6 +69,7 @@ public class ActivityRegistro {
     	String mail;
     	String user;
     	String pass;
+    	String language;
     	
     	private OnTaskCompleted listener;
     	public asyncreg(OnTaskCompleted listener) {
@@ -71,8 +80,9 @@ public class ActivityRegistro {
 	    	user=params[0];
 	    	mail=params[1];
 	    	pass=params[2];
+	    	language = params[3];
 
-	    	return regStatus(mail, user, pass);	
+	    	return regStatus(mail, user, pass, language);	
 	    }
 	    
 	    protected void onPostExecute(Integer result) {

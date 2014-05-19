@@ -41,17 +41,18 @@ import android.widget.Toast;
 import com.rising.drawing.MainActivity;
 import com.rising.drawing.R;
 import com.rising.login.Configuration;
-import com.rising.login.Login;
 import com.rising.login.SessionManager;
 import com.rising.mainscreen.ChangePassword.OnPasswordChanging;
 import com.rising.mainscreen.EraseAccount.OnTaskCompleted;
 import com.rising.mainscreen.SendFeedback.OnSendingFeedback;
+import com.rising.money.MoneyUpdateConnectionNetwork;
+import com.rising.money.MoneyUpdateConnectionNetwork.OnFailMoney;
+import com.rising.money.MoneyUpdateConnectionNetwork.OnUpdateMoney;
 import com.rising.store.MainActivityStore;
 
 public class MainScreenActivity extends Activity implements OnQueryTextListener{
 
 	SessionManager session;
-	Login login;
 	Configuration conf;
 		
 	String[] ficheros;
@@ -64,9 +65,10 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 	private GridView scores_gallery;
 	private int numScores = 0;
 	ArrayList<Score> arraylist = new ArrayList<Score>();
-	
+	public MoneyUpdateConnectionNetwork mucn;
 	private Dialog MDialog;
 	private int fid;
+	Context context;
 	
 	//  Recibir la señal del proceso que elimina la cuenta
 	private OnTaskCompleted listener = new OnTaskCompleted() {
@@ -145,178 +147,203 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 			MDialog.dismiss();
 	    }
 	};
+	 
+	private OnUpdateMoney moneyUpdate = new OnUpdateMoney(){
+
+		@Override
+		public void onUpdateMoney() {
+												
+			conf.setUserMoney(mucn.devolverDatos());
+		}
+	};
 	
+	private OnFailMoney failMoney = new OnFailMoney(){
+
+		@Override
+		public void onFailMoney() {
+			Toast.makeText(context, "Falló al actualizar el saldo", Toast.LENGTH_LONG).show();
+		}
+	};
+		
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		setContentView(R.layout.mainscreen_layout);
-		createScoreFolder();
-						
+		
 		mSelected = new HashMap<Integer, Boolean>();
 		conf = new Configuration(this);
 		session = new SessionManager(getApplicationContext());
-		login = new Login();
 		ficheros = leeFicheros();
-		
+		context = this;
 		session.checkLogin();
-		
 		fid = session.getFacebookId();
-				
+		
+		createScoreFolder();
+		UpdateMoney(conf.getUserEmail());
+		 
 		ActionBar action = getActionBar();
 		action.setTitle(R.string.titulo_coleccion);
 		action.setIcon(R.drawable.ic_menu);
-
+		
+		//  Si no hay partituras, mostramos un mensaje al usuario. Si hay partituras cargamos la galería de partituras
+		if (ficherosLength() == 0) {
+			interfazCuandoNoHayPartituras();
+		} else {
+			interfazCuandoHayPartituras(ficheros);
+		}
+	}
+	
+	public void UpdateMoney(String user){
+		mucn = new MoneyUpdateConnectionNetwork(moneyUpdate, failMoney, this);
+		mucn.execute(user);
+	}
+	
+	public int ficherosLength(){
 		int ficherosLength;
 		if (ficheros != null) ficherosLength = ficheros.length;
 		else ficherosLength = 0;
+		return ficherosLength;
+	}	
+	
+	public void interfazCuandoHayPartituras(final String[] ficheros){
+		infoFicheros = darInfoFicheros(ficheros);
 		
-		//  No hay partituras, mostramos un mensaje al usuario
-		if (ficherosLength == 0) {
-			interfazCuandoNoHayPartituras();
+		for (int i = 0; i < ficherosLength(); i++){
+			 Score ss = new Score(infoFicheros[1][i], infoFicheros[0][i], R.drawable.cover, infoFicheros[2][i]);
+			 arraylist.add(ss);
 		}
+		s_adapter = new ScoresAdapter(this, arraylist);
 		
-		//  Cargamos la galería de partituras
-		else {
-			infoFicheros = darInfoFicheros(ficheros);
+		scores_gallery = (GridView) findViewById(R.id.gV_scores);
+		scores_gallery.setAdapter(s_adapter);
+		scores_gallery.setChoiceMode(GridView.CHOICE_MODE_MULTIPLE_MODAL);
+		numScores = scores_gallery.getCount();
+						
+		scores_gallery.setMultiChoiceModeListener(new MultiChoiceModeListener(){
 			
-			for (int i = 0; i < ficherosLength; i++){
-				 Score ss = new Score(infoFicheros[1][i], infoFicheros[0][i], R.drawable.cover, infoFicheros[2][i]);
-				 arraylist.add(ss);
-			}
-			s_adapter = new ScoresAdapter(this, arraylist);
-			
-			scores_gallery = (GridView) findViewById(R.id.gV_scores);
-			scores_gallery.setAdapter(s_adapter);
-			scores_gallery.setChoiceMode(GridView.CHOICE_MODE_MULTIPLE_MODAL);
-			numScores = scores_gallery.getCount();
-							
-			scores_gallery.setMultiChoiceModeListener(new MultiChoiceModeListener(){
+		@Override
+		public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
 				
-				@Override
-				public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-					
-					// Este método dirige las acciones de los botones de la barra superior
-					switch(item.getItemId()){
-			    	   	case R.id.discard:
-			    	   		List<Score> elementosAEliminar = new ArrayList<Score>();
-			    	   		
-			    	   		for(int i = 0; i < mSelected.size(); i++){
-			    	   			if(mSelected.get(i)){
-			    	   				f_toDelete = new File(Environment.getExternalStorageDirectory() + 
-			    	   						"/RisingScores/scores/" + ficheros[i]);
-			    	     	   		
-			    	   				Log.d("Path", f_toDelete.getAbsolutePath());
-			    	   				
-			    	   				if(f_toDelete.exists()){
-				    	   				if(f_toDelete.delete()){
-				    	   					elementosAEliminar.add(s_adapter.getItem(i));
-				    	   					delete = true;
-				    	   				}else{
-				    	   					delete = false;
-				    	   					break;
-				    	   				}
-			    	   				}else{
-			    	   					Log.e("Archivo", "El archivo no existe");
-			    	   				}			
-			    	   			}
-			    	   		}
-			    	   		
-			    	   		//  Hay que eliminarlos todos de golpe, si no el valor num�rico de los �ndices
-			    	   		//  cambia con cada iteraci�n y salta un IndexOutOfBoundsException
-			    	   		s_adapter.removeAllSelected(elementosAEliminar);
-			    	   		numScores = scores_gallery.getCount();
-			    	   		
-			    	   		if(delete){
-	    	   					Toast.makeText(getApplicationContext(), R.string.successDelete, Toast.LENGTH_SHORT).show();
-	    	   				}else{
-	    	   					Toast.makeText(getApplicationContext(), R.string.failDelete, Toast.LENGTH_SHORT).show();
-	    	   				}
-	    	   				
-			    	   		if (s_adapter.isEmpty()) {
-			    	   			interfazCuandoNoHayPartituras();
-			    	   		}
-			    	   		
-				            //mode.finish();
-				            return true; 
+			// Este método dirige las acciones de los botones de la barra superior
+			switch(item.getItemId()){
+		   	   	case R.id.discard:
+		   	   		List<Score> elementosAEliminar = new ArrayList<Score>();
+		   	   		
+		   	   		for(int i = 0; i < mSelected.size(); i++){
+		   	   			if(mSelected.get(i)){
+		   	   				f_toDelete = new File(Environment.getExternalStorageDirectory() + 
+		  	   						"/RisingScores/scores/" + ficheros[i]);
+		   	     	   		
+		   	   				Log.d("Path", f_toDelete.getAbsolutePath());
+		    	   				
+		   	   				if(f_toDelete.exists()){
+		    	   				if(f_toDelete.delete()){
+		    	   					elementosAEliminar.add(s_adapter.getItem(i));
+		    	   					delete = true;
+		    	   				}else{
+		    	   					delete = false;
+		    	   					break;
+		    	   				}
+		   	   				}else{
+		   	   					Log.e("Archivo", "El archivo no existe");
+		   	   				}			
+		   	   			}
+		   	   		}
+		   	   		
+		   	   		//  Hay que eliminarlos todos de golpe, si no el valor num�rico de los �ndices
+		   	   		//  cambia con cada iteraci�n y salta un IndexOutOfBoundsException
+		   	   		s_adapter.removeAllSelected(elementosAEliminar);
+		   	   		numScores = scores_gallery.getCount();
+		   	   		
+		   	   		if(delete){
+		   	   			Toast.makeText(getApplicationContext(), R.string.successDelete, Toast.LENGTH_SHORT).show();
+    	   			}else{
+    	   				Toast.makeText(getApplicationContext(), R.string.failDelete, Toast.LENGTH_SHORT).show();
+    	   			}
+    	   				
+		       		if (s_adapter.isEmpty()) {
+		       			interfazCuandoNoHayPartituras();
+		       		}
 
-			    	   	case R.id.s_all:
-			    	   		for(int i = 0; i < numScores; i++) {
-			    	   			scores_gallery.setItemChecked(i, true);
-			    	   		}
-				            return true;
-				             
-			    	   	case R.id.s_none:
-			    	   		for(int i = 0; i < numScores; i++) {
-			    	   			scores_gallery.setItemChecked(i, false);
-			    	   		}
-			    	   		return true;     
-		    	   }
-	
-		           return false;
-				}
-	
-				@Override
-				public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-					MenuInflater inflater = mode.getMenuInflater();
-			        inflater.inflate(R.menu.modal_details, menu);
-					mode.setTitle(R.string.title);
-		            mode.setSubtitle(R.string.subtitle);
-		            return true;
-				}
-	
-				@Override
-				public void onDestroyActionMode(ActionMode mode) {
-				}
-	
-				@Override
-				public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-					return true;
-				}
-	
-				@Override
-				public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
-														
-					//Este método dirige lo que pasa en la pantalla del menú contextual 
-	
-					int selectCount = scores_gallery.getCheckedItemCount();
-		            switch (selectCount) {
-			            case 1:
-			                mode.setSubtitle(R.string.subtitle);
-			               		                
-			                break;
-			            default:
-			                mode.setSubtitle(selectCount + " partituras seleccionadas");
-			               		                
-			                break; 
-		            }
-		            
-		            if(checked){
-		            	mSelected.put(position, checked);
-		            }else{
-		            	mSelected.remove(position);
-		            	mSelected.put(position, false);
-		            }
-		            
-		            Log.i("Estado", position + ": " + mSelected.get(position));
-				}
-			});
-			
-			scores_gallery.setOnItemClickListener(new OnItemClickListener(){
-	
-				@Override
-				public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-					Log.i("Position", ficheros[position]);
-					
-					Intent i = new Intent(MainScreenActivity.this, MainActivity.class);
-					i.putExtra("score", ficheros[position]);
-					
-					startActivity(i);
-				}
-			});
+			        return true; 
+
+		   	   	case R.id.s_all:
+		   	   		for(int i = 0; i < numScores; i++) {
+		   	   			scores_gallery.setItemChecked(i, true);
+		    	   	}
+			        return true;
+			             
+		   	   	case R.id.s_none:
+		    		for(int i = 0; i < numScores; i++) {
+		    			scores_gallery.setItemChecked(i, false);
+		    		}
+		    	   	return true;     
+			}
+
+	        return false;
 		}
+
+		@Override
+		public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+			MenuInflater inflater = mode.getMenuInflater();
+			inflater.inflate(R.menu.modal_details, menu);
+			mode.setTitle(R.string.title);
+	        mode.setSubtitle(R.string.subtitle);
+	        return true;
+		}
+
+		@Override
+		public void onDestroyActionMode(ActionMode mode) {
+		}
+
+		@Override
+		public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+			return true;
+		}
+
+		@Override
+		public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
+													
+			//Este método dirige lo que pasa en la pantalla del menú contextual 
+			int selectCount = scores_gallery.getCheckedItemCount();
+	        switch (selectCount) {
+	        	case 1:
+	        		mode.setSubtitle(R.string.subtitle);
+		               		                
+		            break;
+	        	default:
+	        		mode.setSubtitle(selectCount + " partituras seleccionadas");
+		               		                
+		            break; 
+	        }
+	            
+	        if(checked){
+	           	mSelected.put(position, checked);
+	        }else{
+	           	mSelected.remove(position);
+	           	mSelected.put(position, false);
+	        }
+	            
+	        Log.i("Estado", position + ": " + mSelected.get(position));
+		}
+	});
+		
+		scores_gallery.setOnItemClickListener(new OnItemClickListener(){
+
+		@Override
+		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+			Log.i("Position", ficheros[position]);
+				
+			Intent i = new Intent(MainScreenActivity.this, MainActivity.class);
+			i.putExtra("score", ficheros[position]);
+				
+			startActivity(i);
+		}
+	});
+	
 	}
-			
+		
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.main, menu);
@@ -460,6 +487,7 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 		    		nombreF.setText(nombreF.getText() + " " + session.getName());
 		    		emailF.setText(emailF.getText() + " " + session.getMail()); 
 		    		saldoF.setText(saldoF.getText() + " " + conf.getUserMoney());
+		    		saldoF.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.money_ico, 0);
 	        		
 	        	}else{
 	        		MDialog.setContentView(R.layout.mis_datos);
@@ -474,6 +502,7 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 		    		nombre.setText(nombre.getText() + " " + conf.getUserName());
 		    		email.setText(email.getText() + " " + conf.getUserEmail()); 
 		    		saldo.setText(saldo.getText() + " " + conf.getUserMoney());
+		    		saldo.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.money_ico, 0);
 		    				    		
 		    		Button misDatosBoton = (Button)MDialog.findViewById(R.id.misDatosBoton);
 		    	    misDatosBoton.setOnClickListener(new Button.OnClickListener() {
@@ -578,8 +607,7 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
             	if (!file.isDirectory()) {
             		
             		//  No se pudo crear el directorio, muy probablemente por los permisos
-            		Toast.makeText(getApplicationContext(), "Hubo un problema al crear la carpeta " +
-            				"donde se guardan las partituras", Toast.LENGTH_LONG).show();
+            		Toast.makeText(getApplicationContext(), R.string.error_folder, Toast.LENGTH_LONG).show();
             	}
             }
         }

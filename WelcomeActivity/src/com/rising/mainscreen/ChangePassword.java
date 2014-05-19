@@ -14,6 +14,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.rising.conexiones.HttpPostAux;
+import com.rising.drawing.R;
 
 public class ChangePassword extends AsyncTask<String, String, Integer> {
 
@@ -36,7 +37,7 @@ public class ChangePassword extends AsyncTask<String, String, Integer> {
 	
 	protected void onPreExecute() {
         PDialog = new ProgressDialog(ctx);
-        PDialog.setMessage("Intentando cambiar tu contraseña. Por favor, espera...");
+        PDialog.setMessage(ctx.getString(R.string.try_change_pass));
         PDialog.setIndeterminate(false);
         PDialog.setCancelable(false);
         PDialog.show();

@@ -18,7 +18,7 @@
             android:textColor="#222"
             android:text="@string/current_money"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textSize="40sp" />
+            android:textSize="60sp" />
 
         <TextView
             android:id="@+id/tv_money_unit"
@@ -28,7 +28,8 @@
             android:layout_marginLeft="10dp"
             android:textColor="@color/green"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textSize="50sp" />
+            android:drawableRight="@drawable/money_ico"
+            android:textSize="70sp" />
 
     </LinearLayout>
 
@@ -39,63 +40,63 @@
         android:layout_marginTop="30dp"
         android:layout_gravity="center"
         android:gravity="center"
-        android:textSize="20sp"
+        android:textSize="30sp"
         android:textColor="#001177"
         android:text="@string/free_money" />
 
     <Button
         android:id="@+id/b5"
-        android:layout_width="400dp"
-        android:layout_height="70dp"
+        android:layout_width="600dp"
+        android:layout_height="80dp"
         android:layout_gravity="center"
         android:gravity="center"
         android:background="@drawable/stores_buttons"
         android:layout_marginTop="100dp"
-        android:textSize="30sp"
+        android:textSize="40sp"
         android:text="@string/add5" />
 
     <Button
         android:id="@+id/b10"
-        android:layout_width="400dp"
-        android:layout_height="70dp"
+        android:layout_width="600dp"
+        android:layout_height="80dp"
         android:layout_gravity="center"
         android:gravity="center"
         android:background="@drawable/stores_buttons"
         android:layout_marginTop="50dp"
-        android:textSize="30sp"
+        android:textSize="40sp"
         android:text="@string/add10" />
 
     <Button
         android:id="@+id/b20"
-        android:layout_width="400dp"
-        android:layout_height="70dp"
+        android:layout_width="600dp"
+        android:layout_height="80dp"
         android:layout_gravity="center"
         android:gravity="center"
         android:background="@drawable/stores_buttons"
         android:layout_marginTop="50dp"
-        android:textSize="30sp"
+        android:textSize="40sp"
         android:text="@string/add20" />
 
     <Button
         android:id="@+id/bu50"
-        android:layout_width="400dp"
-        android:layout_height="70dp"
+        android:layout_width="600dp"
+        android:layout_height="80dp"
         android:layout_gravity="center"
         android:gravity="center"
         android:background="@drawable/stores_buttons"
         android:layout_marginTop="50dp"
-        android:textSize="30sp"
+        android:textSize="40sp"
         android:text="@string/add50" />
 
     <Button
         android:id="@+id/b100"
-        android:layout_width="400dp"
-        android:layout_height="70dp"
+        android:layout_width="600dp"
+        android:layout_height="80dp"
         android:layout_gravity="center"
         android:gravity="center"
         android:background="@drawable/stores_buttons"
         android:layout_marginTop="50dp"
-        android:textSize="30sp"
+        android:textSize="40sp"
         android:text="@string/add100" />
 
 </LinearLayout>

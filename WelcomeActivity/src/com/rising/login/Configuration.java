@@ -18,11 +18,11 @@ public class Configuration {
 	}
 	
 	private SharedPreferences getSettings(){
-	 return mContext.getSharedPreferences(SHARED_PREFS_FILE, 0);
+		return mContext.getSharedPreferences(SHARED_PREFS_FILE, 0);
 	}
 	
 	public String getUserEmail(){
-	 return getSettings().getString(KEY_EMAIL, null);  
+		return getSettings().getString(KEY_EMAIL, null);  
 	}
 	
 	public String getUserId(){
@@ -33,8 +33,8 @@ public class Configuration {
 		return getSettings().getString(KEY_NAME, null);  
 	}
 		
-	public float getUserMoney(){		
-		return Math.round(getSettings().getFloat(KEY_MONEY, 0));	
+	public float getUserMoney(){	
+		return getSettings().getFloat(KEY_MONEY, 0);
 	}
 	
 	public void setUserEmail(String email){
@@ -45,20 +45,19 @@ public class Configuration {
 	
 	public void setUserId(String id){
 	    SharedPreferences.Editor editor = getSettings().edit();
-	    editor.putString(KEY_ID, id );
+	    editor.putString(KEY_ID, id);
 	    editor.commit();
 	}
 	
 	public void setUserName(String name){
 	    SharedPreferences.Editor editor = getSettings().edit();
-	    editor.putString(KEY_NAME, name );
+	    editor.putString(KEY_NAME, name);
 	    editor.commit();
 	}
 	
 	public void setUserMoney(double money){
 	    SharedPreferences.Editor editor = getSettings().edit();
-	    editor.putFloat(KEY_MONEY, (float)money);
+	  	editor.putFloat(KEY_MONEY, (float)money);
 	    editor.commit();
 	}
-	
 }

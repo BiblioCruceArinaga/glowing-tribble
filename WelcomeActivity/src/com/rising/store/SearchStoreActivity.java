@@ -3,6 +3,7 @@ package com.rising.store;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -10,7 +11,9 @@ import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.GridView;
+import android.widget.TextView;
 
 import com.rising.drawing.R;
 import com.rising.login.Configuration;
@@ -24,8 +27,9 @@ public class SearchStoreActivity extends Activity{
 	private static ArrayList<InfoCompra> ICompra = new ArrayList<InfoCompra>();
 	static InfoBuyNetworkConnection ibnc;
 	public SearchNetworkConnection snc;
-	
 	public ProgressDialog PDialog;
+	ActionBar ABar;
+	TextView result;
 	
 	//Esto cargará todo aquello que dependa del hilo para ejecutarse, y que de no ser así no interesa que se ejecute
 	private OnTaskCompleted listener = new OnTaskCompleted() {
@@ -34,15 +38,19 @@ public class SearchStoreActivity extends Activity{
 	    	infoPart = snc.devolverPartituras();
 	    	ICompra = ibnc.devolverCompra();
 	    	
-	    	//Trozo de código dónde se ve si la partitura ha sido comprada por el usuario. En tal caso se pone a true el valor "Comprado"
-	    	for(int i = 0; i < infoPart.size(); i++){
-		    	for(int j = 0; j < ICompra.size(); j++){	
-		    		if(infoPart.get(i).getId() == ICompra.get(j).getId_S()){
-		    			infoPart.get(i).setComprado(true);
-		    		}
-		    	}
-	    	}		    	
-		   		
+	    	if(infoPart.size() == 0){
+	    		result.setVisibility(View.VISIBLE);
+	    	}else{ 
+	    	
+		    	//Trozo de código dónde se ve si la partitura ha sido comprada por el usuario. En tal caso se pone a true el valor "Comprado"
+		    	for(int i = 0; i < infoPart.size(); i++){
+			    	for(int j = 0; j < ICompra.size(); j++){	
+			    		if(infoPart.get(i).getId() == ICompra.get(j).getId_S()){
+			    			infoPart.get(i).setComprado(true);
+			    		}
+			    	}
+		    	}		    	
+	    	}
 	    	GridView GV_Search = (GridView) findViewById(R.id.gV_search);
 				
 	    	GV_Search.setAdapter(new CustomAdapter(SearchStoreActivity.this, infoPart));	  
@@ -62,12 +70,18 @@ public class SearchStoreActivity extends Activity{
 		//La paso a una variable String
 		word = b.getString("SearchText");
 		
+		result = (TextView)findViewById(R.id.empty_result);
+		result.setVisibility(View.INVISIBLE);
+		
 		PDialog = new ProgressDialog(this);
-		PDialog.setMessage("Buscando...");
+		PDialog.setMessage(getString(R.string.searching));
         PDialog.setIndeterminate(false);
         PDialog.setCancelable(false);
         PDialog.show();
 		
+        ABar = getActionBar();
+        ABar.setDisplayHomeAsUpEnabled(true);
+        
 		snc = new SearchNetworkConnection(listener, this);
 		ibnc = new InfoBuyNetworkConnection(this);
 		

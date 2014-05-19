@@ -27,6 +27,7 @@ public class DownloadScores extends AsyncTask<String, Integer, String>{
 //  Comunicaci�n HTTP con el servidor
 	HttpPost httppost;
 	HttpClient httpcliente;
+	private String path = "/RisingScores/scores/";
 	String URL_connect = "http://www.scores.rising.es/store-buyscore";
 	
 	//  Contexto
@@ -99,7 +100,7 @@ public class DownloadScores extends AsyncTask<String, Integer, String>{
                 // download the file
                 input = connection.getInputStream();
                 output = new FileOutputStream(Environment.getExternalStorageDirectory() 
-                		+ "/RisingScores/scores/" + FileNameURL(url));
+                		+ path + FileNameURL(url));
 
                 byte data[] = new byte[4096];
                 long total = 0;
