@@ -20,16 +20,21 @@ public class ActivityOlvidarPass {
 
 	//Se inicializa un string con la dirección en la base de datos del archivo a consultar y la clase HttpPostAux.	
 	String URL_connect = "http://www.scores.rising.es/recuperar-clave-mobile";
+	String URL_connect_en = "http://www.scores.rising.es/en/recuperar-clave-mobile";
 	HttpPostAux postAux = new HttpPostAux();
 	
-    public int mailStatus(String mail) {
+    public int mailStatus(String mail, String language) {
     	int status=-1;
 
     	ArrayList<NameValuePair> postparameters2send= new ArrayList<NameValuePair>();
 		postparameters2send.add(new BasicNameValuePair("mail", mail));
-		  
-      	JSONArray jData = postAux.getServerData(postparameters2send, URL_connect);
-      	
+		JSONArray jData;
+		if(language.equals("spanish")){
+			jData = postAux.getServerData(postparameters2send, URL_connect);
+		}else{
+			jData = postAux.getServerData(postparameters2send, URL_connect_en);
+		}
+		
 		if (jData!=null && jData.length() > 0){
 			JSONObject json_data;
 			
@@ -56,6 +61,7 @@ public class ActivityOlvidarPass {
     	Context ctx;
     	int res = -1;	
     	String mail;
+    	String language;
     	
     	public asyncmail(Context ctx) {
     		this.ctx = ctx;
@@ -63,7 +69,8 @@ public class ActivityOlvidarPass {
     	
 	    protected Integer doInBackground(String... params) {
 	    	mail=params[0];
-	    	return mailStatus(mail);
+	    	language = params[1];
+	    	return mailStatus(mail, language);
 	    }
 	    
 	    protected void onPostExecute(Integer result) {

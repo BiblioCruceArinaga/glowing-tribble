@@ -25,6 +25,7 @@
     	<string name="confirm_login">Login</string>
     	<string name="cerrar_sesion">Logout</string>
     	<string name="close_d">Close</string>
+    	<string name="auth">Authenticating...</string>
     	
     	<!-- Dialogo olvido contraseña -->
     	<string name="olvido_title">Recover password</string>
@@ -52,6 +53,7 @@
 </string>
     	<string name="ok_reg">An email have been sent</string>
     	<string name="ok_reg_mail">﻿Registration is completed but could not send the confirmation email. We\'ll send it manually within a maximum of 24 hours.</string>
+    	<string name="creating_account">Creating your account...</string>
     	
 	<!-- Pantalla principal -->
     <string name="titulo_coleccion">My collection</string>
@@ -67,6 +69,7 @@
     <string name="no_scores">Your scores collection is empty. 
 You can buy scores in our store.</string>
     <string name="no_scores_button">Go to Score Store</string>
+    <string name="error_folder">There was a problem iniciating Scores</string>
     	    	
     	<!-- Menú contextual -->
     	<string name="select_all">Select all</string>
@@ -103,6 +106,7 @@ You can buy scores in our store.</string>
     	<string name="mis_datos_error_verif">We couldn\'t verify your identity</string>
     	<string name="mis_datos_clave_erronea">Incorrect password</string>
     	<string name="mis_datos_saldo">Credit:</string>
+    	<string name="try_change_pass">Trying to change your password. Please wait...</string>
     
     <string name="feedback">Feedback</string>
     	<string name="feedback_envianos">
@@ -324,7 +328,7 @@ You can buy scores in our store.</string>
     	
     <string name="about">About Scores</string>
 	    <string name="version">Version: Beta</string>
-	    <string name="acerca_de">Scores have been develop for RISING S.C.P.</string>	
+	    <string name="acerca_de">Scores have been develop by RISING S.C.P.</string>	
 	    <string name="visitanos">Visit our site: </string>
     	<string name="web">scores.rising.es</string>
 	    
@@ -351,24 +355,40 @@ You can buy scores in our store.</string>
     	<string name="no_money">You do not have enough credit to make the purchase. </string>
     	<string name="buy_credit">Buy credit</string>
     	<string name="open">Open</string>
+    	<string name="downloading">Downloading</string>
     	    	
     		<!-- Pantalla busqueda -->
     		<string name="list">List</string>
+    		<string name="empty_result">No scores were found</string>
+    		<string name="searching">Searching...</string>
     	
     		<!-- Pantalla saldo -->
     		<string name="money">Credit</string>
     		<string name="current_money">Current credit:  </string>
     		<string name="free_money">Get free credit!</string>
-    		<string name="add5">Add 5</string>
-    		<string name="add10">Add 10 + 1 Free</string>
-    		<string name="add20">Add 20 + 2 Free</string>
-    		<string name="add50">Add 50 + 5 Free</string>
-    		<string name="add100">Add 100 + 10 Free</string>
+    		<string name="add5">Add 5 credits</string>
+    		<string name="add10">Add 10 credits + 1 Free</string>
+    		<string name="add20">Add 20 credits + 2 Free</string>
+    		<string name="add50">Add 50 credits + 5 Free</string>
+    		<string name="add100">Add 100 credits + 10 Free</string>
     		<string name="share_friends">Share with friends</string>
     		<string name="share_social">Share in social networks</string>
     		<string name="share_button">Share</string>
-    		<string name="friendmail">Enter the e-mail from a friend</string>
-    
+    		<string name="share_friends_text">Invite your friends to join to Scores</string>
+    		<string name="share_social_text">Share how much you like Scores in social networks</string>
+    		<string name="friendmail">Enter a friend e-mail</string>
+    		<string name="friendmail_empty">This field cannot be empty</string>
+    		<string name="friendmail2">Friend e-mail</string>
+    		<string name="receive_friends">You will receive 0,15 credits!</string>
+    		<string name="receive_social">You will receive 0,05 credits!</string>
+    		<string name="rate_app">Rate Scores on Google Play Store</string>
+    		<string name="receive_rate">You will receive 0,05 credits!</string>
+    		<string name="share_rate">Rate the app</string>
+    		<string name="google_init_error">Fail to init the comunication with Google</string>
+    		<string name="buy_fail">Fail to finish the purchase. This didn\'t do it</string>
+    		<string name="buy_fail2">Fail to register the purchase</string>
+    		<string name="buy_ok">The purchase was successed</string>
+    		
     		<!-- Pantalla encuesta -->
     		<string name="quest_explain">In our efforts to improve and want to always bring you the best and right what
  	    	you need we bring you this short survey through which we can know what exactly we can offer you 

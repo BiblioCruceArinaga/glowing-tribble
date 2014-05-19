@@ -19,7 +19,10 @@ import android.widget.Toast;
 import com.rising.drawing.R;
 import com.rising.login.Configuration;
 import com.rising.mainscreen.MainScreenActivity;
-import com.rising.store.MoneyUpdateConnectionNetwork.OnUpdateMoney;
+import com.rising.money.MoneyActivity;
+import com.rising.money.MoneyUpdateConnectionNetwork;
+import com.rising.money.MoneyUpdateConnectionNetwork.OnFailMoney;
+import com.rising.money.MoneyUpdateConnectionNetwork.OnUpdateMoney;
 import com.rising.store.instruments.FreeFragment;
 import com.rising.store.instruments.GuitarFragment;
 import com.rising.store.instruments.PianoFragment;
@@ -31,55 +34,31 @@ public class MainActivityStore extends FragmentActivity implements OnQueryTextLi
 	String f;
 	static String s;
 	public MenuItem item;	
-	
-	//  Poner tiempo máximo de conexión. Si no se conecta pasado ese tiempo, sale algo.
-	Bundle savedInstanceState;
-	MainActivityStore activity;
-	double d; 
-	MoneyUpdateConnectionNetwork mucn;
-	
-	//  Con esta clase se guardan los datos del usuario 
-	//  en el dispositivo para posteriores consultas
-	Configuration conf;
-		
 	public static Context context;
+	Bundle savedInstanceState;
+	MainActivityStore activity; 
+	MoneyUpdateConnectionNetwork mucn;
+	Configuration conf;
 			
 	private OnUpdateMoney moneyUpdate = new OnUpdateMoney(){
 
 		@Override
 		public void onUpdateMoney() {
-			
-			//Log.i("UpdateMoney", "Aqu� 1: " + conf.getUserMoney());
-			//conf.setUserMoney(d);
-			/**
-			Esto es provicional. No debe hacerse así, debe actualizarse desde la base de datos
-			**/
-			//conf.setUserMoney();
-			//item.setTitle(""+conf.getUserMoney());
-			
-			Log.i("UpdateMoney", "Aquí 2");
+								
+			conf.setUserMoney(mucn.devolverDatos());
+			invalidateOptionsMenu();
 		}
 	};
 	
-	public void StartMoneyUpdate(String user){
+	private OnFailMoney failMoney = new OnFailMoney(){
+
+		@Override
+		public void onFailMoney() {
 			
-		Log.i("User", "Mail: " + user);
-		//mucn.execute(user);
-		
-		Log.i("Aquí", "Llegó 1");
-		
-		//conf.setUserMoney(mucn.getMoney());
+			Toast.makeText(context, "Falló al actualizar el saldo", Toast.LENGTH_LONG).show();
+		}		
+	};
 				
-		//conf.setUserMoney(1.90);
-		
-		Log.i("Aquí", "Llegó 3");
-		
-		//this.invalidateOptionsMenu();	
-			
-		Log.i("Aquí", "Llegó 4");
-		
-		//d = new MoneyUpdateConnectionNetwork(moneyUpdate, context).getMoney();	
-	}
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -87,7 +66,8 @@ public class MainActivityStore extends FragmentActivity implements OnQueryTextLi
 		setContentView(R.layout.activity_main_store);		
 		context = this;
 		conf = new Configuration(this);
-		mucn  = new MoneyUpdateConnectionNetwork(moneyUpdate, activity);
+		
+		StartMoneyUpdate(conf.getUserEmail());
 		
     	ABar = getActionBar();
     	ABar.setIcon(R.drawable.ic_menu);
@@ -100,7 +80,12 @@ public class MainActivityStore extends FragmentActivity implements OnQueryTextLi
     	ABar.addTab(ABar.newTab().setText(R.string.free).setTabListener(new TabListener(new FreeFragment())));
    	}
 	
-	//Vuelve (o lo pretende) a colocar los archivos que encuentre en el dispositivo en la pantalla principal
+	public void StartMoneyUpdate(String user){
+		mucn = new MoneyUpdateConnectionNetwork(moneyUpdate, failMoney, context);	
+		mucn.execute(user);
+	}
+	
+	//Vuelve a colocar los archivos que encuentre en el dispositivo en la pantalla principal
 	@Override
 	public void onBackPressed() {
 	   //super.onBackPressed();
@@ -124,18 +109,29 @@ public class MainActivityStore extends FragmentActivity implements OnQueryTextLi
 	}
     	
 	@Override
+	public boolean onPrepareOptionsMenu(Menu menu){
+		item = menu.findItem(R.id.money);
+		String s = String.valueOf(conf.getUserMoney());
+		item.setTitle(s);
+		return true;
+	}
+	
+	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.main_store, menu);
+		
+		//Crea el buscador
 	    SearchView searchView = (SearchView) menu.findItem(R.id.action_search_store).getActionView();
 	    searchView.setOnQueryTextListener(this);
 	    	  	
-	    item = menu.findItem(R.id.money);
-		item.setTitle("" + conf.getUserMoney());
-	    Log.i("Conf", "Conf User: " + conf.getUserName() + ", Conf Money: " + conf.getUserMoney());
-	    	    
+	    //Crea y muestra el saldo del usuario
+	    item = menu.findItem(R.id.money);    
+	    item.setTitle("" + conf.getUserMoney());
+	    item.setIcon(R.drawable.money_ico);
+	    
 		return true;
 	}
-		
+	
 	//Al pulsar en el botón intro una vez escrita la palabra entra en este método, que envia la palabra a otro Activity para que este muestre 
 	//los resultados a partir de la palabra
 	@Override
@@ -145,10 +141,7 @@ public class MainActivityStore extends FragmentActivity implements OnQueryTextLi
 		Bundle b = new Bundle();
 		b.putString("SearchText", text);
 		i.putExtras(b);
-		startActivity(i);
-		
-		//c_adapter.filter(text); 
-		
+		startActivity(i);		
 		return false;
 	}
 		
@@ -156,8 +149,8 @@ public class MainActivityStore extends FragmentActivity implements OnQueryTextLi
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    switch (item.getItemId()) {
 	    	case R.id.money:
-	    		//Intent i = new Intent(this, MoneyActivity.class);
-	    	   // startActivity(i);
+	    		Intent i = new Intent(this, MoneyActivity.class);
+	    	    startActivity(i);
 	    	    return true;
     	    
 	    	case R.id.update_store:
@@ -177,14 +170,13 @@ public class MainActivityStore extends FragmentActivity implements OnQueryTextLi
 	    			}
 	    		}
 	    			    		
-	    		Log.i("Update", "Entró en actualizar ");
 	    		return true;
 	        
 	    	case android.R.id.home:
 	    		Intent in = new Intent(this, MainScreenActivity.class);
 	    		startActivity(in);
 	    		finish();
-	    		
+	    	
 	    	default:
 	            return super.onOptionsItemSelected(item);
 	    }
@@ -194,7 +186,6 @@ public class MainActivityStore extends FragmentActivity implements OnQueryTextLi
 	public boolean onQueryTextChange(String newText) {
 		return false;
 	}
-
 }
 
 //Clase necesaria para implementar las pestañas en la aplicación. Los métodos en esta ejecutan lo que pasa cuando 
@@ -221,4 +212,5 @@ class TabListener implements ActionBar.TabListener {
 	public void onTabUnselected(Tab tab, FragmentTransaction ft) {
 		ft.remove(fragment);
 	}	
+
 }

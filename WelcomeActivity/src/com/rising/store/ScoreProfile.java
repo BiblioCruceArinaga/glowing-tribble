@@ -49,18 +49,18 @@ public class ScoreProfile extends Activity{
 	private String year;
 	private String instrument;
 	private String description;
-	private String price;
+	private float price;
 	private boolean comprado;
 	private String urlD;
 	static String selectedURL = "";
-	private String path = "/RisingScores/scores/";
+	private String path = "/RisingScores/scores/";//Implementar sistema anti piratería
 	Dialog BDialog, NMDialog;
 	Button Confirm_Buy, Cancel_Buy, Buy_Money;
 		
 	String Id_User = "";
 	String Id_Score = "";
 	
-	//  private String style -> Dato para el futuro. 
+	//  private String style -> Dato para el futuro. Estilo musical
 	//  Al final del perfil de la partitura se recomienda al usuario más del mismo estilo
 
 	//private ShareActionProvider share;
@@ -77,16 +77,10 @@ public class ScoreProfile extends Activity{
 
 		@Override
 		public void onBuyCompleted() {
+			
 			//Hay que poner algo aquí para que cuando falle la aplicación no se cierre     				
 			download.execute(selectedURL);
-			
 			comprado = true;
-			//Log.i("URL", lista.get(position).getUrl());
-			
-			Log.i("BuyComplete", "Aquí 1");
-			//new MainActivityStore().StartMoneyUpdate(conf.getUserEmail());
-			Log.i("BuyComplete", "Aquí 2");
-			
 		}
 	};
 	
@@ -109,37 +103,24 @@ public class ScoreProfile extends Activity{
 		
 	};
 	
-	
 	private OnDownloadFailed failedDownload = new OnDownloadFailed(){
 		@Override
 		public void onDownloadFailed() {
-			//Acciones a ejecutar cuando la descarga fall�
+			//Acciones a ejecutar cuando la descarga fall�(Dialog o  Activity????)
 		}
-		
 	};	
-	
-	public String FileNameString(String urlComplete){
 		
-		String urlCompleto = urlComplete.toString();
-		int position = urlCompleto.lastIndexOf('/');
-		
-		String name = urlCompleto.substring(position + 1, urlCompleto.length());
-		
-		return name;
-	}
-	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		setContentView(R.layout.score_profile_layout);
-		ctx = getApplicationContext();
+		ctx = this;
 		download = new DownloadScores(listenerDownload, failedDownload, this);
 		bnc = new BuyNetworkConnection(buyComplete, failedBuy, this);		
 		
-		// instantiate it within the onCreate method
 		mProgressDialog = new ProgressDialog(ScoreProfile.this);
-		mProgressDialog.setMessage("Descargando");
+		mProgressDialog.setMessage(getString(R.string.downloading));
 		mProgressDialog.setIndeterminate(true);
 		mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
 		mProgressDialog.setCancelable(true);
@@ -150,7 +131,7 @@ public class ScoreProfile extends Activity{
 		author = b.getString("author");
 		year = String.valueOf(b.getInt("year"));
 		instrument = b.getString("instrument");
-		price = String.valueOf(b.getFloat("price"));
+		price = b.getFloat("price");
 		description = b.getString("description");
 		comprado = b.getBoolean("comprado");
 		urlD = b.getString("url");
@@ -167,6 +148,7 @@ public class ScoreProfile extends Activity{
 		TextView TV_Instrument = (TextView) findViewById(R.id.instrumentoPartitura_profile);
 		Button B_Price = (Button) findViewById(R.id.comprar_profile);
 		TextView TV_Description = (TextView) findViewById(R.id.tv_description_profile);
+		//ImageView IV_Partitura = (ImageView) findViewById(R.id.imagenPartitura_profile);
 				
 		//  Cambiamos el texto de los TextView por el de la partitura seleccionada 
 		TV_Name.setText(name);
@@ -174,7 +156,7 @@ public class ScoreProfile extends Activity{
 		TV_Year.setText(year);
 		TV_Instrument.setText(instrument);
 		TV_Description.setText(description);
-		
+			
 		if(comprado){
 			if(buscarArchivos(FileNameString(urlD))){
 				B_Price.setText(R.string.open);
@@ -182,22 +164,22 @@ public class ScoreProfile extends Activity{
 				B_Price.setText(R.string.download);
 	    	}
 		}else{
-			if(price.equals("0.0")){
+			if(price == 0.0){
 				B_Price.setText(R.string.free);
+				B_Price.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.money_ico, 0);
 			}else{
-				B_Price.setText(price + "€");
+				B_Price.setText(price + "");
+	        	B_Price.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.money_ico, 0);
 			}
 		}
-		
-		
+				
 		//Dialog que pregunta al usuario si quiere comprar la partitura
- 		BDialog = new Dialog(ctx, R.style.cust_dialog);
+ 		BDialog = new Dialog(this, R.style.cust_dialog);
  		BDialog.setContentView(R.layout.buy_dialog);
 		BDialog.setTitle(R.string.confirm_buy);
 										
 		Confirm_Buy = (Button)BDialog.findViewById(R.id.b_confirm_buy);
 		Cancel_Buy = (Button)BDialog.findViewById(R.id.b_cancel_buy);
-		
 			
 		B_Price.setOnClickListener(new OnClickListener(){
 
@@ -213,15 +195,14 @@ public class ScoreProfile extends Activity{
         		//  Si la partitura ya está comprada lanza la descarga 
         		//  sin registrar la compra en la base de datos.
         		if(comprado){
+        			
         			//Si la partitura ya est� en el dispositivo la abre
         			if(buscarArchivos(FileNameString(urlD))){
-        				
-        				//Log.i("Filename", FileNameString(lista.get(position).getUrl()) + ", Context: " + ctx);      				
+        							
         				AbrirFichero(ctx, FileNameString(urlD));				
         			}else{
         				     				
 	     				download.execute(urlD);
-	     				//Log.i("URL", lista.get(position).getUrl());
         			}  				
         			     				
      				mProgressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
@@ -244,48 +225,46 @@ public class ScoreProfile extends Activity{
 							selectedURL = urlD;
 							
 							//Aquí tiene lugar la descarga y la compra, y el registro de la compra en la base de datos
-							if(price.equals(0.0)){	
+							if(price == 0.0){	
 									     							     							     							     					
 								bnc.execute(Id_User, Id_Score);
 				 			
 				 				BDialog.dismiss();
 										     						     								     							     							     				
 							}else{
-												 								 					
-									//Log.i("Prices", "Partitura: " + lista.get(position).getPrecio() + ", User: " + conf.getUserMoney());
-									 			
-				     			if(Integer.valueOf(price) < conf.getUserMoney()){		 					
+												 								 														 			
+				     			if(price < conf.getUserMoney()){		 					
 				 							     								     				
 					     			bnc.execute(Id_User, Id_Score);
 					     			
 					     			BDialog.dismiss();					     							     			
-									}else{
+								}else{
 										
-										NMDialog = new Dialog(ctx, R.style.cust_dialog);
+									NMDialog = new Dialog(ctx, R.style.cust_dialog);
 										
-										NMDialog.setContentView(R.layout.no_money_dialog);
-										NMDialog.setTitle(R.string.not_enough_credit);
+									NMDialog.setContentView(R.layout.no_money_dialog);
+									NMDialog.setTitle(R.string.not_enough_credit);
 										
-										Buy_Money = (Button)NMDialog.findViewById(R.id.b_buy_credit);
+									Buy_Money = (Button)NMDialog.findViewById(R.id.b_buy_credit);
 										
-										Buy_Money.setOnClickListener(new OnClickListener(){
+									Buy_Money.setOnClickListener(new OnClickListener(){
 				
 										@Override
 										public void onClick(View v) {
 											/************************************************************************/
 											/*======================================================================
-											 			Terminar cuando se implemente el growth hacking
-											  =====================================================================*/
-											 /***********************************************************************/
+										 			Terminar cuando se implemente el growth hacking
+										  	=====================================================================*/
+											/***********************************************************************/
 											
 										}
 											
-										});
+									});
 										
-										NMDialog.show();			 						
-									}
-									
+									NMDialog.show();			 						
 								}
+									
+							}
 						}
 							
 						});
@@ -304,9 +283,20 @@ public class ScoreProfile extends Activity{
         });
 	} 
 	
+	public String FileNameString(String urlComplete){
+		
+		String urlCompleto = urlComplete.toString();
+		int position = urlCompleto.lastIndexOf('/');
+		
+		String name = urlCompleto.substring(position + 1, urlCompleto.length());
+		
+		return name;
+	}
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.menu_score_profile, menu); 
+		
 		//Hacer un menú con el botón de compartir en todos sitios
 		
 		// Para cuando tengamos la tienda de partituras web se inplementará esto, no antes
@@ -326,17 +316,13 @@ public class ScoreProfile extends Activity{
 	    	case android.R.id.home:
 	    		finish();
 	    		return true;
-	    		
-	        case R.id.action_settings:
-	            Toast.makeText(getApplicationContext(), "Preferencias. Está por hacer", Toast.LENGTH_LONG).show();
-	            return true;
 	        default:
 	            return super.onOptionsItemSelected(item);
 	    }
 	}
 	
 	//Busca en el dispositivo archivos con el mismo nombre que el que se le pasa
-		public boolean buscarArchivos(String name){
+	public boolean buscarArchivos(String name){
 			//String[] ficheros = new MainScreenActivity().leeFicheros();
 			File f = new File(Environment.getExternalStorageDirectory() + path + name);
 			
@@ -347,7 +333,7 @@ public class ScoreProfile extends Activity{
 			}
 		}
 		
-		public void AbrirFichero(Context ctx, String path){
+	public void AbrirFichero(Context ctx, String path){
 			Intent in = new Intent(ctx, MainActivity.class);
 			in.putExtra("score", path);
 			
@@ -365,115 +351,7 @@ public class ScoreProfile extends Activity{
         return shareIntent;
     }
     */
-	/*
-	class AsyncDownload extends AsyncTask<String, Integer, String>{
-
-		private Context context;
-
-	    public AsyncDownload(Context context) {
-	        this.context = context;
-	    }
-
-	    @Override
-	    protected String doInBackground(String... sUrl) {
-	    	
-	        // take CPU lock to prevent CPU from going off if the user 
-	        // presses the power button during download
-	        PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
-	        PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, getClass().getName());
-	        wl.acquire();
-
-	        try {
-	            InputStream input = null;
-	            OutputStream output = null;
-	            HttpURLConnection connection = null;
-	            try {
-	                URL url = new URL(sUrl[0]);
-	                connection = (HttpURLConnection) url.openConnection();
-	                connection.connect();
-
-	                // expect HTTP 200 OK, so we don't mistakenly save error report 
-	                // instead of the file
-	                if (connection.getResponseCode() != HttpURLConnection.HTTP_OK)
-	                     return "Server returned HTTP " + connection.getResponseCode() 
-	                    		 + " " + connection.getResponseMessage();
-
-	                // this will be useful to display download percentage
-	                // might be -1: server did not report the length
-	                int fileLength = connection.getContentLength();
-
-	                // download the file
-	                input = connection.getInputStream();
-	                output = new FileOutputStream(Environment.getExternalStorageDirectory() 
-	                		+ "/RisingScores/scores/" + download.FileNameURL(url));
-
-	                byte data[] = new byte[4096];
-	                long total = 0;
-	                int count;
-	                while ((count = input.read(data)) != -1) {
-	                	
-	                    // allow canceling with back button
-	                    if (isCancelled())
-	                        return null;
-	                    total += count;
-	                    
-	                    // publishing the progress....
-	                    if (fileLength > 0) // only if total length is known
-	                        publishProgress((int) (total * 100 / fileLength));
-	                    output.write(data, 0, count);
-	                }
-	            } catch (Exception e) {
-	                return e.toString();
-	            } finally {
-	                try {
-	                    if (output != null)
-	                        output.close();
-	                    if (input != null)
-	                        input.close();
-	                } 
-	                catch (IOException ignored) { }
-
-	                if (connection != null)
-	                    connection.disconnect();
-	            }
-	        } finally {
-	            wl.release();
-	        }
-	        return null;
-	    }
 		
-		 @Override
-		    protected void onPreExecute() {
-		        super.onPreExecute();
-		        mProgressDialog.show();
-		    }
-
-		    @Override
-		    protected void onProgressUpdate(Integer... progress) {
-		        super.onProgressUpdate(progress);
-		        // if we get here, length is known, now set indeterminate to false
-		        mProgressDialog.setIndeterminate(false);
-		        mProgressDialog.setMax(100);
-		        mProgressDialog.setProgress(progress[0]);
-		    }
-
-		    @Override
-		    protected void onPostExecute(String result) {
-		        mProgressDialog.dismiss();
-		        if (result != null){
-		        	
-		        	//Sustituir por dialog
-		            Toast.makeText(context,R.string.errordownload + result, Toast.LENGTH_LONG).show();
-		        	Log.e("Error descarga", "Error descarga: " + result);
-		        }else{ 
-		            Toast.makeText(context,R.string.okdownload, Toast.LENGTH_SHORT).show();
-		            Log.i("Descarga", "Archivo descargado");		            
-		        }
-		    }
-		
-		
-	}*/
-	
 	class AsyncBuyScore extends AsyncTask<String, String, String>{
 
 		@Override
@@ -509,7 +387,7 @@ public class ScoreProfile extends Activity{
 			    	return "Inval";
 			    	
 			    }else{// [{"logstatus":"1"}]
-			    	 Log.e("BuyStatus ", "Valido");
+			    	Log.e("BuyStatus ", "Valido");
 			    	return "Val";
 			    } 
 			}else{	

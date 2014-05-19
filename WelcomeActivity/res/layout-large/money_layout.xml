@@ -28,6 +28,7 @@
             android:layout_marginLeft="10dp"
             android:textColor="@color/green"
             android:textAppearance="?android:attr/textAppearanceLarge"
+            android:drawableRight="@drawable/money_ico"
             android:textSize="50sp" />
 
     </LinearLayout>
@@ -45,7 +46,7 @@
 
     <Button
         android:id="@+id/b5"
-        android:layout_width="300dp"
+        android:layout_width="400dp"
         android:layout_height="70dp"
         android:layout_gravity="center"
         android:gravity="center"
@@ -56,7 +57,7 @@
 
     <Button
         android:id="@+id/b10"
-        android:layout_width="300dp"
+        android:layout_width="400dp"
         android:layout_height="70dp"
         android:layout_gravity="center"
         android:gravity="center"
@@ -67,7 +68,7 @@
 
     <Button
         android:id="@+id/b20"
-        android:layout_width="300dp"
+        android:layout_width="400dp"
         android:layout_height="70dp"
         android:layout_gravity="center"
         android:gravity="center"
@@ -78,7 +79,7 @@
 
     <Button
         android:id="@+id/bu50"
-        android:layout_width="300dp"
+        android:layout_width="400dp"
         android:layout_height="70dp"
         android:layout_gravity="center"
         android:gravity="center"
@@ -89,7 +90,7 @@
 
     <Button
         android:id="@+id/b100"
-        android:layout_width="300dp"
+        android:layout_width="400dp"
         android:layout_height="70dp"
         android:layout_gravity="center"
         android:gravity="center"

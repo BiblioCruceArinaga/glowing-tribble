@@ -2,6 +2,7 @@ package com.rising.login;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Locale;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -48,7 +49,7 @@ public class Login extends FragmentActivity {
 	
 	SessionManager session;
 	LoginButton authButton;
-	Configuration conf = new Configuration(this);
+	public Configuration conf = new Configuration(this);
 	public static String FId;
 	public static String FName;
 	public static String FMail;
@@ -69,6 +70,7 @@ public class Login extends FragmentActivity {
 	private String confipass = "";
 	private String mail = "";
 	private String name = "";	
+	private String language = "";
 	
 	private String URL_connect = "http://www.scores.rising.es/login-mobile";
 	private String URL_Check_Facebook = "http://www.scores.rising.es/login-facebook-mobile";
@@ -132,7 +134,9 @@ public class Login extends FragmentActivity {
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.login_layout);
-							    	
+							   
+		language = Locale.getDefault().getDisplayLanguage();
+		
 		session = new SessionManager(getApplicationContext());
 		dunc = new UserDataNetworkConnection(listenerUser, getApplicationContext());
 		
@@ -231,7 +235,7 @@ public class Login extends FragmentActivity {
 							Toast.makeText(getApplicationContext(), R.string.err_campos_vacios, Toast.LENGTH_SHORT).show();
 						}
 						else {
-							AOP.new asyncmail(getApplicationContext()).execute(mail); 
+							AOP.new asyncmail(getApplicationContext()).execute(mail, language); 
 							LPDialog.dismiss();
 						}
 					}
@@ -268,7 +272,7 @@ public class Login extends FragmentActivity {
 				ConfiPass_Registro = (EditText)RDialog.findViewById(R.id.et_confipass_registro);
 				Confirm_Reg = (Button)RDialog.findViewById(R.id.b_confirm_reg);
 				Cancel_Reg = (Button)RDialog.findViewById(R.id.b_cancel_reg);
-				
+								
 				Confirm_Reg.setOnClickListener(new OnClickListener(){
 
 					@Override
@@ -291,12 +295,12 @@ public class Login extends FragmentActivity {
 							
 							if(checkPass(pass, confipass)){
 					            PDialog = new ProgressDialog(Login.this);
-					            PDialog.setMessage("Creando tu cuenta...");
+					            PDialog.setMessage(getString(R.string.creating_account));
 					            PDialog.setIndeterminate(false);
 					            PDialog.setCancelable(false);
 					            PDialog.show();
 					            
-								AR.new asyncreg(listener).execute(name, mail, pass); 
+								AR.new asyncreg(listener).execute(name, mail, pass, language); 
  			        		}else{
  			        			Toast.makeText(getApplicationContext(), R.string.err_pass, Toast.LENGTH_LONG).show();
  			        		}
@@ -410,7 +414,6 @@ public class Login extends FragmentActivity {
     public boolean checkLoginData(String username ,String password ){
     	
 	    if(username.equals("") || password.equals("")){
-	    	Log.e("checkLoginData", "Hay campos en blanco en la actividad Login");
 	    	return false;
 	    }else{
 	    	return true;
@@ -465,7 +468,7 @@ public class Login extends FragmentActivity {
     	String user,pass;
         protected void onPreExecute() {
             PDialog = new ProgressDialog(Login.this);
-            PDialog.setMessage("Autentificando....");
+            PDialog.setMessage(getString(R.string.auth));
             PDialog.setIndeterminate(false);
             PDialog.setCancelable(false);
             PDialog.show();
@@ -504,7 +507,7 @@ public class Login extends FragmentActivity {
     	@Override
     	protected void onPreExecute() {
             PDialog = new ProgressDialog(Login.this);
-            PDialog.setMessage("Autentificando....");
+            PDialog.setMessage(getString(R.string.auth));
             PDialog.setIndeterminate(false);
             PDialog.setCancelable(false);
             PDialog.show();

@@ -14,8 +14,8 @@
 		        android:layout_width="120dp"
 		        android:layout_height="170dp"
 		        android:layout_marginLeft="20dp"
-		        android:layout_marginTop="40dp"
-		        android:layout_marginBottom="30dp"
+		        android:layout_marginTop="20dp"
+		        android:layout_marginBottom="10dp"
 		        android:contentDescription="@string/contentDescription"
 		        android:background="@drawable/scores_image" />
 	        
@@ -28,7 +28,7 @@
 	           <TextView
 			        android:id="@+id/nombrePartitura_profile"
 			        android:layout_width="match_parent"
-			        android:layout_height="100dp"
+			        android:layout_height="wrap_content"
 			        android:layout_marginTop="20dp"
 			        android:layout_marginRight="10dp"
 			        android:text="Sinfonía Nº6, 'Pastoral'"
@@ -39,7 +39,7 @@
 	           <TextView
 			        android:id="@+id/autorPartitura_profile"
 			        android:layout_width="match_parent"
-			        android:layout_height="50dp"
+			        android:layout_height="wrap_content"
 			        android:layout_marginTop="10dp"
 			        android:layout_marginRight="10dp"
 			        android:textStyle="italic"
@@ -77,14 +77,14 @@
 	        
 	        <Button
 		        android:id="@+id/comprar_profile"
-		        android:layout_width="100dp"
+		        android:layout_width="120dp"
 		        android:layout_height="50dp"
 		        android:background="@drawable/stores_buttons"
 		        android:layout_marginLeft="20dp"
 		        android:layout_marginRight="20dp"
 		        android:layout_marginTop="10dp"
 		        android:layout_marginBottom="10dp"
-		        android:text="1.99€"
+		        android:paddingRight="5dp"
 		        android:textSize="20sp" />
 	    </LinearLayout>
 	    
@@ -111,9 +111,9 @@
 	        android:id="@+id/tv_description_profile"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
-	        android:layout_marginLeft="20dp"
+	        android:layout_marginLeft="10dp"
 	        android:layout_marginRight="10dp"
-	        android:layout_marginTop="20dp"
+	        android:layout_marginTop="10dp"
 	        android:layout_marginBottom="20dp"
 	        android:textColor="#222"
 	        android:textSize="15sp"
