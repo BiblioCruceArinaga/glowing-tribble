@@ -8,6 +8,7 @@ public class Compas {
 	//  Información tal cual fue leída en el fichero
 	private ArrayList<ElementoGrafico> barlines;
 	private ArrayList<ElementoGrafico> clefs;
+	private ArrayList<Integer> positions;
 	private ElementoGrafico dynamics;
 	private ElementoGrafico pedalStart;
 	private ElementoGrafico pedalStop;
@@ -44,6 +45,7 @@ public class Compas {
 	public Compas() {
 		barlines = new ArrayList<ElementoGrafico>();
 		clefs = new ArrayList<ElementoGrafico>();
+		positions = new ArrayList<Integer>();
 		dynamics = null;
 		pedalStart = null;
 		pedalStop = null;
@@ -84,10 +86,16 @@ public class Compas {
 	
 	public void addClef(ElementoGrafico clef) {
 		clefs.add(clef);
+		
+		if (!positions.contains(clef.getPosition()))
+			positions.add(clef.getPosition());
 	}
 	
 	public void addNote(Nota note) {
 		notas.add(note);
+		
+		if (!positions.contains(note.getX())) 
+			positions.add(note.getX());
 	}
 	
 	public void clearClefs() {
@@ -156,6 +164,10 @@ public class Compas {
 	
 	public ElementoGrafico getPedalStop() {
 		return pedalStop;
+	}
+	
+	public ArrayList<Integer> getPositions() {
+		return positions;
 	}
 	
 	public boolean getRepeatBegin() {
@@ -306,6 +318,10 @@ public class Compas {
 	
 	public void setDynamics(ElementoGrafico dynamics) {
 		this.dynamics = dynamics;
+		
+		if (dynamics != null)
+			if (!positions.contains(dynamics.getPosition()))
+				positions.add(dynamics.getPosition());
 	}
 	
 	public void setEndingBegin(boolean endingBegin) {
@@ -334,10 +350,18 @@ public class Compas {
 
 	public void setPedalStart(ElementoGrafico pedalStart) {
 		this.pedalStart = pedalStart;
+		
+		if (pedalStart != null)
+			if (!positions.contains(pedalStart.getPosition()))
+				positions.add(pedalStart.getPosition());
 	}
 	
 	public void setPedalStop(ElementoGrafico pedalStop) {
 		this.pedalStop = pedalStop;
+		
+		if (pedalStop != null)
+			if (!positions.contains(pedalStop.getPosition()))
+				positions.add(pedalStop.getPosition());
 	}
 	
 	public void setRepeatBegin(boolean repeatBegin) {
@@ -389,6 +413,10 @@ public class Compas {
 	
 	public void setWords(ElementoGrafico words) {
 		this.words = words;
+		
+		if (words != null)
+			if (!positions.contains(words.getPosition()))
+				positions.add(words.getPosition());
 	}
 	
 	public void setXIni(int x_ini) {

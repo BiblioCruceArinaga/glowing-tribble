@@ -115,7 +115,8 @@ public class DrawingMethods {
 			if (compas_margin_x + posicion == posicionesOctavarium[0]) 
 				octavarium = 1;
 
-		int y = obtenerPosicionYDeNota(nota, clavesActuales.get(nota.getPentagrama() - 1), partitura.getInstrument());
+		int y = obtenerPosicionYDeNota(nota, 
+				clavesActuales.get(nota.getPentagrama() - 1), partitura.getInstrument());
 		if (nota.notaDeGracia()) y += config.getMargenNotaGracia();
 		
 		if (octavarium > 0) {
@@ -155,7 +156,7 @@ public class DrawingMethods {
 		for (int i=0; i<numClefs; i++) {
 			claveNormalTratada = false;
 
-			x_position = calcularPosicionX(clefs.get(i).getPosition());
+			x_position = calcularPosicionX(compas.getPositions(), clefs.get(i).getPosition());
 			numClavesEnElemento = clefs.get(i).getValue(1);
 
 			for (int j=0; j<numClavesEnElemento; j++) {
@@ -208,7 +209,7 @@ public class DrawingMethods {
 		ElementoGrafico dynamics = compas.getDynamics();
 		byte location = dynamics.getValue(0);
 		byte intensidadByte = dynamics.getValue(1);
-		int posicion = calcularPosicionX(dynamics.getPosition());
+		int posicion = calcularPosicionX(compas.getPositions(), dynamics.getPosition());
 
 		Intensidad intensidad = new Intensidad();
 		intensidad.setImagen(obtenerImagenDeIntensidad(intensidadByte));
@@ -222,7 +223,7 @@ public class DrawingMethods {
 		if (compas.hayPedalStart()) {
 			ElementoGrafico dynamics = compas.getPedalStart();
 			byte location = dynamics.getValue(0);
-			int posicion = calcularPosicionX(dynamics.getPosition());
+			int posicion = calcularPosicionX(compas.getPositions(), dynamics.getPosition());
 
 			Pedal pedalInicio = new Pedal();
 			pedalInicio.setImagen(pedalStart);
@@ -234,7 +235,7 @@ public class DrawingMethods {
 		if (compas.hayPedalStop()) {
 			ElementoGrafico dynamics = compas.getPedalStop();
 			byte location = dynamics.getValue(0);
-			int posicion = calcularPosicionX(dynamics.getPosition());
+			int posicion = calcularPosicionX(compas.getPositions(), dynamics.getPosition());
 
 			Pedal pedalFin = new Pedal();
 			pedalFin.setImagen(pedalStop);
@@ -252,14 +253,13 @@ public class DrawingMethods {
 
 		if (compas.hayClefs()) calcularClefs(compas);
 		calcularTime(compas);
-		if (compas.hayWords()) calcularWords(compas);
-		if (compas.hayDynamics()) calcularDynamics(compas);
-		if (compas.hayPedals()) calcularPedals(compas);
+		//if (compas.hayWords()) calcularWords(compas);
+		//if (compas.hayDynamics()) calcularDynamics(compas);
+		//if (compas.hayPedals()) calcularPedals(compas);
 		
 		compas.setXIniNotas(compas_margin_x);
 		
 		int distanciaX = calcularPosicionesDeNotas(compas);
-		
 		compas_margin_x += distanciaX;
 		compas_margin_x += config.getMargenDerechoCompases();
 		
@@ -273,7 +273,7 @@ public class DrawingMethods {
 			moverCompasAlSiguienteRenglon(compas);
 			
 			ultimoCompas = compasActual - 1;
-			reajustarCompases();
+			//reajustarCompases();
 			primerCompas = compasActual;
 		}
 	}
@@ -287,12 +287,12 @@ public class DrawingMethods {
 		}
 	}
 
-	private int calcularPosicionesDeNota(Nota nota) {
+	private int calcularPosicionesDeNota(ArrayList<Integer> posiciones, Nota nota) {
 		int posicionX = nota.getPosicion();
 		int posicionY = 0;
 
 		if (posicionX != -1) {
-			posicionX = calcularPosicionX(posicionX);
+			posicionX = calcularPosicionX(posiciones, posicionX);
 			posicionY = calcularCabezaDeNota(nota, posicionX);
 			
 			nota.setX(compas_margin_x + posicionX);
@@ -305,11 +305,13 @@ public class DrawingMethods {
 	private int calcularPosicionesDeNotas(Compas compas) {
 		ArrayList<Nota> notas = compas.getNotas();
 		int numNotas = notas.size();
+		
+		ArrayList<Integer> posiciones = compas.getPositions();
 		int mayorDistanciaX = 0;
 		int distanciaActualX = 0;
 		
 		for (int i=0; i<numNotas; i++) {
-			distanciaActualX = calcularPosicionesDeNota(notas.get(i));
+			distanciaActualX = calcularPosicionesDeNota(posiciones, notas.get(i));
 
 			if (distanciaActualX > mayorDistanciaX) 
 				mayorDistanciaX = distanciaActualX;
@@ -318,8 +320,13 @@ public class DrawingMethods {
 		return mayorDistanciaX;
 	}
 	
-	private int calcularPosicionX(int position) {
-		return position * config.getUnidadDesplazamiento() / partitura.getDivisions();
+	private int calcularPosicionX(ArrayList<Integer> posiciones, int position) {
+		int multiplicador = posiciones.indexOf(position);
+		
+		if (multiplicador > -1)
+			return config.getUnidadDesplazamiento() * multiplicador;
+		else
+			return 0;
 	}
 	
 	private void calcularTime(Compas compas) {
@@ -358,7 +365,7 @@ public class DrawingMethods {
 	
 	private void calcularWords(Compas compas) {
 		Texto texto = new Texto();
-		int posicionX = calcularPosicionX(compas.getWordsPosition());
+		int posicionX = calcularPosicionX(compas.getPositions(), compas.getWordsPosition());
 		
 		texto.setTexto(compas.getWordsString());
 		texto.setX(compas_margin_x + posicionX);
@@ -1536,13 +1543,13 @@ public class DrawingMethods {
         //  Segundo paso: reajustar posición de las notas
         for (int i=primerCompas; i<=ultimoCompas; i++) {
         	Compas compas = partitura.getCompas(i);
-        	ArrayList<Integer> xDelCompas = saberNumeroDeElementosDeCompas(compas);
+        	ArrayList<Integer> xsDelCompas = saberNumeroDeElementosDeCompas(compas);
         	
         	int lastX = saberXMasGrande(compas);
         	int anchoADistribuir = compas.getXFin() - config.getMargenDerechoCompases() - lastX;
         	
         	//  El primer elemento no lo vamos a mover, de ahí el -1
-        	int numElementos = xDelCompas.size() - 1;
+        	int numElementos = xsDelCompas.size() - 1;
         	
         	int anchoPorNota = 0;
         	if (numElementos > 0)
@@ -1561,7 +1568,7 @@ public class DrawingMethods {
         		//  de menor a mayor. Esto permite asociar automáticamente
         		//  el índice de cada posición X con el multiplicador
         		//  necesario para reajustar el elemento con ese valor de x
-        		multiplicador = xDelCompas.indexOf(notas.get(j).getX());
+        		multiplicador = xsDelCompas.indexOf(notas.get(j).getX());
     			notas.get(j).setX(notas.get(j).getX() + anchoPorNota * multiplicador);
         	}
         }

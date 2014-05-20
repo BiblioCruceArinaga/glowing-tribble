@@ -129,7 +129,6 @@ public class Config {
 				tamano_letra_tempo = 10;
 				tamano_letra_tresillo = 5;
 				tamano_letra_words = 30;
-				unidad_desplazamiento = 25;
 				this.width = width;
 				
 				x_accidental = 10;
@@ -207,7 +206,6 @@ public class Config {
 				tamano_letra_tresillo = 25;
 				tamano_letra_tempo = 45;
 				tamano_letra_words = 30;
-				unidad_desplazamiento = 200;
 				this.width = width;
 				
 				x_accidental = 16;

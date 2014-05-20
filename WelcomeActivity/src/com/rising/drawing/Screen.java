@@ -566,7 +566,8 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback {
 	                		int pulsos = compas.numeroDePulsos();
 	                		for (int j=0; j<pulsos; j++) {
 	                			
-	                			emitirSonido(j, xPos, compas.getYIni());
+	                			emitirSonido(j);
+	                			dibujarBip(j, xPos, compas.getYIni());
 	                			Thread.sleep(speed);
 	                			
 	                			synchronized (mPauseLock) {
@@ -634,8 +635,7 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback {
 		//  velocidad a la que deberá empezar a tocar
 		private void bipsDePreparacion(long speed, int pulsos) throws InterruptedException {
 			for (int j=0; j<pulsos; j++) {
-				//emitirSonido(j, partitura.getCompas().getXIni(), 
-				//		partitura.getCompas(i).getYIni());
+				emitirSonido(j);
 				int numero = pulsos - j;
 				
 				if (bip == null) {
@@ -658,7 +658,7 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback {
 			}
 		}
 
-		private void emitirSonido(int pulso, int x, int y) {		
+		private void dibujarBip(int pulso, int x, int y) {
 			bip = new OrdenDibujo();
 			bip.setOrden(DrawOrder.DRAW_TEXT);
 			bip.setPaint(PaintOptions.SET_TEXT_SIZE, config.getTamanoLetraPulso());
@@ -666,7 +666,9 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback {
 			bip.setTexto((pulso + 1) + "");
 			bip.setX1(x);
 			bip.setY1(y);
-			
+		}
+		
+		private void emitirSonido(int pulso) {
 			if (pulso == 0)
 				bipAgudo.play(bipAgudoInt, 1, 1, 1, 0, 1);
 			else 
@@ -679,6 +681,7 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback {
 			yOffset -= distanciaDesplazamiento;
 		}
 	}
+	
 	
 	/*
 	 * 
