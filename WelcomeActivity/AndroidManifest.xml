@@ -107,7 +107,10 @@
         <activity
             android:name="com.rising.mainscreen.PreferencesActivity"
             android:label="@string/app_name"></activity>
-        <activity android:name="com.rising.money.Facebook_Publish"></activity>
+
+        <activity 
+	    android:name="com.rising.money.Facebook_Publish"></activity>
+
         
     </application>
 

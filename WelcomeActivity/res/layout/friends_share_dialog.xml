@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background_scoresapp"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="20dp"
+        android:textColor="#222"
+        android:textSize="20sp"
+        android:text="@string/receive_friends" />
+
+    <EditText
+        android:id="@+id/eT_sharefriend_dialog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:text="arezrod_16@hotmail.com"
+        android:hint="@string/friendmail2"
+        android:layout_marginRight="15dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginBottom="15dp"
+        android:layout_marginTop="30dp"
+        android:textColorHint="#DDD"
+        android:textColor="#DDD"
+        android:textColorHighlight="#DDD"
+        android:textSize="18sp"
+        android:inputType="textEmailAddress" >
+
+        <requestFocus />
+    </EditText>
+
+    <Button
+        android:id="@+id/b_sharefriend_dialog"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:background="@drawable/stores_buttons"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:textSize="20sp"
+        android:textColor="#DDD"
+        android:layout_marginTop="15dp"     
+        android:layout_marginBottom="50dp"   
+        android:text="@string/share_button" />
+    
+</LinearLayout>

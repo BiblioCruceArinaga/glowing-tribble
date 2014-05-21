@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background_scoresapp"
+    android:orientation="vertical" >
+
+    <EditText
+        android:id="@+id/eT_metronome"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:textSize="30sp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="30dp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:inputType="numberSigned" >
+
+        <requestFocus />
+    </EditText>
+
+    <NumberPicker
+        android:id="@+id/nm_metronome"
+        android:layout_width="match_parent"
+        android:layout_height="150dp" 
+        android:layout_below="@id/eT_metronome">
+
+    </NumberPicker>
+
+    <ImageButton
+        android:id="@+id/playButton1"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_alignTop="@+id/playButton2"
+        android:layout_toLeftOf="@+id/playButton2"
+        android:background="@null"
+        android:contentDescription="@string/contentDescription"
+        android:src="@drawable/play_button" />
+    
+    <ImageButton
+        android:id="@+id/playButton2"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/nm_metronome"
+        android:layout_marginRight="76dp"
+        android:background="@null"
+        android:contentDescription="@string/contentDescription"
+        android:src="@drawable/borrar" />
+
+</RelativeLayout>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background_scoresapp"
+    android:orientation="vertical" >
+
+    <EditText
+        android:id="@+id/et_mail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="15dp"
+        android:textSize="24sp"
+        android:hint="@string/mail"
+        android:textColorHint="#DDD"
+        android:textColor="#DDD"
+        android:textColorHighlight="#DDD"
+        android:inputType="textEmailAddress" >
+
+        <requestFocus />
+    </EditText>
+
+    <EditText
+        android:id="@+id/et_pass"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="30dp"
+        android:textSize="24sp"
+        android:hint="@string/pass"
+        android:textColorHint="#DDD"
+        android:textColor="#DDD"
+        android:textColorHighlight="#DDD"
+        android:inputType="textPassword" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/b_confirm_login"
+            android:layout_width="0dp"
+            android:layout_height="70dp"
+            android:textColor="#EEE"
+            android:background="@drawable/stores_buttons"
+            android:textSize="30sp"
+            android:layout_weight="1"
+            android:text="@string/confirm_login" />
+
+        <Button
+            android:id="@+id/b_cancel_login"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="0dp"
+            android:layout_height="70dp"
+            android:textColor="#EEE"
+            android:background="@drawable/stores_buttons"
+            android:textSize="30sp"
+            android:layout_weight="1"
+            android:text="@string/cancel" />
+
+    </LinearLayout>
+
+</LinearLayout>
