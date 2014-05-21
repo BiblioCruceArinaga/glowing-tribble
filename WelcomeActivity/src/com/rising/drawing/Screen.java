@@ -309,36 +309,36 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback {
 				elemento.setPosition(leerHastaAlmohadilla());
 				compas.setPedalStart(elemento);
 				break;
-				
+
 			case 26:
 				elemento.addValue(figuraGrafica);
 				elemento.setPosition(leerHastaAlmohadilla());
 				compas.setPedalStop(elemento);
 				break;
-				
+
 			case 27:
 				elemento.addAllValues(leerHastaAlmohadilla());
 				elemento.setPosition(leerHastaAlmohadilla());
 				compas.setWords(elemento);
 				break;
-				
+
 			case 28:
 				elemento.addValue(fichero.readByte());
 				elemento.setPosition(leerHastaAlmohadilla());
 				compas.addBarline(elemento);
 				break;
-				
+
 			case 29:
 				compas.setRepeatOrEnding(fichero.readByte());
 				leerHastaAlmohadilla();
 				break;
-				
+
 			case 30:
 				elemento.addAllValues(leerClaves());
 				elemento.setPosition(leerHastaAlmohadilla());
 				compas.addClef(elemento);
 				break;
-				
+			
 			case 31:
 				elemento.addValue(fichero.readByte());
 				elemento.setPosition(leerHastaAlmohadilla());

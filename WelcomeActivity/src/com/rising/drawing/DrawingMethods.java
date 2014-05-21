@@ -253,9 +253,9 @@ public class DrawingMethods {
 
 		if (compas.hayClefs()) calcularClefs(compas);
 		calcularTime(compas);
-		//if (compas.hayWords()) calcularWords(compas);
-		//if (compas.hayDynamics()) calcularDynamics(compas);
-		//if (compas.hayPedals()) calcularPedals(compas);
+		if (compas.hayWords()) calcularWords(compas);
+		if (compas.hayDynamics()) calcularDynamics(compas);
+		if (compas.hayPedals()) calcularPedals(compas);
 		
 		compas.setXIniNotas(compas_margin_x);
 		
@@ -273,7 +273,7 @@ public class DrawingMethods {
 			moverCompasAlSiguienteRenglon(compas);
 			
 			ultimoCompas = compasActual - 1;
-			//reajustarCompases();
+			reajustarCompases();
 			primerCompas = compasActual;
 		}
 	}
@@ -336,19 +336,18 @@ public class DrawingMethods {
 			switch (compas.getTime().getValue(1)) {
 				case 1:
 					inicializarTempo(tempo, 3, 8);
-					config.unidadDesplazamientoCorcheas();
 					break;
 				case 2:
 					inicializarTempo(tempo, 4, 4);
-					config.unidadDesplazamientoNegras();
 					break;
 				case 3:
 					inicializarTempo(tempo, 2, 4);
-					config.unidadDesplazamientoNegras();
 					break;
 				case 4:
 					inicializarTempo(tempo, 7, 4);
-					config.unidadDesplazamientoNegras();
+					break;
+				case 5:
+					inicializarTempo(tempo, 6, 8);
 					break;
 				default:
 					break;
@@ -1534,6 +1533,12 @@ public class DrawingMethods {
 	            for (int j=0; j<numNotas; j++) {
 	            	compas.getNota(j).setX(compas.getNota(j).getX() + anchoParaCadaCompas);
 	            }
+
+	            if (compas.hayPedalInicio())
+	            	compas.getPedalInicio().setX(compas.getPedalInicio().getX() + anchoParaCadaCompas);
+	            
+	            if (compas.hayPedalFin())
+	            	compas.getPedalFin().setX(compas.getPedalFin().getX() + anchoParaCadaCompas);
 	            
 	            if (compas.hayTempo())
 	            	compas.getTempo().setX(compas.getXIniNotas() - config.getAnchoTempo());
@@ -1571,6 +1576,26 @@ public class DrawingMethods {
         		multiplicador = xsDelCompas.indexOf(notas.get(j).getX());
     			notas.get(j).setX(notas.get(j).getX() + anchoPorNota * multiplicador);
         	}
+        	
+        	//  Los elementos gráficos con una posición determinada
+        	//  deben reajustarse igual que las notas
+        	if (compas.hayIntensidad()) {
+        		multiplicador = xsDelCompas.indexOf(compas.getIntensidad().getX());
+            	compas.getIntensidad().setX( 
+            			compas.getIntensidad().getX() + anchoPorNota * multiplicador);
+        	}
+            
+        	if (compas.hayPedalInicio()) {
+        		multiplicador = xsDelCompas.indexOf(compas.getPedalInicio().getX());
+            	compas.getPedalInicio().setX( 
+            			compas.getPedalInicio().getX() + anchoPorNota * multiplicador);
+        	}
+            
+            if (compas.hayPedalFin()) {
+            	multiplicador = xsDelCompas.indexOf(compas.getPedalFin().getX());
+            	compas.getPedalFin().setX( 
+            			compas.getPedalFin().getX() + anchoPorNota * multiplicador);
+            }
         }
 	}
 	
@@ -1585,6 +1610,20 @@ public class DrawingMethods {
 		for (int i=0; i<numNotas; i++)
 			if (!xEncontradas.contains(notas.get(i).getX()))
 				xEncontradas.add(notas.get(i).getX());
+		
+		//  Figuras gráficas del compás con posiciones determinadas
+		//  independientes de las posiciones de las notas
+		if (compas.hayIntensidad())
+			if (!xEncontradas.contains(compas.getIntensidad().getX()))
+				xEncontradas.add(compas.getIntensidad().getX());
+		
+		if (compas.hayPedalInicio())
+			if (!xEncontradas.contains(compas.getPedalInicio().getX()))
+				xEncontradas.add(compas.getPedalInicio().getX());
+		
+		if (compas.hayPedalFin())
+			if (!xEncontradas.contains(compas.getPedalFin().getX()))
+				xEncontradas.add(compas.getPedalFin().getX());
 		
 		Collections.sort(xEncontradas);
 		return xEncontradas;
@@ -1694,9 +1733,9 @@ public class DrawingMethods {
 			if (i == numBeams - 1) {
 				
 				//  Gestión de hooks en la última nota. Por ahora sólo se está controlando un caso
-				if (partitura.getCompas(i).getNota(i).getBeam() == 4) {
+				if (partitura.getCompas(indCompasAnt).getNota(indNotaAnt).getBeam() == 4) {
 					
-					int x_last_beam = partitura.getCompas(numBeams - 1).getNota(numBeams - 1).getX();
+					int x_last_beam = partitura.getCompas(indCompasAnt).getNota(indNotaAnt).getX();
 
 					ordenDibujo = new OrdenDibujo();
 					ordenDibujo.setOrden(DrawOrder.DRAW_LINE);

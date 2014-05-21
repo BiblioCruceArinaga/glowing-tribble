@@ -64,6 +64,14 @@ public class Nota {
 		return figurasGraficas.contains((byte) 25);
 	}
 	
+	public boolean finDeTresillo() {
+		return figurasGraficas.contains((byte) 4);
+	}
+	
+	public byte getBeam() {
+		return beam;
+	}
+	
 	public byte getFiguracion() {
 		return figuracion;
 	}
@@ -76,18 +84,14 @@ public class Nota {
 		return ligadura;
 	}
 	
-	public int getOctavarium() {
-		return octavarium;
-	}
-	
-	public byte getStep() {
-		return step;
-	}
-	
 	public byte getOctava() {
 		return octava;
 	}
 	
+	public int getOctavarium() {
+		return octavarium;
+	}
+
 	public byte getPentagrama() {
 		return pentagrama;
 	}
@@ -96,18 +100,6 @@ public class Nota {
 		return plica;
 	}
 	
-	public byte getBeam() {
-		return beam;
-	}
-	
-	public byte getVoz() {
-		return voz;
-	}
-	
-	public ArrayList<Byte> getPosicionArray() {
-		return posicion;
-	}
-
 	public int getPosicion() {
 		byte[] bytesArray = new byte[posicion.size()];
         int len = bytesArray.length;
@@ -124,6 +116,18 @@ public class Nota {
         }
 	}
 	
+	public ArrayList<Byte> getPosicionArray() {
+		return posicion;
+	}
+	
+	public byte getStep() {
+		return step;
+	}
+
+	public byte getVoz() {
+		return voz;
+	}
+
 	public int getX() {
 		return x;
 	}
@@ -134,10 +138,6 @@ public class Nota {
 	
 	public int getYOctavarium() {
 		return y_octavarium;
-	}
-	
-	public boolean finDeTresillo() {
-		return figurasGraficas.contains((byte) 4);
 	}
 	
 	public boolean haciaArriba() {

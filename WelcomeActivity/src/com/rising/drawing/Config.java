@@ -3,7 +3,6 @@ package com.rising.drawing;
 public class Config {
 	
 	private boolean supported = true;
-	private int densityDPI = 0;
 	
 	private int alto_dialog_bpm;
 	private int altura_arco_ligaduras;
@@ -79,7 +78,6 @@ public class Config {
 	private int y_tresillo_abajo;
 	
 	public Config(int densityDPI, int width) {
-		this.densityDPI = densityDPI;
 		
 		switch (densityDPI) {
 			case 120:
@@ -129,6 +127,7 @@ public class Config {
 				tamano_letra_tempo = 10;
 				tamano_letra_tresillo = 5;
 				tamano_letra_words = 30;
+				unidad_desplazamiento = 30;
 				this.width = width;
 				
 				x_accidental = 10;
@@ -206,6 +205,7 @@ public class Config {
 				tamano_letra_tresillo = 25;
 				tamano_letra_tempo = 45;
 				tamano_letra_words = 30;
+				unidad_desplazamiento = 50;
 				this.width = width;
 				
 				x_accidental = 16;
@@ -528,65 +528,6 @@ public class Config {
 	
 	public int getYTresilloAbajo() {
 		return y_tresillo_abajo;
-	}
-	
-	/**
-	 * Cuando el tempo se mide en corcheas, el valor por defecto de
-	 * la unidad de desplazamiento es adecuado. Esta función existe
-	 * en caso de que hayamos leído compases medidos con negras
-	 * anteriormente y queramos volver a tempos medidos por corcheas
-	 * @param unidad_desplazamiento
-	 */
-	public void unidadDesplazamientoCorcheas() {
-		switch (densityDPI) {
-			case 120:
-				break;
-			case 160:
-				break;
-			case 213:
-				unidad_desplazamiento = 25;
-				break;
-			case 240:
-				break;
-			case 320:
-				unidad_desplazamiento = 200;
-				break;
-			case 400:
-				break;
-			case 480:
-				break;
-			default: 
-				supported = false;
-		}
-	}
-	
-	/**
-	 * Cuando el tempo se mide en negras, la unidad de desplazamiento debe
-	 * reducirse a la mitad, ya que de lo contrario los elementos se verían 
-	 * demasiado separados
-	 * @param unidad_desplazamiento
-	 */
-	public void unidadDesplazamientoNegras() {
-		switch (densityDPI) {
-			case 120:
-				break;
-			case 160:
-				break;
-			case 213:
-				unidad_desplazamiento = 12;
-				break;
-			case 240:
-				break;
-			case 320:
-				unidad_desplazamiento = 100;
-				break;
-			case 400:
-				break;
-			case 480:
-				break;
-			default: 
-				supported = false;
-		}
 	}
 	
 	/**
