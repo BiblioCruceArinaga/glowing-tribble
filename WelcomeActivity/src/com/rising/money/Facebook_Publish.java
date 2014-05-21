@@ -14,6 +14,9 @@ import com.facebook.UiLifecycleHelper;
 import com.facebook.widget.FacebookDialog;
 import com.facebook.widget.WebDialog;
 import com.facebook.widget.WebDialog.OnCompleteListener;
+import com.rising.drawing.R;
+import com.rising.money.SocialBonificationNetworkConnection.OnBonificationDone;
+import com.rising.money.SocialBonificationNetworkConnection.OnFailBonification;
 
 public class Facebook_Publish extends Activity{
 	
@@ -24,13 +27,34 @@ public class Facebook_Publish extends Activity{
 	private String DESCRIPTION = "Todo el poder de las partituras en la palma de tu mano";
 	private String SUBTITLE = "Las partituras del futuro";
 	private String PICTURE = "";
+	private String ID_BONIFICATION = "3";
+	private SocialBonificationNetworkConnection sbnc;
 		
+	private OnBonificationDone successbonification = new OnBonificationDone(){
+
+		@Override
+		public void onBonificationDone() {
+			Toast.makeText(ctx, R.string.win_social, Toast.LENGTH_LONG).show();
+			finish();
+		}		
+	};
+	
+	private OnFailBonification failbonification = new OnFailBonification(){
+
+		@Override
+		public void onFailBonification() {
+			Toast.makeText(ctx, R.string.fail_social, Toast.LENGTH_LONG).show();
+			finish();
+		}		
+	};
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
 		uiHelper = new UiLifecycleHelper(this, null);
 	    uiHelper.onCreate(savedInstanceState);
+	    sbnc = new SocialBonificationNetworkConnection(successbonification, failbonification, ctx);
 	    publish();
 	}
 		
@@ -39,7 +63,8 @@ public class Facebook_Publish extends Activity{
 	    super.onActivityResult(requestCode, resultCode, data);
 
 	    uiHelper.onActivityResult(requestCode, resultCode, data, new FacebookDialog.Callback() {
-	        @Override
+	        
+	    	@Override
 	        public void onError(FacebookDialog.PendingCall pendingCall, Exception error, Bundle data) {
 	            Log.e("Activity", String.format("Error: %s", error.toString()));
 	            finish();
@@ -47,9 +72,8 @@ public class Facebook_Publish extends Activity{
 
 	        @Override
 	        public void onComplete(FacebookDialog.PendingCall pendingCall, Bundle data) {
-	            Log.i("Activity", "Success!");
-	            
-	            finish();
+	            Log.i("Activity", "Success!");	     
+	            sbnc.execute(ID_BONIFICATION);
 	        }
 	    });
 	}
@@ -59,7 +83,7 @@ public class Facebook_Publish extends Activity{
 	    super.onResume();
 	    uiHelper.onResume();
 	}
-
+	
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 	    super.onSaveInstanceState(outState);

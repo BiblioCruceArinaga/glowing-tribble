@@ -18,9 +18,7 @@ import com.rising.conexiones.HttpPostAux;
 import com.rising.login.Configuration;
 
 public class BuyMoneyNetworkConnection extends AsyncTask<String, Integer, Integer>{
-	
-	//Esta por probar. 
-		
+			
 	//Comunicaci�n HTTP con el servidor
 	HttpPost httppost;
 	HttpClient httpcliente;

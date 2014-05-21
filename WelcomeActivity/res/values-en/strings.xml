@@ -363,31 +363,37 @@ You can buy scores in our store.</string>
     		<string name="searching">Searching...</string>
     	
     		<!-- Pantalla saldo -->
-    		<string name="money">Credit</string>
-    		<string name="current_money">Current credit:  </string>
-    		<string name="free_money">Get free credit!</string>
-    		<string name="add5">Add 5 credits</string>
-    		<string name="add10">Add 10 credits + 1 Free</string>
-    		<string name="add20">Add 20 credits + 2 Free</string>
-    		<string name="add50">Add 50 credits + 5 Free</string>
-    		<string name="add100">Add 100 credits + 10 Free</string>
-    		<string name="share_friends">Share with friends</string>
-    		<string name="share_social">Share in social networks</string>
-    		<string name="share_button">Share</string>
-    		<string name="share_friends_text">Invite your friends to join to Scores</string>
-    		<string name="share_social_text">Share how much you like Scores in social networks</string>
-    		<string name="friendmail">Enter a friend e-mail</string>
-    		<string name="friendmail_empty">This field cannot be empty</string>
-    		<string name="friendmail2">Friend e-mail</string>
-    		<string name="receive_friends">You will receive 0,15 credits!</string>
-    		<string name="receive_social">You will receive 0,05 credits!</string>
-    		<string name="rate_app">Rate Scores on Google Play Store</string>
-    		<string name="receive_rate">You will receive 0,05 credits!</string>
-    		<string name="share_rate">Rate the app</string>
-    		<string name="google_init_error">Fail to init the comunication with Google</string>
-    		<string name="buy_fail">Fail to finish the purchase. This didn\'t do it</string>
-    		<string name="buy_fail2">Fail to register the purchase</string>
-    		<string name="buy_ok">The purchase was successed</string>
+    		
+    			<!-- Pantalla compra dinero -->
+	    			<string name="money">Credit</string>
+		    		<string name="current_money">Current credit:  </string>
+		    		<string name="free_money">Get free credit!</string>
+		    		<string name="add5">Add 5 credits</string>
+		    		<string name="add10">Add 10 credits + 1 Free</string>
+		    		<string name="add20">Add 20 credits + 2 Free</string>
+		    		<string name="add50">Add 50 credits + 5 Free</string>
+		    		<string name="add100">Add 100 credits + 10 Free</string>
+		    		<string name="google_init_error">Fail to init the comunication with Google</string>
+		    		<string name="buy_fail">Fail to finish the purchase. This didn\'t do it</string>
+		    		<string name="buy_fail2">Fail to register the purchase</string>
+		    		<string name="buy_ok">The purchase was successed</string>
+	    		
+	    		<!-- Pantalla saldo gratis -->
+    				<string name="share_friends">Share with friends</string>
+    				<string name="share_social">Share in social networks</string>
+    				<string name="share_button">Share</string>
+    				<string name="share_friends_text">Invite your friends to join to Scores</string>
+    				<string name="share_social_text">Share how much you like Scores in social networks</string>
+    				<string name="friendmail">Enter a friend e-mail</string>
+    				<string name="friendmail_empty">This field cannot be empty</string>
+			    	<string name="friendmail2">Friend e-mail</string>
+			    	<string name="receive_friends">You will receive 0,15 credits!</string>
+			    	<string name="receive_social">You will receive 0,05 credits!</string>
+			    	<string name="rate_app">Rate Scores on Google Play Store</string>
+			    	<string name="receive_rate">You will receive 0,05 credits!</string>
+			    	<string name="win_social">You have received 0,05 credits!</string>
+			    	<string name="fail_social">Fail to register your share</string>
+			    	<string name="share_rate">Rate the app</string>
     		
     		<!-- Pantalla encuesta -->
     		<string name="quest_explain">In our efforts to improve and want to always bring you the best and right what

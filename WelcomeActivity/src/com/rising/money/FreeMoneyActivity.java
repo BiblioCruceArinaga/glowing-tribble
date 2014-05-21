@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -82,9 +81,9 @@ public class FreeMoneyActivity extends Activity{
 						if(ET_SFriendsDialog.getText().toString().equals("")){
 							Toast.makeText(ctx, R.string.friendmail_empty, Toast.LENGTH_LONG).show();
 						}else{
-							Log.i("Llamada", "La llamada de la fortuna");
+						
 							invitacion.execute(ET_SFriendsDialog.getText().toString());
-							friends.dismiss();
+							friends.dismiss(); 
 						}
 					}
 					
@@ -109,7 +108,8 @@ public class FreeMoneyActivity extends Activity{
 
 					@Override
 					public void onClick(View v) {
-						Toast.makeText(ctx, "Facebook", Toast.LENGTH_LONG).show();
+						Intent i = new Intent(ctx, Facebook_Publish.class);
+						startActivity(i);
 					}
 						
 				});
@@ -145,18 +145,4 @@ public class FreeMoneyActivity extends Activity{
 	    }
 	}
 
-	
-	
-	
-	
-	
-		
-	
-	
-	
-	
-	
-	
-	
-	
 }
