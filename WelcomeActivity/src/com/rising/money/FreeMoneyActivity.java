@@ -57,7 +57,7 @@ public class FreeMoneyActivity extends Activity{
     	
     	ABar.setTitle(R.string.money);
     	ABar.setDisplayHomeAsUpEnabled(true); 
-      	
+    	
     	invitacion = new Invitations(listenerInvitation, failInvitation, this);
     	
     	Button SFriends = (Button) findViewById(R.id.b_share_friends);
@@ -109,8 +109,7 @@ public class FreeMoneyActivity extends Activity{
 
 					@Override
 					public void onClick(View v) {
-						Intent i = new Intent(ctx, Facebook_Publish.class);
-						startActivity(i);
+						Toast.makeText(ctx, "Facebook", Toast.LENGTH_LONG).show();
 					}
 						
 				});
@@ -119,8 +118,8 @@ public class FreeMoneyActivity extends Activity{
 
 					@Override
 					public void onClick(View v) {
-						//Toast.makeText(ctx, "Twitter", Toast.LENGTH_LONG).show();
-						//new Twitter_Publish(ctx).publish();
+						Toast.makeText(ctx, "Twitter", Toast.LENGTH_LONG).show();
+						
 					}
 					
 				});
@@ -145,26 +144,13 @@ public class FreeMoneyActivity extends Activity{
 	            return super.onOptionsItemSelected(item);
 	    }
 	}
+
 	
 	
 	
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+		
 	
 	
 	
