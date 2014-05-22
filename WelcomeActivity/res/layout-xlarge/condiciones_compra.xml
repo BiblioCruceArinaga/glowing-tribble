@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/textAreaScroller" 
+    android:layout_width="fill_parent" 
+    android:layout_height="500dp" 
+    android:background="@drawable/background_scoresapp"
+    android:scrollbars="vertical">
+   
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+         android:layout_margin="30dp"
+        android:paddingBottom="20dp"
+        android:textSize="20sp"
+        android:textColor="#222"
+        android:text="@string/condiciones" />
+    
+</ScrollView>
