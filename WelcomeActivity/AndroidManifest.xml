@@ -110,6 +110,7 @@
 
         <activity 
 	    	android:name="com.rising.money.Facebook_Publish"></activity>
+        <activity android:name="com.rising.money.Twitter_Publish"></activity>
 
         
     </application>

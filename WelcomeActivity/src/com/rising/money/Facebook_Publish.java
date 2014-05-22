@@ -35,7 +35,8 @@ public class Facebook_Publish extends Activity{
 		@Override
 		public void onBonificationDone() {
 			Toast.makeText(ctx, R.string.win_social, Toast.LENGTH_LONG).show();
-			finish();
+			
+			finish();			
 		}		
 	};
 	
@@ -94,6 +95,15 @@ public class Facebook_Publish extends Activity{
 	public void onPause() {
 	    super.onPause();
 	    uiHelper.onPause();
+	}
+
+	//Debo evitar que se cierre esta ventana dando por válido el compratir. 
+	@Override
+	public void onBackPressed() {
+		super.onBackPressed();
+		//Toast.makeText(ctx, R.string.fail_social, Toast.LENGTH_LONG).show();
+		finish();
+		uiHelper.onDestroy();
 	}
 
 	@Override

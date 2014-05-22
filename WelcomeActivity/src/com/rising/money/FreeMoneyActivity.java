@@ -26,7 +26,7 @@ public class FreeMoneyActivity extends Activity{
 	EditText ET_SFriendsDialog;
 	Context ctx = this;
 	Invitations invitacion;
-		
+	
 	private OnInvitationOk listenerInvitation = new OnInvitationOk(){
 
 		@Override
@@ -61,7 +61,7 @@ public class FreeMoneyActivity extends Activity{
     	
     	Button SFriends = (Button) findViewById(R.id.b_share_friends);
     	Button SSocial = (Button) findViewById(R.id.b_share_social);
-    	
+    	    	
     	SFriends.setOnClickListener(new OnClickListener(){
 
 			@Override
@@ -104,10 +104,12 @@ public class FreeMoneyActivity extends Activity{
 				ImageButton B_FB_SocialShareDialog = (ImageButton) social.findViewById(R.id.ib_fb_social);
 				ImageButton B_TWT_SocialShareDialog = (ImageButton) social.findViewById(R.id.ib_twt_social);
 				
+				//Debería poner un progressdialog que avise de que está cargando la ventana.
 				B_FB_SocialShareDialog.setOnClickListener(new OnClickListener(){
 
 					@Override
 					public void onClick(View v) {
+						
 						Intent i = new Intent(ctx, Facebook_Publish.class);
 						startActivity(i);
 					}
@@ -118,8 +120,8 @@ public class FreeMoneyActivity extends Activity{
 
 					@Override
 					public void onClick(View v) {
-						Toast.makeText(ctx, "Twitter", Toast.LENGTH_LONG).show();
-						
+						Intent i = new Intent(ctx, Twitter_Publish.class);
+						startActivity(i);						
 					}
 					
 				});
