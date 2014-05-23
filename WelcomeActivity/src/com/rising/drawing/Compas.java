@@ -2,6 +2,7 @@ package com.rising.drawing;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class Compas {
 
@@ -94,8 +95,13 @@ public class Compas {
 	public void addNote(Nota note) {
 		notas.add(note);
 		
-		if (!positions.contains(note.getX())) 
-			positions.add(note.getX());
+		if (!positions.contains(note.getPosicion())) 
+			positions.add(note.getPosicion());
+		
+		int i = 0;
+		if (i == 0) {
+			i++;
+		}
 	}
 	
 	public void clearClefs() {
@@ -167,6 +173,7 @@ public class Compas {
 	}
 	
 	public ArrayList<Integer> getPositions() {
+		Collections.sort(positions);
 		return positions;
 	}
 	
