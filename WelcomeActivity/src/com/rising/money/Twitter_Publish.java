@@ -42,6 +42,8 @@ public class Twitter_Publish extends Activity {
 	 	 
 	 public void publish() throws TwitterException{
 	 
+		 
+		 
 		//Instantiate a re-usable and thread-safe factory
 	        TwitterFactory twitterFactory = new TwitterFactory();
 	 
