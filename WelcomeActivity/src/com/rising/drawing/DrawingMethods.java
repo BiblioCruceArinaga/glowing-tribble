@@ -679,6 +679,9 @@ public class DrawingMethods {
 				switch (location) {
 					case 2:
 						return compas_margin_y + config.getDistanciaLineasPentagrama() * 6;
+					case 3:
+						return compas_margin_y + config.getDistanciaLineasPentagrama() * 4 + 
+								config.getDistanciaPentagramas() - config.getDistanciaLineasPentagrama() * 4;
 					default:
 						return compas_margin_y - config.getDistanciaLineasPentagrama() * 6;
 				}
@@ -699,6 +702,9 @@ public class DrawingMethods {
 				switch (location) {
 					case 1:
 						return compas_margin_y - config.getDistanciaLineasPentagrama();
+					case 4:
+						return compas_margin_y + config.getDistanciaLineasPentagrama() * 4 + 
+								config.getDistanciaPentagramas() + config.getDistanciaLineasPentagrama() * 6;
 					default:
 						return compas_margin_y - config.getDistanciaLineasPentagrama();
 				}
