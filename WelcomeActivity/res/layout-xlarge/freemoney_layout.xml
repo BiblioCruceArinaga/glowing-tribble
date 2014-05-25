@@ -38,6 +38,7 @@
         android:background="@drawable/stores_buttons"
         android:gravity="center"
         android:textSize="40sp"
+        android:textColor="#DDD"
         android:layout_marginTop="20dp"
         android:text="@string/share_friends" />
 
@@ -62,6 +63,7 @@
         android:layout_gravity="center"
         android:gravity="center"
         android:textSize="40sp"
+        android:textColor="#DDD"
         android:layout_marginTop="20dp"
         android:text="@string/share_social" />
 

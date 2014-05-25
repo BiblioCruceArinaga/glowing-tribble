@@ -21,6 +21,8 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.NumberPicker;
 import android.widget.NumberPicker.OnScrollListener;
+import android.widget.SeekBar;
+import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.Toast;
 
 public class MainActivity extends Activity{
@@ -33,6 +35,7 @@ public class MainActivity extends Activity{
 	private ImageButton playButton;
 	private NumberPicker metronome_speed;
 	private EditText editText_metronome;
+	private SeekBar seekBar_metronome;
 	private int tempo = 120;
 	String score;
 	private boolean play;
@@ -112,6 +115,7 @@ public class MainActivity extends Activity{
 		MDialog.setTitle(R.string.metronome);	
 		MDialog.getWindow().setLayout(config.getAnchoDialogBpm(), config.getAltoDialogBpm());
 
+		seekBar_metronome = (SeekBar)MDialog.findViewById(R.id.seekBar_metronome);
 		editText_metronome = (EditText)MDialog.findViewById(R.id.eT_metronome);
 
 		metronome_speed = (NumberPicker)MDialog.findViewById(R.id.nm_metronome);
@@ -125,10 +129,34 @@ public class MainActivity extends Activity{
 			@Override
 			public void onScrollStateChange(NumberPicker arg0, int arg1) {
 				// TODO Auto-generated method stub
-				editText_metronome.setText(arg0.getValue() + "");
+				seekBar_metronome.setProgress(arg0.getValue());
 			}
 		});
-					
+			
+		seekBar_metronome.setMax(300);
+		seekBar_metronome.setProgress(value);
+		seekBar_metronome.setOnSeekBarChangeListener(new OnSeekBarChangeListener(){
+
+			@Override
+			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+				metronome_speed.setValue(progress);
+				Log.i("Progress", progress + "");
+				
+			}
+
+			@Override
+			public void onStartTrackingTouch(SeekBar seekBar) {
+				Log.i("Seek", "StartTracking");
+				
+			}
+
+			@Override
+			public void onStopTrackingTouch(SeekBar seekBar) {
+				Log.i("Seek", "StopTracking");
+				
+			}
+		});
+		
 		playButton = (ImageButton)MDialog.findViewById(R.id.playButton1);
 		playButton.setOnClickListener(new OnClickListener(){
  

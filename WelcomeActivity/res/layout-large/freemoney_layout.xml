@@ -12,7 +12,7 @@
         android:layout_gravity="center"
         android:gravity="center"
         android:textColor="#222"
-        android:textSize="40sp"
+        android:textSize="50sp"
         android:layout_marginTop="90dp"
         android:text="@string/free_money"
         android:textAppearance="?android:attr/textAppearanceLarge" />
@@ -23,7 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:gravity="center"
-        android:layout_marginTop="150dp"
+        android:layout_marginTop="100dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:textColor="#222"
@@ -32,12 +32,13 @@
     
     <Button
         android:id="@+id/b_share_friends"
-        android:layout_width="450dp"
+        android:layout_width="400dp"
         android:layout_height="100dp"
         android:layout_gravity="center"
         android:background="@drawable/stores_buttons"
         android:gravity="center"
         android:textSize="30sp"
+        android:textColor="#DDD"
         android:layout_marginTop="20dp"
         android:text="@string/share_friends" />
 
@@ -56,12 +57,13 @@
     
     <Button
         android:id="@+id/b_share_social"
-        android:layout_width="450dp"
+        android:layout_width="400dp"
         android:layout_height="100dp"
         android:background="@drawable/stores_buttons"
         android:layout_gravity="center"
         android:gravity="center"
         android:textSize="30sp"
+        android:textColor="#DDD"
         android:layout_marginTop="20dp"
         android:text="@string/share_social" />
 

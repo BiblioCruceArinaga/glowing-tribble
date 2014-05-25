@@ -30,7 +30,7 @@
 		        android:layout_height="wrap_content"
 		        android:layout_marginLeft="25dp"
 		        android:layout_marginTop="100dp"
-		        android:textSize="20sp"
+		        android:textSize="25sp"
 		        android:textColor="#222"
 		        android:text="@string/version" />
 	        
@@ -40,7 +40,7 @@
 		        android:layout_height="wrap_content"
 		        android:layout_marginLeft="5dp"
 		        android:layout_marginTop="100dp"
-		        android:textSize="20sp"
+		        android:textSize="25sp"
 		        android:textColor="#222"
 		        android:text="@string/appversion" />
 	        
@@ -52,7 +52,7 @@
 	        android:layout_height="wrap_content"
 	        android:layout_marginLeft="25dp"
 	        android:layout_marginTop="16dp"
-	        android:textSize="20sp"
+	        android:textSize="25sp"
 	        android:textColor="#222"
 	        android:text="@string/acerca_de" />
 	
@@ -66,7 +66,7 @@
 		        android:layout_height="wrap_content"
 		        android:layout_marginLeft="25dp"
 		        android:layout_marginTop="19dp"
-		        android:textSize="20sp"
+		        android:textSize="25sp"
 		        android:textColor="#222"
 		        android:text="@string/visitanos" />
 	        
@@ -76,7 +76,7 @@
 		        android:layout_height="wrap_content"
 		        android:layout_marginLeft="25dp"
 		        android:layout_marginTop="19dp"
-		        android:textSize="20sp"
+		        android:textSize="25sp"
 		        android:textColor="#222"
 		        android:text="@string/web" />
 	        

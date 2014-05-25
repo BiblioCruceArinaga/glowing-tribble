@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:textColor="#222"
         android:layout_gravity="center"
-        android:textSize="40sp"
+        android:textSize="25sp"
         android:layout_margin="20dp"
         android:text="@string/buy_agree"
         android:textAppearance="?android:attr/textAppearanceLarge" />
@@ -24,7 +24,7 @@
         <Button
             android:id="@+id/b_confirm_buy"
             android:layout_width="0dp"
-            android:layout_height="70dp"
+            android:layout_height="50dp"
             android:textColor="#EEE"
             android:background="@drawable/stores_buttons"
             android:textSize="30sp"
@@ -35,7 +35,7 @@
             android:id="@+id/b_cancel_buy"
             style="?android:attr/buttonBarButtonStyle"
             android:layout_width="0dp"
-            android:layout_height="70dp"
+            android:layout_height="50dp"
             android:textColor="#EEE"
             android:background="@drawable/stores_buttons"
             android:textSize="30sp"

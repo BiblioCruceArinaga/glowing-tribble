@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-<string name="appversion">0.3</string>
+<string name="appversion">0.4</string>
 
     <!-- Pantalla Login -->
     <string name="app_name">Scores</string>
