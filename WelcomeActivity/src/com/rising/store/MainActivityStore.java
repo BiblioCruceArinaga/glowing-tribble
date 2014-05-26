@@ -149,8 +149,8 @@ public class MainActivityStore extends FragmentActivity implements OnQueryTextLi
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    switch (item.getItemId()) {
 	    	case R.id.money:
-	    		/*Intent i = new Intent(this, MoneyActivity.class);
-	    	    startActivity(i);*/
+	    		Intent i = new Intent(this, MoneyActivity.class);
+	    	    startActivity(i);
 	    	    return true;
     	    
 	    	case R.id.update_store:

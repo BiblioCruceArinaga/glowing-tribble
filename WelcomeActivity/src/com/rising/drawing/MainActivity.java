@@ -17,7 +17,7 @@ import android.view.SurfaceHolder;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
-import android.widget.EditText;
+import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.NumberPicker;
 import android.widget.NumberPicker.OnScrollListener;
@@ -34,13 +34,14 @@ public class MainActivity extends Activity{
 	private Dialog MDialog;
 	private ImageButton playButton;
 	private NumberPicker metronome_speed;
-	private EditText editText_metronome;
+	private CheckBox numeros_checkbox;
 	private SeekBar seekBar_metronome;
 	private int tempo = 120;
 	String score;
 	private boolean play;
 	private boolean stop = false;
 	private Config config = null;
+	private boolean numeros_bip; 
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState){
@@ -57,7 +58,6 @@ public class MainActivity extends Activity{
 		DisplayMetrics dm = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(dm);
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-
 		s = new Screen(this, score, dm.widthPixels, dm.densityDpi);
 		if (s.isValidScreen()) {
 			myScreenThread = new ScreenThread(holder, s);
@@ -116,9 +116,9 @@ public class MainActivity extends Activity{
 		MDialog.getWindow().setLayout(config.getAnchoDialogBpm(), config.getAltoDialogBpm());
 
 		seekBar_metronome = (SeekBar)MDialog.findViewById(R.id.seekBar_metronome);
-		editText_metronome = (EditText)MDialog.findViewById(R.id.eT_metronome);
-
+		numeros_checkbox = (CheckBox)MDialog.findViewById(R.id.cB_metronome);
 		metronome_speed = (NumberPicker)MDialog.findViewById(R.id.nm_metronome);
+					
 		metronome_speed.setMaxValue(300);
 		metronome_speed.setMinValue(1);
 		metronome_speed.setValue(value);
@@ -132,7 +132,7 @@ public class MainActivity extends Activity{
 				seekBar_metronome.setProgress(arg0.getValue());
 			}
 		});
-			
+			 
 		seekBar_metronome.setMax(300);
 		seekBar_metronome.setProgress(value);
 		seekBar_metronome.setOnSeekBarChangeListener(new OnSeekBarChangeListener(){
@@ -156,17 +156,19 @@ public class MainActivity extends Activity{
 				
 			}
 		});
-		
+				
 		playButton = (ImageButton)MDialog.findViewById(R.id.playButton1);
 		playButton.setOnClickListener(new OnClickListener(){
  
 			@Override
 			public void onClick(View v) {
-				if (!editText_metronome.getText().toString().equals("")) {
-					tempo = Integer.parseInt(editText_metronome.getText().toString());
-				}
-				else {
-					tempo = metronome_speed.getValue();
+				
+				tempo = metronome_speed.getValue();
+								
+				if(numeros_checkbox.isChecked()){
+					numeros_bip = true;
+				}else{
+					numeros_bip = false;
 				}
 				
 				if ( (tempo > 0) && (tempo < 301) ) {
@@ -175,7 +177,7 @@ public class MainActivity extends Activity{
 					play = true;
 					stop = false;
 					s.Metronome_Back();
-					s.Metronome_Play(tempo);
+					s.Metronome_Play(tempo, numeros_bip);
 					MDialog.dismiss();
 				}
 				else {
@@ -205,7 +207,7 @@ public class MainActivity extends Activity{
     		item.setIcon(R.drawable.pause_button);
     		
     		if (stop)
-    			s.Metronome_Play(tempo);
+    			s.Metronome_Play(tempo, numeros_bip);
     		else
     			s.Metronome_Pause();
     	}

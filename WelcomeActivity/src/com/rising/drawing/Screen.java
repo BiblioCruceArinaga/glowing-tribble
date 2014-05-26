@@ -21,11 +21,13 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
-import android.widget.EditText;
+import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.NumberPicker;
-import android.widget.Toast;
 import android.widget.NumberPicker.OnScrollListener;
+import android.widget.SeekBar;
+import android.widget.SeekBar.OnSeekBarChangeListener;
+import android.widget.Toast;
 
 class Screen extends SurfaceView implements SurfaceHolder.Callback {
 
@@ -475,9 +477,9 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback {
 		}
 	}
 	
-	public void Metronome_Play(int bpm){
+	public void Metronome_Play(int bpm, boolean numeros_bip){
 		if (metronomo == null) {
-    		metronomo = new Metronomo(bpm);
+    		metronomo = new Metronomo(bpm, numeros_bip);
     		metronomo.run();
 		}
 	}
@@ -495,6 +497,7 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback {
 	    private boolean mPaused;
 	    private Thread th;
 	    private int mbpm;
+	    private boolean numeros_bip;
 	    
 	    //  Bips sonoros del metrónomo
 	    SoundPool bipAgudo = null;
@@ -502,10 +505,11 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback {
 	    int bipAgudoInt = 0;
 	    int bipGraveInt = 0;
 
-	    public Metronomo(int bpm) {
+	    public Metronomo(int bpm, boolean n_bip) {
 	        mPauseLock = new Object();
 	        mPaused = false;
 	        mbpm = bpm;
+	        this.numeros_bip = n_bip;
 	        
 	        bipAgudo = new SoundPool(5, AudioManager.STREAM_MUSIC, 0);
 			bipAgudoInt = bipAgudo.load(context, R.raw.bip, 0);
@@ -567,7 +571,9 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback {
 	                		for (int j=0; j<pulsos; j++) {
 	                			
 	                			emitirSonido(j);
-	                			dibujarBip(j, xPos, compas.getYIni());
+	                			if(numeros_bip){
+	                				dibujarBip(j, xPos, compas.getYIni());
+	                			}
 	                			Thread.sleep(speed);
 	                			
 	                			synchronized (mPauseLock) {
@@ -723,11 +729,11 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback {
 	private void establecerVelocidadAlCompas(final int index) {
 		MDialog = new Dialog(context,  R.style.cust_dialog);	
 		MDialog.setContentView(R.layout.metronome_dialog_compas);
-		MDialog.setTitle("Elegir velocidad");
+		MDialog.setTitle(R.string.metronome);
 		MDialog.getWindow().setLayout(config.getAnchoDialogBpm(), config.getAltoDialogBpm());	
 
-		final EditText editText_metronome = (EditText)MDialog.findViewById(R.id.eT_metronome);
-
+		final SeekBar seekBar_metronome = (SeekBar)MDialog.findViewById(R.id.seekBar_metronome);
+		
 		final NumberPicker metronome_speed = (NumberPicker)MDialog.findViewById(R.id.nm_metronome);
 		metronome_speed.setMaxValue(300);
 		metronome_speed.setMinValue(1);
@@ -739,22 +745,43 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback {
 			@Override
 			public void onScrollStateChange(NumberPicker arg0, int arg1) {
 				// TODO Auto-generated method stub
-				editText_metronome.setText(arg0.getValue() + "");
+				seekBar_metronome.setProgress(arg0.getValue());
 			}
 		});
-					
+		
+		seekBar_metronome.setMax(300);
+		seekBar_metronome.setProgress(120);
+		seekBar_metronome.setOnSeekBarChangeListener(new OnSeekBarChangeListener(){
+
+			@Override
+			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+				metronome_speed.setValue(progress);
+				Log.i("Progress", progress + "");
+				
+			}
+
+			@Override
+			public void onStartTrackingTouch(SeekBar seekBar) {
+				Log.i("Seek", "StartTracking");
+				
+			}
+
+			@Override
+			public void onStopTrackingTouch(SeekBar seekBar) {
+				Log.i("Seek", "StopTracking");
+				
+			}
+		});
+		
 		ImageButton playButton = (ImageButton)MDialog.findViewById(R.id.playButton1);
 		playButton.setOnClickListener(new OnClickListener(){
 
 			@Override
 			public void onClick(View v) {
 				int bpm = -1;
-				
-				if (!editText_metronome.getText().toString().equals(""))
-					bpm = Integer.parseInt(editText_metronome.getText().toString());
-				else 
-					bpm = metronome_speed.getValue();
-				
+								
+				bpm = metronome_speed.getValue();
+												
 				if ( (bpm < 1) || (bpm > 300) ) {
 					Toast toast1 = Toast.makeText(context,
 				                    R.string.speed_allowed, Toast.LENGTH_SHORT);

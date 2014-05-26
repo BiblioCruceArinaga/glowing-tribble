@@ -4,13 +4,13 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-
     <GridView
         android:id="@+id/gV_guitar_fragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_margin="20dp"
+        android:verticalSpacing="10dp"
         android:numColumns="1" >
     </GridView>
 

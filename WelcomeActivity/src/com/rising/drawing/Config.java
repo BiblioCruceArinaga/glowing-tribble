@@ -85,7 +85,7 @@ public class Config {
 			case 160:
 				break;
 			case 213:
-				alto_dialog_bpm = 720;
+				alto_dialog_bpm = 770;
 				altura_arco_ligaduras = 20;
 				ancho_beams = 5;
 				ancho_cabeza_nota = 10;
@@ -163,7 +163,7 @@ public class Config {
 				break;
 				
 			case 320:
-				alto_dialog_bpm = 800;
+				alto_dialog_bpm = 850;
 				altura_arco_ligaduras = 50;
 				ancho_beams = 8;
 				ancho_cabeza_nota = 26;
