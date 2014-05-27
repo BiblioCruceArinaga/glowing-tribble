@@ -168,7 +168,7 @@ public class MoneyActivity extends Activity implements IabHelper.OnIabSetupFinis
 	 
 	    billingHelper = new IabHelper(this, clave);
 	    billingHelper.startSetup(this);
-	    Log.i("Clave-ID1", "La clave: " + clave + "Id: " + ID);
+	    Log.i("Clave-ID1", "La clave: " + clave + ", Id: " + ID);
 	    PayMethod = "1";
 	}
 		

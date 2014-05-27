@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-<string name="appversion">0.4</string>
+<string name="appversion">0.3.1</string>
     
     
     <!-- Pantalla Login -->
@@ -343,7 +343,7 @@
     	
     <string name="about">Acerca de Scores</string>
 	    <string name="version">Versión: Beta 0.3 </string>
-	    <string name="acerca_de">Scores ha sido desarrollado por RISING S.C.P.</string>	
+	    <string name="acerca_de">Scores es desarrollado por RISING S.C.P.</string>	
 	    <string name="visitanos">Visita nuestra web: </string>
 	    <string name="web">scores.rising.es</string>
     
@@ -371,6 +371,7 @@
     	<string name="buy_credit">Comprar saldo</string>   	
     	<string name="open">Abrir</string>
     	<string name="downloading">Descargando</string>
+    	<string name="win_buy">¡Has recibido 0,01 crédito!</string>
     	
     		<!-- Pantalla busqueda -->
     		<string name="list">Lista</string>
@@ -409,6 +410,11 @@
 		    		<string name="win_social">¡Has recibido 0,05 créditos!</string>
 		    		<string name="fail_social">Falló al registrar la aportación</string>
 		    		<string name="share_rate">Califica la aplicación</string>
+		    		<string name="wait">Debes esperar </string>
+			    	<string name="hours"> horas para volver a postear</string>
+			    	<string name="tweet_done">El tweet se envió correctamente</string>
+			    	<string name="tweet_fail">Hubo un error y no se pudo enviar el tweet</string>
+			    	<string name="fail_market_app">No se encontró la tienda de aplicaciones</string>	
 
     
     		<!-- Pantalla encuesta -->

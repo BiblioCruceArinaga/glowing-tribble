@@ -13,7 +13,6 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.rising.drawing.R;
-import com.rising.mainscreen.MainScreenActivity;
 
 public class FreeMoneyActivity extends Activity{
 	
@@ -66,9 +65,7 @@ public class FreeMoneyActivity extends Activity{
 
 			@Override
 			public void onClick(View v) {
-				social = new Dialog(FreeMoneyActivity.this);
-				
-				
+				social = new Dialog(FreeMoneyActivity.this);			
 			}
     		
     	});

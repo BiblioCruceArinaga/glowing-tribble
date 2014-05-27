@@ -26,6 +26,9 @@ import com.rising.drawing.MainActivity;
 import com.rising.drawing.R;
 import com.rising.login.Configuration;
 import com.rising.money.MoneyActivity;
+import com.rising.money.SocialBonificationNetworkConnection;
+import com.rising.money.SocialBonificationNetworkConnection.OnBonificationDone;
+import com.rising.money.SocialBonificationNetworkConnection.OnFailBonification;
 import com.rising.store.BuyNetworkConnection.OnBuyCompleted;
 import com.rising.store.BuyNetworkConnection.OnBuyFailed;
 import com.rising.store.DownloadScores.OnDownloadCompleted;
@@ -50,15 +53,33 @@ public class CustomAdapter extends BaseAdapter {
 	public static DownloadScores download;
 	static String selectedURL = "";
 	static int selected = -1; 
-	BuyNetworkConnection bnc;	   	
+	private String ID_BONIFICATION = "6";
+	BuyNetworkConnection bnc;	
+	private SocialBonificationNetworkConnection sbnc;
 
+	private OnBonificationDone successbonification = new OnBonificationDone(){
+
+		@Override
+		public void onBonificationDone() {
+			Toast.makeText(ctx, R.string.win_buy, Toast.LENGTH_LONG).show();
+		}		
+	};
+	
+	private OnFailBonification failbonification = new OnFailBonification(){
+
+		@Override
+		public void onFailBonification() {
+			Toast.makeText(ctx, R.string.fail_social, Toast.LENGTH_LONG).show();
+		}		
+	};
+	
 	//Registra la compra y procede con la descarga
 	private OnBuyCompleted buyComplete = new OnBuyCompleted(){
 
 		@Override
 		public void onBuyCompleted() {
 			((MainActivityStore) ctx).StartMoneyUpdate(conf.getUserEmail());
-			
+			sbnc.execute(ID_BONIFICATION);
 			download.execute(selectedURL);
 			
 			lista.get(selected).setComprado(true);	
@@ -142,6 +163,7 @@ public class CustomAdapter extends BaseAdapter {
 		conf = new Configuration(ctx);
 		bnc = new BuyNetworkConnection(buyComplete, failedBuy, ctx);	
 		download = new DownloadScores(listenerDownload, failedDownload, ctx);
+		sbnc = new SocialBonificationNetworkConnection(successbonification, failbonification, ctx);
 		selected = position;
 				
         if (view == null) {

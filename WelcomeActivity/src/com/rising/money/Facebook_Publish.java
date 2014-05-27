@@ -1,5 +1,7 @@
 package com.rising.money;
 
+import java.util.Locale;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -20,23 +22,28 @@ import com.rising.money.SocialBonificationNetworkConnection.OnFailBonification;
 
 public class Facebook_Publish extends Activity{
 	
+	Context mctx = new FreeMoneyActivity();
 	Context ctx = this;
 	private UiLifecycleHelper uiHelper;
 	private String LINK = "http://scores.rising.es/";
+	private String LINK_EN = "http://scores.rising.es/en/";
 	private String NAME = "Scores";
 	private String DESCRIPTION = "Todo el poder de las partituras en la palma de tu mano";
+	private String DESCRIPTION_EN = "All the power of the scores in your hands";
 	private String SUBTITLE = "Las partituras del futuro";
-	private String PICTURE = "";
+	private String SUBTITLE_EN = "Scores of the future";
+	private String PICTURE = "http://www.scores.rising.es/img/facebook_share_image.png";
 	private String ID_BONIFICATION = "3";
 	private SocialBonificationNetworkConnection sbnc;
+	private EnableButtonsData EBD;
 		
 	private OnBonificationDone successbonification = new OnBonificationDone(){
 
 		@Override
 		public void onBonificationDone() {
 			Toast.makeText(ctx, R.string.win_social, Toast.LENGTH_LONG).show();
-			
-			finish();			
+			EBD.setEnable_FB(false);
+			finish();	
 		}		
 	};
 	
@@ -49,20 +56,22 @@ public class Facebook_Publish extends Activity{
 		}		
 	};
 	
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
 		uiHelper = new UiLifecycleHelper(this, null);
 	    uiHelper.onCreate(savedInstanceState);
+	    EBD = new EnableButtonsData(ctx);
 	    sbnc = new SocialBonificationNetworkConnection(successbonification, failbonification, ctx);
 	    publish();
 	}
-		
+	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 	    super.onActivityResult(requestCode, resultCode, data);
-
+	    
 	    uiHelper.onActivityResult(requestCode, resultCode, data, new FacebookDialog.Callback() {
 	        
 	    	@Override
@@ -73,8 +82,13 @@ public class Facebook_Publish extends Activity{
 
 	        @Override
 	        public void onComplete(FacebookDialog.PendingCall pendingCall, Bundle data) {
-	            Log.i("Activity", "Success!");	     
-	            sbnc.execute(ID_BONIFICATION);
+	        	if(FacebookDialog.getNativeDialogPostId(data) != null){
+	        		Log.i("Activity", "Success!");	     
+		            sbnc.execute(ID_BONIFICATION);
+	        	}else{
+	        		finish();
+	        	}
+	            
 	        }
 	    });
 	}
@@ -97,19 +111,11 @@ public class Facebook_Publish extends Activity{
 	    uiHelper.onPause();
 	}
 
-	//Debo evitar que se cierre esta ventana dando por válido el compratir. 
-	@Override
-	public void onBackPressed() {
-		super.onBackPressed();
-		//Toast.makeText(ctx, R.string.fail_social, Toast.LENGTH_LONG).show();
-		finish();
-		uiHelper.onDestroy();
-	}
-
 	@Override
 	public void onDestroy() {
 	    super.onDestroy();
 	    uiHelper.onDestroy();
+	    Log.i("Destroy", "Se destruyó");
 	}
 	
 	private void publish(){
@@ -120,25 +126,39 @@ public class Facebook_Publish extends Activity{
 		} else {
 			publishFeedDialog();
 		}
-		
 	}
 	
 	private void publishApp(){
 		// Publish the post using the Share Dialog
-		FacebookDialog shareDialog = new FacebookDialog.ShareDialogBuilder(this)
-		.setLink(LINK).setName(NAME).setDescription(DESCRIPTION).setCaption(SUBTITLE).setPicture(PICTURE)
-		.build();
+		FacebookDialog shareDialog;
+		if(Locale.getDefault().getDisplayLanguage().toString().equals("spanish")){
+			shareDialog = new FacebookDialog.ShareDialogBuilder(this)
+			.setLink(LINK).setName(NAME).setDescription(DESCRIPTION).setCaption(SUBTITLE).setPicture(PICTURE).build();
+		}else{
+			shareDialog = new FacebookDialog.ShareDialogBuilder(this)
+			.setLink(LINK_EN).setName(NAME).setDescription(DESCRIPTION_EN).setCaption(SUBTITLE_EN).setPicture(PICTURE).build();
+		}
+		
 		uiHelper.trackPendingDialogCall(shareDialog.present());
 	}
 	
 	private void publishFeedDialog() {
 	    Bundle params = new Bundle();
-	    params.putString("name", NAME);
-	    params.putString("caption", SUBTITLE);
-	    params.putString("description", DESCRIPTION);
-	    params.putString("link", LINK);
-	    params.putString("picture", PICTURE);
-
+	    
+	    if(Locale.getDefault().getDisplayLanguage().toString().equals("spanish")){
+		    params.putString("name", NAME);
+		    params.putString("caption", SUBTITLE);
+		    params.putString("description", DESCRIPTION);
+		    params.putString("link", LINK);
+		    params.putString("picture", PICTURE);
+	    }else{
+	    	params.putString("name", NAME);
+	 	    params.putString("caption", SUBTITLE_EN);
+	 	    params.putString("description", DESCRIPTION_EN);
+	 	    params.putString("link", LINK_EN);
+	 	    params.putString("picture", PICTURE);
+	    }
+	    
 	    WebDialog feedDialog = (
 	        new WebDialog.FeedDialogBuilder(ctx,
 	            Session.getActiveSession(),

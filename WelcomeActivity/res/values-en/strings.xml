@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-<string name="appversion">0.4</string>
+<string name="appversion">0.3.1</string>
 
     <!-- Pantalla Login -->
     <string name="app_name">Scores</string>
@@ -330,7 +330,7 @@ You can buy scores in our store.</string>
     	
     <string name="about">About Scores</string>
 	    <string name="version">Version: Beta</string>
-	    <string name="acerca_de">Scores have been develop by RISING S.C.P.</string>	
+	    <string name="acerca_de">Scores is develop by RISING S.C.P.</string>	
 	    <string name="visitanos">Visit our site: </string>
     	<string name="web">scores.rising.es</string>
 	    
@@ -358,6 +358,7 @@ You can buy scores in our store.</string>
     	<string name="buy_credit">Buy credit</string>
     	<string name="open">Open</string>
     	<string name="downloading">Downloading</string>
+    	<string name="win_buy">You have received 0,01 credit!</string>
     	    	
     		<!-- Pantalla busqueda -->
     		<string name="list">List</string>
@@ -396,6 +397,11 @@ You can buy scores in our store.</string>
 			    	<string name="win_social">You have received 0,05 credits!</string>
 			    	<string name="fail_social">Fail to register your share</string>
 			    	<string name="share_rate">Rate the app</string>
+			    	<string name="wait">You should wait </string>
+			    	<string name="hours"> hours to post again</string>
+			    	<string name="tweet_done">Tweet sent successfully</string>
+			    	<string name="tweet_fail">There was an error and could not send the tweet</string>
+			    	<string name="fail_market_app">Unable to find market app</string>	
     		
     		<!-- Pantalla encuesta -->
     		<string name="quest_explain">In our efforts to improve and want to always bring you the best and right what
