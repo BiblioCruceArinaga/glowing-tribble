@@ -92,6 +92,10 @@ You can buy scores in our store.</string>
         <string name="score">Score</string>
     	<string name="speed_allowed">Min. Speed: 1 bpm. Max Speed: 300 bpm.</string>
     	
+    <!-- Leer micrófono -->
+    <string name="readMicrophone">Micrófono</string>
+    <string name="startPlaying">Ya puede empezar a tocar</string>
+    	
     <string name="contentDescription">Image</string>
 
     <!-- Menú principal contextual -->

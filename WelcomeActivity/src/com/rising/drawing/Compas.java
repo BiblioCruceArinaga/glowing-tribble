@@ -244,6 +244,21 @@ public class Compas {
 		return x_ini_notas;
 	}
 	
+	//  Devuelve el número de golpes de sonido que debe leer el micro para considerar
+	//  que este compás ya ha sido interpretado en su totalidad. Los acordes cuentan 
+	//  como un único sonido. Las notas tocadas a la vez en diferentes pentagramas o
+	//  voces comparten la misma x, y por tanto cuentan como un unico golpe de sonido.
+	public int golpesDeSonido() {
+		ArrayList<Integer> xEncontradas = new ArrayList<Integer>();
+		
+		int numNotas = notas.size();
+		for (int i=0; i<numNotas; i++)
+			if (!xEncontradas.contains(notas.get(i).getX()))
+				xEncontradas.add(notas.get(i).getX());
+		
+		return xEncontradas.size();
+	}
+	
 	public boolean hayBarlines() {
 		return !barlines.isEmpty();
 	}

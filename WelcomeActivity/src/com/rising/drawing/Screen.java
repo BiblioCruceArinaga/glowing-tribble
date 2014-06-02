@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.StreamCorruptedException;
 import java.util.ArrayList;
+import java.util.Observable;
+import java.util.Observer;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -27,7 +29,7 @@ import android.widget.NumberPicker;
 import android.widget.Toast;
 import android.widget.NumberPicker.OnScrollListener;
 
-class Screen extends SurfaceView implements SurfaceHolder.Callback {
+class Screen extends SurfaceView implements SurfaceHolder.Callback, Observer {
 
 	private boolean isValidScreen = false;
 	private ObjectInputStream fichero = null;
@@ -38,6 +40,14 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback {
 	private Partitura partitura = new Partitura();
 	private Compas compas = new Compas();
 	private ArrayList<OrdenDibujo> ordenesDibujo = new ArrayList<OrdenDibujo>();
+	
+	//  Gestión de la lectura de micrófono
+	private SoundReader soundReader = null;
+	private int compasActual = 0;
+	private int golpeSonidoActual = 0;
+	private int yActual = 0;
+	private int desplazamiento = 0;
+	private boolean primerDesplazamientoHecho = false;
 	
 	//  Metrónomo y su gestión
 	private Metronomo metronomo = null;
@@ -89,7 +99,7 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback {
 				ordenesDibujo = metodosDibujo.crearOrdenesDeDibujo();
 				isValidScreen = true;
 			}
-			
+		
 		} catch (FileNotFoundException e) {
 			Log.i("FileNotFoundException: ", e.getMessage() + "\n");
 		} catch (StreamCorruptedException e) {
@@ -128,6 +138,11 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback {
 		
 		ordenesDibujo.clear();
 		ordenesDibujo = null;
+		
+		if (soundReader != null) {
+			soundReader.onDestroy();
+			soundReader = null;
+		}
 		
 		altoPantalla = 0;
 		canvasDependentDataRecovered = false;
@@ -460,7 +475,7 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback {
 	 * Gestión del metrónomo
 	 * 
 	 */
-	public void Metronome_Back(){
+	public void Back(){
 		yOffset = 0;
 		limiteVisibleArriba = 0;
 		limiteVisibleAbajo = altoPantalla;
@@ -674,12 +689,6 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback {
 			else 
 				bipGrave.play(bipGraveInt, 1, 1, 1, 0, 1);
 		}
-		
-		private void hacerScroll(int distanciaDesplazamiento) {
-			limiteVisibleArriba -= distanciaDesplazamiento;
-			limiteVisibleAbajo -= distanciaDesplazamiento;
-			yOffset -= distanciaDesplazamiento;
-		}
 	}
 	
 	
@@ -794,5 +803,59 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback {
 		});
 		
 		MDialog.show();
+	}
+	
+	/*
+	 * 
+	 * GESTIÓN DE LA LECTURA DEL MICRÓFONO
+	 * 
+	 */
+	public void readMicrophone() throws Exception {
+		soundReader = new SoundReader();
+		soundReader.addObserver(this);
+		
+		yActual = partitura.getCompas(0).getYIni();
+		desplazamiento = yActual + config.getDistanciaLineasPentagrama() * 4 +
+    			(config.getDistanciaPentagramas() + 
+    			config.getDistanciaLineasPentagrama() * 4) * 
+    			(partitura.getStaves() - 1);
+		
+		Toast.makeText(context, R.string.startPlaying, Toast.LENGTH_SHORT).show();
+	}
+
+	@Override
+	public void update(Observable observable, Object data) {
+		int sound = (Integer) data;
+		
+		if (sound > 0) {
+			Compas compas = partitura.getCompas(compasActual);
+			int golpesSonido = compas.golpesDeSonido();
+			if (golpeSonidoActual == golpesSonido) {
+				compasActual++;
+				golpeSonidoActual = 0;
+				
+				if (compas.getYIni() != yActual) {
+					hacerScroll(desplazamiento);
+				
+					if (!primerDesplazamientoHecho) {
+						desplazamiento = config.getDistanciaPentagramas() + 
+	                			config.getDistanciaLineasPentagrama() * 4 +
+	                			(config.getDistanciaPentagramas() + 
+	                			config.getDistanciaLineasPentagrama() * 4) * 
+	                			(partitura.getStaves() - 1);
+						
+        				primerDesplazamientoHecho = true;
+					}
+				}
+			}
+			else
+				golpeSonidoActual++;
+		}
+	}
+	
+	private void hacerScroll(int distanciaDesplazamiento) {
+		limiteVisibleArriba -= distanciaDesplazamiento;
+		limiteVisibleAbajo -= distanciaDesplazamiento;
+		yOffset -= distanciaDesplazamiento;
 	}
 }

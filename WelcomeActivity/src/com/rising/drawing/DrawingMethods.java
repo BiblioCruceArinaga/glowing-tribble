@@ -30,44 +30,46 @@ public class DrawingMethods {
 	private int ultimoCompas = 0;
 
 	//  Variables para la gestión de las múltiples notas
+	private ArrayList<IndiceNota> beams = new ArrayList<IndiceNota>();
 	private boolean buscandoOctavarium = false;
+	private ArrayList<IndiceNota> ligadurasInicio = new ArrayList<IndiceNota>();
 	private int octavarium = 0;
 	private int[] posicionesOctavarium = {0,0};
-	private ArrayList<IndiceNota> beams = new ArrayList<IndiceNota>();
-	private int y_anterior = 0;
-	private int x_ini_tresillo = 0;
 	private int x_ini_slide = 0;
+	private int x_ini_tresillo = 0;
+	private int y_anterior = 0;
 	private int y_ini_slide = 0;
-	private ArrayList<IndiceNota> ligadurasInicio = new ArrayList<IndiceNota>();
-	
+
 	//  Bitmaps
-	private Bitmap trebleclef = null;
+	private Bitmap accent = null;
 	private Bitmap bassclef = null;
-	private Bitmap mezzoforte = null;
-	private Bitmap forte = null;
-	private Bitmap piano = null;
-	private Bitmap pianissimo = null;
-	private Bitmap rectangle = null;
-	private Bitmap quarterrest = null;
-	private Bitmap eighthrest = null;
-	private Bitmap noterest16 = null;
-	private Bitmap noterest32 = null;
-	private Bitmap noterest64 = null;
-	private Bitmap whitehead = null;
+	private Bitmap bendrelease = null;
 	private Bitmap blackheadlittle = null;
 	private Bitmap blackhead = null;
+	private Bitmap eighthrest = null;
+	private Bitmap flat = null;
+	private Bitmap forte = null;
 	private Bitmap head = null;
 	private Bitmap headlittle = null;
 	private Bitmap headinv = null;
 	private Bitmap headinvlittle = null;
-	private Bitmap sharp = null;
-	private Bitmap flat = null;
+	private Bitmap mezzoforte = null;
 	private Bitmap natural = null;
-	private Bitmap vibrato = null;
-	private Bitmap bendrelease = null;
+	private Bitmap noterest16 = null;
+	private Bitmap noterest32 = null;
+	private Bitmap noterest64 = null;
 	private Bitmap octavariumImage = null;
 	private Bitmap pedalStart = null;
 	private Bitmap pedalStop = null;
+	private Bitmap piano = null;
+	private Bitmap pianissimo = null;
+	private Bitmap quarterrest = null;
+	private Bitmap rectangle = null;
+	private Bitmap sharp = null;
+	private Bitmap trebleclef = null;
+	private Bitmap vibrato = null;
+	private Bitmap whitehead = null;
+
 	
 	public DrawingMethods(Partitura partitura, Config config, Resources resources) {
 		if (config.supported()) {
@@ -78,33 +80,34 @@ public class DrawingMethods {
 			compas_margin_x = config.getXInicialPentagramas();
 			compas_margin_y = config.getMargenSuperior();
 
-			trebleclef = BitmapFactory.decodeResource(resources, R.drawable.trebleclef);
+			accent = BitmapFactory.decodeResource(resources, R.drawable.accent);
 			bassclef = BitmapFactory.decodeResource(resources, R.drawable.bassclef);
-			mezzoforte = BitmapFactory.decodeResource(resources, R.drawable.mezzoforte);
-			forte = BitmapFactory.decodeResource(resources, R.drawable.forte);
-			piano = BitmapFactory.decodeResource(resources, R.drawable.piano);
-			pianissimo = BitmapFactory.decodeResource(resources, R.drawable.pianissimo);
-			rectangle = BitmapFactory.decodeResource(resources, R.drawable.rectangle);
-			quarterrest = BitmapFactory.decodeResource(resources, R.drawable.quarterrest);
+			bendrelease = BitmapFactory.decodeResource(resources, R.drawable.bendrelease);
+			blackheadlittle = BitmapFactory.decodeResource(resources, R.drawable.blackheadlittle);
+			blackhead = BitmapFactory.decodeResource(resources, R.drawable.blackhead);
 			eighthrest = BitmapFactory.decodeResource(resources, R.drawable.eighthrest);
+			flat = BitmapFactory.decodeResource(resources, R.drawable.flat);
+			forte = BitmapFactory.decodeResource(resources, R.drawable.forte);
+			head = BitmapFactory.decodeResource(resources, R.drawable.head);
+			headinv = BitmapFactory.decodeResource(resources, R.drawable.headinv);
+			headinvlittle = BitmapFactory.decodeResource(resources, R.drawable.headinvlittle);
+			headlittle = BitmapFactory.decodeResource(resources, R.drawable.headlittle);
+			mezzoforte = BitmapFactory.decodeResource(resources, R.drawable.mezzoforte);
+			natural = BitmapFactory.decodeResource(resources, R.drawable.natural);
 			noterest16 = BitmapFactory.decodeResource(resources, R.drawable.noterest16);
 			noterest32 = BitmapFactory.decodeResource(resources, R.drawable.noterest32);
 			noterest64 = BitmapFactory.decodeResource(resources, R.drawable.noterest64);
-			whitehead = BitmapFactory.decodeResource(resources, R.drawable.whitehead);
-			blackheadlittle = BitmapFactory.decodeResource(resources, R.drawable.blackheadlittle);
-			blackhead = BitmapFactory.decodeResource(resources, R.drawable.blackhead);
-			head = BitmapFactory.decodeResource(resources, R.drawable.head);
-			headlittle = BitmapFactory.decodeResource(resources, R.drawable.headlittle);
-			headinv = BitmapFactory.decodeResource(resources, R.drawable.headinv);
-			headinvlittle = BitmapFactory.decodeResource(resources, R.drawable.headinvlittle);
-			sharp = BitmapFactory.decodeResource(resources, R.drawable.sharp);
-			flat = BitmapFactory.decodeResource(resources, R.drawable.flat);
-			natural = BitmapFactory.decodeResource(resources, R.drawable.natural);
-			vibrato = BitmapFactory.decodeResource(resources, R.drawable.vibrato);
-			bendrelease = BitmapFactory.decodeResource(resources, R.drawable.bendrelease);
 			octavariumImage = BitmapFactory.decodeResource(resources, R.drawable.octavarium);
 			pedalStart = BitmapFactory.decodeResource(resources, R.drawable.pedalstart);
 			pedalStop = BitmapFactory.decodeResource(resources, R.drawable.pedalstop);
+			piano = BitmapFactory.decodeResource(resources, R.drawable.piano);
+			pianissimo = BitmapFactory.decodeResource(resources, R.drawable.pianissimo);
+			quarterrest = BitmapFactory.decodeResource(resources, R.drawable.quarterrest);
+			rectangle = BitmapFactory.decodeResource(resources, R.drawable.rectangle);
+			sharp = BitmapFactory.decodeResource(resources, R.drawable.sharp);
+			trebleclef = BitmapFactory.decodeResource(resources, R.drawable.trebleclef);
+			vibrato = BitmapFactory.decodeResource(resources, R.drawable.vibrato);
+			whitehead = BitmapFactory.decodeResource(resources, R.drawable.whitehead);
 			
 			isValid = true;
 		}
@@ -702,12 +705,15 @@ public class DrawingMethods {
 				switch (location) {
 					case 1:
 						return compas_margin_y - config.getDistanciaLineasPentagrama();
+					case 2:
+						return compas_margin_y + config.getDistanciaLineasPentagrama() * 6;
 					case 4:
 						return compas_margin_y + config.getDistanciaLineasPentagrama() * 4 + 
 								config.getDistanciaPentagramas() + config.getDistanciaLineasPentagrama() * 6;
 					default:
 						return compas_margin_y - config.getDistanciaLineasPentagrama();
 				}
+				
 			default:
 				return 0;
 		}
@@ -2166,6 +2172,18 @@ public class DrawingMethods {
 				ordenDibujo.setX1(posicionX);
 				ordenDibujo.setY1(posicionY + config.getYTapping());
 				ordenesDibujo.add(ordenDibujo);
+				
+			case 30:
+				ordenDibujo.setOrden(DrawOrder.DRAW_BITMAP);
+				ordenDibujo.setImagen(accent);
+				ordenDibujo.setX1(posicionX);
+				ordenDibujo.setY1(posicionY - config.getYAccentUp());
+				ordenesDibujo.add(ordenDibujo);
+				break;
+				
+			case 31:
+				
+				break;
 				
 			default:
 				break;

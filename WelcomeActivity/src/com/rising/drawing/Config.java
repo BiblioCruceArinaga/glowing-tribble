@@ -51,6 +51,7 @@ public class Config {
 	private int unidad_desplazamiento;
 	private int width;
 	
+	private int y_accent_up;
 	private int x_accidental;
 	private int y_accidental;
 	private int y_accidental_flat;
@@ -130,6 +131,7 @@ public class Config {
 				unidad_desplazamiento = 30;
 				this.width = width;
 				
+				y_accent_up = 30;
 				x_accidental = 10;
 				y_accidental = 10;
 				y_accidental_flat = 15;
@@ -208,6 +210,7 @@ public class Config {
 				unidad_desplazamiento = 50;
 				this.width = width;
 				
+				y_accent_up = 30;
 				x_accidental = 16;
 				y_accidental = 10;
 				y_accidental_flat = 17;
@@ -421,6 +424,10 @@ public class Config {
 		return width;
 	}
 	
+	
+	public int getYAccentUp() {
+		return y_accent_up;
+	}
 	
 	public int getXAccidental() {
 		return x_accidental;

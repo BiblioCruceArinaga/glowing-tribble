@@ -81,6 +81,18 @@ public class MainActivity extends Activity{
 	    	case R.id.metronome_button:
 	    		metronome_options(tempo);
 	    		return true;
+	    		
+	    	case R.id.readSound_Button:
+	    		s.Back();
+	    		
+				try {
+					s.readMicrophone();
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+	    		return true;
 	    	
 	    	case android.R.id.home:
 	    		s.Metronome_Stop();
@@ -146,7 +158,7 @@ public class MainActivity extends Activity{
 					
 					play = true;
 					stop = false;
-					s.Metronome_Back();
+					s.Back();
 					s.Metronome_Play(tempo);
 					MDialog.dismiss();
 				}
@@ -221,7 +233,7 @@ public class MainActivity extends Activity{
         			break;
         		
         		case R.id.metronome_menu_back:    
-        			s.Metronome_Back();
+        			s.Back();
         			break;
         			
         		case R.id.metronome_menu_pause:
