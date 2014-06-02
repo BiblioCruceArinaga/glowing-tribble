@@ -10,6 +10,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Environment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,6 +23,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
+import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
+import com.nostra13.universalimageloader.utils.DiskCacheUtils;
+import com.nostra13.universalimageloader.utils.MemoryCacheUtils;
 import com.rising.drawing.MainActivity;
 import com.rising.drawing.R;
 import com.rising.login.Configuration;
@@ -52,10 +59,13 @@ public class CustomAdapter extends BaseAdapter {
 	String URL_Buy = "http://www.scores.rising.es/store-buyscore";
 	public static DownloadScores download;
 	static String selectedURL = "";
+	static String imagenURL = "";
 	static int selected = -1; 
 	private String ID_BONIFICATION = "6";
 	BuyNetworkConnection bnc;	
 	private SocialBonificationNetworkConnection sbnc;
+	
+	ImageLoader iml;
 
 	private OnBonificationDone successbonification = new OnBonificationDone(){
 
@@ -80,7 +90,7 @@ public class CustomAdapter extends BaseAdapter {
 		public void onBuyCompleted() {
 			((MainActivityStore) ctx).StartMoneyUpdate(conf.getUserEmail());
 			sbnc.execute(ID_BONIFICATION);
-			download.execute(selectedURL);
+			download.execute(selectedURL, imagenURL);
 			
 			lista.get(selected).setComprado(true);	
 		}
@@ -121,6 +131,8 @@ public class CustomAdapter extends BaseAdapter {
 		this.infoPartituras = new ArrayList<PartituraTienda>();
 		this.infoPartituras.addAll(partituras);
 		mProgressDialog = new ProgressDialog(ctx);
+		mProgressDialog.setCancelable(true);
+		iml = ImageLoader.getInstance();
 	}
 		
 	public class ViewHolder {
@@ -156,7 +168,7 @@ public class CustomAdapter extends BaseAdapter {
 		
 		return name;
 	}
-	
+	Bitmap score_imagen;
 	@Override
 	public View getView(final int position, View view, ViewGroup parent) {
 
@@ -165,7 +177,7 @@ public class CustomAdapter extends BaseAdapter {
 		download = new DownloadScores(listenerDownload, failedDownload, ctx);
 		sbnc = new SocialBonificationNetworkConnection(successbonification, failbonification, ctx);
 		selected = position;
-				
+								
         if (view == null) {
         	holder = new ViewHolder();
         	view = inflater.inflate(R.layout.grid_element, parent, false);
@@ -185,8 +197,48 @@ public class CustomAdapter extends BaseAdapter {
         holder.Title.setText(lista.get(position).getNombre());
         holder.Author.setText(lista.get(position).getAutor());
         holder.intrumento.setText(lista.get(position).getInstrumento());
+                        
+        DisplayImageOptions options = new DisplayImageOptions.Builder()
+        .showImageOnLoading(R.drawable.cover)
+        .showImageForEmptyUri(R.drawable.cover)
+        .showImageOnFail(R.drawable.cover)
+        .cacheInMemory(true).considerExifParams(true)
+        .displayer(new RoundedBitmapDisplayer(10)).build();
+         
+        iml.displayImage(lista.get(position).getImagen(), holder.image, options, new SimpleImageLoadingListener(){
+        	 boolean cacheFound;
+
+             @Override
+             public void onLoadingStarted(String url, View view) {
+                 List<String> memCache = MemoryCacheUtils.findCacheKeysForImageUri(url, ImageLoader.getInstance().getMemoryCache());
+                 cacheFound = !memCache.isEmpty();
+                 if (!cacheFound) {
+                     File discCache = DiskCacheUtils.findInCache(url, ImageLoader.getInstance().getDiskCache());
+                     if (discCache != null) {
+                         cacheFound = discCache.exists();
+                     }
+                 }
+             }
+
+             @Override
+             public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                 if (cacheFound) {
+                     MemoryCacheUtils.removeFromCache(imageUri, ImageLoader.getInstance().getMemoryCache());
+                     DiskCacheUtils.removeFromCache(imageUri, ImageLoader.getInstance().getDiskCache());
+
+                     ImageLoader.getInstance().displayImage(imageUri, (ImageView) view);
+                 }
+             }
+        });
+               
         
-        
+       /* if(iml.getMemoryCache() != null){
+        	Log.i("Llegó", "Aquí 1");
+        	MemoryCacheUtils.findCachedBitmapsForImageUri(lista.get(position).getImagen(), ImageLoader.getInstance().getMemoryCache());	
+        }else{
+        	iml.displayImage(lista.get(position).getImagen(), holder.image, options);		    	
+        }*/
+                        
 	    if(lista.get(position).getComprado()){    
 	    	if(buscarArchivos(FileNameString(lista.get(position).getUrl()))){
 				holder.botonCompra.setText(R.string.open);
@@ -223,7 +275,18 @@ public class CustomAdapter extends BaseAdapter {
 										
 		Confirm_Buy = (Button)BDialog.findViewById(R.id.b_confirm_buy);
 		Cancel_Buy = (Button)BDialog.findViewById(R.id.b_cancel_buy);
- 				
+ 			
+		holder.image.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				Intent i = new Intent(ctx, ImageActivity.class);
+				i.putExtra("imagen", lista.get(position).getImagen());
+				ctx.startActivity(i);
+			}
+			
+		});
+		
         holder.botonInfo.setOnClickListener(new OnClickListener(){
         	 
 			@Override
@@ -238,6 +301,7 @@ public class CustomAdapter extends BaseAdapter {
 				i.putExtra("description", lista.get(position).getDescription());
 				i.putExtra("url", lista.get(position).getUrl());
 				i.putExtra("comprado", lista.get(position).getComprado());
+				i.putExtra("url_imagen", lista.get(position).getImagen());
 				Log.i("Datos", "Id: " + lista.get(position).getId() + ", name: " + lista.get(position).getNombre());
 				ctx.startActivity(i);
 			}
@@ -272,6 +336,7 @@ public class CustomAdapter extends BaseAdapter {
 						public void onClick(View arg0) {
 									
 							selectedURL = lista.get(position).getUrl();
+							imagenURL = lista.get(position).getImagen();
 							
 							//Aquí tiene lugar la descarga y la compra, y el registro de la compra en la base de datos
 			 				if(lista.get(position).getPrecio() == 0.0){	

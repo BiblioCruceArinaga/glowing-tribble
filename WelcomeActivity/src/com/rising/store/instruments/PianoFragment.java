@@ -12,6 +12,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
 
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.rising.drawing.R;
 import com.rising.login.Configuration;
 import com.rising.store.CustomAdapter;
@@ -85,6 +88,16 @@ public class PianoFragment extends Fragment{
 		pnc = new PianoNetworkConnection(listen, listener, rootView.getContext());
 		
 		pnc.execute(Locale.getDefault().getDisplayLanguage());
+		
+		 // Create default options which will be used for every 
+		   //  displayImage(...) call if no options will be passed to this method
+		    DisplayImageOptions displayimageOptions = new DisplayImageOptions.Builder().build();
+
+
+		    // Create global configuration and initialize ImageLoader with this configuration
+		    ImageLoaderConfiguration config = new ImageLoaderConfiguration.
+		    		Builder(rootView.getContext()).defaultDisplayImageOptions(displayimageOptions).build();
+		    ImageLoader.getInstance().init(config);
 				
 		return rootView;	
 	}

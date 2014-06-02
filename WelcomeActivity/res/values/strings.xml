@@ -89,7 +89,7 @@ You can buy scores in our store.</string>
     	<string name="metronome_back">Back to top</string>
     	<string name="close_metronome">Close metronome</string>
     	<string name="tempo">Tempo</string>
-        <string name="score">Score</string>
+        <string name="score">Scores</string>
     	<string name="speed_allowed">Min. Speed: 1 bpm. Max Speed: 300 bpm.</string>
     	<string name="visual_help">Count with visual help</string>
     	

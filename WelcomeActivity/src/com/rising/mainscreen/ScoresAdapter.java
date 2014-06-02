@@ -1,11 +1,17 @@
 package com.rising.mainscreen;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,11 +26,10 @@ import com.rising.drawing.R;
 // Porque BaseAdapter es una subclase de Adapter
 // estos m�todos en este ejemplo son: getCount(), getItem(), getItemId(), getView()
 public class ScoresAdapter extends BaseAdapter {
-	Context context;
 	String[] titulos;
 	String[] autores; 
 	MainScreenActivity MSA = new MainScreenActivity();
-	
+	private String img_path = "/RisingScores/scores_images/";
 	// Declare Variables
     Context mContext;
     LayoutInflater inflater;
@@ -95,12 +100,30 @@ public class ScoresAdapter extends BaseAdapter {
         holder.Title.setText(scores_list.get(position).getTitle());
         holder.Author.setText(scores_list.get(position).getAuthor());
 
-        // Set the results into ImageView
-        holder.image.setImageResource(scores_list.get(position).getImage());
+        //holder.image.setImageBitmap(imagenFichero(scores_list.get(position).getImage()));
+        //holder.image.setBackground(imagenFichero(scores_list.get(position).getImage()));
+        holder.image.setBackgroundDrawable(imagenFichero(scores_list.get(position).getImage()));
                
         return view;
     }
      
+    public Drawable imagenFichero(String nombreImagen){
+	     	
+		File f = new File(Environment.getExternalStorageDirectory() + img_path + nombreImagen);
+						
+		Bitmap myBitmap;
+		if(f.exists()){
+		    myBitmap = BitmapFactory.decodeFile(f.getAbsolutePath());
+		}else{
+			myBitmap = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.cover); 
+		}
+		
+		Drawable drawable = new BitmapDrawable(mContext.getResources(),myBitmap);
+		
+	//return myBitmap;
+	return drawable;
+}  
+    
     // Filter Class
     public void filter(String charText){
     	charText = charText.toLowerCase(Locale.getDefault());

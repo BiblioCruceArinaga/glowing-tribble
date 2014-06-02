@@ -6,6 +6,7 @@ import android.app.Dialog;
 import android.content.pm.ActivityInfo;
 import android.graphics.Canvas;
 import android.graphics.Point;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -47,6 +48,15 @@ public class MainActivity extends Activity{
 	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);	
+		
+		if (Build.VERSION.SDK_INT < 16) {
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        }else{
+			View ScoreView = getWindow().getDecorView();
+			int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
+			ScoreView.setSystemUiVisibility(uiOptions);
+        }		
+		
 		Bundle b = this.getIntent().getExtras();
 		score = b.getString("score");
 
@@ -65,6 +75,33 @@ public class MainActivity extends Activity{
 		}
 		
 		setContentView(s);
+	}
+	
+	@Override
+	public void onResume(){
+		super.onResume();
+		
+		if (Build.VERSION.SDK_INT < 16) {
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN, WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN);
+        }else{
+			View ScoreView = getWindow().getDecorView();
+			int uifullscreen = View.SYSTEM_UI_FLAG_FULLSCREEN;
+			ScoreView.setSystemUiVisibility(uifullscreen);
+        }
+	}
+	
+	@Override
+	public void onWindowFocusChanged(boolean hasFocus) {
+		super.onWindowFocusChanged(hasFocus);
+		if (Build.VERSION.SDK_INT < 16) {
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN, WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN);
+        }else{
+			View ScoreView = getWindow().getDecorView();
+			int uifullscreen = View.SYSTEM_UI_FLAG_FULLSCREEN;
+			ScoreView.setSystemUiVisibility(uifullscreen);
+        }
 	}
 	
 	@Override
@@ -114,6 +151,13 @@ public class MainActivity extends Activity{
 		MDialog.setContentView(R.layout.metronome_dialog);
 		MDialog.setTitle(R.string.metronome);	
 		MDialog.getWindow().setLayout(config.getAnchoDialogBpm(), config.getAltoDialogBpm());
+		if (Build.VERSION.SDK_INT < 16) {
+            MDialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        }else{
+			View ScoreView = MDialog.getWindow().getDecorView();
+			int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
+			ScoreView.setSystemUiVisibility(uiOptions);
+        }	
 
 		seekBar_metronome = (SeekBar)MDialog.findViewById(R.id.seekBar_metronome);
 		numeros_checkbox = (CheckBox)MDialog.findViewById(R.id.cB_metronome);

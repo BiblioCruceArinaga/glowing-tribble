@@ -37,6 +37,7 @@ public class FreeNetworkConnection extends AsyncTask<String, Integer, String>{
 	HttpParams httpParams = new BasicHttpParams();
 	final int CONN_WAIT_TIME = 30000;
 	final int CONN_DATA_WAIT_TIME = 20000;
+	String URL = "http://www.scores.rising.es/store-free";
 	
 	//  Contexto
 	Context context;
@@ -79,7 +80,7 @@ public class FreeNetworkConnection extends AsyncTask<String, Integer, String>{
         	HttpConnectionParams.setConnectionTimeout(httpParams, CONN_WAIT_TIME);
         	HttpConnectionParams.setSoTimeout(httpParams, CONN_DATA_WAIT_TIME);
         	httpclient = new DefaultHttpClient(httpParams);
-            httppost = new HttpPost("http://www.scores.rising.es/store-free");
+            httppost = new HttpPost(URL);
             httppost.setEntity(new UrlEncodedFormEntity(params));
             HttpResponse response = httpclient.execute(httppost);
             HttpEntity entity = response.getEntity();
@@ -120,6 +121,7 @@ public class FreeNetworkConnection extends AsyncTask<String, Integer, String>{
 			float precio;
 			boolean comprado;
 			String URL;
+			String URL_Imagen;
 			
 			jArray = new JSONArray(result);
 		    JSONObject json_data=null;
@@ -135,8 +137,9 @@ public class FreeNetworkConnection extends AsyncTask<String, Integer, String>{
 		    	year = json_data.getInt("Year");
 		    	comprado = false;
 		    	URL = json_data.getString("URL");
+		    	URL_Imagen = json_data.getString("URL_Image");
 		    	
-		        resultado.add(new PartituraTienda(id,nombre,autor,instrumento,precio, description, year, comprado, URL));
+		        resultado.add(new PartituraTienda(id,nombre,autor,instrumento,precio, description, year, comprado, URL, URL_Imagen));
 		    }
 		}catch(JSONException e1){
 			

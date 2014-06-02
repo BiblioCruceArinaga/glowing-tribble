@@ -119,7 +119,8 @@ public class PianoNetworkConnection extends AsyncTask<String, Integer, String>{
 			int year;
 			float precio;
 			boolean comprado;
-			String URL;		
+			String URL;
+			String URL_Imagen;
 			
 			jArray = new JSONArray(result);
 		    JSONObject json_data=null;
@@ -134,8 +135,9 @@ public class PianoNetworkConnection extends AsyncTask<String, Integer, String>{
 		    	year = json_data.getInt("Year");
 		    	comprado = false;
 		    	URL = json_data.getString("URL");
+		    	URL_Imagen = json_data.getString("URL_Image");
 		    	
-		        resultado.add(new PartituraTienda(id,nombre,autor,instrumento,precio, description, year, comprado, URL));
+		        resultado.add(new PartituraTienda(id,nombre,autor,instrumento,precio, description, year, comprado, URL, URL_Imagen));
 		    }
 		}catch(JSONException e1){
 			

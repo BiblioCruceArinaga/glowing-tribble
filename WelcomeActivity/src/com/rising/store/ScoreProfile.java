@@ -2,6 +2,7 @@ package com.rising.store;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -17,6 +18,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
@@ -26,13 +28,21 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
+import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
+import com.nostra13.universalimageloader.utils.DiskCacheUtils;
+import com.nostra13.universalimageloader.utils.MemoryCacheUtils;
 import com.rising.conexiones.HttpPostAux;
 import com.rising.drawing.MainActivity;
 import com.rising.drawing.R;
 import com.rising.login.Configuration;
+import com.rising.money.MoneyActivity;
 import com.rising.store.BuyNetworkConnection.OnBuyCompleted;
 import com.rising.store.BuyNetworkConnection.OnBuyFailed;
 import com.rising.store.DownloadScores.OnDownloadCompleted;
@@ -52,10 +62,12 @@ public class ScoreProfile extends Activity{
 	private float price;
 	private boolean comprado;
 	private String urlD;
+	private String URL_Image;
 	static String selectedURL = "";
 	private String path = "/RisingScores/scores/";//Implementar sistema anti piratería
 	Dialog BDialog, NMDialog;
 	Button Confirm_Buy, Cancel_Buy, Buy_Money;
+	private ImageLoader iml;
 		
 	String Id_User = "";
 	String Id_Score = "";
@@ -118,6 +130,7 @@ public class ScoreProfile extends Activity{
 		ctx = this;
 		download = new DownloadScores(listenerDownload, failedDownload, this);
 		bnc = new BuyNetworkConnection(buyComplete, failedBuy, this);		
+		iml = ImageLoader.getInstance();
 		
 		mProgressDialog = new ProgressDialog(ScoreProfile.this);
 		mProgressDialog.setMessage(getString(R.string.downloading));
@@ -135,6 +148,7 @@ public class ScoreProfile extends Activity{
 		description = b.getString("description");
 		comprado = b.getBoolean("comprado");
 		urlD = b.getString("url");
+		URL_Image = b.getString("url_imagen");
 		
 		ActionBar ABar = getActionBar();
     	
@@ -148,7 +162,7 @@ public class ScoreProfile extends Activity{
 		TextView TV_Instrument = (TextView) findViewById(R.id.instrumentoPartitura_profile);
 		Button B_Price = (Button) findViewById(R.id.comprar_profile);
 		TextView TV_Description = (TextView) findViewById(R.id.tv_description_profile);
-		//ImageView IV_Partitura = (ImageView) findViewById(R.id.imagenPartitura_profile);
+		ImageView IV_Partitura = (ImageView) findViewById(R.id.imagenPartitura_profile);
 				
 		//  Cambiamos el texto de los TextView por el de la partitura seleccionada 
 		TV_Name.setText(name);
@@ -156,7 +170,57 @@ public class ScoreProfile extends Activity{
 		TV_Year.setText(year);
 		TV_Instrument.setText(instrument);
 		TV_Description.setText(description);
+		
+		DisplayImageOptions options = new DisplayImageOptions.Builder()
+        .showImageOnLoading(R.drawable.cover)
+        .showImageForEmptyUri(R.drawable.cover)
+        .showImageOnFail(R.drawable.cover)
+        .cacheInMemory(true)
+        .considerExifParams(true)
+        .displayer(new RoundedBitmapDisplayer(10))
+        .build();
+               
+		iml.displayImage(URL_Image, IV_Partitura, options, new SimpleImageLoadingListener(){
+	       	 boolean cacheFound;
+
+	            @Override
+	            public void onLoadingStarted(String url, View view) {
+	                List<String> memCache = MemoryCacheUtils.findCacheKeysForImageUri(url, ImageLoader.getInstance().getMemoryCache());
+	                cacheFound = !memCache.isEmpty();
+	                if (!cacheFound) {
+	                    File discCache = DiskCacheUtils.findInCache(url, ImageLoader.getInstance().getDiskCache());
+	                    if (discCache != null) {
+	                        cacheFound = discCache.exists();
+	                    }
+	                }
+	            }
+
+	            @Override
+	            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+	                if (cacheFound) {
+	                    MemoryCacheUtils.removeFromCache(imageUri, ImageLoader.getInstance().getMemoryCache());
+	                    DiskCacheUtils.removeFromCache(imageUri, ImageLoader.getInstance().getDiskCache());
+
+	                    ImageLoader.getInstance().displayImage(imageUri, (ImageView) view);
+	                }
+	            }
+	       });
+		
+		//iml.displayImage(URL_Image, IV_Partitura, options);	
+		
+		IV_Partitura.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				Intent i = new Intent(ctx, ImageActivity.class);
+				i.putExtra("imagen", URL_Image);
+				ctx.startActivity(i);
+			}
 			
+		});
+		
+		
+		
 		if(comprado){
 			if(buscarArchivos(FileNameString(urlD))){
 				B_Price.setText(R.string.open);
@@ -251,12 +315,8 @@ public class ScoreProfile extends Activity{
 				
 										@Override
 										public void onClick(View v) {
-											/************************************************************************/
-											/*======================================================================
-										 			Terminar cuando se implemente el growth hacking
-										  	=====================================================================*/
-											/***********************************************************************/
-											
+											Intent i = new Intent(ctx, MoneyActivity.class);
+											startActivity(i);
 										}
 											
 									});

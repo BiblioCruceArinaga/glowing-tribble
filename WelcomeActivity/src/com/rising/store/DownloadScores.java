@@ -18,7 +18,12 @@ import android.os.PowerManager;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.rising.drawing.R;
+import com.rising.money.SocialBonificationNetworkConnection.OnBonificationDone;
+import com.rising.money.SocialBonificationNetworkConnection.OnFailBonification;
+import com.rising.store.DownloadImages.OnDownloadICompleted;
+import com.rising.store.DownloadImages.OnDownloadIFailed;
 
 public class DownloadScores extends AsyncTask<String, Integer, String>{
 	
@@ -29,12 +34,30 @@ public class DownloadScores extends AsyncTask<String, Integer, String>{
 	HttpClient httpcliente;
 	private String path = "/RisingScores/scores/";
 	String URL_connect = "http://www.scores.rising.es/store-buyscore";
+	ImageLoader iml;
+	DownloadImages downloadimage;
 	
 	//  Contexto
 	Context context;
 	
 	//  Informaci�n obtenida de la base de datos
 	String res;
+	
+	private OnDownloadICompleted successdownloadimages = new OnDownloadICompleted(){
+
+		@Override
+		public void onDownloadICompleted() {
+			Log.i("Éxito", "Descarga correcta de la imagen");
+		}		
+	};
+	
+	private OnDownloadIFailed faildownloadimages = new OnDownloadIFailed(){
+
+		@Override
+		public void onDownloadIFailed() {
+			Log.i("Fracaso", "Descarga incorrecta de la imagen");
+		}		
+	};
 	
 	public interface OnDownloadCompleted{
         void onDownloadCompleted();
@@ -52,8 +75,9 @@ public class DownloadScores extends AsyncTask<String, Integer, String>{
 		this.context = ctx;
 		this.listenerDownload = listener;
 		this.failedDownload = failed;
+		downloadimage = new DownloadImages(successdownloadimages, faildownloadimages, context);
 		mProgressDialog = new ProgressDialog(ctx);
-		mProgressDialog.setMessage("Descargando");
+		mProgressDialog.setMessage(ctx.getString(R.string.downloading));
  		mProgressDialog.setIndeterminate(true);
  		mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
  		mProgressDialog.setCancelable(true);
@@ -68,7 +92,7 @@ public class DownloadScores extends AsyncTask<String, Integer, String>{
 		
 		return name;
 	}	
-		
+			
 	@Override
     protected String doInBackground(String... sUrl) {
     	
@@ -85,6 +109,7 @@ public class DownloadScores extends AsyncTask<String, Integer, String>{
             
             try {
                 URL url = new URL(sUrl[0]);
+                downloadimage.execute(sUrl[1]);
                 connection = (HttpURLConnection) url.openConnection();
                 connection.connect();
 

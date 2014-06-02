@@ -14,7 +14,7 @@
 		android:layout_marginRight="5dp"
         android:layout_gravity="bottom"
         android:gravity="bottom"
-        android:background="?android:attr/activatedBackgroundIndicator"
+       	android:background="?android:attr/activatedBackgroundIndicator"
         android:contentDescription="@string/contentDescription" />
 
     <TextView

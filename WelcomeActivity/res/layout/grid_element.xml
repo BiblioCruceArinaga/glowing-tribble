@@ -16,8 +16,7 @@
 	        android:layout_height="120dp"
 	        android:layout_marginLeft="15dp"
 	        android:layout_marginTop="15dp"
-	        android:contentDescription="@string/contentDescription"
-	        android:background="@drawable/scores_image" />
+	        android:contentDescription="@string/contentDescription" />
         
         <LinearLayout
             android:layout_width="wrap_content"

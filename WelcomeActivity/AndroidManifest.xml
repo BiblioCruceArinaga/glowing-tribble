@@ -36,12 +36,14 @@
     <uses-permission android:name="com.android.vending.BILLING"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
-    <application
+    <application       
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
-                
+        android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
+        <!-- android:theme="@style/AppTheme"-->         
+        
+        
         <activity android:name="com.rising.mainscreen.SearchActivity" >
 			<intent-filter>
 				<action android:name="android.intent.action.SEARCH" />
@@ -130,6 +132,7 @@
         <activity 
 	    	android:name="com.rising.money.Facebook_Publish"></activity>
         <activity android:name="com.rising.money.Twitter_Publish"></activity>
+        <activity android:name="com.rising.store.ImageActivity"></activity>
 
         
     </application>
