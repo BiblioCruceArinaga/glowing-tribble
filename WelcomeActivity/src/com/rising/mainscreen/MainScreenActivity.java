@@ -16,7 +16,6 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.text.util.Linkify;
@@ -26,7 +25,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.AbsListView.MultiChoiceModeListener;
@@ -62,6 +60,7 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 	String path = "/RisingScores/scores/";
 	String image_path = "/RisingScores/scores_images/";
 	private File f_toDelete;
+	private File f_image_toDelete;
 	private boolean delete;
 	HashMap<Integer, Boolean> mSelected;	
 	private ScoresAdapter s_adapter;
@@ -210,6 +209,11 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 		return ficherosLength;
 	}	
 	
+	public String ficheroAImagen(String fichero){
+		String imagenFichero = fichero.substring(0, fichero.lastIndexOf("."));
+		return imagenFichero + ".jpg";
+	}
+	
 	public void interfazCuandoHayPartituras(final String[] ficheros){
 		infoFicheros = darInfoFicheros(ficheros);
 		
@@ -225,6 +229,8 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 		numScores = scores_gallery.getCount();
 						
 		scores_gallery.setMultiChoiceModeListener(new MultiChoiceModeListener(){
+
+			String[] ficheros2 = ficheros;
 			
 		@Override
 		public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
@@ -234,18 +240,14 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 		   	   	case R.id.discard:
 		   	   		List<Score> elementosAEliminar = new ArrayList<Score>();
 		   	   		
-		   	   		for(int i = 0; i < mSelected.size(); i++){
-		   	   			
-		   	   			//Tal vez haya que corregirlo. Me falló y luego me funcionó
-		   	   			Log.i("Loop", "I: " + i + ", MSelected: " + mSelected.size() + ", Selected 4: " + mSelected.get(3));
-		   	   			if(mSelected.get(i)){
-		   	   				f_toDelete = new File(Environment.getExternalStorageDirectory() + 
-		  	   						"/RisingScores/scores/" + ficheros[i]);
-		   	     	   		
-		   	   				Log.d("Path", f_toDelete.getAbsolutePath());
-		    	   				
-		   	   				if(f_toDelete.exists()){
-		    	   				if(f_toDelete.delete()){
+		   	   		for(int i = 0; i < ficherosLength(); i++){
+		   	   					   	   			
+		   	   			if(mSelected.containsKey(i)){
+		   	   				Log.i("Ficheros", ficheros2[i] + ", " +ficheroAImagen(ficheros2[i]));
+		   	   				f_toDelete = new File(Environment.getExternalStorageDirectory() + path + ficheros2[i]);	
+		   	   				f_image_toDelete = new File(Environment.getExternalStorageDirectory() + image_path + ficheroAImagen(ficheros2[i]));
+		   	   				if(f_toDelete.exists() && f_image_toDelete.exists()){
+		    	   				if(f_toDelete.delete() && f_image_toDelete.delete()){
 		    	   					elementosAEliminar.add(s_adapter.getItem(i));
 		    	   					delete = true;
 		    	   				}else{
@@ -253,6 +255,7 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 		    	   					break;
 		    	   				}
 		   	   				}else{
+		   	   					Log.i("Existe", "File: " + f_toDelete.getAbsolutePath() + ", imagen: " + f_image_toDelete.getAbsolutePath() );
 		   	   					Log.e("Archivo", "El archivo no existe");
 		   	   				}			
 		   	   			}
@@ -272,7 +275,8 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 		       		if (s_adapter.isEmpty()) {
 		       			interfazCuandoNoHayPartituras();
 		       		}
-
+		       		mSelected.clear();
+		       		mode.finish();
 			        return true; 
 
 		   	   	case R.id.s_all:
@@ -297,6 +301,7 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 			inflater.inflate(R.menu.modal_details, menu);
 			mode.setTitle(R.string.title);
 	        mode.setSubtitle(R.string.subtitle);
+	        ficheros2 = leeFicheros();
 	        return true;
 		}
 
@@ -306,6 +311,7 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 
 		@Override
 		public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+			
 			return true;
 		}
 
@@ -320,7 +326,7 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 		               		                
 		            break;
 	        	default:
-	        		mode.setSubtitle(selectCount + " partituras seleccionadas");
+	        		mode.setSubtitle(selectCount + " " + getString(R.string.subtitle2));
 		               		                
 		            break; 
 	        }
@@ -654,12 +660,12 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 		
 		for(int i=0; i < len; i++){
 			String[] dataSplit = ArrayScores[i].split("_");
-			String imagenFichero = ArrayScores[i].substring(0, ArrayScores[i].lastIndexOf("."));
+			//String imagenFichero = ArrayScores[i].substring(0, ArrayScores[i].lastIndexOf("."));
 					
 			res[0][i] = dataSplit[0].replace("-", " ");	//  Nombre de la obra
 			res[1][i] = dataSplit[1].replace("-", " ");	//  Autor
 			res[2][i] = dataSplit[2].substring(0, dataSplit[2].indexOf("."));	//  Instrumento
-			res[3][i] = imagenFichero + ".jpg";	// Imagen
+			res[3][i] = ficheroAImagen(ArrayScores[i]);	// Imagen
 		}
 		
 		return res;
