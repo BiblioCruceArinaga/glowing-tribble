@@ -94,7 +94,19 @@ You can buy scores in our store.</string>
     	
     <!-- Leer micrófono -->
     <string name="readMicrophone">Micrófono</string>
-    <string name="startPlaying">Ya puede empezar a tocar</string>
+    <string name="microphone_sensitivity">Sensibilidad</string>
+    <string name="microphone_start">Empezar</string>
+    <string name="microphone_stop">Parar</string>
+    <string name="startPlaying">Ya puedes empezar a tocar</string>
+    <string name="setSensitivity">Ajustar sensibilidad</string>
+    <string name="sensitivityText">
+        Ajusta la sensibilidad del micrófono. Si este valor es demasiado bajo,
+        tendrás que tocar muy fuerte para que la aplicación te oiga. Si este
+        valor es demasiado alto, el ruido ambiente podría interferir en la
+        aplicación y estorbarte. Busca un valor apropiado que te permita
+        tocar de manera cómoda.
+    </string>
+    <string name="sensitivityButton">Ajustar</string>
     	
     <string name="contentDescription">Image</string>
 

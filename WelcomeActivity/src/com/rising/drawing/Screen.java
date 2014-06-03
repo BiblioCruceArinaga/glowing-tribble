@@ -139,10 +139,7 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback, Observer {
 		ordenesDibujo.clear();
 		ordenesDibujo = null;
 		
-		if (soundReader != null) {
-			soundReader.onDestroy();
-			soundReader = null;
-		}
+		stopMicrophone();
 		
 		altoPantalla = 0;
 		canvasDependentDataRecovered = false;
@@ -810,9 +807,10 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback, Observer {
 	 * GESTIÓN DE LA LECTURA DEL MICRÓFONO
 	 * 
 	 */
-	public void readMicrophone() throws Exception {
+	public void readMicrophone(int sensibilidad) throws Exception {
 		soundReader = new SoundReader();
 		soundReader.addObserver(this);
+		soundReader.setSensitivity(sensibilidad);
 		
 		yActual = partitura.getCompas(0).getYIni();
 		desplazamiento = yActual + config.getDistanciaLineasPentagrama() * 4 +
@@ -820,7 +818,20 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback, Observer {
     			config.getDistanciaLineasPentagrama() * 4) * 
     			(partitura.getStaves() - 1);
 		
+		ArrayList<Integer> golpesSonido = new ArrayList<Integer>();
+		int numCompases = partitura.getCompases().size();
+		for (int i=0; i<numCompases; i++) 
+			golpesSonido.add(partitura.getCompas(i).golpesDeSonido());
+		
 		Toast.makeText(context, R.string.startPlaying, Toast.LENGTH_SHORT).show();
+	}
+	
+	public void stopMicrophone() {
+		if (soundReader != null) {
+			soundReader.deleteObservers();
+			soundReader.onDestroy();
+			soundReader = null;
+		}
 	}
 
 	@Override
@@ -830,11 +841,14 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback, Observer {
 		if (sound > 0) {
 			Compas compas = partitura.getCompas(compasActual);
 			int golpesSonido = compas.golpesDeSonido();
-			if (golpeSonidoActual == golpesSonido) {
+			
+			if (golpeSonidoActual >= golpesSonido) {
+				Log.i("Check", "Compás nº " + compasActual + ": " + golpesSonido);
+				
 				compasActual++;
 				golpeSonidoActual = 0;
 				
-				if (compas.getYIni() != yActual) {
+				if (partitura.getCompas(compasActual).getYIni() != yActual) {
 					hacerScroll(desplazamiento);
 				
 					if (!primerDesplazamientoHecho) {

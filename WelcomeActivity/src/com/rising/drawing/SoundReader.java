@@ -14,7 +14,11 @@ public class SoundReader extends Observable implements AudioRecord.OnRecordPosit
 	private static final int AUDIO_SAMPLING_RATE = 8000;
 	private static int AUDIO_DATA_SIZE = 2048;
 	private static int BUFFER_SIZE = 0;
-	private static float NOTIFY_RATE = (float) 0.15;
+	
+	//  Velocidad a la que se notifican las muestras y
+	//  volumen a partir del cual se considera un ruido válido
+	//  3040, 3120, 3200
+	private static int NOTIFY_RATE = 3180;
 	private static float THRESHOLD = (float) 15.0;
 	
 	private AudioRecord audioRecord = null;
@@ -62,8 +66,7 @@ public class SoundReader extends Observable implements AudioRecord.OnRecordPosit
 		
 		startRecorder();
 		
-		if(audioRecord.setPositionNotificationPeriod(
-				(int)(NOTIFY_RATE * AUDIO_SAMPLING_RATE)) != AudioRecord.SUCCESS) {
+		if(audioRecord.setPositionNotificationPeriod(NOTIFY_RATE) != AudioRecord.SUCCESS) {
 			throw new Exception("Wrong notify rate.");
 		}
 		
@@ -111,5 +114,50 @@ public class SoundReader extends Observable implements AudioRecord.OnRecordPosit
 			floatArray[i] = shortArray[i];
 		
 		return floatArray;
+	}
+	
+	//  El músico podrá configurar el "volumen" al que
+	//  deberá tocar para que la aplicación considere el 
+	//  sonido recogido como válido. Esto permitirá al
+	//  músico usar la aplicación sin problemas en entornos
+	//  donde haya ruido de fondo
+	public void setSensitivity(int sensitivity) {
+		switch (sensitivity) {
+			case 0:
+				THRESHOLD = 30;
+				break;
+			case 1:
+				THRESHOLD = 27;
+				break;
+			case 2:
+				THRESHOLD = 24;
+				break;
+			case 3:
+				THRESHOLD = 21;
+				break;
+			case 4:
+				THRESHOLD = 18;
+				break;
+			case 5:
+				THRESHOLD = 15;
+				break;
+			case 6:
+				THRESHOLD = 12;
+				break;
+			case 7:
+				THRESHOLD = 9;
+				break;
+			case 8:
+				THRESHOLD = 6;
+				break;
+			case 9:
+				THRESHOLD = 3;
+				break;
+			case 10:
+				THRESHOLD = 0;
+				break;
+			default:
+				break;
+		}
 	}
 }

@@ -175,6 +175,12 @@ public class Nota {
 	public boolean tienePlica() {
 		return plica > 0;
 	}
+	
+	public boolean tienePuntillo() {
+		return figurasGraficas.contains((byte) 15) ||
+			   figurasGraficas.contains((byte) 16) ||
+			   figurasGraficas.contains((byte) 17);
+	}
 
 	public boolean tieneSlash() {
 		return figurasGraficas.contains((byte) 18);

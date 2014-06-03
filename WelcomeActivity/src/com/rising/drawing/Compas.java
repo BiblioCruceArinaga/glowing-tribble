@@ -249,14 +249,33 @@ public class Compas {
 	//  como un único sonido. Las notas tocadas a la vez en diferentes pentagramas o
 	//  voces comparten la misma x, y por tanto cuentan como un unico golpe de sonido.
 	public int golpesDeSonido() {
+		int numGolpes = 0;
 		ArrayList<Integer> xEncontradas = new ArrayList<Integer>();
 		
 		int numNotas = notas.size();
-		for (int i=0; i<numNotas; i++)
-			if (!xEncontradas.contains(notas.get(i).getX()))
+		for (int i=0; i<numNotas; i++) {
+			if (!xEncontradas.contains(notas.get(i).getX())) {
 				xEncontradas.add(notas.get(i).getX());
+				
+				//  La unidad mínima de "golpe de sonido" es la corchea. 
+				//  Si se tocan negras o notas de mayor duración, se 
+				//  añaden golpes de sonido extra. El +1 es el golpe
+				//  mínimo que corresponde a la nota encontrada
+				numGolpes += golpesExtra(notas.get(i)) + 1;
+			}
+		}
 		
-		return xEncontradas.size();
+		return numGolpes;
+	}
+	
+	private int golpesExtra(Nota nota) {
+		switch (nota.getFiguracion()) {
+			case 11: 
+				if (nota.tienePuntillo()) return 6;
+				else return 5;
+			default: 
+				return 0;
+		}
 	}
 	
 	public boolean hayBarlines() {

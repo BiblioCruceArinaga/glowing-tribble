@@ -17,10 +17,14 @@ import android.view.SurfaceHolder;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.NumberPicker;
 import android.widget.NumberPicker.OnScrollListener;
+import android.widget.SeekBar;
+import android.widget.SeekBar.OnSeekBarChangeListener;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends Activity{
@@ -29,15 +33,23 @@ public class MainActivity extends Activity{
     SurfaceHolder holder;
 	Canvas canvas;
 	Screen s;
+	String score;
+	private Config config = null;
+	
+	//  Gestión del metrónomo
 	private Dialog MDialog;
 	private ImageButton playButton;
 	private NumberPicker metronome_speed;
 	private EditText editText_metronome;
 	private int tempo = 120;
-	String score;
 	private boolean play;
 	private boolean stop = false;
-	private Config config = null;
+
+	//  Gestión del micrófono
+	private boolean readingMicrophone = false;
+	private Dialog MicrophoneDialog = null;
+	private Button sensitivityButton = null;
+	private int sensibilidad = 5;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState){
@@ -83,15 +95,7 @@ public class MainActivity extends Activity{
 	    		return true;
 	    		
 	    	case R.id.readSound_Button:
-	    		s.Back();
-	    		
-				try {
-					s.readMicrophone();
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				
+	    		microphone_options();
 	    		return true;
 	    	
 	    	case android.R.id.home:
@@ -109,7 +113,126 @@ public class MainActivity extends Activity{
 		s.Metronome_Stop();
 	}
 	
-	//  Método que controla el dialog de las opciones del metrónomo
+	
+	/*
+	 * 
+	 * MÉTODOS DEL MICRÓFONO
+	 * 
+	 */
+	public void microphone_options() {
+		MainActivity.this.startActionMode(new ActionBarMicrophone());
+	}
+	
+	private class ActionBarMicrophone implements ActionMode.Callback {
+
+		@Override
+		public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+			switch(item.getItemId()){
+	    		case R.id.microphone_sensitivity:
+	    			gestionarSensibilidad();
+	    			break;
+	    		
+	    		case R.id.microphone_start:    
+	    			
+	    			try {
+	    				if (readingMicrophone) item.setTitle(R.string.microphone_start);
+	    				else item.setTitle(R.string.microphone_stop);
+	    				
+	    				gestionarMicrofono();
+	    				
+	    			} catch (Exception e) {
+	    				// TODO Auto-generated catch block
+	    				e.printStackTrace();
+	    			}
+	    			
+	    			break;
+	    			
+	    		default:
+	    			break;
+	    	}
+			return true;
+		}
+
+		@Override
+		public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+			mode.getMenuInflater().inflate(R.menu.microphone_menu, menu);			
+            return true;
+		}
+
+		@Override
+		public void onDestroyActionMode(ActionMode arg0) {
+			s.stopMicrophone();
+			readingMicrophone = false;
+		}
+
+		@Override
+		public boolean onPrepareActionMode(ActionMode arg0, Menu arg1) {
+			// TODO Auto-generated method stub
+			return false;
+		}
+		
+		private void gestionarMicrofono() throws Exception {
+			if (readingMicrophone) {
+				s.stopMicrophone();
+				
+				readingMicrophone = false;
+			}
+			else {
+				s.Back();
+				s.readMicrophone(sensibilidad);
+				
+				readingMicrophone = true;
+			}
+		}
+		
+		private void gestionarSensibilidad() {
+			MicrophoneDialog = new Dialog(MainActivity.this, R.style.cust_dialog);	
+			MicrophoneDialog.setContentView(R.layout.microphone_sensitivity_dialog);
+			MicrophoneDialog.setTitle(R.string.setSensitivity);	
+			
+			final TextView texto = (TextView) MicrophoneDialog.findViewById(R.id.sensitivityValue);
+			final SeekBar seekBar = (SeekBar) MicrophoneDialog.findViewById(R.id.sensitivityBar);
+			
+			seekBar.setProgress(sensibilidad);
+			texto.setText(sensibilidad + "");
+			
+			seekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+
+				@Override
+				public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+					texto.setText(seekBar.getProgress() + "");
+				}
+
+				@Override
+				public void onStartTrackingTouch(SeekBar seekBar) {
+					// TODO Auto-generated method stub
+				}
+
+				@Override
+				public void onStopTrackingTouch(SeekBar seekBar) {
+					// TODO Auto-generated method stub
+				}
+			});
+			
+			sensitivityButton = (Button) MicrophoneDialog.findViewById(R.id.sensitivityButton);
+			sensitivityButton.setOnClickListener(new OnClickListener(){
+	 
+				@Override
+				public void onClick(View v) {
+					sensibilidad = seekBar.getProgress();
+					MicrophoneDialog.dismiss();
+				}
+			});
+			
+			MicrophoneDialog.show();
+		}
+	}
+	
+	/*
+	 * 
+	 * MÉTODOS DEL METRÓNOMO
+	 * 
+	 */
 	private void metronome_options(int value){
 		WindowManager wm = (WindowManager) getSystemService(WINDOW_SERVICE);
 		Display display = wm.getDefaultDisplay();
@@ -119,7 +242,7 @@ public class MainActivity extends Activity{
 		int screenHeight = screenSize.y;
 		Log.i("Windowrrr", screenWith + ", " + screenHeight);
 		
-		MDialog = new Dialog(MainActivity.this,  R.style.cust_dialog);	
+		MDialog = new Dialog(MainActivity.this, R.style.cust_dialog);	
 		MDialog.setContentView(R.layout.metronome_dialog);
 		MDialog.setTitle(R.string.metronome);	
 		MDialog.getWindow().setLayout(config.getAnchoDialogBpm(), config.getAltoDialogBpm());
