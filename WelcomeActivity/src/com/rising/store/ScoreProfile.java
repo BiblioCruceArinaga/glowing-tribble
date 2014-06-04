@@ -68,6 +68,7 @@ public class ScoreProfile extends Activity{
 	Dialog BDialog, NMDialog;
 	Button Confirm_Buy, Cancel_Buy, Buy_Money;
 	private ImageLoader iml;
+	private Button B_Price;
 		
 	String Id_User = "";
 	String Id_Score = "";
@@ -83,7 +84,7 @@ public class ScoreProfile extends Activity{
 	private HttpPostAux HPA =  new HttpPostAux();
 	
 	// declare the dialog as a member field of your activity
-	ProgressDialog mProgressDialog;
+	ProgressDialog mProgressDialog, Image_PDialog;
 	
 	private OnBuyCompleted buyComplete = new OnBuyCompleted(){
 
@@ -108,9 +109,10 @@ public class ScoreProfile extends Activity{
 	private OnDownloadCompleted listenerDownload = new OnDownloadCompleted(){
 		@Override
 		public void onDownloadCompleted() {
-			Intent i = new Intent(ScoreProfile.this, MainActivityStore.class);
-			startActivity(i);
-			finish();
+			
+			B_Price.setText(R.string.open);
+			Toast.makeText(ctx,R.string.okdownload, Toast.LENGTH_SHORT).show();            
+            Log.i("Custom", "Archivo descargado");
 		}
 		
 	};
@@ -131,6 +133,7 @@ public class ScoreProfile extends Activity{
 		download = new DownloadScores(listenerDownload, failedDownload, this);
 		bnc = new BuyNetworkConnection(buyComplete, failedBuy, this);		
 		iml = ImageLoader.getInstance();
+		Image_PDialog = ProgressDialog.show(ctx, "", getString(R.string.pleasewait));
 		
 		mProgressDialog = new ProgressDialog(ScoreProfile.this);
 		mProgressDialog.setMessage(getString(R.string.downloading));
@@ -156,21 +159,21 @@ public class ScoreProfile extends Activity{
     	ABar.setIcon(R.drawable.ic_menu);
     	ABar.setDisplayHomeAsUpEnabled(true);
 		
-		TextView TV_Name = (TextView) findViewById(R.id.nombrePartitura_profile);
-		TextView TV_Author = (TextView) findViewById(R.id.autorPartitura_profile);
-		TextView TV_Year = (TextView) findViewById(R.id.anoPartitura_profile);
-		TextView TV_Instrument = (TextView) findViewById(R.id.instrumentoPartitura_profile);
-		Button B_Price = (Button) findViewById(R.id.comprar_profile);
-		TextView TV_Description = (TextView) findViewById(R.id.tv_description_profile);
+		final TextView TV_Name = (TextView) findViewById(R.id.nombrePartitura_profile);
+		final TextView TV_Author = (TextView) findViewById(R.id.autorPartitura_profile);
+		final TextView TV_Year = (TextView) findViewById(R.id.anoPartitura_profile);
+		final TextView TV_Instrument = (TextView) findViewById(R.id.instrumentoPartitura_profile);
+		B_Price = (Button) findViewById(R.id.comprar_profile);
+		final TextView TV_Description = (TextView) findViewById(R.id.tv_description_profile);
 		ImageView IV_Partitura = (ImageView) findViewById(R.id.imagenPartitura_profile);
-				
-		//  Cambiamos el texto de los TextView por el de la partitura seleccionada 
-		TV_Name.setText(name);
-		TV_Author.setText(author);
-		TV_Year.setText(year);
-		TV_Instrument.setText(instrument);
-		TV_Description.setText(description);
-		
+						
+	//  Cambiamos el texto de los TextView por el de la partitura seleccionada 
+		TV_Name.setText("");
+		TV_Author.setText("");
+		TV_Year.setText("");
+		TV_Instrument.setText("");
+		TV_Description.setText("");
+        		
 		DisplayImageOptions options = new DisplayImageOptions.Builder()
         .showImageOnLoading(R.drawable.cover)
         .showImageForEmptyUri(R.drawable.cover)
@@ -203,6 +206,13 @@ public class ScoreProfile extends Activity{
 
 	                    ImageLoader.getInstance().displayImage(imageUri, (ImageView) view);
 	                }
+	            //  Cambiamos el texto de los TextView por el de la partitura seleccionada 
+	        		TV_Name.setText(name);
+	        		TV_Author.setText(author);
+	        		TV_Year.setText(year);
+	        		TV_Instrument.setText(instrument);
+	        		TV_Description.setText(description);
+	                Image_PDialog.dismiss();
 	            }
 	       });
 		
@@ -266,7 +276,7 @@ public class ScoreProfile extends Activity{
         				AbrirFichero(ctx, FileNameString(urlD));				
         			}else{
         				     				
-	     				download.execute(urlD);
+	     				download.execute(urlD, URL_Image);
         			}  				
         			     				
      				mProgressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {

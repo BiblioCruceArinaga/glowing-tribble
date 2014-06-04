@@ -16,12 +16,9 @@ import android.os.AsyncTask;
 import android.os.Environment;
 import android.os.PowerManager;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.rising.drawing.R;
-import com.rising.money.SocialBonificationNetworkConnection.OnBonificationDone;
-import com.rising.money.SocialBonificationNetworkConnection.OnFailBonification;
 import com.rising.store.DownloadImages.OnDownloadICompleted;
 import com.rising.store.DownloadImages.OnDownloadIFailed;
 
@@ -36,7 +33,8 @@ public class DownloadScores extends AsyncTask<String, Integer, String>{
 	String URL_connect = "http://www.scores.rising.es/store-buyscore";
 	ImageLoader iml;
 	DownloadImages downloadimage;
-	
+	String urlI;
+		
 	//  Contexto
 	Context context;
 	
@@ -55,6 +53,7 @@ public class DownloadScores extends AsyncTask<String, Integer, String>{
 
 		@Override
 		public void onDownloadIFailed() {
+			downloadimage.resourceToBitmap(urlI);
 			Log.i("Fracaso", "Descarga incorrecta de la imagen");
 		}		
 	};
@@ -109,6 +108,7 @@ public class DownloadScores extends AsyncTask<String, Integer, String>{
             
             try {
                 URL url = new URL(sUrl[0]);
+                urlI = sUrl[1];
                 downloadimage.execute(sUrl[1]);
                 connection = (HttpURLConnection) url.openConnection();
                 connection.connect();
@@ -124,8 +124,7 @@ public class DownloadScores extends AsyncTask<String, Integer, String>{
 
                 // download the file
                 input = connection.getInputStream();
-                output = new FileOutputStream(Environment.getExternalStorageDirectory() 
-                		+ path + FileNameURL(url));
+                output = new FileOutputStream(Environment.getExternalStorageDirectory() + path + FileNameURL(url));
 
                 byte data[] = new byte[4096];
                 long total = 0;
@@ -143,6 +142,7 @@ public class DownloadScores extends AsyncTask<String, Integer, String>{
                     output.write(data, 0, count);
                 }
             } catch (Exception e) {
+            	Log.e("Error descargar", e.getMessage());
                 return e.toString();
             } finally {
                 try {
@@ -156,7 +156,7 @@ public class DownloadScores extends AsyncTask<String, Integer, String>{
                 if (connection != null)
                     connection.disconnect();
             }
-            
+             
         } finally {
             wl.release();
         }
@@ -182,21 +182,15 @@ public class DownloadScores extends AsyncTask<String, Integer, String>{
 	@Override
 	protected void onPostExecute(String result) {
 	    mProgressDialog.dismiss();
+	    Log.i("Download", "Se acaba de cerrar el dialog");
 	    
 	    //Podr�an sustituirse por Dialogs. 
         if (result != null){
-        	
         	if(failedDownload != null) failedDownload.onDownloadFailed();
-        	        	
-        	//Un dialog con los botones "Volver a intentar" y "Cancelar"
-            Toast.makeText(context,R.string.errordownload, Toast.LENGTH_LONG).show();
         	Log.e("Error descarga", "Error descarga: " + result);
         }else{ 
+        	Log.i("Download", "Listener Good");
         	if (listenerDownload != null) listenerDownload.onDownloadCompleted();
-        	        	
-        	//Un dialog con los botones "Abrir partitura" y "Ok"
-            Toast.makeText(context,R.string.okdownload, Toast.LENGTH_SHORT).show();
-            Log.i("Descarga", "Archivo descargado");		            
         }
 	}
 

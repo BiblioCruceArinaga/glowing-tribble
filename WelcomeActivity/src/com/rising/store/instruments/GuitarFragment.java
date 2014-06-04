@@ -59,7 +59,7 @@ public class GuitarFragment extends Fragment{
 	    	
 		    guitarView.setAdapter(new CustomAdapter(context, partiturasGuitar));
 		      		    
-		    onDestroyProgress();
+		    //onDestroyProgress();
 	    } 	
 	};
 	

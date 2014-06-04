@@ -5,16 +5,21 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Environment;
+import android.util.Log;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.rising.drawing.R;
 
 public class DownloadImages extends AsyncTask<String, Integer, String>{
 	
@@ -96,9 +101,11 @@ public class DownloadImages extends AsyncTask<String, Integer, String>{
                     
                     output.write(data, 0, count);
                 }
-            } catch (Exception e) {
-                return e.toString();
-            } finally {
+            } catch (IOException IOE) {
+                //resourceToBitmap(sUrl[0]);
+            } catch(Exception e){
+            	return e.toString(); 
+            }finally {
                 try {
                     if (output != null)
                         output.close();
@@ -120,11 +127,36 @@ public class DownloadImages extends AsyncTask<String, Integer, String>{
 	@Override
 	protected void onPostExecute(String result) {	
 		
-        if (result != null){
+        if (result != null){        	
         	if(failedDownloadImage != null) failedDownloadImage.onDownloadIFailed();
         }else{ 
-        	if (listenerDownloadImage != null) listenerDownloadImage.onDownloadICompleted();	            
+        	if(listenerDownloadImage != null) listenerDownloadImage.onDownloadICompleted();	            
         }
 	}
 
+	public void resourceToBitmap(String url){
+		Bitmap bmp = BitmapFactory.decodeResource(context.getResources(), R.drawable.cover);
+		
+		URL urll = null;
+		try {
+			urll = new URL(url);
+		} catch (MalformedURLException e1) {	
+			e1.printStackTrace();
+			Log.e("Falló", "Falló conversión de Resource a Bitmap " + e1.getMessage());
+		}
+		
+		FileOutputStream out = null;
+		try {
+		       out = new FileOutputStream(Environment.getExternalStorageDirectory() + path + FileNameURL(urll));
+		       bmp.compress(Bitmap.CompressFormat.JPEG, 90, out);
+		} catch (Exception e) {
+		    e.printStackTrace();
+		} finally {
+		       try{
+		           out.close();
+		       } catch(Throwable ignore) {}
+		}
+	}
+	
+	
 }

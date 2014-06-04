@@ -243,7 +243,6 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 		   	   		for(int i = 0; i < ficherosLength(); i++){
 		   	   					   	   			
 		   	   			if(mSelected.containsKey(i)){
-		   	   				Log.i("Ficheros", ficheros2[i] + ", " +ficheroAImagen(ficheros2[i]));
 		   	   				f_toDelete = new File(Environment.getExternalStorageDirectory() + path + ficheros2[i]);	
 		   	   				f_image_toDelete = new File(Environment.getExternalStorageDirectory() + image_path + ficheroAImagen(ficheros2[i]));
 		   	   				if(f_toDelete.exists() && f_image_toDelete.exists()){
@@ -254,10 +253,7 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 		    	   					delete = false;
 		    	   					break;
 		    	   				}
-		   	   				}else{
-		   	   					Log.i("Existe", "File: " + f_toDelete.getAbsolutePath() + ", imagen: " + f_image_toDelete.getAbsolutePath() );
-		   	   					Log.e("Archivo", "El archivo no existe");
-		   	   				}			
+		   	   				}		
 		   	   			}
 		   	   		}
 		   	   		

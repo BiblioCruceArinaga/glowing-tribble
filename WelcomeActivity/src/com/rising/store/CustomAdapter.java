@@ -6,9 +6,7 @@ import java.util.List;
 import java.util.Locale;
 
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Environment;
@@ -40,6 +38,9 @@ import com.rising.store.BuyNetworkConnection.OnBuyCompleted;
 import com.rising.store.BuyNetworkConnection.OnBuyFailed;
 import com.rising.store.DownloadScores.OnDownloadCompleted;
 import com.rising.store.DownloadScores.OnDownloadFailed;
+import com.rising.store.instruments.FreeFragment;
+import com.rising.store.instruments.GuitarFragment;
+import com.rising.store.instruments.PianoFragment;
 
 public class CustomAdapter extends BaseAdapter {
 
@@ -49,13 +50,13 @@ public class CustomAdapter extends BaseAdapter {
 	LayoutInflater inflater;
 	String Id_User = "";
 	String Id_Score = "";
-	String path = "/RisingScores/scores/";
+	private String path = "/RisingScores/scores/";
 	private List<PartituraTienda> lista;
 	Configuration conf;
-	Dialog BDialog, NMDialog;
-	Button Confirm_Buy, Cancel_Buy, Buy_Money;
+	private Dialog BDialog, NMDialog;
+	private Button Confirm_Buy, Cancel_Buy, Buy_Money;
     private ArrayList<PartituraTienda> infoPartituras;
-	ProgressDialog mProgressDialog;
+	
 	String URL_Buy = "http://www.scores.rising.es/store-buyscore";
 	public static DownloadScores download;
 	static String selectedURL = "";
@@ -64,9 +65,8 @@ public class CustomAdapter extends BaseAdapter {
 	private String ID_BONIFICATION = "6";
 	BuyNetworkConnection bnc;	
 	private SocialBonificationNetworkConnection sbnc;
-	
 	ImageLoader iml;
-
+	
 	private OnBonificationDone successbonification = new OnBonificationDone(){
 
 		@Override
@@ -105,22 +105,27 @@ public class CustomAdapter extends BaseAdapter {
 	};
 		
 	private OnDownloadCompleted listenerDownload = new OnDownloadCompleted(){
+		
 		@Override
 		public void onDownloadCompleted() {
-			
-			//Acciones a ejecutar cuando la descarga est� completa
-			holder.botonCompra.setText(R.string.open);	
-			holder.botonCompra.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);	
+
+			holder.botonCompra.setText(R.string.open);
+			holder.botonCompra.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+			notifyDataSetChanged();				
+            Toast.makeText(ctx,R.string.okdownload, Toast.LENGTH_SHORT).show();            
+            Log.i("Custom", "Archivo descargado, " + holder.botonCompra.isActivated() + ", " + holder.botonCompra.getText().toString());
 		}
 	};
 			
 	private OnDownloadFailed failedDownload = new OnDownloadFailed(){
+		
 		@Override
 		public void onDownloadFailed() {
-			//Acciones a ejecutar cuando la descarga fall�
 			
-			//Aqu� va un Dialog
-			Toast.makeText(ctx, "Falló la descarga", Toast.LENGTH_LONG).show();
+			holder.botonCompra.setText(R.string.download);	
+        	
+			//Un dialog con los botones "Volver a intentar" y "Cancelar"
+			Toast.makeText(ctx,R.string.errordownload, Toast.LENGTH_LONG).show();
 		}
 	};	
 		
@@ -130,20 +135,9 @@ public class CustomAdapter extends BaseAdapter {
 		this.lista = partituras;
 		this.infoPartituras = new ArrayList<PartituraTienda>();
 		this.infoPartituras.addAll(partituras);
-		mProgressDialog = new ProgressDialog(ctx);
-		mProgressDialog.setCancelable(true);
-		iml = ImageLoader.getInstance();
 	}
-		
-	public class ViewHolder {
-        TextView Author;
-        TextView Title;
-        ImageView image;
-        TextView intrumento;
-        Button botonCompra;
-        Button botonInfo;
-    }
 	
+			
 	@Override
 	public int getCount() {
 		return lista.size();
@@ -168,7 +162,17 @@ public class CustomAdapter extends BaseAdapter {
 		
 		return name;
 	}
-	Bitmap score_imagen;
+	
+	
+	public class ViewHolder {
+        TextView Author;
+        TextView Title;
+        ImageView image;
+        TextView intrumento;
+        Button botonCompra;
+        Button botonInfo;
+    }
+	
 	@Override
 	public View getView(final int position, View view, ViewGroup parent) {
 
@@ -177,18 +181,18 @@ public class CustomAdapter extends BaseAdapter {
 		download = new DownloadScores(listenerDownload, failedDownload, ctx);
 		sbnc = new SocialBonificationNetworkConnection(successbonification, failbonification, ctx);
 		selected = position;
-								
+		iml = ImageLoader.getInstance();
         if (view == null) {
         	holder = new ViewHolder();
         	view = inflater.inflate(R.layout.grid_element, parent, false);
-            
+        	
             holder.Title = (TextView) view.findViewById(R.id.nombrePartitura);
             holder.Author = (TextView) view.findViewById(R.id.autorPartitura);
             holder.intrumento = (TextView) view.findViewById(R.id.instrumentoPartitura);
             holder.botonCompra = (Button) view.findViewById(R.id.comprar);
             holder.botonInfo = (Button) view.findViewById(R.id.masInfo);
             holder.image = (ImageView) view.findViewById(R.id.imagenPartitura);
-            
+        
             view.setTag(holder);
         }else{
         	holder = (ViewHolder) view.getTag();
@@ -198,7 +202,7 @@ public class CustomAdapter extends BaseAdapter {
         holder.Author.setText(lista.get(position).getAutor());
         holder.intrumento.setText(lista.get(position).getInstrumento());
                         
-        DisplayImageOptions options = new DisplayImageOptions.Builder()
+         final DisplayImageOptions options = new DisplayImageOptions.Builder()
         .showImageOnLoading(R.drawable.cover)
         .showImageForEmptyUri(R.drawable.cover)
         .showImageOnFail(R.drawable.cover)
@@ -210,24 +214,29 @@ public class CustomAdapter extends BaseAdapter {
 
              @Override
              public void onLoadingStarted(String url, View view) {
-                 List<String> memCache = MemoryCacheUtils.findCacheKeysForImageUri(url, ImageLoader.getInstance().getMemoryCache());
+                 List<String> memCache = MemoryCacheUtils.findCacheKeysForImageUri(url, iml.getMemoryCache());
                  cacheFound = !memCache.isEmpty();
                  if (!cacheFound) {
-                     File discCache = DiskCacheUtils.findInCache(url, ImageLoader.getInstance().getDiskCache());
+                	 Log.i("Start Cache", "Loading Cache");
+                     File discCache = DiskCacheUtils.findInCache(url, iml.getDiskCache());
                      if (discCache != null) {
                          cacheFound = discCache.exists();
                      }
                  }
              }
-
+             
              @Override
              public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
                  if (cacheFound) {
-                     MemoryCacheUtils.removeFromCache(imageUri, ImageLoader.getInstance().getMemoryCache());
-                     DiskCacheUtils.removeFromCache(imageUri, ImageLoader.getInstance().getDiskCache());
+                     MemoryCacheUtils.removeFromCache(imageUri, iml.getMemoryCache());
+                     DiskCacheUtils.removeFromCache(imageUri, iml.getDiskCache());
 
-                     ImageLoader.getInstance().displayImage(imageUri, (ImageView) view);
+                     iml.displayImage(imageUri, (ImageView) view, options);
+                     Log.i("Complete Cache", "Loading Cache Complete");
                  }
+                 new PianoFragment().onDestroyProgress();
+                 new GuitarFragment().onDestroyProgress();
+                 new FreeFragment().onDestroyProgress();
              }
         });
                
@@ -254,19 +263,7 @@ public class CustomAdapter extends BaseAdapter {
 	        	holder.botonCompra.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.money_ico, 0);
 	        }
 	    	
-	    }
-	         
-        //ProgressDialog de la descarga
-	    mProgressDialog.setMessage(ctx.getString(R.string.downloading));
- 		mProgressDialog.setIndeterminate(true);
- 		mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
- 		mProgressDialog.setCancelable(true);
- 		mProgressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-		    @Override
-		    public void onCancel(DialogInterface dialog) {
-		    	download.cancel(true);
-		    }
-		}); 
+	    }        
  		
  		//Dialog que pregunta al usuario si quiere comprar la partitura
  		BDialog = new Dialog(ctx, R.style.cust_dialog);
@@ -320,10 +317,10 @@ public class CustomAdapter extends BaseAdapter {
         		if(lista.get(position).getComprado()){
         			
         			//Si la partitura ya est� en el dispositivo la abre
-        			if(buscarArchivos(FileNameString(lista.get(position).getUrl()))){       				  				
+        			if(buscarArchivos(FileNameString(lista.get(position).getUrl()))){       	
         				AbrirFichero(ctx, FileNameString(lista.get(position).getUrl()));	
         			}else{
-	     				download.execute(lista.get(position).getUrl());
+	     				download.execute(lista.get(position).getUrl(), lista.get(position).getImagen());
         			}
         		}else{
         		        			

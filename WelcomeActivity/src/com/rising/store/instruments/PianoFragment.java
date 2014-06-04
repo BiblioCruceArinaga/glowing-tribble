@@ -15,6 +15,7 @@ import android.widget.GridView;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.rising.drawing.R;
 import com.rising.login.Configuration;
 import com.rising.store.CustomAdapter;
@@ -55,8 +56,8 @@ public class PianoFragment extends Fragment{
 	    	GridView pianoView = (GridView) rootView.findViewById(R.id.gV_piano_fragment);
 	    		    			    			    
 		    pianoView.setAdapter(new CustomAdapter(getActivity(), partiturasPiano));
-		    	    
-		    onDestroyProgress();
+		    	    		    
+		    //onDestroyProgress();
 	    }	
 	};
 		
@@ -89,15 +90,17 @@ public class PianoFragment extends Fragment{
 		
 		pnc.execute(Locale.getDefault().getDisplayLanguage());
 		
-		 // Create default options which will be used for every 
-		   //  displayImage(...) call if no options will be passed to this method
-		    DisplayImageOptions displayimageOptions = new DisplayImageOptions.Builder().build();
-
-
-		    // Create global configuration and initialize ImageLoader with this configuration
-		    ImageLoaderConfiguration config = new ImageLoaderConfiguration.
-		    		Builder(rootView.getContext()).defaultDisplayImageOptions(displayimageOptions).build();
-		    ImageLoader.getInstance().init(config);
+		DisplayImageOptions options = new DisplayImageOptions.Builder()
+        .showImageOnLoading(R.drawable.cover)
+        .showImageForEmptyUri(R.drawable.cover)
+        .showImageOnFail(R.drawable.cover)
+        .cacheInMemory(true).considerExifParams(true)
+        .displayer(new RoundedBitmapDisplayer(10)).build();
+		
+		// Create global configuration and initialize ImageLoader with this configuration
+		ImageLoaderConfiguration config = new ImageLoaderConfiguration.
+		Builder(rootView.getContext()).defaultDisplayImageOptions(options).build();
+		ImageLoader.getInstance().init(config);
 				
 		return rootView;	
 	}

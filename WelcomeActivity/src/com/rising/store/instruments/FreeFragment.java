@@ -52,7 +52,7 @@ public class FreeFragment extends Fragment{
 	    	
 		    freeView.setAdapter(new CustomAdapter(rootView.getContext(), partiturasFree));
 		          
-		    onDestroyProgress();
+		    //onDestroyProgress();
 	    } 	
 	};
 	

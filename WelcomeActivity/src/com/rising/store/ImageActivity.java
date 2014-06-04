@@ -4,9 +4,12 @@ import java.io.File;
 import java.util.List;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -32,10 +35,12 @@ public class ImageActivity extends Activity{
 		Bundle bundle=getIntent().getExtras();
 		url = bundle.getString("imagen");
 		iml = ImageLoader.getInstance();
+		final Context ctx = this;
 						
 		ImageView IV_Score_Preview = (ImageView) findViewById(R.id.iV_score_preview);
-				
-		DisplayImageOptions options = new DisplayImageOptions.Builder()
+		final ProgressDialog Image_PDialog;		
+		
+		final DisplayImageOptions options = new DisplayImageOptions.Builder()
         .showImageOnLoading(R.drawable.cover)
         .showImageForEmptyUri(R.drawable.cover)
         .showImageOnFail(R.drawable.cover)
@@ -44,6 +49,8 @@ public class ImageActivity extends Activity{
         .displayer(new RoundedBitmapDisplayer(10))
         .build();
                
+		Image_PDialog = ProgressDialog.show(ctx, "", getString(R.string.pleasewait));
+		
 		//iml.displayImage(url, IV_Score_Preview, options);
 		iml.displayImage(url, IV_Score_Preview, options, new SimpleImageLoadingListener(){
        	 boolean cacheFound;
@@ -53,8 +60,10 @@ public class ImageActivity extends Activity{
                 List<String> memCache = MemoryCacheUtils.findCacheKeysForImageUri(url, ImageLoader.getInstance().getMemoryCache());
                 cacheFound = !memCache.isEmpty();
                 if (!cacheFound) {
+                	Log.i("Start Cache", "Loading Cache");
                     File discCache = DiskCacheUtils.findInCache(url, ImageLoader.getInstance().getDiskCache());
                     if (discCache != null) {
+                    	Log.i("Start Cache", "Loading Cache 3");
                         cacheFound = discCache.exists();
                     }
                 }
@@ -66,8 +75,10 @@ public class ImageActivity extends Activity{
                     MemoryCacheUtils.removeFromCache(imageUri, ImageLoader.getInstance().getMemoryCache());
                     DiskCacheUtils.removeFromCache(imageUri, ImageLoader.getInstance().getDiskCache());
 
-                    ImageLoader.getInstance().displayImage(imageUri, (ImageView) view);
+                    ImageLoader.getInstance().displayImage(imageUri, (ImageView) view, options);
+                    Log.i("Complete Cache", "Loading Cache Complete");
                 }
+                Image_PDialog.dismiss();
             }
        });
 		
