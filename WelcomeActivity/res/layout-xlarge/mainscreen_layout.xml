@@ -37,6 +37,8 @@
         android:layout_marginLeft="50dp"
        	android:layout_marginRight="50dp"
        	android:layout_marginBottom="50dp"
+       	android:verticalSpacing="20sp"
+        android:horizontalSpacing="20sp"
         android:numColumns="3" >
     </GridView>
 

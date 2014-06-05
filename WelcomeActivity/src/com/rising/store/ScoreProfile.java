@@ -113,8 +113,7 @@ public class ScoreProfile extends Activity{
 			B_Price.setText(R.string.open);
 			Toast.makeText(ctx,R.string.okdownload, Toast.LENGTH_SHORT).show();            
             Log.i("Custom", "Archivo descargado");
-		}
-		
+		}		
 	};
 	
 	private OnDownloadFailed failedDownload = new OnDownloadFailed(){

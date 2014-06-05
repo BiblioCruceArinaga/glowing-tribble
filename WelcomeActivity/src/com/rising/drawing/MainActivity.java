@@ -209,11 +209,12 @@ public class MainActivity extends Activity{
 				
 				tempo = metronome_speed.getValue();
 								
-				if(numeros_checkbox.isChecked()){
+				//Aquí, en vez de los números deben ir las lineas
+				/*if(numeros_checkbox.isChecked()){
 					numeros_bip = true;
 				}else{
 					numeros_bip = false;
-				}
+				}*/
 				
 				if ( (tempo > 0) && (tempo < 301) ) {
 					MainActivity.this.startActionMode(new ActionBarCallBack());

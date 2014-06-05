@@ -227,115 +227,82 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 		scores_gallery.setAdapter(s_adapter);
 		scores_gallery.setChoiceMode(GridView.CHOICE_MODE_MULTIPLE_MODAL);
 		numScores = scores_gallery.getCount();
-						
+							
 		scores_gallery.setMultiChoiceModeListener(new MultiChoiceModeListener(){
 
 			String[] ficheros2 = ficheros;
 			
 		@Override
-		public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-				
-			// Este método dirige las acciones de los botones de la barra superior
-			switch(item.getItemId()){
-		   	   	case R.id.discard:
-		   	   		List<Score> elementosAEliminar = new ArrayList<Score>();
-		   	   		
-		   	   		for(int i = 0; i < ficherosLength(); i++){
-		   	   					   	   			
-		   	   			if(mSelected.containsKey(i)){
-		   	   				f_toDelete = new File(Environment.getExternalStorageDirectory() + path + ficheros2[i]);	
-		   	   				f_image_toDelete = new File(Environment.getExternalStorageDirectory() + image_path + ficheroAImagen(ficheros2[i]));
-		   	   				if(f_toDelete.exists() && f_image_toDelete.exists()){
-		    	   				if(f_toDelete.delete() && f_image_toDelete.delete()){
-		    	   					elementosAEliminar.add(s_adapter.getItem(i));
-		    	   					delete = true;
-		    	   				}else{
-		    	   					delete = false;
-		    	   					break;
-		    	   				}
-		   	   				}		
-		   	   			}
-		   	   		}
-		   	   		
-		   	   		//  Hay que eliminarlos todos de golpe, si no el valor num�rico de los �ndices
-		   	   		//  cambia con cada iteraci�n y salta un IndexOutOfBoundsException
-		   	   		s_adapter.removeAllSelected(elementosAEliminar);
-		   	   		numScores = scores_gallery.getCount();
-		   	   		
-		   	   		if(delete){
-		   	   			Toast.makeText(getApplicationContext(), R.string.successDelete, Toast.LENGTH_SHORT).show();
-    	   			}else{
-    	   				Toast.makeText(getApplicationContext(), R.string.failDelete, Toast.LENGTH_SHORT).show();
-    	   			}
-    	   				
-		       		if (s_adapter.isEmpty()) {
-		       			interfazCuandoNoHayPartituras();
-		       		}
-		       		mSelected.clear();
-		       		mode.finish();
-			        return true; 
-
-		   	   	case R.id.s_all:
-		   	   		for(int i = 0; i < numScores; i++) {
-		   	   			scores_gallery.setItemChecked(i, true);
-		    	   	}
-			        return true;
-			             
-		   	   	case R.id.s_none:
-		    		for(int i = 0; i < numScores; i++) {
-		    			scores_gallery.setItemChecked(i, false);
-		    		}
-		    	   	return true;     
+			public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+					
+				// Este método dirige las acciones de los botones de la barra superior
+				switch(item.getItemId()){
+			   	   	case R.id.discard:
+			   	   		borrarElementos(ficheros2);
+			       		mode.finish();
+				        return true; 
+	
+			   	   	case R.id.s_all:
+			   	   		for(int i = 0; i < numScores; i++) {
+			   	   			scores_gallery.setItemChecked(i, true);
+			    	   	}
+				        return true;
+				             
+			   	   	case R.id.s_none:
+			    		for(int i = 0; i < numScores; i++) {
+			    			scores_gallery.setItemChecked(i, false);
+			    		}
+			    	   	return true;     
+				}
+	
+		        return false;
 			}
-
-	        return false;
-		}
-
-		@Override
-		public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-			MenuInflater inflater = mode.getMenuInflater();
-			inflater.inflate(R.menu.modal_details, menu);
-			mode.setTitle(R.string.title);
-	        mode.setSubtitle(R.string.subtitle);
-	        ficheros2 = leeFicheros();
-	        return true;
-		}
-
-		@Override
-		public void onDestroyActionMode(ActionMode mode) {
-		}
-
-		@Override
-		public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-			
-			return true;
-		}
-
-		@Override
-		public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
+	
+			@Override
+			public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+				Log.i("Eso", "Aquí1");
+				MenuInflater inflater = mode.getMenuInflater();
+				inflater.inflate(R.menu.modal_details, menu);
+				mode.setTitle(R.string.title);
+		        mode.setSubtitle(R.string.subtitle);
+		        ficheros2 = leeFicheros();
+		        Log.i("Eso", "Aquí2");
+		        return true;
+			}
+	
+			@Override
+			public void onDestroyActionMode(ActionMode mode) {
+			}
+	
+			@Override
+			public boolean onPrepareActionMode(ActionMode mode, Menu menu) {			
+				return true;
+			}
+	
+			@Override
+			public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
 													
-			//Este método dirige lo que pasa en la pantalla del menú contextual 
-			int selectCount = scores_gallery.getCheckedItemCount();
-	        switch (selectCount) {
-	        	case 1:
-	        		mode.setSubtitle(R.string.subtitle);
-		               		                
-		            break;
-	        	default:
-	        		mode.setSubtitle(selectCount + " " + getString(R.string.subtitle2));
-		               		                
-		            break; 
-	        }
-	            
-	        if(checked){
-	           	mSelected.put(position, checked);
-	        }else{
-	           	mSelected.remove(position);
-	           	mSelected.put(position, false);
-	        }
-	            
-	        Log.i("Estado", position + ": " + mSelected.get(position));
-		}
+				//Este método dirige lo que pasa en la pantalla del menú contextual 
+				int selectCount = scores_gallery.getCheckedItemCount();
+				
+		        switch (selectCount) {
+		        	case 1:
+		        		mode.setSubtitle(R.string.subtitle);
+			            break;
+		        	default:
+		        		mode.setSubtitle(selectCount + " " + getString(R.string.subtitle2));
+			            break; 
+		        }
+		            
+		        if(checked){
+		           	mSelected.put(position, checked);
+		        }else{
+		           	mSelected.remove(position);
+		           	mSelected.put(position, false);
+		        }
+		        
+		        Log.i("Estado", position + ": " + mSelected.get(position));
+			}
 	});
 		
 		scores_gallery.setOnItemClickListener(new OnItemClickListener(){
@@ -752,4 +719,39 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 		}
 	}
 
+	public void borrarElementos(String[] ficheros2){
+		List<Score> elementosAEliminar = new ArrayList<Score>();
+	   		
+	   		for(int i = 0; i < ficherosLength(); i++){
+	   					   	   			
+	   			if(mSelected.containsKey(i)){
+	   				f_toDelete = new File(Environment.getExternalStorageDirectory() + path + ficheros2[i]);	
+	   				f_image_toDelete = new File(Environment.getExternalStorageDirectory() + image_path + ficheroAImagen(ficheros2[i]));
+	   				if(f_toDelete.exists() && f_image_toDelete.exists()){
+	   				if(f_toDelete.delete() && f_image_toDelete.delete()){
+	   					elementosAEliminar.add(s_adapter.getItem(i));
+	   					delete = true;
+	   				}else{
+	   					delete = false;
+	   					break;
+	   				}
+	   				}		
+	   			}
+	   		}
+	   		
+	   		s_adapter.removeAllSelected(elementosAEliminar);
+	   		numScores = scores_gallery.getCount();
+	   		
+	   		if(delete){
+	   			Toast.makeText(getApplicationContext(), R.string.successDelete, Toast.LENGTH_LONG).show();
+			}else{
+				Toast.makeText(getApplicationContext(), R.string.failDelete, Toast.LENGTH_LONG).show();
+			}
+				
+   		if (s_adapter.isEmpty()) {
+   			interfazCuandoNoHayPartituras();
+   		}
+   		mSelected.clear();
+	}
+	
 }

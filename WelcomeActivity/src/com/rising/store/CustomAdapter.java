@@ -113,7 +113,7 @@ public class CustomAdapter extends BaseAdapter {
 			holder.botonCompra.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
 			notifyDataSetChanged();				
             Toast.makeText(ctx,R.string.okdownload, Toast.LENGTH_SHORT).show();            
-            Log.i("Custom", "Archivo descargado, " + holder.botonCompra.isActivated() + ", " + holder.botonCompra.getText().toString());
+            Log.i("Custom", "Archivo descargado");
 		}
 	};
 			
