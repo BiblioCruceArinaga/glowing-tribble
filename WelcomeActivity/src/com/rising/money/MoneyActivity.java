@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
@@ -56,7 +57,7 @@ public class MoneyActivity extends Activity implements IabHelper.OnIabSetupFinis
 		super.onCreate(savedInstanceState);
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		setContentView(R.layout.money_layout);
-				
+		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
     	ActionBar ABar = getActionBar();
     	
     	ABar.setTitle(R.string.money);
@@ -83,6 +84,7 @@ public class MoneyActivity extends Activity implements IabHelper.OnIabSetupFinis
 			public void onClick(View v) {
 				Intent i = new Intent(MoneyActivity.this, FreeMoneyActivity.class);
 				startActivity(i);
+				finish();
 			}
     		
     	});

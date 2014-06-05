@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.GridView;
 import android.widget.TextView;
 
@@ -63,6 +64,7 @@ public class SearchStoreActivity extends Activity{
 		super.onCreate(savedInstanceState);
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		setContentView(R.layout.searchstore_layout);
+		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 			
 		//Recibo la palabra de la activity anterior
 		Bundle b = this.getIntent().getExtras();

@@ -48,14 +48,7 @@ public class MainActivity extends Activity{
 	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);	
-		
-		if (Build.VERSION.SDK_INT < 16) {
-            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        }else{
-			View ScoreView = getWindow().getDecorView();
-			int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
-			ScoreView.setSystemUiVisibility(uiOptions);
-        }		
+		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);		
 		
 		Bundle b = this.getIntent().getExtras();
 		score = b.getString("score");
