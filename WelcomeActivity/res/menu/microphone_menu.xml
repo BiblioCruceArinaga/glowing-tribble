@@ -6,6 +6,12 @@
         android:title="@string/microphone_sensitivity" 
         android:showAsAction="always" >
     </item>
+    
+    <item 
+        android:id="@+id/microphone_speed" 
+        android:title="@string/microphone_speed" 
+        android:showAsAction="always" >
+    </item>
 
     <item 
         android:id="@+id/microphone_start" 

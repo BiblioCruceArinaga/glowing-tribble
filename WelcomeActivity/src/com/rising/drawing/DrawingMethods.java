@@ -42,6 +42,8 @@ public class DrawingMethods {
 
 	//  Bitmaps
 	private Bitmap accent = null;
+	private Bitmap arc = null;
+	private Bitmap arc2 = null;
 	private Bitmap bassclef = null;
 	private Bitmap bendrelease = null;
 	private Bitmap blackheadlittle = null;
@@ -81,6 +83,8 @@ public class DrawingMethods {
 			compas_margin_y = config.getMargenSuperior();
 
 			accent = BitmapFactory.decodeResource(resources, R.drawable.accent);
+			arc = BitmapFactory.decodeResource(resources, R.drawable.arco);
+			arc2 = BitmapFactory.decodeResource(resources, R.drawable.arco2);
 			bassclef = BitmapFactory.decodeResource(resources, R.drawable.bassclef);
 			bendrelease = BitmapFactory.decodeResource(resources, R.drawable.bendrelease);
 			blackheadlittle = BitmapFactory.decodeResource(resources, R.drawable.blackheadlittle);
@@ -137,6 +141,10 @@ public class DrawingMethods {
 
 		if (buscandoOctavarium) {
 			if (compas_margin_x + posicion == posicionesOctavarium[1]) {
+				
+				//  Indicar que esta nota "cierra" el octavarium
+				nota.setOctavarium(octavarium + 1);
+				
 				octavarium = 0;
 				buscandoOctavarium = false;
 
@@ -206,6 +214,22 @@ public class DrawingMethods {
 			//  octavarium no
 			if (claveNormalTratada) compas_margin_x += config.getAnchoClaves();
 		}
+	}
+	
+	private int calcularDesplazamientoExtraNotaDeGracia(Nota nota, int posicionX) {
+		int desplazamientoExtra = 0;
+		
+		if (nota.notaDeGracia()) {
+			desplazamientoExtra = config.getDesplazamientoExtraNotaGracia();
+			
+			if (nota.getBeam() == 0)
+				desplazamientoExtra -= config.getOffsetUltimaNotaGracia();
+			else
+				if (nota.beamFinal()) 
+					desplazamientoExtra -= config.getOffsetUltimaNotaGracia();
+		}
+		
+		return desplazamientoExtra;
 	}
 	
 	private void calcularDynamics(Compas compas) {
@@ -296,6 +320,8 @@ public class DrawingMethods {
 
 		if (posicionX != -1) {
 			posicionX = calcularPosicionX(posiciones, posicionX);
+			posicionX += calcularDesplazamientoExtraNotaDeGracia(nota, posicionX);
+			
 			posicionY = calcularCabezaDeNota(nota, posicionX);
 			
 			nota.setX(compas_margin_x + posicionX);
@@ -1546,6 +1572,9 @@ public class DrawingMethods {
 	            	compas.getNota(j).setX(compas.getNota(j).getX() + anchoParaCadaCompas);
 	            }
 
+	            if (compas.hayIntensidad())
+	            	compas.getIntensidad().setX(compas.getIntensidad().getX() + anchoParaCadaCompas);
+	            
 	            if (compas.hayPedalInicio())
 	            	compas.getPedalInicio().setX(compas.getPedalInicio().getX() + anchoParaCadaCompas);
 	            
@@ -1733,14 +1762,24 @@ public class DrawingMethods {
 	//  Esta implementación está ignorando las plicas dobles
 	private void dibujarBeams(int y_beams, boolean haciaArriba) {
 		int numBeams = beams.size();
-		int distancia_beams = haciaArriba ? config.getDistanciaEntreBeams() : 
-			- config.getDistanciaEntreBeams();
+		
+		int indCompasAnt = 0;
+		int indNotaAnt = 0;
+		int distancia_beams = 0;
+		int ancho_beams = 0;
 
 		for (int i=0; i<numBeams; i++) {
 			OrdenDibujo ordenDibujo;
 			
-			int indCompasAnt = beams.get(i).getCompas();
-			int indNotaAnt = beams.get(i).getNota();
+			indCompasAnt = beams.get(i).getCompas();
+			indNotaAnt = beams.get(i).getNota();
+			
+			distancia_beams = partitura.getCompas(indCompasAnt).getNota(indNotaAnt).notaDeGracia() ? 
+					config.getDistanciaEntreBeamsNotasGracia() : config.getDistanciaEntreBeams();
+			if (!haciaArriba) distancia_beams *= -1;
+			
+			ancho_beams = partitura.getCompas(indCompasAnt).getNota(indNotaAnt).notaDeGracia() ?
+					config.getAnchoBeamsNotaGracia() : config.getAnchoBeams();
 
 			if (i == numBeams - 1) {
 				
@@ -1751,7 +1790,7 @@ public class DrawingMethods {
 
 					ordenDibujo = new OrdenDibujo();
 					ordenDibujo.setOrden(DrawOrder.DRAW_LINE);
-					ordenDibujo.setPaint(PaintOptions.SET_STROKE_WIDTH, config.getAnchoBeams());
+					ordenDibujo.setPaint(PaintOptions.SET_STROKE_WIDTH, ancho_beams);
 					ordenDibujo.setX1(x_last_beam);
 					ordenDibujo.setY1(y_beams + distancia_beams * 2);
 					ordenDibujo.setX2(x_last_beam - config.getAnchoHooks());
@@ -1778,7 +1817,7 @@ public class DrawingMethods {
 					case 2:
 						ordenDibujo = new OrdenDibujo();
 						ordenDibujo.setOrden(DrawOrder.DRAW_LINE);
-						ordenDibujo.setPaint(PaintOptions.SET_STROKE_WIDTH, config.getAnchoBeams());
+						ordenDibujo.setPaint(PaintOptions.SET_STROKE_WIDTH, ancho_beams);
 						ordenDibujo.setX1(x_ant_beams);
 						ordenDibujo.setY1(y_beams);
 						ordenDibujo.setX2(x_sig_beams);
@@ -1787,7 +1826,7 @@ public class DrawingMethods {
 	
 						ordenDibujo = new OrdenDibujo();
 						ordenDibujo.setOrden(DrawOrder.DRAW_LINE);
-						ordenDibujo.setPaint(PaintOptions.SET_STROKE_WIDTH, config.getAnchoBeams());
+						ordenDibujo.setPaint(PaintOptions.SET_STROKE_WIDTH, ancho_beams);
 						ordenDibujo.setX1(x_ant_beams);
 						ordenDibujo.setY1(y_beams + distancia_beams);
 						ordenDibujo.setX2(x_sig_beams);
@@ -1816,7 +1855,7 @@ public class DrawingMethods {
 					case 3:
 						ordenDibujo = new OrdenDibujo();
 						ordenDibujo.setOrden(DrawOrder.DRAW_LINE);
-						ordenDibujo.setPaint(PaintOptions.SET_STROKE_WIDTH, config.getAnchoBeams());
+						ordenDibujo.setPaint(PaintOptions.SET_STROKE_WIDTH, ancho_beams);
 						ordenDibujo.setX1(x_ant_beams);
 						ordenDibujo.setY1(y_beams);
 						ordenDibujo.setX2(x_sig_beams);
@@ -1827,7 +1866,7 @@ public class DrawingMethods {
 					case 5:
 						ordenDibujo = new OrdenDibujo();
 						ordenDibujo.setOrden(DrawOrder.DRAW_LINE);
-						ordenDibujo.setPaint(PaintOptions.SET_STROKE_WIDTH, config.getAnchoBeams());
+						ordenDibujo.setPaint(PaintOptions.SET_STROKE_WIDTH, ancho_beams);
 						ordenDibujo.setX1(x_ant_beams);
 						ordenDibujo.setY1(y_beams);
 						ordenDibujo.setX2(x_sig_beams);
@@ -1836,7 +1875,7 @@ public class DrawingMethods {
 	
 						ordenDibujo = new OrdenDibujo();
 						ordenDibujo.setOrden(DrawOrder.DRAW_LINE);
-						ordenDibujo.setPaint(PaintOptions.SET_STROKE_WIDTH, config.getAnchoBeams());
+						ordenDibujo.setPaint(PaintOptions.SET_STROKE_WIDTH, ancho_beams);
 						ordenDibujo.setX1(x_ant_beams);
 						ordenDibujo.setY1(y_beams + distancia_beams);
 						ordenDibujo.setX2(x_sig_beams);
@@ -1845,7 +1884,7 @@ public class DrawingMethods {
 	
 						ordenDibujo = new OrdenDibujo();
 						ordenDibujo.setOrden(DrawOrder.DRAW_LINE);
-						ordenDibujo.setPaint(PaintOptions.SET_STROKE_WIDTH, config.getAnchoBeams());
+						ordenDibujo.setPaint(PaintOptions.SET_STROKE_WIDTH, ancho_beams);
 						ordenDibujo.setX1(x_ant_beams);
 						ordenDibujo.setY1(y_beams + distancia_beams * 2);
 						ordenDibujo.setX2(x_sig_beams);
@@ -2226,33 +2265,51 @@ public class DrawingMethods {
 		Nota nota = partitura.getCompas(compasNotaInicio).getNota(notaInicio);
 		int xInicio = nota.getX();
 		int y = nota.getY();
-		
-		OrdenDibujo ordenDibujo = new OrdenDibujo();
-		ordenDibujo.setOrden(DrawOrder.DRAW_ARC);
-		ordenDibujo.setPaint(PaintOptions.SET_STYLE_STROKE, 0);
-		ordenDibujo.setPaint(PaintOptions.SET_STROKE_WIDTH, 2);
-		
+
 		if (xInicio < xFinal) {
+			OrdenDibujo ordenDibujo = new OrdenDibujo();
+			ordenDibujo.setOrden(DrawOrder.DRAW_ARC);
+			ordenDibujo.setPaint(PaintOptions.SET_STYLE_STROKE, 0);
+			ordenDibujo.setPaint(PaintOptions.SET_STROKE_WIDTH, 2);
+			
 			RectF rectf = new RectF(xInicio + config.getAnchoCabezaNota() +
 					config.getXLigaduras(), y - config.getYLigaduras(), 
 					xFinal - config.getXLigaduras(), y + config.getAlturaArcoLigaduras());
 			ordenDibujo.setRectF(rectf);
+			
+			ordenesDibujo.add(ordenDibujo);
 		}
 		
 		//  La ligadura es con una nota de un compás
 		//  que fue desplazado hacia abajo porque no cabía,
 		//  así que la dibujamos al frente
 		else {
-			Compas compas = partitura.getCompas(compasNotaInicio);
-
-			RectF rectf = new RectF(xInicio + config.getAnchoCabezaNota() + 
-					config.getXLigaduras(), y - config.getYLigaduras(), 
-					compas.getXFin(), y + config.getAlturaArcoLigaduras());
-			ordenDibujo.setRectF(rectf);
+			dibujarLigaduraDeNotasEnDiferentesRenglones(xInicio, y, xFinal);
 		}
 		
-		ordenesDibujo.add(ordenDibujo);
+		
 		ligadurasInicio.remove(indLigadura);
+	}
+	
+	private void dibujarLigaduraDeNotasEnDiferentesRenglones(int xInicio, int yInicio, int xFinal) {
+		OrdenDibujo ordenDibujo = new OrdenDibujo();
+		ordenDibujo.setOrden(DrawOrder.DRAW_BITMAP);
+		ordenDibujo.setImagen(arc);
+		ordenDibujo.setX1(xInicio + config.getAnchoCabezaNota() + config.getXLigaduras());
+		ordenDibujo.setY1(yInicio - config.getYLigaduras());
+		ordenesDibujo.add(ordenDibujo);
+		
+		ordenDibujo = new OrdenDibujo();
+		ordenDibujo.setOrden(DrawOrder.DRAW_BITMAP);
+		ordenDibujo.setImagen(arc2);
+		ordenDibujo.setX1(xFinal - config.getAnchoCabezaNota() - config.getXLigaduras());
+		
+		int yFinal = yInicio + config.getDistanciaPentagramas() +
+				(config.getDistanciaLineasPentagrama() * 4 + config.getDistanciaPentagramas()) * 
+				(partitura.getStaves() - 1);
+		ordenDibujo.setY1(yFinal + config.getAlturaArcoLigaduras());
+		
+		ordenesDibujo.add(ordenDibujo);
 	}
 	
 	private void dibujarLineasDePentagramaDeCompas(Compas compas) {
@@ -2451,28 +2508,38 @@ public class DrawingMethods {
 					dibujarCorcheteDeNota(notas.get(i));
 			
 			dibujarFigurasGraficasDeNota(notas.get(i), y_beams);
-			
 			dibujarLineasFueraDelPentagrama(notas.get(i), compas.getYIni());
 		}
 	}
 	
 	private void dibujarOctavarium(Nota nota) {
-		if (nota.getOctavarium() == 1) {
-			OrdenDibujo ordenDibujo = new OrdenDibujo();
-			ordenDibujo.setOrden(DrawOrder.DRAW_BITMAP);
-			ordenDibujo.setImagen(octavariumImage);
-			ordenDibujo.setX1(nota.getX());
-			ordenDibujo.setY1(nota.getYOctavarium());
-			ordenesDibujo.add(ordenDibujo);
-		}
-		
-		if (nota.getOctavarium() == 2) {
-			OrdenDibujo ordenDibujo = new OrdenDibujo();
-			ordenDibujo.setOrden(DrawOrder.DRAW_CIRCLE);
-			ordenDibujo.setRadius(config.getRadioOctavarium());
-			ordenDibujo.setX1(nota.getX() + config.getXOctavarium());
-			ordenDibujo.setY1(nota.getYOctavarium());
-			ordenesDibujo.add(ordenDibujo);
+		if (nota.getOctavarium() > 0) {
+			if (nota.getOctavarium() > 1) {
+				OrdenDibujo ordenDibujo = new OrdenDibujo();
+				ordenDibujo.setOrden(DrawOrder.DRAW_CIRCLE);
+				ordenDibujo.setRadius(config.getRadioOctavarium());
+				ordenDibujo.setX1(nota.getX() + config.getAnchoCabezaNota());
+				ordenDibujo.setY1(nota.getYOctavarium());
+				ordenesDibujo.add(ordenDibujo);
+				
+				if (nota.getOctavarium() == 3) {
+					ordenDibujo = new OrdenDibujo();
+					ordenDibujo.setOrden(DrawOrder.DRAW_CIRCLE);
+					ordenDibujo.setRadius(config.getRadioOctavarium());
+					ordenDibujo.setX1(nota.getX() + config.getAnchoCabezaNota());
+					ordenDibujo.setY1(nota.getYOctavarium() + config.getYOctavarium2());
+					ordenesDibujo.add(ordenDibujo);
+				}
+			}
+			
+			else {
+				OrdenDibujo ordenDibujo = new OrdenDibujo();
+				ordenDibujo.setOrden(DrawOrder.DRAW_BITMAP);
+				ordenDibujo.setImagen(octavariumImage);
+				ordenDibujo.setX1(nota.getX());
+				ordenDibujo.setY1(nota.getYOctavarium());
+				ordenesDibujo.add(ordenDibujo);
+			}
 		}
 	}
 	

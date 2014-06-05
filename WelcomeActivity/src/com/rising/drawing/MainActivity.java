@@ -48,8 +48,8 @@ public class MainActivity extends Activity{
 	//  Gestión del micrófono
 	private boolean readingMicrophone = false;
 	private Dialog MicrophoneDialog = null;
-	private Button sensitivityButton = null;
 	private int sensibilidad = 5;
+	private int velocidad = 5;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState){
@@ -131,6 +131,10 @@ public class MainActivity extends Activity{
 	    		case R.id.microphone_sensitivity:
 	    			gestionarSensibilidad();
 	    			break;
+	    			
+	    		case R.id.microphone_speed:
+	    			gestionarVelocidad();
+	    			break;
 	    		
 	    		case R.id.microphone_start:    
 	    			
@@ -179,7 +183,7 @@ public class MainActivity extends Activity{
 			}
 			else {
 				s.Back();
-				s.readMicrophone(sensibilidad);
+				s.readMicrophone(sensibilidad, velocidad);
 				
 				readingMicrophone = true;
 			}
@@ -214,12 +218,54 @@ public class MainActivity extends Activity{
 				}
 			});
 			
-			sensitivityButton = (Button) MicrophoneDialog.findViewById(R.id.sensitivityButton);
+			Button sensitivityButton = (Button) MicrophoneDialog.findViewById(R.id.sensitivityButton);
 			sensitivityButton.setOnClickListener(new OnClickListener(){
 	 
 				@Override
 				public void onClick(View v) {
 					sensibilidad = seekBar.getProgress();
+					MicrophoneDialog.dismiss();
+				}
+			});
+			
+			MicrophoneDialog.show();
+		}
+		
+		private void gestionarVelocidad() {
+			MicrophoneDialog = new Dialog(MainActivity.this, R.style.cust_dialog);	
+			MicrophoneDialog.setContentView(R.layout.microphone_speed_dialog);
+			MicrophoneDialog.setTitle(R.string.setSpeed);	
+			
+			final TextView texto = (TextView) MicrophoneDialog.findViewById(R.id.speedValue);
+			final SeekBar seekBar = (SeekBar) MicrophoneDialog.findViewById(R.id.speedBar);
+			
+			seekBar.setProgress(velocidad);
+			texto.setText(velocidad + "");
+			
+			seekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+
+				@Override
+				public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+					texto.setText(seekBar.getProgress() + "");
+				}
+
+				@Override
+				public void onStartTrackingTouch(SeekBar seekBar) {
+					// TODO Auto-generated method stub
+				}
+
+				@Override
+				public void onStopTrackingTouch(SeekBar seekBar) {
+					// TODO Auto-generated method stub
+				}
+			});
+			
+			Button speedButton = (Button) MicrophoneDialog.findViewById(R.id.speedButton);
+			speedButton.setOnClickListener(new OnClickListener(){
+	 
+				@Override
+				public void onClick(View v) {
+					velocidad = seekBar.getProgress();
 					MicrophoneDialog.dismiss();
 				}
 			});

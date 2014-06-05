@@ -56,6 +56,10 @@ public class Nota {
 		return figurasGraficas.contains((byte) 2);
 	}
 	
+	public boolean beamFinal() {
+		return beam == 1 || beam == 4;
+	}
+	
 	public boolean desplazadaALaIzquierda() {
 		return figurasGraficas.contains((byte) 24);
 	}

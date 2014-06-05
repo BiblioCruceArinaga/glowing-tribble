@@ -18,7 +18,7 @@ public class SoundReader extends Observable implements AudioRecord.OnRecordPosit
 	//  Velocidad a la que se notifican las muestras y
 	//  volumen a partir del cual se considera un ruido válido
 	//  3040, 3120, 3200
-	private static int NOTIFY_RATE = 3180;
+	private static int NOTIFY_RATE = 3200;
 	private static float THRESHOLD = (float) 15.0;
 	
 	private AudioRecord audioRecord = null;
@@ -51,7 +51,10 @@ public class SoundReader extends Observable implements AudioRecord.OnRecordPosit
 		//silenceDetector = null;
 	}
 
-	public SoundReader() throws Exception {
+	public SoundReader(int velocidad) throws Exception {
+		
+		setSpeed(velocidad);
+		
 		BUFFER_SIZE = AudioRecord.getMinBufferSize(44100, AudioFormat.CHANNEL_IN_MONO, 
 					  AudioFormat.ENCODING_PCM_16BIT) * 2;
 			
@@ -155,6 +158,50 @@ public class SoundReader extends Observable implements AudioRecord.OnRecordPosit
 				break;
 			case 10:
 				THRESHOLD = 0;
+				break;
+			default:
+				break;
+		}
+	}
+	
+	//  El músico podrá elegir la velocidad a la que
+	//  se envían las muestras a la interfaz. Eso
+	//  permitirá que la partitura se mueva más rápida
+	//  o más lentamente
+	private void setSpeed(int speed) {
+		switch (speed) {
+			case 0:
+				NOTIFY_RATE = 11000;
+				break;
+			case 1:
+				NOTIFY_RATE = 10000;
+				break;
+			case 2:
+				NOTIFY_RATE = 9000;
+				break;
+			case 3:
+				NOTIFY_RATE = 8000;
+				break;
+			case 4:
+				NOTIFY_RATE = 7000;
+				break;
+			case 5:
+				NOTIFY_RATE = 6000;
+				break;
+			case 6:
+				NOTIFY_RATE = 5000;
+				break;
+			case 7:
+				NOTIFY_RATE = 4000;
+				break;
+			case 8:
+				NOTIFY_RATE = 3000;
+				break;
+			case 9:
+				NOTIFY_RATE = 2000;
+				break;
+			case 10:
+				NOTIFY_RATE = 1000;
 				break;
 			default:
 				break;

@@ -807,8 +807,8 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback, Observer {
 	 * GESTIÓN DE LA LECTURA DEL MICRÓFONO
 	 * 
 	 */
-	public void readMicrophone(int sensibilidad) throws Exception {
-		soundReader = new SoundReader();
+	public void readMicrophone(int sensibilidad, int velocidad) throws Exception {
+		soundReader = new SoundReader(velocidad);
 		soundReader.addObserver(this);
 		soundReader.setSensitivity(sensibilidad);
 		
