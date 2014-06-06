@@ -72,7 +72,7 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback, Observer {
     private static float yOffset = 0;
     private float yPrevious = 0;
     private float yDown = 0;
-	
+    
 	//  ========================================
 	//  Constructor y métodos heredados
 	//  ========================================
@@ -231,6 +231,11 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback, Observer {
 	//  ========================================
 	private void cargarDatosDeFichero() throws IOException {
 		leerDatosBasicosDePartitura();
+		
+		int numCompas = 0;
+		
+		//  Número del primer compás
+		compas.setNumeroCompas(leerHastaAlmohadilla());
 
 		byte byteLeido = fichero.readByte();
 		while (byteLeido != -128) {
@@ -238,19 +243,23 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback, Observer {
 			switch (byteLeido) {			
 				case 126:
 					leerFiguraGraficaCompas();
+					byteLeido = fichero.readByte();
 					break;
 					
 				case 127:
+					numCompas = compas.getNumeroCompas();
 					partitura.addCompas(compas);
 					compas = new Compas();
+					
+					if (compas.setNumeroCompas(leerHastaAlmohadilla()))
+						byteLeido = fichero.readByte();
 					break;
 				
 				default:
 					leerInfoNota(byteLeido);
+					byteLeido = fichero.readByte();
 					break;
 			}
-			
-			byteLeido = fichero.readByte();
 		}	
 	}
 

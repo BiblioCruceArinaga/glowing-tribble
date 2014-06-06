@@ -39,9 +39,9 @@ public class Compas {
 	private int x_fin;
 	private int y_ini;
 	private int y_fin;
-	
-	//  Posición X donde empiezan a colocarse las notas 
 	private int x_ini_notas;
+	
+	private int numeroCompas;
 	
 	public Compas() {
 		barlines = new ArrayList<ElementoGrafico>();
@@ -75,6 +75,8 @@ public class Compas {
 		y_ini = -1;
 		y_fin = -1;
 		x_ini_notas = -1;
+		
+		numeroCompas = -1;
 	}
 	
 	public void addBarline(ElementoGrafico barline) {
@@ -150,6 +152,10 @@ public class Compas {
 
 	public Nota getNota(int index) {
 		return notas.get(index);
+	}
+	
+	public int getNumeroCompas() {
+		return numeroCompas;
 	}
 	
 	public ArrayList<Nota> getNotas() {
@@ -379,6 +385,31 @@ public class Compas {
 	
 	public void setIntensidad(Intensidad intensidad) {
 		this.intensidad = intensidad;
+	}
+	
+	public boolean setNumeroCompas(ArrayList<Byte> bytes) {
+		boolean success = false;
+		
+		byte[] bytesArray = new byte[bytes.size()];
+        int len = bytesArray.length;
+        for (int i=0; i<len; i++) 
+        	bytesArray[i] = bytes.get(i);
+        
+        try {
+        	if (len > 0) {
+	            String bytesString = new String(bytesArray, "UTF-8");
+	            if (!bytesString.equals("")) {
+	            	numeroCompas = Integer.parseInt(bytesString);
+	            	success = true;
+	            }
+        	}
+            
+            return success;
+        }
+        catch (UnsupportedEncodingException e) {
+            System.out.println(e.getMessage());
+            return success;
+        }
 	}
 	
 	public void setPedalFin(Pedal pedalFin) {

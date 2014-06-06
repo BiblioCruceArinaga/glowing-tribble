@@ -5,7 +5,8 @@ public class Config {
 	private boolean supported = true;
 	
 	private int alto_dialog_bpm;
-	private int altura_arco_ligaduras;
+	private int altura_arco_ligaduras_expresion;
+	private int altura_arco_ligaduras_union;
 	private int ancho_beams;
 	private int ancho_beams_nota_gracia;
 	private int ancho_cabeza_nota;
@@ -45,6 +46,7 @@ public class Config {
 	private int tamano_letra_autor;
 	private int tamano_letra_bip_preparacion;
 	private int tamano_letra_bpm;
+	private int tamano_letra_numero_compas;
 	private int tamano_letra_obra;
 	private int tamano_letra_palm_mute;
 	private int tamano_letra_pulso;
@@ -66,8 +68,9 @@ public class Config {
 	private int x_fin_slash;
 	private int y_inicio_slash;
 	private int y_fin_slash;
-	private int x_ligaduras;
-	private int y_ligaduras;
+	private int y_ligaduras_expresion;
+	private int x_ligaduras_union;
+	private int y_ligaduras_union;
 	private int x_octavarium;
 	private int y_octavarium;
 	private int y_octavarium_2;
@@ -92,7 +95,8 @@ public class Config {
 				break;
 			case 213:
 				alto_dialog_bpm = 720;
-				altura_arco_ligaduras = 20;
+				altura_arco_ligaduras_expresion = 30;
+				altura_arco_ligaduras_union = 20;
 				ancho_beams = 5;
 				ancho_beams_nota_gracia = 2;
 				ancho_cabeza_nota = 10;
@@ -130,6 +134,7 @@ public class Config {
 				tamano_letra_autor = 30;
 				tamano_letra_bip_preparacion = 150;
 				tamano_letra_bpm = 30;
+				tamano_letra_numero_compas = 30;
 				tamano_letra_obra = 50;
 				tamano_letra_palm_mute = 30;
 				tamano_letra_pulso = 50;
@@ -153,8 +158,9 @@ public class Config {
 				x_fin_slash = 5;
 				y_inicio_slash = 5;
 				y_fin_slash = 10;
-				x_ligaduras = 20;
-				y_ligaduras = 10;
+				y_ligaduras_expresion = 10;
+				x_ligaduras_union = 20;
+				y_ligaduras_union = 10;
 				x_octavarium = 15;
 				y_octavarium = 8;
 				y_octavarium_2 = 16;
@@ -176,7 +182,8 @@ public class Config {
 				
 			case 320:
 				alto_dialog_bpm = 800;
-				altura_arco_ligaduras = 50;
+				altura_arco_ligaduras_expresion = 30;
+				altura_arco_ligaduras_union = 50;
 				ancho_beams = 8;
 				ancho_beams_nota_gracia = 4;
 				ancho_cabeza_nota = 26;
@@ -214,6 +221,7 @@ public class Config {
 				tamano_letra_autor = 50;
 				tamano_letra_bip_preparacion = 300;
 				tamano_letra_bpm = 50;
+				tamano_letra_numero_compas = 30;
 				tamano_letra_obra = 80;
 				tamano_letra_palm_mute = 30;
 				tamano_letra_pulso = 50;
@@ -237,8 +245,9 @@ public class Config {
 				x_fin_slash = 5;
 				y_inicio_slash = 10;
 				y_fin_slash = 20;
-				x_ligaduras = 20;
-				y_ligaduras = 24;
+				y_ligaduras_expresion = 50;
+				x_ligaduras_union = 20;
+				y_ligaduras_union = 24;
 				x_octavarium = 15;
 				y_octavarium = 8;
 				y_octavarium_2 = 30;
@@ -267,8 +276,12 @@ public class Config {
 		return alto_dialog_bpm;
 	}
 	
-	public int getAlturaArcoLigaduras() {
-		return altura_arco_ligaduras;
+	public int getAlturaArcoLigadurasExpresion() {
+		return altura_arco_ligaduras_expresion;
+	}
+	
+	public int getAlturaArcoLigadurasUnion() {
+		return altura_arco_ligaduras_union;
 	}
 	
 	public int getAnchoBeams() {
@@ -419,6 +432,10 @@ public class Config {
 		return tamano_letra_bpm;
 	}
 	
+	public int getTamanoLetraNumeroCompas() {
+		return tamano_letra_numero_compas;
+	}
+	
 	public int getTamanoLetraObra() {
 		return tamano_letra_obra;
 	}
@@ -508,12 +525,16 @@ public class Config {
 		return y_fin_slash;
 	}
 	
-	public int getXLigaduras() {
-		return x_ligaduras;
+	public int getYLigadurasExpresion() {
+		return y_ligaduras_expresion;
 	}
 	
-	public int getYLigaduras() {
-		return y_ligaduras;
+	public int getXLigadurasUnion() {
+		return x_ligaduras_union;
+	}
+	
+	public int getYLigadurasUnion() {
+		return y_ligaduras_union;
 	}
 
 	public int getXOctavarium() {
