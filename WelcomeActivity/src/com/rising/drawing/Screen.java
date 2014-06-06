@@ -21,7 +21,6 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
-import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.NumberPicker;
 import android.widget.NumberPicker.OnScrollListener;

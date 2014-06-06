@@ -136,8 +136,7 @@ public class CustomAdapter extends BaseAdapter {
 		this.infoPartituras = new ArrayList<PartituraTienda>();
 		this.infoPartituras.addAll(partituras);
 	}
-	
-			
+				
 	@Override
 	public int getCount() {
 		return lista.size();
@@ -162,8 +161,7 @@ public class CustomAdapter extends BaseAdapter {
 		
 		return name;
 	}
-	
-	
+		
 	public class ViewHolder {
         TextView Author;
         TextView Title;
@@ -214,17 +212,22 @@ public class CustomAdapter extends BaseAdapter {
 
              @Override
              public void onLoadingStarted(String url, View view) {
+            	 Log.i("Entra", "URL: " + url);
                  List<String> memCache = MemoryCacheUtils.findCacheKeysForImageUri(url, iml.getMemoryCache());
                  cacheFound = !memCache.isEmpty();
                  if (!cacheFound) {
-                	 Log.i("Start Cache", "Loading Cache");
+                	 Log.i("Start Cache", "Loading Cache of: " + url);
                      File discCache = DiskCacheUtils.findInCache(url, iml.getDiskCache());
                      if (discCache != null) {
+                    	 Log.i("Empty Cache", "Caché empty to: " + url);
                          cacheFound = discCache.exists();
                      }
+                 }else{
+                	 iml.denyNetworkDownloads(true);
+                	 Log.i("No online", "DenyNetworkDownloads of: " + url);
                  }
              }
-             
+            
              @Override
              public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
                  if (cacheFound) {
