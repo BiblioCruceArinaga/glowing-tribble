@@ -35,6 +35,7 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback {
 	private ScreenThread thread;
 	private Context context = null;
 	private Config config = null;
+	private String path_folder = "/RisingScores/scores/";
 
 	private Partitura partitura = new Partitura();
 	private Compas compas = new Compas();
@@ -75,7 +76,7 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback {
 			this.context = context;
 			
 			File f = new File(Environment.getExternalStorageDirectory() + 
-					"/RisingScores/scores/" + path);
+					path_folder + path);
 	        FileInputStream is = new FileInputStream(f);
 			fichero = new ObjectInputStream(is);
 			

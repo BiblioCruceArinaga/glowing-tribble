@@ -17,6 +17,10 @@ import android.widget.SearchView;
 import android.widget.SearchView.OnQueryTextListener;
 import android.widget.Toast;
 
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.rising.drawing.R;
 import com.rising.login.Configuration;
 import com.rising.mainscreen.MainScreenActivity;
@@ -71,6 +75,19 @@ public class MainActivityStore extends FragmentActivity implements OnQueryTextLi
 		conf = new Configuration(this);
 		
 		StartMoneyUpdate(conf.getUserEmail());
+		
+		DisplayImageOptions options = new DisplayImageOptions.Builder()
+        .showImageOnLoading(R.drawable.cover)
+        .showImageForEmptyUri(R.drawable.cover)
+        .showImageOnFail(R.drawable.cover)
+        .cacheInMemory(true).considerExifParams(true)
+        .displayer(new RoundedBitmapDisplayer(10)).build();
+		
+		// Create global configuration and initialize ImageLoader with this configuration
+		ImageLoaderConfiguration config = new ImageLoaderConfiguration.
+		Builder(this).defaultDisplayImageOptions(options).build();
+		ImageLoader.getInstance().init(config);
+		
 		
     	ABar = getActionBar();
     	ABar.setIcon(R.drawable.ic_menu);

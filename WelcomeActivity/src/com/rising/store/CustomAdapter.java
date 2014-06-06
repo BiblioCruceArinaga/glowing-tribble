@@ -206,26 +206,23 @@ public class CustomAdapter extends BaseAdapter {
         .showImageOnFail(R.drawable.cover)
         .cacheInMemory(true).considerExifParams(true)
         .displayer(new RoundedBitmapDisplayer(10)).build();
-         
+                  
         iml.displayImage(lista.get(position).getImagen(), holder.image, options, new SimpleImageLoadingListener(){
         	 boolean cacheFound;
 
              @Override
              public void onLoadingStarted(String url, View view) {
-            	 Log.i("Entra", "URL: " + url);
+            	 //Log.i("Entra", "URL: " + url);
                  List<String> memCache = MemoryCacheUtils.findCacheKeysForImageUri(url, iml.getMemoryCache());
                  cacheFound = !memCache.isEmpty();
                  if (!cacheFound) {
-                	 Log.i("Start Cache", "Loading Cache of: " + url);
+                	 //Log.i("Start Cache", "Loading Cache of: " + url);
                      File discCache = DiskCacheUtils.findInCache(url, iml.getDiskCache());
                      if (discCache != null) {
-                    	 Log.i("Empty Cache", "Caché empty to: " + url);
+                    	 //Log.i("Empty Cache", "Caché empty to: " + url);
                          cacheFound = discCache.exists();
                      }
-                 }else{
-                	 iml.denyNetworkDownloads(true);
-                	 Log.i("No online", "DenyNetworkDownloads of: " + url);
-                 }
+                 }            	
              }
             
              @Override
@@ -235,22 +232,15 @@ public class CustomAdapter extends BaseAdapter {
                      DiskCacheUtils.removeFromCache(imageUri, iml.getDiskCache());
 
                      iml.displayImage(imageUri, (ImageView) view, options);
-                     Log.i("Complete Cache", "Loading Cache Complete");
+                     //Log.i("Complete Cache", "Loading Cache Complete");
                  }
+                 
                  new PianoFragment().onDestroyProgress();
                  new GuitarFragment().onDestroyProgress();
                  new FreeFragment().onDestroyProgress();
              }
         });
-               
-        
-       /* if(iml.getMemoryCache() != null){
-        	Log.i("Llegó", "Aquí 1");
-        	MemoryCacheUtils.findCachedBitmapsForImageUri(lista.get(position).getImagen(), ImageLoader.getInstance().getMemoryCache());	
-        }else{
-        	iml.displayImage(lista.get(position).getImagen(), holder.image, options);		    	
-        }*/
-                        
+                         
 	    if(lista.get(position).getComprado()){    
 	    	if(buscarArchivos(FileNameString(lista.get(position).getUrl()))){
 				holder.botonCompra.setText(R.string.open);
@@ -282,6 +272,7 @@ public class CustomAdapter extends BaseAdapter {
 			public void onClick(View v) {
 				Intent i = new Intent(ctx, ImageActivity.class);
 				i.putExtra("imagen", lista.get(position).getImagen());
+				Log.i("Imagen", "" + lista.get(position).getImagen());
 				ctx.startActivity(i);
 			}
 			

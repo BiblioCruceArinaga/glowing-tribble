@@ -53,19 +53,17 @@ public class ImageActivity extends Activity{
                
 		Image_PDialog = ProgressDialog.show(ctx, "", getString(R.string.pleasewait));
 		
-		//iml.displayImage(url, IV_Score_Preview, options);
 		iml.displayImage(url, IV_Score_Preview, options, new SimpleImageLoadingListener(){
        	 boolean cacheFound;
 
             @Override
             public void onLoadingStarted(String url, View view) {
-                List<String> memCache = MemoryCacheUtils.findCacheKeysForImageUri(url, ImageLoader.getInstance().getMemoryCache());
+                List<String> memCache = MemoryCacheUtils.findCacheKeysForImageUri(url, iml.getMemoryCache());
                 cacheFound = !memCache.isEmpty();
                 if (!cacheFound) {
-                	Log.i("Start Cache", "Loading Cache");
-                    File discCache = DiskCacheUtils.findInCache(url, ImageLoader.getInstance().getDiskCache());
+                	Log.i("Start Cache", "Loading Cache of: " + url);
+                    File discCache = DiskCacheUtils.findInCache(url, iml.getDiskCache());
                     if (discCache != null) {
-                    	Log.i("Start Cache", "Loading Cache 3");
                         cacheFound = discCache.exists();
                     }
                 }
@@ -74,10 +72,10 @@ public class ImageActivity extends Activity{
             @Override
             public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
                 if (cacheFound) {
-                    MemoryCacheUtils.removeFromCache(imageUri, ImageLoader.getInstance().getMemoryCache());
-                    DiskCacheUtils.removeFromCache(imageUri, ImageLoader.getInstance().getDiskCache());
+                    MemoryCacheUtils.removeFromCache(imageUri, iml.getMemoryCache());
+                    DiskCacheUtils.removeFromCache(imageUri, iml.getDiskCache());
 
-                    ImageLoader.getInstance().displayImage(imageUri, (ImageView) view, options);
+                    iml.displayImage(imageUri, (ImageView) view, options);
                     Log.i("Complete Cache", "Loading Cache Complete");
                 }
                 Image_PDialog.dismiss();

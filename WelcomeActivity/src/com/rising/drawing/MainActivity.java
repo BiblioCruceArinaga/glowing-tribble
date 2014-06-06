@@ -57,6 +57,12 @@ public class MainActivity extends Activity{
 		aBar.setTitle(R.string.score);	
 		aBar.setIcon(R.drawable.ic_menu);
 		aBar.setDisplayHomeAsUpEnabled(true);
+				
+	}
+	
+	@Override
+	public void onResume(){
+		super.onResume();
 		
 		DisplayMetrics dm = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(dm);
@@ -67,34 +73,12 @@ public class MainActivity extends Activity{
 			config = s.getConfig();
 		}
 		
-		setContentView(s);
+		setContentView(s);	
 	}
 	
 	@Override
-	public void onResume(){
-		super.onResume();
-		
-		if (Build.VERSION.SDK_INT < 16) {
-            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-            getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN, WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN);
-        }else{
-			View ScoreView = getWindow().getDecorView();
-			int uifullscreen = View.SYSTEM_UI_FLAG_FULLSCREEN;
-			ScoreView.setSystemUiVisibility(uifullscreen);
-        }
-	}
-	
-	@Override
-	public void onWindowFocusChanged(boolean hasFocus) {
-		super.onWindowFocusChanged(hasFocus);
-		if (Build.VERSION.SDK_INT < 16) {
-            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-            getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN, WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN);
-        }else{
-			View ScoreView = getWindow().getDecorView();
-			int uifullscreen = View.SYSTEM_UI_FLAG_FULLSCREEN;
-			ScoreView.setSystemUiVisibility(uifullscreen);
-        }
+	protected void onPause() {
+		super.onPause();	
 	}
 	
 	@Override
@@ -144,14 +128,7 @@ public class MainActivity extends Activity{
 		MDialog.setContentView(R.layout.metronome_dialog);
 		MDialog.setTitle(R.string.metronome);	
 		MDialog.getWindow().setLayout(config.getAnchoDialogBpm(), config.getAltoDialogBpm());
-		if (Build.VERSION.SDK_INT < 16) {
-            MDialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        }else{
-			View ScoreView = MDialog.getWindow().getDecorView();
-			int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
-			ScoreView.setSystemUiVisibility(uiOptions);
-        }	
-
+		
 		seekBar_metronome = (SeekBar)MDialog.findViewById(R.id.seekBar_metronome);
 		numeros_checkbox = (CheckBox)MDialog.findViewById(R.id.cB_metronome);
 		metronome_speed = (NumberPicker)MDialog.findViewById(R.id.nm_metronome);

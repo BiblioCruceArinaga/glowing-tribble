@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.util.Log;
@@ -32,6 +33,7 @@ public class FreeFragment extends Fragment{
 	Configuration conf;
 	static InfoBuyNetworkConnection ibnc;
 	static ProgressDialog progressDialog;
+	FragmentManager fm;
 		
 	//Esto cargará todo aquello que dependa del hilo para ejecutarse, y que de no ser así no interesa que se ejecute
 	private OnTaskCompleted listener = new OnTaskCompleted() {
@@ -79,14 +81,27 @@ public class FreeFragment extends Fragment{
 		
 		ibnc.execute(new Configuration(rootView.getContext()).getUserId());
 		
+		fm = getFragmentManager();
+		
+		return rootView;
+	}
+	
+	@Override
+	public void onResume() {
+		super.onResume();
+		
 		progressDialog = ProgressDialog.show(rootView.getContext(), "", getString(R.string.pleasewait));
 		
 		fnc = new FreeNetworkConnection(listen, listener, rootView.getContext());
 		
 		fnc.execute(Locale.getDefault().getDisplayLanguage());
-					
-		return rootView;
+	}
+	
+	@Override
+	public void onPause() {
+		super.onPause();
 		
+		fnc.cancel(true);
 	}
 	
 	//Cierra el ProgressDialog en el caso de que lo haya.
