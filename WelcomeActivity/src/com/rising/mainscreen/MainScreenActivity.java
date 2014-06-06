@@ -72,7 +72,7 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 	private Dialog MDialog;
 	private int fid;
 	Context context;
-	
+		
 	//  Recibir la señal del proceso que elimina la cuenta
 	private OnTaskCompleted listener = new OnTaskCompleted() {
 	    public void onTaskCompleted(int details) {       
@@ -183,10 +183,13 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 		session.checkLogin();
 		fid = session.getFacebookId();
 		
+		
 		createScoreFolder();
 		createImageFolder();
 		UpdateMoney(conf.getUserEmail());
-		 
+		
+		
+		
 		ActionBar action = getActionBar();
 		action.setTitle(R.string.titulo_coleccion);
 		action.setIcon(R.drawable.ic_menu);
@@ -312,11 +315,12 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 		@Override
 		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 			Log.i("Position", ficheros[position]);
-				
+			
 			Intent i = new Intent(MainScreenActivity.this, MainActivity.class);
 			i.putExtra("score", ficheros[position]);
-				
+					
 			startActivity(i);
+			
 		}
 	});
 	
@@ -330,7 +334,7 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 	    searchView.setOnQueryTextListener(this);
 		return true;			
 	}
-
+	
 	@Override
 	public boolean onQueryTextChange(String newText) {
 		if (s_adapter != null) s_adapter.filter(newText);
