@@ -35,7 +35,7 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback {
 	private ScreenThread thread;
 	private Context context = null;
 	private Config config = null;
-	private String path_folder = "/RisingScores/scores/";
+	private String path_folder = "/.RisingScores/scores/";
 
 	private Partitura partitura = new Partitura();
 	private Compas compas = new Compas();

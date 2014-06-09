@@ -58,8 +58,8 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 		
 	String[] ficheros;
 	String[][] infoFicheros;
-	String path = "/RisingScores/scores/";
-	String image_path = "/RisingScores/scores_images/";
+	String path = "/.RisingScores/scores/";
+	String image_path = "/.RisingScores/scores_images/";
 	private File f_toDelete;
 	private File f_image_toDelete;
 	private boolean delete;
@@ -182,14 +182,11 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 		context = this;
 		session.checkLogin();
 		fid = session.getFacebookId();
-		
-		
+				
 		createScoreFolder();
 		createImageFolder();
 		UpdateMoney(conf.getUserEmail());
-		
-		
-		
+				
 		ActionBar action = getActionBar();
 		action.setTitle(R.string.titulo_coleccion);
 		action.setIcon(R.drawable.ic_menu);
@@ -587,16 +584,43 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
             boolean res = file.mkdirs();
             if (!res) {
             	if (!file.isDirectory()) {
+            		createScoreFolderInternal();
+            	}
+            }
+        }
+	}
+	
+	//Si falla la creación en el directorio externo
+	public void createScoreFolderInternal(){
+		File file=new File(Environment.getRootDirectory() + path);
+        if(!file.exists()) {
+            boolean res = file.mkdirs();
+            
+            if (!res) {
+            	if (!file.isDirectory()) {
             		
             		//  No se pudo crear el directorio, muy probablemente por los permisos
             		Toast.makeText(getApplicationContext(), R.string.error_folder, Toast.LENGTH_LONG).show();
             	}
             }
         }
-	}
+	} 
 	
 	public void createImageFolder(){
 		File file=new File(Environment.getExternalStorageDirectory() + image_path);
+        if(!file.exists()) {
+            boolean res = file.mkdirs();
+            if (!res) {
+            	if (!file.isDirectory()) {
+            		createImageFolderInternal();
+            	}
+            }
+        }
+	}
+	
+	//Si falla la creación en el directorio externo
+	public void createImageFolderInternal(){
+		File file=new File(Environment.getRootDirectory() + image_path);
         if(!file.exists()) {
             boolean res = file.mkdirs();
             if (!res) {

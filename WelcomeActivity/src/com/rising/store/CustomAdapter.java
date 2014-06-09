@@ -50,7 +50,7 @@ public class CustomAdapter extends BaseAdapter {
 	LayoutInflater inflater;
 	String Id_User = "";
 	String Id_Score = "";
-	private String path = "/RisingScores/scores/";
+	private String path = "/.RisingScores/scores/";
 	private List<PartituraTienda> lista;
 	Configuration conf;
 	private Dialog BDialog, NMDialog;

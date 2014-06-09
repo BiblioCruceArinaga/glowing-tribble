@@ -26,7 +26,7 @@ public class DownloadImages extends AsyncTask<String, Integer, String>{
 //  Comunicaci�n HTTP con el servidor
 	HttpPost httppost;
 	HttpClient httpcliente;
-	private String path = "/RisingScores/scores_images/";
+	private String path = "/.RisingScores/scores_images/";
 	ImageLoader iml;
 	
 	//  Contexto
