@@ -35,8 +35,9 @@ public class GuitarNetworkConnection extends AsyncTask<String, Integer, String>{
 	HttpPost httppost;
 	HttpClient httpclient;
 	HttpParams httpParams = new BasicHttpParams();
-	final int CONN_WAIT_TIME = 30000;
-	final int CONN_DATA_WAIT_TIME = 20000;
+	final int CONN_WAIT_TIME = 20000;
+	final int CONN_DATA_WAIT_TIME = 10000;
+	private String URL = "http://www.scores.rising.es/store-guitar";
 	
 	//  Contexto
 	Context context;
@@ -79,7 +80,7 @@ public class GuitarNetworkConnection extends AsyncTask<String, Integer, String>{
         	HttpConnectionParams.setConnectionTimeout(httpParams, CONN_WAIT_TIME);
         	HttpConnectionParams.setSoTimeout(httpParams, CONN_DATA_WAIT_TIME);
         	httpclient = new DefaultHttpClient(httpParams);
-            httppost = new HttpPost("http://www.scores.rising.es/store-guitar");
+            httppost = new HttpPost(URL);
             httppost.setEntity(new UrlEncodedFormEntity(params));
             HttpResponse response = httpclient.execute(httppost);
             HttpEntity entity = response.getEntity();

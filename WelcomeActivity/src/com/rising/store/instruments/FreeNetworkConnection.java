@@ -35,9 +35,9 @@ public class FreeNetworkConnection extends AsyncTask<String, Integer, String>{
 	HttpPost httppost;
 	HttpClient httpclient;
 	HttpParams httpParams = new BasicHttpParams();
-	final int CONN_WAIT_TIME = 30000;
-	final int CONN_DATA_WAIT_TIME = 20000;
-	String URL = "http://www.scores.rising.es/store-free";
+	final int CONN_WAIT_TIME = 20000;
+	final int CONN_DATA_WAIT_TIME = 10000;
+	private String URL = "http://www.scores.rising.es/store-free";
 	
 	//  Contexto
 	Context context;

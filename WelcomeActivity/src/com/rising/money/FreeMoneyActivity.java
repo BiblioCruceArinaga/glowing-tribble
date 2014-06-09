@@ -5,17 +5,15 @@ import java.util.Calendar;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.View.OnClickListener;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -25,8 +23,6 @@ import android.widget.Toast;
 import com.rising.drawing.R;
 import com.rising.money.Invitations.OnInvitationFail;
 import com.rising.money.Invitations.OnInvitationOk;
-import com.rising.money.SocialBonificationNetworkConnection.OnBonificationDone;
-import com.rising.money.SocialBonificationNetworkConnection.OnFailBonification;
 
 public class FreeMoneyActivity extends Activity{
 	
@@ -37,25 +33,6 @@ public class FreeMoneyActivity extends Activity{
 	Context ctx = this;
 	Invitations invitacion;
 	private EnableButtonsData EBD;
-	private String ID_BONIFICATION = "11";
-	private SocialBonificationNetworkConnection sbnc;
-		
-	private OnBonificationDone successbonification = new OnBonificationDone(){
-
-		@Override
-		public void onBonificationDone() {
-			Toast.makeText(ctx, R.string.win_social, Toast.LENGTH_LONG).show();
-			EBD.setEnable_Rate(false);	
-		}		
-	};
-	
-	private OnFailBonification failbonification = new OnFailBonification(){
-
-		@Override
-		public void onFailBonification() {
-			Toast.makeText(ctx, R.string.fail_social, Toast.LENGTH_LONG).show();
-		}		
-	};
 	
 	private OnInvitationOk listenerInvitation = new OnInvitationOk(){
 
@@ -82,8 +59,7 @@ public class FreeMoneyActivity extends Activity{
 		setContentView(R.layout.freemoney_layout);
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		EBD = new EnableButtonsData(ctx);
-		sbnc = new SocialBonificationNetworkConnection(successbonification, failbonification, ctx);
-		
+						
     	ActionBar ABar = getActionBar();
     	
     	ABar.setTitle(R.string.money);
@@ -94,16 +70,7 @@ public class FreeMoneyActivity extends Activity{
     	Button SFriends = (Button) findViewById(R.id.b_share_friends);
     	Button SSocial = (Button) findViewById(R.id.b_share_social);
     	GRate = (Button) findViewById(R.id.b_rate);
-    	TV_Rate = (TextView) findViewById(R.id.tV_rate);
-    	
-    	if(EBD.getEnable_Rate()){
-    		GRate.setVisibility(View.VISIBLE);
-    		TV_Rate.setVisibility(View.VISIBLE);
-    	}else{
-    		GRate.setVisibility(View.INVISIBLE);
-    		GRate.setEnabled(false);
-    		TV_Rate.setVisibility(View.INVISIBLE);
-    	}
+    	TV_Rate = (TextView) findViewById(R.id.tV_rate);   	
     	    	
     	SFriends.setOnClickListener(new OnClickListener(){
 
@@ -202,11 +169,7 @@ public class FreeMoneyActivity extends Activity{
 							}
 							
 						}
-						Log.i("Time", "Time: "+time+ ", Diferencias: " + (12 - cantidadTotalHoras(EBD.getTime_TW(), time)) + ", Horas: " + EBD.getTime_TW());
-						
-						
-						
-											
+						Log.i("Time", "Time: "+time+ ", Diferencias: " + (12 - cantidadTotalHoras(EBD.getTime_TW(), time)) + ", Horas: " + EBD.getTime_TW());		
 					}
 					
 				});
@@ -220,26 +183,26 @@ public class FreeMoneyActivity extends Activity{
 
 			@Override
 			public void onClick(View v) {
-				launchMarket();
+				Intent i = new Intent(ctx, Google_Rate.class);
+				startActivity(i);
+				onPause();
 			}
     	});
     	
 	}
-		
+	
 	@Override
-	protected void onRestart() {
-		super.onRestart();
+	protected void onResume() {
+		super.onResume();
+		
 		if(EBD.getEnable_Rate()){
-			sbnc.execute(ID_BONIFICATION);
-			if(EBD.getEnable_Rate()){
-	    		GRate.setVisibility(View.VISIBLE);
-	    		TV_Rate.setVisibility(View.VISIBLE);
-	    	}else{
-	    		GRate.setVisibility(View.INVISIBLE);
-	    		GRate.setEnabled(false);
-	    		TV_Rate.setVisibility(View.INVISIBLE);
-	    	}
-		}
+    		GRate.setVisibility(View.VISIBLE);
+    		TV_Rate.setVisibility(View.VISIBLE);
+    	}else{
+    		GRate.setVisibility(View.INVISIBLE);
+    		GRate.setEnabled(false);
+    		TV_Rate.setVisibility(View.INVISIBLE);
+    	}
 	}
 
 	/*Metodo que devuelve el Numero total de horas que hay entre las dos Fechas */ 
@@ -247,16 +210,6 @@ public class FreeMoneyActivity extends Activity{
 		long totalMinutos=0; 
 		totalMinutos=((fechaFinal-fechaInicial)/1000/60/60); 
 		return totalMinutos; 
-	}
-	
-	private void launchMarket() {
-	    Uri uri = Uri.parse("market://details?id=" + getPackageName());
-	    Intent myAppLinkToMarket = new Intent(Intent.ACTION_VIEW, uri);
-	    try {
-	        startActivity(myAppLinkToMarket);
-	    } catch (ActivityNotFoundException e) {
-	        Toast.makeText(this, R.string.fail_market_app, Toast.LENGTH_LONG).show();
-	    }
 	}
 	
 	@Override

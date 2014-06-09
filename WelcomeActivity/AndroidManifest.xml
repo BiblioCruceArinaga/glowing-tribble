@@ -133,6 +133,7 @@
 	    	android:name="com.rising.money.Facebook_Publish"></activity>
         <activity android:name="com.rising.money.Twitter_Publish"></activity>
         <activity android:name="com.rising.store.ImageActivity"></activity>
+        <activity android:name="com.rising.money.Google_Rate"></activity>
 
         
     </application>
