@@ -71,6 +71,7 @@ public class Config {
 	private int y_ligaduras_expresion;
 	private int x_ligaduras_union;
 	private int y_ligaduras_union;
+	private int y_numero_compas;
 	private int x_octavarium;
 	private int y_octavarium;
 	private int y_octavarium_2;
@@ -161,6 +162,7 @@ public class Config {
 				y_ligaduras_expresion = 10;
 				x_ligaduras_union = 20;
 				y_ligaduras_union = 10;
+				y_numero_compas = 15;
 				x_octavarium = 15;
 				y_octavarium = 8;
 				y_octavarium_2 = 16;
@@ -248,6 +250,7 @@ public class Config {
 				y_ligaduras_expresion = 50;
 				x_ligaduras_union = 20;
 				y_ligaduras_union = 24;
+				y_numero_compas = 15;
 				x_octavarium = 15;
 				y_octavarium = 8;
 				y_octavarium_2 = 30;
@@ -535,6 +538,10 @@ public class Config {
 	
 	public int getYLigadurasUnion() {
 		return y_ligaduras_union;
+	}
+	
+	public int getYNumeroCompas() {
+		return y_numero_compas;
 	}
 
 	public int getXOctavarium() {

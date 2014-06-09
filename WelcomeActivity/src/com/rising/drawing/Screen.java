@@ -13,8 +13,12 @@ import java.util.Observer;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.Path;
+import android.graphics.Point;
 import android.graphics.Rect;
+import android.graphics.RectF;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Environment;
@@ -232,35 +236,26 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback, Observer {
 	private void cargarDatosDeFichero() throws IOException {
 		leerDatosBasicosDePartitura();
 		
-		int numCompas = 0;
-		
-		//  Número del primer compás
-		compas.setNumeroCompas(leerHastaAlmohadilla());
-
 		byte byteLeido = fichero.readByte();
 		while (byteLeido != -128) {
 			
 			switch (byteLeido) {			
 				case 126:
 					leerFiguraGraficaCompas();
-					byteLeido = fichero.readByte();
 					break;
 					
 				case 127:
-					numCompas = compas.getNumeroCompas();
 					partitura.addCompas(compas);
 					compas = new Compas();
-					
-					if (compas.setNumeroCompas(leerHastaAlmohadilla()))
-						byteLeido = fichero.readByte();
 					break;
 				
 				default:
 					leerInfoNota(byteLeido);
-					byteLeido = fichero.readByte();
 					break;
 			}
-		}	
+			
+			byteLeido = fichero.readByte();
+		}
 	}
 
 	public Config getConfig() {
@@ -300,12 +295,14 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback, Observer {
 		byte staves = fichero.readByte();
 		byte instrument = fichero.readByte();
 		ArrayList<Byte> divisions = leerHastaAlmohadilla();
+		int numeroCompas = fichero.readByte();
 		
 		partitura.setWork(work);
 		partitura.setCreator(creator);
 		partitura.setStaves(staves);
 		partitura.setInstrument(instrument);
 		partitura.setDivisions(divisions);
+		partitura.setFirstNumber(numeroCompas);
 	}
 	
 	private void leerFiguraGraficaCompas() throws IOException {
@@ -454,7 +451,18 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback, Observer {
 							ordenDibujo.getY1(), ordenDibujo.getPaint());
 					break;
 				case DRAW_ARC:
-					canvas.drawArc(ordenDibujo.getRectF(), 0, -180, false, ordenDibujo.getPaint());
+					RectF rectf = ordenDibujo.getRectF();
+					
+					Matrix matrix = new Matrix();
+					matrix.postRotate(8, rectf.left, rectf.bottom);
+
+					Path path = new Path();
+					path.addArc(rectf, 0, -180);
+					path.transform(matrix, path);
+					
+					canvas.drawPath(path, ordenDibujo.getPaint());
+					
+					//canvas.drawArc(ordenDibujo.getRectF(), 0, -180, false, ordenDibujo.getPaint());
 					break;
 				default:
 					break;

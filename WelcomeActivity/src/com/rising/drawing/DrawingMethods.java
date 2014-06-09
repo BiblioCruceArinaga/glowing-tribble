@@ -491,6 +491,7 @@ public class DrawingMethods {
 	public ArrayList<OrdenDibujo> crearOrdenesDeDibujo() {
 		
 		desenrollarRepeticiones();
+		numerarCompases();
 		
 		//  Obra
 		OrdenDibujo ordenDibujo = new OrdenDibujo();
@@ -552,6 +553,8 @@ public class DrawingMethods {
 					
 					nuevosCompases.get(nuevosCompases.size() - 1).clearClefs();
 					nuevosCompases.get(nuevosCompases.size() - 1).setTime(null);
+					nuevosCompases.get(nuevosCompases.size() - 1).setWords(null);
+					nuevosCompases.get(nuevosCompases.size() - 1).setDynamics(null);
 				}
 			}
 		}
@@ -624,6 +627,14 @@ public class DrawingMethods {
 			compas.getNota(i).setY(compas.getNota(i).getY() + distancia_y);
 			compas.getNota(i).setYOctavarium(compas.getNota(i).getYOctavarium() + distancia_y);
 		}
+	}
+	
+	private void numerarCompases() {
+		final int numCompases = partitura.getCompases().size();
+		int numeroCompas = partitura.getFirstNumber();
+		
+		for (int i=0; i<numCompases; i++) 
+			partitura.getCompas(i).setNumeroCompas(numeroCompas++);
 	}
 	
 	private Bitmap obtenerImagenDeCabezaDeNota(Nota nota) {
@@ -2570,7 +2581,7 @@ public class DrawingMethods {
 		ordenDibujo.setPaint(PaintOptions.SET_TEXT_SIZE, config.getTamanoLetraNumeroCompas());
 		ordenDibujo.setTexto(compas.getNumeroCompas() + "");
 		ordenDibujo.setX1(compas.getXIni());
-		ordenDibujo.setY1(compas.getYIni());
+		ordenDibujo.setY1(compas.getYIni() - config.getYNumeroCompas());
 		ordenesDibujo.add(ordenDibujo);
 	}
 	

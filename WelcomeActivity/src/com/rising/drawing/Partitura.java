@@ -9,6 +9,7 @@ public class Partitura {
     private int staves;
     private byte instrument;
     private int divisions;
+    private int firstNumber;
 
     private ArrayList<Compas> compases;
     
@@ -20,6 +21,7 @@ public class Partitura {
         instrument = 0;
         divisions = 0;
         staves = 1;
+        firstNumber = 1;
     }
     
     public void addCompas(Compas compas) {
@@ -65,6 +67,10 @@ public class Partitura {
     	return divisions;
     }
     
+    public int getFirstNumber() {
+    	return firstNumber;
+    }
+    
     public byte getInstrument() {
     	return instrument;
     }
@@ -81,6 +87,37 @@ public class Partitura {
     	return work;
     }
     
+    private String sanitizeString(String oldString) {
+    	int index = oldString.indexOf('&');
+    	
+    	if (index > -1) {
+    		switch (oldString.charAt(index - 1)) {
+	    		case 'a':
+	    			oldString = oldString.replace("a&", "á");
+	    			break;
+	    		case 'e':
+	    			oldString = oldString.replace("e&", "é");
+	    			break;
+	    		case 'i':
+	    			oldString = oldString.replace("i&", "í");
+	    			break;
+	    		case 'o':
+	    			oldString = oldString.replace("o&", "ó");
+	    			break;
+	    		case 'u':
+	    			oldString = oldString.replace("u&", "ú");
+	    			break;
+	    		case 'n':
+	    			oldString = oldString.replace("n&", "ñ");
+	    			break;
+    			default:
+    				break;
+    		}
+    	}
+    	
+    	return oldString;
+    }
+    
     public void setCompases(ArrayList<Compas> nuevosCompases) {
     	compases.clear();
     	
@@ -92,12 +129,16 @@ public class Partitura {
     
     public void setCreator(ArrayList<Byte> creator) {
     	String creatorString = bytesArrayToString(creator);
-        this.creator = creatorString;
+        this.creator = sanitizeString(creatorString);
     }
     
     public void setDivisions(ArrayList<Byte> divisions) {
         String divisionsString = bytesArrayToString(divisions);
         this.divisions = Integer.parseInt(divisionsString);
+    }
+    
+    public void setFirstNumber(int firstNumber) {
+    	this.firstNumber = firstNumber;
     }
     
     public void setInstrument(byte instrument) {
@@ -110,6 +151,6 @@ public class Partitura {
     
     public void setWork(ArrayList<Byte> work) {
     	String workString = bytesArrayToString(work);
-        this.work = workString;
+        this.work = sanitizeString(workString);
     }
 }

@@ -387,29 +387,8 @@ public class Compas {
 		this.intensidad = intensidad;
 	}
 	
-	public boolean setNumeroCompas(ArrayList<Byte> bytes) {
-		boolean success = false;
-		
-		byte[] bytesArray = new byte[bytes.size()];
-        int len = bytesArray.length;
-        for (int i=0; i<len; i++) 
-        	bytesArray[i] = bytes.get(i);
-        
-        try {
-        	if (len > 0) {
-	            String bytesString = new String(bytesArray, "UTF-8");
-	            if (!bytesString.equals("")) {
-	            	numeroCompas = Integer.parseInt(bytesString);
-	            	success = true;
-	            }
-        	}
-            
-            return success;
-        }
-        catch (UnsupportedEncodingException e) {
-            System.out.println(e.getMessage());
-            return success;
-        }
+	public void setNumeroCompas(int numeroCompas) {
+		this.numeroCompas = numeroCompas;
 	}
 	
 	public void setPedalFin(Pedal pedalFin) {
