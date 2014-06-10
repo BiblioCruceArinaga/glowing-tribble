@@ -12,6 +12,7 @@ public class OrdenDibujo {
 	private Bitmap imagen;
 	private DrawOrder orden;
 	private RectF rectf;
+	private float angulo;
 	
 	private int x1;
 	private int y1;
@@ -25,12 +26,17 @@ public class OrdenDibujo {
 		imagen = null;
 		orden = null;
 		rectf = null;
+		angulo = 0;
 		
 		x1 = -1;
 		x2 = -1;
 		y1 = -1;
 		y2 = -1;
 		radius = 0;
+	}
+	
+	public float getAngulo() {
+		return angulo;
 	}
 	
 	public Bitmap getImagen() {
@@ -71,6 +77,10 @@ public class OrdenDibujo {
 	
 	public int getY2() {
 		return y2;
+	}
+	
+	public void setAngulo(float angulo) {
+		this.angulo = angulo;
 	}
 	
 	public void setImagen(Bitmap imagen) {

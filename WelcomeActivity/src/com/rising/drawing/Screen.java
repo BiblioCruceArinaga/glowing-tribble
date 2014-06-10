@@ -451,11 +451,10 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback, Observer {
 							ordenDibujo.getY1(), ordenDibujo.getPaint());
 					break;
 				case DRAW_ARC:
-					RectF rectf = ordenDibujo.getRectF();
 					
-					Matrix matrix = new Matrix();
-					matrix.postRotate(8, rectf.left, rectf.bottom);
-
+					RectF rectf = ordenDibujo.getRectF();
+					Matrix matrix = getMatrix(rectf, ordenDibujo.getAngulo());
+					
 					Path path = new Path();
 					path.addArc(rectf, 0, -180);
 					path.transform(matrix, path);
@@ -483,6 +482,31 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback, Observer {
     	canvas.drawLine(x_end, offsetBarraLateral - yOffset, 
     			x_end, offsetBarraLateral + tamanoBarraLateral - yOffset, paint);
     }
+	
+	//  La rotación de una matriz produce una traslación
+	//  involuntaria e indeseada que debemos contrarrestar
+	//  manualmente para que el resultado quede bien.
+	//  Además, aquí controlamos que la rotación
+	//  se haga en el sentido adecuado
+	public Matrix getMatrix(RectF rectf, float angulo) {
+		Matrix matrix = new Matrix();
+		
+		//  Rotación
+		if (angulo > 0) {
+			matrix.postRotate(angulo, rectf.left, rectf.bottom);
+		}
+		else {
+			matrix.postRotate(angulo, rectf.right, rectf.top);
+		}
+
+		//  Contrarrestar traslación accidental. En el futuro
+		//  considerar que girar a la izquierda y a la derecha
+		//  requieren valores diferentes para obtener el mismo resultado
+		if (Math.abs(angulo) == 25)
+			matrix.postTranslate(-config.getXAngulo25(), 0);
+		
+		return matrix;
+	}
 
 	/*
 	 * 
@@ -493,6 +517,12 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback, Observer {
 		yOffset = 0;
 		limiteVisibleArriba = 0;
 		limiteVisibleAbajo = altoPantalla;
+	}
+	
+	public void Forward() {
+		yOffset = -finalScroll - altoPantalla;
+    	limiteVisibleArriba = -finalScroll - altoPantalla;
+    	limiteVisibleAbajo = -finalScroll;
 	}
 	
 	public void Metronome_Pause(){

@@ -6,6 +6,7 @@ import java.util.Collections;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Point;
 import android.graphics.RectF;
 
 public class DrawingMethods {
@@ -2241,7 +2242,7 @@ public class DrawingMethods {
 				
 			case 33:
 				int indLigaduraExpresion = encontrarIndiceLigadura(nota.getLigaduraExpresion());
-				dibujarLigaduraExpresion(indLigaduraExpresion, posicionX);
+				dibujarLigaduraExpresion(indLigaduraExpresion, posicionX, posicionY);
 				break;
 				
 			default:
@@ -2288,22 +2289,25 @@ public class DrawingMethods {
 		ordenesDibujo.add(ordenDibujo);
 	}
 	
-	private void dibujarLigaduraExpresion(int indLigadura, int xFinal) {
+	private void dibujarLigaduraExpresion(int indLigadura, int xFinal, int yFinal) {
 		int compasNotaInicio = ligaduras.get(indLigadura).getCompas();
 		int notaInicio = ligaduras.get(indLigadura).getNota();
 		
 		Nota nota = partitura.getCompas(compasNotaInicio).getNota(notaInicio);
 		int xInicio = nota.getX();
-		int y = nota.getY();
+		int yInicio = nota.getY();
 
 		if (xInicio < xFinal) {
 			OrdenDibujo ordenDibujo = new OrdenDibujo();
 			ordenDibujo.setOrden(DrawOrder.DRAW_ARC);
 			ordenDibujo.setPaint(PaintOptions.SET_STYLE_STROKE, 0);
 			ordenDibujo.setPaint(PaintOptions.SET_STROKE_WIDTH, 2);
+			ordenDibujo.setAngulo(hallarAngulo(yInicio, yFinal));
 			
 			RectF rectf = null;
 			if (nota.ligaduraExpresionEncima()) {
+				int y = Math.min(yInicio, yFinal);
+				
 				rectf = new RectF(xInicio, y - config.getYLigadurasExpresion(), 
 					xFinal + config.getAnchoCabezaNota(), 
 					y + config.getAlturaArcoLigadurasExpresion());
@@ -2580,7 +2584,7 @@ public class DrawingMethods {
 		ordenDibujo.setOrden(DrawOrder.DRAW_TEXT);
 		ordenDibujo.setPaint(PaintOptions.SET_TEXT_SIZE, config.getTamanoLetraNumeroCompas());
 		ordenDibujo.setTexto(compas.getNumeroCompas() + "");
-		ordenDibujo.setX1(compas.getXIni());
+		ordenDibujo.setX1(compas.getXIni() - config.getXNumeroCompas());
 		ordenDibujo.setY1(compas.getYIni() - config.getYNumeroCompas());
 		ordenesDibujo.add(ordenDibujo);
 	}
@@ -2778,5 +2782,28 @@ public class DrawingMethods {
 		}
 		
 		return y_beams;
+	}
+	
+	//  Halla el ángulo de rotación de la ligadura de expresión
+	private float hallarAngulo(int yInicio, int yFinal) {
+		float angulo = 0;
+		
+		int signo = -1;
+		if (yFinal > yInicio) signo = 1;
+		
+		int distancia = Math.abs(yFinal - yInicio);
+		
+		if (distancia == config.getDistanciaLineasPentagramaMitad())
+			angulo = 0;
+		
+		if (distancia == config.getDistanciaLineasPentagrama() +
+				config.getDistanciaLineasPentagramaMitad())
+			angulo = 25;
+		
+		if (distancia == config.getDistanciaLineasPentagrama() * 2 +
+				config.getDistanciaLineasPentagramaMitad())
+			angulo = 8;
+		
+		return angulo * signo;
 	}
 }

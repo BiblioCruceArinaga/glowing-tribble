@@ -71,6 +71,7 @@ public class Config {
 	private int y_ligaduras_expresion;
 	private int x_ligaduras_union;
 	private int y_ligaduras_union;
+	private int x_numero_compas;
 	private int y_numero_compas;
 	private int x_octavarium;
 	private int y_octavarium;
@@ -86,6 +87,8 @@ public class Config {
 	private int x_tresillo;
 	private int y_tresillo_arriba;
 	private int y_tresillo_abajo;
+	
+	private int x_angulo_25;
 	
 	public Config(int densityDPI, int width) {
 		
@@ -162,6 +165,7 @@ public class Config {
 				y_ligaduras_expresion = 10;
 				x_ligaduras_union = 20;
 				y_ligaduras_union = 10;
+				x_numero_compas = 50;
 				y_numero_compas = 15;
 				x_octavarium = 15;
 				y_octavarium = 8;
@@ -177,6 +181,8 @@ public class Config {
 				x_tresillo = 6;
 				y_tresillo_arriba = 7;
 				y_tresillo_abajo = 7;
+				
+				x_angulo_25 = 25;
 				break;
 				
 			case 240:
@@ -250,6 +256,7 @@ public class Config {
 				y_ligaduras_expresion = 50;
 				x_ligaduras_union = 20;
 				y_ligaduras_union = 24;
+				x_numero_compas = 50;
 				y_numero_compas = 15;
 				x_octavarium = 15;
 				y_octavarium = 8;
@@ -265,6 +272,8 @@ public class Config {
 				x_tresillo = 18;
 				y_tresillo_arriba = 9;
 				y_tresillo_abajo = 26;
+				
+				x_angulo_25 = 25;
 				break;
 			case 400:
 				break;
@@ -540,6 +549,10 @@ public class Config {
 		return y_ligaduras_union;
 	}
 	
+	public int getXNumeroCompas() {
+		return x_numero_compas;
+	}
+	
 	public int getYNumeroCompas() {
 		return y_numero_compas;
 	}
@@ -598,6 +611,11 @@ public class Config {
 	
 	public int getYTresilloAbajo() {
 		return y_tresillo_abajo;
+	}
+	
+	
+	public int getXAngulo25() {
+		return x_angulo_25;
 	}
 	
 	/**

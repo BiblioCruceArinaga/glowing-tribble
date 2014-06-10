@@ -1,6 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
+    <item
+        android:id="@+id/navigate"
+        android:showAsAction="always"
+        android:title="@string/navigate">
+        
+        <menu>
+            <item
+                android:id="@+id/navigate_top"
+                android:title="@string/navigate_top"/>
+            <item
+                android:id="@+id/navigate_bottom"
+                android:title="@string/navigate_bottom"/> 
+        </menu>
+    </item>
+        
+    
     <item 
         android:id="@+id/readSound_Button"
         android:showAsAction="always"

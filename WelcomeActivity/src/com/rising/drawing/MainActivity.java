@@ -98,6 +98,14 @@ public class MainActivity extends Activity{
 	    		microphone_options();
 	    		return true;
 	    	
+	    	case R.id.navigate_top:
+	    		s.Back();
+	    		return true;
+	    		
+	    	case R.id.navigate_bottom:
+	    		s.Forward();
+	    		return true;
+	    		
 	    	case android.R.id.home:
 	    		s.Metronome_Stop();
 	    		finish();
@@ -385,7 +393,7 @@ public class MainActivity extends Activity{
 		}else{
 			menu.getItem(0).setEnabled(false);
 			menu.getItem(1).setEnabled(false);
-			menu.getItem(4).setEnabled(false);
+			menu.getItem(4).setEnabled(true);
 		}
 	}
 	

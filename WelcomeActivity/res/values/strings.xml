@@ -114,6 +114,11 @@ You can buy scores in our store.</string>
         Ajusta este valor si crees que la partitura se está moviendo
         demasiado despacio o demasiado deprisa.
     </string>
+    
+    <!-- Navegación -->
+    <string name="navigate">Navegación</string>
+    <string name="navigate_top">Ir al principio</string>
+    <string name="navigate_bottom">Ir al final</string>
     	
     <string name="contentDescription">Image</string>
 
