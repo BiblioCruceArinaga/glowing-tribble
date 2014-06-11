@@ -2,13 +2,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.rising.drawing"
     android:versionCode="4"
-    android:versionName="@string/appversion" 
+    android:versionName="0.3.1" 
     android:configChanges="orientation|keyboardHidden"
     android:screenOrientation="portrait">
 
     <uses-sdk
         android:minSdkVersion="14"
-        android:targetSdkVersion="17" />
+        android:targetSdkVersion="19" />
     
     <supports-screens 
         android:smallScreens="false"
@@ -42,17 +42,7 @@
         android:label="@string/app_name"
         android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
         <!-- android:theme="@style/AppTheme"-->         
-        
-        
-        <activity android:name="com.rising.mainscreen.SearchActivity" >
-			<intent-filter>
-				<action android:name="android.intent.action.SEARCH" />
-			</intent-filter>
-		
-		<meta-data android:name="android.app.searchable"
-		android:resource="@xml/searchable"/>
-     	</activity>
-    
+            
 	<meta-data android:value="@string/facebook_app_id" android:name="com.facebook.sdk.ApplicationId"/>
        
      <!-- Login Activity -->
@@ -68,11 +58,11 @@
             android:theme="@style/AppBaseTheme">
         </activity>
         
-        <!-- Facebook Login -->
+        <!-- Facebook Login 
          <activity
             android:name="com.facebook.LoginActivity"
            	android:theme="@android:style/Theme.Translucent.NoTitleBar"
-            android:label="@string/app_name" />
+            android:label="@string/app_name" />-->
         
         <!-- Score Activity -->
         <activity
@@ -123,10 +113,6 @@
         <activity
             android:name="com.rising.store.SearchStoreActivity"
             android:theme="@style/Theme.Tabs"
-            android:label="@string/app_name"></activity>
-        
-        <activity
-            android:name="com.rising.mainscreen.PreferencesActivity"
             android:label="@string/app_name"></activity>
 
         <activity 

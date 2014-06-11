@@ -19,6 +19,7 @@ import android.util.Log;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.rising.drawing.R;
+import com.rising.login.Configuration;
 import com.rising.store.DownloadImages.OnDownloadICompleted;
 import com.rising.store.DownloadImages.OnDownloadIFailed;
 
@@ -26,7 +27,8 @@ public class DownloadScores extends AsyncTask<String, Integer, String>{
 	
 	// declare the dialog as a member field of your activity
 	ProgressDialog mProgressDialog;
-//  Comunicaci�n HTTP con el servidor
+	
+	//  Comunicaci�n HTTP con el servidor
 	HttpPost httppost;
 	HttpClient httpcliente;
 	private String path = "/.RisingScores/scores/";
@@ -34,6 +36,7 @@ public class DownloadScores extends AsyncTask<String, Integer, String>{
 	ImageLoader iml;
 	DownloadImages downloadimage;
 	String urlI;
+	Configuration conf;
 		
 	//  Contexto
 	Context context;
@@ -80,6 +83,7 @@ public class DownloadScores extends AsyncTask<String, Integer, String>{
  		mProgressDialog.setIndeterminate(true);
  		mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
  		mProgressDialog.setCancelable(true);
+ 		conf = new Configuration(ctx);
 	}
 	
 	public String FileNameURL(URL urlComplete){
@@ -100,7 +104,9 @@ public class DownloadScores extends AsyncTask<String, Integer, String>{
         PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
         PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, getClass().getName());
         wl.acquire();
-
+        
+        //new DownloadScoresEncrypter(context, sUrl[2]).CreateAndInsert(sUrl[0]);
+        
         try {
             InputStream input = null;
             OutputStream output = null;
@@ -109,11 +115,11 @@ public class DownloadScores extends AsyncTask<String, Integer, String>{
             try {
                 URL url = new URL(sUrl[0]);
                 urlI = sUrl[1];
-                downloadimage.execute(sUrl[1]);
+                downloadimage.execute(urlI);
                 connection = (HttpURLConnection) url.openConnection();
                 connection.connect();
-
-                // expect HTTP 200 OK, so we don't mistakenly save error report 
+                
+				// expect HTTP 200 OK, so we don't mistakenly save error report 
                 // instead of the file
                 if (connection.getResponseCode() != HttpURLConnection.HTTP_OK)
                      return "Server returned HTTP " + connection.getResponseCode() + " " + connection.getResponseMessage();
@@ -124,26 +130,33 @@ public class DownloadScores extends AsyncTask<String, Integer, String>{
 
                 // download the file
                 input = connection.getInputStream();
-                output = new FileOutputStream(Environment.getExternalStorageDirectory() + path + FileNameURL(url));
-
+                output = new FileOutputStream(Environment.getExternalStorageDirectory() + path + FileNameURL(url), true);
+                
                 byte data[] = new byte[4096];
                 long total = 0;
                 int count;
+                                
                 while ((count = input.read(data)) != -1) {
-                	
+                                	 
                     // allow canceling with back button
-                    if (isCancelled())
+                    if (isCancelled()){
+                    	input.close();
                         return null;
+                    }
                     total += count;
                     
                     // publishing the progress....
                     if (fileLength > 0) // only if total length is known
                         publishProgress((int) (total * 100 / fileLength));
+                    
+                    //Aquí iría el método de introducción del código de seguridad. Habría que pasarle a ese método el Id de la 
+                    //partitura y el Token del usuario 
+                     
                     output.write(data, 0, count);
                 }
             } catch (Exception e) {
-            	Log.e("Error descargar", e.getMessage());
-                return e.toString();
+            	e.getMessage();
+            	Log.e("Error descargar", e.getMessage());	
             } finally {
                 try {
                     if (output != null)

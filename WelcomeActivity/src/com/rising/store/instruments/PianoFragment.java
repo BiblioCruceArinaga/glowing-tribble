@@ -81,7 +81,6 @@ public class PianoFragment extends Fragment{
 		ibnc = new InfoBuyNetworkConnection(rootView.getContext());
 		
 		ibnc.execute(new Configuration(rootView.getContext()).getUserId());
-			
 		fm = getFragmentManager();
 					
 		return rootView;	

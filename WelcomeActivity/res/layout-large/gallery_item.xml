@@ -25,7 +25,6 @@
         android:textSize="30sp"
         android:textStyle="bold"
         android:textColor="#222"
-        android:text="RED"
         android:textAppearance="?android:attr/textAppearanceMedium" />
     
      <TextView
@@ -37,7 +36,6 @@
         android:gravity="center"
         android:textSize="20sp"
         android:textColor="#222"
-        android:text="Blue"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
      <!-- Este TextView está para que al seleccionar un objeto del gridview este se vea azul. No se me ocurrió nada mejor -->

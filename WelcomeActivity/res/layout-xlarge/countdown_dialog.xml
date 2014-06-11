@@ -13,7 +13,6 @@
         android:layout_gravity="center"
         android:gravity="center"
         android:background="@null"
-        android:text="5"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
 </LinearLayout>

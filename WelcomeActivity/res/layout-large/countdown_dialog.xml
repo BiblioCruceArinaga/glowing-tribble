@@ -13,7 +13,6 @@
         android:layout_gravity="center"
         android:gravity="center"
         android:background="@null"
-        android:text="5"
         android:layout_marginTop="-30dp"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 

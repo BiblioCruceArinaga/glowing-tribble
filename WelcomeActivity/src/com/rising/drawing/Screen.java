@@ -28,7 +28,7 @@ import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.Toast;
 
-class Screen extends SurfaceView implements SurfaceHolder.Callback {
+public class Screen extends SurfaceView implements SurfaceHolder.Callback {
 
 	private boolean isValidScreen = false;
 	private ObjectInputStream fichero = null;
@@ -75,8 +75,7 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback {
 		try {
 			this.context = context;
 			
-			File f = new File(Environment.getExternalStorageDirectory() + 
-					path_folder + path);
+			File f = new File(Environment.getExternalStorageDirectory() + path_folder + path);
 	        FileInputStream is = new FileInputStream(f);
 			fichero = new ObjectInputStream(is);
 			

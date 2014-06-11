@@ -1,13 +1,13 @@
 package com.rising.login;
 
-import com.rising.drawing.R;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Window;
+
+import com.rising.drawing.R;
 
 public class WelcomeActivity extends Activity{
 

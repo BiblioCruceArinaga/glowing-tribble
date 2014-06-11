@@ -22,12 +22,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.rising.store.PartituraTienda;
-
 import android.content.Context;
 import android.net.ParseException;
 import android.os.AsyncTask;
 import android.util.Log;
+
+import com.rising.store.PartituraTienda;
 
 public class PianoNetworkConnection extends AsyncTask<String, Integer, String>{
 
@@ -76,7 +76,6 @@ public class PianoNetworkConnection extends AsyncTask<String, Integer, String>{
         	
         	//params.add(user);
         	params.add(new BasicNameValuePair("Lenguaje", urls[0]));
-        	        	
         	HttpConnectionParams.setConnectionTimeout(httpParams, CONN_WAIT_TIME);
         	HttpConnectionParams.setSoTimeout(httpParams, CONN_DATA_WAIT_TIME);
         	httpclient = new DefaultHttpClient(httpParams);
@@ -111,7 +110,6 @@ public class PianoNetworkConnection extends AsyncTask<String, Integer, String>{
 	    }
 	    
 		try{
-			
 			int id;
 			String nombre;
 			String autor; 
@@ -170,11 +168,6 @@ public class PianoNetworkConnection extends AsyncTask<String, Integer, String>{
     	return "";
     }
     
-    // This is called each time you call publishProgress()
-    protected void onProgressUpdate(Integer... progress) {
-    	
-    }
-
     // This is called when doInBackground() is finished
     protected void onPostExecute(String result) {
     	if (listener != null) listener.onTaskCompleted();

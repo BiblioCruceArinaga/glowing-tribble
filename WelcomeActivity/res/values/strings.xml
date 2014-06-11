@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-<string name="appversion">0.3.1</string>
+	<string name="appversion">0.3.1</string>
 
     <!-- Pantalla Login -->
     <string name="app_name">Scores</string>
@@ -12,6 +12,7 @@
     <string name="registrate">If you\'re still not a user, Sign up now!</string>
     <string name="slogan">Scores of the future</string>
     <string name="facebook_app_id">1439111256308763</string>
+    <string name="beta">Beta</string>
         
    		<!-- Dialogo inicio sesión -->
     	<string name="mail">EMail</string>
@@ -25,7 +26,7 @@
     	<string name="confirm_login">Login</string>
     	<string name="cerrar_sesion">Logout</string>
     	<string name="close_d">Close</string>
-    	<string name="auth">Authenticating...</string>
+    	<string name="auth">Authenticating&#8230;</string>
     	
     	<!-- Dialogo olvido contraseña -->
     	<string name="olvido_title">Recover password</string>
@@ -53,7 +54,7 @@
 </string>
     	<string name="ok_reg">An email have been sent</string>
     	<string name="ok_reg_mail">﻿Registration is completed but could not send the confirmation email. We\'ll send it manually within a maximum of 24 hours.</string>
-    	<string name="creating_account">Creating your account...</string>
+    	<string name="creating_account">Creating your account&#8230;</string>
     	
 	<!-- Pantalla principal -->
     <string name="titulo_coleccion">My collection</string>
@@ -108,7 +109,7 @@ You can buy scores in our store.</string>
     	<string name="mis_datos_error_verif">We couldn\'t verify your identity</string>
     	<string name="mis_datos_clave_erronea">Incorrect password</string>
     	<string name="mis_datos_saldo">Credit:</string>
-    	<string name="try_change_pass">Trying to change your password. Please wait...</string>
+    	<string name="try_change_pass">Trying to change your password. Please wait&#8230;</string>
     
     <string name="feedback">Feedback</string>
     	<string name="feedback_envianos">
@@ -120,7 +121,7 @@ You can buy scores in our store.</string>
     
     <string name="terminos_condiciones">Terms and conditions</string>
     	<string name="terminos">
-    	    TERMS OF USE OF THE APPLICATION\n\n
+    	    TERMS OF USE OF THE APPLICATION\n\n;
 
 			1. ACCEPTANCE OF CONDITIONS OF USE\n\n
 			
@@ -337,7 +338,7 @@ You can buy scores in our store.</string>
     <!-- Pantalla tienda -->
     	<string name="store">Store</string>
     	<string name="masinfo">+ Info</string>
-    	<string name="pleasewait">Please, wait...</string>
+    	<string name="pleasewait">Please, wait&#8230;</string>
     	<string name="free">Free</string>
     	<string name="download">Download</string>
     	<string name="coin">€</string>
@@ -359,11 +360,12 @@ You can buy scores in our store.</string>
     	<string name="open">Open</string>
     	<string name="downloading">Downloading</string>
     	<string name="win_buy">You have received 0,01 credit!</string>
+    	<string name="no_space">You haven\'t got space enough in your device</string>
     	    	
     		<!-- Pantalla busqueda -->
     		<string name="list">List</string>
     		<string name="empty_result">No scores were found</string>
-    		<string name="searching">Searching...</string>
+    		<string name="searching">Searching&#8230;</string>
     		
     		<!-- Pantalla saldo -->
     		

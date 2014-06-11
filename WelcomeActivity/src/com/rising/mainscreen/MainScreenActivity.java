@@ -182,7 +182,7 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 		context = this;
 		session.checkLogin();
 		fid = session.getFacebookId();
-				
+		
 		createScoreFolder();
 		createImageFolder();
 		UpdateMoney(conf.getUserEmail());
@@ -312,6 +312,15 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 		@Override
 		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 			Log.i("Position", ficheros[position]);
+			
+			//new DownloadScoresEncrypter(ficheros[0], conf.getUserId()).DescryptAndConfirm(ficheros[position]);	
+			//Log.i("Ficheros", ""+ficheros[0]);
+			
+			/*if(new DownloadScoresEncrypter(context, ficheros[0]+conf.getUserId()).DescryptAndConfirm(ficheros[position])){
+				Toast.makeText(context, "Coincide. Se abre. Eres tu", Toast.LENGTH_LONG).show();
+			}else{
+				Toast.makeText(context, "Te vas a la mierda", Toast.LENGTH_LONG).show();
+			}*/
 			
 			Intent i = new Intent(MainScreenActivity.this, MainActivity.class);
 			i.putExtra("score", ficheros[position]);

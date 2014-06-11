@@ -68,11 +68,20 @@ public class MainActivityStore extends FragmentActivity implements OnQueryTextLi
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-				
+		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);				
 		setContentView(R.layout.activity_main_store);		
 		context = this;
 		conf = new Configuration(this);
+	
+    	ABar = getActionBar();
+    	ABar.setIcon(R.drawable.ic_menu);
+    	ABar.setTitle(R.string.store);
+    	ABar.setDisplayHomeAsUpEnabled(true); 
+    	ABar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS); 
+    	     	    	
+    	ABar.addTab(ABar.newTab().setText(R.string.piano).setTabListener(new TabListener(new PianoFragment())));
+    	ABar.addTab(ABar.newTab().setText(R.string.guitar).setTabListener(new TabListener(new GuitarFragment())));
+    	ABar.addTab(ABar.newTab().setText(R.string.free).setTabListener(new TabListener(new FreeFragment())));
 		
 		StartMoneyUpdate(conf.getUserEmail());
 		
@@ -87,17 +96,6 @@ public class MainActivityStore extends FragmentActivity implements OnQueryTextLi
 		ImageLoaderConfiguration config = new ImageLoaderConfiguration.
 		Builder(this).defaultDisplayImageOptions(options).build();
 		ImageLoader.getInstance().init(config);
-		
-		
-    	ABar = getActionBar();
-    	ABar.setIcon(R.drawable.ic_menu);
-    	ABar.setTitle(R.string.store);
-    	ABar.setDisplayHomeAsUpEnabled(true); 
-    	ABar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS); 
-    	     	    	
-    	ABar.addTab(ABar.newTab().setText(R.string.piano).setTabListener(new TabListener(new PianoFragment())));
-    	ABar.addTab(ABar.newTab().setText(R.string.guitar).setTabListener(new TabListener(new GuitarFragment())));
-    	ABar.addTab(ABar.newTab().setText(R.string.free).setTabListener(new TabListener(new FreeFragment())));
    	}
 	
 	public void StartMoneyUpdate(String user){

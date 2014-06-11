@@ -22,12 +22,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.rising.store.PartituraTienda;
-
 import android.content.Context;
 import android.net.ParseException;
 import android.os.AsyncTask;
 import android.util.Log;
+
+import com.rising.store.PartituraTienda;
 
 public class GuitarNetworkConnection extends AsyncTask<String, Integer, String>{
 

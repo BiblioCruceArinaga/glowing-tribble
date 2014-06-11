@@ -6,7 +6,6 @@ import android.app.Dialog;
 import android.content.pm.ActivityInfo;
 import android.graphics.Canvas;
 import android.graphics.Point;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -57,7 +56,6 @@ public class MainActivity extends Activity{
 		aBar.setTitle(R.string.score);	
 		aBar.setIcon(R.drawable.ic_menu);
 		aBar.setDisplayHomeAsUpEnabled(true);
-				
 	}
 	
 	@Override

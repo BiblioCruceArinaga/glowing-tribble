@@ -30,7 +30,6 @@
 			        android:layout_height="wrap_content"
 			        android:layout_marginTop="20dp"
 			        android:layout_marginRight="10dp"
-			        android:text="Sinfonía Nº6, 'Pastoral'"
 			        android:textColor="#222"
 			        android:textSize="20sp"
 			        android:textStyle="bold" />
@@ -42,7 +41,6 @@
 			        android:layout_marginTop="10dp"
 			        android:layout_marginRight="10dp"
 			        android:textStyle="italic"
-			        android:text="Ludwig Van Beethoven"
 			        android:textColor="#222"
 			        android:textSize="18sp" />
 	                    
@@ -53,7 +51,6 @@
 			        android:layout_marginTop="10dp"
 			        android:layout_marginRight="10dp"
 			        android:textSize="15sp" 
-			        android:text="1869"
 			        android:textColor="#222" />  
 	           
 	            <TextView
@@ -63,7 +60,6 @@
 			        android:layout_marginTop="10dp"
 			        android:layout_marginRight="10dp"
 			        android:textSize="15sp" 
-			        android:text="Piano"
 			        android:textColor="#222" />    
 	            
 	        </LinearLayout>
@@ -116,7 +112,6 @@
 	        android:layout_marginBottom="20dp"
 	        android:textColor="#222"
 	        android:textSize="15sp"
-	        android:text="Large Text"
 	        android:textAppearance="?android:attr/textAppearanceLarge" />
 	        
 	    </FrameLayout>

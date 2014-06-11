@@ -6,23 +6,36 @@
     android:orientation="vertical" >
     
     <TextView
-        android:id="@+id/misDatosNombre"
+        android:id="@+id/misDatosFacebookNombre"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="37dp"
+        android:layout_marginBottom="10dp"
         android:textColor="#222"
         android:textSize="20sp"
         android:text="@string/mis_datos_nombre" />
     
     <TextView
-        android:id="@+id/misDatosEmail"
+        android:id="@+id/misDatosFacebookEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
-        android:layout_marginTop="8dp"
-        android:textSize="20sp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
         android:textColor="#222"
+        android:textSize="20sp"
         android:text="@string/mis_datos_email" />
+    
+    <TextView 
+        android:id="@+id/misDatosFacebookSaldo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="37dp"
+        android:textColor="#222"
+        android:textSize="20sp"
+        android:text="@string/mis_datos_saldo" />
 
 </LinearLayout>

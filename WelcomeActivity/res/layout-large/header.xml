@@ -8,7 +8,6 @@
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Large Text"
         android:layout_marginRight="50dp"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
@@ -17,6 +16,7 @@
         android:layout_width="130dp"
         android:layout_height="50dp"
         android:background="@null"
+        android:contentDescription="@string/contentDescription"
         android:src="@drawable/back_button" />
 
     <ImageButton
@@ -24,6 +24,7 @@
         android:layout_width="130dp"
         android:layout_height="50dp"
         android:background="@null"
+        android:contentDescription="@string/contentDescription"
         android:src="@drawable/pause_button" />
 
     <ImageButton
@@ -31,6 +32,7 @@
         android:layout_width="130dp"
         android:layout_height="50dp"
         android:background="@null"
+        android:contentDescription="@string/contentDescription"
         android:src="@drawable/stop_button" />
 
     <TextView

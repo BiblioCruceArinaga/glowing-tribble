@@ -33,7 +33,6 @@
 		        android:ellipsize="end"
 		        android:maxLines="4"
 		        android:scrollHorizontally="true"
-		        android:text="Sinfonía Nº6, 'Pastoral'"
 		        android:textColor="#222"
 		        android:textSize="18sp"
 		        android:textStyle="bold" />
@@ -43,7 +42,6 @@
 		        android:layout_width="125dp"
 		        android:layout_height="wrap_content"
 		        android:layout_marginTop="30dp"
-		        android:text="Ludwig Van Beethoven"
 		        android:textColor="#222"
 		        android:textSize="13sp" />
            
@@ -53,7 +51,6 @@
 		        android:layout_height="wrap_content"
 		        android:layout_marginTop="10dp"
 		        android:textSize="13sp" 
-		        android:text="Piano"
 		        android:textColor="#222" />    
             
         </LinearLayout>
@@ -66,6 +63,7 @@
                 
     	<Button
 	        android:id="@+id/masInfo"
+	        style="?android:attr/buttonBarButtonStyle"
 	        android:layout_width="70dp"
 	        android:layout_height="35dp"
 	        android:background="@drawable/stores_buttons"
@@ -79,6 +77,7 @@
         
         <Button
 	        android:id="@+id/comprar"
+	        style="?android:attr/buttonBarButtonStyle"
 	        android:layout_width="70dp"
 	        android:layout_height="35dp"
 	        android:background="@drawable/stores_buttons"

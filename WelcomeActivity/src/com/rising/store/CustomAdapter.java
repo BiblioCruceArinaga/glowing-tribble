@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -57,7 +58,7 @@ public class CustomAdapter extends BaseAdapter {
 	private Button Confirm_Buy, Cancel_Buy, Buy_Money;
     private ArrayList<PartituraTienda> infoPartituras;
 	
-	String URL_Buy = "http://www.scores.rising.es/store-buyscore";
+    String URL_Buy = "http://www.scores.rising.es/store-buyscore";
 	public static DownloadScores download;
 	static String selectedURL = "";
 	static String imagenURL = "";
@@ -90,8 +91,13 @@ public class CustomAdapter extends BaseAdapter {
 		public void onBuyCompleted() {
 			((MainActivityStore) ctx).StartMoneyUpdate(conf.getUserEmail());
 			sbnc.execute(ID_BONIFICATION);
-			download.execute(selectedURL, imagenURL);
 			
+			if(spaceOnDisc()){
+				download.execute(selectedURL, imagenURL, String.valueOf(lista.get(selected).getNombre())+conf.getUserId());
+			}else{
+				new AlertDialog.Builder(ctx).setMessage(ctx.getString(R.string.no_space)).show();
+			}
+									
 			lista.get(selected).setComprado(true);	
 		}
 	};
@@ -114,6 +120,7 @@ public class CustomAdapter extends BaseAdapter {
 			notifyDataSetChanged();				
             Toast.makeText(ctx,R.string.okdownload, Toast.LENGTH_SHORT).show();            
             Log.i("Custom", "Archivo descargado");
+            Log.i("Space", Environment.getExternalStorageDirectory().getFreeSpace()+"");
 		}
 	};
 			
@@ -314,7 +321,11 @@ public class CustomAdapter extends BaseAdapter {
         			if(buscarArchivos(FileNameString(lista.get(position).getUrl()))){       	
         				AbrirFichero(ctx, FileNameString(lista.get(position).getUrl()));	
         			}else{
-	     				download.execute(lista.get(position).getUrl(), lista.get(position).getImagen());
+        				if(spaceOnDisc()){
+	     					download.execute(lista.get(position).getUrl(), lista.get(position).getImagen(), String.valueOf(lista.get(selected).getNombre())+conf.getUserId());
+        				}else{
+        					new AlertDialog.Builder(ctx).setMessage(ctx.getString(R.string.no_space)).show();
+        				}
         			}
         		}else{
         		        			
@@ -408,6 +419,14 @@ public class CustomAdapter extends BaseAdapter {
 		}
 	}
 		
+	public boolean spaceOnDisc(){
+		if(Environment.getExternalStorageDirectory().getFreeSpace() < 30000){
+			return false;
+		}else{
+			return true;
+		}
+	}
+	
 	// Método de filtrado
     public void filter(String charText){
     	
