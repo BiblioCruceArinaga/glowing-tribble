@@ -1,12 +1,10 @@
 package com.rising.drawing;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Point;
 import android.graphics.RectF;
 
 public class DrawingMethods {
@@ -22,7 +20,7 @@ public class DrawingMethods {
 	//  Variables para la gestión y el tratamiento dinámico de los múltiples compases
 	private int compas_margin_x = 0;
 	private int compas_margin_y = 0;
-	private ArrayList<Byte> clavesActuales = new ArrayList<Byte>();
+	private byte[] clavesActuales = {0, 0};
 	private Tempo tempoActual = null;
 	
 	private int compasActual = 0;
@@ -124,7 +122,7 @@ public class DrawingMethods {
 				octavarium = 1;
 
 		int y = obtenerPosicionYDeNota(nota, 
-				clavesActuales.get(nota.getPentagrama() - 1), partitura.getInstrument());
+				clavesActuales[nota.getPentagrama() - 1], partitura.getInstrument());
 		if (nota.notaDeGracia()) y += config.getMargenNotaGracia();
 		
 		if (octavarium > 0) {
@@ -163,10 +161,8 @@ public class DrawingMethods {
 		int numClefs = clefs.size();
 		int x_position = -1;
 		int numClavesEnElemento = -1;
-		boolean claveNormalTratada = false;
-
+		
 		for (int i=0; i<numClefs; i++) {
-			claveNormalTratada = false;
 
 			x_position = calcularPosicionX(compas.getPositions(), clefs.get(i).getPosition());
 			numClavesEnElemento = clefs.get(i).getValue(1);
@@ -185,11 +181,12 @@ public class DrawingMethods {
 					case 0:
 						Clave clave = new Clave();
 						clave.setImagenClave(obtenerImagenDeClave(claveByte));
-						clave.setX(compas_margin_x);
+						clave.setX(compas_margin_x + x_position);
 						clave.setY(marginY + obtenerPosicionYDeClave(claveByte));
+						clave.setPentagrama(pentagrama);
 						compas.addClave(clave);
 						
-						clavesActuales.add(claveByte);
+						clavesActuales[pentagrama - 1] = claveByte;
 						break;
 
 					case 1:
@@ -204,16 +201,7 @@ public class DrawingMethods {
 					default: 
 						break;
 				}
-
-				//  Se asume lo de abajo
-				if (alteracion == 0) claveNormalTratada = true;
 			}
-
-			//  Se asume que en un mismo compás nunca habrá una clave
-			//  y un octavarium al mismo tiempo. Si eso ocurriera, las
-			//  claves normales deberían mover la variable, pero los
-			//  octavarium no
-			if (claveNormalTratada) compas_margin_x += config.getAnchoClaves();
 		}
 	}
 	
@@ -297,6 +285,12 @@ public class DrawingMethods {
 				(config.getDistanciaPentagramas() + config.getDistanciaLineasPentagrama() * 4) * 
 				(partitura.getStaves() - 1));
 		
+		//  El diseño actual del código no permite una lectura
+		//  por orden de aparición en la partitura, lo que 
+		//  obliga a arreglar las posiciones de los elementos
+		//  antes y después de la aparición de una clave
+		compas.arreglarPosicionesPorClave(config.getUnidadDesplazamiento());
+		
 		if (compas.getXFin() > config.getXFinalPentagramas()) {
 			moverCompasAlSiguienteRenglon(compas);
 			
@@ -318,7 +312,7 @@ public class DrawingMethods {
 	private int calcularPosicionesDeNota(ArrayList<Integer> posiciones, Nota nota) {
 		int posicionX = nota.getPosicion();
 		int posicionY = 0;
-
+		
 		if (posicionX != -1) {
 			posicionX = calcularPosicionX(posiciones, posicionX);
 			posicionX += calcularDesplazamientoExtraNotaDeGracia(nota, posicionX);
@@ -403,79 +397,6 @@ public class DrawingMethods {
 		compas.setTexto(texto);
 	}
 
-	//  Cada elemento de un ArrayList debe ser un objeto independiente. Esto
-	//  significa que no se puede asignar un compás a un compás viejo directamente,
-	//  ya que en tal caso el array lo considerará como el mismo objeto antiguo.
-	//  Por eso hace falta esta función, que crea un nuevo objeto compás y le
-	//  pasa todos los datos contenidos en el compás viejo
-	private Compas clonarCompas(Compas compasViejo) {
-		Compas compasNuevo = new Compas();
-		
-		ArrayList<Nota> notas = compasViejo.getNotas();
-		int num = notas.size();
-		for (int i=0; i<num; i++) {
-			Nota nota = new Nota(
-					notas.get(i).getStep(), notas.get(i).getOctava(), notas.get(i).getFiguracion(),
-					notas.get(i).getBeam(), notas.get(i).getPlica(), notas.get(i).getVoz(),
-					notas.get(i).getPentagrama(), notas.get(i).getFigurasGraficas(),
-					notas.get(i).getPosicionArray()
-					);
-			compasNuevo.addNote(nota);
-		}
-		
-		ArrayList<ElementoGrafico> barlines = compasViejo.getBarlines();
-		num = barlines.size();
-		for (int i=0; i<num; i++) {
-			compasNuevo.addBarline(clonarElementoGrafico(barlines.get(i)));
-		}
-		
-		ArrayList<ElementoGrafico> clefs = compasViejo.getClefs();
-		num = clefs.size();
-		for (int i=0; i<num; i++) {
-			compasNuevo.addClef(clonarElementoGrafico(clefs.get(i)));
-		}
-		
-		compasNuevo.setRepeatBegin(compasViejo.getRepeatBegin());
-		compasNuevo.setRepeatEnd(compasViejo.getRepeatEnd());
-		compasNuevo.setEndingBegin(compasViejo.getEndingBegin());
-		compasNuevo.setEndingEnd(compasViejo.getEndingEnd());
-		compasNuevo.setEndingDis(compasViejo.getEndingDis());
-		
-		compasNuevo.setDynamics(clonarElementoGrafico(compasViejo.getDynamics()));
-		compasNuevo.setPedalStart(clonarElementoGrafico(compasViejo.getPedalStart()));
-		compasNuevo.setPedalStop(clonarElementoGrafico(compasViejo.getPedalStop()));
-		compasNuevo.setTime(clonarElementoGrafico(compasViejo.getTime()));
-		compasNuevo.setWords(clonarElementoGrafico(compasViejo.getWords()));
-		
-		compasNuevo.setXIni(compasViejo.getXIni());
-		compasNuevo.setXFin(compasViejo.getXFin());
-		compasNuevo.setYIni(compasViejo.getYIni());
-		compasNuevo.setYFin(compasViejo.getYFin());
-		
-		return compasNuevo;
-	}
-	
-	private ElementoGrafico clonarElementoGrafico(ElementoGrafico elementoViejo) {
-		if (elementoViejo == null) 
-			return null;
-		
-		else {
-			ElementoGrafico elementoNuevo = new ElementoGrafico();
-			
-			ArrayList<Byte> values = elementoViejo.getValues();
-			int numValues = values.size();
-			for (int i=0; i<numValues; i++) {
-				byte value = elementoViejo.getValue(i);
-				elementoNuevo.addValue(value);
-			}
-			
-			elementoNuevo.setPosition(elementoViejo.getPosition());
-			elementoNuevo.setX(elementoViejo.getX());
-			
-			return elementoNuevo;
-		}
-	}
-
 	private Tempo clonarTempo(Tempo tempoViejo) {
 		Tempo tempoNuevo = new Tempo();
 		
@@ -490,8 +411,7 @@ public class DrawingMethods {
 	}
 	
 	public ArrayList<OrdenDibujo> crearOrdenesDeDibujo() {
-		
-		desenrollarRepeticiones();
+
 		numerarCompases();
 		
 		//  Obra
@@ -520,48 +440,6 @@ public class DrawingMethods {
 		dibujarCompases();
 		return ordenesDibujo;
 	}
-	
-	//  Cambiamos la estructura de la partitura para que las repeticiones y endings
-	//  se muestren de corrido, de forma que no haya que dar saltos para leer la partitura
-	private void desenrollarRepeticiones() {
-		ArrayList<Compas> compases = partitura.getCompases();
-		ArrayList<Compas> nuevosCompases = new ArrayList<Compas>();
-		
-		int repeticionInicio = 0;
-		int repeticionFinal = 0;
-		int numCompases = compases.size();
-		
-		for (int i=0; i<numCompases; i++) {
-			nuevosCompases.add(clonarCompas(compases.get(i)));
-			
-			if (compases.get(i).getRepeatBegin()) {
-				repeticionInicio = i;
-				nuevosCompases.get(nuevosCompases.size() - 1).setRepeatBegin(false);
-			}
-			
-			if (compases.get(i).getRepeatEnd()) {
-				nuevosCompases.get(nuevosCompases.size() - 1).setRepeatEnd(false);
-				
-				repeticionFinal = i;
-				if (compases.get(i).hayEnding1()) {
-					repeticionFinal--;
-					nuevosCompases.get(nuevosCompases.size() - 1).setEndingBegin(false);
-					nuevosCompases.get(nuevosCompases.size() - 1).setEndingEnd(false);
-				}
-				
-				for (int j=repeticionInicio; j<=repeticionFinal; j++) {
-					nuevosCompases.add(clonarCompas(compases.get(j)));
-					
-					nuevosCompases.get(nuevosCompases.size() - 1).clearClefs();
-					nuevosCompases.get(nuevosCompases.size() - 1).setTime(null);
-					nuevosCompases.get(nuevosCompases.size() - 1).setWords(null);
-					nuevosCompases.get(nuevosCompases.size() - 1).setDynamics(null);
-				}
-			}
-		}
-		
-		partitura.setCompases(nuevosCompases);
-	}
 
 	private void inicializarTempo(Tempo tempo, int numerador, int denominador) {
 		tempo.setDibujar(true);
@@ -587,6 +465,15 @@ public class DrawingMethods {
 			compas.setXFin(config.getXFinalPentagramas());
 		compas.setXIniNotas(compas.getXIniNotas() - distancia_x);
 		
+		if (compas.hayClaves()) {
+			ArrayList<Clave> claves = compas.getClaves();
+ 
+			for (int i=0; i<claves.size(); i++) {
+				compas.getClave(i).setX(compas.getClave(i).getX() - distancia_x);
+				compas.getClave(i).setY(compas.getClave(i).getY() + distancia_y);
+			}
+		}
+ 		
 		if (compas.hayIntensidad()) {
 			compas.getIntensidad().setX(compas.getIntensidad().getX() - distancia_x);
 			compas.getIntensidad().setY(compas.getIntensidad().getY() + distancia_y);
@@ -1580,10 +1467,16 @@ public class DrawingMethods {
 	            compas.setXFin(posicionX);
 	            
 	            int numNotas = compas.numeroDeNotas();
-	            for (int j=0; j<numNotas; j++) {
+	            for (int j=0; j<numNotas; j++)
 	            	compas.getNota(j).setX(compas.getNota(j).getX() + anchoParaCadaCompas);
-	            }
 
+	            if (compas.hayClaves()) {
+	            	ArrayList<Clave> claves = compas.getClaves();
+	            	 
+	    			for (int j=0; j<claves.size(); j++)
+	    				compas.getClave(j).setX(compas.getClave(j).getX() + anchoParaCadaCompas);
+	            }
+	            
 	            if (compas.hayIntensidad())
 	            	compas.getIntensidad().setX(compas.getIntensidad().getX() + anchoParaCadaCompas);
 	            
@@ -1601,9 +1494,9 @@ public class DrawingMethods {
         //  Segundo paso: reajustar posición de las notas
         for (int i=primerCompas; i<=ultimoCompas; i++) {
         	Compas compas = partitura.getCompas(i);
-        	ArrayList<Integer> xsDelCompas = saberNumeroDeElementosDeCompas(compas);
+        	ArrayList<Integer> xsDelCompas = compas.saberNumeroDeElementosDeCompas();
         	
-        	int lastX = saberXMasGrande(compas);
+        	int lastX = compas.saberXMasGrande();
         	int anchoADistribuir = compas.getXFin() - config.getMargenDerechoCompases() - lastX;
         	
         	//  El primer elemento no lo vamos a mover, de ahí el -1
@@ -1629,9 +1522,16 @@ public class DrawingMethods {
         		multiplicador = xsDelCompas.indexOf(notas.get(j).getX());
     			notas.get(j).setX(notas.get(j).getX() + anchoPorNota * multiplicador);
         	}
+
+        	if (compas.hayClaves()) {
+            	ArrayList<Clave> claves = compas.getClaves();
+            	
+    			for (int j=0; j<claves.size(); j++) {
+    				multiplicador = xsDelCompas.indexOf(compas.getClave(j).getX());
+    				compas.getClave(j).setX(compas.getClave(j).getX() + anchoPorNota * multiplicador);
+    			}
+            }
         	
-        	//  Los elementos gráficos con una posición determinada
-        	//  deben reajustarse igual que las notas
         	if (compas.hayIntensidad()) {
         		multiplicador = xsDelCompas.indexOf(compas.getIntensidad().getX());
             	compas.getIntensidad().setX( 
@@ -1651,50 +1551,7 @@ public class DrawingMethods {
             }
         }
 	}
-	
-	//  Devuelve un array con cada valor de X de cada elemento
-	//  del compás. Por elemento se entiende cualquier nota o
-	//  acorde que ocupe una posición X única en el compás
-	private ArrayList<Integer> saberNumeroDeElementosDeCompas(Compas compas) {
-		ArrayList<Integer> xEncontradas = new ArrayList<Integer>();
-		
-		ArrayList<Nota> notas = compas.getNotas();
-		int numNotas = notas.size();
-		for (int i=0; i<numNotas; i++)
-			if (!xEncontradas.contains(notas.get(i).getX()))
-				xEncontradas.add(notas.get(i).getX());
-		
-		//  Figuras gráficas del compás con posiciones determinadas
-		//  independientes de las posiciones de las notas
-		if (compas.hayIntensidad())
-			if (!xEncontradas.contains(compas.getIntensidad().getX()))
-				xEncontradas.add(compas.getIntensidad().getX());
-		
-		if (compas.hayPedalInicio())
-			if (!xEncontradas.contains(compas.getPedalInicio().getX()))
-				xEncontradas.add(compas.getPedalInicio().getX());
-		
-		if (compas.hayPedalFin())
-			if (!xEncontradas.contains(compas.getPedalFin().getX()))
-				xEncontradas.add(compas.getPedalFin().getX());
-		
-		Collections.sort(xEncontradas);
-		return xEncontradas;
-	}
-	
-	//  Devuelve la posición X de la nota más cercana al margen derecho
-	private int saberXMasGrande(Compas compas) {
-		int xMasGrande = 0;
-		
-		ArrayList<Nota> notas = compas.getNotas();
-		int numNotas = notas.size();
-		for (int i=0; i<numNotas; i++) {
-			if (xMasGrande < notas.get(i).getX())
-				xMasGrande = notas.get(i).getX();
-		}
-		
-		return xMasGrande;
-	}
+
 	
 	/*
 	 * 

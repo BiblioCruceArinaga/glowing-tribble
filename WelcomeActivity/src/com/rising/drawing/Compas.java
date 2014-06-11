@@ -24,12 +24,6 @@ public class Compas {
 	private Pedal pedalFin;
 	private Tempo tempo;
 	private Texto texto;
-	
-	private boolean repeatBegin;
-    private boolean repeatEnd;
-    private boolean endingBegin;
-    private boolean endingEnd;
-    private boolean endingDis;
     
     //  Bpm y su posición en el array de órdenes de dibujo
     private int bpm;
@@ -60,12 +54,6 @@ public class Compas {
 		pedalFin = null;
 		tempo = null;
 		texto = null;
-		
-		repeatBegin = false;
-		repeatEnd = false;
-		endingBegin = false;
-		endingEnd = false;
-		endingDis = false;
 		
 		bpm = -1;
 		bpmIndex = -1;
@@ -99,10 +87,16 @@ public class Compas {
 		
 		if (!positions.contains(note.getPosicion())) 
 			positions.add(note.getPosicion());
-		
-		int i = 0;
-		if (i == 0) {
-			i++;
+	}
+	
+	public void arreglarPosicionesPorClave(int unidadDesplazamiento) {
+		for (int i=0; i<claves.size(); i++) {
+			int posicion = claves.get(i).getX();
+			
+			for (int j=0; j<notas.size(); j++) {
+				if (notas.get(j).getX() >= posicion)
+					notas.get(j).setX(notas.get(j).getX() + unidadDesplazamiento);
+			}
 		}
 	}
 	
@@ -122,6 +116,10 @@ public class Compas {
 		return bpmIndex;
 	}
 	
+	public Clave getClave(int index) {
+		return claves.get(index);
+	}
+	
 	public ArrayList<Clave> getClaves() {
 		return claves;
 	}
@@ -132,18 +130,6 @@ public class Compas {
 	
 	public ElementoGrafico getDynamics() {
 		return dynamics;
-	}
-	
-	public boolean getEndingBegin() {
-		return endingBegin;
-	}
-	
-	public boolean getEndingDis() {
-		return endingDis;
-	}
-	
-	public boolean getEndingEnd() {
-		return endingEnd;
 	}
 	
 	public Intensidad getIntensidad() {
@@ -181,14 +167,6 @@ public class Compas {
 	public ArrayList<Integer> getPositions() {
 		Collections.sort(positions);
 		return positions;
-	}
-	
-	public boolean getRepeatBegin() {
-		return repeatBegin;
-	}
-	
-	public boolean getRepeatEnd() {
-		return repeatEnd;
 	}
 	
 	public Tempo getTempo() {
@@ -288,19 +266,16 @@ public class Compas {
 		return !barlines.isEmpty();
 	}
 	
+	public boolean hayClaves() {
+		return !claves.isEmpty();
+	}
+	
 	public boolean hayClefs() {
 		return !clefs.isEmpty();
 	}
 	
 	public boolean hayDynamics() {
 		return dynamics != null;
-	}
-	
-	//  Esta implementación de los ending está asumiendo que los
-	//  ending son de un compás de ancho máximo, y también que sólo
-	//  habrá dos ending seguidos como mucho
-	public boolean hayEnding1() {
-		return endingBegin && endingEnd;
 	}
 	
 	public boolean hayIntensidad() {
@@ -355,6 +330,51 @@ public class Compas {
 		return tempo.numeroDePulsos();
 	}
 	
+	//  Devuelve un array con cada valor de X de cada elemento
+	//  del compás. Por elemento se entiende cualquier nota, 
+	//  acorde o figura gráfica que ocupe una posición X única en el compás
+	public ArrayList<Integer> saberNumeroDeElementosDeCompas() {
+		ArrayList<Integer> xEncontradas = new ArrayList<Integer>();
+
+		int numNotas = notas.size();
+		for (int i=0; i<numNotas; i++)
+			if (!xEncontradas.contains(notas.get(i).getX()))
+				xEncontradas.add(notas.get(i).getX());
+
+		if (hayClaves())
+			for (int i=0; i<claves.size(); i++)
+				if (!xEncontradas.contains(getClave(i).getX()))
+					xEncontradas.add(getClave(i).getX());
+		
+		if (hayIntensidad())
+			if (!xEncontradas.contains(getIntensidad().getX()))
+				xEncontradas.add(getIntensidad().getX());
+		
+		if (hayPedalInicio())
+			if (!xEncontradas.contains(getPedalInicio().getX()))
+				xEncontradas.add(getPedalInicio().getX());
+		
+		if (hayPedalFin())
+			if (!xEncontradas.contains(getPedalFin().getX()))
+				xEncontradas.add(getPedalFin().getX());
+		
+		Collections.sort(xEncontradas);
+		return xEncontradas;
+	}
+	
+	//  Devuelve la posición X de la nota más cercana al margen derecho
+	public int saberXMasGrande() {
+		int xMasGrande = 0;
+		
+		int numNotas = notas.size();
+		for (int i=0; i<numNotas; i++) {
+			if (xMasGrande < notas.get(i).getX())
+				xMasGrande = notas.get(i).getX();
+		}
+		
+		return xMasGrande;
+	}
+	
 	public void setBpm(int bpm) {
 		this.bpm = bpm;
 	}
@@ -369,18 +389,6 @@ public class Compas {
 		if (dynamics != null)
 			if (!positions.contains(dynamics.getPosition()))
 				positions.add(dynamics.getPosition());
-	}
-	
-	public void setEndingBegin(boolean endingBegin) {
-		this.endingBegin = endingBegin;
-	}
-	
-	public void setEndingDis(boolean endingDis) {
-		this.endingDis = endingDis;
-	}
-	
-	public void setEndingEnd(boolean endingEnd) {
-		this.endingEnd = endingEnd;
 	}
 	
 	public void setIntensidad(Intensidad intensidad) {
@@ -414,42 +422,7 @@ public class Compas {
 			if (!positions.contains(pedalStop.getPosition()))
 				positions.add(pedalStop.getPosition());
 	}
-	
-	public void setRepeatBegin(boolean repeatBegin) {
-		this.repeatBegin = repeatBegin;
-	}
-	
-	public void setRepeatEnd(boolean repeatEnd) {
-		this.repeatEnd = repeatEnd;
-	}
-	
-	public void setRepeatOrEnding(byte repeatOrEnding) {
-		switch (repeatOrEnding) {
-			case 1:
-				repeatBegin = true;
-				break;
-			case 2:
-				repeatEnd = true;
-				break;
-			case 3:
-				endingBegin = true;
-				break;
-			case 4:
-				endingEnd = true;
-				break;
-			case 5:
-				endingBegin = true;
-				endingEnd = true;
-				break;
-			case 6:
-				endingBegin = true;
-				endingDis = true;
-				break;
-			default:
-				break;
-		}
-	}
-	
+
 	public void setTempo(Tempo tempo) {
 		this.tempo = tempo;
 	}

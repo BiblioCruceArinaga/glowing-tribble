@@ -16,7 +16,6 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.media.AudioManager;
@@ -344,11 +343,6 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback, Observer {
 				elemento.addValue(fichero.readByte());
 				elemento.setPosition(leerHastaAlmohadilla());
 				compas.addBarline(elemento);
-				break;
-
-			case 29:
-				compas.setRepeatOrEnding(fichero.readByte());
-				leerHastaAlmohadilla();
 				break;
 
 			case 30:
