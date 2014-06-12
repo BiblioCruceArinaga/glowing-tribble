@@ -26,6 +26,7 @@
         android:background="@drawable/stores_buttons"
         android:layout_marginTop="50dp"
         android:text="@string/buy_credit"
+        android:textColor="#DDD"
         android:textSize="20sp" />
 
 </LinearLayout>

@@ -12,9 +12,9 @@ public class PartituraTienda {
 	private float precio;
 	private boolean comprado;
 	private String url;
-	//private Bitmap imagen;
+	private String imagen;
 		
-	public PartituraTienda(int id, String nombre, String autor, String instrumento, float precio, String description, int year, boolean comprado, String url) {
+	public PartituraTienda(int id, String nombre, String autor, String instrumento, float precio, String description, int year, boolean comprado, String url, String imagen) {
 		this.id = id;
 		this.nombre = nombre;
 		this.autor = autor;
@@ -24,7 +24,7 @@ public class PartituraTienda {
 		this.year = year;
 		this.comprado = comprado;
 		this.url = url;
-		//this.imagen = imagen;
+		this.imagen = imagen;
 	}
 	
 	public int getId() {
@@ -114,11 +114,11 @@ public class PartituraTienda {
 		this.url = url;
 	}
 	
-	/*public Bitmap getImage(){
+	public String getImagen() {
 		return imagen;
 	}
-	
-	public void setImage(Bitmap img){
-		this.imagen = img;
-	}*/
+
+	public void setImagen(String imagen) {
+		this.imagen = imagen;
+	}
 }

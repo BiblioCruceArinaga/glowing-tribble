@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.util.Log;
@@ -32,6 +33,7 @@ public class PianoFragment extends Fragment{
 	Configuration conf;
 	static InfoBuyNetworkConnection ibnc;
 	static ProgressDialog progressDialog;
+	FragmentManager fm;
 	
 	//Esto cargará todo aquello que dependa del hilo para ejecutarse, y que de no ser así no interesa que se ejecute
 	private OnTaskCompleted listener = new OnTaskCompleted() {
@@ -50,10 +52,10 @@ public class PianoFragment extends Fragment{
 	    	}	
 	    	
 	    	GridView pianoView = (GridView) rootView.findViewById(R.id.gV_piano_fragment);
-	    		    			    			    
+	    	
 		    pianoView.setAdapter(new CustomAdapter(getActivity(), partiturasPiano));
-		    	    
-		    onDestroyProgress();
+		    		  		    
+		    //onDestroyProgress();
 	    }	
 	};
 		
@@ -79,13 +81,8 @@ public class PianoFragment extends Fragment{
 		ibnc = new InfoBuyNetworkConnection(rootView.getContext());
 		
 		ibnc.execute(new Configuration(rootView.getContext()).getUserId());
-	
-		progressDialog = ProgressDialog.show(rootView.getContext(), "", getString(R.string.pleasewait));
-		
-		pnc = new PianoNetworkConnection(listen, listener, rootView.getContext());
-		
-		pnc.execute(Locale.getDefault().getDisplayLanguage());
-				
+		fm = getFragmentManager();
+					
 		return rootView;	
 	}
 	
@@ -102,6 +99,22 @@ public class PianoFragment extends Fragment{
 	    progressDialog = null;
 	}
 	
+	@Override
+	public void onResume() {
+		super.onResume();
+		
+		progressDialog = ProgressDialog.show(rootView.getContext(), "", getString(R.string.pleasewait));
+		pnc = new PianoNetworkConnection(listen, listener, rootView.getContext());
+		pnc.execute(Locale.getDefault().getDisplayLanguage());
+	}
+	
+	@Override
+	public void onPause() {
+		super.onPause();
+		
+		pnc.cancel(true);
+	}
+
 	//Método que cierra el hilo, cancela el ProgressDialog y abre el Dialog de error.
 	public void ConnectionExceptionHandle(){	
 		

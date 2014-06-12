@@ -27,6 +27,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
+import android.view.WindowManager;
 import android.widget.AbsListView.MultiChoiceModeListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -48,6 +49,7 @@ import com.rising.mainscreen.SendFeedback.OnSendingFeedback;
 import com.rising.money.MoneyUpdateConnectionNetwork;
 import com.rising.money.MoneyUpdateConnectionNetwork.OnFailMoney;
 import com.rising.money.MoneyUpdateConnectionNetwork.OnUpdateMoney;
+import com.rising.security.DownloadScoresEncrypter;
 import com.rising.store.MainActivityStore;
 
 public class MainScreenActivity extends Activity implements OnQueryTextListener{
@@ -57,8 +59,10 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 		
 	String[] ficheros;
 	String[][] infoFicheros;
-	String path = "/RisingScores/scores/";
+	String path = "/.RisingScores/scores/";
+	String image_path = "/.RisingScores/scores_images/";
 	private File f_toDelete;
+	private File f_image_toDelete;
 	private boolean delete;
 	HashMap<Integer, Boolean> mSelected;	
 	private ScoresAdapter s_adapter;
@@ -69,7 +73,7 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 	private Dialog MDialog;
 	private int fid;
 	Context context;
-	
+		
 	//  Recibir la señal del proceso que elimina la cuenta
 	private OnTaskCompleted listener = new OnTaskCompleted() {
 	    public void onTaskCompleted(int details) {       
@@ -168,9 +172,10 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);		
 		setContentView(R.layout.mainscreen_layout);
-		
+		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+				
 		mSelected = new HashMap<Integer, Boolean>();
 		conf = new Configuration(this);
 		session = new SessionManager(getApplicationContext());
@@ -180,8 +185,9 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 		fid = session.getFacebookId();
 		
 		createScoreFolder();
+		createImageFolder();
 		UpdateMoney(conf.getUserEmail());
-		 
+				
 		ActionBar action = getActionBar();
 		action.setTitle(R.string.titulo_coleccion);
 		action.setIcon(R.drawable.ic_menu);
@@ -206,11 +212,16 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 		return ficherosLength;
 	}	
 	
+	public String ficheroAImagen(String fichero){
+		String imagenFichero = fichero.substring(0, fichero.lastIndexOf("."));
+		return imagenFichero + ".jpg";
+	}
+	
 	public void interfazCuandoHayPartituras(final String[] ficheros){
 		infoFicheros = darInfoFicheros(ficheros);
 		
 		for (int i = 0; i < ficherosLength(); i++){
-			 Score ss = new Score(infoFicheros[1][i], infoFicheros[0][i], R.drawable.cover, infoFicheros[2][i]);
+			 Score ss = new Score(infoFicheros[1][i], infoFicheros[0][i], infoFicheros[3][i], infoFicheros[2][i]);
 			 arraylist.add(ss);
 		}
 		s_adapter = new ScoresAdapter(this, arraylist);
@@ -219,114 +230,82 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 		scores_gallery.setAdapter(s_adapter);
 		scores_gallery.setChoiceMode(GridView.CHOICE_MODE_MULTIPLE_MODAL);
 		numScores = scores_gallery.getCount();
-						
+							
 		scores_gallery.setMultiChoiceModeListener(new MultiChoiceModeListener(){
+
+			String[] ficheros2 = ficheros;
 			
 		@Override
-		public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-				
-			// Este método dirige las acciones de los botones de la barra superior
-			switch(item.getItemId()){
-		   	   	case R.id.discard:
-		   	   		List<Score> elementosAEliminar = new ArrayList<Score>();
-		   	   		
-		   	   		for(int i = 0; i < mSelected.size(); i++){
-		   	   			if(mSelected.get(i)){
-		   	   				f_toDelete = new File(Environment.getExternalStorageDirectory() + 
-		  	   						"/RisingScores/scores/" + ficheros[i]);
-		   	     	   		
-		   	   				Log.d("Path", f_toDelete.getAbsolutePath());
-		    	   				
-		   	   				if(f_toDelete.exists()){
-		    	   				if(f_toDelete.delete()){
-		    	   					elementosAEliminar.add(s_adapter.getItem(i));
-		    	   					delete = true;
-		    	   				}else{
-		    	   					delete = false;
-		    	   					break;
-		    	   				}
-		   	   				}else{
-		   	   					Log.e("Archivo", "El archivo no existe");
-		   	   				}			
-		   	   			}
-		   	   		}
-		   	   		
-		   	   		//  Hay que eliminarlos todos de golpe, si no el valor num�rico de los �ndices
-		   	   		//  cambia con cada iteraci�n y salta un IndexOutOfBoundsException
-		   	   		s_adapter.removeAllSelected(elementosAEliminar);
-		   	   		numScores = scores_gallery.getCount();
-		   	   		
-		   	   		if(delete){
-		   	   			Toast.makeText(getApplicationContext(), R.string.successDelete, Toast.LENGTH_SHORT).show();
-    	   			}else{
-    	   				Toast.makeText(getApplicationContext(), R.string.failDelete, Toast.LENGTH_SHORT).show();
-    	   			}
-    	   				
-		       		if (s_adapter.isEmpty()) {
-		       			interfazCuandoNoHayPartituras();
-		       		}
-
-			        return true; 
-
-		   	   	case R.id.s_all:
-		   	   		for(int i = 0; i < numScores; i++) {
-		   	   			scores_gallery.setItemChecked(i, true);
-		    	   	}
-			        return true;
-			             
-		   	   	case R.id.s_none:
-		    		for(int i = 0; i < numScores; i++) {
-		    			scores_gallery.setItemChecked(i, false);
-		    		}
-		    	   	return true;     
+			public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+					
+				// Este método dirige las acciones de los botones de la barra superior
+				switch(item.getItemId()){
+			   	   	case R.id.discard:
+			   	   		borrarElementos(ficheros2);
+			       		mode.finish();
+				        return true; 
+	
+			   	   	case R.id.s_all:
+			   	   		for(int i = 0; i < numScores; i++) {
+			   	   			scores_gallery.setItemChecked(i, true);
+			    	   	}
+				        return true;
+				             
+			   	   	case R.id.s_none:
+			    		for(int i = 0; i < numScores; i++) {
+			    			scores_gallery.setItemChecked(i, false);
+			    		}
+			    	   	return true;     
+				}
+	
+		        return false;
 			}
-
-	        return false;
-		}
-
-		@Override
-		public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-			MenuInflater inflater = mode.getMenuInflater();
-			inflater.inflate(R.menu.modal_details, menu);
-			mode.setTitle(R.string.title);
-	        mode.setSubtitle(R.string.subtitle);
-	        return true;
-		}
-
-		@Override
-		public void onDestroyActionMode(ActionMode mode) {
-		}
-
-		@Override
-		public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-			return true;
-		}
-
-		@Override
-		public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
+	
+			@Override
+			public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+				Log.i("Eso", "Aquí1");
+				MenuInflater inflater = mode.getMenuInflater();
+				inflater.inflate(R.menu.modal_details, menu);
+				mode.setTitle(R.string.title);
+		        mode.setSubtitle(R.string.subtitle);
+		        ficheros2 = leeFicheros();
+		        Log.i("Eso", "Aquí2");
+		        return true;
+			}
+	
+			@Override
+			public void onDestroyActionMode(ActionMode mode) {
+			}
+	
+			@Override
+			public boolean onPrepareActionMode(ActionMode mode, Menu menu) {			
+				return true;
+			}
+	
+			@Override
+			public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
 													
-			//Este método dirige lo que pasa en la pantalla del menú contextual 
-			int selectCount = scores_gallery.getCheckedItemCount();
-	        switch (selectCount) {
-	        	case 1:
-	        		mode.setSubtitle(R.string.subtitle);
-		               		                
-		            break;
-	        	default:
-	        		mode.setSubtitle(selectCount + " partituras seleccionadas");
-		               		                
-		            break; 
-	        }
-	            
-	        if(checked){
-	           	mSelected.put(position, checked);
-	        }else{
-	           	mSelected.remove(position);
-	           	mSelected.put(position, false);
-	        }
-	            
-	        Log.i("Estado", position + ": " + mSelected.get(position));
-		}
+				//Este método dirige lo que pasa en la pantalla del menú contextual 
+				int selectCount = scores_gallery.getCheckedItemCount();
+				
+		        switch (selectCount) {
+		        	case 1:
+		        		mode.setSubtitle(R.string.subtitle);
+			            break;
+		        	default:
+		        		mode.setSubtitle(selectCount + " " + getString(R.string.subtitle2));
+			            break; 
+		        }
+		            
+		        if(checked){
+		           	mSelected.put(position, checked);
+		        }else{
+		           	mSelected.remove(position);
+		           	mSelected.put(position, false);
+		        }
+		        
+		        Log.i("Estado", position + ": " + mSelected.get(position));
+			}
 	});
 		
 		scores_gallery.setOnItemClickListener(new OnItemClickListener(){
@@ -334,11 +313,21 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 		@Override
 		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 			Log.i("Position", ficheros[position]);
-				
+			
+			//new DownloadScoresEncrypter(context, ficheros[0]+conf.getUserId()).DescryptAndConfirm(ficheros[position]);	
+			Log.i("Ficheros", ""+ficheros[0]+conf.getUserId());
+			
+			if(new DownloadScoresEncrypter(context, ficheros[0]+conf.getUserId()).DescryptAndConfirm(ficheros[position])){
+				Toast.makeText(context, "Coincide. Se abre. Eres tu", Toast.LENGTH_LONG).show();
+			}else{
+				Toast.makeText(context, "Te vas a la mierda", Toast.LENGTH_LONG).show();
+			}
+			
 			Intent i = new Intent(MainScreenActivity.this, MainActivity.class);
 			i.putExtra("score", ficheros[position]);
-				
+					
 			startActivity(i);
+			
 		}
 	});
 	
@@ -352,7 +341,7 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 	    searchView.setOnQueryTextListener(this);
 		return true;			
 	}
-
+	
 	@Override
 	public boolean onQueryTextChange(String newText) {
 		if (s_adapter != null) s_adapter.filter(newText);
@@ -600,7 +589,48 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 	}
 	
 	private void createScoreFolder(){
-		File file=new File(Environment.getExternalStorageDirectory() + "/RisingScores/scores/");
+		File file=new File(Environment.getExternalStorageDirectory() + path);
+        if(!file.exists()) {
+            boolean res = file.mkdirs();
+            if (!res) {
+            	if (!file.isDirectory()) {
+            		createScoreFolderInternal();
+            	}
+            }
+        }
+	}
+	
+	//Si falla la creación en el directorio externo
+	public void createScoreFolderInternal(){
+		File file=new File(Environment.getRootDirectory() + path);
+        if(!file.exists()) {
+            boolean res = file.mkdirs();
+            
+            if (!res) {
+            	if (!file.isDirectory()) {
+            		
+            		//  No se pudo crear el directorio, muy probablemente por los permisos
+            		Toast.makeText(getApplicationContext(), R.string.error_folder, Toast.LENGTH_LONG).show();
+            	}
+            }
+        }
+	} 
+	
+	public void createImageFolder(){
+		File file=new File(Environment.getExternalStorageDirectory() + image_path);
+        if(!file.exists()) {
+            boolean res = file.mkdirs();
+            if (!res) {
+            	if (!file.isDirectory()) {
+            		createImageFolderInternal();
+            	}
+            }
+        }
+	}
+	
+	//Si falla la creación en el directorio externo
+	public void createImageFolderInternal(){
+		File file=new File(Environment.getRootDirectory() + image_path);
         if(!file.exists()) {
             boolean res = file.mkdirs();
             if (!res) {
@@ -620,7 +650,7 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 		return lista;
 	}
 	
-	//  Extrae el autor, el nombre y el instrumento de
+	//  Extrae el autor, el nombre, la imagen y el instrumento de
 	//  todas las partituras existentes en el dispositivo
 	private String[][] darInfoFicheros(String[] ArrayScores) {
 		String[][] res;
@@ -629,19 +659,21 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 		if (ArrayScores != null) len = ArrayScores.length;
 		else len = 0;
 		
-		res = new String[3][len];
+		res = new String[4][len];
 		
 		for(int i=0; i < len; i++){
 			String[] dataSplit = ArrayScores[i].split("_");
-			
+			//String imagenFichero = ArrayScores[i].substring(0, ArrayScores[i].lastIndexOf("."));
+					
 			res[0][i] = dataSplit[0].replace("-", " ");	//  Nombre de la obra
 			res[1][i] = dataSplit[1].replace("-", " ");	//  Autor
 			res[2][i] = dataSplit[2].substring(0, dataSplit[2].indexOf("."));	//  Instrumento
+			res[3][i] = ficheroAImagen(ArrayScores[i]);	// Imagen
 		}
 		
 		return res;
 	}
-	
+		
 	private void interfazCuandoNoHayPartituras() {
 		TextView textoColeccionVacia = (TextView) findViewById(R.id.textoColeccionVacia);
 		textoColeccionVacia.setVisibility(0);
@@ -654,9 +686,9 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 					Intent i = new Intent(MainScreenActivity.this, MainActivityStore.class);
 					startActivity(i);
 				}				
-			}
-			
+			}	
 		});
+		
 		tienda.setVisibility(0);
 		scores_gallery = (GridView) findViewById(R.id.gV_scores);
 		scores_gallery.setVisibility(8);
@@ -678,7 +710,7 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 		}
 	}
 	
-	private void listarInstrumentos() {
+	private void listarInstrumentos() {	
 		if (s_adapter != null) {
 			int size = s_adapter.getCount();
 			
@@ -720,22 +752,46 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 		infoFicheros = darInfoFicheros(ficheros);
 				
 		for (int i = 0; i < ficheros.length; i++){
-			Score ss = new Score(infoFicheros[1][i], infoFicheros[0][i], R.drawable.scores_image, infoFicheros[2][i]);
+			Score ss = new Score(infoFicheros[1][i], infoFicheros[0][i], null, infoFicheros[2][i]);
 			
 			// Binds all strings into an array
 			arraylist.add(ss);
 		}
 	}
 
-	/*
-	private Bitmap imagen(){
-		File imgFile = new  File(Environment.getExternalStorageDirectory() 
-			+ "/RisingScores/scores/paraelisa.png");
-		if(imgFile.exists()){
-			Log.d("¿Existe?", "Sí");
-		    Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-		    return myBitmap;
-		}
-		return null;
-	}*/	
+	public void borrarElementos(String[] ficheros2){
+		List<Score> elementosAEliminar = new ArrayList<Score>();
+	   		
+	   		for(int i = 0; i < ficherosLength(); i++){
+	   					   	   			
+	   			if(mSelected.containsKey(i)){
+	   				f_toDelete = new File(Environment.getExternalStorageDirectory() + path + ficheros2[i]);	
+	   				f_image_toDelete = new File(Environment.getExternalStorageDirectory() + image_path + ficheroAImagen(ficheros2[i]));
+	   				if(f_toDelete.exists() && f_image_toDelete.exists()){
+	   				if(f_toDelete.delete() && f_image_toDelete.delete()){
+	   					elementosAEliminar.add(s_adapter.getItem(i));
+	   					delete = true;
+	   				}else{
+	   					delete = false;
+	   					break;
+	   				}
+	   				}		
+	   			}
+	   		}
+	   		
+	   		s_adapter.removeAllSelected(elementosAEliminar);
+	   		numScores = scores_gallery.getCount();
+	   		
+	   		if(delete){
+	   			Toast.makeText(getApplicationContext(), R.string.successDelete, Toast.LENGTH_LONG).show();
+			}else{
+				Toast.makeText(getApplicationContext(), R.string.failDelete, Toast.LENGTH_LONG).show();
+			}
+				
+   		if (s_adapter.isEmpty()) {
+   			interfazCuandoNoHayPartituras();
+   		}
+   		mSelected.clear();
+	}
+	
 }

@@ -1,12 +1,13 @@
 package com.rising.mainscreen;
 
+
 public class Score implements Comparable<Object> {
     private String Author;
   	private String Title;
   	private String Instrument;
-    private int image;
+    private String image;
  
-    public Score(String Author, String Title, int image, String Instrument) {
+    public Score(String Author, String Title, String image, String Instrument) {
         this.Author = Author;
         this.Title = Title;
         this.Instrument = Instrument;
@@ -37,11 +38,11 @@ public class Score implements Comparable<Object> {
 		Instrument = instrument;
 	}
 	
-    public int getImage() {
+    public String getImage() {
         return this.image;
     }
     
-	public void setImage(int image) {
+	public void setImage(String image) {
 		this.image = image;
 	}
 

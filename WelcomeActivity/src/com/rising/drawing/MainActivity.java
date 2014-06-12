@@ -47,6 +47,8 @@ public class MainActivity extends Activity{
 	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);	
+		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);		
+		
 		Bundle b = this.getIntent().getExtras();
 		score = b.getString("score");
 
@@ -54,6 +56,11 @@ public class MainActivity extends Activity{
 		aBar.setTitle(R.string.score);	
 		aBar.setIcon(R.drawable.ic_menu);
 		aBar.setDisplayHomeAsUpEnabled(true);
+	}
+	
+	@Override
+	public void onResume(){
+		super.onResume();
 		
 		DisplayMetrics dm = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(dm);
@@ -63,8 +70,12 @@ public class MainActivity extends Activity{
 			myScreenThread = new ScreenThread(holder, s);
 			config = s.getConfig();
 		}
-		
-		setContentView(s);
+		setContentView(s);	
+	}
+	
+	@Override
+	protected void onPause() {
+		super.onPause();	
 	}
 	
 	@Override
@@ -114,7 +125,7 @@ public class MainActivity extends Activity{
 		MDialog.setContentView(R.layout.metronome_dialog);
 		MDialog.setTitle(R.string.metronome);	
 		MDialog.getWindow().setLayout(config.getAnchoDialogBpm(), config.getAltoDialogBpm());
-
+		
 		seekBar_metronome = (SeekBar)MDialog.findViewById(R.id.seekBar_metronome);
 		numeros_checkbox = (CheckBox)MDialog.findViewById(R.id.cB_metronome);
 		metronome_speed = (NumberPicker)MDialog.findViewById(R.id.nm_metronome);
@@ -165,11 +176,12 @@ public class MainActivity extends Activity{
 				
 				tempo = metronome_speed.getValue();
 								
-				if(numeros_checkbox.isChecked()){
+				//Aquí, en vez de los números deben ir las lineas
+				/*if(numeros_checkbox.isChecked()){
 					numeros_bip = true;
 				}else{
 					numeros_bip = false;
-				}
+				}*/
 				
 				if ( (tempo > 0) && (tempo < 301) ) {
 					MainActivity.this.startActionMode(new ActionBarCallBack());
@@ -291,7 +303,7 @@ public class MainActivity extends Activity{
         }
   
         @Override
-        public void onDestroyActionMode(ActionMode mode) {}
+        public void onDestroyActionMode(ActionMode mode) { }
   
         @Override
         public boolean onPrepareActionMode(ActionMode mode, Menu menu) {

@@ -19,7 +19,7 @@
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Beta"
+        android:text="@string/beta"
         android:layout_gravity="right"
         android:gravity="right"
         android:layout_marginRight="10dp"
@@ -47,7 +47,7 @@
     <Button
         android:id="@+id/button_login"
         android:background="@drawable/back_buttons"
-        android:layout_width="250dp"
+        android:layout_width="280dp"
         android:layout_height="50dp"
         android:gravity="center"
         android:layout_marginTop="50dp"
@@ -58,9 +58,8 @@
     
     <com.facebook.widget.LoginButton
        	android:id="@+id/button_login_f"
-        android:layout_width="250dp"
+        android:layout_width="280dp"
         android:layout_height="50dp"
-        android:gravity="center"
         android:layout_gravity="center"
         android:layout_marginTop="10dp" />
      
@@ -79,8 +78,8 @@
     	android:id="@+id/b_registro"
         android:background="@drawable/back_buttons"
         android:text="@string/registro"
-        android:layout_width="250dp"
-        android:layout_height="50dp"
+        android:layout_width="280dp"
+        android:layout_height="60dp"
         android:gravity="center"
         android:layout_marginTop="10dp"
         android:layout_gravity="center"

@@ -44,14 +44,15 @@ public class SessionManager {
 	public SessionManager(Context context){
 		this.context = context;
 		sPref = context.getSharedPreferences(PREF_NAME, PRIVATE_MODE);
-		//FLButton = new LoginButton(context, null);
-		editor = sPref.edit();
+		//editor = sPref.edit();
 	}
 	
 	/**
 	 * Create login session
 	 * */
 	public void createLoginSession(String email, String name, String fid){
+		editor = sPref.edit();
+		
 		// Storing login value as TRUE
 		editor.putBoolean(IS_LOGIN, true);
 		

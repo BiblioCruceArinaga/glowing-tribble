@@ -13,6 +13,7 @@
     <string name="registrate">Si no eres usuario, ¡Registrate ya!</string>
     <string name="slogan">Las partituras del futuro</string>
     <string name="facebook_app_id">1439111256308763</string>
+    <string name="beta">Beta</string>
         
    		<!-- Dialogo inicio sesión -->
     	<string name="mail">Correo electrónico</string>
@@ -26,7 +27,7 @@
     	<string name="confirm_login">Iniciar</string>
     	<string name="cerrar_sesion">Cerrar Sesión</string>
     	<string name="close_d">Cerrar</string>
-    	<string name="auth">Autentificando...</string>
+    	<string name="auth">Autentificando&#8230;</string>
     	
     	<!-- Dialogo olvido contraseña -->
     	<string name="olvido_title">Recuperar contraseña</string>
@@ -54,7 +55,7 @@
     	<string name="ok_reg">Se ha enviado un correo electrónico</string>
     	<string name="ok_reg_mail">Se completó el registro pero no se pudo enviar el email de 
     	    confirmación. Te lo enviaremos manualmente en un plazo máximo de 24 horas.</string>
-    	<string name="creating_account">Creando tu cuenta...</string>
+    	<string name="creating_account">Creando tu cuenta&#8230;</string>
     	
 	<!-- Pantalla principal -->
     <string name="titulo_coleccion">Mi colección</string>
@@ -90,10 +91,10 @@
     	<string name="metronome_back">Volver al inicio</string>
     	<string name="close_metronome">Cerrar metrónomo</string>
     	<string name="tempo">Tempo</string>
-        <string name="score">Score</string>
+        <string name="score">Scores</string>
     	<string name="speed_allowed">Velocidad mínima: 1 bpm. Velocidad máxima: 300 bpm.</string>
     	<string name="visual_help">Contar con ayuda visual</string>
-    	
+        	
     <string name="contentDescription">Imagen</string>
 
     <!-- Menú principal contextual -->
@@ -109,7 +110,7 @@
     	<string name="mis_datos_error_verif">No hemos podido verificar su identidad</string>
     	<string name="mis_datos_clave_erronea">Contraseña incorrecta</string>
     	<string name="mis_datos_saldo">Saldo:</string>
-    	<string name="try_change_pass">Intentando cambiar tu contraseña. Por favor, espera...</string>
+    	<string name="try_change_pass">Intentando cambiar tu contraseña. Por favor, espera&#8230;</string>
     
     <string name="feedback">Feedback</string>
     	<string name="feedback_envianos">
@@ -349,7 +350,7 @@
     
     <!-- Pantalla tienda -->
     	<string name="store">Tienda</string>
-    	<string name="pleasewait">Por favor, espera...</string>
+    	<string name="pleasewait">Por favor, espera&#8230;</string>
     	<string name="masinfo">+ Info</string>
     	<string name="free">Gratis</string>
     	<string name="download">Descargar</string>
@@ -372,11 +373,12 @@
     	<string name="open">Abrir</string>
     	<string name="downloading">Descargando</string>
     	<string name="win_buy">¡Has recibido 0,01 crédito!</string>
+    	<string name="no_space">No tienes espacio suficiente en tu dispositivo</string>
     	
     		<!-- Pantalla busqueda -->
     		<string name="list">Lista</string>
     		<string name="empty_result">No se encontraron partituras</string>
-    		<string name="searching">Buscando...</string>
+    		<string name="searching">Buscando&#8230;</string>
     	
     		<!-- Pantalla saldo -->
     			

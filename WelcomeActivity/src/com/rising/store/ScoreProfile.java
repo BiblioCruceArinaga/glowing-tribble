@@ -2,6 +2,7 @@ package com.rising.store;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -17,6 +18,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
@@ -25,14 +27,23 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
+import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
+import com.nostra13.universalimageloader.utils.DiskCacheUtils;
+import com.nostra13.universalimageloader.utils.MemoryCacheUtils;
 import com.rising.conexiones.HttpPostAux;
 import com.rising.drawing.MainActivity;
 import com.rising.drawing.R;
 import com.rising.login.Configuration;
+import com.rising.money.MoneyActivity;
 import com.rising.store.BuyNetworkConnection.OnBuyCompleted;
 import com.rising.store.BuyNetworkConnection.OnBuyFailed;
 import com.rising.store.DownloadScores.OnDownloadCompleted;
@@ -52,10 +63,13 @@ public class ScoreProfile extends Activity{
 	private float price;
 	private boolean comprado;
 	private String urlD;
+	private String URL_Image;
 	static String selectedURL = "";
 	private String path = "/RisingScores/scores/";//Implementar sistema anti piratería
 	Dialog BDialog, NMDialog;
 	Button Confirm_Buy, Cancel_Buy, Buy_Money;
+	private ImageLoader iml;
+	private Button B_Price;
 		
 	String Id_User = "";
 	String Id_Score = "";
@@ -71,7 +85,7 @@ public class ScoreProfile extends Activity{
 	private HttpPostAux HPA =  new HttpPostAux();
 	
 	// declare the dialog as a member field of your activity
-	ProgressDialog mProgressDialog;
+	ProgressDialog mProgressDialog, Image_PDialog;
 	
 	private OnBuyCompleted buyComplete = new OnBuyCompleted(){
 
@@ -96,11 +110,11 @@ public class ScoreProfile extends Activity{
 	private OnDownloadCompleted listenerDownload = new OnDownloadCompleted(){
 		@Override
 		public void onDownloadCompleted() {
-			Intent i = new Intent(ScoreProfile.this, MainActivityStore.class);
-			startActivity(i);
-			finish();
-		}
-		
+			
+			B_Price.setText(R.string.open);
+			Toast.makeText(ctx,R.string.okdownload, Toast.LENGTH_SHORT).show();            
+            Log.i("Custom", "Archivo descargado");
+		}		
 	};
 	
 	private OnDownloadFailed failedDownload = new OnDownloadFailed(){
@@ -115,9 +129,13 @@ public class ScoreProfile extends Activity{
 		super.onCreate(savedInstanceState);
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		setContentView(R.layout.score_profile_layout);
+		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		
 		ctx = this;
 		download = new DownloadScores(listenerDownload, failedDownload, this);
 		bnc = new BuyNetworkConnection(buyComplete, failedBuy, this);		
+		iml = ImageLoader.getInstance();
+		Image_PDialog = ProgressDialog.show(ctx, "", getString(R.string.pleasewait));
 		
 		mProgressDialog = new ProgressDialog(ScoreProfile.this);
 		mProgressDialog.setMessage(getString(R.string.downloading));
@@ -135,6 +153,7 @@ public class ScoreProfile extends Activity{
 		description = b.getString("description");
 		comprado = b.getBoolean("comprado");
 		urlD = b.getString("url");
+		URL_Image = b.getString("url_imagen");
 		
 		ActionBar ABar = getActionBar();
     	
@@ -142,21 +161,78 @@ public class ScoreProfile extends Activity{
     	ABar.setIcon(R.drawable.ic_menu);
     	ABar.setDisplayHomeAsUpEnabled(true);
 		
-		TextView TV_Name = (TextView) findViewById(R.id.nombrePartitura_profile);
-		TextView TV_Author = (TextView) findViewById(R.id.autorPartitura_profile);
-		TextView TV_Year = (TextView) findViewById(R.id.anoPartitura_profile);
-		TextView TV_Instrument = (TextView) findViewById(R.id.instrumentoPartitura_profile);
-		Button B_Price = (Button) findViewById(R.id.comprar_profile);
-		TextView TV_Description = (TextView) findViewById(R.id.tv_description_profile);
-		//ImageView IV_Partitura = (ImageView) findViewById(R.id.imagenPartitura_profile);
-				
-		//  Cambiamos el texto de los TextView por el de la partitura seleccionada 
-		TV_Name.setText(name);
-		TV_Author.setText(author);
-		TV_Year.setText(year);
-		TV_Instrument.setText(instrument);
-		TV_Description.setText(description);
+		final TextView TV_Name = (TextView) findViewById(R.id.nombrePartitura_profile);
+		final TextView TV_Author = (TextView) findViewById(R.id.autorPartitura_profile);
+		final TextView TV_Year = (TextView) findViewById(R.id.anoPartitura_profile);
+		final TextView TV_Instrument = (TextView) findViewById(R.id.instrumentoPartitura_profile);
+		B_Price = (Button) findViewById(R.id.comprar_profile);
+		final TextView TV_Description = (TextView) findViewById(R.id.tv_description_profile);
+		ImageView IV_Partitura = (ImageView) findViewById(R.id.imagenPartitura_profile);
+						
+	//  Cambiamos el texto de los TextView por el de la partitura seleccionada 
+		TV_Name.setText("");
+		TV_Author.setText("");
+		TV_Year.setText("");
+		TV_Instrument.setText("");
+		TV_Description.setText("");
+        		
+		DisplayImageOptions options = new DisplayImageOptions.Builder()
+        .showImageOnLoading(R.drawable.cover)
+        .showImageForEmptyUri(R.drawable.cover)
+        .showImageOnFail(R.drawable.cover)
+        .cacheInMemory(true)
+        .considerExifParams(true)
+        .displayer(new RoundedBitmapDisplayer(10))
+        .build();
+               
+		iml.displayImage(URL_Image, IV_Partitura, options, new SimpleImageLoadingListener(){
+	       	 boolean cacheFound;
+
+	            @Override
+	            public void onLoadingStarted(String url, View view) {
+	                List<String> memCache = MemoryCacheUtils.findCacheKeysForImageUri(url, ImageLoader.getInstance().getMemoryCache());
+	                cacheFound = !memCache.isEmpty();
+	                if (!cacheFound) {
+	                    File discCache = DiskCacheUtils.findInCache(url, ImageLoader.getInstance().getDiskCache());
+	                    if (discCache != null) {
+	                        cacheFound = discCache.exists();
+	                    }
+	                }
+	            }
+
+	            @Override
+	            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+	                if (cacheFound) {
+	                    MemoryCacheUtils.removeFromCache(imageUri, ImageLoader.getInstance().getMemoryCache());
+	                    DiskCacheUtils.removeFromCache(imageUri, ImageLoader.getInstance().getDiskCache());
+
+	                    ImageLoader.getInstance().displayImage(imageUri, (ImageView) view);
+	                }
+	            //  Cambiamos el texto de los TextView por el de la partitura seleccionada 
+	        		TV_Name.setText(name);
+	        		TV_Author.setText(author);
+	        		TV_Year.setText(year);
+	        		TV_Instrument.setText(instrument);
+	        		TV_Description.setText(description);
+	                Image_PDialog.dismiss();
+	            }
+	       });
+		
+		//iml.displayImage(URL_Image, IV_Partitura, options);	
+		
+		IV_Partitura.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				Intent i = new Intent(ctx, ImageActivity.class);
+				i.putExtra("imagen", URL_Image);
+				ctx.startActivity(i);
+			}
 			
+		});
+		
+		
+		
 		if(comprado){
 			if(buscarArchivos(FileNameString(urlD))){
 				B_Price.setText(R.string.open);
@@ -202,7 +278,7 @@ public class ScoreProfile extends Activity{
         				AbrirFichero(ctx, FileNameString(urlD));				
         			}else{
         				     				
-	     				download.execute(urlD);
+	     				download.execute(urlD, URL_Image);
         			}  				
         			     				
      				mProgressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
@@ -251,12 +327,8 @@ public class ScoreProfile extends Activity{
 				
 										@Override
 										public void onClick(View v) {
-											/************************************************************************/
-											/*======================================================================
-										 			Terminar cuando se implemente el growth hacking
-										  	=====================================================================*/
-											/***********************************************************************/
-											
+											Intent i = new Intent(ctx, MoneyActivity.class);
+											startActivity(i);
 										}
 											
 									});

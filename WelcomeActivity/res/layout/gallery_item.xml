@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="270dp"
+    android:layout_height="220dp"
     android:background="@android:color/transparent"
     android:layout_marginBottom="5dp"
     android:layout_marginTop="5dp">
@@ -9,18 +9,25 @@
     <ImageView
         android:id="@+id/iV_score"
         android:layout_width="match_parent"
-        android:layout_height="270dp"
-		android:layout_marginLeft="5dp"
-		android:layout_marginRight="5dp"
+        android:layout_height="250dp"
         android:layout_gravity="bottom"
         android:gravity="bottom"
-        android:background="?android:attr/activatedBackgroundIndicator"
+       	android:background="?android:attr/activatedBackgroundIndicator"
         android:contentDescription="@string/contentDescription" />
 
+     <!-- Esta TextView sirve de fondo para que pueda ser más legible las letras del título y autor -->
+     <!-- <TextView
+        android:id="@+id/fondo"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center" 
+        android:gravity="center"
+        android:background="#8F999999" /> -->
+    
     <TextView
         android:id="@+id/tV_score_title"
         android:layout_width="wrap_content"
-        android:layout_height="270dp"
+        android:layout_height="200dp"
 		android:layout_marginTop="-50dp"
 		android:layout_marginLeft="10dp"
 		android:layout_marginRight="10dp"
@@ -28,22 +35,31 @@
         android:gravity="center"
         android:textSize="25sp"
         android:textStyle="bold"
-        android:textColor="#222"
-        android:text="RED"
+        android:textColor="#111"
         android:textAppearance="?android:attr/textAppearanceMedium" />
     
      <TextView
         android:id="@+id/tV_score_author"
         android:layout_width="wrap_content"
-        android:layout_height="270dp"
+        android:layout_height="200dp"
         android:layout_marginLeft="10dp"
 		android:layout_marginRight="10dp"
 		android:layout_marginBottom="-50dp"
         android:layout_gravity="center"
         android:gravity="center"
         android:textSize="20sp"
-        android:textColor="#222"
-        android:text="Blue"
+        android:textColor="#111"
         android:textAppearance="?android:attr/textAppearanceMedium" />
+     
+     <!-- Este TextView está para que al seleccionar un objeto del gridview este se vea azul. No se me ocurrió nada mejor -->
+     <TextView
+        android:id="@+id/selector"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:background="?android:attr/activatedBackgroundIndicator" />
+     
+
 
 </FrameLayout>

@@ -21,7 +21,6 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
-import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.NumberPicker;
 import android.widget.NumberPicker.OnScrollListener;
@@ -29,13 +28,14 @@ import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.Toast;
 
-class Screen extends SurfaceView implements SurfaceHolder.Callback {
+public class Screen extends SurfaceView implements SurfaceHolder.Callback {
 
 	private boolean isValidScreen = false;
 	private ObjectInputStream fichero = null;
 	private ScreenThread thread;
 	private Context context = null;
 	private Config config = null;
+	private String path_folder = "/.RisingScores/scores/";
 
 	private Partitura partitura = new Partitura();
 	private Compas compas = new Compas();
@@ -75,8 +75,7 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback {
 		try {
 			this.context = context;
 			
-			File f = new File(Environment.getExternalStorageDirectory() + 
-					"/RisingScores/scores/" + path);
+			File f = new File(Environment.getExternalStorageDirectory() + path_folder + path);
 	        FileInputStream is = new FileInputStream(f);
 			fichero = new ObjectInputStream(is);
 			

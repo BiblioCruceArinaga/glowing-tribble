@@ -12,10 +12,15 @@ import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.WindowManager;
 import android.widget.SearchView;
 import android.widget.SearchView.OnQueryTextListener;
 import android.widget.Toast;
 
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.rising.drawing.R;
 import com.rising.login.Configuration;
 import com.rising.mainscreen.MainScreenActivity;
@@ -63,12 +68,11 @@ public class MainActivityStore extends FragmentActivity implements OnQueryTextLi
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);				
 		setContentView(R.layout.activity_main_store);		
 		context = this;
 		conf = new Configuration(this);
-		
-		StartMoneyUpdate(conf.getUserEmail());
-		
+	
     	ABar = getActionBar();
     	ABar.setIcon(R.drawable.ic_menu);
     	ABar.setTitle(R.string.store);
@@ -78,6 +82,20 @@ public class MainActivityStore extends FragmentActivity implements OnQueryTextLi
     	ABar.addTab(ABar.newTab().setText(R.string.piano).setTabListener(new TabListener(new PianoFragment())));
     	ABar.addTab(ABar.newTab().setText(R.string.guitar).setTabListener(new TabListener(new GuitarFragment())));
     	ABar.addTab(ABar.newTab().setText(R.string.free).setTabListener(new TabListener(new FreeFragment())));
+		
+		StartMoneyUpdate(conf.getUserEmail());
+		
+		DisplayImageOptions options = new DisplayImageOptions.Builder()
+        .showImageOnLoading(R.drawable.cover)
+        .showImageForEmptyUri(R.drawable.cover)
+        .showImageOnFail(R.drawable.cover)
+        .cacheInMemory(true).considerExifParams(true)
+        .displayer(new RoundedBitmapDisplayer(10)).build();
+		
+		// Create global configuration and initialize ImageLoader with this configuration
+		ImageLoaderConfiguration config = new ImageLoaderConfiguration.
+		Builder(this).defaultDisplayImageOptions(options).build();
+		ImageLoader.getInstance().init(config);
    	}
 	
 	public void StartMoneyUpdate(String user){

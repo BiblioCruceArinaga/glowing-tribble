@@ -59,7 +59,7 @@ public class GuitarFragment extends Fragment{
 	    	
 		    guitarView.setAdapter(new CustomAdapter(context, partiturasGuitar));
 		      		    
-		    onDestroyProgress();
+		    //onDestroyProgress();
 	    } 	
 	};
 	
@@ -85,18 +85,29 @@ public class GuitarFragment extends Fragment{
 		ibnc = new InfoBuyNetworkConnection(rootView.getContext());
 		
 		ibnc.execute(new Configuration(rootView.getContext()).getUserId());
-		
-		progressDialog = ProgressDialog.show(rootView.getContext(), "", getString(R.string.pleasewait));
-				
-		gnc = new GuitarNetworkConnection(listen, listener, rootView.getContext());
-		
-		gnc.execute(Locale.getDefault().getDisplayLanguage());
-						
+								
 		fm = getFragmentManager();
 		
 		return rootView;
 	}
 
+	@Override
+	public void onResume() {
+		super.onResume();
+		
+		progressDialog = ProgressDialog.show(rootView.getContext(), "", getString(R.string.pleasewait));
+		
+		gnc = new GuitarNetworkConnection(listen, listener, rootView.getContext());
+		
+		gnc.execute(Locale.getDefault().getDisplayLanguage());
+	}
+	
+	@Override
+	public void onPause() {
+		super.onPause();
+		
+		gnc.cancel(true);
+	}
 	
 	//Cierra el ProgressDialog en el caso de que lo haya. 
 	public void onDestroyProgress() {				

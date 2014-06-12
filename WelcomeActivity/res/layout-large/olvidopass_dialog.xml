@@ -24,17 +24,6 @@
         android:orientation="horizontal" >
 
         <Button
-            android:id="@+id/b_confirm_olpass"
-            style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="0dp"
-            android:layout_height="70dp"
-            android:textColor="#EEE"
-            android:background="@drawable/stores_buttons"
-            android:textSize="30sp"
-            android:layout_weight="1"
-            android:text="@string/confirm_olvidopass" />
-
-        <Button
             android:id="@+id/b_cancel_olpass"
             style="?android:attr/buttonBarButtonStyle"
             android:layout_width="0dp"
@@ -44,6 +33,17 @@
             android:textSize="30sp"
             android:layout_weight="1"
             android:text="@string/cancel" />
+        
+        <Button
+            android:id="@+id/b_confirm_olpass"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="0dp"
+            android:layout_height="70dp"
+            android:textColor="#EEE"
+            android:background="@drawable/stores_buttons"
+            android:textSize="30sp"
+            android:layout_weight="1"
+            android:text="@string/confirm_olvidopass" />
 
     </LinearLayout>
 </LinearLayout>

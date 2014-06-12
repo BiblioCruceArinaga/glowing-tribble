@@ -56,18 +56,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal" >
-
-        <Button
-            android:id="@+id/b_confirm_reg"
-            style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="0dp"
-            android:layout_height="70dp"
-            android:textColor="#EEE"
-            android:background="@drawable/stores_buttons"
-            android:textSize="30sp"
-            android:layout_weight="1"
-            android:text="@string/confirm_registro" />
-
+        
         <Button
             android:id="@+id/b_cancel_reg"
             style="?android:attr/buttonBarButtonStyle"
@@ -78,6 +67,17 @@
             android:textSize="30sp"
             android:layout_weight="1"
             android:text="@string/cancel" />
+            
+        <Button
+            android:id="@+id/b_confirm_reg"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="0dp"
+            android:layout_height="70dp"
+            android:textColor="#EEE"
+            android:background="@drawable/stores_buttons"
+            android:textSize="30sp"
+            android:layout_weight="1"
+            android:text="@string/confirm_registro" />
 
     </LinearLayout>
         

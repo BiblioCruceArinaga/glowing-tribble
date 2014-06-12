@@ -16,25 +16,51 @@ import android.os.AsyncTask;
 import android.os.Environment;
 import android.os.PowerManager;
 import android.util.Log;
-import android.widget.Toast;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.rising.drawing.R;
+import com.rising.login.Configuration;
+import com.rising.security.DownloadScoresEncrypter;
+import com.rising.store.DownloadImages.OnDownloadICompleted;
+import com.rising.store.DownloadImages.OnDownloadIFailed;
 
 public class DownloadScores extends AsyncTask<String, Integer, String>{
 	
 	// declare the dialog as a member field of your activity
 	ProgressDialog mProgressDialog;
-//  Comunicaci�n HTTP con el servidor
+	
+	//  Comunicaci�n HTTP con el servidor
 	HttpPost httppost;
 	HttpClient httpcliente;
-	private String path = "/RisingScores/scores/";
+	private String path = "/.RisingScores/scores/";
 	String URL_connect = "http://www.scores.rising.es/store-buyscore";
-	
+	ImageLoader iml;
+	DownloadImages downloadimage;
+	String urlI;
+	Configuration conf;
+		
 	//  Contexto
 	Context context;
 	
 	//  Informaci�n obtenida de la base de datos
 	String res;
+	
+	private OnDownloadICompleted successdownloadimages = new OnDownloadICompleted(){
+
+		@Override
+		public void onDownloadICompleted() {
+			Log.i("Éxito", "Descarga correcta de la imagen");
+		}		
+	};
+	
+	private OnDownloadIFailed faildownloadimages = new OnDownloadIFailed(){
+
+		@Override
+		public void onDownloadIFailed() {
+			downloadimage.resourceToBitmap(urlI);
+			Log.i("Fracaso", "Descarga incorrecta de la imagen");
+		}		
+	};
 	
 	public interface OnDownloadCompleted{
         void onDownloadCompleted();
@@ -52,11 +78,13 @@ public class DownloadScores extends AsyncTask<String, Integer, String>{
 		this.context = ctx;
 		this.listenerDownload = listener;
 		this.failedDownload = failed;
+		downloadimage = new DownloadImages(successdownloadimages, faildownloadimages, context);
 		mProgressDialog = new ProgressDialog(ctx);
-		mProgressDialog.setMessage("Descargando");
+		mProgressDialog.setMessage(ctx.getString(R.string.downloading));
  		mProgressDialog.setIndeterminate(true);
  		mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
  		mProgressDialog.setCancelable(true);
+ 		conf = new Configuration(ctx);
 	}
 	
 	public String FileNameURL(URL urlComplete){
@@ -68,7 +96,7 @@ public class DownloadScores extends AsyncTask<String, Integer, String>{
 		
 		return name;
 	}	
-		
+			
 	@Override
     protected String doInBackground(String... sUrl) {
     	
@@ -77,7 +105,9 @@ public class DownloadScores extends AsyncTask<String, Integer, String>{
         PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
         PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, getClass().getName());
         wl.acquire();
-
+        
+        new DownloadScoresEncrypter(context, sUrl[2]).CreateAndInsert(sUrl[0]);
+        
         try {
             InputStream input = null;
             OutputStream output = null;
@@ -85,10 +115,12 @@ public class DownloadScores extends AsyncTask<String, Integer, String>{
             
             try {
                 URL url = new URL(sUrl[0]);
+                urlI = sUrl[1];
+                downloadimage.execute(urlI);
                 connection = (HttpURLConnection) url.openConnection();
                 connection.connect();
-
-                // expect HTTP 200 OK, so we don't mistakenly save error report 
+                
+				// expect HTTP 200 OK, so we don't mistakenly save error report 
                 // instead of the file
                 if (connection.getResponseCode() != HttpURLConnection.HTTP_OK)
                      return "Server returned HTTP " + connection.getResponseCode() + " " + connection.getResponseMessage();
@@ -99,26 +131,33 @@ public class DownloadScores extends AsyncTask<String, Integer, String>{
 
                 // download the file
                 input = connection.getInputStream();
-                output = new FileOutputStream(Environment.getExternalStorageDirectory() 
-                		+ path + FileNameURL(url));
-
+                output = new FileOutputStream(Environment.getExternalStorageDirectory() + path + FileNameURL(url), true);
+                
                 byte data[] = new byte[4096];
                 long total = 0;
                 int count;
+                                
                 while ((count = input.read(data)) != -1) {
-                	
+                                	 
                     // allow canceling with back button
-                    if (isCancelled())
+                    if (isCancelled()){
+                    	input.close();
                         return null;
+                    }
                     total += count;
                     
                     // publishing the progress....
                     if (fileLength > 0) // only if total length is known
                         publishProgress((int) (total * 100 / fileLength));
+                    
+                    //Aquí iría el método de introducción del código de seguridad. Habría que pasarle a ese método el Id de la 
+                    //partitura y el Token del usuario 
+                     
                     output.write(data, 0, count);
                 }
             } catch (Exception e) {
-                return e.toString();
+            	e.getMessage();
+            	Log.e("Error descargar", e.getMessage());	
             } finally {
                 try {
                     if (output != null)
@@ -131,7 +170,7 @@ public class DownloadScores extends AsyncTask<String, Integer, String>{
                 if (connection != null)
                     connection.disconnect();
             }
-            
+             
         } finally {
             wl.release();
         }
@@ -157,21 +196,15 @@ public class DownloadScores extends AsyncTask<String, Integer, String>{
 	@Override
 	protected void onPostExecute(String result) {
 	    mProgressDialog.dismiss();
+	    Log.i("Download", "Se acaba de cerrar el dialog");
 	    
 	    //Podr�an sustituirse por Dialogs. 
         if (result != null){
-        	
         	if(failedDownload != null) failedDownload.onDownloadFailed();
-        	        	
-        	//Un dialog con los botones "Volver a intentar" y "Cancelar"
-            Toast.makeText(context,R.string.errordownload, Toast.LENGTH_LONG).show();
         	Log.e("Error descarga", "Error descarga: " + result);
         }else{ 
+        	Log.i("Download", "Listener Good");
         	if (listenerDownload != null) listenerDownload.onDownloadCompleted();
-        	        	
-        	//Un dialog con los botones "Abrir partitura" y "Ok"
-            Toast.makeText(context,R.string.okdownload, Toast.LENGTH_SHORT).show();
-            Log.i("Descarga", "Archivo descargado");		            
         }
 	}
 
