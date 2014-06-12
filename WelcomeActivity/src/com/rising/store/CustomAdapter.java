@@ -262,7 +262,6 @@ public class CustomAdapter extends BaseAdapter {
 	        	holder.botonCompra.setText(lista.get(position).getPrecio() + "");
 	        	holder.botonCompra.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.money_ico, 0);
 	        }
-	    	
 	    }        
  		
  		//Dialog que pregunta al usuario si quiere comprar la partitura

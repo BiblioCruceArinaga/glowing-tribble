@@ -20,6 +20,7 @@ import android.util.Log;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.rising.drawing.R;
 import com.rising.login.Configuration;
+import com.rising.security.DownloadScoresEncrypter;
 import com.rising.store.DownloadImages.OnDownloadICompleted;
 import com.rising.store.DownloadImages.OnDownloadIFailed;
 
@@ -105,7 +106,7 @@ public class DownloadScores extends AsyncTask<String, Integer, String>{
         PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, getClass().getName());
         wl.acquire();
         
-        //new DownloadScoresEncrypter(context, sUrl[2]).CreateAndInsert(sUrl[0]);
+        new DownloadScoresEncrypter(context, sUrl[2]).CreateAndInsert(sUrl[0]);
         
         try {
             InputStream input = null;

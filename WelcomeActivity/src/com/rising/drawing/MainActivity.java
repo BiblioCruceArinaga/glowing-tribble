@@ -70,7 +70,6 @@ public class MainActivity extends Activity{
 			myScreenThread = new ScreenThread(holder, s);
 			config = s.getConfig();
 		}
-		
 		setContentView(s);	
 	}
 	
@@ -304,7 +303,7 @@ public class MainActivity extends Activity{
         }
   
         @Override
-        public void onDestroyActionMode(ActionMode mode) {}
+        public void onDestroyActionMode(ActionMode mode) { }
   
         @Override
         public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
