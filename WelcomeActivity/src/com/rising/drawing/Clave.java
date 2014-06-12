@@ -4,18 +4,24 @@ import android.graphics.Bitmap;
 
 public class Clave {
 	
-	public Bitmap imagenClave;
-	public int x;
-	public int y;
+	private Bitmap imagenClave;
+	private int x;
+	private int y;
+	private byte pentagrama;
 	
 	public Clave() {
 		imagenClave = null;
 		x = -1;
 		y = -1;
+		pentagrama = -1;
 	}
 	
 	public Bitmap getImagenClave() {
 		return imagenClave;
+	}
+	
+	public byte getPentagrama() {
+		return pentagrama;
 	}
 	
 	public int getX() {
@@ -28,6 +34,10 @@ public class Clave {
 	
 	public void setImagenClave(Bitmap imagenClave) {
 		this.imagenClave = imagenClave;
+	}
+	
+	public void setPentagrama(byte pentagrama) {
+		this.pentagrama = pentagrama;
 	}
 	
 	public void setX(int x) {

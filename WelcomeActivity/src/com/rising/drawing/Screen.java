@@ -7,12 +7,17 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.StreamCorruptedException;
 import java.util.ArrayList;
+import java.util.Observable;
+import java.util.Observer;
 
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.Path;
 import android.graphics.Rect;
+import android.graphics.RectF;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Environment;
@@ -41,6 +46,14 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback {
 	private Compas compas = new Compas();
 	private ArrayList<OrdenDibujo> ordenesDibujo = new ArrayList<OrdenDibujo>();
 	
+	//  Gestión de la lectura de micrófono
+	private SoundReader soundReader = null;
+	private int compasActual = 0;
+	private int golpeSonidoActual = 0;
+	private int yActual = 0;
+	private int desplazamiento = 0;
+	private boolean primerDesplazamientoHecho = false;
+	
 	//  Metrónomo y su gestión
 	private Metronomo metronomo = null;
 	private OrdenDibujo bip = null;
@@ -64,7 +77,7 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback {
     private static float yOffset = 0;
     private float yPrevious = 0;
     private float yDown = 0;
-	
+    
 	//  ========================================
 	//  Constructor y métodos heredados
 	//  ========================================
@@ -90,7 +103,7 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback {
 				ordenesDibujo = metodosDibujo.crearOrdenesDeDibujo();
 				isValidScreen = true;
 			}
-			
+		
 		} catch (FileNotFoundException e) {
 			Log.i("FileNotFoundException: ", e.getMessage() + "\n");
 		} catch (StreamCorruptedException e) {
@@ -129,6 +142,8 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback {
 		
 		ordenesDibujo.clear();
 		ordenesDibujo = null;
+		
+		stopMicrophone();
 		
 		altoPantalla = 0;
 		canvasDependentDataRecovered = false;
@@ -220,7 +235,7 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback {
 	//  ========================================
 	private void cargarDatosDeFichero() throws IOException {
 		leerDatosBasicosDePartitura();
-
+		
 		byte byteLeido = fichero.readByte();
 		while (byteLeido != -128) {
 			
@@ -240,7 +255,7 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback {
 			}
 			
 			byteLeido = fichero.readByte();
-		}	
+		}
 	}
 
 	public Config getConfig() {
@@ -280,12 +295,14 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback {
 		byte staves = fichero.readByte();
 		byte instrument = fichero.readByte();
 		ArrayList<Byte> divisions = leerHastaAlmohadilla();
+		int numeroCompas = fichero.readByte();
 		
 		partitura.setWork(work);
 		partitura.setCreator(creator);
 		partitura.setStaves(staves);
 		partitura.setInstrument(instrument);
 		partitura.setDivisions(divisions);
+		partitura.setFirstNumber(numeroCompas);
 	}
 	
 	private void leerFiguraGraficaCompas() throws IOException {
@@ -327,11 +344,6 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback {
 				elemento.addValue(fichero.readByte());
 				elemento.setPosition(leerHastaAlmohadilla());
 				compas.addBarline(elemento);
-				break;
-
-			case 29:
-				compas.setRepeatOrEnding(fichero.readByte());
-				leerHastaAlmohadilla();
 				break;
 
 			case 30:
@@ -434,7 +446,17 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback {
 							ordenDibujo.getY1(), ordenDibujo.getPaint());
 					break;
 				case DRAW_ARC:
-					canvas.drawArc(ordenDibujo.getRectF(), 0, -180, false, ordenDibujo.getPaint());
+					
+					RectF rectf = ordenDibujo.getRectF();
+					Matrix matrix = getMatrix(rectf, ordenDibujo.getAngulo());
+					
+					Path path = new Path();
+					path.addArc(rectf, 0, -180);
+					path.transform(matrix, path);
+					
+					canvas.drawPath(path, ordenDibujo.getPaint());
+					
+					//canvas.drawArc(ordenDibujo.getRectF(), 0, -180, false, ordenDibujo.getPaint());
 					break;
 				default:
 					break;
@@ -455,16 +477,47 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback {
     	canvas.drawLine(x_end, offsetBarraLateral - yOffset, 
     			x_end, offsetBarraLateral + tamanoBarraLateral - yOffset, paint);
     }
+	
+	//  La rotación de una matriz produce una traslación
+	//  involuntaria e indeseada que debemos contrarrestar
+	//  manualmente para que el resultado quede bien.
+	//  Además, aquí controlamos que la rotación
+	//  se haga en el sentido adecuado
+	public Matrix getMatrix(RectF rectf, float angulo) {
+		Matrix matrix = new Matrix();
+		
+		//  Rotación
+		if (angulo > 0) {
+			matrix.postRotate(angulo, rectf.left, rectf.bottom);
+		}
+		else {
+			matrix.postRotate(angulo, rectf.right, rectf.top);
+		}
+
+		//  Contrarrestar traslación accidental. En el futuro
+		//  considerar que girar a la izquierda y a la derecha
+		//  requieren valores diferentes para obtener el mismo resultado
+		if (Math.abs(angulo) == 25)
+			matrix.postTranslate(-config.getXAngulo25(), 0);
+		
+		return matrix;
+	}
 
 	/*
 	 * 
 	 * Gestión del metrónomo
 	 * 
 	 */
-	public void Metronome_Back(){
+	public void Back(){
 		yOffset = 0;
 		limiteVisibleArriba = 0;
 		limiteVisibleAbajo = altoPantalla;
+	}
+	
+	public void Forward() {
+		yOffset = -finalScroll - altoPantalla;
+    	limiteVisibleArriba = -finalScroll - altoPantalla;
+    	limiteVisibleAbajo = -finalScroll;
 	}
 	
 	public void Metronome_Pause(){
@@ -679,12 +732,6 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback {
 			else 
 				bipGrave.play(bipGraveInt, 1, 1, 1, 0, 1);
 		}
-		
-		private void hacerScroll(int distanciaDesplazamiento) {
-			limiteVisibleArriba -= distanciaDesplazamiento;
-			limiteVisibleAbajo -= distanciaDesplazamiento;
-			yOffset -= distanciaDesplazamiento;
-		}
 	}
 	
 	
@@ -820,5 +867,76 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback {
 		});
 		
 		MDialog.show();
+	}
+	
+	/*
+	 * 
+	 * GESTIÓN DE LA LECTURA DEL MICRÓFONO
+	 * 
+	 */
+	public void readMicrophone(int sensibilidad, int velocidad) throws Exception {
+		soundReader = new SoundReader(velocidad);
+		soundReader.addObserver(this);
+		soundReader.setSensitivity(sensibilidad);
+		
+		yActual = partitura.getCompas(0).getYIni();
+		desplazamiento = yActual + config.getDistanciaLineasPentagrama() * 4 +
+    			(config.getDistanciaPentagramas() + 
+    			config.getDistanciaLineasPentagrama() * 4) * 
+    			(partitura.getStaves() - 1);
+		
+		ArrayList<Integer> golpesSonido = new ArrayList<Integer>();
+		int numCompases = partitura.getCompases().size();
+		for (int i=0; i<numCompases; i++) 
+			golpesSonido.add(partitura.getCompas(i).golpesDeSonido());
+		
+		Toast.makeText(context, R.string.startPlaying, Toast.LENGTH_SHORT).show();
+	}
+	
+	public void stopMicrophone() {
+		if (soundReader != null) {
+			soundReader.deleteObservers();
+			soundReader.onDestroy();
+			soundReader = null;
+		}
+	}
+
+	@Override
+	public void update(Observable observable, Object data) {
+		int sound = (Integer) data;
+		
+		if (sound > 0) {
+			Compas compas = partitura.getCompas(compasActual);
+			int golpesSonido = compas.golpesDeSonido();
+			
+			if (golpeSonidoActual >= golpesSonido) {
+				Log.i("Check", "Compás nº " + compasActual + ": " + golpesSonido);
+				
+				compasActual++;
+				golpeSonidoActual = 0;
+				
+				if (partitura.getCompas(compasActual).getYIni() != yActual) {
+					hacerScroll(desplazamiento);
+				
+					if (!primerDesplazamientoHecho) {
+						desplazamiento = config.getDistanciaPentagramas() + 
+	                			config.getDistanciaLineasPentagrama() * 4 +
+	                			(config.getDistanciaPentagramas() + 
+	                			config.getDistanciaLineasPentagrama() * 4) * 
+	                			(partitura.getStaves() - 1);
+						
+        				primerDesplazamientoHecho = true;
+					}
+				}
+			}
+			else
+				golpeSonidoActual++;
+		}
+	}
+	
+	private void hacerScroll(int distanciaDesplazamiento) {
+		limiteVisibleArriba -= distanciaDesplazamiento;
+		limiteVisibleAbajo -= distanciaDesplazamiento;
+		yOffset -= distanciaDesplazamiento;
 	}
 }

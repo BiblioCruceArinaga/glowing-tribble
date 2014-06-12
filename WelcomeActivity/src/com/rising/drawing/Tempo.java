@@ -57,7 +57,8 @@ public class Tempo {
 			case 4:
 				return numerador;
 			case 8:
-				return 3;
+				if (numerador == 6) return 2;
+				else return 3;
 			default:
 				return 0;
 		}

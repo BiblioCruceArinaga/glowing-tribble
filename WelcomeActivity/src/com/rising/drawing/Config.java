@@ -5,16 +5,20 @@ public class Config {
 	private boolean supported = true;
 	
 	private int alto_dialog_bpm;
-	private int altura_arco_ligaduras;
+	private int altura_arco_ligaduras_expresion;
+	private int altura_arco_ligaduras_union;
 	private int ancho_beams;
+	private int ancho_beams_nota_gracia;
 	private int ancho_cabeza_nota;
 	private int ancho_cabeza_nota_gracia;
 	private int ancho_claves;
 	private int ancho_dialog_bpm;
 	private int ancho_hooks;
 	private int ancho_tempo;
+	private int desplazamiento_extra_nota_gracia;
 	private int distancia_corchetes;
 	private int distancia_entre_beams;
+	private int distancia_entre_beams_notas_gracia;
 	private int distancia_lineas_pentagrama;
 	private int distancia_lineas_pentagrama_mitad;
 	private int distancia_pentagramas;
@@ -35,12 +39,14 @@ public class Config {
 	private int margen_superior;
 	private int mitad_cabeza_nota_vertical;
 	private int mitad_cabeza_nota_gracia_vertical;
+	private int offset_ultima_nota_gracia;
 	private int radio_octavarium;
 	private int radio_puntillos;
 	private int radio_staccatos;
 	private int tamano_letra_autor;
 	private int tamano_letra_bip_preparacion;
 	private int tamano_letra_bpm;
+	private int tamano_letra_numero_compas;
 	private int tamano_letra_obra;
 	private int tamano_letra_palm_mute;
 	private int tamano_letra_pulso;
@@ -51,6 +57,7 @@ public class Config {
 	private int unidad_desplazamiento;
 	private int width;
 	
+	private int y_accent_up;
 	private int x_accidental;
 	private int y_accidental;
 	private int y_accidental_flat;
@@ -61,10 +68,14 @@ public class Config {
 	private int x_fin_slash;
 	private int y_inicio_slash;
 	private int y_fin_slash;
-	private int x_ligaduras;
-	private int y_ligaduras;
+	private int y_ligaduras_expresion;
+	private int x_ligaduras_union;
+	private int y_ligaduras_union;
+	private int x_numero_compas;
+	private int y_numero_compas;
 	private int x_octavarium;
 	private int y_octavarium;
+	private int y_octavarium_2;
 	private int y_palm_mute;
 	private int x_puntillo;
 	private int y_puntillo_arriba;
@@ -77,6 +88,8 @@ public class Config {
 	private int y_tresillo_arriba;
 	private int y_tresillo_abajo;
 	
+	private int x_angulo_25;
+	
 	public Config(int densityDPI, int width) {
 		
 		switch (densityDPI) {
@@ -86,16 +99,20 @@ public class Config {
 				break;
 			case 213:
 				alto_dialog_bpm = 770;
-				altura_arco_ligaduras = 20;
+				altura_arco_ligaduras_expresion = 30;
+				altura_arco_ligaduras_union = 20;
 				ancho_beams = 5;
+				ancho_beams_nota_gracia = 2;
 				ancho_cabeza_nota = 10;
 				ancho_cabeza_nota_gracia = 5;
 				ancho_claves = 30;
 				ancho_dialog_bpm = 600;
 				ancho_hooks = 16;
 				ancho_tempo = 20;
+				desplazamiento_extra_nota_gracia = 30;
 				distancia_corchetes = 15;
 				distancia_entre_beams = 5;
+				distancia_entre_beams_notas_gracia = 2;
 				distancia_lineas_pentagrama = 12;
 				distancia_lineas_pentagrama_mitad = 6;
 				distancia_pentagramas = 150;
@@ -114,12 +131,14 @@ public class Config {
 				margen_superior = 50;
 				mitad_cabeza_nota_vertical = 6;
 				mitad_cabeza_nota_gracia_vertical = 3;
+				offset_ultima_nota_gracia = 15;
 				radio_octavarium = 3;
 				radio_puntillos = 4;
 				radio_staccatos = 4;
 				tamano_letra_autor = 30;
 				tamano_letra_bip_preparacion = 150;
 				tamano_letra_bpm = 30;
+				tamano_letra_numero_compas = 30;
 				tamano_letra_obra = 50;
 				tamano_letra_palm_mute = 30;
 				tamano_letra_pulso = 50;
@@ -130,6 +149,7 @@ public class Config {
 				unidad_desplazamiento = 30;
 				this.width = width;
 				
+				y_accent_up = 30;
 				x_accidental = 10;
 				y_accidental = 10;
 				y_accidental_flat = 15;
@@ -142,10 +162,14 @@ public class Config {
 				x_fin_slash = 5;
 				y_inicio_slash = 5;
 				y_fin_slash = 10;
-				x_ligaduras = 20;
-				y_ligaduras = 10;
+				y_ligaduras_expresion = 10;
+				x_ligaduras_union = 20;
+				y_ligaduras_union = 10;
+				x_numero_compas = 50;
+				y_numero_compas = 15;
 				x_octavarium = 15;
 				y_octavarium = 8;
+				y_octavarium_2 = 16;
 				y_palm_mute = 15;
 				x_puntillo = ancho_cabeza_nota + 10;
 				y_puntillo_arriba = mitad_cabeza_nota_vertical - 10;
@@ -157,6 +181,8 @@ public class Config {
 				x_tresillo = 6;
 				y_tresillo_arriba = 7;
 				y_tresillo_abajo = 7;
+				
+				x_angulo_25 = 25;
 				break;
 				
 			case 240:
@@ -164,16 +190,20 @@ public class Config {
 				
 			case 320:
 				alto_dialog_bpm = 850;
-				altura_arco_ligaduras = 50;
+				altura_arco_ligaduras_expresion = 30;
+				altura_arco_ligaduras_union = 50;
 				ancho_beams = 8;
+				ancho_beams_nota_gracia = 4;
 				ancho_cabeza_nota = 26;
 				ancho_cabeza_nota_gracia = 15;
 				ancho_claves = 88;
 				ancho_dialog_bpm = 600;
 				ancho_hooks = 16;
 				ancho_tempo = 65;
+				desplazamiento_extra_nota_gracia = 40;
 				distancia_corchetes = 15;
 				distancia_entre_beams = 12;
+				distancia_entre_beams_notas_gracia = 6;
 				distancia_lineas_pentagrama = 19;
 				distancia_lineas_pentagrama_mitad = 9;
 				distancia_pentagramas = 240;
@@ -192,12 +222,14 @@ public class Config {
 				margen_superior = 80;
 				mitad_cabeza_nota_vertical = 10;
 				mitad_cabeza_nota_gracia_vertical = 4;
+				offset_ultima_nota_gracia = 24;
 				radio_octavarium = 3;
 				radio_puntillos = 4;
 				radio_staccatos = 4;
 				tamano_letra_autor = 50;
 				tamano_letra_bip_preparacion = 300;
 				tamano_letra_bpm = 50;
+				tamano_letra_numero_compas = 30;
 				tamano_letra_obra = 80;
 				tamano_letra_palm_mute = 30;
 				tamano_letra_pulso = 50;
@@ -208,7 +240,8 @@ public class Config {
 				unidad_desplazamiento = 50;
 				this.width = width;
 				
-				x_accidental = 16;
+				y_accent_up = 30;
+				x_accidental = 20;
 				y_accidental = 10;
 				y_accidental_flat = 17;
 				y_bend = 40;
@@ -220,10 +253,14 @@ public class Config {
 				x_fin_slash = 5;
 				y_inicio_slash = 10;
 				y_fin_slash = 20;
-				x_ligaduras = 20;
-				y_ligaduras = 10;
+				y_ligaduras_expresion = 50;
+				x_ligaduras_union = 20;
+				y_ligaduras_union = 24;
+				x_numero_compas = 50;
+				y_numero_compas = 15;
 				x_octavarium = 15;
 				y_octavarium = 8;
+				y_octavarium_2 = 30;
 				y_palm_mute = 50;
 				x_puntillo = ancho_cabeza_nota + 10;
 				y_puntillo_arriba = mitad_cabeza_nota_vertical - 10;
@@ -235,6 +272,8 @@ public class Config {
 				x_tresillo = 18;
 				y_tresillo_arriba = 9;
 				y_tresillo_abajo = 26;
+				
+				x_angulo_25 = 25;
 				break;
 			case 400:
 				break;
@@ -249,12 +288,20 @@ public class Config {
 		return alto_dialog_bpm;
 	}
 	
-	public int getAlturaArcoLigaduras() {
-		return altura_arco_ligaduras;
+	public int getAlturaArcoLigadurasExpresion() {
+		return altura_arco_ligaduras_expresion;
+	}
+	
+	public int getAlturaArcoLigadurasUnion() {
+		return altura_arco_ligaduras_union;
 	}
 	
 	public int getAnchoBeams() {
 		return ancho_beams;
+	}
+	
+	public int getAnchoBeamsNotaGracia() {
+		return ancho_beams_nota_gracia;
 	}
 	
 	public int getAnchoCabezaNota() {
@@ -281,12 +328,20 @@ public class Config {
 		return ancho_tempo;
 	}
 	
+	public int getDesplazamientoExtraNotaGracia() {
+		return desplazamiento_extra_nota_gracia;
+	}
+	
 	public int getDistanciaCorchetes() {
 		return distancia_corchetes;
 	}
 
 	public int getDistanciaEntreBeams() {
 		return distancia_entre_beams;
+	}
+	
+	public int getDistanciaEntreBeamsNotasGracia() {
+		return distancia_entre_beams_notas_gracia;
 	}
 	
 	public int getDistanciaLineasPentagrama() {
@@ -361,6 +416,10 @@ public class Config {
 		return mitad_cabeza_nota_gracia_vertical;
 	}
 	
+	public int getOffsetUltimaNotaGracia() {
+		return offset_ultima_nota_gracia;
+	}
+	
 	public int getRadioOctavarium() {
 		return radio_octavarium;
 	}
@@ -383,6 +442,10 @@ public class Config {
 	
 	public int getTamanoLetraBpm() {
 		return tamano_letra_bpm;
+	}
+	
+	public int getTamanoLetraNumeroCompas() {
+		return tamano_letra_numero_compas;
 	}
 	
 	public int getTamanoLetraObra() {
@@ -421,6 +484,10 @@ public class Config {
 		return width;
 	}
 	
+	
+	public int getYAccentUp() {
+		return y_accent_up;
+	}
 	
 	public int getXAccidental() {
 		return x_accidental;
@@ -470,12 +537,24 @@ public class Config {
 		return y_fin_slash;
 	}
 	
-	public int getXLigaduras() {
-		return x_ligaduras;
+	public int getYLigadurasExpresion() {
+		return y_ligaduras_expresion;
 	}
 	
-	public int getYLigaduras() {
-		return y_ligaduras;
+	public int getXLigadurasUnion() {
+		return x_ligaduras_union;
+	}
+	
+	public int getYLigadurasUnion() {
+		return y_ligaduras_union;
+	}
+	
+	public int getXNumeroCompas() {
+		return x_numero_compas;
+	}
+	
+	public int getYNumeroCompas() {
+		return y_numero_compas;
 	}
 
 	public int getXOctavarium() {
@@ -484,6 +563,10 @@ public class Config {
 	
 	public int getYOctavarium() {
 		return y_octavarium;
+	}
+	
+	public int getYOctavarium2() {
+		return y_octavarium_2;
 	}
 	
 	public int getYPalmMute() {
@@ -528,6 +611,11 @@ public class Config {
 	
 	public int getYTresilloAbajo() {
 		return y_tresillo_abajo;
+	}
+	
+	
+	public int getXAngulo25() {
+		return x_angulo_25;
 	}
 	
 	/**

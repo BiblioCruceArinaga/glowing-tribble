@@ -94,6 +94,34 @@ You can buy scores in our store.</string>
     	<string name="speed_allowed">Min. Speed: 1 bpm. Max Speed: 300 bpm.</string>
     	<string name="visual_help">Count with visual help</string>
     	
+    <!-- Leer micrófono -->
+    <string name="readMicrophone">Micrófono</string>
+    <string name="microphone_sensitivity">Sensibilidad</string>
+    <string name="microphone_speed">Velocidad</string>
+    <string name="microphone_start">Empezar</string>
+    <string name="microphone_stop">Parar</string>
+    <string name="startPlaying">Ya puedes empezar a tocar</string>
+    <string name="setSensitivity">Ajustar sensibilidad</string>
+    <string name="setSpeed">Ajustar velocidad</string>
+    <string name="sensitivityText">
+        Ajusta la sensibilidad del micrófono. Si este valor es demasiado bajo,
+        tendrás que tocar muy fuerte para que la aplicación te oiga. Si este
+        valor es demasiado alto, el ruido ambiente podría interferir en la
+        aplicación y estorbarte. Busca un valor apropiado que te permita
+        tocar de manera cómoda.
+    </string>
+    <string name="sensitivityButton">Ajustar</string>
+    <string name="speedText">
+        Ajusta la velocidad a la que se recogen muestras del micrófono.
+        Ajusta este valor si crees que la partitura se está moviendo
+        demasiado despacio o demasiado deprisa.
+    </string>
+    
+    <!-- Navegación -->
+    <string name="navigate">Navegación</string>
+    <string name="navigate_top">Ir al principio</string>
+    <string name="navigate_bottom">Ir al final</string>
+    	
     <string name="contentDescription">Image</string>
 
     <!-- Menú principal contextual -->

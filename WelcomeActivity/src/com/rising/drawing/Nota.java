@@ -17,10 +17,10 @@ public class Nota {
 	//  la nota, y por tanto no necesitamos guardarla
 	private int octavarium;
 	private int y_octavarium;
-	
-	//  Este campo representará una inicio o un final
-	//  de ligadura de unión dependiendo del contexto
-	private byte ligadura;
+
+	private byte ligaduraUnion;
+	private byte ligaduraExpresion;
+	private boolean ligaduraExpresionEncima;
 	
 	ArrayList<Byte> figurasGraficas;
 	ArrayList<Byte> posicion;
@@ -43,7 +43,9 @@ public class Nota {
 		octavarium = 0;
 		y_octavarium = -1;
 		
-		ligadura = 0;
+		ligaduraUnion = 0;
+		ligaduraExpresion = 0;
+		ligaduraExpresionEncima = false;
 		
 		this.figurasGraficas = figurasGraficas;
 		this.posicion = posicion;
@@ -56,6 +58,10 @@ public class Nota {
 		return figurasGraficas.contains((byte) 2);
 	}
 	
+	public boolean beamFinal() {
+		return beam == 1 || beam == 4;
+	}
+	
 	public boolean desplazadaALaIzquierda() {
 		return figurasGraficas.contains((byte) 24);
 	}
@@ -64,6 +70,20 @@ public class Nota {
 		return figurasGraficas.contains((byte) 25);
 	}
 	
+	public boolean esLigadura(int indFigura) {
+		return esLigaduraUnion(indFigura) || esLigaduraExpresion(indFigura);
+	}
+	
+	public boolean esLigaduraExpresion(int indFigura) {
+		return (figurasGraficas.get(indFigura) == 32) || 
+			   (figurasGraficas.get(indFigura) == 33);
+	}
+	
+	public boolean esLigaduraUnion(int indFigura) {
+		return (figurasGraficas.get(indFigura) == 10) || 
+			   (figurasGraficas.get(indFigura) == 11);
+	}
+
 	public boolean finDeTresillo() {
 		return figurasGraficas.contains((byte) 4);
 	}
@@ -80,8 +100,12 @@ public class Nota {
 		return figurasGraficas;
 	}
 	
-	public byte getLigadura() {
-		return ligadura;
+	public byte getLigaduraExpresion() {
+		return ligaduraExpresion;
+	}
+	
+	public byte getLigaduraUnion() {
+		return ligaduraUnion;
 	}
 	
 	public byte getOctava() {
@@ -144,12 +168,24 @@ public class Nota {
 		return plica == 1;
 	}
 	
+	public boolean ligaduraExpresionEncima() {
+		return ligaduraExpresionEncima;
+	}
+	
 	public boolean notaDeGracia() {
 		return figurasGraficas.contains((byte) 18) || figurasGraficas.contains((byte) 19);
 	}
 	
-	public void setLigadura(byte ligadura) {
-		this.ligadura = ligadura;
+	public void setLigaduraUnion(byte ligaduraUnion) {
+		this.ligaduraUnion = ligaduraUnion;
+	}
+	
+	public void setLigaduraExpresion(byte ligaduraExpresion) {
+		this.ligaduraExpresion = ligaduraExpresion;
+	}
+	
+	public void setLigaduraExpresionOrientacion(boolean orientacion) {
+		ligaduraExpresionEncima = orientacion;
 	}
 	
 	public void setOctavarium(int octavarium) {
@@ -171,9 +207,15 @@ public class Nota {
 	public boolean silencio() {
 		return step == 0;
 	}
-	
+
 	public boolean tienePlica() {
 		return plica > 0;
+	}
+	
+	public boolean tienePuntillo() {
+		return figurasGraficas.contains((byte) 15) ||
+			   figurasGraficas.contains((byte) 16) ||
+			   figurasGraficas.contains((byte) 17);
 	}
 
 	public boolean tieneSlash() {
