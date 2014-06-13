@@ -124,7 +124,7 @@ public class Nota {
 		return plica;
 	}
 	
-	public int getPosicion() {
+	public int getPosition() {
 		byte[] bytesArray = new byte[posicion.size()];
         int len = bytesArray.length;
         for (int i=0; i<len; i++)

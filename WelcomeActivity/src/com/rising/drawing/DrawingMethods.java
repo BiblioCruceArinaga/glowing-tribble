@@ -156,50 +156,52 @@ public class DrawingMethods {
 	}
 
 	private void calcularClefs(Compas compas) {
-		ArrayList<ElementoGrafico> clefs = compas.getClefs();
+		ElementoGrafico[] clefs = compas.getClefs();
 		
-		int numClefs = clefs.size();
 		int x_position = -1;
 		int numClavesEnElemento = -1;
 		
-		for (int i=0; i<numClefs; i++) {
+		for (int i=0; i<clefs.length; i++) {
 
-			x_position = calcularPosicionX(compas.getPositions(), clefs.get(i).getPosition());
-			numClavesEnElemento = clefs.get(i).getValue(1);
-
-			for (int j=0; j<numClavesEnElemento; j++) {
-				byte pentagrama = clefs.get(i).getValue(2 + 3 * j);
-				byte claveByte = clefs.get(i).getValue(3 + 3 * j);
-				byte alteracion = clefs.get(i).getValue(4 + 3 * j);
-
-				//  El margen Y depende del pentagrama al que pertenezca el compás
-				int marginY = compas_margin_y + 
-						(config.getDistanciaLineasPentagrama() * 4 + 
-								config.getDistanciaPentagramas()) * (pentagrama - 1);
-
-				switch (alteracion) {
-					case 0:
-						Clave clave = new Clave();
-						clave.setImagenClave(obtenerImagenDeClave(claveByte));
-						clave.setX(compas_margin_x + x_position);
-						clave.setY(marginY + obtenerPosicionYDeClave(claveByte));
-						clave.setPentagrama(pentagrama);
-						compas.addClave(clave);
-						
-						clavesActuales[pentagrama - 1] = claveByte;
-						break;
-
-					case 1:
-						posicionesOctavarium[0] = compas_margin_x + x_position;
-						buscandoOctavarium = true;
-						break;
-
-					case -1:
-						posicionesOctavarium[1] = compas_margin_x + x_position;
-						break;
-
-					default: 
-						break;
+			if (clefs[i] != null) {
+				x_position = calcularPosicionX(compas.getPositions(), clefs[i].getPosition());
+				numClavesEnElemento = clefs[i].getValue(1);
+	
+				for (int j=0; j<numClavesEnElemento; j++) {
+					byte pentagrama = clefs[i].getValue(2 + 3 * j);
+					byte claveByte = clefs[i].getValue(3 + 3 * j);
+					byte alteracion = clefs[i].getValue(4 + 3 * j);
+	
+					//  El margen Y depende del pentagrama al que pertenezca el compás
+					int marginY = compas_margin_y + 
+							(config.getDistanciaLineasPentagrama() * 4 + 
+									config.getDistanciaPentagramas()) * (pentagrama - 1);
+	
+					switch (alteracion) {
+						case 0:
+							Clave clave = new Clave();
+							clave.setImagenClave(obtenerImagenDeClave(claveByte));
+							clave.setX(compas_margin_x + x_position);
+							clave.setY(marginY + obtenerPosicionYDeClave(claveByte));
+							clave.setClave(claveByte);
+							clave.setPentagrama(pentagrama);
+							clave.setPosition(clefs[i].getPosition());
+							
+							compas.setClave(clave, pentagrama);
+							break;
+	
+						case 1:
+							posicionesOctavarium[0] = compas_margin_x + x_position;
+							buscandoOctavarium = true;
+							break;
+	
+						case -1:
+							posicionesOctavarium[1] = compas_margin_x + x_position;
+							break;
+	
+						default: 
+							break;
+					}
 				}
 			}
 		}
@@ -285,12 +287,6 @@ public class DrawingMethods {
 				(config.getDistanciaPentagramas() + config.getDistanciaLineasPentagrama() * 4) * 
 				(partitura.getStaves() - 1));
 		
-		//  El diseño actual del código no permite una lectura
-		//  por orden de aparición en la partitura, lo que 
-		//  obliga a arreglar las posiciones de los elementos
-		//  antes y después de la aparición de una clave
-		compas.arreglarPosicionesPorClave(config.getUnidadDesplazamiento());
-		
 		if (compas.getXFin() > config.getXFinalPentagramas()) {
 			moverCompasAlSiguienteRenglon(compas);
 			
@@ -309,17 +305,33 @@ public class DrawingMethods {
 		}
 	}
 
-	private int calcularPosicionesDeNota(ArrayList<Integer> posiciones, Nota nota) {
-		int posicionX = nota.getPosicion();
+	private int calcularPosicionesDeNota(ArrayList<Integer> posiciones, 
+			Compas compas, Nota nota) {
+		int posicionX = nota.getPosition();
 		int posicionY = 0;
 		
 		if (posicionX != -1) {
 			posicionX = calcularPosicionX(posiciones, posicionX);
 			posicionX += calcularDesplazamientoExtraNotaDeGracia(nota, posicionX);
+			nota.setX(compas_margin_x + posicionX);
+			
+			//  Si se coloca una clave en el compás, las notas anteriores
+			//  a esta clave deben colocarse según la clave vieja, y las
+			//  posteriores según la clave nueva
+			Clave clave = compas.getClavePorPentagrama(nota.getPentagrama());
+			if (clave != null) {
+				if (clave.getX() <= nota.getX())
+					clavesActuales[nota.getPentagrama() - 1] = clave.getByteClave();
+				else {
+					
+					//  Si no hay notas después de esta clave en este compás,
+					//  las notas del siguiente compás deben calcularse con esta clave
+					if (compas.noHayNotasDelanteDeClave(clave))
+						clavesActuales[nota.getPentagrama() - 1] = clave.getByteClave();
+				}
+			}
 			
 			posicionY = calcularCabezaDeNota(nota, posicionX);
-			
-			nota.setX(compas_margin_x + posicionX);
 			nota.setY(posicionY);
 		}
 
@@ -335,7 +347,7 @@ public class DrawingMethods {
 		int distanciaActualX = 0;
 		
 		for (int i=0; i<numNotas; i++) {
-			distanciaActualX = calcularPosicionesDeNota(posiciones, notas.get(i));
+			distanciaActualX = calcularPosicionesDeNota(posiciones, compas, notas.get(i));
 
 			if (distanciaActualX > mayorDistanciaX) 
 				mayorDistanciaX = distanciaActualX;
@@ -345,12 +357,7 @@ public class DrawingMethods {
 	}
 	
 	private int calcularPosicionX(ArrayList<Integer> posiciones, int position) {
-		int multiplicador = posiciones.indexOf(position);
-		
-		if (multiplicador > -1)
-			return config.getUnidadDesplazamiento() * multiplicador;
-		else
-			return 0;
+		return position * config.getUnidadDesplazamiento() / partitura.getDivisions();
 	}
 	
 	private void calcularTime(Compas compas) {
@@ -359,19 +366,19 @@ public class DrawingMethods {
 			
 			switch (compas.getTime().getValue(1)) {
 				case 1:
-					inicializarTempo(tempo, 3, 8);
+					inicializarTempo(tempo, compas, 3, 8);
 					break;
 				case 2:
-					inicializarTempo(tempo, 4, 4);
+					inicializarTempo(tempo, compas, 4, 4);
 					break;
 				case 3:
-					inicializarTempo(tempo, 2, 4);
+					inicializarTempo(tempo, compas, 2, 4);
 					break;
 				case 4:
-					inicializarTempo(tempo, 7, 4);
+					inicializarTempo(tempo, compas, 7, 4);
 					break;
 				case 5:
-					inicializarTempo(tempo, 6, 8);
+					inicializarTempo(tempo, compas, 6, 8);
 					break;
 				default:
 					break;
@@ -379,7 +386,6 @@ public class DrawingMethods {
 			
 			compas.setTempo(tempo);
 			tempoActual = tempo;
-			compas_margin_x += config.getAnchoTempo();
 		}
 		else {
 			compas.setTempo(clonarTempo(tempoActual));
@@ -441,11 +447,13 @@ public class DrawingMethods {
 		return ordenesDibujo;
 	}
 
-	private void inicializarTempo(Tempo tempo, int numerador, int denominador) {
+	private void inicializarTempo(Tempo tempo, Compas compas, int numerador, int denominador) {
+		int x_position = calcularPosicionX(compas.getPositions(), compas.getTime().getPosition());
+		
 		tempo.setDibujar(true);
 		tempo.setNumerador(numerador);
 		tempo.setDenominador(denominador);
-		tempo.setX(compas_margin_x);
+		tempo.setX(compas_margin_x + x_position);
 		tempo.setYNumerador(compas_margin_y + config.getDistanciaLineasPentagrama() * 2);
 		tempo.setYDenominador(compas_margin_y + config.getDistanciaLineasPentagrama() * 4);
 	}
@@ -466,11 +474,13 @@ public class DrawingMethods {
 		compas.setXIniNotas(compas.getXIniNotas() - distancia_x);
 		
 		if (compas.hayClaves()) {
-			ArrayList<Clave> claves = compas.getClaves();
+			Clave[] claves = compas.getClaves();
  
-			for (int i=0; i<claves.size(); i++) {
-				compas.getClave(i).setX(compas.getClave(i).getX() - distancia_x);
-				compas.getClave(i).setY(compas.getClave(i).getY() + distancia_y);
+			for (int i=0; i<claves.length; i++) {
+				if (compas.getClave(i) != null) {
+					compas.getClave(i).setX(compas.getClave(i).getX() - distancia_x);
+					compas.getClave(i).setY(compas.getClave(i).getY() + distancia_y);
+				}
 			}
 		}
  		
@@ -1471,10 +1481,11 @@ public class DrawingMethods {
 	            	compas.getNota(j).setX(compas.getNota(j).getX() + anchoParaCadaCompas);
 
 	            if (compas.hayClaves()) {
-	            	ArrayList<Clave> claves = compas.getClaves();
+	            	Clave[] claves = compas.getClaves();
 	            	 
-	    			for (int j=0; j<claves.size(); j++)
-	    				compas.getClave(j).setX(compas.getClave(j).getX() + anchoParaCadaCompas);
+	    			for (int j=0; j<claves.length; j++)
+	    				if (compas.getClave(j) != null)
+	    					compas.getClave(j).setX(compas.getClave(j).getX() + anchoParaCadaCompas);
 	            }
 	            
 	            if (compas.hayIntensidad())
@@ -1524,11 +1535,13 @@ public class DrawingMethods {
         	}
 
         	if (compas.hayClaves()) {
-            	ArrayList<Clave> claves = compas.getClaves();
+            	Clave[] claves = compas.getClaves();
             	
-    			for (int j=0; j<claves.size(); j++) {
-    				multiplicador = xsDelCompas.indexOf(compas.getClave(j).getX());
-    				compas.getClave(j).setX(compas.getClave(j).getX() + anchoPorNota * multiplicador);
+    			for (int j=0; j<claves.length; j++) {
+    				if (compas.getClave(j) != null) {
+	    				multiplicador = xsDelCompas.indexOf(compas.getClave(j).getX());
+	    				compas.getClave(j).setX(compas.getClave(j).getX() + anchoPorNota * multiplicador);
+    				}
     			}
             }
         	
@@ -1810,16 +1823,18 @@ public class DrawingMethods {
 	}
 	
 	private void dibujarClaves(Compas compas) {
-		ArrayList<Clave> claves = compas.getClaves();
-		int numClaves = claves.size();
+		Clave[] claves = compas.getClaves();
+		int numClaves = claves.length;
 		
 		for (int i=0; i<numClaves; i++) {
-			OrdenDibujo ordenDibujo = new OrdenDibujo();
-			ordenDibujo.setOrden(DrawOrder.DRAW_BITMAP);
-			ordenDibujo.setImagen(claves.get(i).getImagenClave());
-			ordenDibujo.setX1(claves.get(i).getX());
-			ordenDibujo.setY1(claves.get(i).getY());
-			ordenesDibujo.add(ordenDibujo);
+			if (claves[i] != null) {
+				OrdenDibujo ordenDibujo = new OrdenDibujo();
+				ordenDibujo.setOrden(DrawOrder.DRAW_BITMAP);
+				ordenDibujo.setImagen(claves[i].getImagenClave());
+				ordenDibujo.setX1(claves[i].getX());
+				ordenDibujo.setY1(claves[i].getY());
+				ordenesDibujo.add(ordenDibujo);
+			}
 		}
 	}
 	
