@@ -73,6 +73,7 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 	private Dialog MDialog;
 	private int fid;
 	Context context;
+	Dialog Incorrect_User;
 		
 	//  Recibir la señal del proceso que elimina la cuenta
 	private OnTaskCompleted listener = new OnTaskCompleted() {
@@ -219,6 +220,11 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 	
 	public void interfazCuandoHayPartituras(final String[] ficheros){
 		infoFicheros = darInfoFicheros(ficheros);
+				
+		Incorrect_User = new Dialog(MainScreenActivity.this, R.style.cust_dialog);
+		
+		Incorrect_User.setContentView(R.layout.incorrect_user_dialog);
+		Incorrect_User.setTitle(R.string.incorrect_user);
 		
 		for (int i = 0; i < ficherosLength(); i++){
 			 Score ss = new Score(infoFicheros[1][i], infoFicheros[0][i], infoFicheros[3][i], infoFicheros[2][i]);
@@ -313,22 +319,17 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 		@Override
 		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 			Log.i("Position", ficheros[position]);
-			
-			//new DownloadScoresEncrypter(context, ficheros[0]+conf.getUserId()).DescryptAndConfirm(ficheros[position]);	
-			Log.i("Ficheros", ""+ficheros[0]+conf.getUserId());
-			
-			if(new DownloadScoresEncrypter(context, ficheros[0]+conf.getUserId()).DescryptAndConfirm(ficheros[position])){
-				Toast.makeText(context, "Coincide. Se abre. Eres tu", Toast.LENGTH_LONG).show();
+						
+			if(new DownloadScoresEncrypter(context, infoFicheros[0][position]+conf.getUserId()).DescryptAndConfirm(ficheros[position])){
+				Intent i = new Intent(MainScreenActivity.this, MainActivity.class);
+				i.putExtra("score", ficheros[position]);
+						
+				startActivity(i);
 			}else{
-				Toast.makeText(context, "Te vas a la mierda", Toast.LENGTH_LONG).show();
+				Incorrect_User.show();
 			}
 			
-			Intent i = new Intent(MainScreenActivity.this, MainActivity.class);
-			i.putExtra("score", ficheros[position]);
-					
-			startActivity(i);
-			
-		}
+		} 
 	});
 	
 	}

@@ -33,7 +33,7 @@ import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.Toast;
 
-public class Screen extends SurfaceView implements SurfaceHolder.Callback {
+public class Screen extends SurfaceView implements SurfaceHolder.Callback, Observer {
 
 	private boolean isValidScreen = false;
 	private ObjectInputStream fichero = null;
@@ -529,9 +529,9 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback {
 		}
 	}
 	
-	public void Metronome_Play(int bpm, boolean numeros_bip){
+	public void Metronome_Play(int bpm){
 		if (metronomo == null) {
-    		metronomo = new Metronomo(bpm, numeros_bip);
+    		metronomo = new Metronomo(bpm);
     		metronomo.run();
 		}
 	}
@@ -557,12 +557,11 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback {
 	    int bipAgudoInt = 0;
 	    int bipGraveInt = 0;
 
-	    public Metronomo(int bpm, boolean n_bip) {
+	    public Metronomo(int bpm) {
 	        mPauseLock = new Object();
 	        mPaused = false;
 	        mbpm = bpm;
-	        this.numeros_bip = n_bip;
-	        
+	        	        
 	        bipAgudo = new SoundPool(5, AudioManager.STREAM_MUSIC, 0);
 			bipAgudoInt = bipAgudo.load(context, R.raw.bip, 0);
 

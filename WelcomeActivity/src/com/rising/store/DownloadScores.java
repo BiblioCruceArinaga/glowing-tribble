@@ -157,7 +157,7 @@ public class DownloadScores extends AsyncTask<String, Integer, String>{
                 }
             } catch (Exception e) {
             	e.getMessage();
-            	Log.e("Error descargar", e.getMessage());	
+            	Log.e("Error descargar partitura", e.getMessage());	
             } finally {
                 try {
                     if (output != null)
@@ -201,7 +201,7 @@ public class DownloadScores extends AsyncTask<String, Integer, String>{
 	    //Podr�an sustituirse por Dialogs. 
         if (result != null){
         	if(failedDownload != null) failedDownload.onDownloadFailed();
-        	Log.e("Error descarga", "Error descarga: " + result);
+        	Log.e("Error descarga partitura", "Error descarga: " + result);
         }else{ 
         	Log.i("Download", "Listener Good");
         	if (listenerDownload != null) listenerDownload.onDownloadCompleted();

@@ -17,12 +17,14 @@ import android.view.SurfaceHolder;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.NumberPicker;
 import android.widget.NumberPicker.OnScrollListener;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends Activity{
@@ -43,14 +45,13 @@ public class MainActivity extends Activity{
 	private int tempo = 120;
 	private boolean play;
 	private boolean stop = false;
-	private Config config = null;
-	private boolean numeros_bip; 
 
 	//  Gestión del micrófono
 	private boolean readingMicrophone = false;
 	private Dialog MicrophoneDialog = null;
 	private int sensibilidad = 5;
 	private int velocidad = 5;	
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
@@ -217,7 +218,7 @@ public class MainActivity extends Activity{
 			
 			seekBar.setProgress(sensibilidad);
 			texto.setText(sensibilidad + "");
-			
+		
 			seekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 
 				@Override
@@ -404,7 +405,7 @@ public class MainActivity extends Activity{
     		item.setIcon(R.drawable.pause_button);
     		
     		if (stop)
-    			s.Metronome_Play(tempo, numeros_bip);
+    			s.Metronome_Play(tempo);
     		else
     			s.Metronome_Pause();
     	}

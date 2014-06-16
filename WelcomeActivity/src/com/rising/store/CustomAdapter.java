@@ -31,10 +31,12 @@ import com.nostra13.universalimageloader.utils.MemoryCacheUtils;
 import com.rising.drawing.MainActivity;
 import com.rising.drawing.R;
 import com.rising.login.Configuration;
+import com.rising.mainscreen.MainScreenActivity;
 import com.rising.money.MoneyActivity;
 import com.rising.money.SocialBonificationNetworkConnection;
 import com.rising.money.SocialBonificationNetworkConnection.OnBonificationDone;
 import com.rising.money.SocialBonificationNetworkConnection.OnFailBonification;
+import com.rising.security.DownloadScoresEncrypter;
 import com.rising.store.BuyNetworkConnection.OnBuyCompleted;
 import com.rising.store.BuyNetworkConnection.OnBuyFailed;
 import com.rising.store.DownloadScores.OnDownloadCompleted;
@@ -54,7 +56,7 @@ public class CustomAdapter extends BaseAdapter {
 	private String path = "/.RisingScores/scores/";
 	private List<PartituraTienda> lista;
 	Configuration conf;
-	private Dialog BDialog, NMDialog;
+	private Dialog BDialog, NMDialog, Incorrect_User;
 	private Button Confirm_Buy, Cancel_Buy, Buy_Money;
     private ArrayList<PartituraTienda> infoPartituras;
 	
@@ -67,7 +69,7 @@ public class CustomAdapter extends BaseAdapter {
 	BuyNetworkConnection bnc;	
 	private SocialBonificationNetworkConnection sbnc;
 	ImageLoader iml;
-	
+		
 	private OnBonificationDone successbonification = new OnBonificationDone(){
 
 		@Override
@@ -318,10 +320,10 @@ public class CustomAdapter extends BaseAdapter {
         			
         			//Si la partitura ya est� en el dispositivo la abre
         			if(buscarArchivos(FileNameString(lista.get(position).getUrl()))){       	
-        				AbrirFichero(ctx, FileNameString(lista.get(position).getUrl()));	
+        				AbrirFichero(ctx, lista.get(position).getNombre(), FileNameString(lista.get(position).getUrl()));	
         			}else{
         				if(spaceOnDisc()){
-	     					download.execute(lista.get(position).getUrl(), lista.get(position).getImagen(), String.valueOf(lista.get(selected).getNombre())+conf.getUserId());
+	     					download.execute(lista.get(position).getUrl(), lista.get(position).getImagen(), String.valueOf(lista.get(position).getNombre())+conf.getUserId());
         				}else{
         					new AlertDialog.Builder(ctx).setMessage(ctx.getString(R.string.no_space)).show();
         				}
@@ -385,7 +387,7 @@ public class CustomAdapter extends BaseAdapter {
      				Cancel_Buy.setOnClickListener(new OnClickListener(){
 
 						@Override
-						public void onClick(View v) {
+						public void onClick(View v) { 
 							BDialog.dismiss();							
 						}
      					
@@ -399,11 +401,22 @@ public class CustomAdapter extends BaseAdapter {
          return view;
 	}
 	
-	public void AbrirFichero(Context ctx, String path){
-		Intent in = new Intent(ctx, MainActivity.class);
-		in.putExtra("score", path);
+	public void AbrirFichero(Context ctx, String name, String path){
 		
-		ctx.startActivity(in);
+		Incorrect_User = new Dialog(ctx, R.style.cust_dialog);
+		
+		Incorrect_User.setContentView(R.layout.incorrect_user_dialog);
+		Incorrect_User.setTitle(R.string.incorrect_user);
+		
+		if(new DownloadScoresEncrypter(ctx, name+conf.getUserId()).DescryptAndConfirm(path)){
+			Intent in = new Intent(ctx, MainActivity.class);
+			in.putExtra("score", path);
+			
+			ctx.startActivity(in);
+		}else{
+			Incorrect_User.show();
+		}
+		
 	}
 	
 	//Busca en el dispositivo archivos con el mismo nombre que el que se le pasa

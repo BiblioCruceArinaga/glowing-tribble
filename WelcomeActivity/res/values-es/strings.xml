@@ -72,6 +72,8 @@
         Puedes comprar partituras en nuestra tienda.</string>
     <string name="no_scores_button">Ir a la tienda</string>
     <string name="error_folder">Hubo un problema al iniciar Scores</string>
+    <string name="incorrect_security_line">No puedes abrir esta partitura, está registrada por otro usuario</string>
+    <string name="incorrect_user">Incorrect user</string>
     	    	
     	<!-- Menú contextual -->
     	<string name="select_all">Seleccionar todos</string>

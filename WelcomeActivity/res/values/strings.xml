@@ -71,6 +71,8 @@
 You can buy scores in our store.</string>
     <string name="no_scores_button">Go to Score Store</string>
     <string name="error_folder">There was a problem iniciating Scores</string>
+    <string name="incorrect_security_line">You cannot open this score, is registered by other user</string>
+    <string name="incorrect_user">Incorrect user</string>
     	    	
     	<!-- Menú contextual -->
     	<string name="select_all">Select all</string>
