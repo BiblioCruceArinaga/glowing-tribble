@@ -70,6 +70,12 @@ public class Nota {
 		return figurasGraficas.contains((byte) 25);
 	}
 	
+	public boolean esAlteracion(int indFigura) {
+		return (figurasGraficas.get(indFigura) == 12) ||
+			   (figurasGraficas.get(indFigura) == 13) ||
+			   (figurasGraficas.get(indFigura) == 14);
+	}
+	
 	public boolean esLigadura(int indFigura) {
 		return esLigaduraUnion(indFigura) || esLigaduraExpresion(indFigura);
 	}

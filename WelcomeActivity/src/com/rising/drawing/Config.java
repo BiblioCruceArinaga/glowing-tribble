@@ -88,8 +88,6 @@ public class Config {
 	private int y_tresillo_arriba;
 	private int y_tresillo_abajo;
 	
-	private int x_angulo_25;
-	
 	public Config(int densityDPI, int width) {
 		
 		switch (densityDPI) {
@@ -181,8 +179,6 @@ public class Config {
 				x_tresillo = 6;
 				y_tresillo_arriba = 7;
 				y_tresillo_abajo = 7;
-				
-				x_angulo_25 = 25;
 				break;
 				
 			case 240:
@@ -272,8 +268,6 @@ public class Config {
 				x_tresillo = 18;
 				y_tresillo_arriba = 9;
 				y_tresillo_abajo = 26;
-				
-				x_angulo_25 = 25;
 				break;
 			case 400:
 				break;
@@ -611,11 +605,6 @@ public class Config {
 	
 	public int getYTresilloAbajo() {
 		return y_tresillo_abajo;
-	}
-	
-	
-	public int getXAngulo25() {
-		return x_angulo_25;
 	}
 	
 	/**

@@ -496,8 +496,8 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback, Observer {
 		//  Contrarrestar traslación accidental. En el futuro
 		//  considerar que girar a la izquierda y a la derecha
 		//  requieren valores diferentes para obtener el mismo resultado
-		if (Math.abs(angulo) == 25)
-			matrix.postTranslate(-config.getXAngulo25(), 0);
+		if (angulo < 0)
+			matrix.postTranslate(angulo, 0);
 		
 		return matrix;
 	}

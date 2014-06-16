@@ -298,7 +298,7 @@ public class Compas {
 	}
 	
 	public boolean hayTempo() {
-		return tempo != null;
+		return tempo != null && tempo.dibujar();
 	}
 	
 	public boolean hayTexto() {
@@ -336,7 +336,7 @@ public class Compas {
 	//  Devuelve un array con cada valor de X de cada elemento
 	//  del compás. Por elemento se entiende cualquier nota, 
 	//  acorde o figura gráfica que ocupe una posición X única en el compás
-	public ArrayList<Integer> saberNumeroDeElementosDeCompas() {
+	public ArrayList<Integer> saberXsDelCompas() {
 		ArrayList<Integer> xEncontradas = new ArrayList<Integer>();
 
 		int numNotas = notas.size();
@@ -362,12 +362,20 @@ public class Compas {
 			if (!xEncontradas.contains(getPedalFin().getX()))
 				xEncontradas.add(getPedalFin().getX());
 		
+		if (hayTempo())
+			if (!xEncontradas.contains(getTempo().getX()))
+				xEncontradas.add(getTempo().getX());
+		
 		Collections.sort(xEncontradas);
 		return xEncontradas;
 	}
 	
+	public int saberXPrimeraNota() {
+		return notas.get(0).getX();
+	}
+	
 	//  Devuelve la posición X de la nota más cercana al margen derecho
-	public int saberXMasGrande() {
+	public int saberXUltimaNota() {
 		int xMasGrande = 0;
 		
 		int numNotas = notas.size();
