@@ -10,7 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/empty_result"
-        android:layout_marginTop="400dp"
+        android:layout_marginTop="300dp"
         android:layout_gravity="center"
         android:textColor="#222"
         android:textSize="40sp"
@@ -21,9 +21,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="-405dp"
-        android:layout_marginLeft="25dp"
-        android:layout_marginRight="25dp"
-        android:numColumns="2" >
+        android:layout_marginLeft="35dp"
+        android:layout_marginRight="35dp"
+        android:verticalSpacing="10dp"
+        android:horizontalSpacing="10dp"
+        android:numColumns="3" >
     </GridView>
 
 </LinearLayout>

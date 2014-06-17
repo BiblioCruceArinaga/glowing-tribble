@@ -389,6 +389,7 @@ You can buy scores in our store.</string>
     	<string name="downloading">Downloading</string>
     	<string name="win_buy">You have received 0,01 credit!</string>
     	<string name="no_space">You haven\'t got space enough in your device</string>
+    	<string name="my_purchases">My purchases</string>
     	    	
     		<!-- Pantalla busqueda -->
     		<string name="list">List</string>

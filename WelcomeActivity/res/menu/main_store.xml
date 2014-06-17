@@ -3,7 +3,7 @@
     
     <item android:id="@+id/money"
         android:title="@string/money"
-        android:showAsAction="ifRoom|withText"/>
+        android:showAsAction="always|withText"/>
     
 	<item android:id="@+id/action_search_store"
     	android:title="@string/action_search"
@@ -11,8 +11,12 @@
         android:showAsAction="always" 
         android:actionViewClass="android.widget.SearchView"/>
 	
+	<item android:id="@+id/my_purchases"
+	    android:title="@string/my_purchases"
+	    android:showAsAction="ifRoom"/>
+	
 	<item android:id="@+id/update_store"
 		android:title="@string/update"
 	    android:showAsAction="never"/>
-    
+	    
 </menu>

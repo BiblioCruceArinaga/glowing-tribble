@@ -402,6 +402,7 @@
     	<string name="downloading">Descargando</string>
     	<string name="win_buy">¡Has recibido 0,01 crédito!</string>
     	<string name="no_space">No tienes espacio suficiente en tu dispositivo</string>
+    	<string name="my_purchases">Mis compras</string>
     	
     		<!-- Pantalla busqueda -->
     		<string name="list">Lista</string>

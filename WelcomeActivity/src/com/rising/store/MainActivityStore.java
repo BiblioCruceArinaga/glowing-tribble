@@ -189,6 +189,12 @@ public class MainActivityStore extends FragmentActivity implements OnQueryTextLi
 	    		}
 	    			    		
 	    		return true;
+	    		
+	    	case R.id.my_purchases:
+	    		Intent intent = new Intent(this, MyPurchases.class);
+	    		startActivity(intent);
+	    		finish();
+	    		return true;
 	        
 	    	case android.R.id.home:
 	    		Intent in = new Intent(this, MainScreenActivity.class);

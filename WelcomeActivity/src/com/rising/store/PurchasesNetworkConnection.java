@@ -24,14 +24,12 @@ import android.net.ParseException;
 import android.os.AsyncTask;
 import android.util.Log;
 
-
-public class SearchNetworkConnection extends AsyncTask<String, Integer, String>{
+public class PurchasesNetworkConnection extends AsyncTask<String, Integer, String>{
 
 	//  Comunicaci�n HTTP con el servidor
 	HttpPost httppost;
 	HttpClient httpcliente;
-	String URL_connect = "http://www.scores.rising.es/store-search";
-		///purchases
+	String URL_connect = "http://www.scores.rising.es/purchases";
 	//  Contexto
 	Context context;
 	
@@ -44,7 +42,7 @@ public class SearchNetworkConnection extends AsyncTask<String, Integer, String>{
 	
 	private OnTaskCompleted listener;
 	
-	public SearchNetworkConnection(OnTaskCompleted listener2, Context ctx) {
+	public PurchasesNetworkConnection(OnTaskCompleted listener2, Context ctx) {
 		this.context = ctx;
 		this.listener = listener2;
 	}
@@ -61,7 +59,8 @@ public class SearchNetworkConnection extends AsyncTask<String, Integer, String>{
         // Http post
         try{
         	httpcliente = new DefaultHttpClient();
-        	params.add(new BasicNameValuePair("word", urls[0]));
+        	params.add(new BasicNameValuePair("Id_U", urls[0]));
+        	params.add(new BasicNameValuePair("Lenguaje", urls[1]));
         	        		        	
             httppost = new HttpPost(URL_connect);
             httppost.setEntity(new UrlEncodedFormEntity(params)); 
@@ -162,5 +161,4 @@ public class SearchNetworkConnection extends AsyncTask<String, Integer, String>{
     public ArrayList<PartituraTienda> devolverPartituras() {
     	return searchinfo;
     }
-    
 }
