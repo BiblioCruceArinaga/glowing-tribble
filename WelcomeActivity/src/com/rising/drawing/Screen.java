@@ -379,6 +379,7 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback, Observer {
 		byte octava = fichero.readByte();
 		byte figuracion = fichero.readByte();
 		byte union = fichero.readByte();
+		byte idUnion = fichero.readByte();
 		byte plica = fichero.readByte();
 		byte voz = fichero.readByte();
 		byte pentagrama = fichero.readByte();
@@ -386,8 +387,9 @@ class Screen extends SurfaceView implements SurfaceHolder.Callback, Observer {
 		ArrayList<Byte> figurasGraficas = leerHastaAlmohadilla();
 		ArrayList<Byte> posicionEjeX = leerHastaAlmohadilla();
 
-		compas.addNote(new Nota(nota, octava, figuracion, union, plica,
-				voz, pentagrama, figurasGraficas, posicionEjeX));
+		compas.addNote(new Nota(nota, octava, figuracion, union, 
+				idUnion, plica, voz, pentagrama, figurasGraficas, 
+				posicionEjeX));
 	}
 	//  ================================
 	

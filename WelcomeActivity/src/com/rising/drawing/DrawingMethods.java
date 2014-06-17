@@ -1,6 +1,7 @@
 package com.rising.drawing;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -215,7 +216,7 @@ public class DrawingMethods {
 		if (nota.notaDeGracia()) {
 			desplazamientoExtra = config.getDesplazamientoExtraNotaGracia();
 			
-			if (nota.getBeam() == 0)
+			if (!nota.tieneBeams())
 				desplazamientoExtra -= config.getOffsetUltimaNotaGracia();
 			else
 				if (nota.beamFinal()) 
@@ -1504,39 +1505,36 @@ public class DrawingMethods {
 	            	compas.getPedalFin().setX(compas.getPedalFin().getX() + anchoParaCadaCompas);
 	            
 	            if (compas.hayTempo())
-	            	compas.getTempo().setX(compas.getXIniNotas());
+	            	compas.getTempo().setX(compas.getTempo().getX() + anchoParaCadaCompas);
         	}
         }
         
         //  Segundo paso: reajustar posición de las notas
         for (int i=primerCompas; i<=ultimoCompas; i++) {
         	Compas compas = partitura.getCompas(i);
-        	ArrayList<Integer> xsDelCompas = compas.saberXsDelCompas();
+        	ArrayList<Integer> xsDeNotas = compas.saberXsDeNotas();
         	
         	int lastX = compas.saberXUltimaNota();
         	int anchoADistribuir = compas.getXFin() - config.getMargenDerechoCompases() - lastX;
         	
         	//  El primer elemento no lo vamos a mover, de ahí el -1
-        	int numElementos = xsDelCompas.size() - 1;
+        	int numElementos = xsDeNotas.size() - 1;
         	int anchoPorNota = 0;
         	if (numElementos > 0)
         		anchoPorNota = anchoADistribuir / numElementos;
         	
-        	reajustarNotas(compas, xsDelCompas, anchoPorNota);
-        	reajustarFigurasGraficas(compas, xsDelCompas, anchoPorNota);
+        	reajustarNotas(compas, xsDeNotas, anchoPorNota);
+        	reajustarFigurasGraficas(compas, anchoPorNota);
         }
-        
 	}
 
-	private void reajustarFigurasGraficas(Compas compas, 
-			ArrayList<Integer> xsDelCompas, int anchoPorNota) {
+	private void reajustarFigurasGraficas(Compas compas, int anchoPorNota) {
 		
 		int multiplicador = 0;
 		int xPrimeraNota = compas.saberXPrimeraNota();
 		
-		//  NOTA: las claves sólo deben moverse si no están al principio
-    	//  del compás. Da la casualidad de que con este algoritmo se 
-    	//  respeta esa regla.
+		ArrayList<Integer> xsDelCompas = compas.saberXsDelCompas();
+
     	if (compas.hayClaves()) {
         	Clave[] claves = compas.getClaves();
         	
@@ -1579,32 +1577,9 @@ public class DrawingMethods {
 	        			compas.getTexto().getX() + anchoPorNota * multiplicador);
         	}
         }
-        
-        if (compas.hayTempo()) {
-        	if (compas.getTempo().getX() != xPrimeraNota) {
-        		multiplicador = xsDelCompas.indexOf(compas.getTempo().getX());
-	        	compas.getTempo().setX( 
-	        			compas.getTempo().getX() + anchoPorNota * multiplicador);
-        	}
-        }
 	}
 	
-	private void reajustarNotas(Compas compas, ArrayList<Integer> xsDelCompas, int anchoPorNota) {
-		
-		int xPrimeraNota = compas.saberXPrimeraNota();
-		
-		Clave[] claves = compas.getClaves();
-		Tempo tempo = compas.getTempo();
-		int xClave1 = Integer.MAX_VALUE;
-		int xClave2 = Integer.MAX_VALUE;
-		int xTempo = Integer.MAX_VALUE;
-		
-		if (claves[0] != null)
-			xClave1 = claves[0].getX();
-		if (claves[1] != null)
-			xClave2 = claves[1].getX();
-		if (tempo != null && tempo.getX() != -1)
-			xTempo = tempo.getX();
+	private void reajustarNotas(Compas compas, ArrayList<Integer> xsDeNotas, int anchoPorNota) {
 		
 		//  A cada elemento se le suma una distancia cada vez
     	//  mayor, ya que de lo contrario sólo estaríamos
@@ -1614,28 +1589,8 @@ public class DrawingMethods {
     	int numNotas = notas.size();
     	int multiplicador = 0;
     	for (int j=0;j<numNotas;j++) {
-    		
-    		//  Deben moverse todas las notas excepto la
-    		//  primera, que se moverá si se cumplen
-    		//  ciertas condiciones
-    		if (notas.get(j).getX() != xPrimeraNota) {
-    		
-	    		//  Las X contenidas en el array xsDelCompas están en orden
-	    		//  de menor a mayor. Esto permite asociar automáticamente
-	    		//  el índice de cada posición X con el multiplicador
-	    		//  necesario para reajustar el elemento con ese valor de x
-	    		multiplicador = xsDelCompas.indexOf(notas.get(j).getX());
-				notas.get(j).setX(notas.get(j).getX() + anchoPorNota * multiplicador);
-    		}
-    		
-    		//  Moveremos la primera nota si antes que ella no hay
-    		//  ninguna clave ni tampoco ningún tempo
-    		else {
-    			if (xPrimeraNota < xClave1 && xPrimeraNota < xClave2 && xPrimeraNota < xTempo) {
-    				multiplicador = xsDelCompas.indexOf(notas.get(j).getX());
-    				notas.get(j).setX(notas.get(j).getX() + anchoPorNota * multiplicador);
-    			}
-    		}
+			multiplicador = xsDeNotas.indexOf(notas.get(j).getX());
+			notas.get(j).setX(notas.get(j).getX() + anchoPorNota * multiplicador);
     	}
 	}
 	
@@ -1646,8 +1601,8 @@ public class DrawingMethods {
 	 * 
 	 */
 
-	//  Esta implementación está ignorando las plicas dobles
-	private int colocarBeamsALaMismaAltura(boolean haciaArriba) {
+	//  NOTA: Esta implementación está ignorando las plicas dobles
+	private int colocarBeamsALaMismaAltura(boolean haciaArriba, int beamId) {
 		int numBeams = beams.size();
 		int y_beams = haciaArriba ? Integer.MAX_VALUE : 0;
 		
@@ -1655,24 +1610,27 @@ public class DrawingMethods {
 		boolean notaNormal = false;
 
 		for (int i=0; i<numBeams; i++) {
-			int indCompas = beams.get(i).getCompas();
-			int indNota = beams.get(i).getNota();
-			Nota nota = partitura.getCompas(indCompas).getNota(indNota);
-			
-			//  Previene que puedan haber notas normales y de gracia
-			//  mezcladas en un mismo beam, en cuyo caso la altura
-			//  la impondría la nota normal por ocupar más espacio
-			if (!notaNormal)
-				if (!nota.notaDeGracia()) 
-					notaNormal = true;
-			
-			if (haciaArriba) {
-				if (y_beams > nota.getY())
-					y_beams = nota.getY();
-			}
-			else {
-				if (y_beams < nota.getY())
-					y_beams = nota.getY();
+			if (beamId == beams.get(i).getBeamId()) {
+				
+				int indCompas = beams.get(i).getCompas();
+				int indNota = beams.get(i).getNota();
+				Nota nota = partitura.getCompas(indCompas).getNota(indNota);
+				
+				//  Previene que puedan haber notas normales y de gracia
+				//  mezcladas en un mismo beam, en cuyo caso la altura
+				//  la impondría la nota normal por ocupar más espacio
+				if (!notaNormal)
+					if (!nota.notaDeGracia()) 
+						notaNormal = true;
+				
+				if (haciaArriba) {
+					if (y_beams > nota.getY())
+						y_beams = nota.getY();
+				}
+				else {
+					if (y_beams < nota.getY())
+						y_beams = nota.getY();
+				}
 			}
 		}
 		
@@ -1716,15 +1674,26 @@ public class DrawingMethods {
 	}
 	
 	//  Esta implementación está ignorando las plicas dobles
-	private void dibujarBeams(int y_beams, boolean haciaArriba) {
+	private void dibujarBeams(int y_beams, boolean haciaArriba, int beamId) {
 		int numBeams = beams.size();
 		
 		int indCompasAnt = 0;
 		int indNotaAnt = 0;
 		int distancia_beams = 0;
 		int ancho_beams = 0;
+		
+		Collections.sort(beams);
+		int i = -1;
+		for (int j=0; j<numBeams; j++) {
+			if (beams.get(j).getBeamId() == beamId) {
+				i = j;
+				break;
+			}
+		}
+		int primerBeam = i;
 
-		for (int i=0; i<numBeams; i++) {
+		while (beams.get(i).getBeamId() == beamId) {
+			
 			OrdenDibujo ordenDibujo;
 			
 			indCompasAnt = beams.get(i).getCompas();
@@ -1737,7 +1706,7 @@ public class DrawingMethods {
 			ancho_beams = partitura.getCompas(indCompasAnt).getNota(indNotaAnt).notaDeGracia() ?
 					config.getAnchoBeamsNotaGracia() : config.getAnchoBeams();
 
-			if (i == numBeams - 1) {
+			if ( (i == numBeams - 1) || (beams.get(i + 1).getBeamId() != beamId) ) {
 				
 				//  Gestión de hooks en la última nota. Por ahora sólo se está controlando un caso
 				if (partitura.getCompas(indCompasAnt).getNota(indNotaAnt).getBeam() == 4) {
@@ -1872,9 +1841,11 @@ public class DrawingMethods {
 			}
 			
 			dibujarPlicaDeNota(partitura.getCompas(indCompasAnt).getNota(indNotaAnt), y_beams);
+			if (++i == numBeams) break;
 		}
 		
-		beams.clear();
+		for (int j = primerBeam; j<i; j++)
+			beams.remove(primerBeam);
 	}
 
 	private void dibujarCabezaDeNota(Nota nota) {
@@ -2058,7 +2029,8 @@ public class DrawingMethods {
 				break;
 
 			case 10:
-				ligaduras.add(new IndiceNota(compasActual, notaActual, nota.getLigaduraUnion()));
+				ligaduras.add(new IndiceNota(compasActual, notaActual, 
+						nota.getLigaduraUnion(), (byte) 0));
 				break;
 				
 			case 11:
@@ -2177,7 +2149,8 @@ public class DrawingMethods {
 				break;
 				
 			case 32:
-				ligaduras.add(new IndiceNota(compasActual, notaActual, nota.getLigaduraExpresion()));
+				ligaduras.add(new IndiceNota(compasActual, notaActual, 
+						nota.getLigaduraExpresion(), (byte) 0));
 				break;
 				
 			case 33:
@@ -2509,7 +2482,7 @@ public class DrawingMethods {
 			dibujarCabezaDeNota(notas.get(i));
 
 			int y_beams = 0;
-			if (notas.get(i).getBeam() > 0) 
+			if (notas.get(i).tieneBeams())
 				y_beams = gestionarBeams(notas.get(i));
 			else
 				if (dibujarPlicaDeNota(notas.get(i), 0))
@@ -2619,7 +2592,7 @@ public class DrawingMethods {
 			ordenesDibujo.add(ordenDibujo);
 		}
 
-		return nota.getBeam() == 0;
+		return !nota.tieneBeams();
 	}
 
 	private void dibujarSlash(int x, int y) {
@@ -2702,35 +2675,37 @@ public class DrawingMethods {
 		
 		return indice;
 	}
-	
-	//  Guarda las posiciones de las notas que tienen beams para,
-	//  más adelante, dibujar sus plicas a la altura del beam
-	private int gestionarBeams(Nota nota) {
-		boolean dibujarBeams = false;
-		
-		if (nota.getBeam() > 0) {
-			IndiceNota beam = new IndiceNota(compasActual, notaActual, (byte) 0);
-			beams.add(beam);
-			if ((nota.getBeam() == 1) || (nota.getBeam() == 4)) 
-				dibujarBeams = true;
-		}
-		
-		int y_beams = 0;
-		if (dibujarBeams) {
-			boolean haciaArriba = nota.haciaArriba();
-			y_beams = colocarBeamsALaMismaAltura(haciaArriba);
-			dibujarBeams(y_beams, haciaArriba);
-		}
-		
-		return y_beams;
-	}
-	
+
 	private int gestionarAlteracion(Nota nota, ArrayList<Byte> figurasGraficas, int ind, int y_beams) {
 		if (figurasGraficas.get(ind + 1) == 1)
 			nota.setX(nota.getX() - config.getAnchoCabezaNota());
 		
 		dibujarFiguraGrafica(nota, figurasGraficas.get(ind++), nota.getX(), nota.getY(), y_beams);
 		return ind;
+	}
+	
+	//  Guarda las posiciones de las notas que tienen beams para,
+	//  más adelante, dibujar sus plicas a la altura del beam
+	private int gestionarBeams(Nota nota) {
+		boolean dibujarBeams = false;
+		int beamId = 0;
+		
+		if (nota.tieneBeams()) {
+			IndiceNota beam = new IndiceNota(compasActual, notaActual, (byte) 0, nota.getBeamId());
+			beams.add(beam);
+			beamId = beam.getBeamId();
+			
+			if (nota.beamFinal())
+				dibujarBeams = true;
+		}
+		
+		int y_beams = 0;
+		if (dibujarBeams) {
+			y_beams = colocarBeamsALaMismaAltura(nota.haciaArriba(), beamId);
+			dibujarBeams(y_beams, nota.haciaArriba(), beamId);
+		}
+		
+		return y_beams;
 	}
 	
 	private int gestionarLigaduras(Nota nota, ArrayList<Byte> figurasGraficas, int ind, int y_beams) {

@@ -370,6 +370,20 @@ public class Compas {
 		return xEncontradas;
 	}
 	
+	//  Devuelve un array con todas las posiciones x de
+	//  todas las notas del compás
+	public ArrayList<Integer> saberXsDeNotas() {
+		ArrayList<Integer> xEncontradas = new ArrayList<Integer>();
+
+		int numNotas = notas.size();
+		for (int i=0; i<numNotas; i++)
+			if (!xEncontradas.contains(notas.get(i).getX()))
+				xEncontradas.add(notas.get(i).getX());
+		
+		Collections.sort(xEncontradas);
+		return xEncontradas;
+	}
+	
 	public int saberXPrimeraNota() {
 		return notas.get(0).getX();
 	}

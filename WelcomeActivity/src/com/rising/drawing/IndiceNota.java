@@ -6,7 +6,7 @@ package com.rising.drawing;
  * o beams asociados a ella.
  */
 
-public class IndiceNota {
+public class IndiceNota implements Comparable<IndiceNota> {
 	private int compas;
 	private int nota;
 	
@@ -14,21 +14,40 @@ public class IndiceNota {
 	//  estemos manipulando ligaduras
 	private byte ligadura;
 	
-	public IndiceNota(int compas, int nota, byte ligadura) {
+	//  Este campo es de uso exclusivo
+	//  cuando estemos manipulando beams
+	private byte beamId;
+	
+	public IndiceNota(int compas, int nota, byte ligadura, byte beamId) {
 		this.compas = compas;
 		this.nota = nota;
 		this.ligadura = ligadura;
+		this.beamId = beamId;
+	}
+	
+	public byte getBeamId() {
+		return beamId;
 	}
 	
 	public int getCompas() {
 		return compas;
 	}
 	
+	public byte getLigadura() {
+		return ligadura;
+	}
+	
 	public int getNota() {
 		return nota;
 	}
-	
-	public byte getLigadura() {
-		return ligadura;
+
+	@Override
+	public int compareTo(IndiceNota another) {
+		if (beamId < another.getBeamId())
+			return -1;
+		else if (beamId == another.getBeamId())
+			return 0;
+		else
+			return 1;
 	}
 }

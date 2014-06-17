@@ -9,6 +9,7 @@ public class Nota {
 	private byte octava;
 	private byte figuracion;
 	private byte beam;
+	private byte beamId;
 	private byte plica;
 	private byte voz;
 	private byte pentagrama;
@@ -29,13 +30,14 @@ public class Nota {
 	private int y;
 	
 	public Nota(byte step, byte octava, byte figuracion, byte beam,
-			byte plica, byte voz, byte pentagrama,
+			byte beamId, byte plica, byte voz, byte pentagrama,
 			ArrayList<Byte> figurasGraficas, ArrayList<Byte> posicion) {
 		
 		this.step = step;
 		this.octava = octava;
 		this.figuracion = figuracion;
 		this.beam = beam;
+		this.beamId = beamId;
 		this.plica = plica;
 		this.voz = voz;
 		this.pentagrama = pentagrama;
@@ -96,6 +98,10 @@ public class Nota {
 	
 	public byte getBeam() {
 		return beam;
+	}
+	
+	public byte getBeamId() {
+		return beamId;
 	}
 	
 	public byte getFiguracion() {
@@ -214,6 +220,10 @@ public class Nota {
 		return step == 0;
 	}
 
+	public boolean tieneBeams() {
+		return beam > 0;
+	}
+	
 	public boolean tienePlica() {
 		return plica > 0;
 	}
