@@ -133,8 +133,7 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 				default:
 					Toast.makeText(getApplicationContext(), 
 							R.string.err_login_unknown, Toast.LENGTH_LONG).show();
-			}
-			
+			}		
 			MDialog.dismiss();
 	    }
 	};
@@ -446,16 +445,20 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 
 					@Override
 					public void onClick(View arg0) {
-						EditText feedbackCajaTexto = (EditText) MDialog.findViewById(R.id.feedbackCajaTexto);
-			    		String message = feedbackCajaTexto.getText().toString();
+						if(isOnline()){	
+							EditText feedbackCajaTexto = (EditText) MDialog.findViewById(R.id.feedbackCajaTexto);
+				    		String message = feedbackCajaTexto.getText().toString();
+							
+							if (message.equals("")) {
+								Toast.makeText(getApplicationContext(), 
+									R.string.err_campos_vacios, Toast.LENGTH_LONG).show();
+							} else {
+								new SendFeedback(MainScreenActivity.this, 
+										listenerFeedback).execute(session.getMail(), message);
+							}
 						
-						if (message.equals("")) {
-							Toast.makeText(getApplicationContext(), 
-								R.string.err_campos_vacios, Toast.LENGTH_LONG).show();
-						}
-						else {
-							new SendFeedback(MainScreenActivity.this, 
-									listenerFeedback).execute(session.getMail(), message);
+						}else{
+							Toast.makeText(context, R.string.connection_err, Toast.LENGTH_LONG).show();	
 						}
 					}
 	    	    });
@@ -499,34 +502,37 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 
 						@Override
 						public void onClick(View arg0) {
-							
-							//  Usuario normal
-							if (fid == -1) {
-								
-								if ( 
-									( claveVieja.getText().length() == 0 ) ||
-									( claveNueva.getText().length() == 0 ) ||
-									( claveRepetir.getText().length() == 0 )
-								) {
-									Toast.makeText(getApplicationContext(), 
-										R.string.err_campos_vacios, Toast.LENGTH_LONG).show();
-								} else {
-									if (!claveNueva.getText().toString().equals(
-											claveRepetir.getText().toString())) {
+							if(isOnline()){	
+								//  Usuario normal
+								if (fid == -1) {
+									
+									if ( 
+										( claveVieja.getText().length() == 0 ) ||
+										( claveNueva.getText().length() == 0 ) ||
+										( claveRepetir.getText().length() == 0 )
+									) {
 										Toast.makeText(getApplicationContext(), 
-											R.string.err_pass, Toast.LENGTH_LONG).show();
-									}
-									else {
-										new ChangePassword(MainScreenActivity.this, listenerPass).execute(
-											session.getMail(), 
-											claveVieja.getText().toString(), 
-											claveNueva.getText().toString());    
-					        			
-										claveVieja.setText("");
-										claveNueva.setText("");
-										claveRepetir.setText("");
+											R.string.err_campos_vacios, Toast.LENGTH_LONG).show();
+									} else {
+										if (!claveNueva.getText().toString().equals(
+												claveRepetir.getText().toString())) {
+											Toast.makeText(getApplicationContext(), 
+												R.string.err_pass, Toast.LENGTH_LONG).show();
+										}
+										else {
+											new ChangePassword(MainScreenActivity.this, listenerPass).execute(
+												session.getMail(), 
+												claveVieja.getText().toString(), 
+												claveNueva.getText().toString());    
+						        			
+											claveVieja.setText("");
+											claveNueva.setText("");
+											claveRepetir.setText("");
+										}
 									}
 								}
+							}else{
+								Toast.makeText(context, R.string.connection_err, Toast.LENGTH_LONG).show();	
 							}
 						}
 		    	    	
@@ -556,27 +562,31 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 
 					@Override
 					public void onClick(View arg0) {
-						String mail = session.getMail();
-						
-						//  Usuario normal
-						if (clave.getText().length() > 0) {
-							new EraseAccount(MainScreenActivity.this, listener).execute(
-									mail, clave.getText().toString());    
-		        			clave.setText("");
-						}
-						else {
+						if(isOnline()){
+							String mail = session.getMail();
 							
-							//  Usuario de facebook
-							if (fid > -1) {
+							//  Usuario normal
+							if (clave.getText().length() > 0) {
 								new EraseAccount(MainScreenActivity.this, listener).execute(
-										mail, fid + "");    
+										mail, clave.getText().toString());    
 			        			clave.setText("");
 							}
-							
 							else {
-								Toast.makeText(getApplicationContext(), 
-									R.string.err_campos_vacios, Toast.LENGTH_LONG).show();
+								
+								//  Usuario de facebook
+								if (fid > -1) {
+									new EraseAccount(MainScreenActivity.this, listener).execute(
+											mail, fid + "");    
+				        			clave.setText("");
+								}
+								
+								else {
+									Toast.makeText(getApplicationContext(), 
+										R.string.err_campos_vacios, Toast.LENGTH_LONG).show();
+								}
 							}
+						}else{
+							Toast.makeText(context, R.string.connection_err, Toast.LENGTH_LONG).show();	
 						}
 					}
 	    	    	
@@ -601,7 +611,7 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
         }
 	}
 	
-	//Si falla la creación en el directorio externo
+
 	public void createScoreFolderInternal(){
 		File file=new File(Environment.getRootDirectory() + path);
         if(!file.exists()) {
@@ -686,6 +696,8 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 				if(isOnline()){
 					Intent i = new Intent(MainScreenActivity.this, MainActivityStore.class);
 					startActivity(i);
+				}else{
+					Toast.makeText(context, R.string.connection_err, Toast.LENGTH_LONG).show();
 				}				
 			}	
 		});

@@ -15,8 +15,9 @@ public class SessionManager {
 	// Shared Preferences
 	SharedPreferences sPref;
 	LoginButton FLButton;
+	
 	// Editor for Shared preferences
-	Editor editor;
+	static Editor editor;
 	Session fSession;
 	
 	// Context
@@ -44,7 +45,9 @@ public class SessionManager {
 	public SessionManager(Context context){
 		this.context = context;
 		sPref = context.getSharedPreferences(PREF_NAME, PRIVATE_MODE);
-		//editor = sPref.edit();
+		editor = sPref.edit();
+		editor.commit();
+		
 	}
 	
 	/**
@@ -162,6 +165,7 @@ public class SessionManager {
 	 * Clear session details
 	 * */
 	public void logoutUser(){
+		
 		// Clearing all data from Shared Preferences
 		editor.clear();
 		editor.commit();

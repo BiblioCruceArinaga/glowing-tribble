@@ -257,7 +257,7 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 			byteLeido = fichero.readByte();
 		}
 	}
-
+	
 	public Config getConfig() {
 		return config;
 	}

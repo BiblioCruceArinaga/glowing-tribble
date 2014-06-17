@@ -78,6 +78,8 @@ public class MainActivity extends Activity{
 		if (s.isValidScreen()) {
 			myScreenThread = new ScreenThread(holder, s);
 			config = s.getConfig();
+		}else{
+			Log.e("Valid Screen", "Is not a valid screen");
 		}
 		setContentView(s);	
 	}
@@ -131,7 +133,6 @@ public class MainActivity extends Activity{
 	public void onActionModeFinished (ActionMode mode) {
 		s.Metronome_Stop();
 	}
-	
 	
 	/*
 	 * 

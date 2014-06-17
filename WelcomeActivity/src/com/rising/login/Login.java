@@ -12,8 +12,10 @@ import org.json.JSONObject;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -72,10 +74,9 @@ public class Login extends FragmentActivity {
 	private String mail = "";
 	private String name = "";	
 	private String language = "";
-	
+	private Context ctx;
 	private String URL_connect = "http://www.scores.rising.es/login-mobile";
 	private String URL_Check_Facebook = "http://www.scores.rising.es/login-facebook-mobile";
-		
 	public static UserDataNetworkConnection dunc;
 	public static ArrayList<DatosUsuario> userData;
 	
@@ -140,7 +141,8 @@ public class Login extends FragmentActivity {
 		
 		session = new SessionManager(getApplicationContext());
 		dunc = new UserDataNetworkConnection(listenerUser, getApplicationContext());
-		
+		ctx = this;
+				
 		if (session.isLoggedIn()) {
 			Intent i = new Intent(Login.this, MainScreenActivity.class);
 			startActivity(i);
@@ -164,51 +166,53 @@ public class Login extends FragmentActivity {
 
 			@Override
 			public void onClick(View v) {
-				
-				LDialog = new Dialog(Login.this, R.style.cust_dialog);
-				
-				LDialog.setContentView(R.layout.login_dialog);
-				LDialog.setTitle(R.string.login_title);
-				
-				Confirm_Login = (Button)LDialog.findViewById(R.id.b_confirm_login);
-				Cancel_Login = (Button)LDialog.findViewById(R.id.b_cancel_login);
-				Mail = (EditText)LDialog.findViewById(R.id.et_mail);
-				Pass = (EditText)LDialog.findViewById(R.id.et_pass);
-				
-				Confirm_Login.setOnClickListener(new OnClickListener(){
-
-					@Override
-					public void onClick(View v) {
-
-			        	usuario = Mail.getText().toString();
-			        	passw = Pass.getText().toString();
-			        	
-			        	Log.i("Login", "Mail: " + usuario + ", Pass: " + passw);
-			        					        	
-		        		if (checkLoginData(usuario, passw)==true) {
-		        			
-		        			new asynclogin().execute(usuario,passw);    
-		        			Pass.setText("");		        			
-		        		}else{
-		        			errLogin(0);
-		        		} 
-		        		
-		        		LDialog.dismiss();
-					}
+				if(isOnline()){	
+					LDialog = new Dialog(Login.this, R.style.cust_dialog);
 					
-				});
-				
-				Cancel_Login.setOnClickListener(new OnClickListener(){
-
-					@Override
-					public void onClick(View v) {
-						LDialog.dismiss();					
-					}
+					LDialog.setContentView(R.layout.login_dialog);
+					LDialog.setTitle(R.string.login_title);
 					
-				});
-				
-				LDialog.show();
-				
+					Confirm_Login = (Button)LDialog.findViewById(R.id.b_confirm_login);
+					Cancel_Login = (Button)LDialog.findViewById(R.id.b_cancel_login);
+					Mail = (EditText)LDialog.findViewById(R.id.et_mail);
+					Pass = (EditText)LDialog.findViewById(R.id.et_pass);
+					
+					Confirm_Login.setOnClickListener(new OnClickListener(){
+	
+						@Override
+						public void onClick(View v) {
+	
+				        	usuario = Mail.getText().toString();
+				        	passw = Pass.getText().toString();
+				        	
+				        	Log.i("Login", "Mail: " + usuario + ", Pass: " + passw);
+				        					        	
+			        		if (checkLoginData(usuario, passw)==true) {
+			        			
+			        			new asynclogin().execute(usuario,passw);    
+			        			Pass.setText("");		        			
+			        		}else{
+			        			errLogin(0);
+			        		} 
+			        		
+			        		LDialog.dismiss();
+						}
+						
+					});
+					
+					Cancel_Login.setOnClickListener(new OnClickListener(){
+	
+						@Override
+						public void onClick(View v) {
+							LDialog.dismiss();					
+						}
+						
+					});
+					
+					LDialog.show();
+				}else{
+					Toast.makeText(ctx, R.string.connection_err, Toast.LENGTH_LONG).show();
+				}	
         	}  
 		});
 		
@@ -217,42 +221,45 @@ public class Login extends FragmentActivity {
 			
 			@Override
 			public void onClick(View v) {
-				
-				LPDialog = new Dialog(Login.this, R.style.cust_dialog);
-				
-				LPDialog.setContentView(R.layout.olvidopass_dialog);
-				LPDialog.setTitle(R.string.olvido_title);
-											
-				Confirm_OlvidoPass = (Button)LPDialog.findViewById(R.id.b_confirm_olpass);
-				Cancel_OlvidoPass = (Button)LPDialog.findViewById(R.id.b_cancel_olpass);
-				Mail_OlvidoPass = (EditText)LPDialog.findViewById(R.id.et_mail_olvidopass);
-								
-				Confirm_OlvidoPass.setOnClickListener(new OnClickListener(){
-
-					@Override
-					public void onClick(View v) {
-						String mail = Mail_OlvidoPass.getText().toString();
-						if (mail.equals("")) {
-							Toast.makeText(getApplicationContext(), R.string.err_campos_vacios, Toast.LENGTH_SHORT).show();
+				if(isOnline()){
+					LPDialog = new Dialog(Login.this, R.style.cust_dialog);
+					
+					LPDialog.setContentView(R.layout.olvidopass_dialog);
+					LPDialog.setTitle(R.string.olvido_title);
+												
+					Confirm_OlvidoPass = (Button)LPDialog.findViewById(R.id.b_confirm_olpass);
+					Cancel_OlvidoPass = (Button)LPDialog.findViewById(R.id.b_cancel_olpass);
+					Mail_OlvidoPass = (EditText)LPDialog.findViewById(R.id.et_mail_olvidopass);
+									
+					Confirm_OlvidoPass.setOnClickListener(new OnClickListener(){
+	
+						@Override
+						public void onClick(View v) {
+							String mail = Mail_OlvidoPass.getText().toString();
+							if (mail.equals("")) {
+								Toast.makeText(getApplicationContext(), R.string.err_campos_vacios, Toast.LENGTH_SHORT).show();
+							}
+							else {
+								AOP.new asyncmail(getApplicationContext()).execute(mail, language); 
+								LPDialog.dismiss();
+							}
 						}
-						else {
-							AOP.new asyncmail(getApplicationContext()).execute(mail, language); 
+						
+					});
+							
+					Cancel_OlvidoPass.setOnClickListener(new OnClickListener(){
+	
+						@Override
+						public void onClick(View v) {
 							LPDialog.dismiss();
 						}
-					}
-					
-				});
 						
-				Cancel_OlvidoPass.setOnClickListener(new OnClickListener(){
-
-					@Override
-					public void onClick(View v) {
-						LPDialog.dismiss();
-					}
+					});	
 					
-				});	
-				
-				LPDialog.show();
+					LPDialog.show();
+				}else{
+					Toast.makeText(ctx, R.string.connection_err, Toast.LENGTH_LONG).show();
+				}
 			}
 		});
 	 
@@ -261,67 +268,71 @@ public class Login extends FragmentActivity {
 
 			@Override
 			public void onClick(View v) {
-				
-				RDialog = new Dialog(Login.this, R.style.cust_dialog);
-				
-				RDialog.setContentView(R.layout.registro_dialog);
-				RDialog.setTitle(R.string.registro_title);
-				
-				Nombre_Registro = (EditText)RDialog.findViewById(R.id.et_nombre_registro);
-				Mail_Registro = (EditText)RDialog.findViewById(R.id.et_mail_registro);
-				Pass_Registro = (EditText)RDialog.findViewById(R.id.et_pass_registro);
-				ConfiPass_Registro = (EditText)RDialog.findViewById(R.id.et_confipass_registro);
-				Confirm_Reg = (Button)RDialog.findViewById(R.id.b_confirm_reg);
-				Cancel_Reg = (Button)RDialog.findViewById(R.id.b_cancel_reg);
-								
-				Confirm_Reg.setOnClickListener(new OnClickListener(){
-
-					@Override
-					public void onClick(View v) {
-						
-						if(Nombre_Registro.getText().toString().equals("") && 
-								Mail_Registro.getText().toString().equals("") && 
-								Pass_Registro.getText().toString().equals("") && 
-								ConfiPass_Registro.getText().toString().equals("")) {
- 			        		
-							Toast.makeText(getApplicationContext(), 
-									R.string.err_campos_vacios, Toast.LENGTH_LONG).show();
-																					 							
- 			        	}else{
- 			        		
- 			        		name = Nombre_Registro.getText().toString();
-							mail = Mail_Registro.getText().toString();
-							pass = Pass_Registro.getText().toString();
-							confipass = ConfiPass_Registro.getText().toString();
+				if(isOnline()){	
+					RDialog = new Dialog(Login.this, R.style.cust_dialog);
+					
+					RDialog.setContentView(R.layout.registro_dialog);
+					RDialog.setTitle(R.string.registro_title);
+					
+					Nombre_Registro = (EditText)RDialog.findViewById(R.id.et_nombre_registro);
+					Mail_Registro = (EditText)RDialog.findViewById(R.id.et_mail_registro);
+					Pass_Registro = (EditText)RDialog.findViewById(R.id.et_pass_registro);
+					ConfiPass_Registro = (EditText)RDialog.findViewById(R.id.et_confipass_registro);
+					Confirm_Reg = (Button)RDialog.findViewById(R.id.b_confirm_reg);
+					Cancel_Reg = (Button)RDialog.findViewById(R.id.b_cancel_reg);
+									
+					Confirm_Reg.setOnClickListener(new OnClickListener(){
+	
+						@Override
+						public void onClick(View v) {
 							
-							if(checkPass(pass, confipass)){
-					            PDialog = new ProgressDialog(Login.this);
-					            PDialog.setMessage(getString(R.string.creating_account));
-					            PDialog.setIndeterminate(false);
-					            PDialog.setCancelable(false);
-					            PDialog.show();
-					            
-								AR.new asyncreg(listener).execute(name, mail, pass, language); 
- 			        		}else{
- 			        			Toast.makeText(getApplicationContext(), R.string.err_pass, Toast.LENGTH_LONG).show();
- 			        		}
- 			        	}
- 			        	
- 		        		RDialog.dismiss();
-					}
+							if(Nombre_Registro.getText().toString().equals("") && 
+									Mail_Registro.getText().toString().equals("") && 
+									Pass_Registro.getText().toString().equals("") && 
+									ConfiPass_Registro.getText().toString().equals("")) {
+	 			        		
+								Toast.makeText(getApplicationContext(), 
+										R.string.err_campos_vacios, Toast.LENGTH_LONG).show();
+																						 							
+	 			        	}else{
+	 			        		
+	 			        		name = Nombre_Registro.getText().toString();
+								mail = Mail_Registro.getText().toString();
+								pass = Pass_Registro.getText().toString();
+								confipass = ConfiPass_Registro.getText().toString();
+								
+								if(checkPass(pass, confipass)){
+						            PDialog = new ProgressDialog(Login.this);
+						            PDialog.setMessage(getString(R.string.creating_account));
+						            PDialog.setIndeterminate(false);
+						            PDialog.setCancelable(false);
+						            PDialog.show();
+						            
+									AR.new asyncreg(listener).execute(name, mail, pass, language); 
+	 			        		}else{
+	 			        			Toast.makeText(getApplicationContext(), R.string.err_pass, Toast.LENGTH_LONG).show();
+	 			        		}
+	 			        	}
+	 			        	
+	 		        		RDialog.dismiss();
+						}
+						
+					});
+	
+					Cancel_Reg.setOnClickListener(new OnClickListener(){
+	
+						@Override
+						public void onClick(View v) {
+							RDialog.dismiss();
+						}
+						
+					});
 					
-				});
-
-				Cancel_Reg.setOnClickListener(new OnClickListener(){
-
-					@Override
-					public void onClick(View v) {
-						RDialog.dismiss();
-					}
-					
-				});
+	  				RDialog.show();
 				
-  				RDialog.show();
+				}else{
+					Toast.makeText(ctx, R.string.connection_err, Toast.LENGTH_LONG).show();
+				}
 			}
 		});
 		
@@ -341,24 +352,27 @@ public class Login extends FragmentActivity {
 	    	
 			@Override
 			public void call(Session session, SessionState state, Exception exception) {
-				
-				if(session.isOpened()){
-					Request.newMeRequest(session, new Request.GraphUserCallback() {
-						
-						@Override
-						public void onCompleted(GraphUser user, Response response) {
-							if (user != null) {
-								
-								FId = user.getId();
-								FName = user.getFirstName() + " " + user.getLastName();
-								FMail = user.getProperty("email").toString();
-								new asyncFacebook_process().execute(FMail, FName, FId);
-															
-							}
+				if(isOnline()){
+					if(session.isOpened()){
+						Request.newMeRequest(session, new Request.GraphUserCallback() {
 							
-						}
-					}).executeAsync(); 
-				}				
+							@Override
+							public void onCompleted(GraphUser user, Response response) {
+								if (user != null) {
+									
+									FId = user.getId();
+									FName = user.getFirstName() + " " + user.getLastName();
+									FMail = user.getProperty("email").toString();
+									new asyncFacebook_process().execute(FMail, FName, FId);
+																
+								}
+								
+							}
+						}).executeAsync(); 
+					}
+				}else{
+					Toast.makeText(ctx, R.string.connection_err, Toast.LENGTH_LONG).show();
+				}	
 			}         
 	    }); 
 
@@ -404,7 +418,6 @@ public class Login extends FragmentActivity {
 				
 				EDialog.dismiss();				
 			}
-			
 		});
     	
 		EDialog.show();		
@@ -431,6 +444,15 @@ public class Login extends FragmentActivity {
     	}
     } 
 
+	public boolean isOnline() {
+		ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+		try {
+			return cm.getActiveNetworkInfo().isConnectedOrConnecting();
+		} catch(NullPointerException n) {
+			return false;
+		}
+	}
+    
     //  Validar el estado del login
     public int loginStatus(String username, String password) {
     	int logStatus=-1;
@@ -492,7 +514,6 @@ public class Login extends FragmentActivity {
             	dunc.execute(usuario);
             	
             	session.createLoginSession(user, "", "-1");            	
-            	//Session.setActiveSession(Session.getActiveSession());
     			Intent i=new Intent(Login.this, MainScreenActivity.class);
     			startActivity(i); 
     			finish();	

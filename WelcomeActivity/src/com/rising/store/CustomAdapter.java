@@ -31,7 +31,6 @@ import com.nostra13.universalimageloader.utils.MemoryCacheUtils;
 import com.rising.drawing.MainActivity;
 import com.rising.drawing.R;
 import com.rising.login.Configuration;
-import com.rising.mainscreen.MainScreenActivity;
 import com.rising.money.MoneyActivity;
 import com.rising.money.SocialBonificationNetworkConnection;
 import com.rising.money.SocialBonificationNetworkConnection.OnBonificationDone;
