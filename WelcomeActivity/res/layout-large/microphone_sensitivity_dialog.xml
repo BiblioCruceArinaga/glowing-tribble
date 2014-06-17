@@ -1,40 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:background="@drawable/background_scoresapp"
+    android:orientation="vertical" >
 
     <TextView 
         android:id="@+id/sensitivityText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/sensitivityText"
-        />
+        android:text="@string/sensitivityText" 
+        android:layout_margin="30dp" 
+        android:textColor="#222"
+        android:textSize="25sp"/>
     
     <TextView 
         android:id="@+id/sensitivityValue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@id/sensitivityText"
-        android:text="5"
-        />
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:textColor="#222"
+        android:textSize="30sp"
+        android:text="5" />
     
     <SeekBar
         android:id="@+id/sensitivityBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="30dp"
         android:progress="5"
-        android:max="10"
-        android:layout_below="@id/sensitivityValue"
-        />
+        android:max="10" />
 
     <Button
         android:id="@+id/sensitivityButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/sensitivityBar"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
+        android:layout_width="220dp"
+        android:layout_height="80dp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_marginTop="10dp"
+        style="?android:attr/buttonBarButtonStyle"
+        android:textColor="#EEE"
+        android:background="@drawable/stores_buttons"
+        android:textSize="35sp"
         android:text="@string/sensitivityButton" />
 
-</RelativeLayout>
+</LinearLayout>

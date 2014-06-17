@@ -97,32 +97,30 @@ You can buy scores in our store.</string>
     	<string name="visual_help">Count with visual help</string>
     	
     <!-- Leer micrófono -->
-    <string name="readMicrophone">Micrófono</string>
-    <string name="microphone_sensitivity">Sensibilidad</string>
-    <string name="microphone_speed">Velocidad</string>
-    <string name="microphone_start">Empezar</string>
-    <string name="microphone_stop">Parar</string>
-    <string name="startPlaying">Ya puedes empezar a tocar</string>
-    <string name="setSensitivity">Ajustar sensibilidad</string>
-    <string name="setSpeed">Ajustar velocidad</string>
+    <string name="readMicrophone">Microphone</string>
+    <string name="microphone_sensitivity">Sensitivity</string>
+    <string name="microphone_speed">Speed</string>
+    <string name="microphone_start">Start</string>
+    <string name="microphone_stop">Stop</string>
+    <string name="startPlaying">You can start to play</string>
+    <string name="setSensitivity">Adjust sensitivity</string>
+    <string name="setSpeed">Adjust speed</string>
     <string name="sensitivityText">
-        Ajusta la sensibilidad del micrófono. Si este valor es demasiado bajo,
-        tendrás que tocar muy fuerte para que la aplicación te oiga. Si este
-        valor es demasiado alto, el ruido ambiente podría interferir en la
-        aplicación y estorbarte. Busca un valor apropiado que te permita
-        tocar de manera cómoda.
+        Adjust the sensitivity of the microphone. \n
+	       \t\t -If the value is too low, you will have to play very loud so the application hear you  \n\n
+	       \t\t -If this value is too high, the background noise may interfere with the application and hinder you. \n\n
+	        Searching for an appropriate value that allows you to play comfortably.
     </string>
-    <string name="sensitivityButton">Ajustar</string>
+    <string name="sensitivityButton">Adjust</string>
     <string name="speedText">
-        Ajusta la velocidad a la que se recogen muestras del micrófono.
-        Ajusta este valor si crees que la partitura se está moviendo
-        demasiado despacio o demasiado deprisa.
+        Set the speed at which samples are collected by the microphone.\n\n
+		Set this value if you think the score is moving too slowly or too fast.	    
     </string>
     
     <!-- Navegación -->
-    <string name="navigate">Navegación</string>
-    <string name="navigate_top">Ir al principio</string>
-    <string name="navigate_bottom">Ir al final</string>
+    <string name="navigate">Navigation</string>
+    <string name="navigate_top">Go to the top</string>
+    <string name="navigate_bottom">Go to the bottom</string>
     	
     <string name="contentDescription">Image</string>
 
