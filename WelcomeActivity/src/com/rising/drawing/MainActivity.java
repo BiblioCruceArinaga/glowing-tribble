@@ -3,7 +3,6 @@ package com.rising.drawing;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.pm.ActivityInfo;
 import android.graphics.Canvas;
 import android.graphics.Point;
 import android.os.Bundle;
@@ -55,7 +54,7 @@ public class MainActivity extends Activity{
 	@Override
 	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
-		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);	
+		//setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);	
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);		
 		
 		Bundle b = this.getIntent().getExtras();
@@ -103,6 +102,17 @@ public class MainActivity extends Activity{
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    switch (item.getItemId()) {
+		    case R.id.change_view:
+		    	if (item.getTitle().toString().equals(getString(R.string.panoramic_view))) {
+		    		s.cambiarVista(Vista.CAMBIAR_A_HORIZONTAL);
+		    		item.setTitle(R.string.vertical_view);
+		    	}
+		    	else {
+		    		s.cambiarVista(Vista.CAMBIAR_A_VERTICAL);
+		    		item.setTitle(R.string.panoramic_view);
+		    	}
+		    	return true;
+	    
 	    	case R.id.metronome_button:
 	    		metronome_options(tempo);
 	    		return true;

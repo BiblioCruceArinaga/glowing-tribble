@@ -97,6 +97,10 @@
     	<string name="speed_allowed">Velocidad mínima: 1 bpm. Velocidad máxima: 300 bpm.</string>
     	<string name="visual_help">Contar con ayuda visual</string>
     	
+    <!-- Pantalla panorámica -->
+    <string name="panoramic_view">Panorámica</string>
+    <string name="vertical_view">Vertical</string>
+    	
     <!-- Leer micrófono -->
     <string name="readMicrophone">Micrófono</string>
     	<string name="microphone_sensitivity">Sensibilidad</string>
@@ -375,6 +379,9 @@
 	    <string name="acerca_de">Scores es desarrollado por RISING S.C.P.</string>	
 	    <string name="visitanos">Visita nuestra web: </string>
 	    <string name="web">scores.rising.es</string>
+	    <string name="metronome_image_credit">
+    	    Icono de metrónomo: hecho por Icons-land (http://www.icons-land.com)
+    	</string>
     
     <!-- Pantalla tienda -->
     	<string name="store">Tienda</string>

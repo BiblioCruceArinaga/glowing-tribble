@@ -29,7 +29,7 @@ public class ScoresAdapter extends BaseAdapter {
 	String[] titulos;
 	String[] autores; 
 	MainScreenActivity MSA = new MainScreenActivity();
-	private String img_path = "/.RisingScores/scores_images/";
+	private String img_path = "/RisingScores/scores_images/";
 	// Declare Variables
     Context mContext;
     LayoutInflater inflater;

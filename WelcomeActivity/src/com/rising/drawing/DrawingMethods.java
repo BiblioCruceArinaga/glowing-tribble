@@ -76,7 +76,7 @@ public class DrawingMethods {
 	
 	public DrawingMethods(Partitura partitura, Config config, Resources resources) {
 		if (config.supported()) {
-		
+			
 			this.partitura = partitura;
 			this.config = config;
 			

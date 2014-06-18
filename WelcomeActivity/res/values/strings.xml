@@ -96,6 +96,10 @@ You can buy scores in our store.</string>
     	<string name="speed_allowed">Min. Speed: 1 bpm. Max Speed: 300 bpm.</string>
     	<string name="visual_help">Count with visual help</string>
     	
+    <!-- Pantalla panorámica -->
+    <string name="panoramic_view">Panoramic</string>
+    <string name="vertical_view">Vertical</string>
+    	
     <!-- Leer micrófono -->
     <string name="readMicrophone">Microphone</string>
     <string name="microphone_sensitivity">Sensitivity</string>
@@ -362,6 +366,9 @@ You can buy scores in our store.</string>
 	    <string name="acerca_de">Scores is develop by RISING S.C.P.</string>	
 	    <string name="visitanos">Visit our site: </string>
     	<string name="web">scores.rising.es</string>
+    	<string name="metronome_image_credit">
+    	    Metronome icon: made by Icons-land (http://www.icons-land.com)
+    	</string>
 	    
     <!-- Pantalla tienda -->
     	<string name="store">Store</string>

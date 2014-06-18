@@ -40,7 +40,7 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 	private ScreenThread thread;
 	private Context context = null;
 	private Config config = null;
-	private String path_folder = "/.RisingScores/scores/";
+	private String path_folder = "/RisingScores/scores/";
 
 	private Partitura partitura = new Partitura();
 	private Compas compas = new Compas();
@@ -506,6 +506,15 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 		return matrix;
 	}
 
+	/*
+	 * 
+	 * Gestión de los cambios de vista
+	 * 
+	 */
+	public void cambiarVista(Vista vista) {
+		
+	}
+	
 	/*
 	 * 
 	 * Gestión del metrónomo

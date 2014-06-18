@@ -59,8 +59,8 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 		
 	String[] ficheros;
 	String[][] infoFicheros;
-	String path = "/.RisingScores/scores/";
-	String image_path = "/.RisingScores/scores_images/";
+	String path = "/RisingScores/scores/";
+	String image_path = "/RisingScores/scores_images/";
 	private File f_toDelete;
 	private File f_image_toDelete;
 	private boolean delete;
@@ -172,7 +172,7 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);		
+		//setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);		
 		setContentView(R.layout.mainscreen_layout);
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 				
@@ -318,7 +318,7 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 		@Override
 		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 			Log.i("Position", ficheros[position]);
-						
+						/*
 			if(new DownloadScoresEncrypter(context, infoFicheros[0][position]+conf.getUserId()).DescryptAndConfirm(ficheros[position])){
 				Intent i = new Intent(MainScreenActivity.this, MainActivity.class);
 				i.putExtra("score", ficheros[position]);
@@ -327,7 +327,12 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 			}else{
 				Incorrect_User.show();
 			}
+			*/
 			
+			Intent i = new Intent(MainScreenActivity.this, MainActivity.class);
+			i.putExtra("score", ficheros[position]);
+					
+			startActivity(i);
 		} 
 	});
 	
@@ -414,6 +419,9 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 	    		TextView Link_Web = (TextView) MDialog.findViewById(R.id.link);
 	    		Link_Web.setLinkTextColor(Color.BLACK);
 	    		Linkify.addLinks(Link_Web, Linkify.ALL);
+	    		TextView Link_Metronome_Icon = (TextView) MDialog.findViewById(R.id.metronome_link);
+	    		Link_Metronome_Icon.setLinkTextColor(Color.BLACK);
+	    		Linkify.addLinks(Link_Metronome_Icon, Linkify.ALL);
 	    		MDialog.show();
 	    		return true;
 	            

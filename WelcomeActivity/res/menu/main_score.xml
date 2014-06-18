@@ -2,8 +2,15 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <item
+        android:id="@+id/change_view"
+        android:showAsAction="always"
+        android:title="@string/panoramic_view"
+        />
+    
+    <item
         android:id="@+id/navigate"
         android:showAsAction="always"
+        android:icon="@drawable/ic_menu_go"
         android:title="@string/navigate">
         
         <menu>
@@ -20,11 +27,13 @@
     <item 
         android:id="@+id/readSound_Button"
         android:showAsAction="always"
+        android:icon="@drawable/ic_menu_microphone"
         android:title="@string/readMicrophone"/>
     
 	<item 
         android:id="@+id/metronome_button"
         android:showAsAction="always"
+        android:icon="@drawable/ic_menu_metronome"
         android:title="@string/metronome"/>
 
 </menu>
