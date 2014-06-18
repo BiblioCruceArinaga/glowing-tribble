@@ -9,6 +9,7 @@ public class Nota {
 	private byte octava;
 	private byte figuracion;
 	private byte beam;
+	private byte beamId;
 	private byte plica;
 	private byte voz;
 	private byte pentagrama;
@@ -29,13 +30,14 @@ public class Nota {
 	private int y;
 	
 	public Nota(byte step, byte octava, byte figuracion, byte beam,
-			byte plica, byte voz, byte pentagrama,
+			byte beamId, byte plica, byte voz, byte pentagrama,
 			ArrayList<Byte> figurasGraficas, ArrayList<Byte> posicion) {
 		
 		this.step = step;
 		this.octava = octava;
 		this.figuracion = figuracion;
 		this.beam = beam;
+		this.beamId = beamId;
 		this.plica = plica;
 		this.voz = voz;
 		this.pentagrama = pentagrama;
@@ -70,6 +72,12 @@ public class Nota {
 		return figurasGraficas.contains((byte) 25);
 	}
 	
+	public boolean esAlteracion(int indFigura) {
+		return (figurasGraficas.get(indFigura) == 12) ||
+			   (figurasGraficas.get(indFigura) == 13) ||
+			   (figurasGraficas.get(indFigura) == 14);
+	}
+	
 	public boolean esLigadura(int indFigura) {
 		return esLigaduraUnion(indFigura) || esLigaduraExpresion(indFigura);
 	}
@@ -90,6 +98,10 @@ public class Nota {
 	
 	public byte getBeam() {
 		return beam;
+	}
+	
+	public byte getBeamId() {
+		return beamId;
 	}
 	
 	public byte getFiguracion() {
@@ -124,7 +136,7 @@ public class Nota {
 		return plica;
 	}
 	
-	public int getPosicion() {
+	public int getPosition() {
 		byte[] bytesArray = new byte[posicion.size()];
         int len = bytesArray.length;
         for (int i=0; i<len; i++)
@@ -208,6 +220,10 @@ public class Nota {
 		return step == 0;
 	}
 
+	public boolean tieneBeams() {
+		return beam > 0;
+	}
+	
 	public boolean tienePlica() {
 		return plica > 0;
 	}

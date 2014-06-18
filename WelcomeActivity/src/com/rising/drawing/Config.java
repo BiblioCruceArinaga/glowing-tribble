@@ -15,6 +15,7 @@ public class Config {
 	private int ancho_dialog_bpm;
 	private int ancho_hooks;
 	private int ancho_tempo;
+	private int change_account;
 	private int desplazamiento_extra_nota_gracia;
 	private int distancia_corchetes;
 	private int distancia_entre_beams;
@@ -88,8 +89,6 @@ public class Config {
 	private int y_tresillo_arriba;
 	private int y_tresillo_abajo;
 	
-	private int x_angulo_25;
-	
 	public Config(int densityDPI, int width) {
 		
 		switch (densityDPI) {
@@ -109,6 +108,7 @@ public class Config {
 				ancho_dialog_bpm = 600;
 				ancho_hooks = 16;
 				ancho_tempo = 20;
+				change_account = 4;
 				desplazamiento_extra_nota_gracia = 30;
 				distancia_corchetes = 15;
 				distancia_entre_beams = 5;
@@ -181,8 +181,6 @@ public class Config {
 				x_tresillo = 6;
 				y_tresillo_arriba = 7;
 				y_tresillo_abajo = 7;
-				
-				x_angulo_25 = 25;
 				break;
 				
 			case 240:
@@ -200,6 +198,7 @@ public class Config {
 				ancho_dialog_bpm = 600;
 				ancho_hooks = 16;
 				ancho_tempo = 65;
+				change_account = 4;
 				desplazamiento_extra_nota_gracia = 40;
 				distancia_corchetes = 15;
 				distancia_entre_beams = 12;
@@ -272,8 +271,6 @@ public class Config {
 				x_tresillo = 18;
 				y_tresillo_arriba = 9;
 				y_tresillo_abajo = 26;
-				
-				x_angulo_25 = 25;
 				break;
 			case 400:
 				break;
@@ -326,6 +323,10 @@ public class Config {
 	
 	public int getAnchoTempo() {
 		return ancho_tempo;
+	}
+	
+	public int getChangeAccount() {
+		return change_account;
 	}
 	
 	public int getDesplazamientoExtraNotaGracia() {
@@ -611,11 +612,6 @@ public class Config {
 	
 	public int getYTresilloAbajo() {
 		return y_tresillo_abajo;
-	}
-	
-	
-	public int getXAngulo25() {
-		return x_angulo_25;
 	}
 	
 	/**
