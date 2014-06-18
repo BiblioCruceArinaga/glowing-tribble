@@ -52,6 +52,7 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 	private int golpeSonidoActual = 0;
 	private int yActual = 0;
 	private int desplazamiento = 0;
+	private int changeAccount = 0;
 	private boolean primerDesplazamientoHecho = false;
 	
 	//  Metrónomo y su gestión
@@ -380,6 +381,7 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 		byte octava = fichero.readByte();
 		byte figuracion = fichero.readByte();
 		byte union = fichero.readByte();
+		byte idUnion = fichero.readByte();
 		byte plica = fichero.readByte();
 		byte voz = fichero.readByte();
 		byte pentagrama = fichero.readByte();
@@ -387,8 +389,9 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 		ArrayList<Byte> figurasGraficas = leerHastaAlmohadilla();
 		ArrayList<Byte> posicionEjeX = leerHastaAlmohadilla();
 
-		compas.addNote(new Nota(nota, octava, figuracion, union, plica,
-				voz, pentagrama, figurasGraficas, posicionEjeX));
+		compas.addNote(new Nota(nota, octava, figuracion, union, 
+				idUnion, plica, voz, pentagrama, figurasGraficas, 
+				posicionEjeX));
 	}
 	//  ================================
 	
@@ -497,8 +500,8 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 		//  Contrarrestar traslación accidental. En el futuro
 		//  considerar que girar a la izquierda y a la derecha
 		//  requieren valores diferentes para obtener el mismo resultado
-		if (Math.abs(angulo) == 25)
-			matrix.postTranslate(-config.getXAngulo25(), 0);
+		if (angulo < 0)
+			matrix.postTranslate(angulo, 0);
 		
 		return matrix;
 	}
@@ -575,14 +578,13 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 	                try {
 	                	long speed = ((240000/mbpm)/4);
 	                	int currentY = partitura.getCompas(0).getYIni();
+	                	int changeAccount = 0;
+	                	int staves = partitura.getStaves();
 	                	
-	                	int distanciaDesplazamiento = currentY + 
-	                			config.getDistanciaLineasPentagrama() * 4 +
-	                			(config.getDistanciaPentagramas() + 
-	                			config.getDistanciaLineasPentagrama() * 4) * 
-	                			(partitura.getStaves() - 1);
-	                	boolean primerDesplazamientoRealizado = false;
-
+	                	boolean primerScrollHecho = false;
+	                	int distanciaDesplazamiento = 
+	                			obtenerDistanciaDesplazamiento(currentY, primerScrollHecho);
+	                	
 	                	bipsDePreparacion(speed, partitura.getCompas(0).numeroDePulsos());
 	                	
 	                	int numCompases = partitura.getCompases().size();
@@ -598,20 +600,18 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 	                		//  Si ha cambiado la Y, hacemos scroll
 	                		if (currentY != compas.getYIni()) {
 	                			currentY = compas.getYIni();
-	                			hacerScroll(distanciaDesplazamiento);
+	                			changeAccount += staves;
 	                			
-	                			//  La distancia de desplazamiento en la primera iteración
-	                			//  es diferente al resto porque hay que contar con la
-	                			//  distancia extra del título de la obra y el nombre del
-	                			//  autor
-	                			if (!primerDesplazamientoRealizado) {
-	                				distanciaDesplazamiento = config.getDistanciaPentagramas() + 
-	        	                			config.getDistanciaLineasPentagrama() * 4 +
-	        	                			(config.getDistanciaPentagramas() + 
-	        	                			config.getDistanciaLineasPentagrama() * 4) * 
-	        	                			(partitura.getStaves() - 1);
-	                				
-	                				primerDesplazamientoRealizado = true;
+	                			if (changeAccount == config.getChangeAccount()) {
+	                				hacerScroll(distanciaDesplazamiento);
+		                			
+	                				if (!primerScrollHecho) {
+			                			primerScrollHecho = true;
+			                			distanciaDesplazamiento = 
+			                				obtenerDistanciaDesplazamiento(currentY, primerScrollHecho);
+	                				}
+		                			
+		                			changeAccount = 0;
 	                			}
 	                		}
 
@@ -731,6 +731,8 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 			else 
 				bipGrave.play(bipGraveInt, 1, 1, 1, 0, 1);
 		}
+		
+		
 	}
 	
 	
@@ -879,10 +881,7 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 		soundReader.setSensitivity(sensibilidad);
 		
 		yActual = partitura.getCompas(0).getYIni();
-		desplazamiento = yActual + config.getDistanciaLineasPentagrama() * 4 +
-    			(config.getDistanciaPentagramas() + 
-    			config.getDistanciaLineasPentagrama() * 4) * 
-    			(partitura.getStaves() - 1);
+		desplazamiento = obtenerDistanciaDesplazamiento(yActual, false);
 		
 		ArrayList<Integer> golpesSonido = new ArrayList<Integer>();
 		int numCompases = partitura.getCompases().size();
@@ -915,16 +914,19 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 				golpeSonidoActual = 0;
 				
 				if (partitura.getCompas(compasActual).getYIni() != yActual) {
-					hacerScroll(desplazamiento);
-				
-					if (!primerDesplazamientoHecho) {
-						desplazamiento = config.getDistanciaPentagramas() + 
-	                			config.getDistanciaLineasPentagrama() * 4 +
-	                			(config.getDistanciaPentagramas() + 
-	                			config.getDistanciaLineasPentagrama() * 4) * 
-	                			(partitura.getStaves() - 1);
+					
+					changeAccount += partitura.getStaves();
+					
+					if (changeAccount == config.getChangeAccount()) {
+						hacerScroll(desplazamiento);
 						
-        				primerDesplazamientoHecho = true;
+						if (!primerDesplazamientoHecho) {
+							primerDesplazamientoHecho = true;
+							desplazamiento = 
+	                				obtenerDistanciaDesplazamiento(yActual, primerDesplazamientoHecho);
+						}
+						
+						changeAccount = 0;
 					}
 				}
 			}
@@ -933,9 +935,23 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 		}
 	}
 	
+	//  Métodos que hacen el scroll
 	private void hacerScroll(int distanciaDesplazamiento) {
 		limiteVisibleArriba -= distanciaDesplazamiento;
 		limiteVisibleAbajo -= distanciaDesplazamiento;
 		yOffset -= distanciaDesplazamiento;
+	}
+	
+	private int obtenerDistanciaDesplazamiento(int currentY, boolean primerScrollHecho) {
+		
+		//  La distancia de desplazamiento en la primera iteración
+		//  es diferente al resto porque hay que contar con la
+		//  distancia extra del título de la obra y el nombre del autor
+		if (!primerScrollHecho)
+			return currentY + (config.getDistanciaPentagramas() + 
+							   config.getDistanciaLineasPentagrama()) * 4;
+		else
+			return (config.getDistanciaPentagramas() + 
+			        config.getDistanciaLineasPentagrama() * 4) * 4;
 	}
 }

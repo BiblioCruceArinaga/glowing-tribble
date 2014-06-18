@@ -8,7 +8,7 @@ public class Compas {
 
 	//  Información tal cual fue leída en el fichero
 	private ArrayList<ElementoGrafico> barlines;
-	private ArrayList<ElementoGrafico> clefs;
+	private ElementoGrafico[] clefs = {null, null};
 	private ArrayList<Integer> positions;
 	private ElementoGrafico dynamics;
 	private ElementoGrafico pedalStart;
@@ -18,7 +18,7 @@ public class Compas {
 	
 	//  Información ya analizada
 	private ArrayList<Nota> notas;
-	private ArrayList<Clave> claves;
+	private Clave[] claves = {null, null};
 	private Intensidad intensidad;
 	private Pedal pedalInicio;
 	private Pedal pedalFin;
@@ -39,7 +39,6 @@ public class Compas {
 	
 	public Compas() {
 		barlines = new ArrayList<ElementoGrafico>();
-		clefs = new ArrayList<ElementoGrafico>();
 		positions = new ArrayList<Integer>();
 		dynamics = null;
 		pedalStart = null;
@@ -48,7 +47,6 @@ public class Compas {
 		words = null;
 		
 		notas = new ArrayList<Nota>();
-		claves = new ArrayList<Clave>();
 		intensidad = null;
 		pedalInicio = null;
 		pedalFin = null;
@@ -70,13 +68,12 @@ public class Compas {
 	public void addBarline(ElementoGrafico barline) {
 		barlines.add(barline);
 	}
-	
-	public void addClave(Clave clave) {
-		claves.add(clave);
-	}
-	
+
 	public void addClef(ElementoGrafico clef) {
-		clefs.add(clef);
+		if (clefs[0] == null)
+			clefs[0] = clef;
+		else
+			clefs[1] = clef;
 		
 		if (!positions.contains(clef.getPosition()))
 			positions.add(clef.getPosition());
@@ -85,23 +82,13 @@ public class Compas {
 	public void addNote(Nota note) {
 		notas.add(note);
 		
-		if (!positions.contains(note.getPosicion())) 
-			positions.add(note.getPosicion());
-	}
-	
-	public void arreglarPosicionesPorClave(int unidadDesplazamiento) {
-		for (int i=0; i<claves.size(); i++) {
-			int posicion = claves.get(i).getX();
-			
-			for (int j=0; j<notas.size(); j++) {
-				if (notas.get(j).getX() >= posicion)
-					notas.get(j).setX(notas.get(j).getX() + unidadDesplazamiento);
-			}
-		}
+		if (!positions.contains(note.getPosition())) 
+			positions.add(note.getPosition());
 	}
 	
 	public void clearClefs() {
-		clefs.clear();
+		clefs[0] = null;
+		clefs[1] = null;
 	}
 	
 	public ArrayList<ElementoGrafico> getBarlines() {
@@ -117,14 +104,18 @@ public class Compas {
 	}
 	
 	public Clave getClave(int index) {
-		return claves.get(index);
+		return claves[index];
 	}
 	
-	public ArrayList<Clave> getClaves() {
+	public Clave getClavePorPentagrama(int pentagrama) {
+		return claves[pentagrama - 1];
+	}
+	
+	public Clave[] getClaves() {
 		return claves;
 	}
 	
-	public ArrayList<ElementoGrafico> getClefs() {
+	public ElementoGrafico[] getClefs() {
 		return clefs;
 	}
 	
@@ -139,13 +130,13 @@ public class Compas {
 	public Nota getNota(int index) {
 		return notas.get(index);
 	}
+
+	public ArrayList<Nota> getNotas() {
+		return notas;
+	}
 	
 	public int getNumeroCompas() {
 		return numeroCompas;
-	}
-	
-	public ArrayList<Nota> getNotas() {
-		return notas;
 	}
 	
 	public Pedal getPedalFin() {
@@ -267,11 +258,11 @@ public class Compas {
 	}
 	
 	public boolean hayClaves() {
-		return !claves.isEmpty();
+		return claves[0] != null || claves[1] != null;
 	}
 	
 	public boolean hayClefs() {
-		return !clefs.isEmpty();
+		return clefs[0] != null || clefs[1] != null;
 	}
 	
 	public boolean hayDynamics() {
@@ -307,7 +298,7 @@ public class Compas {
 	}
 	
 	public boolean hayTempo() {
-		return tempo != null;
+		return tempo != null && tempo.dibujar();
 	}
 	
 	public boolean hayTexto() {
@@ -321,6 +312,18 @@ public class Compas {
 	public boolean hayWords() {
 		return words != null;
 	}
+	
+	//  Devuelve true si no hay notas en este compás
+	//  después de esta clave
+	public boolean noHayNotasDelanteDeClave(Clave clave) {
+		int numNotas = notas.size();
+		for (int i=0; i<numNotas; i++)
+			if (clave.getPentagrama() == getNota(i).getPentagrama())
+				if (getNota(i).getPosition() > clave.getPosition())
+					return false;
+		
+		return true;
+	}
 
 	public int numeroDeNotas() {
 		return notas.size();
@@ -333,7 +336,7 @@ public class Compas {
 	//  Devuelve un array con cada valor de X de cada elemento
 	//  del compás. Por elemento se entiende cualquier nota, 
 	//  acorde o figura gráfica que ocupe una posición X única en el compás
-	public ArrayList<Integer> saberNumeroDeElementosDeCompas() {
+	public ArrayList<Integer> saberXsDelCompas() {
 		ArrayList<Integer> xEncontradas = new ArrayList<Integer>();
 
 		int numNotas = notas.size();
@@ -342,9 +345,10 @@ public class Compas {
 				xEncontradas.add(notas.get(i).getX());
 
 		if (hayClaves())
-			for (int i=0; i<claves.size(); i++)
-				if (!xEncontradas.contains(getClave(i).getX()))
-					xEncontradas.add(getClave(i).getX());
+			for (int i=0; i<claves.length; i++)
+				if (getClave(i) != null)
+					if (!xEncontradas.contains(getClave(i).getX()))
+						xEncontradas.add(getClave(i).getX());
 		
 		if (hayIntensidad())
 			if (!xEncontradas.contains(getIntensidad().getX()))
@@ -358,12 +362,34 @@ public class Compas {
 			if (!xEncontradas.contains(getPedalFin().getX()))
 				xEncontradas.add(getPedalFin().getX());
 		
+		if (hayTempo())
+			if (!xEncontradas.contains(getTempo().getX()))
+				xEncontradas.add(getTempo().getX());
+		
 		Collections.sort(xEncontradas);
 		return xEncontradas;
 	}
 	
+	//  Devuelve un array con todas las posiciones x de
+	//  todas las notas del compás
+	public ArrayList<Integer> saberXsDeNotas() {
+		ArrayList<Integer> xEncontradas = new ArrayList<Integer>();
+
+		int numNotas = notas.size();
+		for (int i=0; i<numNotas; i++)
+			if (!xEncontradas.contains(notas.get(i).getX()))
+				xEncontradas.add(notas.get(i).getX());
+		
+		Collections.sort(xEncontradas);
+		return xEncontradas;
+	}
+	
+	public int saberXPrimeraNota() {
+		return notas.get(0).getX();
+	}
+	
 	//  Devuelve la posición X de la nota más cercana al margen derecho
-	public int saberXMasGrande() {
+	public int saberXUltimaNota() {
 		int xMasGrande = 0;
 		
 		int numNotas = notas.size();
@@ -381,6 +407,10 @@ public class Compas {
 	
 	public void setBpmIndex(int bpmIndex) {
 		this.bpmIndex = bpmIndex;
+	}
+	
+	public void setClave(Clave clave, byte pentagrama) {
+		claves[pentagrama - 1] = clave;
 	}
 	
 	public void setDynamics(ElementoGrafico dynamics) {
@@ -433,6 +463,9 @@ public class Compas {
 	
 	public void setTime(ElementoGrafico time) {
 		this.time = time;
+		
+		if (!positions.contains(time.getPosition())) 
+			positions.add(time.getPosition());
 	}
 	
 	public void setWords(ElementoGrafico words) {
