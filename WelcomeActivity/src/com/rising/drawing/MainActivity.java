@@ -104,11 +104,11 @@ public class MainActivity extends Activity{
 	    switch (item.getItemId()) {
 		    case R.id.change_view:
 		    	if (item.getTitle().toString().equals(getString(R.string.panoramic_view))) {
-		    		s.cambiarVista(Vista.CAMBIAR_A_HORIZONTAL);
+		    		s.cambiarVista(Vista.HORIZONTAL);
 		    		item.setTitle(R.string.vertical_view);
 		    	}
 		    	else {
-		    		s.cambiarVista(Vista.CAMBIAR_A_VERTICAL);
+		    		s.cambiarVista(Vista.VERTICAL);
 		    		item.setTitle(R.string.panoramic_view);
 		    	}
 		    	return true;

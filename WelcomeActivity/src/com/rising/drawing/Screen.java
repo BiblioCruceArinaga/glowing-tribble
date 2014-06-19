@@ -42,9 +42,17 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 	private Config config = null;
 	private String path_folder = "/RisingScores/scores/";
 
-	private Partitura partitura = new Partitura();
+	private Partitura partituraHorizontal = new Partitura();
+	private Partitura partituraVertical = new Partitura();
 	private Compas compas = new Compas();
-	private ArrayList<OrdenDibujo> ordenesDibujo = new ArrayList<OrdenDibujo>();
+	
+	//  Gestión de las posibles vistas y su scroll
+	private ArrayList<OrdenDibujo> verticalDrawing = new ArrayList<OrdenDibujo>();
+	private ArrayList<OrdenDibujo> horizontalDrawing = new ArrayList<OrdenDibujo>();
+	private Vista vista;
+	private Scroll scroll;
+	private Thread verticalThread;
+	private Thread horizontalThread;
 	
 	//  Gestión de la lectura de micrófono
 	private SoundReader soundReader = null;
@@ -62,22 +70,6 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 	
 	private int width = 0;
 	private int height = 0;
-	
-	//  Gestión del scroll
-	private float altoPantalla = 0;
-	private boolean canvasDependentDataRecovered = false;
-	private float div = 0;
-	private float finalScroll = 0;
-	private static float limiteVisibleArriba = 0;
-    private static float limiteVisibleAbajo = 0;
-    private int margenFinalScroll = 0;
-    private boolean mostrarBarraLateral = false;
-    private float offsetBarraLateral = 0;
-    private float porcentajeAltura = 0;
-    private int tamanoBarraLateral = 0;
-    private static float yOffset = 0;
-    private float yPrevious = 0;
-    private float yDown = 0;
     
 	//  ========================================
 	//  Constructor y métodos heredados
@@ -92,25 +84,29 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 			File f = new File(Environment.getExternalStorageDirectory() + path_folder + path);
 	        FileInputStream is = new FileInputStream(f);
 			fichero = new ObjectInputStream(is);
-			
 			cargarDatosDeFichero();
 			fichero.close();
 			
 			config = new Config(densityDPI, width);
-			margenFinalScroll = config.getDistanciaPentagramas();
+			scroll = new Scroll(config);
+
+			crearVistasDePartitura();
+
+			horizontalThread.join();
+			verticalThread.join();
+
+			cambiarVista(Vista.VERTICAL);
 			
-			DrawingMethods metodosDibujo = new DrawingMethods(partitura, config, getResources());
-			if (metodosDibujo.isValid()) {
-				ordenesDibujo = metodosDibujo.crearOrdenesDeDibujo();
-				isValidScreen = true;
-			}
-		
 		} catch (FileNotFoundException e) {
 			Log.i("FileNotFoundException: ", e.getMessage() + "\n");
 		} catch (StreamCorruptedException e) {
 			Log.i("StreamCorruptedException: ", e.getMessage() + "\n");
 		} catch (IOException e) {
 			Log.i("IOException: ", e.getMessage() + "\n");
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (CloneNotSupportedException e) {
+			e.printStackTrace();
 		}
     }
 	
@@ -137,73 +133,37 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 		isValidScreen = false;
 		fichero = null;
 		
-		partitura.destruir();
-		partitura = null;
+		partituraHorizontal.destruir();
+		partituraHorizontal = null;
+		partituraVertical.destruir();
+		partituraVertical = null;
 		compas = null;
 		
-		ordenesDibujo.clear();
-		ordenesDibujo = null;
+		verticalDrawing.clear();
+		verticalDrawing = null;
+		horizontalDrawing.clear();
+		horizontalDrawing = null;
 		
 		stopMicrophone();
-		
-		altoPantalla = 0;
-		canvasDependentDataRecovered = false;
-		div = 0;
-		finalScroll = 0;
-		limiteVisibleArriba = 0;
-	    limiteVisibleAbajo = 0;
-	    margenFinalScroll = 0;
-	    mostrarBarraLateral = false;
-	    offsetBarraLateral = 0;
-	    porcentajeAltura = 0;
-	    tamanoBarraLateral = 0;
-	    yOffset = 0;
-	    yPrevious = 0;
 	}
 
 	@Override
 	public boolean onTouchEvent(MotionEvent e){		
 		switch (e.getAction()){
 			case MotionEvent.ACTION_DOWN:
-				yPrevious = e.getY();
-				yDown = yPrevious;
-	            mostrarBarraLateral = true;
+				scroll.down(e);
 	            break;
 	            
 	        case MotionEvent.ACTION_MOVE:
-	        	yOffset += e.getY() - yPrevious;
-	            porcentajeAltura = - yOffset / finalScroll;
-	            offsetBarraLateral = -altoPantalla * porcentajeAltura;
-	            div = e.getY() - yPrevious;
-	            yPrevious = e.getY();
-	            limiteVisibleArriba += div;
-	            limiteVisibleAbajo += div;
-
-	            if (limiteVisibleArriba > 0) {
-	            	yOffset = 0;
-	            	div = 0;
-	            	limiteVisibleArriba = 0;
-	            	limiteVisibleAbajo = altoPantalla;
-	            }
-
-	            if (limiteVisibleAbajo < -finalScroll) {
-	            	yOffset = -finalScroll - altoPantalla;
-	            	div = 0;
-	            	limiteVisibleArriba = -finalScroll - altoPantalla;
-	            	limiteVisibleAbajo = -finalScroll;
-	            }
-
-	            mostrarBarraLateral = true;
+	        	scroll.move(e, vista);
 	            break;
 	            
 	        case MotionEvent.ACTION_UP:
-	        	mostrarBarraLateral = false;
-	        	
-	        	if (yDown == e.getY()) {
-	        		if (MDialog == null) {
-	        			int compas = compasAPartirDeTap(e.getX(), - yOffset + yDown);
-	        			establecerVelocidadAlCompas(compas);
-	        		}
+	        	if (scroll.up(e)) {
+		        	if (MDialog == null) {
+		    			//int compas = compasAPartirDeTap(e.getX(), - yOffset + yDown);
+		    			//establecerVelocidadAlCompas(compas);
+		    		}
 	        	}
 	        	break;
 	        	
@@ -234,7 +194,7 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 	//  ========================================
 	//  Métodos de gestión del fichero
 	//  ========================================
-	private void cargarDatosDeFichero() throws IOException {
+	private void cargarDatosDeFichero() throws IOException, CloneNotSupportedException {
 		leerDatosBasicosDePartitura();
 		
 		byte byteLeido = fichero.readByte();
@@ -246,7 +206,8 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 					break;
 					
 				case 127:
-					partitura.addCompas(compas);
+					partituraHorizontal.addCompas(compas);
+					partituraVertical.addCompas((Compas) compas.clone());
 					compas = new Compas();
 					break;
 				
@@ -298,12 +259,19 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 		ArrayList<Byte> divisions = leerHastaAlmohadilla();
 		int numeroCompas = fichero.readByte();
 		
-		partitura.setWork(work);
-		partitura.setCreator(creator);
-		partitura.setStaves(staves);
-		partitura.setInstrument(instrument);
-		partitura.setDivisions(divisions);
-		partitura.setFirstNumber(numeroCompas);
+		partituraVertical.setWork(work);
+		partituraVertical.setCreator(creator);
+		partituraVertical.setStaves(staves);
+		partituraVertical.setInstrument(instrument);
+		partituraVertical.setDivisions(divisions);
+		partituraVertical.setFirstNumber(numeroCompas);
+		
+		partituraHorizontal.setWork(work);
+		partituraHorizontal.setCreator(creator);
+		partituraHorizontal.setStaves(staves);
+		partituraHorizontal.setInstrument(instrument);
+		partituraHorizontal.setDivisions(divisions);
+		partituraHorizontal.setFirstNumber(numeroCompas);
 	}
 	
 	private void leerFiguraGraficaCompas() throws IOException {
@@ -399,36 +367,33 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 	//  Métodos de dibujo
 	//  ========================================
 	public void draw(Canvas canvas) {
-		
 		if (canvas != null) {
 		
-			//  Estos valores dependen del canvas y sólo deben recogerse una vez
-			if (!canvasDependentDataRecovered) {
-	    		limiteVisibleAbajo = - canvas.getHeight();
-	    		altoPantalla = limiteVisibleAbajo;
-	    		
-	    		finalScroll = partitura.getLastMarginY() + margenFinalScroll;
-	    		tamanoBarraLateral = (int) ( (altoPantalla / finalScroll) * altoPantalla);
-	    		
-	    		canvasDependentDataRecovered = true;
-	    		
-	    		width = canvas.getWidth();
-	    		height = canvas.getHeight();
-			}
+			inicializarParametrosScroll(canvas);
 		
 			canvas.drawARGB(255, 255, 255, 255);
 			canvas.save();
-            canvas.translate(0, yOffset);
-            drawToCanvas(canvas);
-            if (mostrarBarraLateral) dibujarBarraLateral(canvas);
+            
+			if (vista == Vista.VERTICAL) canvas.translate(0, scroll.getYOffset());
+			else canvas.translate(scroll.getXOffset(), 0);
+            
+			drawToCanvas(canvas);
+            scroll.dibujarBarra(canvas, vista);
+            
             canvas.restore();
 		}
     }
 	
 	private void drawToCanvas(Canvas canvas) {
-		int numOrdenes = ordenesDibujo.size();
+		ArrayList<OrdenDibujo> ordenes;
+		if (vista == Vista.VERTICAL)
+			ordenes = verticalDrawing;
+		else
+			ordenes = horizontalDrawing;
+		
+		int numOrdenes = ordenes.size();
 		for (int i=0; i<numOrdenes; i++) {
-			OrdenDibujo ordenDibujo = ordenesDibujo.get(i);
+			OrdenDibujo ordenDibujo = ordenes.get(i);
 			if (ordenDibujo == null) continue;
 			
 			switch (ordenDibujo.getOrden()) {
@@ -458,8 +423,6 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 					path.transform(matrix, path);
 					
 					canvas.drawPath(path, ordenDibujo.getPaint());
-					
-					//canvas.drawArc(ordenDibujo.getRectF(), 0, -180, false, ordenDibujo.getPaint());
 					break;
 				default:
 					break;
@@ -471,15 +434,47 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 			canvas.drawText(bip.getTexto(), bip.getX1(), bip.getY1(), bip.getPaint());
 	}
 	
-	public void dibujarBarraLateral(Canvas canvas) {
-		int x_end = canvas.getWidth() - 30;
+	private void crearVistasDePartitura() {
+		verticalThread = new Thread(new Runnable(){
+    		public void run() {
+    			DrawingMethods metodosDibujo = 
+    					new DrawingMethods(partituraVertical, config, getResources(), Vista.VERTICAL);
+				if (metodosDibujo.isValid()) {
+					verticalDrawing = metodosDibujo.crearOrdenesDeDibujo();
+					isValidScreen = true;
+				}
+    		}
+		});
 		
-		Paint paint = new Paint();
-    	paint.setStrokeWidth(5);
-    	paint.setARGB(255, 0, 0, 0);
-    	canvas.drawLine(x_end, offsetBarraLateral - yOffset, 
-    			x_end, offsetBarraLateral + tamanoBarraLateral - yOffset, paint);
-    }
+		horizontalThread = new Thread(new Runnable(){
+    		public void run() {
+    			DrawingMethods metodosDibujo = 
+    					new DrawingMethods(partituraHorizontal, config, getResources(), Vista.HORIZONTAL);
+				if (metodosDibujo.isValid()) {
+					horizontalDrawing = metodosDibujo.crearOrdenesDeDibujo();
+					isValidScreen = true;
+				}
+    		}
+		});
+		
+		horizontalThread.start();
+		verticalThread.start();
+	}
+
+	public void cambiarVista(Vista vista) {
+		this.vista = vista;
+	}
+	
+	private void inicializarParametrosScroll(Canvas canvas) {
+		if (vista == Vista.VERTICAL) {
+			scroll.inicializarVertical(canvas.getHeight(), partituraVertical.getLastMarginY());
+		}
+		else {
+			int xFin = partituraHorizontal.getCompas(
+					partituraHorizontal.getNumeroDeCompases() - 1).getXFin();
+			scroll.inicializarHorizontal(canvas.getWidth(), xFin);
+		}
+	}
 	
 	//  La rotación de una matriz produce una traslación
 	//  involuntaria e indeseada que debemos contrarrestar
@@ -505,15 +500,6 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 		
 		return matrix;
 	}
-
-	/*
-	 * 
-	 * Gestión de los cambios de vista
-	 * 
-	 */
-	public void cambiarVista(Vista vista) {
-		
-	}
 	
 	/*
 	 * 
@@ -521,15 +507,11 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 	 * 
 	 */
 	public void Back(){
-		yOffset = 0;
-		limiteVisibleArriba = 0;
-		limiteVisibleAbajo = altoPantalla;
+		scroll.back(vista);
 	}
-	
+
 	public void Forward() {
-		yOffset = -finalScroll - altoPantalla;
-    	limiteVisibleArriba = -finalScroll - altoPantalla;
-    	limiteVisibleAbajo = -finalScroll;
+		scroll.forward(vista);
 	}
 	
 	public void Metronome_Pause(){
@@ -584,6 +566,7 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 	    public void run() {
 	    	th = new Thread(new Runnable(){
 	    		public void run() {	
+	    			/*
 	                try {
 	                	long speed = ((240000/mbpm)/4);
 	                	int currentY = partitura.getCompas(0).getYIni();
@@ -612,7 +595,7 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 	                			changeAccount += staves;
 	                			
 	                			if (changeAccount == config.getChangeAccount()) {
-	                				hacerScroll(distanciaDesplazamiento);
+	                				//hacerScroll(distanciaDesplazamiento);
 		                			
 	                				if (!primerScrollHecho) {
 			                			primerScrollHecho = true;
@@ -656,6 +639,7 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 		    		} catch (IndexOutOfBoundsException e) {
 	    				e.printStackTrace();
 	    			}
+	    			*/
 	    		}
 	    	});
 	    	th.start();
@@ -740,8 +724,6 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 			else 
 				bipGrave.play(bipGraveInt, 1, 1, 1, 0, 1);
 		}
-		
-		
 	}
 	
 	
@@ -751,7 +733,7 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 	 * velocidad de metrónomo para cada compás
 	 * 
 	 */
-	
+	/*
 	//  Devuelve el índice del compás que se encuentra
 	//  en la posición X e Y del tap del usuario
 	private int compasAPartirDeTap(float x, float y) {
@@ -767,7 +749,7 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 		
 		return -1;
 	}
-	
+	*/
 	private int dibujarBpm(Compas compas) {
 		OrdenDibujo ordenDibujo = new OrdenDibujo();
 		ordenDibujo.setOrden(DrawOrder.DRAW_TEXT);
@@ -775,9 +757,9 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 		ordenDibujo.setTexto("Bpm = " + compas.getBpm());
 		ordenDibujo.setX1(compas.getXIni());
 		ordenDibujo.setY1(compas.getYIni() - config.getYBpm());
-		ordenesDibujo.add(ordenDibujo);
+		verticalDrawing.add(ordenDibujo);
 		
-		return ordenesDibujo.size() - 1;
+		return verticalDrawing.size() - 1;
 	}
 	
 	//  Prepara el diálogo que permitirá al usuario
@@ -844,11 +826,11 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 				    toast1.show();
 				}
 				else {
-					Compas compas = partitura.getCompas(index);
+					//Compas compas = partitura.getCompas(index);
 					
 					compas.setBpm(bpm);
 					if (compas.getBpmIndex() > -1)
-						ordenesDibujo.set(compas.getBpmIndex(), null);
+						verticalDrawing.set(compas.getBpmIndex(), null);
 					int bpmIndex = dibujarBpm(compas);
 					compas.setBpmIndex(bpmIndex);
 					
@@ -863,10 +845,10 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 
 			@Override
 			public void onClick(View v) {
-				Compas compas = partitura.getCompas(index);
+				//Compas compas = partitura.getCompas(index);
 
 				if (compas.getBpmIndex() > -1) {
-					ordenesDibujo.set(compas.getBpmIndex(), null);
+					verticalDrawing.set(compas.getBpmIndex(), null);
 					compas.setBpm(-1);
 					compas.setBpmIndex(-1);
 				}
@@ -888,7 +870,7 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 		soundReader = new SoundReader(velocidad);
 		soundReader.addObserver(this);
 		soundReader.setSensitivity(sensibilidad);
-		
+		/*
 		yActual = partitura.getCompas(0).getYIni();
 		desplazamiento = obtenerDistanciaDesplazamiento(yActual, false);
 		
@@ -896,7 +878,7 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 		int numCompases = partitura.getCompases().size();
 		for (int i=0; i<numCompases; i++) 
 			golpesSonido.add(partitura.getCompas(i).golpesDeSonido());
-		
+		*/
 		Toast.makeText(context, R.string.startPlaying, Toast.LENGTH_SHORT).show();
 	}
 	
@@ -911,7 +893,7 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 	@Override
 	public void update(Observable observable, Object data) {
 		int sound = (Integer) data;
-		
+		/*
 		if (sound > 0) {
 			Compas compas = partitura.getCompas(compasActual);
 			int golpesSonido = compas.golpesDeSonido();
@@ -927,7 +909,7 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 					changeAccount += partitura.getStaves();
 					
 					if (changeAccount == config.getChangeAccount()) {
-						hacerScroll(desplazamiento);
+						//hacerScroll(desplazamiento);
 						
 						if (!primerDesplazamientoHecho) {
 							primerDesplazamientoHecho = true;
@@ -942,15 +924,30 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 			else
 				golpeSonidoActual++;
 		}
+		*/
 	}
 	
-	//  Métodos que hacen el scroll
+	/*
+	 * 
+	 *  Métodos de gestión del scroll
+	 *
+	 */
+	
+	
+	/*
 	private void hacerScroll(int distanciaDesplazamiento) {
-		limiteVisibleArriba -= distanciaDesplazamiento;
-		limiteVisibleAbajo -= distanciaDesplazamiento;
-		yOffset -= distanciaDesplazamiento;
+		if (vista == Vista.VERTICAL) {
+			limiteVisibleArriba -= distanciaDesplazamiento;
+			limiteVisibleAbajo -= distanciaDesplazamiento;
+			yOffset -= distanciaDesplazamiento;
+		}
+		else {
+			limiteVisibleIzquierda -= distanciaDesplazamiento;
+			limiteVisibleDerecha -= distanciaDesplazamiento;
+			xOffset -= distanciaDesplazamiento;
+		}
 	}
-	
+	*/
 	private int obtenerDistanciaDesplazamiento(int currentY, boolean primerScrollHecho) {
 		
 		//  La distancia de desplazamiento en la primera iteración

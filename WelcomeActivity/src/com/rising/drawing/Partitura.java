@@ -79,6 +79,10 @@ public class Partitura {
     	return compases.get(compases.size() - 1).getYFin();
     }
     
+    public int getNumeroDeCompases() {
+    	return compases.size();
+    }
+    
     public int getStaves() {
     	return staves;
     }

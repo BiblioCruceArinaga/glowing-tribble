@@ -4,7 +4,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class Compas {
+public class Compas implements Cloneable {
 
 	//  Información tal cual fue leída en el fichero
 	private ArrayList<ElementoGrafico> barlines;
@@ -494,5 +494,10 @@ public class Compas {
 	
 	public void setXIniNotas(int x_ini_notas) {
 		this.x_ini_notas = x_ini_notas;
+	}
+	
+	@Override
+	protected Object clone() throws CloneNotSupportedException {
+        return super.clone();
 	}
 }

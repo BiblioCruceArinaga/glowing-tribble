@@ -17,6 +17,7 @@ public class DrawingMethods {
 	//  Partitura y sus datos "físicos" (límites, densidad de pantalla, etc.)
 	private Partitura partitura;
 	private Config config;
+	private Vista vista;
 	
 	//  Variables para la gestión y el tratamiento dinámico de los múltiples compases
 	private int compas_margin_x = 0;
@@ -74,11 +75,12 @@ public class DrawingMethods {
 	private Bitmap whitehead = null;
 
 	
-	public DrawingMethods(Partitura partitura, Config config, Resources resources) {
+	public DrawingMethods(Partitura partitura, Config config, Resources resources, Vista vista) {
 		if (config.supported()) {
 			
 			this.partitura = partitura;
 			this.config = config;
+			this.vista = vista;
 			
 			compas_margin_x = config.getXInicialPentagramas();
 			compas_margin_y = config.getMargenSuperior();
@@ -290,12 +292,14 @@ public class DrawingMethods {
 				(config.getDistanciaPentagramas() + config.getDistanciaLineasPentagrama() * 4) * 
 				(partitura.getStaves() - 1));
 		
-		if (compas.getXFin() > config.getXFinalPentagramas()) {
-			moverCompasAlSiguienteRenglon(compas);
-			
-			ultimoCompas = compasActual - 1;
-			reajustarCompases();
-			primerCompas = compasActual;
+		if (vista == Vista.VERTICAL) {
+			if (compas.getXFin() > config.getXFinalPentagramas()) {
+				moverCompasAlSiguienteRenglon(compas);
+				
+				ultimoCompas = compasActual - 1;
+				reajustarCompases();
+				primerCompas = compasActual;
+			}
 		}
 	}
 	
