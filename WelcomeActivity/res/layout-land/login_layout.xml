@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background_scoresapp"
+    android:orientation="vertical" >
+
+    <ImageView
+        android:id="@+id/iV_Logo"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:contentDescription="@string/logo"
+        android:src="@drawable/scoreslogo" />
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/beta"
+        android:layout_gravity="right"
+        android:gravity="right"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="-5dp"
+        android:layout_marginBottom="50dp"
+        android:textColor="#222"
+        android:textSize="18sp"
+        
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+    
+    <TextView
+        android:id="@+id/tV_slogan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:gravity="right"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="-40dp"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="#222"
+        android:text="@string/slogan"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <Button
+        android:id="@+id/button_login"
+        android:background="@drawable/back_buttons"
+        android:layout_width="280dp"
+        android:layout_height="50dp"
+        android:gravity="center"
+        android:layout_marginTop="50dp"
+        android:layout_gravity="center"
+        android:textColor="#FFF"
+        android:textSize="20sp"
+        android:text="@string/login" />
+    
+    <com.facebook.widget.LoginButton
+       	android:id="@+id/button_login_f"
+        android:layout_width="280dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp" />
+     
+    <TextView
+        android:id="@+id/tV_registrate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/registrate"
+        android:textSize="18sp"
+        android:layout_marginTop="20dp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+		    
+	<Button
+    	android:id="@+id/b_registro"
+        android:background="@drawable/back_buttons"
+        android:text="@string/registro"
+        android:layout_width="280dp"
+        android:layout_height="60dp"
+        android:gravity="center"
+        android:layout_marginTop="10dp"
+        android:layout_gravity="center"
+        android:textColor="#FFF"
+        android:textSize="20sp" />
+                
+	<TextView
+    	android:id="@+id/tv_olvido_pass"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:text="@string/olvida_pass"
+	    android:layout_marginTop="40dp"
+	    android:layout_gravity="center"
+	    android:gravity="center"
+	    android:textSize="14sp"
+	    android:textAppearance="?android:attr/textAppearanceLarge" />
+		
+</LinearLayout>
