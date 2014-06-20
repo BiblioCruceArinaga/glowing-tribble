@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_gravity="center"
     android:background="@drawable/background_scoresapp"
     android:orientation="vertical" >
 
@@ -45,83 +46,86 @@
         android:textColor="#001177"
         android:text="@string/free_money" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:orientation="horizontal" >
-        	        
-	    <Button
-	        android:id="@+id/b5"
-	        style="?android:attr/buttonBarButtonStyle"
-	        android:layout_width="100dp"
-	        android:layout_height="110dp"
-	        android:layout_gravity="center"
-	        android:gravity="center"
-	        android:background="@drawable/stores_buttons"
-	        android:layout_marginTop="30dp"
-	        android:layout_marginLeft="5dp"
-	        android:layout_marginRight="5dp"
-	        android:textSize="15sp"
-	        android:text="@string/add5" />
-	
-	    <Button
-	        android:id="@+id/b10"
-	        style="?android:attr/buttonBarButtonStyle"
-	        android:layout_width="100dp"
-	        android:layout_height="110dp"
-	        android:layout_gravity="center"
-	        android:gravity="center"
-	        android:background="@drawable/stores_buttons"
-	        android:layout_marginTop="30dp"
-	        android:layout_marginLeft="5dp"
-	        android:layout_marginRight="5dp"
-	        android:textSize="15sp"
-	        android:text="@string/add10" />
-	
-	    <Button
-	        android:id="@+id/b20"
-	        style="?android:attr/buttonBarButtonStyle"
-	        android:layout_width="100dp"
-	        android:layout_height="110dp"
-	        android:layout_gravity="center"
-	        android:gravity="center"
-	        android:background="@drawable/stores_buttons"
-	        android:layout_marginTop="30dp"
-	        android:layout_marginLeft="5dp"
-	        android:layout_marginRight="5dp"
-	        android:textSize="15sp"
-	        android:text="@string/add20" />
-	
-	    <Button
-	        android:id="@+id/bu50"
-	        style="?android:attr/buttonBarButtonStyle"
-	        android:layout_width="100dp"
-	        android:layout_height="110dp"
-	        android:layout_gravity="center"
-	        android:gravity="center"
-	        android:background="@drawable/stores_buttons"
-	        android:layout_marginTop="30dp"
-	        android:layout_marginLeft="5dp"
-	        android:layout_marginRight="5dp"
-	        android:textSize="15sp"
-	        android:text="@string/add50" />
-	
-	    <Button
-	        android:id="@+id/b100"
-	        style="?android:attr/buttonBarButtonStyle"
-	        android:layout_width="100dp"
-	        android:layout_height="110dp"
-	        android:layout_gravity="center"
-	        android:gravity="center"
-	        android:background="@drawable/stores_buttons"
-	        android:layout_marginTop="30dp"
-	        android:layout_marginLeft="5dp"
-	        android:layout_marginRight="5dp"
-	        android:textSize="15sp"
-	        android:text="@string/add100" />
-      
-    </LinearLayout>
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal" >
+        
+        <LinearLayout
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_gravity="center_vertical"
+	        android:orientation="horizontal" >
+	        	        
+		    <Button
+		        android:id="@+id/b5"
+		        style="?android:attr/buttonBarButtonStyle"
+		        android:layout_width="100dp"
+		        android:layout_height="100dp"
+		        android:layout_gravity="center"
+		        android:gravity="center"
+		        android:background="@drawable/stores_buttons"
+		        android:layout_marginLeft="5dp"
+		        android:layout_marginRight="5dp"
+		        android:textSize="15sp"
+		        android:text="@string/add5" />
+		
+		    <Button
+		        android:id="@+id/b10"
+		        style="?android:attr/buttonBarButtonStyle"
+		        android:layout_width="100dp"
+		        android:layout_height="100dp"
+		        android:layout_gravity="center"
+		        android:gravity="center"
+		        android:background="@drawable/stores_buttons"
+		        android:layout_marginLeft="5dp"
+		        android:layout_marginRight="5dp"
+		        android:textSize="15sp"
+		        android:text="@string/add10" />
+		
+		    <Button
+		        android:id="@+id/b20"
+		        style="?android:attr/buttonBarButtonStyle"
+		        android:layout_width="100dp"
+		        android:layout_height="100dp"
+		        android:layout_gravity="center"
+		        android:gravity="center"
+		        android:background="@drawable/stores_buttons"
+		        android:layout_marginLeft="5dp"
+		        android:layout_marginRight="5dp"
+		        android:textSize="15sp"
+		        android:text="@string/add20" />
+		
+		    <Button
+		        android:id="@+id/bu50"
+		        style="?android:attr/buttonBarButtonStyle"
+		        android:layout_width="100dp"
+		        android:layout_height="100dp"
+		        android:layout_gravity="center"
+		        android:gravity="center"
+		        android:background="@drawable/stores_buttons"
+		        android:layout_marginLeft="5dp"
+		        android:layout_marginRight="5dp"
+		        android:textSize="15sp"
+		        android:text="@string/add50" />
+		
+		    <Button
+		        android:id="@+id/b100"
+		        style="?android:attr/buttonBarButtonStyle"
+		        android:layout_width="100dp"
+		        android:layout_height="100dp"
+		        android:layout_gravity="center"
+		        android:gravity="center"
+		        android:background="@drawable/stores_buttons"
+		        android:layout_marginLeft="5dp"
+		        android:layout_marginRight="5dp"
+		        android:textSize="15sp"
+		        android:text="@string/add100" />
+	      
+	    </LinearLayout>
+	        
+        
+    </FrameLayout>
 
+    
 </LinearLayout>

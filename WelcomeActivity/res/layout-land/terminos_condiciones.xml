@@ -4,6 +4,7 @@
     android:id="@+id/textAreaScroller" 
     android:layout_width="fill_parent" 
     android:layout_height="500dp" 
+    android:background="@drawable/background_scoresapp"
     android:scrollbars="vertical">
    
     <TextView
@@ -14,6 +15,7 @@
         android:layout_marginTop="37dp"
         android:paddingBottom="20dp"
         android:textSize="15sp"
+        android:textColor="#222"
         android:text="@string/terminos" />
     
 </ScrollView>

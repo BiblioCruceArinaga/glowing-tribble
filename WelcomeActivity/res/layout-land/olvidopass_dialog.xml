@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
         android:layout_marginBottom="30dp"
-        android:textSize="22sp"
+        android:textSize="20sp"
         android:inputType="textEmailAddress"
         android:hint="@string/mail_olvido_pass" >
 
@@ -27,7 +27,7 @@
             android:id="@+id/b_cancel_olpass"
             style="?android:attr/buttonBarButtonStyle"
             android:layout_width="0dp"
-            android:layout_height="70dp"
+            android:layout_height="50dp"
             android:layout_weight="1"
             android:textColor="#EEE"
             android:background="@drawable/stores_buttons"
@@ -38,7 +38,7 @@
             android:id="@+id/b_confirm_olpass"
             style="?android:attr/buttonBarButtonStyle"
             android:layout_width="0dp"
-            android:layout_height="70dp"
+            android:layout_height="50dp"
             android:layout_weight="1"
             android:textColor="#EEE"
             android:background="@drawable/stores_buttons"

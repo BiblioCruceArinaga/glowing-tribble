@@ -12,79 +12,107 @@
         android:layout_gravity="center"
         android:gravity="center"
         android:textColor="#222"
-        android:textSize="20sp"
+        android:textSize="25sp"
         android:layout_marginTop="20dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="30dp"
         android:text="@string/free_money"
         android:textAppearance="?android:attr/textAppearanceLarge" />
-	        
-	<TextView
-	    android:id="@+id/textView1"
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    android:layout_gravity="center"
-	    android:gravity="center"
-	    android:layout_marginTop="20dp"
-	    android:layout_marginLeft="10dp"
-	    android:layout_marginRight="10dp"
-	    android:textColor="#222"
-	    android:text="@string/share_friends_text" />
-		    
-	<Button
-	    android:id="@+id/b_share_friends"
-	    android:layout_width="200dp"
-	    android:layout_height="40dp"
-	    android:layout_gravity="center"
-	    android:background="@drawable/stores_buttons"
-	    android:gravity="center"
-	    android:textSize="15sp"
-	    android:layout_marginTop="10dp"
-	    android:text="@string/share_friends" />
-	    
-	<TextView
-	    android:id="@+id/textView2"
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    android:layout_marginTop="20dp"
-	    android:layout_gravity="center"
-	    android:gravity="center"
-	    android:layout_marginLeft="10dp"
-	    android:layout_marginRight="10dp"
-	    android:textColor="#222"
-	    android:text="@string/share_social_text" />
-	
-	<Button
-	    android:id="@+id/b_share_social"
-	    android:layout_width="200dp"
-	    android:layout_height="40dp"
-	    android:background="@drawable/stores_buttons"
-	    android:layout_gravity="center"
-	    android:gravity="center"
-	    android:textSize="15sp"
-	    android:layout_marginTop="10dp"
-	    android:text="@string/share_social" />
-   
-    <TextView
-        android:id="@+id/tV_rate"
+
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:layout_gravity="center"
-        android:gravity="center"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:textColor="#222"
-        android:text="@string/rate_app" />
-
-    <Button
-        android:id="@+id/b_rate"
-        android:layout_width="200dp"
-        android:layout_height="40dp"
-        android:background="@drawable/stores_buttons"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:textSize="15sp"
         android:layout_marginTop="10dp"
-        android:text="@string/share_rate" />
+        android:layout_gravity="center"
+        android:orientation="horizontal" >
+	                
+		<TextView
+		    android:id="@+id/textView1"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_gravity="center"
+		    android:gravity="left"
+		    android:layout_marginRight="106dp"
+		    android:textColor="#222"
+		    android:textSize="13sp"
+		    android:text="@string/share_friends_text" />
+			    
+		<Button
+		    android:id="@+id/b_share_friends"
+		    android:layout_width="180dp"
+		    android:layout_height="40dp"
+		    android:layout_gravity="center"
+		    android:background="@drawable/stores_buttons"
+		    android:gravity="center"
+		    android:textSize="16sp"
+		    android:text="@string/share_friends" />
+        
+    </LinearLayout>
+	
 
+	<LinearLayout
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_gravity="center"
+	    android:orientation="horizontal" >
+				    	    
+		<TextView
+		    android:id="@+id/textView2"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_gravity="center"
+		    android:gravity="left"
+		    android:layout_marginRight="10dp"
+		    android:textColor="#222"
+		    android:textSize="13sp"
+		    android:text="@string/share_social_text" />
+		
+		<Button
+		    android:id="@+id/b_share_social"
+		    android:layout_width="180dp"
+		    android:layout_height="40dp"
+		    android:background="@drawable/stores_buttons"
+		    android:layout_gravity="right"
+		    android:gravity="center"
+		    android:textSize="16sp"
+		    android:text="@string/share_social" />
+	    
+	</LinearLayout>
+
+	<LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_gravity="center"
+        android:orientation="horizontal" >
+			    
+	    <TextView
+	        android:id="@+id/tV_rate"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_gravity="center"
+	        android:gravity="left"
+	        android:layout_marginRight="112dp"
+	        android:textColor="#222"
+	        android:textSize="13sp"
+	        android:text="@string/rate_app" />
+	
+	    <Button
+	        android:id="@+id/b_rate"
+	        android:layout_width="180dp"
+	        android:layout_height="40dp"
+	        android:layout_gravity="right"
+	        android:background="@drawable/stores_buttons"
+	        android:gravity="center"
+	        android:text="@string/share_rate"
+	        android:textSize="16sp" />
+		    
+    </LinearLayout>
+	
 </LinearLayout>

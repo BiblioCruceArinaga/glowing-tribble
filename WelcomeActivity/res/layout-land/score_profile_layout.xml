@@ -2,55 +2,66 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background_scoresapp"
     android:orientation="vertical" >
 
-    <LinearLayout
+    <ScrollView
+        android:id="@+id/scrollView1"
+        android:layout_width="match_parent"
+        android:background="@drawable/background_scoresapp"
+        android:layout_height="wrap_content" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/background_scoresapp"
+            android:orientation="vertical" >
+            
+            <LinearLayout
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content" >
 	
 	        <ImageView
 		        android:id="@+id/imagenPartitura_profile"
-		        android:layout_width="120dp"
-		        android:layout_height="170dp"
-		        android:layout_marginLeft="20dp"
-		        android:layout_marginTop="20dp"
-		        android:layout_marginBottom="10dp"
+		        android:layout_width="150dp"
+		        android:layout_height="200dp"
+		        android:layout_marginLeft="30dp"
+		        android:layout_marginTop="30dp"
+		        android:layout_marginBottom="20dp"
 		        android:contentDescription="@string/contentDescription" />
 	        
 	        <LinearLayout
 	            android:layout_width="match_parent"
 	            android:layout_height="match_parent"
-	            android:layout_marginLeft="10dp"
+	            android:layout_marginLeft="30dp"
 	            android:orientation="vertical" >
 	            	            
 	           <TextView
 			        android:id="@+id/nombrePartitura_profile"
 			        android:layout_width="match_parent"
 			        android:layout_height="wrap_content"
-			        android:layout_marginTop="20dp"
-			        android:layout_marginRight="10dp"
+			        android:layout_marginTop="30dp"
+			        android:layout_marginRight="20dp"
 			        android:textColor="#222"
-			        android:textSize="20sp"
+			        android:textSize="25sp"
 			        android:textStyle="bold" />
 	            
 	           <TextView
 			        android:id="@+id/autorPartitura_profile"
 			        android:layout_width="match_parent"
 			        android:layout_height="wrap_content"
-			        android:layout_marginTop="10dp"
-			        android:layout_marginRight="10dp"
+			        android:layout_marginTop="20dp"
+			        android:layout_marginRight="20dp"
 			        android:textStyle="italic"
 			        android:textColor="#222"
-			        android:textSize="18sp" />
+			        android:textSize="22sp" />
 	                    
 	           <TextView
 			        android:id="@+id/anoPartitura_profile"
 			        android:layout_width="match_parent"
 			        android:layout_height="wrap_content"
-			        android:layout_marginTop="10dp"
-			        android:layout_marginRight="10dp"
-			        android:textSize="15sp" 
+			        android:layout_marginTop="20dp"
+			        android:layout_marginRight="20dp"
+			        android:textSize="20sp" 
 			        android:textColor="#222" />  
 	           
 	            <TextView
@@ -58,8 +69,8 @@
 			        android:layout_width="match_parent"
 			        android:layout_height="wrap_content"
 			        android:layout_marginTop="10dp"
-			        android:layout_marginRight="10dp"
-			        android:textSize="15sp" 
+			        android:layout_marginRight="20dp"
+			        android:textSize="20sp" 
 			        android:textColor="#222" />    
 	            
 	        </LinearLayout>
@@ -72,11 +83,11 @@
 	        
 	        <Button
 		        android:id="@+id/comprar_profile"
-		        android:layout_width="120dp"
+		        android:layout_width="150dp"
 		        android:layout_height="50dp"
 		        android:background="@drawable/stores_buttons"
-		        android:layout_marginLeft="20dp"
-		        android:layout_marginRight="20dp"
+		        android:layout_marginLeft="30dp"
+		        android:layout_marginRight="30dp"
 		        android:layout_marginTop="10dp"
 		        android:layout_marginBottom="10dp"
 		        android:paddingRight="5dp"
@@ -89,16 +100,16 @@
 	    	android:layout_height="2dp"
 	    	android:layout_marginTop="20dp"
 	    	android:layout_marginBottom="20dp"
-	    	android:layout_marginLeft="20dp"
-	    	android:layout_marginRight="10dp"
+	    	android:layout_marginLeft="30dp"
+	    	android:layout_marginRight="20dp"
 	    	android:background="#222" >
 	    </FrameLayout>
 	    
 	    <!-- Descripción -->
 	    <FrameLayout
 	        android:layout_width="match_parent"
-	        android:layout_marginLeft="20dp"
-	        android:layout_marginRight="10dp"	        
+	        android:layout_marginLeft="30dp"
+	        android:layout_marginRight="20dp"	        
 	        android:background="@drawable/description_style"
 	        android:layout_height="wrap_content" >
 	        
@@ -106,12 +117,12 @@
 	        android:id="@+id/tv_description_profile"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
-	        android:layout_marginLeft="10dp"
-	        android:layout_marginRight="10dp"
-	        android:layout_marginTop="10dp"
+	        android:layout_marginLeft="20dp"
+	        android:layout_marginRight="20dp"
+	        android:layout_marginTop="20dp"
 	        android:layout_marginBottom="20dp"
 	        android:textColor="#222"
-	        android:textSize="15sp"
+	        android:textSize="18sp"
 	        android:textAppearance="?android:attr/textAppearanceLarge" />
 	        
 	    </FrameLayout>
@@ -120,11 +131,14 @@
 	    <FrameLayout
 	        android:layout_width="match_parent"
 	    	android:layout_height="2dp"
-	    	android:layout_marginLeft="20dp"
-	    	android:layout_marginRight="10dp"
+	    	android:layout_marginLeft="30dp"
+	    	android:layout_marginRight="20dp"
 	    	android:layout_marginTop="20dp"
 	    	android:layout_marginBottom="20dp"
 	    	android:background="#222" >
 	    </FrameLayout>
-	    
+            
+        </LinearLayout>
+    </ScrollView>
+
 </LinearLayout>
