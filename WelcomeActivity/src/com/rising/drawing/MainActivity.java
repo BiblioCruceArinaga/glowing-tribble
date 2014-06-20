@@ -386,7 +386,7 @@ public class MainActivity extends Activity{
 					play = true;
 					stop = false;
 					s.Back();
-					s.Metronome_Play(tempo);
+					s.Metronome_Play(tempo, numeros_checkbox.isChecked());
 					MDialog.dismiss();
 				}
 				else {
@@ -416,7 +416,7 @@ public class MainActivity extends Activity{
     		item.setIcon(R.drawable.pause_button);
     		
     		if (stop)
-    			s.Metronome_Play(tempo);
+    			s.Metronome_Play(tempo, numeros_checkbox.isChecked());
     		else
     			s.Metronome_Pause();
     	}

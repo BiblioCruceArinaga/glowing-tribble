@@ -1,10 +1,13 @@
 package com.rising.drawing;
 
+import android.content.res.Configuration;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.view.MotionEvent;
 
 public class Scroll {
+	
+	private int orientation;
 	
 	//  Gestión del scroll vertical
 	private float altoPantalla = 0;
@@ -41,6 +44,8 @@ public class Scroll {
 	public Scroll(Config config) {;
 		margenFinalScrollY = config.getDistanciaPentagramas();
 		margenFinalScrollX = config.getXInicialPentagramas();
+		
+		orientation = 0;
 	}
 	
 	public void down(MotionEvent e) {
@@ -118,6 +123,10 @@ public class Scroll {
     	return (yDown == e.getY());
 	}
 	
+	public int getOrientation() {
+		return orientation;
+	}
+	
 	public float getXDown() {
 		return xDown;
 	}
@@ -132,6 +141,19 @@ public class Scroll {
 	
 	public float getYOffset() {
 		return yOffset;
+	}
+	
+	public void hacerScroll(Vista vista, int distanciaDesplazamiento) {
+		if (vista == Vista.VERTICAL) {
+			limiteVisibleArriba -= distanciaDesplazamiento;
+			limiteVisibleAbajo -= distanciaDesplazamiento;
+			yOffset -= distanciaDesplazamiento;
+		}
+		else {
+			limiteVisibleIzquierda -= distanciaDesplazamiento;
+			limiteVisibleDerecha -= distanciaDesplazamiento;
+			xOffset -= distanciaDesplazamiento;
+		}
 	}
 	
 	public void inicializarHorizontal(int width, int xFin) {
@@ -207,4 +229,34 @@ public class Scroll {
 			}
 		}
     }
+	
+	public int distanciaDesplazamiento(int currentY, boolean primerScrollHecho, 
+			Config config, int staves) {
+		
+		//  La distancia de desplazamiento en la primera iteración
+		//  es diferente al resto porque hay que contar con la
+		//  distancia extra del título de la obra y el nombre del autor
+		if (!primerScrollHecho) {
+			if (orientation == Configuration.ORIENTATION_PORTRAIT)
+				return currentY + (config.getDistanciaPentagramas() + 
+							   config.getDistanciaLineasPentagrama()) * 4;
+			else {
+				return currentY + (config.getDistanciaPentagramas() + 
+						   config.getDistanciaLineasPentagrama()) * 2;
+			}
+		}
+		else {
+			if (orientation == Configuration.ORIENTATION_PORTRAIT)
+				return (config.getDistanciaPentagramas() + 
+						config.getDistanciaLineasPentagrama() * 4) * 4;
+			else {
+				return (config.getDistanciaPentagramas() + 
+				        config.getDistanciaLineasPentagrama() * 4) * 2;
+			}
+		}
+	}
+	
+	public void setOrientation(int orientation) {
+		this.orientation = orientation;
+	}
 }

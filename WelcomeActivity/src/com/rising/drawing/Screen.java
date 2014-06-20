@@ -62,12 +62,9 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 	private boolean primerDesplazamientoHecho = false;
 	
 	//  Metrónomo y su gestión
-	private Metronomo metronomo = null;
+	private Metronome metronomo = null;
 	private OrdenDibujo bip = null;
 	private Dialog MDialog = null;
-	
-	private int width = 0;
-	private int height = 0;
     
 	//  ========================================
 	//  Constructor y métodos heredados
@@ -244,7 +241,6 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 							ordenDibujo.getY1(), ordenDibujo.getPaint());
 					break;
 				case DRAW_ARC:
-					
 					RectF rectf = ordenDibujo.getRectF();
 					Matrix matrix = getMatrix(rectf, ordenDibujo.getAngulo());
 					
@@ -260,8 +256,13 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 		}
 		
 		//  Dibuja el número rojo que marca los pulsos encima del compás
-		if (bip != null)
-			canvas.drawText(bip.getTexto(), bip.getX1(), bip.getY1(), bip.getPaint());
+		if (metronomo != null) {
+			bip = metronomo.getBip();
+			
+			if (bip != null)
+				canvas.drawText(metronomo.getBip().getTexto(), metronomo.getBip().getX1(), 
+					metronomo.getBip().getY1(), metronomo.getBip().getPaint());
+		}
 	}
 	
 	private void crearVistasDePartitura() {
@@ -295,9 +296,15 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 	
 	private void inicializarParametrosScroll(Canvas canvas) {
 		if (vista == Vista.VERTICAL) {
+			partituraVertical.setWidth(canvas.getWidth());
+			partituraVertical.setHeight(canvas.getHeight());
+			
 			scroll.inicializarVertical(canvas.getHeight(), partituraVertical.getLastMarginY());
 		}
 		else {
+			partituraHorizontal.setWidth(canvas.getWidth());
+			partituraHorizontal.setHeight(canvas.getHeight());
+			
 			int xFin = partituraHorizontal.getCompas(
 					partituraHorizontal.getNumeroDeCompases() - 1).getXFin();
 			scroll.inicializarHorizontal(canvas.getWidth(), xFin);
@@ -331,17 +338,9 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 	
 	/*
 	 * 
-	 * Gestión del metrónomo
+	 * Gestión del metrónomo desde Main Activity
 	 * 
 	 */
-	public void Back(){
-		scroll.back(vista);
-	}
-
-	public void Forward() {
-		scroll.forward(vista);
-	}
-	
 	public void Metronome_Pause(){
 		if (metronomo != null) {
 			if (metronomo.paused()) 
@@ -351,9 +350,15 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 		}
 	}
 	
-	public void Metronome_Play(int bpm){
+	public void Metronome_Play(int bpm, boolean ayudaVisual){
 		if (metronomo == null) {
-    		metronomo = new Metronomo(bpm);
+			Partitura partitura = 
+        			vista == Vista.VERTICAL ? partituraVertical : partituraHorizontal;
+			
+			scroll.setOrientation(getResources().getConfiguration().orientation);
+			
+    		metronomo = new Metronome(bpm, ayudaVisual, context, 
+    				vista, partitura, config, scroll);
     		metronomo.run();
 		}
 	}
@@ -365,197 +370,7 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 			bip = null;
 		}
 	}
-	
-	public class Metronomo {
-		private Object mPauseLock;
-	    private boolean mPaused;
-	    private Thread th;
-	    private int mbpm;
-	    private boolean numeros_bip;
-	    
-	    //  Bips sonoros del metrónomo
-	    SoundPool bipAgudo = null;
-	    SoundPool bipGrave = null;
-	    int bipAgudoInt = 0;
-	    int bipGraveInt = 0;
 
-	    public Metronomo(int bpm) {
-	        mPauseLock = new Object();
-	        mPaused = false;
-	        mbpm = bpm;
-	        	        
-	        bipAgudo = new SoundPool(5, AudioManager.STREAM_MUSIC, 0);
-			bipAgudoInt = bipAgudo.load(context, R.raw.bip, 0);
-
-			bipGrave = new SoundPool(5, AudioManager.STREAM_MUSIC, 0);
-			bipGraveInt = bipGrave.load(context, R.raw.bap, 0);
-	    }
-
-	    public void run() {
-	    	th = new Thread(new Runnable(){
-	    		public void run() {	
-	    			/*
-	                try {
-	                	long speed = ((240000/mbpm)/4);
-	                	int currentY = partitura.getCompas(0).getYIni();
-	                	int changeAccount = 0;
-	                	int staves = partitura.getStaves();
-	                	
-	                	boolean primerScrollHecho = false;
-	                	int distanciaDesplazamiento = 
-	                			obtenerDistanciaDesplazamiento(currentY, primerScrollHecho);
-	                	
-	                	bipsDePreparacion(speed, partitura.getCompas(0).numeroDePulsos());
-	                	
-	                	int numCompases = partitura.getCompases().size();
-	                	for (int i=0; i<numCompases; i++) {
-	                		Compas compas = partitura.getCompas(i);
-	                		
-	                		//  Si hay un bpm distinto para este compás...
-	                		if (compas.getBpm() != -1) {
-	                			mbpm = compas.getBpm();
-	                			speed = ((240000/mbpm)/4);
-	                		}
-	                			
-	                		//  Si ha cambiado la Y, hacemos scroll
-	                		if (currentY != compas.getYIni()) {
-	                			currentY = compas.getYIni();
-	                			changeAccount += staves;
-	                			
-	                			if (changeAccount == config.getChangeAccount()) {
-	                				//hacerScroll(distanciaDesplazamiento);
-		                			
-	                				if (!primerScrollHecho) {
-			                			primerScrollHecho = true;
-			                			distanciaDesplazamiento = 
-			                				obtenerDistanciaDesplazamiento(currentY, primerScrollHecho);
-	                				}
-		                			
-		                			changeAccount = 0;
-	                			}
-	                		}
-
-	                		int xPos = (compas.getXFin() - compas.getXIni()) / 2;
-	                		xPos += compas.getXIni();
-	                				
-	                		int pulsos = compas.numeroDePulsos();
-	                		for (int j=0; j<pulsos; j++) {
-	                			
-	                			emitirSonido(j);
-	                			if(numeros_bip){
-	                				dibujarBip(j, xPos, compas.getYIni());
-	                			}
-	                			Thread.sleep(speed);
-	                			
-	                			synchronized (mPauseLock) {
-	    	    	                while (mPaused) {
-	    	    	                    try {
-	    	    	                        mPauseLock.wait();
-	    	    	                    } catch (InterruptedException e) {
-	    	    	                    	Thread.currentThread().interrupt();
-	    	    	                    	mPauseLock.notifyAll();
-	    	    	                    	return;
-	    	    	                    }
-	    	    	                }
-	    	    	            }
-	                		}
-	                	}
-	                } 
-	                catch (InterruptedException e) {
-	    				e.printStackTrace();
-	    				Thread.currentThread().interrupt();
-		    		} catch (IndexOutOfBoundsException e) {
-	    				e.printStackTrace();
-	    			}
-	    			*/
-	    		}
-	    	});
-	    	th.start();
-	    }
-
-	    /**
-	     * Call this on pause.
-	     */
-	    public void onPause() {
-	        synchronized (mPauseLock) {
-	            mPaused = true;
-	        }
-	    }
-
-	    /**
-	     * Call this on resume.
-	     */
-	    public void onResume() {
-	        synchronized (mPauseLock) {
-	            mPaused = false;
-	            mPauseLock.notifyAll();
-	        }
-	    }
-
-	    /**
-	     * Destroy metronome
-	     */
-	    public void onDestroy() {
-	    	mPaused = false;
-	    	th.interrupt();
-	    }
-
-	    /**
-	     * Know metronome state
-	     */
-	    public boolean paused() {
-	    	return this.mPaused;
-	    }
-	    
-	    //  El metrónomo no puede empezar de sopetón, ya que
-		//  desconcertaría al músico. Esta función emite unos
-		//  bips iniciales que orientan al músico sobre la 
-		//  velocidad a la que deberá empezar a tocar
-		private void bipsDePreparacion(long speed, int pulsos) throws InterruptedException {
-			for (int j=0; j<pulsos; j++) {
-				emitirSonido(j);
-				int numero = pulsos - j;
-				
-				if (bip == null) {
-					bip = new OrdenDibujo();
-					bip.setOrden(DrawOrder.DRAW_TEXT);
-					bip.setPaint(PaintOptions.SET_TEXT_SIZE, config.getTamanoLetraBipPreparacion());
-					bip.setPaint(PaintOptions.SET_ARGB_RED, -1);
-					bip.setPaint(PaintOptions.SET_TEXT_ALIGN, -1);
-					bip.setTexto(numero + "");
-					bip.setX1(width / 2);
-					bip.setY1(height / 2);
-				}
-				else
-					bip.setTexto(numero + "");
-				
-				Thread.sleep(speed);
-				
-				if (numero == 1) 
-					bip = null;
-			}
-		}
-
-		private void dibujarBip(int pulso, int x, int y) {
-			bip = new OrdenDibujo();
-			bip.setOrden(DrawOrder.DRAW_TEXT);
-			bip.setPaint(PaintOptions.SET_TEXT_SIZE, config.getTamanoLetraPulso());
-			bip.setPaint(PaintOptions.SET_ARGB_RED, -1);
-			bip.setTexto((pulso + 1) + "");
-			bip.setX1(x);
-			bip.setY1(y);
-		}
-		
-		private void emitirSonido(int pulso) {
-			if (pulso == 0)
-				bipAgudo.play(bipAgudoInt, 1, 1, 1, 0, 1);
-			else 
-				bipGrave.play(bipGraveInt, 1, 1, 1, 0, 1);
-		}
-	}
-	
-	
-	
 	
 	/*
 	 * 
@@ -588,7 +403,7 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 
 	@Override
 	public void update(Observable observable, Object data) {
-		int sound = (Integer) data;
+		//int sound = (Integer) data;
 		/*
 		if (sound > 0) {
 			Compas compas = partitura.getCompas(compasActual);
@@ -629,31 +444,11 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 	 *
 	 */
 	
-	
-	/*
-	private void hacerScroll(int distanciaDesplazamiento) {
-		if (vista == Vista.VERTICAL) {
-			limiteVisibleArriba -= distanciaDesplazamiento;
-			limiteVisibleAbajo -= distanciaDesplazamiento;
-			yOffset -= distanciaDesplazamiento;
-		}
-		else {
-			limiteVisibleIzquierda -= distanciaDesplazamiento;
-			limiteVisibleDerecha -= distanciaDesplazamiento;
-			xOffset -= distanciaDesplazamiento;
-		}
+	public void Back(){
+		scroll.back(vista);
 	}
-	*/
-	private int obtenerDistanciaDesplazamiento(int currentY, boolean primerScrollHecho) {
-		
-		//  La distancia de desplazamiento en la primera iteración
-		//  es diferente al resto porque hay que contar con la
-		//  distancia extra del título de la obra y el nombre del autor
-		if (!primerScrollHecho)
-			return currentY + (config.getDistanciaPentagramas() + 
-							   config.getDistanciaLineasPentagrama()) * 4;
-		else
-			return (config.getDistanciaPentagramas() + 
-			        config.getDistanciaLineasPentagrama() * 4) * 4;
+
+	public void Forward() {
+		scroll.forward(vista);
 	}
 }

@@ -15,7 +15,8 @@ public class Config {
 	private int ancho_dialog_bpm;
 	private int ancho_hooks;
 	private int ancho_tempo;
-	private int change_account;
+	private int change_account_horizontal;
+	private int change_account_vertical;
 	private int desplazamiento_extra_nota_gracia;
 	private int distancia_corchetes;
 	private int distancia_entre_beams;
@@ -108,7 +109,8 @@ public class Config {
 				ancho_dialog_bpm = 600;
 				ancho_hooks = 16;
 				ancho_tempo = 20;
-				change_account = 4;
+				change_account_horizontal = 2;
+				change_account_vertical = 4;
 				desplazamiento_extra_nota_gracia = 30;
 				distancia_corchetes = 15;
 				distancia_entre_beams = 5;
@@ -198,7 +200,8 @@ public class Config {
 				ancho_dialog_bpm = 600;
 				ancho_hooks = 16;
 				ancho_tempo = 65;
-				change_account = 4;
+				change_account_horizontal = 2;
+				change_account_vertical = 4;
 				desplazamiento_extra_nota_gracia = 40;
 				distancia_corchetes = 15;
 				distancia_entre_beams = 12;
@@ -325,8 +328,12 @@ public class Config {
 		return ancho_tempo;
 	}
 	
-	public int getChangeAccount() {
-		return change_account;
+	public int getChangeAccountHorizontal() {
+		return change_account_horizontal;
+	}
+	
+	public int getChangeAccountVertical() {
+		return change_account_vertical;
 	}
 	
 	public int getDesplazamientoExtraNotaGracia() {
