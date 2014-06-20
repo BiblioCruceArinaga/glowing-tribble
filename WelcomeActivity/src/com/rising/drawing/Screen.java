@@ -36,7 +36,6 @@ import android.widget.Toast;
 public class Screen extends SurfaceView implements SurfaceHolder.Callback, Observer {
 
 	private boolean isValidScreen = false;
-	private ObjectInputStream fichero = null;
 	private ScreenThread thread;
 	private Context context = null;
 	private Config config = null;
@@ -44,7 +43,6 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 
 	private Partitura partituraHorizontal = new Partitura();
 	private Partitura partituraVertical = new Partitura();
-	private Compas compas = new Compas();
 	
 	//  Gestión de las posibles vistas y su scroll
 	private ArrayList<OrdenDibujo> verticalDrawing = new ArrayList<OrdenDibujo>();
@@ -81,12 +79,9 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 		try {
 			this.context = context;
 			
-			File f = new File(Environment.getExternalStorageDirectory() + path_folder + path);
-	        FileInputStream is = new FileInputStream(f);
-			fichero = new ObjectInputStream(is);
-			cargarDatosDeFichero();
-			fichero.close();
-			
+			FileMethods fileMethods = new FileMethods(path_folder, path);
+			fileMethods.cargarDatosDeFichero(partituraHorizontal, partituraVertical);
+
 			config = new Config(densityDPI, width);
 			scroll = new Scroll(config);
 
@@ -96,6 +91,7 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 			verticalThread.join();
 
 			cambiarVista(Vista.VERTICAL);
+			isValidScreen = true;
 			
 		} catch (FileNotFoundException e) {
 			Log.i("FileNotFoundException: ", e.getMessage() + "\n");
@@ -131,13 +127,11 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 		}
 		
 		isValidScreen = false;
-		fichero = null;
 		
 		partituraHorizontal.destruir();
 		partituraHorizontal = null;
 		partituraVertical.destruir();
 		partituraVertical = null;
-		compas = null;
 		
 		verticalDrawing.clear();
 		verticalDrawing = null;
@@ -161,8 +155,10 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 	        case MotionEvent.ACTION_UP:
 	        	if (scroll.up(e)) {
 		        	if (MDialog == null) {
-		    			//int compas = compasAPartirDeTap(e.getX(), - yOffset + yDown);
-		    			//establecerVelocidadAlCompas(compas);
+		        		BpmManagement bpmManagement = new BpmManagement(vista,
+		        				partituraHorizontal, partituraVertical, 
+		        				horizontalDrawing, verticalDrawing, config, context); 
+		    			bpmManagement.tapManagement(e, scroll);
 		    		}
 	        	}
 	        	break;
@@ -188,37 +184,6 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 		
 	    return super.dispatchTouchEvent(ev);
 	}
-	//  ========================================
-	
-	
-	//  ========================================
-	//  Métodos de gestión del fichero
-	//  ========================================
-	private void cargarDatosDeFichero() throws IOException, CloneNotSupportedException {
-		leerDatosBasicosDePartitura();
-		
-		byte byteLeido = fichero.readByte();
-		while (byteLeido != -128) {
-			
-			switch (byteLeido) {			
-				case 126:
-					leerFiguraGraficaCompas();
-					break;
-					
-				case 127:
-					partituraHorizontal.addCompas(compas);
-					partituraVertical.addCompas((Compas) compas.clone());
-					compas = new Compas();
-					break;
-				
-				default:
-					leerInfoNota(byteLeido);
-					break;
-			}
-			
-			byteLeido = fichero.readByte();
-		}
-	}
 	
 	public Config getConfig() {
 		return config;
@@ -227,141 +192,6 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 	public boolean isValidScreen() {
 		return isValidScreen;
 	}
-	
-	private ArrayList<Byte> leerClaves() throws IOException {
-		ArrayList<Byte> arrayBytes = new ArrayList<Byte>();
-		
-		byte pentagrama = 0;
-		byte clave = 0;
-		byte alteracion = 0;
-		
-		byte numClefs = fichero.readByte();
-		arrayBytes.add(numClefs);
-		
-		for (int i=0; i<numClefs; i++) {
-			pentagrama = fichero.readByte();
-			clave = fichero.readByte();
-			alteracion = fichero.readByte();
-			
-			arrayBytes.add(pentagrama);
-			arrayBytes.add(clave);
-			arrayBytes.add(alteracion);
-		}
-
-		return arrayBytes;
-	}
-	
-	private void leerDatosBasicosDePartitura() throws IOException {
-		ArrayList<Byte> work = leerHastaAlmohadilla();
-		ArrayList<Byte> creator = leerHastaAlmohadilla();
-		byte staves = fichero.readByte();
-		byte instrument = fichero.readByte();
-		ArrayList<Byte> divisions = leerHastaAlmohadilla();
-		int numeroCompas = fichero.readByte();
-		
-		partituraVertical.setWork(work);
-		partituraVertical.setCreator(creator);
-		partituraVertical.setStaves(staves);
-		partituraVertical.setInstrument(instrument);
-		partituraVertical.setDivisions(divisions);
-		partituraVertical.setFirstNumber(numeroCompas);
-		
-		partituraHorizontal.setWork(work);
-		partituraHorizontal.setCreator(creator);
-		partituraHorizontal.setStaves(staves);
-		partituraHorizontal.setInstrument(instrument);
-		partituraHorizontal.setDivisions(divisions);
-		partituraHorizontal.setFirstNumber(numeroCompas);
-	}
-	
-	private void leerFiguraGraficaCompas() throws IOException {
-		ElementoGrafico elemento = new ElementoGrafico();
-
-		byte posicionFiguraGrafica = fichero.readByte();
-		elemento.addValue(posicionFiguraGrafica);
-		
-		byte figuraGrafica = fichero.readByte();
-		switch (figuraGrafica) {
-			case 1:
-			case 2:
-			case 3:
-			case 4:
-				elemento.addValue(figuraGrafica);
-				elemento.setPosition(leerHastaAlmohadilla());
-				compas.setDynamics(elemento);
-				break;
-
-			case 25:
-				elemento.addValue(figuraGrafica);
-				elemento.setPosition(leerHastaAlmohadilla());
-				compas.setPedalStart(elemento);
-				break;
-
-			case 26:
-				elemento.addValue(figuraGrafica);
-				elemento.setPosition(leerHastaAlmohadilla());
-				compas.setPedalStop(elemento);
-				break;
-
-			case 27:
-				elemento.addAllValues(leerHastaAlmohadilla());
-				elemento.setPosition(leerHastaAlmohadilla());
-				compas.setWords(elemento);
-				break;
-
-			case 28:
-				elemento.addValue(fichero.readByte());
-				elemento.setPosition(leerHastaAlmohadilla());
-				compas.addBarline(elemento);
-				break;
-
-			case 30:
-				elemento.addAllValues(leerClaves());
-				elemento.setPosition(leerHastaAlmohadilla());
-				compas.addClef(elemento);
-				break;
-		
-			case 31:
-				elemento.addValue(fichero.readByte());
-				elemento.setPosition(leerHastaAlmohadilla());
-				compas.setTime(elemento);
-				break;
-				
-			default: 
-				break;
-		}
-	}
-	
-	private ArrayList<Byte> leerHastaAlmohadilla() throws IOException {
-		ArrayList<Byte> bytesArray = new ArrayList<Byte>();
-		byte byteLeido = 0;
-		
-		do {
-			byteLeido = fichero.readByte();
-			bytesArray.add(byteLeido);
-		} while (byteLeido != 35);
-		
-		bytesArray.remove(bytesArray.size() - 1);
-		return bytesArray;
-	}
-	
-	private void leerInfoNota(byte nota) throws IOException {
-		byte octava = fichero.readByte();
-		byte figuracion = fichero.readByte();
-		byte union = fichero.readByte();
-		byte idUnion = fichero.readByte();
-		byte plica = fichero.readByte();
-		byte voz = fichero.readByte();
-		byte pentagrama = fichero.readByte();
-		
-		ArrayList<Byte> figurasGraficas = leerHastaAlmohadilla();
-		ArrayList<Byte> posicionEjeX = leerHastaAlmohadilla();
-
-		compas.addNote(new Nota(nota, octava, figuracion, union, 
-				idUnion, plica, voz, pentagrama, figurasGraficas, 
-				posicionEjeX));
-	}
-	//  ================================
 	
 	//  ========================================
 	//  Métodos de dibujo
@@ -441,7 +271,6 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
     					new DrawingMethods(partituraVertical, config, getResources(), Vista.VERTICAL);
 				if (metodosDibujo.isValid()) {
 					verticalDrawing = metodosDibujo.crearOrdenesDeDibujo();
-					isValidScreen = true;
 				}
     		}
 		});
@@ -452,7 +281,6 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
     					new DrawingMethods(partituraHorizontal, config, getResources(), Vista.HORIZONTAL);
 				if (metodosDibujo.isValid()) {
 					horizontalDrawing = metodosDibujo.crearOrdenesDeDibujo();
-					isValidScreen = true;
 				}
     		}
 		});
@@ -727,139 +555,7 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 	}
 	
 	
-	/*
-	 * 
-	 * Gestión del establecimiento de una 
-	 * velocidad de metrónomo para cada compás
-	 * 
-	 */
-	/*
-	//  Devuelve el índice del compás que se encuentra
-	//  en la posición X e Y del tap del usuario
-	private int compasAPartirDeTap(float x, float y) {
-		ArrayList<Compas> compases = partitura.getCompases();
-		int numCompases = compases.size();
-		for (int i=0; i<numCompases; i++) {
-			if ( (compases.get(i).getYIni() <= y) && (y <= compases.get(i).getYFin()) ) {
-				if ( (compases.get(i).getXIni() <= x) && (x < compases.get(i).getXFin()) ) {
-					return i;
-				}
-			}
-		}
-		
-		return -1;
-	}
-	*/
-	private int dibujarBpm(Compas compas) {
-		OrdenDibujo ordenDibujo = new OrdenDibujo();
-		ordenDibujo.setOrden(DrawOrder.DRAW_TEXT);
-		ordenDibujo.setPaint(PaintOptions.SET_TEXT_SIZE, config.getTamanoLetraBpm());
-		ordenDibujo.setTexto("Bpm = " + compas.getBpm());
-		ordenDibujo.setX1(compas.getXIni());
-		ordenDibujo.setY1(compas.getYIni() - config.getYBpm());
-		verticalDrawing.add(ordenDibujo);
-		
-		return verticalDrawing.size() - 1;
-	}
 	
-	//  Prepara el diálogo que permitirá al usuario
-	//  escoger una velocidad de metrónomo para este compás
-	private void establecerVelocidadAlCompas(final int index) {
-		MDialog = new Dialog(context,  R.style.cust_dialog);	
-		MDialog.setContentView(R.layout.metronome_dialog_compas);
-		MDialog.setTitle(R.string.metronome);
-		MDialog.getWindow().setLayout(config.getAnchoDialogBpm(), config.getAltoDialogBpm());	
-
-		final SeekBar seekBar_metronome = (SeekBar)MDialog.findViewById(R.id.seekBar_metronome);
-		
-		final NumberPicker metronome_speed = (NumberPicker)MDialog.findViewById(R.id.nm_metronome);
-		metronome_speed.setMaxValue(300);
-		metronome_speed.setMinValue(1);
-		metronome_speed.setValue(120);
-		metronome_speed.setWrapSelectorWheel(true);
-		metronome_speed.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
-		metronome_speed.setOnScrollListener(new OnScrollListener() {
-
-			@Override
-			public void onScrollStateChange(NumberPicker arg0, int arg1) {
-				// TODO Auto-generated method stub
-				seekBar_metronome.setProgress(arg0.getValue());
-			}
-		});
-		
-		seekBar_metronome.setMax(300);
-		seekBar_metronome.setProgress(120);
-		seekBar_metronome.setOnSeekBarChangeListener(new OnSeekBarChangeListener(){
-
-			@Override
-			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-				metronome_speed.setValue(progress);
-				Log.i("Progress", progress + "");
-				
-			}
-
-			@Override
-			public void onStartTrackingTouch(SeekBar seekBar) {
-				Log.i("Seek", "StartTracking");
-				
-			}
-
-			@Override
-			public void onStopTrackingTouch(SeekBar seekBar) {
-				Log.i("Seek", "StopTracking");
-				
-			}
-		});
-		
-		ImageButton playButton = (ImageButton)MDialog.findViewById(R.id.playButton1);
-		playButton.setOnClickListener(new OnClickListener(){
-
-			@Override
-			public void onClick(View v) {
-				int bpm = -1;
-								
-				bpm = metronome_speed.getValue();
-												
-				if ( (bpm < 1) || (bpm > 300) ) {
-					Toast toast1 = Toast.makeText(context,
-				                    R.string.speed_allowed, Toast.LENGTH_SHORT);
-				    toast1.show();
-				}
-				else {
-					//Compas compas = partitura.getCompas(index);
-					
-					compas.setBpm(bpm);
-					if (compas.getBpmIndex() > -1)
-						verticalDrawing.set(compas.getBpmIndex(), null);
-					int bpmIndex = dibujarBpm(compas);
-					compas.setBpmIndex(bpmIndex);
-					
-					MDialog.dismiss();
-					MDialog = null;
-				}
-			}
-		});
-		
-		ImageButton deleteButton = (ImageButton)MDialog.findViewById(R.id.playButton2);
-		deleteButton.setOnClickListener(new OnClickListener(){
-
-			@Override
-			public void onClick(View v) {
-				//Compas compas = partitura.getCompas(index);
-
-				if (compas.getBpmIndex() > -1) {
-					verticalDrawing.set(compas.getBpmIndex(), null);
-					compas.setBpm(-1);
-					compas.setBpmIndex(-1);
-				}
-
-				MDialog.dismiss();
-				MDialog = null;
-			}
-		});
-		
-		MDialog.show();
-	}
 	
 	/*
 	 * 

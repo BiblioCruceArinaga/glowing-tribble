@@ -2,7 +2,6 @@ package com.rising.drawing;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.util.Log;
 import android.view.MotionEvent;
 
 public class Scroll {
@@ -68,41 +67,19 @@ public class Scroll {
         xPrevious = x;
         limiteVisibleIzquierda += divX;
         limiteVisibleDerecha += divX;
-        
-        Log.i("XOFFSET", xOffset + "");
-        Log.i("PORCENTAJE ANCHURA", porcentajeAnchura + "");
-        Log.i("OFFSET BARRA HORIZONTAL", offsetBarraHorizontal + "");
-        Log.i("DIVX", divX + "");
-        Log.i("XPREVIOUS", xPrevious + "");
-        Log.i("LIMITE VISIBLE IZQUIERDA", limiteVisibleIzquierda + "");
-        Log.i("LIMITE VISIBLE DERECHA", limiteVisibleDerecha + "");
 
         if (limiteVisibleIzquierda > 0) {
-        	Log.i("ENTRÉ EN LÍMITE VISIBLE IZQUIERDA < 0", "");
-        	
         	xOffset = 0;
         	divX = 0;
         	limiteVisibleIzquierda = 0;
         	limiteVisibleDerecha = anchoPantalla;
-        	
-        	Log.i("XOFFSET", xOffset + "");
-        	Log.i("DIVX", divX + "");
-        	Log.i("LIMITE VISIBLE IZQUIERDA", limiteVisibleIzquierda + "");
-            Log.i("LIMITE VISIBLE DERECHA", limiteVisibleDerecha + "");
         }
 
         if (limiteVisibleDerecha < -finalScrollX) {
-        	Log.i("ENTRÉ EN LÍMITE VISIBLE DERECHA < - FINAL SCROLL X", "");
-        	
         	xOffset = -finalScrollX - anchoPantalla;
         	divX = 0;
         	limiteVisibleIzquierda = -finalScrollX - anchoPantalla;
         	limiteVisibleDerecha = -finalScrollX;
-        	
-        	Log.i("XOFFSET", xOffset + "");
-        	Log.i("DIVX", divX + "");
-        	Log.i("LIMITE VISIBLE IZQUIERDA", limiteVisibleIzquierda + "");
-            Log.i("LIMITE VISIBLE DERECHA", limiteVisibleDerecha + "");
         }
 
         mostrarBarraHorizontal = true;
@@ -141,8 +118,16 @@ public class Scroll {
     	return (yDown == e.getY());
 	}
 	
+	public float getXDown() {
+		return xDown;
+	}
+	
 	public float getXOffset() {
 		return xOffset;
+	}
+	
+	public float getYDown() {
+		return yDown;
 	}
 	
 	public float getYOffset() {
@@ -151,16 +136,10 @@ public class Scroll {
 	
 	public void inicializarHorizontal(int width, int xFin) {
 		if (!x_initialized) {
-    		
     		limiteVisibleDerecha = - width;
     		anchoPantalla = limiteVisibleDerecha;
     		finalScrollX = xFin + margenFinalScrollX;
     		tamanoBarraHorizontal = (int) ( (anchoPantalla / finalScrollX) * anchoPantalla);
-
-    		Log.i("LIMITE VISIBLE DERECHA", limiteVisibleDerecha + "");
-    		Log.i("ANCHO PANTALLA", anchoPantalla + "");
-    		Log.i("FINAL SCROLL X", finalScrollX + "");
-    		Log.i("TAMANO BARRA HORIZONTAL", tamanoBarraHorizontal + "");
     		
     		x_initialized = true;
 		}

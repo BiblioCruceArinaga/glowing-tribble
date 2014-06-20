@@ -42,16 +42,16 @@ public class Nota {
 		this.voz = voz;
 		this.pentagrama = pentagrama;
 		
+		this.figurasGraficas = figurasGraficas;
+		this.posicion = posicion;
+		
 		octavarium = 0;
 		y_octavarium = -1;
 		
 		ligaduraUnion = 0;
 		ligaduraExpresion = 0;
 		ligaduraExpresionEncima = false;
-		
-		this.figurasGraficas = figurasGraficas;
-		this.posicion = posicion;
-		
+
 		x = 0;
 		y = 0;
 	}
