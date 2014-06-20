@@ -1,19 +1,12 @@
 package com.rising.security;
 
-import java.io.BufferedReader;
 import java.io.EOFException;
 import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
+import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.OutputStream;
+import java.nio.charset.Charset;
 
-import org.bouncycastle.crypto.BlockCipher;
-import org.bouncycastle.crypto.BufferedBlockCipher;
-import org.bouncycastle.crypto.engines.DESedeEngine;
-import org.bouncycastle.crypto.modes.CBCBlockCipher;
-import org.bouncycastle.crypto.paddings.PaddedBufferedBlockCipher;
-import org.bouncycastle.crypto.params.KeyParameter;
 import org.bouncycastle.util.encoders.Base64;
 
 import android.content.Context;
@@ -22,105 +15,48 @@ import android.util.Log;
 
 public class DownloadScoresEncrypter {
 
-	private String Id_Score = "DC101AB52CF894CEE52F6173";
 	private String User_Token;
 	private String path = "/.RisingScores/scores/";
-	BlockCipher engine;
 	
+	//Constructor 
 	public DownloadScoresEncrypter(Context ctx, String token){
 		this.User_Token = token.toLowerCase();
-		Log.w("Token", ""+token);
-		engine = new DESedeEngine();
 	}
-	
-	public byte[] Encrypt(byte[] key, String plainText) {
-        byte[] ptBytes = plainText.getBytes();
-        BufferedBlockCipher cipher = new PaddedBufferedBlockCipher(new CBCBlockCipher(engine));
-        cipher.init(true, new KeyParameter(key));
-        byte[] rv = new byte[cipher.getOutputSize(ptBytes.length)];
-        int tam = cipher.processBytes(ptBytes, 0, ptBytes.length, rv, 0);
-        Log.d("Dos datos Encrypt", "Tam: "+ tam + ", plainText tamaño: " + plainText.length());
-        try {
-            cipher.doFinal(rv, tam);
-        } catch (Exception ce) {
-            ce.printStackTrace();
-        }
-        return rv;
-    }
-
-    public String Decrypt(byte[] key, byte[] cipherText) {
-        BufferedBlockCipher cipher = new PaddedBufferedBlockCipher(new CBCBlockCipher(engine));
-        cipher.init(false, new KeyParameter(key));
-        byte[] rv = new byte[cipher.getOutputSize(cipherText.length)];
-        int tam = cipher.processBytes(cipherText, 0, cipherText.length, rv, 0);
-        Log.d("Dos datos Decrypt", "Tam: "+ tam + ", CipherText tamaño: " + cipherText.length);
-        try {
-            cipher.doFinal(rv, tam);
-        } catch (Exception ce) {
-        	ce.printStackTrace();
-            Log.i("Error en Decrypt", "Error aquí: " + ce.getMessage());
-        }
-        return new String(rv).trim();
-    }
-    	
-	public void CreateAndInsert(String url){	
-		 File f = null;
-		 FileWriter fw = null;
-		 PrintWriter pw = null;
+    
+	//Crea un archivo e inserta en él la linea de seguridad
+	public void CreateAndInsert(OutputStream f){	
 		 		 
 		 try{
-			 f = new File(Environment.getExternalStorageDirectory() + path + FileNameURL(url));
-			 fw = new FileWriter(f);
-			 pw = new PrintWriter(fw);			 
 			 Log.i("UserToken", User_Token);
-			 byte[] coded = Base64.encode(User_Token.getBytes());
-		     String cipherText = new String(coded);
+			 byte[] coded = Base64.encode(User_Token.getBytes(Charset.forName("UTF-8")));			 
 			 
-		     pw.println(cipherText);
-		     
-		     Log.i("Text", "UserToken: " + User_Token + ", Cipher: " + cipherText);		     
+			 //Dar la vuelta al array para que el signo = esté al principio y se pueda colocar la cadena al final
+			 byte[] aux = new byte[coded.length];
+			 for(int i = 0; i < coded.length; i++){
+				 aux[i] = coded[aux.length - (i + 1)];
+			 }	 
+						 
+			 String codid = new String(coded);
+			 Log.i("Coded", codid);
+			 String auxi = new String(aux);
+			 Log.i("Aux", auxi);
+			 
+			 f.write(aux);
 			 			 
 		 }catch(Exception e){
-			 Log.e("Error", e.getMessage());
-		 }finally{
-			 try {
-				 pw.close();
-				 fw.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}			 
+			 Log.e("Error DownloadEncrypter", e.getMessage());
 		 }
 	 }
 
+	//Desencripta la linea de seguridad en el archivo que se le pase y devuelve true o false si es igual o no
 	public boolean DescryptAndConfirm(String fichero){
-		File f = null;
-		FileReader fr = null;
-		BufferedReader br = null;
-		String tempp = "";
-		 
-		try{
-			f = new File(Environment.getExternalStorageDirectory() + path + fichero);
-			fr = new FileReader(f);
-			br = new BufferedReader(fr);
-			tempp = br.readLine();
-			Log.i("Complettempp", tempp);
-					 
-		}catch (EOFException EOF){
-		}catch(IOException IOE){
-			IOE.printStackTrace(); 
-		}finally{
-			try {
-				fr.close();
-				br.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		 
+		
+		String tempp = getSecurityLine(fichero); 
+		
+		//Devuelve un array de bytes y convierte estos en una string
 		byte[] decoded = Base64.decode(tempp);
 	    String strDecoded = new String(decoded).toLowerCase();
 	    		
-	    //Este User_Token lo está dando incorrecto
 	    Log.d("Comparation", "Decode: " + strDecoded + ", UT: " + User_Token);
 		
 	    if(strDecoded.equals(User_Token)){
@@ -131,7 +67,7 @@ public class DownloadScoresEncrypter {
 	 }
 	 	 
 	//Esto extrae el nombre del fichero a partir de la URL. Está en varias clases, debería estar solo en una común a todas. 
-	public String FileNameURL(String urlCompleto){			
+	public String FileNameURL(String urlCompleto){
 			
 		int position = urlCompleto.lastIndexOf('/');
 			
@@ -140,16 +76,76 @@ public class DownloadScoresEncrypter {
 		return name;
 	}	
 	 
-	public String getSecurityLine(){
-		byte[] rr = null;
-		try {
-			rr = Encrypt(Id_Score.getBytes(), User_Token);
-		} catch (Exception e) {
-			e.printStackTrace();
+	//Coge la linea de seguridad del archivo que se le pasa
+	public String getSecurityLine(String fichero){
+		File f = null;
+		String line = "";
+		FileInputStream fis = null;
+				
+		try{
+			f = new File(Environment.getExternalStorageDirectory() + path + fichero);
+			
+			byte[] ArrayLine = new byte[SecurityLineLength(f)];
+						
+			fis = new FileInputStream(f);
+			
+			byte b = 0;
+			int i = 0;
+			
+			while((b = (byte)fis.read())!=-128){
+			}
+			Log.i("LineLength", ""+SecurityLineLength(f));
+			while((b = (byte)fis.read()) != -1){
+				ArrayLine[i] = b;
+				i++;
+			}
+			
+			byte[] ArrayAux = new byte[ArrayLine.length];
+			for(int j = 0; j < ArrayLine.length; j++){
+				ArrayAux[j] = ArrayLine[ArrayAux.length - (j + 1)];
+			}
+			
+			line = new String(ArrayAux);
+			Log.i("Complettempp", line);
+					 
+		}catch (EOFException EOF){
+		}catch(IOException IOE){
+			IOE.printStackTrace(); 
 		}finally{
-			Log.i("Resultado Unión", rr.toString());
+			try {
+				fis.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
-		return null;
+		return line;
+	}
+	
+	//Mide la longitud de la linea de seguridad del archivo que se le pasa
+	public int SecurityLineLength(File f){
+		FileInputStream fis = null;
+		int length = 0;
+		byte bb = 0;
+		try{
+			fis = new FileInputStream(f);
+			while((bb = (byte)fis.read())!=-128){
+			}
+			
+			while((bb = (byte)fis.read()) != -1){
+				length++;
+			}
+			
+		}catch(Exception e){
+			Log.e("ExceptionLineLength", e.getMessage());
+		}finally{
+			try {
+				fis.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return length;
 	}
 	
 }

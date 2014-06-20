@@ -85,18 +85,20 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 	public Screen(Context context, String path, int width, int densityDPI){
 		super(context);
 		getHolder().addCallback(this);
-		
+		Log.i("Valores", "Density: " + densityDPI + ", Width: " + width);
 		try {
 			this.context = context;
 			
 			File f = new File(Environment.getExternalStorageDirectory() + path_folder + path);
 	        FileInputStream is = new FileInputStream(f);
+			//fichero = new DataInputStream(is);
 			fichero = new ObjectInputStream(is);
-			
+
 			cargarDatosDeFichero();
 			fichero.close();
 			
 			config = new Config(densityDPI, width);
+			
 			margenFinalScroll = config.getDistanciaPentagramas();
 			
 			DrawingMethods metodosDibujo = new DrawingMethods(partitura, config, getResources());
@@ -106,11 +108,11 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 			}
 		
 		} catch (FileNotFoundException e) {
-			Log.i("FileNotFoundException: ", e.getMessage() + "\n");
+			Log.e("FileNotFoundException: ", e.getMessage() + "\n");
 		} catch (StreamCorruptedException e) {
-			Log.i("StreamCorruptedException: ", e.getMessage() + "\n");
+			Log.e("StreamCorruptedException: ", e.getMessage() + "\n");
 		} catch (IOException e) {
-			Log.i("IOException: ", e.getMessage() + "\n");
+			Log.e("IOException: ", e.getMessage() + "\n");
 		}
     }
 	
@@ -234,6 +236,7 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 	//  ========================================
 	//  Métodos de gestión del fichero
 	//  ========================================
+			
 	private void cargarDatosDeFichero() throws IOException {
 		leerDatosBasicosDePartitura();
 		
