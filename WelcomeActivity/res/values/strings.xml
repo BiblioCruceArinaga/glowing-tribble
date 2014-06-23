@@ -94,7 +94,6 @@ You can buy scores in our store.</string>
     	<string name="tempo">Tempo</string>
         <string name="score">Scores</string>
     	<string name="speed_allowed">Min. Speed: 1 bpm. Max Speed: 300 bpm.</string>
-    	<string name="visual_help">Count with visual help</string>
     	
     <!-- Pantalla panorámica -->
     <string name="panoramic_view">Panoramic</string>
@@ -125,6 +124,10 @@ You can buy scores in our store.</string>
     <string name="navigate">Navigation</string>
     <string name="navigate_top">Go to the top</string>
     <string name="navigate_bottom">Go to the bottom</string>
+    <string name="navigate_to_bar">Go to bar&#8230;</string>
+    <string name="number_of_bar">Number of bar</string>
+    <string name="go_to_bar">Go to bar</string>
+    <string name="wrong_bar_number">There is no bar with that number</string>
     	
     <string name="contentDescription">Image</string>
 

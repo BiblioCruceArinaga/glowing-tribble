@@ -8,6 +8,7 @@ import android.view.MotionEvent;
 public class Scroll {
 	
 	private int orientation;
+	private int margenPrimerCompas;
 	
 	//  Gestión del scroll vertical
 	private float altoPantalla = 0;
@@ -44,6 +45,7 @@ public class Scroll {
 	public Scroll(Config config) {;
 		margenFinalScrollY = config.getDistanciaPentagramas();
 		margenFinalScrollX = config.getXInicialPentagramas();
+		margenPrimerCompas = margenFinalScrollX;
 		
 		orientation = 0;
 	}
@@ -123,6 +125,10 @@ public class Scroll {
     	return (yDown == e.getY());
 	}
 	
+	public float getLimiteVisibleDerecha() {
+		return limiteVisibleDerecha;
+	}
+	
 	public int getOrientation() {
 		return orientation;
 	}
@@ -178,33 +184,7 @@ public class Scroll {
     		y_initialized = true;
 		}
 	}
-	
-	public void back(Vista vista){
-		if (vista == Vista.VERTICAL) {
-			yOffset = 0;
-			limiteVisibleArriba = 0;
-			limiteVisibleAbajo = altoPantalla;
-		}
-		else {
-			xOffset = 0;
-	    	limiteVisibleIzquierda = 0;
-	    	limiteVisibleDerecha = anchoPantalla;
-		}
-	}
 
-	public void forward(Vista vista) {
-		if (vista == Vista.VERTICAL) {
-			yOffset = -finalScrollY - altoPantalla;
-	    	limiteVisibleArriba = -finalScrollY - altoPantalla;
-	    	limiteVisibleAbajo = -finalScrollY;
-		}
-		else {
-			xOffset = -finalScrollX - anchoPantalla;
-	    	limiteVisibleIzquierda = -finalScrollX - anchoPantalla;
-	    	limiteVisibleDerecha = -finalScrollX;
-		}
-	}
-	
 	public void dibujarBarra(Canvas canvas, Vista vista) {
 		if (vista == Vista.VERTICAL) {
 			if (mostrarBarraVertical) {
@@ -230,7 +210,18 @@ public class Scroll {
 		}
     }
 	
-	public int distanciaDesplazamiento(int currentY, boolean primerScrollHecho, 
+	public int distanciaDesplazamientoX(Partitura partitura, int primerCompas, int ultimoCompas) {
+		int distancia = 0;
+		
+		for (int i=primerCompas; i<ultimoCompas; i++) {
+			distancia += partitura.getCompas(i).getXFin() - partitura.getCompas(i).getXIni();
+		}
+		
+		if (primerCompas == 0) distancia += margenPrimerCompas;
+		return distancia;
+	}
+	
+	public int distanciaDesplazamientoY(int currentY, boolean primerScrollHecho, 
 			Config config, int staves) {
 		
 		//  La distancia de desplazamiento en la primera iteración
@@ -258,5 +249,37 @@ public class Scroll {
 	
 	public void setOrientation(int orientation) {
 		this.orientation = orientation;
+	}
+	
+	
+	/*
+	 * 
+	 * Navegación
+	 * 
+	 */
+	public void back(Vista vista){
+		if (vista == Vista.VERTICAL) {
+			yOffset = 0;
+			limiteVisibleArriba = 0;
+			limiteVisibleAbajo = altoPantalla;
+		}
+		else {
+			xOffset = 0;
+	    	limiteVisibleIzquierda = 0;
+	    	limiteVisibleDerecha = anchoPantalla;
+		}
+	}
+
+	public void forward(Vista vista) {
+		if (vista == Vista.VERTICAL) {
+			yOffset = -finalScrollY - altoPantalla;
+	    	limiteVisibleArriba = -finalScrollY - altoPantalla;
+	    	limiteVisibleAbajo = -finalScrollY;
+		}
+		else {
+			xOffset = -finalScrollX - anchoPantalla;
+	    	limiteVisibleIzquierda = -finalScrollX - anchoPantalla;
+	    	limiteVisibleDerecha = -finalScrollX;
+		}
 	}
 }

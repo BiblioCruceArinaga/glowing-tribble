@@ -95,7 +95,6 @@
     	<string name="tempo">Tempo</string>
         <string name="score">Scores</string>
     	<string name="speed_allowed">Velocidad mínima: 1 bpm. Velocidad máxima: 300 bpm.</string>
-    	<string name="visual_help">Contar con ayuda visual</string>
     	
     <!-- Pantalla panorámica -->
     <string name="panoramic_view">Panorámica</string>
@@ -124,8 +123,12 @@
     
     <!-- Navegación -->
     <string name="navigate">Navegación</string>
-	    <string name="navigate_top">Ir al principio</string>
-	    <string name="navigate_bottom">Ir al final</string>
+    <string name="navigate_top">Ir al principio</string>
+    <string name="navigate_bottom">Ir al final</string>
+    <string name="navigate_to_bar">Ir al compás&#8230;</string>
+    <string name="number_of_bar">Número de compás</string>
+    <string name="go_to_bar">Ir al compás</string>
+    <string name="wrong_bar_number">No hay ningún compás con ese número</string>
         	
     <string name="contentDescription">Imagen</string>
 

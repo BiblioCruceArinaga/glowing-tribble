@@ -18,12 +18,14 @@
                 android:id="@+id/navigate_top"
                 android:title="@string/navigate_top"/>
             <item
+                android:id="@+id/navigate_to_bar"
+                android:title="@string/navigate_to_bar"/>
+            <item
                 android:id="@+id/navigate_bottom"
                 android:title="@string/navigate_bottom"/> 
         </menu>
     </item>
-        
-    
+
     <item 
         android:id="@+id/readSound_Button"
         android:showAsAction="always"

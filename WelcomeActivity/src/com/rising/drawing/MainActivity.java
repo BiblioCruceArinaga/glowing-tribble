@@ -17,7 +17,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.NumberPicker;
 import android.widget.NumberPicker.OnScrollListener;
@@ -39,7 +39,6 @@ public class MainActivity extends Activity{
 	private Dialog MDialog;
 	private ImageButton playButton;
 	private NumberPicker metronome_speed;
-	private CheckBox numeros_checkbox;
 	private SeekBar seekBar_metronome;
 	private int tempo = 120;
 	private boolean play;
@@ -127,6 +126,31 @@ public class MainActivity extends Activity{
 	    		
 	    	case R.id.navigate_bottom:
 	    		s.Forward();
+	    		return true;
+	    		
+	    	case R.id.navigate_to_bar:
+	    		MDialog = new Dialog(MainActivity.this, R.style.cust_dialog);	
+				MDialog.setContentView(R.layout.gotobar);
+				MDialog.setTitle(R.string.navigate_to_bar);	
+
+				final EditText barEditText = (EditText) MDialog.findViewById(R.id.editTextNumberOfBar);
+				
+				Button barButton = (Button) MDialog.findViewById(R.id.buttonNumberOfBar);
+				barButton.setOnClickListener(new OnClickListener(){
+		 
+					@Override
+					public void onClick(View v) {
+						String barNumberString = barEditText.getText().toString();
+						
+						if (!s.goToBar(Integer.parseInt(barNumberString)))
+							Toast.makeText(getApplicationContext(),
+				                    R.string.wrong_bar_number, Toast.LENGTH_SHORT).show();
+						
+						MDialog.dismiss();
+					}
+				});
+				
+				MDialog.show();
 	    		return true;
 	    		
 	    	case android.R.id.home:
@@ -316,15 +340,14 @@ public class MainActivity extends Activity{
 		display.getSize(screenSize);
 		int screenWith = screenSize.x;
 		int screenHeight = screenSize.y;
-		Log.i("Windowrrr", screenWith + ", " + screenHeight);
+		Log.i("Window", screenWith + ", " + screenHeight);
 		
 		MDialog = new Dialog(MainActivity.this, R.style.cust_dialog);	
 		MDialog.setContentView(R.layout.metronome_dialog);
-		MDialog.setTitle(R.string.metronome);	
+		MDialog.setTitle(R.string.metronome);
 		MDialog.getWindow().setLayout(config.getAnchoDialogBpm(), config.getAltoDialogBpm());
 		
 		seekBar_metronome = (SeekBar)MDialog.findViewById(R.id.seekBar_metronome);
-		numeros_checkbox = (CheckBox)MDialog.findViewById(R.id.cB_metronome);
 		metronome_speed = (NumberPicker)MDialog.findViewById(R.id.nm_metronome);
 					
 		metronome_speed.setMaxValue(300);
@@ -386,13 +409,12 @@ public class MainActivity extends Activity{
 					play = true;
 					stop = false;
 					s.Back();
-					s.Metronome_Play(tempo, numeros_checkbox.isChecked());
+					s.Metronome_Play(tempo);
 					MDialog.dismiss();
 				}
 				else {
-					Toast toast1 = Toast.makeText(getApplicationContext(),
-				                    R.string.speed_allowed, Toast.LENGTH_SHORT);
-				    toast1.show();
+					Toast.makeText(getApplicationContext(),
+				                    R.string.speed_allowed, Toast.LENGTH_SHORT).show();
 				}
 			}
 		});
@@ -416,7 +438,7 @@ public class MainActivity extends Activity{
     		item.setIcon(R.drawable.pause_button);
     		
     		if (stop)
-    			s.Metronome_Play(tempo, numeros_checkbox.isChecked());
+    			s.Metronome_Play(tempo);
     		else
     			s.Metronome_Pause();
     	}

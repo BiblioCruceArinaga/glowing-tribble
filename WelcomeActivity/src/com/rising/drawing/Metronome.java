@@ -10,7 +10,6 @@ public class Metronome {
     private boolean mPaused;
     private Thread th;
     private int mbpm;
-    private boolean ayudaVisual;
     private Vista vista;
     private Partitura partitura;
     private OrdenDibujo bip = null;
@@ -23,14 +22,13 @@ public class Metronome {
     int bipAgudoInt = 0;
     int bipGraveInt = 0;
 
-    public Metronome(int bpm, boolean ayudaVisual, Context context, Vista vista,
+    public Metronome(int bpm, Context context, Vista vista,
     		Partitura partitura, Config config, Scroll scroll) {
     	
         mPauseLock = new Object();
         mPaused = false;
         mbpm = bpm;
-        
-        this.ayudaVisual = ayudaVisual;
+
         this.vista = vista;
         this.partitura = partitura;
         this.config = config;
@@ -51,6 +49,9 @@ public class Metronome {
                 	long speed = ((240000/mbpm)/4);
 
                 	int currentY = partitura.getCompas(0).getYIni();
+                	int currentX = partitura.getCompas(0).getXFin();
+                	int primerCompas = 0;
+                	int ultimoCompas = 0;
                 	int changeAccount = 0;
                 	int finalChangeAccount = 
                 			scroll.getOrientation() == Configuration.ORIENTATION_PORTRAIT ? 
@@ -58,9 +59,10 @@ public class Metronome {
                 	int staves = partitura.getStaves();
                 	
                 	boolean primerScrollHecho = false;
-                	int distanciaDesplazamiento = 
-                			scroll.distanciaDesplazamiento(currentY, 
+                	int distanciaDesplazamientoY = 
+                			scroll.distanciaDesplazamientoY(currentY, 
                 					primerScrollHecho, config, staves);
+                	int distanciaDesplazamientoX = 0;
                 	
                 	bipsDePreparacion(speed, partitura.getCompas(0).numeroDePulsos());
                 	
@@ -74,35 +76,48 @@ public class Metronome {
                 			speed = ((240000/mbpm)/4);
                 		}
                 			
-                		//  Si ha cambiado la Y, hacemos scroll
-                		if (currentY != compas.getYIni()) {
+                		//  Gestión del scroll en el eje Y
+                		if ( (currentY != compas.getYIni()) && (vista == Vista.VERTICAL) ) {
                 			currentY = compas.getYIni();
                 			changeAccount += staves;
                 			
                 			if (changeAccount == finalChangeAccount) {
-                				scroll.hacerScroll(vista, distanciaDesplazamiento);
+                				scroll.hacerScroll(vista, distanciaDesplazamientoY);
 	                			
                 				if (!primerScrollHecho) {
 		                			primerScrollHecho = true;
 		                			
-		                			distanciaDesplazamiento = 
-		                				scroll.distanciaDesplazamiento(
-		                						currentY, primerScrollHecho, config, staves);
+		                			distanciaDesplazamientoY = 
+		                				scroll.distanciaDesplazamientoY(
+		                					currentY, primerScrollHecho, config, staves);
                 				}
 	                			
 	                			changeAccount = 0;
                 			}
                 		}
-
-                		int xPos = (compas.getXFin() - compas.getXIni()) / 2;
-                		xPos += compas.getXIni();
+                		else {
+                			
+                			//  Gestión del scroll en el eje X
+                			if ( (currentX != compas.getXFin()) && (vista == Vista.HORIZONTAL) ) {
+                				currentX = compas.getXFin();
+                				ultimoCompas++;
+                				
+                				if (currentX > - scroll.getLimiteVisibleDerecha()) {
+            						distanciaDesplazamientoX = 
+            							scroll.distanciaDesplazamientoX(partitura, 
+            								primerCompas, ultimoCompas);
+                					
+                					scroll.hacerScroll(vista, distanciaDesplazamientoX);
+                					
+                					primerCompas = ultimoCompas;
+                				}
+                			}
+                		}
                 				
                 		int pulsos = compas.numeroDePulsos();
                 		for (int j=0; j<pulsos; j++) {
                 			
                 			emitirSonido(j);
-                			if (ayudaVisual)
-                				dibujarBip(j, xPos, compas.getYIni());
                 			Thread.sleep(speed);
                 			
                 			synchronized (mPauseLock) {
@@ -190,16 +205,8 @@ public class Metronome {
 			
 			Thread.sleep(speed);
 		}
-	}
-
-	private void dibujarBip(int pulso, int x, int y) {
-		bip = new OrdenDibujo();
-		bip.setOrden(DrawOrder.DRAW_TEXT);
-		bip.setPaint(PaintOptions.SET_TEXT_SIZE, config.getTamanoLetraPulso());
-		bip.setPaint(PaintOptions.SET_ARGB_RED, -1);
-		bip.setTexto((pulso + 1) + "");
-		bip.setX1(x);
-		bip.setY1(y);
+		
+		bip = null;
 	}
 	
 	private void emitirSonido(int pulso) {

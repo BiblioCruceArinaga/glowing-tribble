@@ -24,7 +24,7 @@ public class BpmManagement {
 	private ArrayList<OrdenDibujo> verticalDrawing;
 	private Config config;
 	private Context context;
-	private Dialog MDialog;
+	private Dialog MDialog = null;
 	
 	public BpmManagement(Vista vista, Partitura horizontalScore, Partitura verticalScore,
 			ArrayList<OrdenDibujo> horizontalDrawing, ArrayList<OrdenDibujo> verticalDrawing,

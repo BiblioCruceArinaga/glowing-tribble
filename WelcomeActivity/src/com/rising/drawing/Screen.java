@@ -1,10 +1,7 @@
 package com.rising.drawing;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.io.StreamCorruptedException;
 import java.util.ArrayList;
 import java.util.Observable;
@@ -14,23 +11,13 @@ import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
-import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Rect;
 import android.graphics.RectF;
-import android.media.AudioManager;
-import android.media.SoundPool;
-import android.os.Environment;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.View;
-import android.widget.ImageButton;
-import android.widget.NumberPicker;
-import android.widget.NumberPicker.OnScrollListener;
-import android.widget.SeekBar;
-import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.Toast;
 
 public class Screen extends SurfaceView implements SurfaceHolder.Callback, Observer {
@@ -151,12 +138,10 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 	            
 	        case MotionEvent.ACTION_UP:
 	        	if (scroll.up(e)) {
-		        	if (MDialog == null) {
-		        		BpmManagement bpmManagement = new BpmManagement(vista,
-		        				partituraHorizontal, partituraVertical, 
-		        				horizontalDrawing, verticalDrawing, config, context); 
-		    			bpmManagement.tapManagement(e, scroll);
-		    		}
+	        		BpmManagement bpmManagement = new BpmManagement(vista,
+	        				partituraHorizontal, partituraVertical, 
+	        				horizontalDrawing, verticalDrawing, config, context); 
+	    			bpmManagement.tapManagement(e, scroll);
 	        	}
 	        	break;
 	        	
@@ -350,15 +335,14 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 		}
 	}
 	
-	public void Metronome_Play(int bpm, boolean ayudaVisual){
+	public void Metronome_Play(int bpm){
 		if (metronomo == null) {
 			Partitura partitura = 
         			vista == Vista.VERTICAL ? partituraVertical : partituraHorizontal;
 			
 			scroll.setOrientation(getResources().getConfiguration().orientation);
 			
-    		metronomo = new Metronome(bpm, ayudaVisual, context, 
-    				vista, partitura, config, scroll);
+    		metronomo = new Metronome(bpm, context, vista, partitura, config, scroll);
     		metronomo.run();
 		}
 	}
@@ -440,7 +424,7 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 	
 	/*
 	 * 
-	 *  Métodos de gestión del scroll
+	 *  Métodos de navegación
 	 *
 	 */
 	
@@ -450,5 +434,61 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 
 	public void Forward() {
 		scroll.forward(vista);
+	}
+	
+	public boolean goToBar(int bar) {
+		Partitura partitura = vista == Vista.HORIZONTAL ?
+				partituraHorizontal : partituraVertical;
+
+		//  El número está fuera de los límites
+		if (bar > partitura.getNumeroDeCompases()) 
+			return false; 
+		if (bar < 0)
+			return false;
+		
+		Compas primerCompas = partitura.getCompas(0);
+		int numeroPrimerCompas = primerCompas.getNumeroCompas();
+		
+		//  A partir de aquí hay que comprobar los valores límite.
+		
+		//  Si el número del primer compás es 0, el rango válido
+		//  es [0, n - 1], donde n = número de compases
+		if (numeroPrimerCompas == 0)
+			if (bar == partitura.getNumeroDeCompases())
+				return false;
+		
+		//  Si el número del primer compás es 1, el rango válido
+		//  es [1, n], donde n = número de compases
+		if (numeroPrimerCompas == 1) {
+			if (bar == 0)
+				return false;
+			else
+				bar--;
+		}
+		
+		//  Si hemos llegado hasta aquí, el número introducido
+		//  es válido y podemos movernos al compás indicado
+		if (vista == Vista.HORIZONTAL) {
+			float xOffset = - scroll.getXOffset();
+			float xIni = partitura.getCompas(bar).getXIni();
+			float distancia = Math.abs(xOffset - xIni);
+			
+			if (xIni < xOffset)
+				scroll.hacerScroll(vista, (int) -distancia);
+			else
+				scroll.hacerScroll(vista, (int) distancia);
+		}
+		else {
+			float yOffset = - scroll.getYOffset();
+			float yIni = partitura.getCompas(bar).getYIni();
+			float distancia = Math.abs(yOffset - yIni);
+			
+			if (yIni < yOffset)
+				scroll.hacerScroll(vista, (int) -distancia - config.getDistanciaPentagramas());
+			else
+				scroll.hacerScroll(vista, (int) distancia - config.getDistanciaPentagramas());
+		}
+		
+		return true;
 	}
 }
