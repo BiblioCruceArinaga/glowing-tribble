@@ -306,7 +306,7 @@ public class CustomAdapter extends BaseAdapter {
         	
          });
         
-        holder.botonCompra.setOnClickListener(new OnClickListener(){    	
+        holder.botonCompra.setOnClickListener(new OnClickListener(){
         	
         	 @Override
  			public void onClick(View v) {

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="300dp"
+    android:layout_height="250dp"
+    android:background="@drawable/store_products"
+    android:layout_margin="15dp"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <ImageView
+	        android:id="@+id/imagenPartitura"
+	        android:layout_width="90dp"
+	        android:layout_height="140dp"
+	        android:layout_marginLeft="15dp"
+	        android:layout_marginTop="15dp"
+	        android:layout_marginBottom="30dp"
+	        android:contentDescription="@string/contentDescription" />
+        
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="15dp"
+            android:orientation="vertical" >
+                        
+           <TextView
+		        android:id="@+id/nombrePartitura"
+		        android:layout_width="match_parent"
+		        android:layout_height="70dp"
+		        android:layout_marginTop="15dp"
+		        android:layout_marginRight="10dp"
+		        android:textColor="#222"
+		        android:textSize="20sp"
+		        android:textStyle="bold" />
+            
+           <TextView
+		        android:id="@+id/autorPartitura"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:layout_marginTop="5dp"
+		        android:layout_marginRight="10dp"
+		        android:textColor="#000000"
+		        android:textSize="15sp" />
+           
+            <TextView
+		        android:id="@+id/instrumentoPartitura"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:layout_marginTop="10dp"
+		        android:layout_marginRight="10dp"
+		        android:textSize="15sp" 
+		        android:textColor="#000000" />    
+            
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp" >
+                
+    	<Button
+	        android:id="@+id/masInfo"
+	        style="?android:attr/buttonBarButtonStyle"
+	        android:layout_width="90dp"
+	        android:layout_height="40dp"
+	        android:background="@drawable/stores_buttons"
+	        android:layout_marginLeft="15dp"
+	        android:layout_marginRight="42dp"
+	        android:layout_marginBottom="10dp"
+	        android:text="@string/masinfo"
+	        android:textSize="16sp"/>
+        
+        <Button
+	        android:id="@+id/comprar"
+	        style="?android:attr/buttonBarButtonStyle"
+	        android:layout_width="90dp"
+	        android:layout_height="40dp"
+	        android:paddingRight="5dp"
+	        android:background="@drawable/stores_buttons"
+	        android:layout_marginLeft="42dp"
+	        android:layout_marginRight="10dp"
+	        android:layout_marginBottom="10dp"
+	        android:textSize="16sp" />
+
+    </LinearLayout>
+
+</LinearLayout>

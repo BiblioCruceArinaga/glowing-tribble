@@ -1,5 +1,6 @@
 package com.rising.drawing;
 
+
 public class Config {
 	
 	private boolean supported = true;

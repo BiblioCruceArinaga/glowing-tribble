@@ -8,7 +8,9 @@
         android:id="@+id/gV_piano_fragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="40dp"
+        android:layout_margin="30dp"
+        android:verticalSpacing="20dp"
+        android:horizontalSpacing="20dp"
         android:numColumns="2" >
     </GridView>
 

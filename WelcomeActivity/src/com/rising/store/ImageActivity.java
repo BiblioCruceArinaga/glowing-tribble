@@ -27,6 +27,7 @@ public class ImageActivity extends Activity{
 	
 	static ImageLoader iml;
 	private String url;
+	ProgressDialog Image_PDialog;	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +41,6 @@ public class ImageActivity extends Activity{
 		final Context ctx = this;
 						
 		ImageView IV_Score_Preview = (ImageView) findViewById(R.id.iV_score_preview);
-		final ProgressDialog Image_PDialog;		
 		
 		final DisplayImageOptions options = new DisplayImageOptions.Builder()
         .showImageOnLoading(R.drawable.cover)
@@ -78,10 +78,22 @@ public class ImageActivity extends Activity{
                     iml.displayImage(imageUri, (ImageView) view, options);
                     Log.i("Complete Cache", "Loading Cache Complete");
                 }
-                Image_PDialog.dismiss();
+                
+                if (Image_PDialog != null) { 
+                	Image_PDialog.dismiss();
+               }
             }
        });
 		
+	}
+	
+	@Override
+	protected void onPause() {
+		super.onPause();
+		
+		if(Image_PDialog != null)
+	        Image_PDialog.dismiss();
+	    Image_PDialog = null;
 	}
 
 	@Override

@@ -13,7 +13,6 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
@@ -630,6 +629,7 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
             		
             		//  No se pudo crear el directorio, muy probablemente por los permisos
             		Toast.makeText(getApplicationContext(), R.string.error_folder, Toast.LENGTH_LONG).show();
+            		//finish();
             	}
             }
         }
@@ -657,6 +657,7 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
             		
             		//  No se pudo crear el directorio, muy probablemente por los permisos
             		Toast.makeText(getApplicationContext(), R.string.error_folder, Toast.LENGTH_LONG).show();
+            		//finish();
             	}
             }
         }

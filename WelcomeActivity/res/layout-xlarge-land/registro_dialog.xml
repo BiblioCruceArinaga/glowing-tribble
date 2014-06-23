@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background_scoresapp"
+    android:orientation="vertical" >
+    
+    <EditText
+        android:id="@+id/et_nombre_registro"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="10dp"
+        android:textSize="23sp"
+        android:textColorHint="#DDD"
+        android:textColor="#DDD"
+        android:textColorHighlight="#DDD"
+        android:hint="@string/nombre_registro" >
+        <requestFocus />
+    </EditText>
+        
+	<EditText
+        android:id="@+id/et_mail_registro"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:textSize="23sp"
+        android:inputType="textEmailAddress"
+        android:textColorHint="#DDD"
+        android:textColor="#DDD"
+        android:textColorHighlight="#DDD"
+        android:hint="@string/mail_registro" >
+    
+	</EditText>
+    
+    <EditText
+        android:id="@+id/et_pass_registro"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:textSize="23sp"
+        android:inputType="textPassword"
+        android:textColorHint="#DDD"
+        android:textColor="#DDD"
+        android:textColorHighlight="#DDD"
+        android:hint="@string/pass_registro" >
+        
+    </EditText>
+        
+    <EditText
+        android:id="@+id/et_confipass_registro"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="20dp"
+        android:textSize="23sp"
+        android:inputType="textPassword"
+        android:textColorHint="#DDD"
+        android:textColor="#DDD"
+        android:textColorHighlight="#DDD"
+        android:hint="@string/confipass_registro" >
+
+    </EditText>
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/b_cancel_reg"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_weight="1"
+            android:textColor="#EEE"
+            android:background="@drawable/stores_buttons"
+            android:textSize="22sp"
+            android:text="@string/cancel" />
+        
+        <Button
+            android:id="@+id/b_confirm_reg"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_weight="1"
+            android:textColor="#EEE"
+            android:background="@drawable/stores_buttons"
+            android:textSize="22sp"
+            android:text="@string/confirm_registro" />
+
+    </LinearLayout>
+        
+</LinearLayout>
