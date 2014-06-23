@@ -621,6 +621,7 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
             		
             		//  No se pudo crear el directorio, muy probablemente por los permisos
             		Toast.makeText(getApplicationContext(), R.string.error_folder, Toast.LENGTH_LONG).show();
+            		//finish();
             	}
             }
         }
@@ -648,6 +649,7 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
             		
             		//  No se pudo crear el directorio, muy probablemente por los permisos
             		Toast.makeText(getApplicationContext(), R.string.error_folder, Toast.LENGTH_LONG).show();
+            		//finish();
             	}
             }
         }

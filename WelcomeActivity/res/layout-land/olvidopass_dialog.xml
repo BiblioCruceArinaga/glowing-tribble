@@ -13,6 +13,9 @@
         android:layout_marginBottom="30dp"
         android:textSize="20sp"
         android:inputType="textEmailAddress"
+        android:textColorHint="#DDD"
+        android:textColor="#DDD"
+        android:textColorHighlight="#DDD"
         android:hint="@string/mail_olvido_pass" >
 
         <requestFocus />

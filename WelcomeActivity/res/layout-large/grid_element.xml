@@ -12,12 +12,12 @@
 
         <ImageView
 	        android:id="@+id/imagenPartitura"
-	        android:layout_width="70dp"
-	        android:layout_height="150dp"
+	        android:layout_width="80dp"
+	        android:layout_height="130dp"
 	        android:layout_marginLeft="15dp"
 	        android:layout_marginTop="15dp"
-	        android:contentDescription="@string/contentDescription"
-	        android:background="@drawable/scores_image" />
+	        android:layout_marginBottom="30dp"
+	        android:contentDescription="@string/contentDescription" />
         
         <LinearLayout
             android:layout_width="wrap_content"
@@ -27,29 +27,29 @@
                         
            <TextView
 		        android:id="@+id/nombrePartitura"
-		        android:layout_width="125dp"
+		        android:layout_width="140dp"
 		        android:layout_height="wrap_content"
 		        android:layout_marginTop="22dp"
-		        android:ellipsize="end"
-		        android:maxLines="4"
-		        android:scrollHorizontally="true"
+		        android:layout_marginRight="10dp"
 		        android:textColor="#222"
 		        android:textSize="18sp"
 		        android:textStyle="bold" />
             
            <TextView
 		        android:id="@+id/autorPartitura"
-		        android:layout_width="125dp"
+		        android:layout_width="140dp"
 		        android:layout_height="wrap_content"
 		        android:layout_marginTop="30dp"
+		        android:layout_marginRight="10dp"
 		        android:textColor="#222"
 		        android:textSize="13sp" />
            
             <TextView
 		        android:id="@+id/instrumentoPartitura"
-		        android:layout_width="125dp"
+		        android:layout_width="140dp"
 		        android:layout_height="wrap_content"
 		        android:layout_marginTop="10dp"
+		        android:layout_marginRight="10dp"
 		        android:textSize="13sp" 
 		        android:textColor="#222" />    
             
@@ -64,31 +64,31 @@
     	<Button
 	        android:id="@+id/masInfo"
 	        style="?android:attr/buttonBarButtonStyle"
-	        android:layout_width="70dp"
+	        android:layout_width="80dp"
 	        android:layout_height="35dp"
 	        android:background="@drawable/stores_buttons"
 	        android:layout_marginLeft="15dp"
-	        android:layout_marginRight="40dp"
+	        android:layout_marginRight="30dp"
 	        android:layout_marginTop="15dp"
 	        android:layout_marginBottom="20dp"
 	        android:text="@string/masinfo"
 	        android:textColor="#DDD"
-	        android:textSize="19sp"/>
+	        android:textSize="16sp"/>
         
         <Button
 	        android:id="@+id/comprar"
 	        style="?android:attr/buttonBarButtonStyle"
-	        android:layout_width="70dp"
+	        android:layout_width="90dp"
 	        android:layout_height="35dp"
 	        android:background="@drawable/stores_buttons"
-	        android:layout_marginLeft="40dp"
+	        android:layout_marginLeft="30dp"
 	        android:layout_marginRight="15dp"
 	        android:layout_marginTop="15dp"
 	        android:layout_marginBottom="10dp"
 	        android:paddingRight="5dp"
 	        android:paddingLeft="5dp"
 	        android:textColor="#DDD"
-	        android:textSize="19sp" />
+	        android:textSize="16sp" />
 
     </LinearLayout>
 
