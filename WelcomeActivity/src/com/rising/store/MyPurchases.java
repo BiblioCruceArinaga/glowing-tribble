@@ -78,6 +78,7 @@ public class MyPurchases extends Activity{
 		PDialog.show();
 				
 		ABar = getActionBar();
+		ABar.setTitle(R.string.my_purchases);
 		ABar.show();
 		ABar.setDisplayHomeAsUpEnabled(true);
 		        

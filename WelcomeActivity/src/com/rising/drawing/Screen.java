@@ -26,7 +26,7 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 	private ScreenThread thread;
 	private Context context = null;
 	private Config config = null;
-	private String path_folder = "/RisingScores/scores/";
+	private String path_folder = "/.RisingScores/scores/";
 
 	private Partitura partituraHorizontal = new Partitura();
 	private Partitura partituraVertical = new Partitura();
@@ -56,38 +56,28 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 	//  ========================================
 	//  Constructor y métodos heredados
 	//  ========================================
-	public Screen(Context context, String path, int width, int densityDPI){
+	public Screen(Context context, String path, int width, int height, int densityDPI){
 		super(context);
 		getHolder().addCallback(this);
-		Log.i("Valores", "Density: " + densityDPI + ", Width: " + width);
+		
 		try {
 			this.context = context;
 			
 			FileMethods fileMethods = new FileMethods(path_folder, path);
 			fileMethods.cargarDatosDeFichero(partituraHorizontal, partituraVertical);
 
-			config = new Config(densityDPI, width);
-			scroll = new Scroll(config);
-
+			config = new Config(densityDPI, width, height);
+			scroll = new Scroll(config);			
+			
 			crearVistasDePartitura();
-
+			
 			horizontalThread.join();
 			verticalThread.join();
 
 			cambiarVista(Vista.VERTICAL);
+									
 			isValidScreen = true;
-			/*File f = new File(Environment.getExternalStorageDirectory() + path_folder + path);
-	        FileInputStream is = new FileInputStream(f);
-			//fichero = new DataInputStream(is);
-			fichero = new ObjectInputStream(is);
-
-			cargarDatosDeFichero();
-			fichero.close();
-			
-			config = new Config(densityDPI, width);
-			
-			margenFinalScroll = config.getDistanciaPentagramas();*/
-			
+						
 		} catch (FileNotFoundException e) {
 			Log.e("FileNotFoundException: ", e.getMessage() + "\n");
 		} catch (StreamCorruptedException e) {
@@ -177,39 +167,6 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 		
 	    return super.dispatchTouchEvent(ev);
 	}
-
-/*
-	//  ========================================
-	
-	
-	//  ========================================
-	//  Métodos de gestión del fichero
-	//  ========================================
-			
-	private void cargarDatosDeFichero() throws IOException {
-		leerDatosBasicosDePartitura();
-		
-		byte byteLeido = fichero.readByte();
-		while (byteLeido != -128) {
-			
-			switch (byteLeido) {			
-				case 126:
-					leerFiguraGraficaCompas();
-					break;
-					
-				case 127:
-					partitura.addCompas(compas);
-					compas = new Compas();
-					break;
-				
-				default:
-					leerInfoNota(byteLeido);
-					break;
-			}
-			
-			byteLeido = fichero.readByte();
-		}
-	}*/
 	
 	public Config getConfig() {
 		return config;
@@ -295,6 +252,7 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 	}
 	
 	private void crearVistasDePartitura() {
+			
 		verticalThread = new Thread(new Runnable(){
     		public void run() {
     			DrawingMethods metodosDibujo = 
@@ -317,6 +275,21 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 		
 		horizontalThread.start();
 		verticalThread.start();
+	}
+	
+	private void crearVistasDePartituraMovil(){
+		
+		horizontalThread = new Thread(new Runnable(){
+    		public void run() {
+    			DrawingMethods metodosDibujo = 
+    					new DrawingMethods(partituraHorizontal, config, getResources(), Vista.HORIZONTAL);
+				if (metodosDibujo.isValid()) {
+					horizontalDrawing = metodosDibujo.crearOrdenesDeDibujo();
+				}
+    		}
+		});
+		
+		horizontalThread.start();
 	}
 
 	public void cambiarVista(Vista vista) {

@@ -4,64 +4,29 @@
     android:layout_height="match_parent"
     android:background="@drawable/background_scoresapp"
     android:orientation="vertical" >
-
-    <TextView
-        android:id="@+id/misDatosNombre"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="37dp"
-        android:textColor="#222"
-        android:textSize="20sp"
-        android:text="@string/mis_datos_nombre" />
-    
-    <TextView
-        android:id="@+id/misDatosEmail"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="8dp"
-        android:textSize="20sp"
-        android:textColor="#222"
-        android:text="@string/mis_datos_email" />
-    
-    <TextView 
-        android:id="@+id/misDatosSaldo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="5dp"
-        android:textColor="#222"
-        android:textSize="20sp"
-        android:text="@string/mis_datos_saldo" />
-    
-    <TextView
-        android:id="@+id/misDatosClave"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="20dp"
-        android:textSize="20sp"
-        android:text="@string/mis_datos_clave" />
     
     <EditText 
         android:id="@+id/misDatosClaveVieja"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/mis_datos_clave_vieja"
+        android:textColorHint="#CCC"
+        android:textColor="#EEE"
         android:layout_marginLeft="16dp"
-        android:layout_marginTop="8dp"
-        android:inputType="textPassword"
-        />
+        android:layout_marginTop="70dp"
+        android:textSize="30sp"
+        android:inputType="textPassword"/>
     
     <EditText 
         android:id="@+id/misDatosClaveNueva"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/mis_datos_clave_nueva"
+        android:textColorHint="#CCC"
+        android:textColor="#EEE"
         android:layout_marginLeft="16dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="50dp"
+        android:textSize="30sp"
         android:inputType="textPassword"
         />
     
@@ -70,19 +35,22 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/mis_datos_clave_repetir"
+        android:textColorHint="#CCC"
+        android:textColor="#EEE"
         android:layout_marginLeft="16dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="50dp"
+        android:textSize="30sp"
         android:inputType="textPassword"
         />
     
     <Button 
         android:id="@+id/misDatosBoton"
-         android:layout_width="350dp"
-        android:layout_height="50dp"
+         android:layout_width="380dp"
+        android:layout_height="60dp"
         android:background="@drawable/stores_buttons"
         android:layout_gravity="center"
         android:gravity="center"
-        android:textSize="30sp"
+        android:textSize="35sp"
         android:textColor="#DDD"
         android:layout_marginTop="50dp"
         android:text="@string/mis_datos_boton"

@@ -14,7 +14,6 @@
         android:gravity="center"
         android:textSize="20sp"
         android:textColor="#222"
-        android:layout_marginTop="10dp"
         android:text="@string/number_of_bar"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 

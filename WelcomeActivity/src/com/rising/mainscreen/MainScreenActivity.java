@@ -42,8 +42,6 @@ import com.rising.drawing.MainActivity;
 import com.rising.drawing.R;
 import com.rising.login.Configuration;
 import com.rising.login.SessionManager;
-import com.rising.mainscreen.ChangePassword.OnPasswordChanging;
-import com.rising.mainscreen.EraseAccount.OnTaskCompleted;
 import com.rising.mainscreen.SendFeedback.OnSendingFeedback;
 import com.rising.money.MoneyUpdateConnectionNetwork;
 import com.rising.money.MoneyUpdateConnectionNetwork.OnFailMoney;
@@ -58,8 +56,8 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 		
 	String[] ficheros;
 	String[][] infoFicheros;
-	String path = "/RisingScores/scores/";
-	String image_path = "/RisingScores/scores_images/";
+	String path = "/.RisingScores/scores/";
+	String image_path = "/.RisingScores/scores_images/";
 	private File f_toDelete;
 	private File f_image_toDelete;
 	private boolean delete;
@@ -73,69 +71,6 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 	private int fid;
 	Context context;
 	Dialog Incorrect_User;
-		
-	//  Recibir la señal del proceso que elimina la cuenta
-	private OnTaskCompleted listener = new OnTaskCompleted() {
-	    public void onTaskCompleted(int details) {       
-			switch (details) {
-				case 1: {
-					Toast.makeText(getApplicationContext(), 
-							R.string.cuenta_eliminada, Toast.LENGTH_LONG).show();
-					
-					session.logoutUser();
-					finish();
-					break;
-				}
-				case 2: {
-					Toast.makeText(getApplicationContext(), 
-							R.string.error_eliminar_cuenta_fallo_verif, Toast.LENGTH_LONG).show();
-					break;
-				}
-				case 3: {
-					Toast.makeText(getApplicationContext(), 
-							R.string.error_eliminar_cuenta_identidad, Toast.LENGTH_LONG).show();
-					break;
-				}
-				default:
-					Toast.makeText(getApplicationContext(), 
-						R.string.error_eliminar_cuenta, Toast.LENGTH_LONG).show();
-			}
-			
-			MDialog.dismiss();
-	    }
-	};
-	
-	//  Recibir la señal del proceso que cambia la contraseña
-	private OnPasswordChanging listenerPass = new OnPasswordChanging() {
-	    public void onPasswordChanged(int details) {       
-			switch (details) {
-				case 1: {
-					Toast.makeText(getApplicationContext(), 
-							R.string.mis_datos_clave_cambiada, Toast.LENGTH_LONG).show();
-					break;
-				}
-				case 2: {
-					Toast.makeText(getApplicationContext(), 
-							R.string.mis_datos_error_verif, Toast.LENGTH_LONG).show();
-					break;
-				}
-				case 3: {
-					Toast.makeText(getApplicationContext(), 
-							R.string.mis_datos_clave_erronea, Toast.LENGTH_LONG).show();
-					break;
-				}
-				case 4: {
-					Toast.makeText(getApplicationContext(), 
-							R.string.err_login_unknown, Toast.LENGTH_LONG).show();
-					break;
-				}
-				default:
-					Toast.makeText(getApplicationContext(), 
-							R.string.err_login_unknown, Toast.LENGTH_LONG).show();
-			}		
-			MDialog.dismiss();
-	    }
-	};
 	
 	//  Recibir la señal del proceso que envía Feedback
 	private OnSendingFeedback listenerFeedback = new OnSendingFeedback() {
@@ -170,8 +105,7 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 		
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		//setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);		
+		super.onCreate(savedInstanceState);	
 		setContentView(R.layout.mainscreen_layout);
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 				
@@ -184,9 +118,10 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 		fid = session.getFacebookId();
 		
 		createScoreFolder();
-		createImageFolder();
+		createImageFolder();		
+
 		UpdateMoney(conf.getUserEmail());
-				
+		
 		ActionBar action = getActionBar();
 		action.setTitle(R.string.titulo_coleccion);
 		action.setIcon(R.drawable.ic_menu);
@@ -196,9 +131,10 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 			interfazCuandoNoHayPartituras();
 		} else {
 			interfazCuandoHayPartituras(ficheros);
-		}
+		} 
+		
 	}
-	
+
 	public void UpdateMoney(String user){
 		mucn = new MoneyUpdateConnectionNetwork(moneyUpdate, failMoney, this);
 		mucn.execute(user);
@@ -228,6 +164,7 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 			 Score ss = new Score(infoFicheros[1][i], infoFicheros[0][i], infoFicheros[3][i], infoFicheros[2][i]);
 			 arraylist.add(ss);
 		}
+		
 		s_adapter = new ScoresAdapter(this, arraylist);
 		
 		scores_gallery = (GridView) findViewById(R.id.gV_scores);
@@ -317,21 +254,15 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 		@Override
 		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 			Log.i("Position", ficheros[position]);
-						/*
+			
 			if(new DownloadScoresEncrypter(context, infoFicheros[0][position]+conf.getUserId()).DescryptAndConfirm(ficheros[position])){
 				Intent i = new Intent(MainScreenActivity.this, MainActivity.class);
 				i.putExtra("score", ficheros[position]);
-						
+
 				startActivity(i);
 			}else{
 				Incorrect_User.show();
 			}
-			*/
-			
-			Intent i = new Intent(MainScreenActivity.this, MainActivity.class);
-			i.putExtra("score", ficheros[position]);
-					
-			startActivity(i);
 		} 
 	});
 	
@@ -396,19 +327,6 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 			case R.id.show_all:
 				mostrarTodas();
 				return true;
-
-	    	case R.id.session_button:
-	    		if(fid > -1){
-	    			session.LogOutFacebook();	    			
-	    		}else{
-	    			session.logoutUser();
-	    		}
-	    		conf.setUserEmail("");
-	    		conf.setUserId("");
-	    		conf.setUserMoney(0);
-	    		conf.setUserName("");
-	        	finish();
-	            return true;
             
 	        case R.id.about:
 	        	MDialog = new Dialog(MainScreenActivity.this, R.style.cust_dialog);
@@ -423,23 +341,7 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 	    		Linkify.addLinks(Link_Metronome_Icon, Linkify.ALL);
 	    		MDialog.show();
 	    		return true;
-	            
-	        case R.id.terminos_condiciones:
-	        	MDialog = new Dialog(MainScreenActivity.this, R.style.cust_dialog);
-	    		MDialog.setContentView(R.layout.terminos_condiciones);
-	    		MDialog.setTitle(R.string.terminos_condiciones);
-	    		MDialog.getWindow().setLayout(LayoutParams.MATCH_PARENT,LayoutParams.WRAP_CONTENT);
-	    		MDialog.show();
-	            return true;
-	            
-	        case R.id.condiciones_compra:
-	        	MDialog = new Dialog(MainScreenActivity.this, R.style.cust_dialog);
-	    		MDialog.setContentView(R.layout.condiciones_compra);
-	    		MDialog.setTitle(R.string.condiciones_compra);
-	    		MDialog.getWindow().setLayout(LayoutParams.MATCH_PARENT,LayoutParams.WRAP_CONTENT);
-	    		MDialog.show();
-	            return true;
-	            
+	                
 	        case R.id.feedback:
 	        	MDialog = new Dialog(MainScreenActivity.this, R.style.cust_dialog);
 	    		MDialog.setContentView(R.layout.feedback);
@@ -473,134 +375,11 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 	            return true;
 	            
 	        case R.id.mis_datos:
-	        		        	        	
-	        	MDialog = new Dialog(MainScreenActivity.this, R.style.cust_dialog);
-	        	MDialog.setTitle(R.string.mis_datos);
-	    		MDialog.getWindow().setLayout(LayoutParams.MATCH_PARENT,LayoutParams.WRAP_CONTENT);	        	
 	        	
-	        	if(fid > -1){
-	        		MDialog.setContentView(R.layout.mis_datos_facebook);
-	        		final TextView nombreF = (TextView) MDialog.findViewById(R.id.misDatosFacebookNombre);
-		    		final TextView emailF = (TextView) MDialog.findViewById(R.id.misDatosFacebookEmail);
-		    		final TextView saldoF = (TextView) MDialog.findViewById(R.id.misDatosFacebookSaldo);
-		    		
-		    		nombreF.setText(nombreF.getText() + " " + session.getName());
-		    		emailF.setText(emailF.getText() + " " + session.getMail()); 
-		    		saldoF.setText(saldoF.getText() + " " + conf.getUserMoney());
-		    		saldoF.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.money_ico, 0);
-	        		
-	        	}else{
-	        		MDialog.setContentView(R.layout.mis_datos);
-		        	
-		        	final TextView nombre = (TextView) MDialog.findViewById(R.id.misDatosNombre);
-		    		final TextView email = (TextView) MDialog.findViewById(R.id.misDatosEmail);
-		    		final TextView saldo = (TextView) MDialog.findViewById(R.id.misDatosSaldo);
-		    		final EditText claveVieja = (EditText) MDialog.findViewById(R.id.misDatosClaveVieja);
-		    	    final EditText claveNueva = (EditText) MDialog.findViewById(R.id.misDatosClaveNueva);
-		    	    final EditText claveRepetir = (EditText) MDialog.findViewById(R.id.misDatosClaveRepetir);
-		    	    
-		    		nombre.setText(nombre.getText() + " " + conf.getUserName());
-		    		email.setText(email.getText() + " " + conf.getUserEmail()); 
-		    		saldo.setText(saldo.getText() + " " + conf.getUserMoney());
-		    		saldo.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.money_ico, 0);
-		    				    		
-		    		Button misDatosBoton = (Button)MDialog.findViewById(R.id.misDatosBoton);
-		    	    misDatosBoton.setOnClickListener(new Button.OnClickListener() {
-
-						@Override
-						public void onClick(View arg0) {
-							if(isOnline()){	
-								//  Usuario normal
-								if (fid == -1) {
-									
-									if ( 
-										( claveVieja.getText().length() == 0 ) ||
-										( claveNueva.getText().length() == 0 ) ||
-										( claveRepetir.getText().length() == 0 )
-									) {
-										Toast.makeText(getApplicationContext(), 
-											R.string.err_campos_vacios, Toast.LENGTH_LONG).show();
-									} else {
-										if (!claveNueva.getText().toString().equals(
-												claveRepetir.getText().toString())) {
-											Toast.makeText(getApplicationContext(), 
-												R.string.err_pass, Toast.LENGTH_LONG).show();
-										}
-										else {
-											new ChangePassword(MainScreenActivity.this, listenerPass).execute(
-												session.getMail(), 
-												claveVieja.getText().toString(), 
-												claveNueva.getText().toString());    
-						        			
-											claveVieja.setText("");
-											claveNueva.setText("");
-											claveRepetir.setText("");
-										}
-									}
-								}
-							}else{
-								Toast.makeText(context, R.string.connection_err, Toast.LENGTH_LONG).show();	
-							}
-						}
-		    	    	
-		    	    });
-	        	}
-
-	    	    MDialog.show();
-	            return true;
-	            
-	        case R.id.eliminar_cuenta:
-	        	MDialog = new Dialog(MainScreenActivity.this, R.style.cust_dialog);
-	    		MDialog.setContentView(R.layout.eliminar_cuenta);
-	    		MDialog.setTitle(R.string.eliminar_cuenta);
-	    		MDialog.getWindow().setLayout(LayoutParams.MATCH_PARENT,LayoutParams.WRAP_CONTENT);
-	    		MDialog.show();
-	    		
-	    		final EditText clave = (EditText) MDialog.findViewById(R.id.claveEliminarCuenta);
-	    		if (fid > -1) {
-	    			clave.setVisibility(View.INVISIBLE);
-	    			
-	    			TextView texto = (TextView) MDialog.findViewById(R.id.textoEliminarCuenta);
-	    			texto.setText(R.string.esta_seguro_facebook);
-	    		}
-	    		
-	    		Button botonEliminarCuenta = (Button)MDialog.findViewById(R.id.botonEliminarCuenta);
-	    	    botonEliminarCuenta.setOnClickListener(new Button.OnClickListener() {
-
-					@Override
-					public void onClick(View arg0) {
-						if(isOnline()){
-							String mail = session.getMail();
-							
-							//  Usuario normal
-							if (clave.getText().length() > 0) {
-								new EraseAccount(MainScreenActivity.this, listener).execute(
-										mail, clave.getText().toString());    
-			        			clave.setText("");
-							}
-							else {
-								
-								//  Usuario de facebook
-								if (fid > -1) {
-									new EraseAccount(MainScreenActivity.this, listener).execute(
-											mail, fid + "");    
-				        			clave.setText("");
-								}
-								
-								else {
-									Toast.makeText(getApplicationContext(), 
-										R.string.err_campos_vacios, Toast.LENGTH_LONG).show();
-								}
-							}
-						}else{
-							Toast.makeText(context, R.string.connection_err, Toast.LENGTH_LONG).show();	
-						}
-					}
-	    	    	
-	    	    });
-	            
-	            return true;
-	        	            
+	        	Intent in = new Intent(MainScreenActivity.this, PreferenciesActivity.class);
+	        	startActivity(in);
+	        	return true;
+	                	        	            
 	        default:
 	            return super.onOptionsItemSelected(item);
 	    }
