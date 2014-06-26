@@ -3,19 +3,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background_scoresapp"
-    android:orientation="horizontal" >
+    android:orientation="vertical" >
 
     <ImageView
         android:id="@+id/logo"
-        android:layout_width="250dp"
-        android:layout_height="300dp"
-        android:layout_marginLeft="10dp"
+        android:layout_width="200dp"
+        android:layout_height="150dp"
+        android:layout_gravity="center"
         android:contentDescription="@string/logo"
         android:src="@drawable/scoreslogo" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="150dp"
         android:orientation="vertical" >
         
         <LinearLayout
@@ -27,9 +27,9 @@
 		        android:id="@+id/textView1"
 		        android:layout_width="wrap_content"
 		        android:layout_height="wrap_content"
-		        android:layout_marginLeft="25dp"
-		        android:layout_marginTop="50dp"
-		        android:textSize="20sp"
+		        android:layout_marginLeft="15dp"
+		        android:layout_marginTop="20dp"
+		        android:textSize="15sp"
 		        android:textColor="#222"
 		        android:text="@string/version" />
 	        
@@ -38,8 +38,8 @@
 		        android:layout_width="wrap_content"
 		        android:layout_height="wrap_content"
 		        android:layout_marginLeft="5dp"
-		        android:layout_marginTop="50dp"
-		        android:textSize="20sp"
+		        android:layout_marginTop="20dp"
+		        android:textSize="15sp"
 		        android:textColor="#222"
 		        android:text="@string/appversion" />
 	        
@@ -49,24 +49,23 @@
 	        android:id="@+id/textView2"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
-	        android:layout_marginLeft="25dp"
+	        android:layout_marginLeft="15dp"
 	        android:layout_marginTop="16dp"
-	        android:textSize="20sp"
+	        android:textSize="15sp"
 	        android:textColor="#222"
 	        android:text="@string/acerca_de" />
 	
 	    <LinearLayout
 	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content" 
-	        android:orientation="vertical">
+	        android:layout_height="wrap_content" >
 	        
 	        <TextView
 		        android:id="@+id/textView3"
 		        android:layout_width="wrap_content"
 		        android:layout_height="wrap_content"
-		        android:layout_marginLeft="25dp"
+		        android:layout_marginLeft="15dp"
 		        android:layout_marginTop="19dp"
-		        android:textSize="20sp"
+		        android:textSize="15sp"
 		        android:textColor="#222"
 		        android:text="@string/visitanos" />
 	        
@@ -74,13 +73,31 @@
 		        android:id="@+id/link"
 		        android:layout_width="wrap_content"
 		        android:layout_height="wrap_content"
-		        android:layout_marginLeft="75dp"
-		        android:layout_marginTop="5dp"
-		        android:textSize="20sp"
+		        android:layout_marginLeft="15dp"
+		        android:layout_marginTop="19dp"
+		        android:textSize="15sp"
 		        android:textColor="#222"
 		        android:text="@string/web" />
 	        
 	    </LinearLayout>
+	    
+	    <LinearLayout
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        >
+	        
+	        <TextView
+		        android:id="@+id/metronome_link"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_marginLeft="15dp"
+		        android:layout_marginTop="19dp"
+		        android:textSize="15sp"
+		        android:textColor="#222"
+		        android:text="@string/metronome_image_credit" />
+	        
+	    </LinearLayout>
+	        
 	  
 	</LinearLayout>    
 

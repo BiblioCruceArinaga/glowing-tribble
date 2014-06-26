@@ -2,8 +2,15 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <item
+        android:id="@+id/change_view"
+        android:showAsAction="always"
+        android:title="@string/panoramic_view"
+        />
+    
+    <item
         android:id="@+id/navigate"
         android:showAsAction="always"
+        android:icon="@drawable/ic_menu_go"
         android:title="@string/navigate">
         
         <menu>
@@ -11,20 +18,24 @@
                 android:id="@+id/navigate_top"
                 android:title="@string/navigate_top"/>
             <item
+                android:id="@+id/navigate_to_bar"
+                android:title="@string/navigate_to_bar"/>
+            <item
                 android:id="@+id/navigate_bottom"
                 android:title="@string/navigate_bottom"/> 
         </menu>
     </item>
-        
-    
+
     <item 
         android:id="@+id/readSound_Button"
         android:showAsAction="always"
+        android:icon="@drawable/ic_menu_microphone"
         android:title="@string/readMicrophone"/>
     
 	<item 
         android:id="@+id/metronome_button"
         android:showAsAction="always"
+        android:icon="@drawable/ic_menu_metronome"
         android:title="@string/metronome"/>
 
 </menu>

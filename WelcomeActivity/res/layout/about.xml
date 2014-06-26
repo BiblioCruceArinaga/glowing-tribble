@@ -8,14 +8,14 @@
     <ImageView
         android:id="@+id/logo"
         android:layout_width="200dp"
-        android:layout_height="150dp"
+        android:layout_height="120dp"
         android:layout_gravity="center"
         android:contentDescription="@string/logo"
         android:src="@drawable/scoreslogo" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="200dp"
         android:orientation="vertical" >
         
         <LinearLayout
@@ -28,7 +28,7 @@
 		        android:layout_width="wrap_content"
 		        android:layout_height="wrap_content"
 		        android:layout_marginLeft="15dp"
-		        android:layout_marginTop="20dp"
+		        android:layout_marginTop="15dp"
 		        android:textSize="15sp"
 		        android:textColor="#222"
 		        android:text="@string/version" />
@@ -38,7 +38,7 @@
 		        android:layout_width="wrap_content"
 		        android:layout_height="wrap_content"
 		        android:layout_marginLeft="5dp"
-		        android:layout_marginTop="20dp"
+		        android:layout_marginTop="15dp"
 		        android:textSize="15sp"
 		        android:textColor="#222"
 		        android:text="@string/appversion" />
@@ -80,6 +80,23 @@
 		        android:text="@string/web" />
 	        
 	    </LinearLayout>
+	    
+	    <LinearLayout
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content" >
+	        
+	        <TextView
+	            android:id="@+id/metronome_link"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_marginLeft="15dp"
+	            android:layout_marginTop="19dp"
+	            android:text="@string/metronome_image_credit"
+	            android:textColor="#222"
+	            android:textSize="15sp" />
+	        
+	    </LinearLayout>
+	        
 	  
 	</LinearLayout>    
 

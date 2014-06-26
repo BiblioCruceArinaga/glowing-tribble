@@ -75,15 +75,17 @@ public class Compas {
 		else
 			clefs[1] = clef;
 		
-		if (!positions.contains(clef.getPosition()))
-			positions.add(clef.getPosition());
+		if (clef != null)
+			if (!positions.contains(clef.getPosition()))
+				positions.add(clef.getPosition());
 	}
 	
 	public void addNote(Nota note) {
 		notas.add(note);
 		
-		if (!positions.contains(note.getPosition())) 
-			positions.add(note.getPosition());
+		if (note != null)
+			if (!positions.contains(note.getPosition())) 
+				positions.add(note.getPosition());
 	}
 	
 	public void clearClefs() {
@@ -464,8 +466,9 @@ public class Compas {
 	public void setTime(ElementoGrafico time) {
 		this.time = time;
 		
-		if (!positions.contains(time.getPosition())) 
-			positions.add(time.getPosition());
+		if (time != null)
+			if (!positions.contains(time.getPosition())) 
+				positions.add(time.getPosition());
 	}
 	
 	public void setWords(ElementoGrafico words) {
@@ -494,5 +497,57 @@ public class Compas {
 	
 	public void setXIniNotas(int x_ini_notas) {
 		this.x_ini_notas = x_ini_notas;
+	}
+
+	public Compas clonar() {
+		Compas nuevoCompas = new Compas();
+		
+		clonarFigurasGraficas(nuevoCompas);
+		clonarNotas(nuevoCompas);
+		
+		return nuevoCompas;
+	}
+	
+	private ElementoGrafico clonarElementoGrafico(ElementoGrafico old) {
+		if (old == null) 
+			return null;
+		else {			
+			ElementoGrafico nuevo = new ElementoGrafico();
+			
+			nuevo.setPosition(old.getPosition());
+			nuevo.addAllValues(old.getValues());
+			nuevo.setX(old.getX());
+			
+			return nuevo;
+		}
+	}
+	
+	private void clonarFigurasGraficas(Compas nuevoCompas) {
+		int numBarlines = barlines.size();
+		for (int i=0; i<numBarlines; i++)
+			nuevoCompas.addBarline(clonarElementoGrafico(barlines.get(i)));
+		
+		nuevoCompas.addClef(clonarElementoGrafico(clefs[0]));
+		nuevoCompas.addClef(clonarElementoGrafico(clefs[1]));
+		
+		nuevoCompas.setDynamics(clonarElementoGrafico(getDynamics()));
+		nuevoCompas.setPedalStart(clonarElementoGrafico(getPedalStart()));
+		nuevoCompas.setPedalStop(clonarElementoGrafico(getPedalStop()));
+		nuevoCompas.setTime(clonarElementoGrafico(getTime()));
+		nuevoCompas.setWords(clonarElementoGrafico(getWords()));
+	}
+	
+	private Nota clonarNota(Nota oldNote) {
+		Nota newNote = new Nota(oldNote.getStep(), oldNote.getOctava(), oldNote.getFiguracion(),
+				oldNote.getBeam(), oldNote.getBeamId(), oldNote.getPlica(), oldNote.getVoz(),
+				oldNote.getPentagrama(), oldNote.getFigurasGraficas(), oldNote.getPosicionArray());
+		
+		return newNote;
+	}
+	
+	private void clonarNotas(Compas nuevoCompas) {
+		int numNotas = notas.size();
+		for (int i=0; i<numNotas; i++)
+			nuevoCompas.addNote(clonarNota(notas.get(i)));
 	}
 }

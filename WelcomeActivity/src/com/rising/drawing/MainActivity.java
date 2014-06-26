@@ -18,8 +18,9 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout.LayoutParams;
 import android.widget.NumberPicker;
 import android.widget.NumberPicker.OnScrollListener;
 import android.widget.SeekBar;
@@ -40,7 +41,6 @@ public class MainActivity extends Activity{
 	private Dialog MDialog;
 	private ImageButton playButton;
 	private NumberPicker metronome_speed;
-	private CheckBox numeros_checkbox;
 	private SeekBar seekBar_metronome;
 	private int tempo = 120;
 	private boolean play;
@@ -54,9 +54,17 @@ public class MainActivity extends Activity{
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState){
-		super.onCreate(savedInstanceState);
-		//setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);	
+		super.onCreate(savedInstanceState);	
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);		
+		
+		Display display = getWindowManager().getDefaultDisplay();
+		Point size = new Point();
+		display.getSize(size);
+		int width = size.x;
+				
+		if(width<= 800){
+			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+		}		
 		
 		Bundle b = this.getIntent().getExtras();
 		score = b.getString("score");
@@ -74,7 +82,7 @@ public class MainActivity extends Activity{
 		DisplayMetrics dm = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(dm);
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-		s = new Screen(this, score, dm.widthPixels, dm.densityDpi);
+		s = new Screen(this, score, dm.widthPixels, dm.heightPixels ,dm.densityDpi);
 		if (s.isValidScreen()) {
 			myScreenThread = new ScreenThread(holder, s);
 			config = s.getConfig();
@@ -103,6 +111,17 @@ public class MainActivity extends Activity{
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    switch (item.getItemId()) {
+		    case R.id.change_view:
+		    	if (item.getTitle().toString().equals(getString(R.string.panoramic_view))) {
+		    		s.cambiarVista(Vista.HORIZONTAL);
+		    		item.setTitle(R.string.vertical_view);
+		    	}
+		    	else {
+		    		s.cambiarVista(Vista.VERTICAL);
+		    		item.setTitle(R.string.panoramic_view);
+		    	}
+		    	return true;
+	    
 	    	case R.id.metronome_button:
 	    		metronome_options(tempo);
 	    		return true;
@@ -117,6 +136,31 @@ public class MainActivity extends Activity{
 	    		
 	    	case R.id.navigate_bottom:
 	    		s.Forward();
+	    		return true;
+	    		
+	    	case R.id.navigate_to_bar:
+	    		MDialog = new Dialog(MainActivity.this, R.style.cust_dialog);	
+				MDialog.setContentView(R.layout.gotobar);
+				MDialog.setTitle(R.string.navigate_to_bar);	
+
+				final EditText barEditText = (EditText) MDialog.findViewById(R.id.editTextNumberOfBar);
+				
+				Button barButton = (Button) MDialog.findViewById(R.id.buttonNumberOfBar);
+				barButton.setOnClickListener(new OnClickListener(){
+		 
+					@Override
+					public void onClick(View v) {
+						String barNumberString = barEditText.getText().toString();
+						
+						if (!s.goToBar(Integer.parseInt(barNumberString)))
+							Toast.makeText(getApplicationContext(),
+				                    R.string.wrong_bar_number, Toast.LENGTH_SHORT).show();
+						
+						MDialog.dismiss();
+					}
+				});
+				
+				MDialog.show();
 	    		return true;
 	    		
 	    	case android.R.id.home:
@@ -213,7 +257,8 @@ public class MainActivity extends Activity{
 			MicrophoneDialog = new Dialog(MainActivity.this, R.style.cust_dialog);	
 			MicrophoneDialog.setContentView(R.layout.microphone_sensitivity_dialog);
 			MicrophoneDialog.setTitle(R.string.setSensitivity);	
-			
+			MicrophoneDialog.getWindow().setLayout(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+						
 			final TextView texto = (TextView) MicrophoneDialog.findViewById(R.id.sensitivityValue);
 			final SeekBar seekBar = (SeekBar) MicrophoneDialog.findViewById(R.id.sensitivityBar);
 			
@@ -306,15 +351,14 @@ public class MainActivity extends Activity{
 		display.getSize(screenSize);
 		int screenWith = screenSize.x;
 		int screenHeight = screenSize.y;
-		Log.i("Windowrrr", screenWith + ", " + screenHeight);
+		Log.i("Window", screenWith + ", " + screenHeight);
 		
 		MDialog = new Dialog(MainActivity.this, R.style.cust_dialog);	
 		MDialog.setContentView(R.layout.metronome_dialog);
-		MDialog.setTitle(R.string.metronome);	
+		MDialog.setTitle(R.string.metronome);
 		MDialog.getWindow().setLayout(config.getAnchoDialogBpm(), config.getAltoDialogBpm());
 		
 		seekBar_metronome = (SeekBar)MDialog.findViewById(R.id.seekBar_metronome);
-		numeros_checkbox = (CheckBox)MDialog.findViewById(R.id.cB_metronome);
 		metronome_speed = (NumberPicker)MDialog.findViewById(R.id.nm_metronome);
 					
 		metronome_speed.setMaxValue(300);
@@ -380,9 +424,8 @@ public class MainActivity extends Activity{
 					MDialog.dismiss();
 				}
 				else {
-					Toast toast1 = Toast.makeText(getApplicationContext(),
-				                    R.string.speed_allowed, Toast.LENGTH_SHORT);
-				    toast1.show();
+					Toast.makeText(getApplicationContext(),
+				                    R.string.speed_allowed, Toast.LENGTH_SHORT).show();
 				}
 			}
 		});

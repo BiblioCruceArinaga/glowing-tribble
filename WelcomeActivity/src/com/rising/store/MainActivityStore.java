@@ -23,7 +23,6 @@ import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.rising.drawing.R;
 import com.rising.login.Configuration;
 import com.rising.mainscreen.MainScreenActivity;
-import com.rising.money.MoneyActivity;
 import com.rising.money.MoneyUpdateConnectionNetwork;
 import com.rising.money.MoneyUpdateConnectionNetwork.OnFailMoney;
 import com.rising.money.MoneyUpdateConnectionNetwork.OnUpdateMoney;
@@ -66,7 +65,6 @@ public class MainActivityStore extends FragmentActivity implements OnQueryTextLi
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		//setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);				
 		setContentView(R.layout.activity_main_store);		
 		context = this;
@@ -165,10 +163,10 @@ public class MainActivityStore extends FragmentActivity implements OnQueryTextLi
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    switch (item.getItemId()) {
-	    	case R.id.money:
+	    	/*case R.id.money:
 	    		Intent i = new Intent(this, MoneyActivity.class);
 	    	    startActivity(i);
-	    	    return true;
+	    	    return true;*/
     	    
 	    	case R.id.update_store:
 	    		    		

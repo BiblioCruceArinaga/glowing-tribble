@@ -44,30 +44,10 @@
         android:showAsAction="never"
         android:title="@string/feedback"/>
     
-    <item 
-        android:id="@+id/terminos_condiciones"
-        android:showAsAction="never"
-        android:title="@string/terminos_condiciones"/>
-    
-    <item 
-        android:id="@+id/condiciones_compra"
-        android:showAsAction="never"
-        android:title="@string/condiciones_compra"/>
-    
-    <item 
-        android:id="@+id/eliminar_cuenta"
-        android:showAsAction="never"
-        android:title="@string/eliminar_cuenta"/>
-    
     <item
         android:id="@+id/about"
         android:orderInCategory="100"
         android:showAsAction="never"
         android:title="@string/about"/>
     
-    <item 
-        android:id="@+id/session_button"
-        android:showAsAction="never"
-        android:title="@string/cerrar_sesion"/>
-
 </menu>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string name="appversion">0.3.1</string>
+	<string name="appversion">0.4.1</string>
 
     <!-- Pantalla Login -->
     <string name="app_name">Scores</string>
@@ -94,7 +94,10 @@ You can buy scores in our store.</string>
     	<string name="tempo">Tempo</string>
         <string name="score">Scores</string>
     	<string name="speed_allowed">Min. Speed: 1 bpm. Max Speed: 300 bpm.</string>
-    	<string name="visual_help">Count with visual help</string>
+    	
+    <!-- Pantalla panorámica -->
+    <string name="panoramic_view">Panoramic</string>
+    <string name="vertical_view">Vertical</string>
     	
     <!-- Leer micrófono -->
     <string name="readMicrophone">Microphone</string>
@@ -107,8 +110,8 @@ You can buy scores in our store.</string>
     <string name="setSpeed">Adjust speed</string>
     <string name="sensitivityText">
         Adjust the sensitivity of the microphone. \n
-	       \t\t -If the value is too low, you will have to play very loud so the application hear you  \n\n
-	       \t\t -If this value is too high, the background noise may interfere with the application and hinder you. \n\n
+	       \t\t -If the value is too low, you will have to play very loud so the application hear you  \n
+	       \t\t -If this value is too high, the background noise may interfere with the application and hinder you. \n
 	        Searching for an appropriate value that allows you to play comfortably.
     </string>
     <string name="sensitivityButton">Adjust</string>
@@ -121,6 +124,10 @@ You can buy scores in our store.</string>
     <string name="navigate">Navigation</string>
     <string name="navigate_top">Go to the top</string>
     <string name="navigate_bottom">Go to the bottom</string>
+    <string name="navigate_to_bar">Go to bar&#8230;</string>
+    <string name="number_of_bar">Number of bar</string>
+    <string name="go_to_bar">Go to bar</string>
+    <string name="wrong_bar_number">There is no bar with that number</string>
     	
     <string name="contentDescription">Image</string>
 
@@ -330,6 +337,8 @@ You can buy scores in our store.</string>
 			subject to the jurisdiction of the Courts of Las Palmas de Gran Canaria. \n\n    	    
     	</string>
 
+    <string name="cambiar_pass">Change password</string>	
+    	
     <string name="eliminar_cuenta">Delete account</string>
     	<string name="esta_seguro">
     	    Are you sure you want to delete your account? If you do it,
@@ -362,6 +371,9 @@ You can buy scores in our store.</string>
 	    <string name="acerca_de">Scores is develop by RISING S.C.P.</string>	
 	    <string name="visitanos">Visit our site: </string>
     	<string name="web">scores.rising.es</string>
+    	<string name="metronome_image_credit">
+    	    Metronome icon: made by Icons-land (http://www.icons-land.com)
+    	</string>
 	    
     <!-- Pantalla tienda -->
     	<string name="store">Store</string>

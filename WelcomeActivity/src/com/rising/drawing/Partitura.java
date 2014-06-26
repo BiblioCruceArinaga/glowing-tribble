@@ -10,6 +10,9 @@ public class Partitura {
     private byte instrument;
     private int divisions;
     private int firstNumber;
+    
+    private int width;
+    private int height;
 
     private ArrayList<Compas> compases;
     
@@ -22,6 +25,9 @@ public class Partitura {
         divisions = 0;
         staves = 1;
         firstNumber = 1;
+        
+        width = 0;
+        height = 0;
     }
     
     public void addCompas(Compas compas) {
@@ -71,6 +77,10 @@ public class Partitura {
     	return firstNumber;
     }
     
+    public int getHeight() {
+    	return height;
+    }
+    
     public byte getInstrument() {
     	return instrument;
     }
@@ -79,8 +89,16 @@ public class Partitura {
     	return compases.get(compases.size() - 1).getYFin();
     }
     
+    public int getNumeroDeCompases() {
+    	return compases.size();
+    }
+    
     public int getStaves() {
     	return staves;
+    }
+    
+    public int getWidth() {
+    	return width;
     }
     
     public String getWork() {
@@ -141,12 +159,20 @@ public class Partitura {
     	this.firstNumber = firstNumber;
     }
     
+    public void setHeight(int height) {
+    	this.height = height;
+    }
+    
     public void setInstrument(byte instrument) {
     	this.instrument = instrument;
     }
     
     public void setStaves(byte staves) {
     	this.staves = staves;
+    }
+    
+    public void setWidth(int width) {
+    	this.width = width;
     }
     
     public void setWork(ArrayList<Byte> work) {

@@ -10,9 +10,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/speedText"
-        android:layout_margin="20dp" 
+        android:layout_margin="10dp" 
         android:textColor="#222"
-        android:textSize="16sp" />
+        android:textSize="17sp" />
     
     <TextView 
         android:id="@+id/speedValue"
@@ -28,7 +28,7 @@
         android:id="@+id/speedBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
+        android:layout_margin="10dp"
         android:progress="5"
         android:max="10"
         />
@@ -36,7 +36,7 @@
     <Button
         android:id="@+id/speedButton"
         android:layout_width="140dp"
-        android:layout_height="50dp"
+        android:layout_height="40dp"
         android:layout_gravity="center"
         android:gravity="center"
         android:layout_marginTop="10dp"
