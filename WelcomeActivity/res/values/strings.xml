@@ -73,7 +73,10 @@ You can buy scores in our store.</string>
     <string name="error_folder">There was a problem iniciating Scores</string>
     <string name="incorrect_security_line">You cannot open this score, is registered by other user</string>
     <string name="incorrect_user">Incorrect user</string>
-    	    	
+    <string name="upload_pdf">Upload PDF file</string>
+    <string name="upload">Upload</string>	  
+    <string name="select">Select</string> 
+    	
     	<!-- Menú contextual -->
     	<string name="select_all">Select all</string>
     	<string name="select_none">Deselect all</string>
@@ -109,7 +112,7 @@ You can buy scores in our store.</string>
     <string name="setSensitivity">Adjust sensitivity</string>
     <string name="setSpeed">Adjust speed</string>
     <string name="sensitivityText">
-        Adjust the sensitivity of the microphone. \n
+        Adjust the sensitivity of the microphone. \n\n
 	       \t\t -If the value is too low, you will have to play very loud so the application hear you  \n
 	       \t\t -If this value is too high, the background noise may interfere with the application and hinder you. \n
 	        Searching for an appropriate value that allows you to play comfortably.

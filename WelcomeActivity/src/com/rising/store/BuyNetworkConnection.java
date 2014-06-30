@@ -26,7 +26,7 @@ import android.util.Log;
 
 public class BuyNetworkConnection extends AsyncTask<String, Integer, String>{
 
-	//  Comunicaci�n HTTP con el servidor
+	//  Comunicación HTTP con el servidor
 	HttpPost httppost;
 	HttpClient httpcliente;
 	String URL_connect = "http://www.scores.rising.es/store-buyscore";
@@ -34,7 +34,7 @@ public class BuyNetworkConnection extends AsyncTask<String, Integer, String>{
 	//  Contexto
 	Context context;
 	
-	//  Informaci�n obtenida de la base de datos
+	//  Información obtenida de la base de datos
 	String res;
 	
 	public interface OnBuyCompleted{
@@ -69,13 +69,14 @@ public class BuyNetworkConnection extends AsyncTask<String, Integer, String>{
         	httpcliente = new DefaultHttpClient();
         	param.add(new BasicNameValuePair("id_u", params[0]));
 			param.add(new BasicNameValuePair("id_s", params[1]));
-        	        	
+        	param.add(new BasicNameValuePair("Lenguaje", params[2]));        	
+			
             httppost = new HttpPost(URL_connect);
                         
             httppost.setEntity(new UrlEncodedFormEntity(param));
                         
             HttpResponse responses = httpcliente.execute(httppost);
-
+            
             HttpEntity entitys = responses.getEntity();
              
             is = entitys.getContent();

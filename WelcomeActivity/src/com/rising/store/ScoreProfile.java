@@ -3,6 +3,7 @@ package com.rising.store;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -64,7 +65,7 @@ public class ScoreProfile extends Activity{
 	private String urlD;
 	private String URL_Image;
 	static String selectedURL = "";
-	private String path = "/RisingScores/scores/";//Implementar sistema anti piratería
+	private String path = "/.RisingScores/scores/";
 	Dialog BDialog, NMDialog;
 	Button Confirm_Buy, Cancel_Buy, Buy_Money;
 	private ImageLoader iml;
@@ -302,7 +303,7 @@ public class ScoreProfile extends Activity{
 							//Aquí tiene lugar la descarga y la compra, y el registro de la compra en la base de datos
 							if(price == 0.0){	
 									     							     							     							     					
-								bnc.execute(Id_User, Id_Score);
+								bnc.execute(Id_User, Id_Score, Locale.getDefault().getDisplayLanguage());
 				 			
 				 				BDialog.dismiss();
 										     						     								     							     							     				
@@ -310,7 +311,7 @@ public class ScoreProfile extends Activity{
 												 								 														 			
 				     			if(price < conf.getUserMoney()){		 					
 				 							     								     				
-					     			bnc.execute(Id_User, Id_Score);
+					     			bnc.execute(Id_User, Id_Score, Locale.getDefault().getDisplayLanguage());
 					     			
 					     			BDialog.dismiss();					     							     			
 								}else{
@@ -435,6 +436,7 @@ public class ScoreProfile extends Activity{
 	     		
 			postparameters2send.add(new BasicNameValuePair("id_u", params[0]));
 			postparameters2send.add(new BasicNameValuePair("id_s", params[1]));
+			postparameters2send.add(new BasicNameValuePair("lenguaje", params[2]));
 			
 			//Se realiza una peticion, y como respuesta se obtiene un array JSON
 	      	JSONArray jData = HPA.getServerData(postparameters2send, URL_Buy);

@@ -26,6 +26,7 @@ public class BuyMoneyNetworkConnection extends AsyncTask<String, Integer, Intege
 	HttpPostAux postAux = new HttpPostAux();
 	
 	String Id_U;
+	String lenguaje;
 	String PayMethod;
 	String Money;
 	Context context;
@@ -55,6 +56,7 @@ public class BuyMoneyNetworkConnection extends AsyncTask<String, Integer, Intege
 		Id_U = conf.getUserId();
 		PayMethod = params[1];
 		Money = params[2];
+		lenguaje = params[3];
 		int status = -1;
 		
 		ArrayList<NameValuePair> postparameters2send= new ArrayList<NameValuePair>();
@@ -62,6 +64,7 @@ public class BuyMoneyNetworkConnection extends AsyncTask<String, Integer, Intege
 		postparameters2send.add(new BasicNameValuePair("id_u", Id_U));
 		postparameters2send.add(new BasicNameValuePair("paymethod", PayMethod));
 		postparameters2send.add(new BasicNameValuePair("money", Money));
+		postparameters2send.add(new BasicNameValuePair("Lenguaje", lenguaje));
 				
 		JSONArray jData = postAux.getServerData(postparameters2send, URL_connect);
 		

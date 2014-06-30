@@ -1,5 +1,7 @@
 package com.rising.money;
 
+import java.util.Locale;
+
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
@@ -219,7 +221,7 @@ public class MoneyActivity extends Activity implements IabHelper.OnIabSetupFinis
 
         if (result.isSuccess()) {
         	        	
-        	bmnc.execute(PayMethod, Money);
+        	bmnc.execute(PayMethod, Money, Locale.getDefault().getDisplayLanguage());
         }
         else {
             Toast.makeText(this, R.string.buy_fail, Toast.LENGTH_LONG).show();

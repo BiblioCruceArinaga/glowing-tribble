@@ -343,7 +343,7 @@ public class CustomAdapter extends BaseAdapter {
 							//Aquí tiene lugar la descarga y la compra, y el registro de la compra en la base de datos
 			 				if(lista.get(position).getPrecio() == 0.0){	
 			 						     							     							     							     					
-			     				bnc.execute(Id_User, Id_Score);
+			     				bnc.execute(Id_User, Id_Score, Locale.getDefault().getDisplayLanguage());
 			     				
 			     				BDialog.dismiss();
 			    							     						     								     							     							     				
@@ -351,7 +351,7 @@ public class CustomAdapter extends BaseAdapter {
 			 								 								 					
 				     			if(lista.get(position).getPrecio() < conf.getUserMoney()){		 					
 			     							     								     				
-					     			bnc.execute(Id_User, Id_Score);
+					     			bnc.execute(Id_User, Id_Score, Locale.getDefault().getDisplayLanguage());
 					     			
 					     			BDialog.dismiss();					     							     			
 			 					}else{

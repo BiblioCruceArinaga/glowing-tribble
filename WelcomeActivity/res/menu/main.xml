@@ -35,6 +35,11 @@
           android:actionViewClass="android.widget.SearchView"/>
     
     <item 
+        android:id="@+id/subir_archivo"
+        android:showAsAction="ifRoom"
+        android:title="@string/upload_pdf"/>
+    
+    <item 
         android:id="@+id/mis_datos"
         android:showAsAction="never"
         android:title="@string/mis_datos"/>

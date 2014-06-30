@@ -311,7 +311,11 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 					Toast.makeText(this, R.string.connection_err, Toast.LENGTH_LONG).show();	
 				}
 				return true;
-	    	
+				
+			case R.id.subir_archivo:
+				subirArchivo();
+				return true;
+				
 			case R.id.sort_author:
 				listarAutores();
 				return true;
@@ -593,6 +597,26 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
    			interfazCuandoNoHayPartituras();
    		}
    		mSelected.clear();
+	}
+	
+	public void subirArchivo(){
+		MDialog = new Dialog(MainScreenActivity.this, R.style.cust_dialog);
+		MDialog.setContentView(R.layout.upload_pdf);
+		MDialog.setTitle(R.string.upload_pdf);
+		MDialog.getWindow().setLayout(LayoutParams.MATCH_PARENT,LayoutParams.WRAP_CONTENT);
+		MDialog.show();
+		
+		Button B_Upload = (Button) MDialog.findViewById(R.id.upload_pdf_button);
+		
+		B_Upload.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View arg0) {
+				Log.i("Hola", "Hola");
+			}
+			
+		});
+
 	}
 	
 }

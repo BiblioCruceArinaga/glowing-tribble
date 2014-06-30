@@ -74,6 +74,9 @@
     <string name="error_folder">Hubo un problema al iniciar Scores</string>
     <string name="incorrect_security_line">No puedes abrir esta partitura, está registrada por otro usuario</string>
     <string name="incorrect_user">Incorrect user</string>
+    <string name="upload_pdf">Subir PDF</string>
+    <string name="upload">Subir</string>
+    <string name="select">Seleccionar</string>
     	    	
     	<!-- Menú contextual -->
     	<string name="select_all">Seleccionar todos</string>
@@ -110,7 +113,7 @@
     	<string name="setSensitivity">Ajustar sensibilidad</string>
     	<string name="setSpeed">Ajustar velocidad</string>
     	<string name="sensitivityText">
-	        Ajusta la sensibilidad del micrófono. \n
+	        Ajusta la sensibilidad del micrófono. \n\n
 	        \t\t-Si este valor es demasiado bajo,tendrás que tocar muy fuerte para que la aplicación te oiga. \n
 	        \t\t-Si este valor es demasiado alto, el ruido ambiente podría interferir en la aplicación y estorbarte. \n
 	        Busca un valor apropiado que te permita tocar de manera cómoda.
