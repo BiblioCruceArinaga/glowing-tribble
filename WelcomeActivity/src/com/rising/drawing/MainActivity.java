@@ -47,8 +47,8 @@ public class MainActivity extends Activity{
 	//  Gestión del micrófono
 	private boolean readingMicrophone = false;
 	private Dialog MicrophoneDialog = null;
-	private int sensibilidad = 5;
-	private int velocidad = 5;	
+	private int sensibilidad = 10;
+	private int velocidad = 10;	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState){

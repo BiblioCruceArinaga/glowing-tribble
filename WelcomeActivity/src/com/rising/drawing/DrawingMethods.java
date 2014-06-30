@@ -1712,19 +1712,41 @@ public class DrawingMethods {
 
 			if ( (i == numBeams - 1) || (beams.get(i + 1).getBeamId() != beamId) ) {
 				
-				//  Gestión de hooks en la última nota. Por ahora sólo se está controlando un caso
-				if (partitura.getCompas(indCompasAnt).getNota(indNotaAnt).getBeam() == 4) {
-					
-					int x_last_beam = partitura.getCompas(indCompasAnt).getNota(indNotaAnt).getX();
-
-					ordenDibujo = new OrdenDibujo();
-					ordenDibujo.setOrden(DrawOrder.DRAW_LINE);
-					ordenDibujo.setPaint(PaintOptions.SET_STROKE_WIDTH, ancho_beams);
-					ordenDibujo.setX1(x_last_beam);
-					ordenDibujo.setY1(y_beams + distancia_beams * 2);
-					ordenDibujo.setX2(x_last_beam - config.getAnchoHooks());
-					ordenDibujo.setY2(y_beams + distancia_beams * 2);
-					ordenesDibujo.add(ordenDibujo);
+				int x_last_beam = 0;
+				Nota nota = partitura.getCompas(indCompasAnt).getNota(indNotaAnt);
+				int offset = nota.haciaArriba() ? config.getAnchoCabezaNota() : 0;
+				
+				//  Gestión de hooks en la última nota
+				switch (nota.getBeam()) {
+						
+					case 4:
+						x_last_beam = nota.getX();
+	
+						ordenDibujo = new OrdenDibujo();
+						ordenDibujo.setOrden(DrawOrder.DRAW_LINE);
+						ordenDibujo.setPaint(PaintOptions.SET_STROKE_WIDTH, ancho_beams);
+						ordenDibujo.setX1(x_last_beam + offset);
+						ordenDibujo.setY1(y_beams + distancia_beams * 2);
+						ordenDibujo.setX2(x_last_beam + offset - config.getAnchoHooks());
+						ordenDibujo.setY2(y_beams + distancia_beams * 2);
+						ordenesDibujo.add(ordenDibujo);
+						break;
+						
+					case 6:
+						x_last_beam = nota.getX();
+						
+						ordenDibujo = new OrdenDibujo();
+						ordenDibujo.setOrden(DrawOrder.DRAW_LINE);
+						ordenDibujo.setPaint(PaintOptions.SET_STROKE_WIDTH, ancho_beams);
+						ordenDibujo.setX1(x_last_beam + offset);
+						ordenDibujo.setY1(y_beams + distancia_beams);
+						ordenDibujo.setX2(x_last_beam + offset - config.getAnchoHooks());
+						ordenDibujo.setY2(y_beams + distancia_beams);
+						ordenesDibujo.add(ordenDibujo);
+						break;
+						
+					default:
+						break;
 				}
 			}
 			else {

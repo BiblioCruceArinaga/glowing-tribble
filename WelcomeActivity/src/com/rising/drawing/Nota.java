@@ -61,7 +61,7 @@ public class Nota {
 	}
 	
 	public boolean beamFinal() {
-		return beam == 1 || beam == 4;
+		return beam == 1 || beam == 4 || beam == 6;
 	}
 	
 	public boolean desplazadaALaIzquierda() {

@@ -8,7 +8,9 @@ import android.view.MotionEvent;
 public class Scroll {
 	
 	private int orientation;
-	private int margenPrimerCompas;
+	private int distanciaPentagramas;
+	private int margenXPrimerCompas;
+	private int margenYPrimerCompas;
 	
 	//  Gestión del scroll vertical
 	private float altoPantalla = 0;
@@ -45,7 +47,9 @@ public class Scroll {
 	public Scroll(Config config) {;
 		margenFinalScrollY = config.getDistanciaPentagramas();
 		margenFinalScrollX = config.getXInicialPentagramas();
-		margenPrimerCompas = margenFinalScrollX;
+		margenXPrimerCompas = margenFinalScrollX;
+		margenYPrimerCompas = config.getMargenInferiorAutor();
+		distanciaPentagramas = config.getDistanciaPentagramas();
 		
 		orientation = 0;
 	}
@@ -123,6 +127,10 @@ public class Scroll {
     	mostrarBarraHorizontal = false;
     	
     	return (yDown == e.getY());
+	}
+	
+	public float getLimiteVisibleAbajo() {
+		return limiteVisibleAbajo;
 	}
 	
 	public float getLimiteVisibleDerecha() {
@@ -210,17 +218,28 @@ public class Scroll {
 		}
     }
 	
-	public int distanciaDesplazamientoX(Partitura partitura, int primerCompas, int ultimoCompas) {
+	public int distanciaDesplazamiento(Partitura partitura, int primerCompas, int ultimoCompas, Vista vista) {
 		int distancia = 0;
 		
-		for (int i=primerCompas; i<ultimoCompas; i++) {
-			distancia += partitura.getCompas(i).getXFin() - partitura.getCompas(i).getXIni();
+		if (vista == Vista.HORIZONTAL) {
+			for (int i=primerCompas; i<ultimoCompas; i++)
+				distancia += partitura.getCompas(i).getXFin() - partitura.getCompas(i).getXIni();
+		}
+		else {
+			distancia = partitura.getCompas(ultimoCompas).getYIni() - 
+					partitura.getCompas(primerCompas).getYIni();
 		}
 		
-		if (primerCompas == 0) distancia += margenPrimerCompas;
+		if (primerCompas == 0) {
+			if (vista == Vista.HORIZONTAL)
+				distancia += margenXPrimerCompas;
+			else
+				distancia += margenYPrimerCompas;
+		}
+		
 		return distancia;
 	}
-	
+	/*
 	public int distanciaDesplazamientoY(int currentY, boolean primerScrollHecho, 
 			Config config, int staves) {
 		
@@ -245,6 +264,14 @@ public class Scroll {
 				        config.getDistanciaLineasPentagrama() * 4) * 2;
 			}
 		}
+	}
+	*/
+	
+	public boolean outOfBoundaries(int xFin, int yFin, Vista vista) {
+		if (vista == Vista.HORIZONTAL)
+			return xFin > - limiteVisibleDerecha;
+		else
+			return yFin > - limiteVisibleAbajo;
 	}
 	
 	public void setOrientation(int orientation) {

@@ -127,36 +127,66 @@ public class SoundReader extends Observable implements AudioRecord.OnRecordPosit
 	public void setSensitivity(int sensitivity) {
 		switch (sensitivity) {
 			case 0:
-				THRESHOLD = 30;
+				THRESHOLD = 60;
 				break;
 			case 1:
-				THRESHOLD = 27;
+				THRESHOLD = 57;
 				break;
 			case 2:
-				THRESHOLD = 24;
+				THRESHOLD = 54;
 				break;
 			case 3:
-				THRESHOLD = 21;
+				THRESHOLD = 51;
 				break;
 			case 4:
-				THRESHOLD = 18;
+				THRESHOLD = 48;
 				break;
 			case 5:
-				THRESHOLD = 15;
+				THRESHOLD = 45;
 				break;
 			case 6:
-				THRESHOLD = 12;
+				THRESHOLD = 42;
 				break;
 			case 7:
-				THRESHOLD = 9;
+				THRESHOLD = 39;
 				break;
 			case 8:
-				THRESHOLD = 6;
+				THRESHOLD = 36;
 				break;
 			case 9:
-				THRESHOLD = 3;
+				THRESHOLD = 33;
 				break;
 			case 10:
+				THRESHOLD = 30;
+				break;
+			case 11:
+				THRESHOLD = 27;
+				break;
+			case 12:
+				THRESHOLD = 24;
+				break;
+			case 13:
+				THRESHOLD = 21;
+				break;
+			case 14:
+				THRESHOLD = 18;
+				break;
+			case 15:
+				THRESHOLD = 15;
+				break;
+			case 16:
+				THRESHOLD = 12;
+				break;
+			case 17:
+				THRESHOLD = 9;
+				break;
+			case 18:
+				THRESHOLD = 6;
+				break;
+			case 19:
+				THRESHOLD = 3;
+				break;
+			case 20:
 				THRESHOLD = 0;
 				break;
 			default:
@@ -171,36 +201,66 @@ public class SoundReader extends Observable implements AudioRecord.OnRecordPosit
 	private void setSpeed(int speed) {
 		switch (speed) {
 			case 0:
-				NOTIFY_RATE = 11000;
+				NOTIFY_RATE = 17000;
 				break;
 			case 1:
-				NOTIFY_RATE = 10000;
+				NOTIFY_RATE = 16200;
 				break;
 			case 2:
-				NOTIFY_RATE = 9000;
+				NOTIFY_RATE = 15400;
 				break;
 			case 3:
-				NOTIFY_RATE = 8000;
+				NOTIFY_RATE = 14600;
 				break;
 			case 4:
-				NOTIFY_RATE = 7000;
+				NOTIFY_RATE = 13800;
 				break;
 			case 5:
-				NOTIFY_RATE = 6000;
+				NOTIFY_RATE = 13000;
 				break;
 			case 6:
-				NOTIFY_RATE = 5000;
+				NOTIFY_RATE = 12200;
 				break;
 			case 7:
-				NOTIFY_RATE = 4000;
+				NOTIFY_RATE = 11400;
 				break;
 			case 8:
-				NOTIFY_RATE = 3000;
+				NOTIFY_RATE = 10600;
 				break;
 			case 9:
-				NOTIFY_RATE = 2000;
+				NOTIFY_RATE = 9800;
 				break;
 			case 10:
+				NOTIFY_RATE = 9000;
+				break;
+			case 11:
+				NOTIFY_RATE = 8200;
+				break;
+			case 12:
+				NOTIFY_RATE = 7400;
+				break;
+			case 13:
+				NOTIFY_RATE = 6600;
+				break;
+			case 14:
+				NOTIFY_RATE = 5800;
+				break;
+			case 15:
+				NOTIFY_RATE = 5000;
+				break;
+			case 16:
+				NOTIFY_RATE = 4200;
+				break;
+			case 17:
+				NOTIFY_RATE = 3400;
+				break;
+			case 18:
+				NOTIFY_RATE = 2600;
+				break;
+			case 19:
+				NOTIFY_RATE = 1800;
+				break;
+			case 20:
 				NOTIFY_RATE = 1000;
 				break;
 			default:

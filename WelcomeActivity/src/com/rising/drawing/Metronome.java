@@ -48,21 +48,11 @@ public class Metronome {
                 try {
                 	long speed = ((240000/mbpm)/4);
 
-                	int currentY = partitura.getCompas(0).getYIni();
-                	int currentX = partitura.getCompas(0).getXFin();
+                	int currentX = 0;
+                	int currentY = 0;
                 	int primerCompas = 0;
                 	int ultimoCompas = 0;
-                	int changeAccount = 0;
-                	int finalChangeAccount = 
-                			scroll.getOrientation() == Configuration.ORIENTATION_PORTRAIT ? 
-                					config.getChangeAccountVertical() : config.getChangeAccountHorizontal();
-                	int staves = partitura.getStaves();
-                	
-                	boolean primerScrollHecho = false;
-                	int distanciaDesplazamientoY = 
-                			scroll.distanciaDesplazamientoY(currentY, 
-                					primerScrollHecho, config, staves);
-                	int distanciaDesplazamientoX = 0;
+                	int distanciaDesplazamiento = 0;
                 	
                 	bipsDePreparacion(speed, partitura.getCompas(0).numeroDePulsos());
                 	
@@ -75,44 +65,23 @@ public class Metronome {
                 			mbpm = compas.getBpm();
                 			speed = ((240000/mbpm)/4);
                 		}
-                			
-                		//  Gestión del scroll en el eje Y
-                		if ( (currentY != compas.getYIni()) && (vista == Vista.VERTICAL) ) {
-                			currentY = compas.getYIni();
-                			changeAccount += staves;
-                			
-                			if (changeAccount == finalChangeAccount) {
-                				scroll.hacerScroll(vista, distanciaDesplazamientoY);
-	                			
-                				if (!primerScrollHecho) {
-		                			primerScrollHecho = true;
-		                			
-		                			distanciaDesplazamientoY = 
-		                				scroll.distanciaDesplazamientoY(
-		                					currentY, primerScrollHecho, config, staves);
-                				}
-	                			
-	                			changeAccount = 0;
-                			}
-                		}
-                		else {
-                			
-                			//  Gestión del scroll en el eje X
-                			if ( (currentX != compas.getXFin()) && (vista == Vista.HORIZONTAL) ) {
-                				currentX = compas.getXFin();
-                				ultimoCompas++;
-                				
-                				if (currentX > - scroll.getLimiteVisibleDerecha()) {
-            						distanciaDesplazamientoX = 
-            							scroll.distanciaDesplazamientoX(partitura, 
-            								primerCompas, ultimoCompas);
-                					
-                					scroll.hacerScroll(vista, distanciaDesplazamientoX);
-                					
-                					primerCompas = ultimoCompas;
-                				}
-                			}
-                		}
+
+            			//  Gestión del scroll
+            			if (currentX != compas.getXFin()) {
+            				currentX = compas.getXFin();
+            				currentY = compas.getYFin();
+            				ultimoCompas = i;
+            				
+            				if (scroll.outOfBoundaries(currentX, currentY, vista)) {
+        						distanciaDesplazamiento = 
+        							scroll.distanciaDesplazamiento(partitura, 
+        								primerCompas, ultimoCompas, vista);
+            					
+            					scroll.hacerScroll(vista, distanciaDesplazamiento);
+            					
+            					primerCompas = ultimoCompas;
+            				}
+            			}
                 				
                 		int pulsos = compas.numeroDePulsos();
                 		for (int j=0; j<pulsos; j++) {

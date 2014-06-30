@@ -43,10 +43,10 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 	private SoundReader soundReader = null;
 	private int compasActual = 0;
 	private int golpeSonidoActual = 0;
+	private int xActual = 0;
 	private int yActual = 0;
 	private int desplazamiento = 0;
-	private int changeAccount = 0;
-	private boolean primerDesplazamientoHecho = false;
+	private int primerCompas = 0;
 	
 	//  Metrónomo y su gestión
 	private Metronome metronomo = null;
@@ -365,15 +365,16 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 		soundReader = new SoundReader(velocidad);
 		soundReader.addObserver(this);
 		soundReader.setSensitivity(sensibilidad);
-		/*
-		yActual = partitura.getCompas(0).getYIni();
-		desplazamiento = obtenerDistanciaDesplazamiento(yActual, false);
+		
+		Partitura partitura = vista == Vista.HORIZONTAL ?
+				partituraHorizontal : partituraVertical;
+		xActual = partitura.getCompas(0).getXIni();
 		
 		ArrayList<Integer> golpesSonido = new ArrayList<Integer>();
 		int numCompases = partitura.getCompases().size();
 		for (int i=0; i<numCompases; i++) 
 			golpesSonido.add(partitura.getCompas(i).golpesDeSonido());
-		*/
+		
 		Toast.makeText(context, R.string.startPlaying, Toast.LENGTH_SHORT).show();
 	}
 	
@@ -387,40 +388,41 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 
 	@Override
 	public void update(Observable observable, Object data) {
-		//int sound = (Integer) data;
-		/*
+		int sound = (Integer) data;
 		if (sound > 0) {
+			
+			Partitura partitura = vista == Vista.HORIZONTAL ?
+					partituraHorizontal : partituraVertical;
+			
 			Compas compas = partitura.getCompas(compasActual);
 			int golpesSonido = compas.golpesDeSonido();
 			
 			if (golpeSonidoActual >= golpesSonido) {
-				Log.i("Check", "Compás nº " + compasActual + ": " + golpesSonido);
-				
-				compasActual++;
+				compas = partitura.getCompas(++compasActual);
 				golpeSonidoActual = 0;
 				
-				if (partitura.getCompas(compasActual).getYIni() != yActual) {
+				//  Gestión del scroll
+				if (compas.getXIni() != xActual) {
+					xActual = compas.getXFin();
+					yActual = compas.getYFin();
 					
-					changeAccount += partitura.getStaves();
-					
-					if (changeAccount == config.getChangeAccount()) {
-						//hacerScroll(desplazamiento);
+					if (scroll.outOfBoundaries(xActual, yActual, vista)) {
 						
-						if (!primerDesplazamientoHecho) {
-							primerDesplazamientoHecho = true;
-							desplazamiento = 
-	                				obtenerDistanciaDesplazamiento(yActual, primerDesplazamientoHecho);
-						}
+						desplazamiento = 
+            				scroll.distanciaDesplazamiento(partitura, 
+            					primerCompas, compasActual, vista);
 						
-						changeAccount = 0;
+						scroll.hacerScroll(vista, desplazamiento);
+						
+						primerCompas = compasActual;
 					}
 				}
 			}
 			else
 				golpeSonidoActual++;
 		}
-		*/
 	}
+	
 	
 	/*
 	 * 
