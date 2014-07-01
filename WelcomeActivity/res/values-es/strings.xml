@@ -74,10 +74,14 @@
     <string name="error_folder">Hubo un problema al iniciar Scores</string>
     <string name="incorrect_security_line">No puedes abrir esta partitura, está registrada por otro usuario</string>
     <string name="incorrect_user">Incorrect user</string>
-    <string name="upload_pdf">Subir PDF</string>
-    <string name="upload">Subir</string>
-    <string name="select">Seleccionar</string>
-    	    	
+    
+    	<!-- Pantalla subir archivos PDF -->
+    	<string name="upload_pdf">Subir PDF</string>
+    	<string name="upload">Subir</string>
+    	<string name="select">Seleccionar</string>
+    	<string name="choose_directory">Elige el archivo</string>
+    	<string name="pdf_error">El archivo seleccionado no es un archivo PDF</string>    	
+    	
     	<!-- Menú contextual -->
     	<string name="select_all">Seleccionar todos</string>
     	<string name="select_none">Deseleccionar todos</string>

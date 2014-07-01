@@ -115,6 +115,8 @@
             android:theme="@style/Theme.Tabs"
             android:label="@string/app_name" ></activity>
         <activity android:name="com.rising.mainscreen.PreferenciesActivity" android:label="@string/app_name" android:theme="@style/Theme.Tabs"></activity>
+        <activity android:theme="@style/Theme.Tabs" android:label="@string/app_name" android:name="com.rising.mainscreen.FileExplore"></activity>
+        <activity android:theme="@style/Theme.Tabs" android:label="@string/app_name" android:name="com.rising.pdf.PDFReaderActivity"></activity>
 
         
     </application>

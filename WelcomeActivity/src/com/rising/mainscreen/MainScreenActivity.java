@@ -33,6 +33,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.SearchView.OnQueryTextListener;
 import android.widget.TextView;
@@ -46,6 +47,7 @@ import com.rising.mainscreen.SendFeedback.OnSendingFeedback;
 import com.rising.money.MoneyUpdateConnectionNetwork;
 import com.rising.money.MoneyUpdateConnectionNetwork.OnFailMoney;
 import com.rising.money.MoneyUpdateConnectionNetwork.OnUpdateMoney;
+import com.rising.pdf.PDFReaderActivity;
 import com.rising.security.DownloadScoresEncrypter;
 import com.rising.store.MainActivityStore;
 
@@ -151,7 +153,7 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 		String imagenFichero = fichero.substring(0, fichero.lastIndexOf("."));
 		return imagenFichero + ".jpg";
 	}
-	
+		
 	public void interfazCuandoHayPartituras(final String[] ficheros){
 		infoFicheros = darInfoFicheros(ficheros);
 				
@@ -255,13 +257,21 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 			Log.i("Position", ficheros[position]);
 			
-			if(new DownloadScoresEncrypter(context, infoFicheros[0][position]+conf.getUserId()).DescryptAndConfirm(ficheros[position])){
-				Intent i = new Intent(MainScreenActivity.this, MainActivity.class);
+			//Si es un PDF abre el PDF, si no, el otro. 
+			if(ComprobarFichero(ficheros[position])){
+				Intent i = new Intent(MainScreenActivity.this, PDFReaderActivity.class);
 				i.putExtra("score", ficheros[position]);
 
 				startActivity(i);
 			}else{
-				Incorrect_User.show();
+				if(new DownloadScoresEncrypter(context, infoFicheros[0][position]+conf.getUserId()).DescryptAndConfirm(ficheros[position])){
+					Intent i = new Intent(MainScreenActivity.this, MainActivity.class);
+					i.putExtra("score", ficheros[position]);
+	
+					startActivity(i);
+				}else{
+					Incorrect_User.show();
+				}
 			}
 		} 
 	});
@@ -401,7 +411,6 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
         }
 	}
 	
-
 	public void createScoreFolderInternal(){
 		File file=new File(Environment.getRootDirectory() + path);
         if(!file.exists()) {
@@ -465,13 +474,20 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 		res = new String[4][len];
 		
 		for(int i=0; i < len; i++){
-			String[] dataSplit = ArrayScores[i].split("_");
-			//String imagenFichero = ArrayScores[i].substring(0, ArrayScores[i].lastIndexOf("."));
-					
-			res[0][i] = dataSplit[0].replace("-", " ");	//  Nombre de la obra
-			res[1][i] = dataSplit[1].replace("-", " ");	//  Autor
-			res[2][i] = dataSplit[2].substring(0, dataSplit[2].indexOf("."));	//  Instrumento
-			res[3][i] = ficheroAImagen(ArrayScores[i]);	// Imagen
+			if(ComprobarFichero(ArrayScores[i])){
+				res[0][i] = ArrayScores[i].substring(0, ArrayScores[i].indexOf(".")); 
+				res[1][i] = "";	//  Autor
+				res[2][i] = "";	//  Instrumento
+				res[3][i] = ficheroAImagen(ArrayScores[i]);	// Imagen
+			}else{
+				String[] dataSplit = ArrayScores[i].split("_");
+				//String imagenFichero = ArrayScores[i].substring(0, ArrayScores[i].lastIndexOf("."));
+						
+				res[0][i] = dataSplit[0].replace("-", " ");	//  Nombre de la obra
+				res[1][i] = dataSplit[1].replace("-", " ");	//  Autor
+				res[2][i] = dataSplit[2].substring(0, dataSplit[2].indexOf("."));	//  Instrumento
+				res[3][i] = ficheroAImagen(ArrayScores[i]);	// Imagen
+			}
 		}
 		
 		return res;
@@ -542,6 +558,10 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 		}
 	}
 	
+	private void listarFormatos() {
+		
+	}
+	
 	private void ordenarPorNombre() {
 		if (s_adapter != null) s_adapter.sortByName();
 	}
@@ -606,17 +626,47 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 		MDialog.getWindow().setLayout(LayoutParams.MATCH_PARENT,LayoutParams.WRAP_CONTENT);
 		MDialog.show();
 		
+		boolean subido = false;
+		
 		Button B_Upload = (Button) MDialog.findViewById(R.id.upload_pdf_button);
+		TextView TV_Upload_Name = (TextView) MDialog.findViewById(R.id.upload_pdf_name);
+		ProgressBar PB_Upload_Progress = (ProgressBar) MDialog.findViewById(R.id.upload_pdf_progress);
+		
+		TV_Upload_Name.setVisibility(View.GONE);
+		PB_Upload_Progress.setVisibility(View.GONE);
 		
 		B_Upload.setOnClickListener(new OnClickListener(){
 
 			@Override
 			public void onClick(View arg0) {
-				Log.i("Hola", "Hola");
+				Intent i = new Intent(MainScreenActivity.this, FileExplore.class);
+				startActivity(i);	
 			}
 			
 		});
+		
+		if(subido){
+			TV_Upload_Name.setVisibility(View.VISIBLE);
+			TV_Upload_Name.setText("El nombre del fichero");
+			B_Upload.setText(R.string.upload);
+		}
+		
 
 	}
-	
+	//Comprueba si es un PDF por la extensión
+	public boolean ComprobarFichero(String nombre){
+			
+		Log.i("Comprueba ficheros", nombre);
+				
+		int i = nombre.lastIndexOf('.');
+		
+		String pdf = nombre.substring(i+1, nombre.length()).toLowerCase();
+		Log.i("PDF", pdf);
+		
+		if(pdf.equals("pdf")){
+			return true;
+		}else{
+			return false;
+		}		
+	}
 }
