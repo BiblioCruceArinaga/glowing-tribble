@@ -387,6 +387,9 @@ public class DrawingMethods {
 				case 5:
 					inicializarTempo(tempo, compas, 6, 8);
 					break;
+				case 6:
+					inicializarTempo(tempo, compas, 3, 4);
+					break;
 				default:
 					break;
 			}
@@ -1450,7 +1453,7 @@ public class DrawingMethods {
 					
 				case 10:
 					coo_y = margenY + config.getDistanciaLineasPentagrama() + 
-						config.getDistanciaLineasPentagramaMitad();
+						config.getDistanciaLineasPentagramaMitad() + config.getYSilencioBlanca();
 					break;
 					
 				case 11:

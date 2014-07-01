@@ -82,6 +82,7 @@ public class Config {
 	private int x_puntillo;
 	private int y_puntillo_arriba;
 	private int y_puntillo_abajo;
+	private int y_silencio_blanca;
 	private int x_staccato;
 	private int y_staccato_arriba;
 	private int y_staccato_abajo;
@@ -176,6 +177,7 @@ public class Config {
 				x_puntillo = ancho_cabeza_nota + 10;
 				y_puntillo_arriba = mitad_cabeza_nota_vertical - 10;
 				y_puntillo_abajo = mitad_cabeza_nota_vertical + 10;
+				y_silencio_blanca = 5;
 				x_staccato = 15;
 				y_staccato_arriba = 20;
 				y_staccato_abajo = 8;
@@ -267,6 +269,7 @@ public class Config {
 				x_puntillo = ancho_cabeza_nota + 10;
 				y_puntillo_arriba = mitad_cabeza_nota_vertical - 10;
 				y_puntillo_abajo = mitad_cabeza_nota_vertical + 10;
+				y_silencio_blanca = 4;
 				x_staccato = 15;
 				y_staccato_arriba = 28;
 				y_staccato_abajo = 14;
@@ -591,6 +594,10 @@ public class Config {
 	
 	public int getYPuntilloAbajo() {
 		return y_puntillo_abajo;
+	}
+	
+	public int getYSilencioBlanca() {
+		return y_silencio_blanca;
 	}
 	
 	public int getXStaccato() {
