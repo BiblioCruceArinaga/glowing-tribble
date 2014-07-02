@@ -50,6 +50,8 @@ public class DrawingMethods {
 	private Bitmap blackheadlittle = null;
 	private Bitmap blackhead = null;
 	private Bitmap eighthrest = null;
+	private Bitmap fermata = null;
+	private Bitmap fermata_inverted = null;
 	private Bitmap flat = null;
 	private Bitmap forte = null;
 	private Bitmap head = null;
@@ -93,6 +95,8 @@ public class DrawingMethods {
 			blackheadlittle = BitmapFactory.decodeResource(resources, R.drawable.blackheadlittle);
 			blackhead = BitmapFactory.decodeResource(resources, R.drawable.blackhead);
 			eighthrest = BitmapFactory.decodeResource(resources, R.drawable.eighthrest);
+			fermata = BitmapFactory.decodeResource(resources, R.drawable.fermata);
+			fermata_inverted = BitmapFactory.decodeResource(resources, R.drawable.fermata_inverted);
 			flat = BitmapFactory.decodeResource(resources, R.drawable.flat);
 			forte = BitmapFactory.decodeResource(resources, R.drawable.forte);
 			head = BitmapFactory.decodeResource(resources, R.drawable.head);
@@ -2192,6 +2196,22 @@ public class DrawingMethods {
 				ordenDibujo.setImagen(marcato);
 				ordenDibujo.setX1(posicionX);
 				ordenDibujo.setY1(posicionY - config.getYAccentUp());
+				ordenesDibujo.add(ordenDibujo);
+				break;
+				
+			case 36:
+				ordenDibujo.setOrden(DrawOrder.DRAW_BITMAP);
+				ordenDibujo.setImagen(fermata);
+				ordenDibujo.setX1(posicionX - config.getXFermata());
+				ordenDibujo.setY1(posicionY - config.getYFermata());
+				ordenesDibujo.add(ordenDibujo);
+				break;
+				
+			case 37:
+				ordenDibujo.setOrden(DrawOrder.DRAW_BITMAP);
+				ordenDibujo.setImagen(fermata_inverted);
+				ordenDibujo.setX1(posicionX - config.getXFermata());
+				ordenDibujo.setY1(posicionY + config.getYFermata());
 				ordenesDibujo.add(ordenDibujo);
 				break;
 				

@@ -22,15 +22,15 @@
         android:gravity="center"
         android:textColor="#222"
         android:textSize="20sp"
-        android:text="5" />
+        android:text="10" />
     
     <SeekBar
         android:id="@+id/speedBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
-        android:progress="5"
-        android:max="10"
+        android:progress="10"
+        android:max="20"
         />
 
     <Button

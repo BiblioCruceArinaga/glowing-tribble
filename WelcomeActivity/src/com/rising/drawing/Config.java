@@ -70,6 +70,8 @@ public class Config {
 	private int x_fin_slash;
 	private int y_inicio_slash;
 	private int y_fin_slash;
+	private int x_fermata;
+	private int y_fermata;
 	private int y_ligaduras_expresion;
 	private int x_ligaduras_union;
 	private int y_ligaduras_union;
@@ -165,6 +167,8 @@ public class Config {
 				x_fin_slash = 5;
 				y_inicio_slash = 5;
 				y_fin_slash = 10;
+				x_fermata = 10;
+				y_fermata = 10;
 				y_ligaduras_expresion = 10;
 				x_ligaduras_union = 20;
 				y_ligaduras_union = 10;
@@ -235,7 +239,7 @@ public class Config {
 				tamano_letra_bpm = 50;
 				tamano_letra_numero_compas = 30;
 				tamano_letra_obra = 80;
-				tamano_letra_palm_mute = 30;
+				tamano_letra_palm_mute = 20;
 				tamano_letra_pulso = 50;
 				tamano_letra_tapping = 30;
 				tamano_letra_tresillo = 25;
@@ -257,6 +261,8 @@ public class Config {
 				x_fin_slash = 5;
 				y_inicio_slash = 10;
 				y_fin_slash = 20;
+				x_fermata = 15;
+				y_fermata = 50;
 				y_ligaduras_expresion = 50;
 				x_ligaduras_union = 20;
 				y_ligaduras_union = 24;
@@ -271,8 +277,8 @@ public class Config {
 				y_puntillo_abajo = mitad_cabeza_nota_vertical + 10;
 				y_silencio_blanca = 4;
 				x_staccato = 15;
-				y_staccato_arriba = 28;
-				y_staccato_abajo = 14;
+				y_staccato_arriba = 34;
+				y_staccato_abajo = 20;
 				y_tapping = 50;
 				x_tresillo = 18;
 				y_tresillo_arriba = 9;
@@ -546,6 +552,14 @@ public class Config {
 	
 	public int getYFinSlash() {
 		return y_fin_slash;
+	}
+	
+	public int getXFermata() {
+		return x_fermata;
+	}
+	
+	public int getYFermata() {
+		return y_fermata;
 	}
 	
 	public int getYLigadurasExpresion() {
