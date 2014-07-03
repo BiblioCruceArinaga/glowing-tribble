@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string name="appversion">0.3.1</string>
+	<string name="appversion">0.4.1</string>
 
     <!-- Pantalla Login -->
     <string name="app_name">Scores</string>
@@ -9,7 +9,7 @@
     <string name="login_f">Login with Facebook</string>
     <string name="olvida_pass">Forgot your password?</string>
     <string name="registro">Sign up</string>
-    <string name="registrate">If you\'re still not a user, Sign up now!</string>
+    <string name="registrate">If you\'re not still a user, Sign up now!</string>
     <string name="slogan">Scores of the future</string>
     <string name="facebook_app_id">1439111256308763</string>
     <string name="beta">Beta</string>
@@ -110,8 +110,8 @@ You can buy scores in our store.</string>
     <string name="setSpeed">Adjust speed</string>
     <string name="sensitivityText">
         Adjust the sensitivity of the microphone. \n
-	       \t\t -If the value is too low, you will have to play very loud so the application hear you  \n\n
-	       \t\t -If this value is too high, the background noise may interfere with the application and hinder you. \n\n
+	       \t\t -If the value is too low, you will have to play very loud so the application hear you  \n
+	       \t\t -If this value is too high, the background noise may interfere with the application and hinder you. \n
 	        Searching for an appropriate value that allows you to play comfortably.
     </string>
     <string name="sensitivityButton">Adjust</string>
@@ -531,6 +531,8 @@ You can buy scores in our store.</string>
 			Spanish.\n\n	    
     	</string>
 
+    <string name="cambiar_pass">Change password</string>	
+    	
     <string name="eliminar_cuenta">Delete account</string>
     	<string name="esta_seguro">
     	    Are you sure you want to delete your account? If you do it,

@@ -29,7 +29,7 @@ public class ScoresAdapter extends BaseAdapter {
 	String[] titulos;
 	String[] autores; 
 	MainScreenActivity MSA = new MainScreenActivity();
-	private String img_path = "/RisingScores/scores_images/";
+	private String img_path = "/.RisingScores/scores_images/";
 	// Declare Variables
     Context mContext;
     LayoutInflater inflater;
@@ -103,17 +103,36 @@ public class ScoresAdapter extends BaseAdapter {
         //holder.image.setImageBitmap(imagenFichero(scores_list.get(position).getImage()));
         //holder.image.setBackground(imagenFichero(scores_list.get(position).getImage()));
         holder.image.setBackgroundDrawable(imagenFichero(scores_list.get(position).getImage()));
-               
+                       
         return view;
     }
      
     public Drawable imagenFichero(String nombreImagen){
 	     	
 		File f = new File(Environment.getExternalStorageDirectory() + img_path + nombreImagen);
-						
+					
+		//Decode image size
+		BitmapFactory.Options o = new BitmapFactory.Options();
+		o.inJustDecodeBounds = true;
+		BitmapFactory.decodeFile(f.getAbsolutePath(),o);
+
+		//The new size we want to scale to
+		final int REQUIRED_WIDTH=120;
+		final int REQUIRED_HIGHT=500;
+		
+		//Find the correct scale value. It should be the power of 2.
+		int scale=1;
+		while(o.outWidth/scale/2>=REQUIRED_WIDTH && o.outHeight/scale/2>=REQUIRED_HIGHT)
+			scale*=2;
+
+		//Decode with inSampleSize
+		BitmapFactory.Options o2 = new BitmapFactory.Options();
+		o2.inSampleSize=scale;
+				 	
 		Bitmap myBitmap;
 		if(f.exists()){
-		    myBitmap = BitmapFactory.decodeFile(f.getAbsolutePath());
+		    //myBitmap = BitmapFactory.decodeFile(f.getAbsolutePath());
+		    myBitmap = BitmapFactory.decodeFile(f.getAbsolutePath(), o2);
 		}else{
 			myBitmap = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.cover); 
 		}

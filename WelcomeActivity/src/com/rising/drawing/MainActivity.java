@@ -3,6 +3,7 @@ package com.rising.drawing;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.pm.ActivityInfo;
 import android.graphics.Canvas;
 import android.graphics.Point;
 import android.os.Bundle;
@@ -19,6 +20,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout.LayoutParams;
 import android.widget.NumberPicker;
 import android.widget.NumberPicker.OnScrollListener;
 import android.widget.SeekBar;
@@ -52,9 +54,17 @@ public class MainActivity extends Activity{
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState){
-		super.onCreate(savedInstanceState);
-		//setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);	
+		super.onCreate(savedInstanceState);	
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);		
+		
+		Display display = getWindowManager().getDefaultDisplay();
+		Point size = new Point();
+		display.getSize(size);
+		int width = size.x;
+				
+		if(width<= 800){
+			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+		}		
 		
 		Bundle b = this.getIntent().getExtras();
 		score = b.getString("score");
@@ -72,7 +82,7 @@ public class MainActivity extends Activity{
 		DisplayMetrics dm = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(dm);
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-		s = new Screen(this, score, dm.widthPixels, dm.densityDpi);
+		s = new Screen(this, score, dm.widthPixels, dm.heightPixels ,dm.densityDpi);
 		if (s.isValidScreen()) {
 			myScreenThread = new ScreenThread(holder, s);
 			config = s.getConfig();
@@ -247,7 +257,8 @@ public class MainActivity extends Activity{
 			MicrophoneDialog = new Dialog(MainActivity.this, R.style.cust_dialog);	
 			MicrophoneDialog.setContentView(R.layout.microphone_sensitivity_dialog);
 			MicrophoneDialog.setTitle(R.string.setSensitivity);	
-			
+			MicrophoneDialog.getWindow().setLayout(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+						
 			final TextView texto = (TextView) MicrophoneDialog.findViewById(R.id.sensitivityValue);
 			final SeekBar seekBar = (SeekBar) MicrophoneDialog.findViewById(R.id.sensitivityBar);
 			

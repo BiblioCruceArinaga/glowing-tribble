@@ -9,6 +9,7 @@ import java.net.URL;
 
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
+import org.bouncycastle.util.encoders.Base64;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -105,9 +106,7 @@ public class DownloadScores extends AsyncTask<String, Integer, String>{
         PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
         PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, getClass().getName());
         wl.acquire();
-        
-        new DownloadScoresEncrypter(context, sUrl[2]).CreateAndInsert(sUrl[0]);
-        
+                
         try {
             InputStream input = null;
             OutputStream output = null;
@@ -128,11 +127,11 @@ public class DownloadScores extends AsyncTask<String, Integer, String>{
                 // this will be useful to display download percentage
                 // might be -1: server did not report the length
                 int fileLength = connection.getContentLength();
-
+                
                 // download the file
                 input = connection.getInputStream();
                 output = new FileOutputStream(Environment.getExternalStorageDirectory() + path + FileNameURL(url), true);
-                
+                                                
                 byte data[] = new byte[4096];
                 long total = 0;
                 int count;
@@ -150,9 +149,6 @@ public class DownloadScores extends AsyncTask<String, Integer, String>{
                     if (fileLength > 0) // only if total length is known
                         publishProgress((int) (total * 100 / fileLength));
                     
-                    //Aquí iría el método de introducción del código de seguridad. Habría que pasarle a ese método el Id de la 
-                    //partitura y el Token del usuario 
-                     
                     output.write(data, 0, count);
                 }
             } catch (Exception e) {
@@ -160,6 +156,9 @@ public class DownloadScores extends AsyncTask<String, Integer, String>{
             	Log.e("Error descargar partitura", e.getMessage());	
             } finally {
                 try {
+                	//Crea el fichero e incluye en él la linea de seguridad
+                    new DownloadScoresEncrypter(context, sUrl[2]).CreateAndInsert(output);
+                    Log.w("User_Token_Download", ""+sUrl[2]);
                     if (output != null)
                         output.close();
                     if (input != null)

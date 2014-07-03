@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-<string name="appversion">0.3.1</string>
+<string name="appversion">0.4.1</string>
     
     
     <!-- Pantalla Login -->
@@ -111,8 +111,8 @@
     	<string name="setSpeed">Ajustar velocidad</string>
     	<string name="sensitivityText">
 	        Ajusta la sensibilidad del micrófono. \n
-	        \t\t-Si este valor es demasiado bajo,tendrás que tocar muy fuerte para que la aplicación te oiga. \n\n
-	        \t\t-Si este valor es demasiado alto, el ruido ambiente podría interferir en la aplicación y estorbarte. \n\n
+	        \t\t-Si este valor es demasiado bajo,tendrás que tocar muy fuerte para que la aplicación te oiga. \n
+	        \t\t-Si este valor es demasiado alto, el ruido ambiente podría interferir en la aplicación y estorbarte. \n
 	        Busca un valor apropiado que te permita tocar de manera cómoda.
 	    </string>
 	    <string name="sensitivityButton">Ajustar</string>
@@ -146,7 +146,7 @@
     	<string name="mis_datos_clave_erronea">Contraseña incorrecta</string>
     	<string name="mis_datos_saldo">Saldo:</string>
     	<string name="try_change_pass">Intentando cambiar tu contraseña. Por favor, espera&#8230;</string>
-    
+        	
     <string name="feedback">Feedback</string>
     	<string name="feedback_envianos">
     		Envíanos aquellos errores que hayas encontrado o sugerencias que tengas
@@ -570,6 +570,8 @@
 			el documento original, en este caso escrito en español.\n\n
     	</string>
 
+    <string name="cambiar_pass">Cambiar contraseña</string>	
+        	
     <string name="eliminar_cuenta">Eliminar cuenta</string>
     	<string name="esta_seguro">
     	    ¿Estás seguro de que deseas eliminar tu cuenta? Si lo haces, 

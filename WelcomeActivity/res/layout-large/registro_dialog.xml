@@ -11,7 +11,10 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
         android:layout_marginBottom="15dp"
-        android:textSize="24sp"
+        android:textSize="20sp"
+        android:textColorHint="#DDD"
+        android:textColor="#DDD"
+        android:textColorHighlight="#DDD"
         android:hint="@string/nombre_registro" >
         <requestFocus />
     </EditText>
@@ -22,8 +25,11 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
         android:layout_marginBottom="15dp"
-        android:textSize="24sp"
+        android:textSize="20sp"
         android:inputType="textEmailAddress"
+        android:textColorHint="#DDD"
+        android:textColor="#DDD"
+        android:textColorHighlight="#DDD"
         android:hint="@string/mail_registro" >
     
 	</EditText>
@@ -34,8 +40,11 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
         android:layout_marginBottom="15dp"
-        android:textSize="24sp"
+        android:textSize="20sp"
         android:inputType="textPassword"
+        android:textColorHint="#DDD"
+        android:textColor="#DDD"
+        android:textColorHighlight="#DDD"
         android:hint="@string/pass_registro" >
         
     </EditText>
@@ -46,8 +55,11 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
         android:layout_marginBottom="30dp"
-        android:textSize="24sp"
+        android:textSize="20sp"
         android:inputType="textPassword"
+        android:textColorHint="#DDD"
+        android:textColor="#DDD"
+        android:textColorHighlight="#DDD"
         android:hint="@string/confipass_registro" >
 
     </EditText>
@@ -61,10 +73,10 @@
             android:id="@+id/b_cancel_reg"
             style="?android:attr/buttonBarButtonStyle"
             android:layout_width="0dp"
-            android:layout_height="70dp"
+            android:layout_height="50dp"
             android:textColor="#EEE"
             android:background="@drawable/stores_buttons"
-            android:textSize="30sp"
+            android:textSize="25sp"
             android:layout_weight="1"
             android:text="@string/cancel" />
         
@@ -72,10 +84,10 @@
             android:id="@+id/b_confirm_reg"
             style="?android:attr/buttonBarButtonStyle"
             android:layout_width="0dp"
-            android:layout_height="70dp"
+            android:layout_height="50dp"
             android:textColor="#EEE"
             android:background="@drawable/stores_buttons"
-            android:textSize="30sp"
+            android:textSize="25sp"
             android:layout_weight="1"
             android:text="@string/confirm_registro" />
 

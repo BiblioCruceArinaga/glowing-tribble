@@ -1,5 +1,6 @@
 package com.rising.drawing;
 
+
 public class Config {
 	
 	private boolean supported = true;
@@ -58,6 +59,7 @@ public class Config {
 	private int tamano_letra_words;
 	private int unidad_desplazamiento;
 	private int width;
+	private int height;
 	
 	private int y_accent_up;
 	private int x_accidental;
@@ -93,7 +95,7 @@ public class Config {
 	private int y_tresillo_arriba;
 	private int y_tresillo_abajo;
 	
-	public Config(int densityDPI, int width) {
+	public Config(int densityDPI, int width, int height) {
 		
 		switch (densityDPI) {
 			case 120:
@@ -152,7 +154,7 @@ public class Config {
 				tamano_letra_tresillo = 5;
 				tamano_letra_words = 30;
 				unidad_desplazamiento = 30;
-				this.width = width;
+				this.width = width;				
 				
 				y_accent_up = 30;
 				x_accidental = 10;
@@ -195,95 +197,193 @@ public class Config {
 				break;
 				
 			case 320:
-				alto_dialog_bpm = 850;
-				altura_arco_ligaduras_expresion = 30;
-				altura_arco_ligaduras_union = 50;
-				ancho_beams = 8;
-				ancho_beams_nota_gracia = 4;
-				ancho_cabeza_nota = 26;
-				ancho_cabeza_nota_gracia = 15;
-				ancho_claves = 88;
-				ancho_dialog_bpm = 600;
-				ancho_hooks = 16;
-				ancho_tempo = 65;
-				change_account_horizontal = 2;
-				change_account_vertical = 4;
-				desplazamiento_extra_nota_gracia = 40;
-				distancia_corchetes = 15;
-				distancia_entre_beams = 12;
-				distancia_entre_beams_notas_gracia = 6;
-				distancia_lineas_pentagrama = 19;
-				distancia_lineas_pentagrama_mitad = 9;
-				distancia_pentagramas = 240;
-				largo_imagen_corchete = 25;
-				largo_imagen_corchete_gracia = 5;
-				longitud_plica = 60;
-				longitud_plica_nota_gracia = 30;
-				margen_ancho_cabeza_nota = 5;
-				margen_autor = 180;
-				margen_barlines = 10;
-				margen_derecho_compases = 70;
-				margen_inferior_autor = 320;
-				margen_izquierdo_compases = 50;
-				margen_nota_gracia = 4;
-				margen_obra = 90;
-				margen_superior = 80;
-				mitad_cabeza_nota_vertical = 10;
-				mitad_cabeza_nota_gracia_vertical = 4;
-				offset_ultima_nota_gracia = 24;
-				radio_octavarium = 3;
-				radio_puntillos = 4;
-				radio_staccatos = 4;
-				tamano_letra_autor = 50;
-				tamano_letra_bip_preparacion = 300;
-				tamano_letra_bpm = 50;
-				tamano_letra_numero_compas = 30;
-				tamano_letra_obra = 80;
-				tamano_letra_palm_mute = 20;
-				tamano_letra_pulso = 50;
-				tamano_letra_tapping = 30;
-				tamano_letra_tresillo = 25;
-				tamano_letra_tempo = 45;
-				tamano_letra_words = 30;
-				unidad_desplazamiento = 50;
-				this.width = width;
 				
-				y_accent_up = 30;
-				x_accidental = 20;
-				y_accidental = 10;
-				y_accidental_flat = 17;
-				y_bend = 40;
-				y_bpm = 30;
-				y_clave_sol_segunda = 63;
-				x_inicial_pentagramas = 80;
-				x_final_pentagramas = width - x_inicial_pentagramas;
-				x_inicio_slash = 15;
-				x_fin_slash = 5;
-				y_inicio_slash = 10;
-				y_fin_slash = 20;
-				x_fermata = 15;
-				y_fermata = 50;
-				y_ligaduras_expresion = 50;
-				x_ligaduras_union = 20;
-				y_ligaduras_union = 24;
-				x_numero_compas = 50;
-				y_numero_compas = 15;
-				x_octavarium = 15;
-				y_octavarium = 8;
-				y_octavarium_2 = 30;
-				y_palm_mute = 50;
-				x_puntillo = ancho_cabeza_nota + 10;
-				y_puntillo_arriba = mitad_cabeza_nota_vertical - 10;
-				y_puntillo_abajo = mitad_cabeza_nota_vertical + 10;
-				y_silencio_blanca = 4;
-				x_staccato = 15;
-				y_staccato_arriba = 34;
-				y_staccato_abajo = 20;
-				y_tapping = 50;
-				x_tresillo = 18;
-				y_tresillo_arriba = 9;
-				y_tresillo_abajo = 26;
-				break;
+				switch(height){
+					case 720:
+						alto_dialog_bpm = 850;
+						altura_arco_ligaduras_expresion = 30;
+						altura_arco_ligaduras_union = 50;
+						ancho_beams = 8;
+						ancho_beams_nota_gracia = 4;
+						ancho_cabeza_nota = 25;
+						ancho_cabeza_nota_gracia = 15;
+						ancho_claves = 88; 
+						ancho_dialog_bpm = 600;
+						ancho_hooks = 16;
+						ancho_tempo = 65;
+						change_account_horizontal = 2;
+						change_account_vertical = 4;
+						desplazamiento_extra_nota_gracia = 40;
+						distancia_corchetes = 15;
+						distancia_entre_beams = 12;
+						distancia_entre_beams_notas_gracia = 6;
+						distancia_lineas_pentagrama = 18; 
+						distancia_lineas_pentagrama_mitad = 9; 
+						distancia_pentagramas = 220; // 220
+						largo_imagen_corchete = 25;
+						largo_imagen_corchete_gracia = 5;
+						longitud_plica = 60; 
+						longitud_plica_nota_gracia = 30; 
+						margen_ancho_cabeza_nota = 5;
+						margen_autor = 60; 
+						margen_barlines = 10;
+						margen_derecho_compases = 70;
+						margen_inferior_autor = 120; 
+						margen_izquierdo_compases = 50;
+						margen_nota_gracia = 4;
+						margen_obra = 20; 
+						margen_superior = 35;
+						mitad_cabeza_nota_vertical = 10;
+						mitad_cabeza_nota_gracia_vertical = 4;
+						offset_ultima_nota_gracia = 24;
+						radio_octavarium = 3;
+						radio_puntillos = 4;
+						radio_staccatos = 4;
+						tamano_letra_autor = 25;
+						tamano_letra_bip_preparacion = 300;
+						tamano_letra_bpm = 50;
+						tamano_letra_numero_compas = 30; 
+						tamano_letra_obra = 40; 
+						tamano_letra_palm_mute = 30;
+						tamano_letra_pulso = 50;
+						tamano_letra_tapping = 30;
+						tamano_letra_tresillo = 25;
+						tamano_letra_tempo = 45;
+						tamano_letra_words = 30;
+						unidad_desplazamiento = 50;
+						this.width = width;
+										
+						y_accent_up = 30;
+						x_accidental = 20;
+						y_accidental = 10;
+						y_accidental_flat = 17;
+						y_bend = 40;
+						y_bpm = 30;
+						y_clave_sol_segunda = 63;
+						x_inicial_pentagramas = 80;
+						x_final_pentagramas = width - x_inicial_pentagramas;
+						x_inicio_slash = 15;
+						x_fin_slash = 5;
+						y_inicio_slash = 10;
+						y_fin_slash = 20;
+						x_fermata = 15;
+						y_fermata = 50;
+						y_ligaduras_expresion = 50;
+						x_ligaduras_union = 20;
+						y_ligaduras_union = 24;
+						x_numero_compas = 50;
+						y_numero_compas = 15;
+						x_octavarium = 15;
+						y_octavarium = 8;
+						y_octavarium_2 = 30;
+						y_palm_mute = 50;
+						x_puntillo = ancho_cabeza_nota + 10;
+						y_puntillo_arriba = mitad_cabeza_nota_vertical - 10;
+						y_puntillo_abajo = mitad_cabeza_nota_vertical + 10;
+						x_staccato = 15;
+						y_staccato_arriba = 28;
+						y_staccato_abajo = 14;
+						y_tapping = 50;
+						x_tresillo = 18;
+						y_tresillo_arriba = 9;
+						y_tresillo_abajo = 26;
+						break;
+					case 800:
+						
+					case 960:
+						break;
+					case 1080:
+						break;
+					default:
+						alto_dialog_bpm = 850;
+						altura_arco_ligaduras_expresion = 30;
+						altura_arco_ligaduras_union = 50;
+						ancho_beams = 8;
+						ancho_beams_nota_gracia = 4;
+						ancho_cabeza_nota = 26;
+						ancho_cabeza_nota_gracia = 15;
+						ancho_claves = 88;
+						ancho_dialog_bpm = 600;
+						ancho_hooks = 16;
+						ancho_tempo = 65;
+						change_account_horizontal = 2;
+						change_account_vertical = 4;
+						desplazamiento_extra_nota_gracia = 40;
+						distancia_corchetes = 15;
+						distancia_entre_beams = 12;
+						distancia_entre_beams_notas_gracia = 6;
+						distancia_lineas_pentagrama = 19;
+						distancia_lineas_pentagrama_mitad = 9;
+						distancia_pentagramas = 240;
+						largo_imagen_corchete = 25;
+						largo_imagen_corchete_gracia = 5;
+						longitud_plica = 60;
+						longitud_plica_nota_gracia = 30;
+						margen_ancho_cabeza_nota = 5;
+						margen_autor = 180;
+						margen_barlines = 10;
+						margen_derecho_compases = 70;
+						margen_inferior_autor = 320;
+						margen_izquierdo_compases = 50;
+						margen_nota_gracia = 4;
+						margen_obra = 90;
+						margen_superior = 80;
+						mitad_cabeza_nota_vertical = 10;
+						mitad_cabeza_nota_gracia_vertical = 4;
+						offset_ultima_nota_gracia = 24;
+						radio_octavarium = 3;
+						radio_puntillos = 4;
+						radio_staccatos = 4;
+						tamano_letra_autor = 50;
+						tamano_letra_bip_preparacion = 300;
+						tamano_letra_bpm = 50;
+						tamano_letra_numero_compas = 30;
+						tamano_letra_obra = 80;
+						tamano_letra_palm_mute = 30;
+						tamano_letra_pulso = 50;
+						tamano_letra_tapping = 30;
+						tamano_letra_tresillo = 25;
+						tamano_letra_tempo = 45;
+						tamano_letra_words = 30;
+						unidad_desplazamiento = 50;
+						this.width = width;
+										
+						y_accent_up = 30;
+						x_accidental = 20;
+						y_accidental = 10;
+						y_accidental_flat = 17;
+						y_bend = 40;
+						y_bpm = 30;
+						y_clave_sol_segunda = 63;
+						x_inicial_pentagramas = 80;
+						x_final_pentagramas = width - x_inicial_pentagramas;
+						x_inicio_slash = 15;
+						x_fin_slash = 5;
+						y_inicio_slash = 10;
+						y_fin_slash = 20;
+						y_ligaduras_expresion = 50;
+						x_ligaduras_union = 20;
+						y_ligaduras_union = 24;
+						x_numero_compas = 50;
+						y_numero_compas = 15;
+						x_octavarium = 15;
+						y_octavarium = 8;
+						y_octavarium_2 = 30;
+						y_palm_mute = 50;
+						x_puntillo = ancho_cabeza_nota + 10;
+						y_puntillo_arriba = mitad_cabeza_nota_vertical - 10;
+						y_puntillo_abajo = mitad_cabeza_nota_vertical + 10;
+						x_staccato = 15;
+						y_staccato_arriba = 28;
+						y_staccato_abajo = 14;
+						y_tapping = 50;
+						x_tresillo = 18;
+						y_tresillo_arriba = 9;
+						y_tresillo_abajo = 26;
+						break;
+				
+				}
+
 			case 400:
 				break;
 			case 480:
@@ -501,6 +601,9 @@ public class Config {
 		return width;
 	}
 	
+	public int getHeight() {
+		return height;
+	}
 	
 	public int getYAccentUp() {
 		return y_accent_up;

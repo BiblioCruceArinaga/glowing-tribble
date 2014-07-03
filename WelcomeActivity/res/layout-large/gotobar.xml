@@ -10,6 +10,11 @@
         android:id="@+id/textViewNumberOfBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:textSize="20sp"
+        android:textColor="#222"
+        android:layout_marginTop="10dp"
         android:text="@string/number_of_bar"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -17,6 +22,8 @@
         android:id="@+id/editTextNumberOfBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="10dp"
         android:inputType="number"
         android:ems="10" >
 
@@ -25,8 +32,16 @@
 
     <Button
         android:id="@+id/buttonNumberOfBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+		android:layout_width="140dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        style="?android:attr/buttonBarButtonStyle"
+        android:textColor="#EEE"
+        android:background="@drawable/stores_buttons"
+        android:textSize="20sp"
         android:text="@string/go_to_bar" />
         
 </LinearLayout>

@@ -26,7 +26,7 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 	private ScreenThread thread;
 	private Context context = null;
 	private Config config = null;
-	private String path_folder = "/RisingScores/scores/";
+	private String path_folder = "/.RisingScores/scores/";
 
 	private Partitura partituraHorizontal = new Partitura();
 	private Partitura partituraVertical = new Partitura();
@@ -56,7 +56,7 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 	//  ========================================
 	//  Constructor y métodos heredados
 	//  ========================================
-	public Screen(Context context, String path, int width, int densityDPI){
+	public Screen(Context context, String path, int width, int height, int densityDPI){
 		super(context);
 		getHolder().addCallback(this);
 		
@@ -66,21 +66,22 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 			FileMethods fileMethods = new FileMethods(path_folder, path);
 			fileMethods.cargarDatosDeFichero(partituraHorizontal, partituraVertical);
 
-			config = new Config(densityDPI, width);
-			scroll = new Scroll(config);
-
+			config = new Config(densityDPI, width, height);
+			scroll = new Scroll(config);			
+			
 			crearVistasDePartitura();
-
+			
 			horizontalThread.join();
 			verticalThread.join();
 
 			cambiarVista(Vista.VERTICAL);
+									
 			isValidScreen = true;
-			
+						
 		} catch (FileNotFoundException e) {
-			Log.i("FileNotFoundException: ", e.getMessage() + "\n");
+			Log.e("FileNotFoundException: ", e.getMessage() + "\n");
 		} catch (StreamCorruptedException e) {
-			Log.i("StreamCorruptedException: ", e.getMessage() + "\n");
+			Log.e("StreamCorruptedException: ", e.getMessage() + "\n");
 		} catch (IOException e) {
 			Log.i("IOException: ", e.getMessage() + "\n");
 		} catch (InterruptedException e) {
@@ -251,6 +252,7 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 	}
 	
 	private void crearVistasDePartitura() {
+			
 		verticalThread = new Thread(new Runnable(){
     		public void run() {
     			DrawingMethods metodosDibujo = 
@@ -273,6 +275,21 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 		
 		horizontalThread.start();
 		verticalThread.start();
+	}
+	
+	private void crearVistasDePartituraMovil(){
+		
+		horizontalThread = new Thread(new Runnable(){
+    		public void run() {
+    			DrawingMethods metodosDibujo = 
+    					new DrawingMethods(partituraHorizontal, config, getResources(), Vista.HORIZONTAL);
+				if (metodosDibujo.isValid()) {
+					horizontalDrawing = metodosDibujo.crearOrdenesDeDibujo();
+				}
+    		}
+		});
+		
+		horizontalThread.start();
 	}
 
 	public void cambiarVista(Vista vista) {

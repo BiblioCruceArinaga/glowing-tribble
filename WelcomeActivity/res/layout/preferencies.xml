@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background_scoresapp"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/name_preferencies"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:textColor="#222"
+        android:textSize="20sp"
+        android:text="@string/mis_datos_nombre" />
+    
+    <TextView
+        android:id="@+id/mail_preferencies"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:textColor="#222"
+        android:textSize="20sp"
+        android:text="@string/mis_datos_email" />
+    
+    <TextView
+        android:id="@+id/credit_preferencies"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:textColor="#222"
+        android:textSize="20sp"
+        android:layout_marginBottom="20dp"
+        android:text="@string/mis_datos_saldo" />
+    
+    
+    <Button
+        android:id="@+id/logout_button_preferencies"
+        android:layout_width="match_parent"
+        android:layout_height="75dp"
+        android:gravity="center_vertical|left"
+        android:paddingLeft="20dp"
+        android:textColor="#222"
+        android:textSize="17sp"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="2dp"
+        android:background="#40DDDDDD"
+        android:text="@string/cerrar_sesion" />
+    
+    <Button
+        android:id="@+id/changepass_preferencies"
+        android:layout_width="match_parent"
+        android:layout_height="75dp"
+        android:gravity="center_vertical|left"
+        android:paddingLeft="20dp"
+        android:textColor="#222"
+        android:textSize="17sp"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="2dp"
+        android:background="#40DDDDDD"
+        android:text="@string/cambiar_pass" />
+
+    <Button
+        android:id="@+id/term_conditions_preferencies"
+        android:layout_width="match_parent"
+        android:layout_height="75dp"
+        android:gravity="center_vertical|left"
+        android:paddingLeft="20dp"
+        android:textColor="#222"
+        android:textSize="17sp"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="2dp"
+        android:background="#40DDDDDD"
+        android:text="@string/terminos_condiciones" />
+
+    <Button
+        android:id="@+id/term_purchase_preferencies"
+        android:layout_width="match_parent"
+        android:layout_height="75dp"
+        android:gravity="center_vertical|left"
+        android:paddingLeft="20dp"
+        android:textColor="#222"
+        android:textSize="17sp"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="2dp"
+        android:background="#40DDDDDD"
+        android:text="@string/condiciones_compra" />
+
+    <Button
+        android:id="@+id/delete_account_preferencies"
+        android:layout_width="match_parent"
+        android:layout_height="75dp"
+        android:gravity="center_vertical|left"
+        android:paddingLeft="20dp"
+        android:textColor="#C22"
+        android:textStyle="bold"
+        android:textSize="17sp"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="2dp"
+        android:background="#40DDDDDD"
+        android:text="@string/eliminar_cuenta" />
+<!-- 
+100% — FF
+95% — F2
+90% — E6
+85% — D9
+80% — CC
+75% — BF
+70% — B3
+65% — A6
+60% — 99
+55% — 8C
+50% — 80
+45% — 73
+40% — 66
+35% — 59
+30% — 4D
+25% — 40
+20% — 33
+15% — 26
+10% — 1A
+5% — 0D
+0% — 00 -->
+</LinearLayout>
