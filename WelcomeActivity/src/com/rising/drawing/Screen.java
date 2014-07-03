@@ -123,6 +123,9 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 		horizontalDrawing.clear();
 		horizontalDrawing = null;
 		
+		scroll = null;
+		config = null;
+		
 		stopMicrophone();
 	}
 

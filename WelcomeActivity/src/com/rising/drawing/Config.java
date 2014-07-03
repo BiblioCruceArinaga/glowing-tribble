@@ -15,6 +15,7 @@ public class Config {
 	private int ancho_claves;
 	private int ancho_dialog_bpm;
 	private int ancho_hooks;
+	private int ancho_ligadura_union_max;
 	private int ancho_tempo;
 	private int change_account_horizontal;
 	private int change_account_vertical;
@@ -43,6 +44,8 @@ public class Config {
 	private int mitad_cabeza_nota_vertical;
 	private int mitad_cabeza_nota_gracia_vertical;
 	private int offset_ultima_nota_gracia;
+	private int offset_ligadura_expresion;
+	private int offset_ligadura_union;
 	private int radio_octavarium;
 	private int radio_puntillos;
 	private int radio_staccatos;
@@ -72,6 +75,7 @@ public class Config {
 	private int x_fin_slash;
 	private int y_inicio_slash;
 	private int y_fin_slash;
+	private int y_intensidad_middle;
 	private int x_fermata;
 	private int y_fermata;
 	private int y_ligaduras_expresion;
@@ -103,94 +107,6 @@ public class Config {
 			case 160:
 				break;
 			case 213:
-				alto_dialog_bpm = 770;
-				altura_arco_ligaduras_expresion = 30;
-				altura_arco_ligaduras_union = 20;
-				ancho_beams = 5;
-				ancho_beams_nota_gracia = 2;
-				ancho_cabeza_nota = 10;
-				ancho_cabeza_nota_gracia = 5;
-				ancho_claves = 30;
-				ancho_dialog_bpm = 600;
-				ancho_hooks = 16;
-				ancho_tempo = 20;
-				change_account_horizontal = 2;
-				change_account_vertical = 4;
-				desplazamiento_extra_nota_gracia = 30;
-				distancia_corchetes = 15;
-				distancia_entre_beams = 5;
-				distancia_entre_beams_notas_gracia = 2;
-				distancia_lineas_pentagrama = 12;
-				distancia_lineas_pentagrama_mitad = 6;
-				distancia_pentagramas = 150;
-				largo_imagen_corchete = 10;
-				largo_imagen_corchete_gracia = 5;
-				longitud_plica = 40;
-				longitud_plica_nota_gracia = 20;
-				margen_ancho_cabeza_nota = 5;
-				margen_autor = 120;
-				margen_barlines = 10;
-				margen_derecho_compases = 30;
-				margen_inferior_autor = 230;
-				margen_izquierdo_compases = 30;
-				margen_nota_gracia = 6;
-				margen_obra = 60;
-				margen_superior = 50;
-				mitad_cabeza_nota_vertical = 6;
-				mitad_cabeza_nota_gracia_vertical = 3;
-				offset_ultima_nota_gracia = 15;
-				radio_octavarium = 3;
-				radio_puntillos = 4;
-				radio_staccatos = 4;
-				tamano_letra_autor = 30;
-				tamano_letra_bip_preparacion = 150;
-				tamano_letra_bpm = 30;
-				tamano_letra_numero_compas = 30;
-				tamano_letra_obra = 50;
-				tamano_letra_palm_mute = 30;
-				tamano_letra_pulso = 50;
-				tamano_letra_tapping = 30;
-				tamano_letra_tempo = 10;
-				tamano_letra_tresillo = 5;
-				tamano_letra_words = 30;
-				unidad_desplazamiento = 30;
-				this.width = width;				
-				
-				y_accent_up = 30;
-				x_accidental = 10;
-				y_accidental = 10;
-				y_accidental_flat = 15;
-				y_bend = 40;
-				y_bpm = 20;
-				y_clave_sol_segunda = 15;
-				x_inicial_pentagramas = 50;
-				x_final_pentagramas = width - x_inicial_pentagramas;
-				x_inicio_slash = 5;
-				x_fin_slash = 5;
-				y_inicio_slash = 5;
-				y_fin_slash = 10;
-				x_fermata = 10;
-				y_fermata = 10;
-				y_ligaduras_expresion = 10;
-				x_ligaduras_union = 20;
-				y_ligaduras_union = 10;
-				x_numero_compas = 50;
-				y_numero_compas = 15;
-				x_octavarium = 15;
-				y_octavarium = 8;
-				y_octavarium_2 = 16;
-				y_palm_mute = 15;
-				x_puntillo = ancho_cabeza_nota + 10;
-				y_puntillo_arriba = mitad_cabeza_nota_vertical - 10;
-				y_puntillo_abajo = mitad_cabeza_nota_vertical + 10;
-				y_silencio_blanca = 5;
-				x_staccato = 15;
-				y_staccato_arriba = 20;
-				y_staccato_abajo = 8;
-				y_tapping = 15;
-				x_tresillo = 6;
-				y_tresillo_arriba = 7;
-				y_tresillo_abajo = 7;
 				break;
 				
 			case 240:
@@ -210,6 +126,7 @@ public class Config {
 						ancho_claves = 88; 
 						ancho_dialog_bpm = 600;
 						ancho_hooks = 16;
+						ancho_ligadura_union_max = 250;
 						ancho_tempo = 65;
 						change_account_horizontal = 2;
 						change_account_vertical = 4;
@@ -235,6 +152,8 @@ public class Config {
 						margen_superior = 35;
 						mitad_cabeza_nota_vertical = 10;
 						mitad_cabeza_nota_gracia_vertical = 4;
+						offset_ligadura_expresion = 40;
+						offset_ligadura_union = 50;
 						offset_ultima_nota_gracia = 24;
 						radio_octavarium = 3;
 						radio_puntillos = 4;
@@ -266,8 +185,6 @@ public class Config {
 						x_fin_slash = 5;
 						y_inicio_slash = 10;
 						y_fin_slash = 20;
-						x_fermata = 15;
-						y_fermata = 50;
 						y_ligaduras_expresion = 50;
 						x_ligaduras_union = 20;
 						y_ligaduras_union = 24;
@@ -305,6 +222,7 @@ public class Config {
 						ancho_claves = 88;
 						ancho_dialog_bpm = 600;
 						ancho_hooks = 16;
+						ancho_ligadura_union_max = 150;
 						ancho_tempo = 65;
 						change_account_horizontal = 2;
 						change_account_vertical = 4;
@@ -330,6 +248,8 @@ public class Config {
 						margen_superior = 80;
 						mitad_cabeza_nota_vertical = 10;
 						mitad_cabeza_nota_gracia_vertical = 4;
+						offset_ligadura_expresion = 40;
+						offset_ligadura_union = 50;
 						offset_ultima_nota_gracia = 24;
 						radio_octavarium = 3;
 						radio_puntillos = 4;
@@ -361,6 +281,9 @@ public class Config {
 						x_fin_slash = 5;
 						y_inicio_slash = 10;
 						y_fin_slash = 20;
+						y_intensidad_middle = 20;
+						x_fermata = 15;
+						y_fermata = 50;
 						y_ligaduras_expresion = 50;
 						x_ligaduras_union = 20;
 						y_ligaduras_union = 24;
@@ -431,6 +354,10 @@ public class Config {
 	
 	public int getAnchoHooks() {
 		return ancho_hooks;
+	}
+	
+	public int getAnchoLigaduraUnionMax() {
+		return ancho_ligadura_union_max;
 	}
 	
 	public int getAnchoTempo() {
@@ -531,6 +458,14 @@ public class Config {
 	
 	public int getMitadCabezaNotaGraciaVertical() {
 		return mitad_cabeza_nota_gracia_vertical;
+	}
+	
+	public int getOffsetLigaduraExpresion() {
+		return offset_ligadura_expresion;
+	}
+	
+	public int getOffsetLigaduraUnion() {
+		return offset_ligadura_union;
 	}
 	
 	public int getOffsetUltimaNotaGracia() {
@@ -655,6 +590,10 @@ public class Config {
 	
 	public int getYFinSlash() {
 		return y_fin_slash;
+	}
+	
+	public int getYIntensidadMiddle() {
+		return y_intensidad_middle;
 	}
 	
 	public int getXFermata() {

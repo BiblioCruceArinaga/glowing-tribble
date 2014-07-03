@@ -117,6 +117,19 @@ public class OrdenDibujo {
 		this.rectf = rectf;
 	}
 	
+	public void setRectF(RectF rectf, int anchoLigaduraUnionMax, int offset) {
+		float distanciaX = rectf.right - rectf.left;
+		
+		if (distanciaX < anchoLigaduraUnionMax) {
+			rectf.top = rectf.top + offset;
+			
+			rectf.top = rectf.top - offset / 2;
+			rectf.bottom = rectf.bottom - offset / 2;
+		}
+		
+		this.rectf = rectf;
+	}
+	
 	public void setTexto(String texto) {
 		this.texto = texto;
 	}

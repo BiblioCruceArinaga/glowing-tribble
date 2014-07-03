@@ -43,8 +43,6 @@ public class DrawingMethods {
 
 	//  Bitmaps
 	private Bitmap accent = null;
-	private Bitmap arc = null;
-	private Bitmap arc2 = null;
 	private Bitmap bassclef = null;
 	private Bitmap bendrelease = null;
 	private Bitmap blackheadlittle = null;
@@ -88,8 +86,6 @@ public class DrawingMethods {
 			compas_margin_y = config.getMargenSuperior();
 
 			accent = BitmapFactory.decodeResource(resources, R.drawable.accent);
-			arc = BitmapFactory.decodeResource(resources, R.drawable.arco);
-			arc2 = BitmapFactory.decodeResource(resources, R.drawable.arco2);
 			bassclef = BitmapFactory.decodeResource(resources, R.drawable.bassclef);
 			bendrelease = BitmapFactory.decodeResource(resources, R.drawable.bendrelease);
 			blackheadlittle = BitmapFactory.decodeResource(resources, R.drawable.blackheadlittle);
@@ -638,6 +634,9 @@ public class DrawingMethods {
 					case 3:
 						return compas_margin_y + config.getDistanciaLineasPentagrama() * 4 + 
 								config.getDistanciaPentagramas() - config.getDistanciaLineasPentagrama() * 4;
+					case 5:
+						return compas_margin_y + config.getDistanciaLineasPentagrama() * 4 +
+								config.getDistanciaPentagramas() / 2 - config.getYIntensidadMiddle();
 					default:
 						return compas_margin_y - config.getDistanciaLineasPentagrama() * 6;
 				}
@@ -648,6 +647,9 @@ public class DrawingMethods {
 					case 4:
 						return compas_margin_y + config.getDistanciaLineasPentagrama() * 4 + 
 							config.getDistanciaPentagramas() + config.getDistanciaLineasPentagrama() * 8;
+					case 5:
+						return compas_margin_y + config.getDistanciaLineasPentagrama() * 4 +
+								config.getDistanciaPentagramas() / 2;
 					default:
 						return compas_margin_y + config.getDistanciaLineasPentagrama() * 4 + 
 							config.getDistanciaPentagramas() + config.getDistanciaLineasPentagrama() * 8;
@@ -663,6 +665,9 @@ public class DrawingMethods {
 					case 4:
 						return compas_margin_y + config.getDistanciaLineasPentagrama() * 4 + 
 								config.getDistanciaPentagramas() + config.getDistanciaLineasPentagrama() * 6;
+					case 5:
+						return compas_margin_y + config.getDistanciaLineasPentagrama() * 4 +
+								config.getDistanciaPentagramas() / 2;
 					default:
 						return compas_margin_y - config.getDistanciaLineasPentagrama();
 				}
@@ -2275,7 +2280,7 @@ public class DrawingMethods {
 					xFinal + config.getAnchoCabezaNota(), 
 					y + config.getAlturaArcoLigadurasExpresion());
 			}
-			ordenDibujo.setRectF(rectf);
+			ordenDibujo.setRectF(rectf, config.getAnchoLigaduraUnionMax(), config.getOffsetLigaduraExpresion());
 			
 			ordenesDibujo.add(ordenDibujo);
 		}
@@ -2305,7 +2310,7 @@ public class DrawingMethods {
 			RectF rectf = new RectF(xInicio + config.getAnchoCabezaNota() +
 					config.getXLigadurasUnion(), y - config.getYLigadurasUnion(), 
 					xFinal - config.getXLigadurasUnion(), y + config.getAlturaArcoLigadurasUnion());
-			ordenDibujo.setRectF(rectf);
+			ordenDibujo.setRectF(rectf, config.getAnchoLigaduraUnionMax(), config.getOffsetLigaduraUnion());
 			
 			ordenesDibujo.add(ordenDibujo);
 		}
@@ -2323,21 +2328,29 @@ public class DrawingMethods {
 	
 	private void dibujarLigaduraDeNotasEnDiferentesRenglones(int xInicio, int yInicio, int xFinal) {
 		OrdenDibujo ordenDibujo = new OrdenDibujo();
-		ordenDibujo.setOrden(DrawOrder.DRAW_BITMAP);
-		ordenDibujo.setImagen(arc);
-		ordenDibujo.setX1(xInicio + config.getAnchoCabezaNota() + config.getXLigadurasUnion());
-		ordenDibujo.setY1(yInicio - config.getYLigadurasUnion());
+		ordenDibujo.setOrden(DrawOrder.DRAW_ARC);
+		ordenDibujo.setPaint(PaintOptions.SET_STYLE_STROKE, 0);
+		ordenDibujo.setPaint(PaintOptions.SET_STROKE_WIDTH, 2);
+		
+		RectF rectf = new RectF(xInicio + config.getAnchoCabezaNota() +
+				config.getXLigadurasUnion(), yInicio - config.getYLigadurasUnion(), 
+				config.getXFinalPentagramas(), yInicio + config.getAlturaArcoLigadurasUnion());
+		ordenDibujo.setRectF(rectf, config.getAnchoLigaduraUnionMax(), config.getOffsetLigaduraUnion());
+		
 		ordenesDibujo.add(ordenDibujo);
 		
-		ordenDibujo = new OrdenDibujo();
-		ordenDibujo.setOrden(DrawOrder.DRAW_BITMAP);
-		ordenDibujo.setImagen(arc2);
-		ordenDibujo.setX1(xFinal - config.getAnchoCabezaNota() - config.getXLigadurasUnion());
+	    ordenDibujo = new OrdenDibujo();
+		ordenDibujo.setOrden(DrawOrder.DRAW_ARC);
+		ordenDibujo.setPaint(PaintOptions.SET_STYLE_STROKE, 0);
+		ordenDibujo.setPaint(PaintOptions.SET_STROKE_WIDTH, 2);
 		
-		int yFinal = yInicio + config.getDistanciaPentagramas() +
+		int yFinal = yInicio +
 				(config.getDistanciaLineasPentagrama() * 4 + config.getDistanciaPentagramas()) * 
-				(partitura.getStaves() - 1);
-		ordenDibujo.setY1(yFinal + config.getAlturaArcoLigadurasUnion());
+				(partitura.getStaves());
+		
+		rectf = new RectF(config.getXInicialPentagramas(), yFinal - config.getYLigadurasUnion(), 
+				xFinal - config.getXLigadurasUnion(), yFinal + config.getAlturaArcoLigadurasUnion());
+		ordenDibujo.setRectF(rectf, config.getAnchoLigaduraUnionMax(), config.getOffsetLigaduraUnion());
 		
 		ordenesDibujo.add(ordenDibujo);
 	}
