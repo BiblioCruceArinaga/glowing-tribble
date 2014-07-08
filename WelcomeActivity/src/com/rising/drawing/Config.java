@@ -43,6 +43,7 @@ public class Config {
 	private int margen_superior;
 	private int mitad_cabeza_nota_vertical;
 	private int mitad_cabeza_nota_gracia_vertical;
+	private int offset_accent;
 	private int offset_ultima_nota_gracia;
 	private int offset_ligadura_expresion;
 	private int offset_ligadura_union;
@@ -83,9 +84,7 @@ public class Config {
 	private int y_ligaduras_union;
 	private int x_numero_compas;
 	private int y_numero_compas;
-	private int x_octavarium;
 	private int y_octavarium;
-	private int y_octavarium_2;
 	private int y_palm_mute;
 	private int x_puntillo;
 	private int y_puntillo_arriba;
@@ -152,6 +151,7 @@ public class Config {
 						margen_superior = 35;
 						mitad_cabeza_nota_vertical = 10;
 						mitad_cabeza_nota_gracia_vertical = 4;
+						offset_accent = 8;
 						offset_ligadura_expresion = 40;
 						offset_ligadura_union = 50;
 						offset_ultima_nota_gracia = 24;
@@ -190,9 +190,7 @@ public class Config {
 						y_ligaduras_union = 24;
 						x_numero_compas = 50;
 						y_numero_compas = 15;
-						x_octavarium = 15;
 						y_octavarium = 8;
-						y_octavarium_2 = 30;
 						y_palm_mute = 50;
 						x_puntillo = ancho_cabeza_nota + 10;
 						y_puntillo_arriba = mitad_cabeza_nota_vertical - 10;
@@ -248,6 +246,7 @@ public class Config {
 						margen_superior = 80;
 						mitad_cabeza_nota_vertical = 10;
 						mitad_cabeza_nota_gracia_vertical = 4;
+						offset_accent = 8;
 						offset_ligadura_expresion = 40;
 						offset_ligadura_union = 50;
 						offset_ultima_nota_gracia = 24;
@@ -259,7 +258,7 @@ public class Config {
 						tamano_letra_bpm = 50;
 						tamano_letra_numero_compas = 30;
 						tamano_letra_obra = 80;
-						tamano_letra_palm_mute = 30;
+						tamano_letra_palm_mute = 20;
 						tamano_letra_pulso = 50;
 						tamano_letra_tapping = 30;
 						tamano_letra_tresillo = 25;
@@ -289,9 +288,7 @@ public class Config {
 						y_ligaduras_union = 24;
 						x_numero_compas = 50;
 						y_numero_compas = 15;
-						x_octavarium = 15;
-						y_octavarium = 8;
-						y_octavarium_2 = 30;
+						y_octavarium = 30;
 						y_palm_mute = 50;
 						x_puntillo = ancho_cabeza_nota + 10;
 						y_puntillo_arriba = mitad_cabeza_nota_vertical - 10;
@@ -304,7 +301,6 @@ public class Config {
 						y_tresillo_arriba = 9;
 						y_tresillo_abajo = 26;
 						break;
-				
 				}
 
 			case 400:
@@ -458,6 +454,10 @@ public class Config {
 	
 	public int getMitadCabezaNotaGraciaVertical() {
 		return mitad_cabeza_nota_gracia_vertical;
+	}
+	
+	public int getOffsetAccent() {
+		return offset_accent;
 	}
 	
 	public int getOffsetLigaduraExpresion() {
@@ -624,16 +624,8 @@ public class Config {
 		return y_numero_compas;
 	}
 
-	public int getXOctavarium() {
-		return x_octavarium;
-	}
-	
 	public int getYOctavarium() {
 		return y_octavarium;
-	}
-	
-	public int getYOctavarium2() {
-		return y_octavarium_2;
 	}
 	
 	public int getYPalmMute() {

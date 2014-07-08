@@ -123,6 +123,7 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 		horizontalDrawing.clear();
 		horizontalDrawing = null;
 		
+		scroll.back(vista);
 		scroll = null;
 		config = null;
 		
@@ -278,21 +279,6 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 		
 		horizontalThread.start();
 		verticalThread.start();
-	}
-	
-	private void crearVistasDePartituraMovil(){
-		
-		horizontalThread = new Thread(new Runnable(){
-    		public void run() {
-    			DrawingMethods metodosDibujo = 
-    					new DrawingMethods(partituraHorizontal, config, getResources(), Vista.HORIZONTAL);
-				if (metodosDibujo.isValid()) {
-					horizontalDrawing = metodosDibujo.crearOrdenesDeDibujo();
-				}
-    		}
-		});
-		
-		horizontalThread.start();
 	}
 
 	public void cambiarVista(Vista vista) {

@@ -32,10 +32,12 @@ public class DrawingMethods {
 
 	//  Variables para la gestión de las múltiples notas
 	private ArrayList<IndiceNota> beams = new ArrayList<IndiceNota>();
-	private boolean buscandoOctavarium = false;
 	private ArrayList<IndiceNota> ligaduras = new ArrayList<IndiceNota>();
 	private int octavarium = 0;
-	private int[] posicionesOctavarium = {0,0};
+	private int x_ini_octavarium = 0;
+	private int y_ini_octavarium = 0;
+	private int x_fin_octavarium = 0;
+	private int y_fin_octavarium = 0;
 	private int x_ini_slide = 0;
 	private int x_ini_tresillo = 0;
 	private int y_anterior = 0;
@@ -122,40 +124,9 @@ public class DrawingMethods {
 	}
 	
 	private int calcularCabezaDeNota(Nota nota, int posicion) {
-		if (buscandoOctavarium)
-			if (compas_margin_x + posicion == posicionesOctavarium[0]) 
-				octavarium = 1;
-
 		int y = obtenerPosicionYDeNota(nota, 
 				clavesActuales[nota.getPentagrama() - 1], partitura.getInstrument());
 		if (nota.notaDeGracia()) y += config.getMargenNotaGracia();
-		
-		if (octavarium > 0) {
-			nota.setOctavarium(octavarium);
-			
-			if (octavarium == 1) {
-				nota.setYOctavarium(compas_margin_y - 
-						config.getDistanciaLineasPentagrama() * 6 - config.getYOctavarium());
-				octavarium++;
-			}
-			else {
-				nota.setYOctavarium(compas_margin_y - config.getDistanciaLineasPentagrama() * 6);
-			}
-		}
-
-		if (buscandoOctavarium) {
-			if (compas_margin_x + posicion == posicionesOctavarium[1]) {
-				
-				//  Indicar que esta nota "cierra" el octavarium
-				nota.setOctavarium(octavarium + 1);
-				
-				octavarium = 0;
-				buscandoOctavarium = false;
-
-				posicionesOctavarium[0] = 0;
-				posicionesOctavarium[1] = 0;
-			}
-		}
 
 		return y;
 	}
@@ -173,40 +144,23 @@ public class DrawingMethods {
 				numClavesEnElemento = clefs[i].getValue(1);
 	
 				for (int j=0; j<numClavesEnElemento; j++) {
-					byte pentagrama = clefs[i].getValue(2 + 3 * j);
-					byte claveByte = clefs[i].getValue(3 + 3 * j);
-					byte alteracion = clefs[i].getValue(4 + 3 * j);
+					byte pentagrama = clefs[i].getValue(2 + 2 * j);
+					byte claveByte = clefs[i].getValue(3 + 2 * j);
 	
 					//  El margen Y depende del pentagrama al que pertenezca el compás
 					int marginY = compas_margin_y + 
 							(config.getDistanciaLineasPentagrama() * 4 + 
 									config.getDistanciaPentagramas()) * (pentagrama - 1);
-	
-					switch (alteracion) {
-						case 0:
-							Clave clave = new Clave();
-							clave.setImagenClave(obtenerImagenDeClave(claveByte));
-							clave.setX(compas_margin_x + x_position);
-							clave.setY(marginY + obtenerPosicionYDeClave(claveByte));
-							clave.setClave(claveByte);
-							clave.setPentagrama(pentagrama);
-							clave.setPosition(clefs[i].getPosition());
-							
-							compas.setClave(clave, pentagrama);
-							break;
-	
-						case 1:
-							posicionesOctavarium[0] = compas_margin_x + x_position;
-							buscandoOctavarium = true;
-							break;
-	
-						case -1:
-							posicionesOctavarium[1] = compas_margin_x + x_position;
-							break;
-	
-						default: 
-							break;
-					}
+
+					Clave clave = new Clave();
+					clave.setImagenClave(obtenerImagenDeClave(claveByte));
+					clave.setX(compas_margin_x + x_position);
+					clave.setY(marginY + obtenerPosicionYDeClave(claveByte));
+					clave.setClave(claveByte);
+					clave.setPentagrama(pentagrama);
+					clave.setPosition(clefs[i].getPosition());
+					
+					compas.setClave(clave, pentagrama);
 				}
 			}
 		}
@@ -537,7 +491,6 @@ public class DrawingMethods {
 		for (int i=0; i<numNotas; i++) {
 			compas.getNota(i).setX(compas.getNota(i).getX() - distancia_x);
 			compas.getNota(i).setY(compas.getNota(i).getY() + distancia_y);
-			compas.getNota(i).setYOctavarium(compas.getNota(i).getYOctavarium() + distancia_y);
 		}
 	}
 	
@@ -684,7 +637,7 @@ public class DrawingMethods {
 						config.getDistanciaPentagramas()) * (nota.getPentagrama() - 1);
 		
 		byte octava = nota.getOctava();
-		if (octavarium > 0) octava--;
+		if (octava > 10) octava -= 12;
 		
 		if (nota.getStep() > 0) {
 
@@ -1901,8 +1854,6 @@ public class DrawingMethods {
 		if (!nota.acorde()) y_anterior = nota.getY();
 
 		ordenesDibujo.add(ordenDibujo);
-		
-		dibujarOctavarium(nota);
 	}
 	
 	private void dibujarClaves(Compas compas) {
@@ -2181,7 +2132,12 @@ public class DrawingMethods {
 			case 30:
 				ordenDibujo.setOrden(DrawOrder.DRAW_BITMAP);
 				ordenDibujo.setImagen(accent);
-				ordenDibujo.setX1(posicionX);
+				
+				if (nota.haciaArriba()) 
+					ordenDibujo.setX1(posicionX - config.getOffsetAccent());
+				else
+					ordenDibujo.setX1(posicionX);
+				
 				ordenDibujo.setY1(posicionY - config.getYAccentUp());
 				ordenesDibujo.add(ordenDibujo);
 				break;
@@ -2552,6 +2508,9 @@ public class DrawingMethods {
 			
 			dibujarFigurasGraficasDeNota(notas.get(i), y_beams);
 			dibujarLineasFueraDelPentagrama(notas.get(i), compas.getYIni());
+			
+			gestionarOctavarium(notas.get(i), compas.getYIni() - 
+					config.getDistanciaLineasPentagrama() * 6);
 		}
 	}
 	
@@ -2565,33 +2524,80 @@ public class DrawingMethods {
 		ordenesDibujo.add(ordenDibujo);
 	}
 	
-	private void dibujarOctavarium(Nota nota) {
-		if (nota.getOctavarium() > 0) {
-			if (nota.getOctavarium() > 1) {
-				OrdenDibujo ordenDibujo = new OrdenDibujo();
-				ordenDibujo.setOrden(DrawOrder.DRAW_CIRCLE);
-				ordenDibujo.setRadius(config.getRadioOctavarium());
-				ordenDibujo.setX1(nota.getX() + config.getAnchoCabezaNota());
-				ordenDibujo.setY1(nota.getYOctavarium());
-				ordenesDibujo.add(ordenDibujo);
-				
-				if (nota.getOctavarium() == 3) {
-					ordenDibujo = new OrdenDibujo();
-					ordenDibujo.setOrden(DrawOrder.DRAW_CIRCLE);
-					ordenDibujo.setRadius(config.getRadioOctavarium());
-					ordenDibujo.setX1(nota.getX() + config.getAnchoCabezaNota());
-					ordenDibujo.setY1(nota.getYOctavarium() + config.getYOctavarium2());
-					ordenesDibujo.add(ordenDibujo);
-				}
-			}
+	private void dibujarOctavarium() {
+		OrdenDibujo ordenDibujo = new OrdenDibujo();
+		ordenDibujo.setOrden(DrawOrder.DRAW_BITMAP);
+		ordenDibujo.setImagen(octavariumImage);
+		ordenDibujo.setX1(x_ini_octavarium);
+		ordenDibujo.setY1(y_ini_octavarium + config.getYOctavarium() / 2);
+		ordenesDibujo.add(ordenDibujo);
+		
+		if (x_ini_octavarium < x_fin_octavarium) {
+			ordenDibujo = new OrdenDibujo();
+			ordenDibujo.setOrden(DrawOrder.DRAW_LINE);
+			ordenDibujo.setPaint(PaintOptions.SET_STROKE_WIDTH, 2);
+			ordenDibujo.setX1(x_ini_octavarium);
+			ordenDibujo.setY1(y_ini_octavarium);
+			ordenDibujo.setX2(x_fin_octavarium + config.getAnchoCabezaNota());
+			ordenDibujo.setY2(y_fin_octavarium);
+			ordenesDibujo.add(ordenDibujo);
+		}
+		else {
+			ordenDibujo = new OrdenDibujo();
+			ordenDibujo.setOrden(DrawOrder.DRAW_LINE);
+			ordenDibujo.setPaint(PaintOptions.SET_STROKE_WIDTH, 2);
+			ordenDibujo.setX1(x_ini_octavarium);
+			ordenDibujo.setY1(y_ini_octavarium);
+			ordenDibujo.setX2(config.getXFinalPentagramas());
+			ordenDibujo.setY2(y_ini_octavarium);
+			ordenesDibujo.add(ordenDibujo);
 			
-			else {
-				OrdenDibujo ordenDibujo = new OrdenDibujo();
-				ordenDibujo.setOrden(DrawOrder.DRAW_BITMAP);
-				ordenDibujo.setImagen(octavariumImage);
-				ordenDibujo.setX1(nota.getX());
-				ordenDibujo.setY1(nota.getYOctavarium());
-				ordenesDibujo.add(ordenDibujo);
+			ordenDibujo = new OrdenDibujo();
+			ordenDibujo.setOrden(DrawOrder.DRAW_LINE);
+			ordenDibujo.setPaint(PaintOptions.SET_STROKE_WIDTH, 2);
+			ordenDibujo.setX1(config.getXInicialPentagramas());
+			ordenDibujo.setY1(y_fin_octavarium);
+			ordenDibujo.setX2(x_fin_octavarium + config.getAnchoCabezaNota());
+			ordenDibujo.setY2(y_fin_octavarium);
+			ordenesDibujo.add(ordenDibujo);
+		}
+		
+		ordenDibujo = new OrdenDibujo();
+		ordenDibujo.setOrden(DrawOrder.DRAW_LINE);
+		ordenDibujo.setPaint(PaintOptions.SET_STROKE_WIDTH, 2);
+		ordenDibujo.setX1(x_fin_octavarium + config.getAnchoCabezaNota());
+		ordenDibujo.setY1(y_fin_octavarium);
+		ordenDibujo.setX2(x_fin_octavarium + config.getAnchoCabezaNota());
+		ordenDibujo.setY2(y_fin_octavarium + config.getYOctavarium());
+		ordenesDibujo.add(ordenDibujo);
+	}
+	
+	private void gestionarOctavarium(Nota nota, int margin_y) {
+		if (nota.octavada()) {
+			
+			switch (octavarium) {
+
+				case 0:
+					x_ini_octavarium = nota.getX();
+					y_ini_octavarium = margin_y;
+					octavarium++;
+					break;
+					
+				case 1:
+					x_fin_octavarium = nota.getX();
+					y_fin_octavarium = margin_y;
+					break;
+			}
+		}
+		else {
+			if (octavarium > 0) {
+				dibujarOctavarium();
+				
+				octavarium = 0;
+				x_ini_octavarium = 0;
+				x_fin_octavarium = 0;
+				y_ini_octavarium = 0;
+				y_fin_octavarium = 0;
 			}
 		}
 	}

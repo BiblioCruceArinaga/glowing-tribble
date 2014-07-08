@@ -13,11 +13,6 @@ public class Nota {
 	private byte plica;
 	private byte voz;
 	private byte pentagrama;
-	
-	//  La posición x del octavarium depende de la de
-	//  la nota, y por tanto no necesitamos guardarla
-	private int octavarium;
-	private int y_octavarium;
 
 	private byte ligaduraUnion;
 	private byte ligaduraExpresion;
@@ -44,9 +39,6 @@ public class Nota {
 		
 		this.figurasGraficas = figurasGraficas;
 		this.posicion = posicion;
-		
-		octavarium = 0;
-		y_octavarium = -1;
 		
 		ligaduraUnion = 0;
 		ligaduraExpresion = 0;
@@ -123,10 +115,6 @@ public class Nota {
 	public byte getOctava() {
 		return octava;
 	}
-	
-	public int getOctavarium() {
-		return octavarium;
-	}
 
 	public byte getPentagrama() {
 		return pentagrama;
@@ -172,10 +160,6 @@ public class Nota {
 		return y;
 	}
 	
-	public int getYOctavarium() {
-		return y_octavarium;
-	}
-	
 	public boolean haciaArriba() {
 		return plica == 1;
 	}
@@ -186,6 +170,10 @@ public class Nota {
 	
 	public boolean notaDeGracia() {
 		return figurasGraficas.contains((byte) 18) || figurasGraficas.contains((byte) 19);
+	}
+	
+	public boolean octavada() {
+		return octava > 10;
 	}
 	
 	public void setLigaduraUnion(byte ligaduraUnion) {
@@ -200,20 +188,12 @@ public class Nota {
 		ligaduraExpresionEncima = orientacion;
 	}
 	
-	public void setOctavarium(int octavarium) {
-		this.octavarium = octavarium;
-	}
-	
 	public void setX(int x) {
 		this.x = x;
 	}
 	
 	public void setY(int y) {
 		this.y = y;
-	}
-	
-	public void setYOctavarium(int y_octavarium) {
-		this.y_octavarium = y_octavarium;
 	}
 	
 	public boolean silencio() {

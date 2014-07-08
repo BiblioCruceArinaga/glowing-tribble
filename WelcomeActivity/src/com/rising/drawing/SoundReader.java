@@ -130,35 +130,36 @@ public class SoundReader extends Observable implements AudioRecord.OnRecordPosit
 				THRESHOLD = 60;
 				break;
 			case 1:
-				THRESHOLD = 57;
-				break;
-			case 2:
 				THRESHOLD = 54;
 				break;
-			case 3:
-				THRESHOLD = 51;
-				break;
-			case 4:
+			case 2:
 				THRESHOLD = 48;
 				break;
-			case 5:
-				THRESHOLD = 45;
-				break;
-			case 6:
+			case 3:
 				THRESHOLD = 42;
 				break;
-			case 7:
-				THRESHOLD = 39;
-				break;
-			case 8:
+			case 4:
 				THRESHOLD = 36;
 				break;
-			case 9:
-				THRESHOLD = 33;
-				break;
-			case 10:
+			case 5:
 				THRESHOLD = 30;
 				break;
+			case 6:
+				THRESHOLD = 24;
+				break;
+			case 7:
+				THRESHOLD = 18;
+				break;
+			case 8:
+				THRESHOLD = 12;
+				break;
+			case 9:
+				THRESHOLD = 6;
+				break;
+			case 10:
+				THRESHOLD = 0;
+				break;
+				/*
 			case 11:
 				THRESHOLD = 27;
 				break;
@@ -189,6 +190,7 @@ public class SoundReader extends Observable implements AudioRecord.OnRecordPosit
 			case 20:
 				THRESHOLD = 0;
 				break;
+				*/
 			default:
 				break;
 		}
@@ -201,38 +203,39 @@ public class SoundReader extends Observable implements AudioRecord.OnRecordPosit
 	private void setSpeed(int speed) {
 		switch (speed) {
 			case 0:
-				NOTIFY_RATE = 17000;
+				NOTIFY_RATE = 16000;
 				break;
 			case 1:
-				NOTIFY_RATE = 16200;
+				NOTIFY_RATE = 14500;
 				break;
 			case 2:
-				NOTIFY_RATE = 15400;
-				break;
-			case 3:
-				NOTIFY_RATE = 14600;
-				break;
-			case 4:
-				NOTIFY_RATE = 13800;
-				break;
-			case 5:
 				NOTIFY_RATE = 13000;
 				break;
+			case 3:
+				NOTIFY_RATE = 11500;
+				break;
+			case 4:
+				NOTIFY_RATE = 10000;
+				break;
+			case 5:
+				NOTIFY_RATE = 8500;
+				break;
 			case 6:
-				NOTIFY_RATE = 12200;
+				NOTIFY_RATE = 7000;
 				break;
 			case 7:
-				NOTIFY_RATE = 11400;
+				NOTIFY_RATE = 5500;
 				break;
 			case 8:
-				NOTIFY_RATE = 10600;
+				NOTIFY_RATE = 4000;
 				break;
 			case 9:
-				NOTIFY_RATE = 9800;
+				NOTIFY_RATE = 2500;
 				break;
 			case 10:
-				NOTIFY_RATE = 9000;
+				NOTIFY_RATE = 1000;
 				break;
+				/*
 			case 11:
 				NOTIFY_RATE = 8200;
 				break;
@@ -263,6 +266,7 @@ public class SoundReader extends Observable implements AudioRecord.OnRecordPosit
 			case 20:
 				NOTIFY_RATE = 1000;
 				break;
+				*/
 			default:
 				break;
 		}

@@ -56,7 +56,6 @@ public class FileMethods {
 		
 		byte pentagrama = 0;
 		byte clave = 0;
-		byte alteracion = 0;
 		
 		byte numClefs = fichero.readByte();
 		arrayBytes.add(numClefs);
@@ -64,11 +63,9 @@ public class FileMethods {
 		for (int i=0; i<numClefs; i++) {
 			pentagrama = fichero.readByte();
 			clave = fichero.readByte();
-			alteracion = fichero.readByte();
 			
 			arrayBytes.add(pentagrama);
 			arrayBytes.add(clave);
-			arrayBytes.add(alteracion);
 		}
 
 		return arrayBytes;

@@ -1,6 +1,5 @@
 package com.rising.drawing;
 
-import android.content.res.Configuration;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.view.MotionEvent;
@@ -8,7 +7,6 @@ import android.view.MotionEvent;
 public class Scroll {
 	
 	private int orientation;
-	private int distanciaPentagramas;
 	private int margenXPrimerCompas;
 	private int margenYPrimerCompas;
 	
@@ -49,7 +47,6 @@ public class Scroll {
 		margenFinalScrollX = config.getXInicialPentagramas();
 		margenXPrimerCompas = margenFinalScrollX;
 		margenYPrimerCompas = config.getMargenInferiorAutor();
-		distanciaPentagramas = config.getDistanciaPentagramas();
 		
 		orientation = 0;
 	}
@@ -239,33 +236,6 @@ public class Scroll {
 		
 		return distancia;
 	}
-	/*
-	public int distanciaDesplazamientoY(int currentY, boolean primerScrollHecho, 
-			Config config, int staves) {
-		
-		//  La distancia de desplazamiento en la primera iteración
-		//  es diferente al resto porque hay que contar con la
-		//  distancia extra del título de la obra y el nombre del autor
-		if (!primerScrollHecho) {
-			if (orientation == Configuration.ORIENTATION_PORTRAIT)
-				return currentY + (config.getDistanciaPentagramas() + 
-							   config.getDistanciaLineasPentagrama()) * 4;
-			else {
-				return currentY + (config.getDistanciaPentagramas() + 
-						   config.getDistanciaLineasPentagrama()) * 2;
-			}
-		}
-		else {
-			if (orientation == Configuration.ORIENTATION_PORTRAIT)
-				return (config.getDistanciaPentagramas() + 
-						config.getDistanciaLineasPentagrama() * 4) * 4;
-			else {
-				return (config.getDistanciaPentagramas() + 
-				        config.getDistanciaLineasPentagrama() * 4) * 2;
-			}
-		}
-	}
-	*/
 	
 	public boolean outOfBoundaries(int xFin, int yFin, Vista vista) {
 		if (vista == Vista.HORIZONTAL)
