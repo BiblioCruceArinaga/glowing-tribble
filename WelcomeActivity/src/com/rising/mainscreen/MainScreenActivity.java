@@ -48,6 +48,7 @@ import com.rising.money.MoneyUpdateConnectionNetwork;
 import com.rising.money.MoneyUpdateConnectionNetwork.OnFailMoney;
 import com.rising.money.MoneyUpdateConnectionNetwork.OnUpdateMoney;
 import com.rising.pdf.PDFReaderActivity;
+import com.rising.pdf.PdfViewerActivity;
 import com.rising.security.DownloadScoresEncrypter;
 import com.rising.store.MainActivityStore;
 
@@ -206,13 +207,13 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 	
 			@Override
 			public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-				Log.i("Eso", "Aquí1");
+				
 				MenuInflater inflater = mode.getMenuInflater();
 				inflater.inflate(R.menu.modal_details, menu);
 				mode.setTitle(R.string.title);
 		        mode.setSubtitle(R.string.subtitle);
 		        ficheros2 = leeFicheros();
-		        Log.i("Eso", "Aquí2");
+		        
 		        return true;
 			}
 	
@@ -259,10 +260,10 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 			
 			//Si es un PDF abre el PDF, si no, el otro. 
 			if(ComprobarFichero(ficheros[position])){
-				Intent i = new Intent(MainScreenActivity.this, PDFReaderActivity.class);
-				i.putExtra("score", ficheros[position]);
-
-				startActivity(i);
+				
+				Intent intent = new Intent(context, PDFReaderActivity.class);
+			    intent.putExtra(PdfViewerActivity.EXTRA_PDFFILENAME, Environment.getExternalStorageDirectory() + path + ficheros[position]);
+			    startActivity(intent);
 			}else{
 				if(new DownloadScoresEncrypter(context, infoFicheros[0][position]+conf.getUserId()).DescryptAndConfirm(ficheros[position])){
 					Intent i = new Intent(MainScreenActivity.this, MainActivity.class);
@@ -640,7 +641,8 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 			@Override
 			public void onClick(View arg0) {
 				Intent i = new Intent(MainScreenActivity.this, FileExplore.class);
-				startActivity(i);	
+				startActivity(i);
+				finish();
 			}
 			
 		});
