@@ -3,11 +3,12 @@ package com.rising.drawing;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
-public class Nota {
+public class Nota implements Comparable<Nota> {
 
 	private byte step;
 	private byte octava;
 	private byte figuracion;
+	private byte pulsos;
 	private byte beam;
 	private byte beamId;
 	private byte plica;
@@ -24,13 +25,14 @@ public class Nota {
 	private int x;
 	private int y;
 	
-	public Nota(byte step, byte octava, byte figuracion, byte beam,
+	public Nota(byte step, byte octava, byte figuracion, byte pulsos, byte beam,
 			byte beamId, byte plica, byte voz, byte pentagrama,
 			ArrayList<Byte> figurasGraficas, ArrayList<Byte> posicion) {
 		
 		this.step = step;
 		this.octava = octava;
 		this.figuracion = figuracion;
+		this.pulsos = pulsos;
 		this.beam = beam;
 		this.beamId = beamId;
 		this.plica = plica;
@@ -144,6 +146,10 @@ public class Nota {
 		return posicion;
 	}
 	
+	public byte getPulsos() {
+		return pulsos;
+	}
+	
 	public byte getStep() {
 		return step;
 	}
@@ -216,5 +222,15 @@ public class Nota {
 
 	public boolean tieneSlash() {
 		return figurasGraficas.contains((byte) 18);
+	}
+
+	@Override
+	public int compareTo(Nota arg0) {
+		if (x < arg0.getX())
+			return -1;
+		else if (x == arg0.getX())
+			return 0;
+		else
+			return 1;
 	}
 }

@@ -50,7 +50,6 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 	
 	//  Metrónomo y su gestión
 	private Metronome metronomo = null;
-	private OrdenDibujo bip = null;
 	private Dialog MDialog = null;
     
 	//  ========================================
@@ -247,11 +246,13 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 		
 		//  Dibuja el número rojo que marca los pulsos encima del compás
 		if (metronomo != null) {
-			bip = metronomo.getBip();
+			OrdenDibujo bip = metronomo.getBip();
+			OrdenDibujo barra = metronomo.getBarra();
 			
 			if (bip != null)
-				canvas.drawText(metronomo.getBip().getTexto(), metronomo.getBip().getX1(), 
-					metronomo.getBip().getY1(), metronomo.getBip().getPaint());
+				canvas.drawText(bip.getTexto(), bip.getX1(), bip.getY1(), bip.getPaint());	
+			if (barra != null)
+				canvas.drawLine(barra.getX1(), barra.getY1(), barra.getX2(), barra.getY2(), barra.getPaint());
 		}
 	}
 	
@@ -357,7 +358,6 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 		if (metronomo != null) {
 			metronomo.onDestroy();
 			metronomo = null;
-			bip = null;
 		}
 	}
 

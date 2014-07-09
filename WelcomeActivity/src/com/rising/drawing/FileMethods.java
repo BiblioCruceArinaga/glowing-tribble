@@ -169,6 +169,7 @@ public class FileMethods {
 	private void leerInfoNota(byte nota) throws IOException {
 		byte octava = fichero.readByte();
 		byte figuracion = fichero.readByte();
+		byte pulsos = fichero.readByte();
 		byte union = fichero.readByte();
 		byte idUnion = fichero.readByte();
 		byte plica = fichero.readByte();
@@ -178,8 +179,7 @@ public class FileMethods {
 		ArrayList<Byte> figurasGraficas = leerHastaAlmohadilla();
 		ArrayList<Byte> posicionEjeX = leerHastaAlmohadilla();
 
-		compas.addNote(new Nota(nota, octava, figuracion, union, 
-				idUnion, plica, voz, pentagrama, figurasGraficas, 
-				posicionEjeX));
+		compas.addNote(new Nota(nota, octava, figuracion, pulsos, union, 
+				idUnion, plica, voz, pentagrama, figurasGraficas, posicionEjeX));
 	}
 }

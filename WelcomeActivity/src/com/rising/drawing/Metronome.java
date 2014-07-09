@@ -1,7 +1,8 @@
 package com.rising.drawing;
 
+import java.util.ArrayList;
+
 import android.content.Context;
-import android.content.res.Configuration;
 import android.media.AudioManager;
 import android.media.SoundPool;
 
@@ -13,6 +14,7 @@ public class Metronome {
     private Vista vista;
     private Partitura partitura;
     private OrdenDibujo bip = null;
+    private OrdenDibujo barra = null;
     private Config config;
     private Scroll scroll;
     
@@ -82,24 +84,30 @@ public class Metronome {
             					primerCompas = ultimoCompas;
             				}
             			}
-                				
-                		int pulsos = compas.numeroDePulsos();
-                		for (int j=0; j<pulsos; j++) {
+                		
+                		ArrayList<Nota> notasConPulsos = compas.notasConPulsos();
+                		int numNotas = notasConPulsos.size();
+                		for (int j=0; j<numNotas; j++) {
                 			
-                			emitirSonido(j);
-                			Thread.sleep(speed);
+                			int numPulsos = notasConPulsos.get(j).getPulsos();
+                			for (int k=0; k<numPulsos; k++) {
                 			
-                			synchronized (mPauseLock) {
-    	    	                while (mPaused) {
-    	    	                    try {
-    	    	                        mPauseLock.wait();
-    	    	                    } catch (InterruptedException e) {
-    	    	                    	Thread.currentThread().interrupt();
-    	    	                    	mPauseLock.notifyAll();
-    	    	                    	return;
-    	    	                    }
-    	    	                }
-    	    	            }
+                				dibujarBarra(compas, notasConPulsos.get(j));
+	                			emitirSonido(j, k);
+	                			Thread.sleep(speed);
+	                			
+	                			synchronized (mPauseLock) {
+	    	    	                while (mPaused) {
+	    	    	                    try {
+	    	    	                        mPauseLock.wait();
+	    	    	                    } catch (InterruptedException e) {
+	    	    	                    	Thread.currentThread().interrupt();
+	    	    	                    	mPauseLock.notifyAll();
+	    	    	                    	return;
+	    	    	                    }
+	    	    	                }
+	    	    	            }
+                			}
                 		}
                 	}
                 } 
@@ -155,7 +163,10 @@ public class Metronome {
 	//  velocidad a la que deberá empezar a tocar
 	private void bipsDePreparacion(long speed, int pulsos) throws InterruptedException {
 		for (int j=0; j<pulsos; j++) {
-			emitirSonido(j);
+			
+			if (bip == null) emitirSonido(j, 0);
+			else emitirSonido(j, 1);
+			
 			int numero = pulsos - j;
 			
 			if (bip == null) {
@@ -178,11 +189,30 @@ public class Metronome {
 		bip = null;
 	}
 	
-	private void emitirSonido(int pulso) {
-		if (pulso == 0)
+	private void dibujarBarra(Compas compas, Nota nota) {
+		barra = new OrdenDibujo();
+		barra.setOrden(DrawOrder.DRAW_LINE);
+		barra.setPaint(PaintOptions.SET_STROKE_WIDTH, 5);
+		barra.setPaint(PaintOptions.SET_ARGB_RED, -1);
+		
+		int x = nota.getX();
+		if (nota.haciaArriba()) x += config.getAnchoCabezaNota();
+		
+		barra.setX1(x);
+		barra.setY1(compas.getYIni());
+		barra.setX2(x);
+		barra.setY2(compas.getYFin());
+	}
+	
+	private void emitirSonido(int nota, int pulso) {
+		if ( (nota == 0) && (pulso == 0) )
 			bipAgudo.play(bipAgudoInt, 1, 1, 1, 0, 1);
 		else 
 			bipGrave.play(bipGraveInt, 1, 1, 1, 0, 1);
+	}
+	
+	public OrdenDibujo getBarra() {
+		return barra;
 	}
 	
 	public OrdenDibujo getBip() {

@@ -326,6 +326,18 @@ public class Compas {
 		
 		return true;
 	}
+	
+	public ArrayList<Nota> notasConPulsos() {
+		ArrayList<Nota> notasConPulsos = new ArrayList<Nota>();
+		
+		final int numNotas = notas.size();
+		for (int i=0; i<numNotas; i++)
+			if (notas.get(i).getPulsos() > 0)
+				notasConPulsos.add(notas.get(i));
+		
+		Collections.sort(notasConPulsos);
+		return notasConPulsos;
+	}
 
 	public int numeroDeNotas() {
 		return notas.size();
@@ -539,8 +551,9 @@ public class Compas {
 	
 	private Nota clonarNota(Nota oldNote) {
 		Nota newNote = new Nota(oldNote.getStep(), oldNote.getOctava(), oldNote.getFiguracion(),
-				oldNote.getBeam(), oldNote.getBeamId(), oldNote.getPlica(), oldNote.getVoz(),
-				oldNote.getPentagrama(), oldNote.getFigurasGraficas(), oldNote.getPosicionArray());
+				oldNote.getPulsos(), oldNote.getBeam(), oldNote.getBeamId(), oldNote.getPlica(), 
+				oldNote.getVoz(), oldNote.getPentagrama(), oldNote.getFigurasGraficas(), 
+				oldNote.getPosicionArray());
 		
 		return newNote;
 	}
