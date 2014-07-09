@@ -80,7 +80,9 @@ You can buy scores in our store.</string>
     	<string name="select">Select</string>
     	<string name="choose_directory">Choose your file</string>
     	<string name="pdf_error">Selected file is not a PDF file</string>
-    	    	
+    	<string name="path_error">There was an error with folders</string>
+    	<string name="uploading">Uploading file</string>
+    	    	    	    	
     	<!-- Menú contextual -->
     	<string name="select_all">Select all</string>
     	<string name="select_none">Deselect all</string>

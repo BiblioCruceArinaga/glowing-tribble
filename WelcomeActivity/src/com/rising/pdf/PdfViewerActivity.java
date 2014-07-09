@@ -11,6 +11,7 @@ import java.nio.channels.FileChannel;
 import net.sf.andpdf.nio.ByteBuffer;
 import net.sf.andpdf.pdfviewer.gui.FullScrollView;
 import net.sf.andpdf.refs.HardReference;
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -21,7 +22,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.RectF;
-import android.graphics.Bitmap.Config;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -32,8 +32,9 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -143,8 +144,12 @@ public abstract class PdfViewerActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         Log.i(TAG, "onCreate");
+                
+        ActionBar ABar = getActionBar();
+        ABar.setDisplayShowHomeEnabled(true);    
+        
         //progress = ProgressDialog.show(PdfViewerActivity.this, "Loading", "Loading PDF Page");
         /*closeNavigationHandler = new Handler();
         closeNavigationThread = new Thread(new Runnable() {
@@ -214,8 +219,6 @@ public abstract class PdfViewerActivity extends Activity {
         }
     }
     	
-    
-
 	private void setContent(String password) {
         try { 
     		parsePDF(pdffilename, password);
@@ -273,7 +276,6 @@ public abstract class PdfViewerActivity extends Activity {
         backgroundThread.start();
 	}
 
-
 	private void updateImageStatus() {
 //		Log.i(TAG, "updateImageStatus: " +  (System.currentTimeMillis()&0xffff));
 		if (backgroundThread == null) {
@@ -293,7 +295,6 @@ public abstract class PdfViewerActivity extends Activity {
 			}
 		}, 1000);
 	}
-
 	
 	@Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -316,38 +317,41 @@ public abstract class PdfViewerActivity extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         super.onOptionsItemSelected(item);
     	switch (item.getItemId()) {
-    	case MENU_NEXT_PAGE: {
-    		nextPage();
-    		break;
-    	}
-    	case MENU_PREV_PAGE: {
-    		prevPage();
-    		break;
-    	}
-    	case MENU_GOTO_PAGE: {
-    		gotoPage();
-    		break;
-    	}
-    	case MENU_ZOOM_IN: {
-    		zoomIn();
-    		break;
-    	}
-    	case MENU_ZOOM_OUT: {
-    		zoomOut();
-    		break;
-    	}
-    	case MENU_BACK: {
-            finish();
-            break;
-    	}
-    	case MENU_CLEANUP: {
-            HardReference.cleanup();
-            break;
-    	}
+	    	case MENU_NEXT_PAGE: {
+	    		nextPage();
+	    		break;
+	    	}
+	    	case MENU_PREV_PAGE: {
+	    		prevPage();
+	    		break;
+	    	}
+	    	case MENU_GOTO_PAGE: {
+	    		gotoPage();
+	    		break;
+	    	}
+	    	case MENU_ZOOM_IN: {
+	    		zoomIn();
+	    		break;
+	    	}
+	    	case MENU_ZOOM_OUT: {
+	    		zoomOut();
+	    		break;
+	    	}
+	    	case MENU_BACK: {
+	            finish();
+	            break;
+	    	}
+	    	case MENU_CLEANUP: {
+	            HardReference.cleanup();
+	            break;
+	    	}
+	    	case android.R.id.home: {
+	    		finish();
+	    		break;
+	    	}
     	}
     	return true;
     }
-    
     
     private void zoomIn() {
     	if (mPdfFile != null) {
@@ -763,8 +767,6 @@ public abstract class PdfViewerActivity extends Activity {
 			return result;
 		}*/
     }
-
-	
 	
     private void showPage(int page, float zoom) throws Exception {
         //long startTime = System.currentTimeMillis();
@@ -824,7 +826,6 @@ public abstract class PdfViewerActivity extends Activity {
         //long stopTime = System.currentTimeMillis();
         //mGraphView.fileMillis = stopTime-startTime;
 	}
-
     
     /**
      * <p>Open a specific pdf file.  Creates a DocumentInfo from the file,
@@ -854,8 +855,7 @@ public abstract class PdfViewerActivity extends Activity {
 	        
         mGraphView.showText("Anzahl Seiten:" + mPdfFile.getNumPages());
     }
-    
-     
+        
     /*private byte[] readBytes(File srcFile) throws IOException {
     	long fileLength = srcFile.length();
     	int len = (int)fileLength;
@@ -902,8 +902,7 @@ public abstract class PdfViewerActivity extends Activity {
 		}
 		return result;
 	}
-
-    
+ 
     @Override
     protected void onDestroy() {
     	super.onDestroy();

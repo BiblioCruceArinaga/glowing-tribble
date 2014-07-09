@@ -74,6 +74,8 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 	private int fid;
 	Context context;
 	Dialog Incorrect_User;
+	private TextView UploadFile;
+	private ProgressBar UploadProgressBar;
 	
 	//  Recibir la señal del proceso que envía Feedback
 	private OnSendingFeedback listenerFeedback = new OnSendingFeedback() {
@@ -164,7 +166,7 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 		Incorrect_User.setTitle(R.string.incorrect_user);
 		
 		for (int i = 0; i < ficherosLength(); i++){
-			 Score ss = new Score(infoFicheros[1][i], infoFicheros[0][i], infoFicheros[3][i], infoFicheros[2][i]);
+			 Score ss = new Score(infoFicheros[1][i], infoFicheros[0][i], infoFicheros[3][i], infoFicheros[2][i], infoFicheros[4][i]);
 			 arraylist.add(ss);
 		}
 		
@@ -263,6 +265,7 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 				
 				Intent intent = new Intent(context, PDFReaderActivity.class);
 			    intent.putExtra(PdfViewerActivity.EXTRA_PDFFILENAME, Environment.getExternalStorageDirectory() + path + ficheros[position]);
+			    
 			    startActivity(intent);
 			}else{
 				if(new DownloadScoresEncrypter(context, infoFicheros[0][position]+conf.getUserId()).DescryptAndConfirm(ficheros[position])){
@@ -472,7 +475,7 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 		if (ArrayScores != null) len = ArrayScores.length;
 		else len = 0;
 		
-		res = new String[4][len];
+		res = new String[5][len];
 		
 		for(int i=0; i < len; i++){
 			if(ComprobarFichero(ArrayScores[i])){
@@ -480,6 +483,7 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 				res[1][i] = "";	//  Autor
 				res[2][i] = "";	//  Instrumento
 				res[3][i] = ficheroAImagen(ArrayScores[i]);	// Imagen
+				res[4][i] = ArrayScores[i].substring(ArrayScores[i].indexOf(".") + 1, ArrayScores[i].length());
 			}else{
 				String[] dataSplit = ArrayScores[i].split("_");
 				//String imagenFichero = ArrayScores[i].substring(0, ArrayScores[i].lastIndexOf("."));
@@ -488,6 +492,7 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 				res[1][i] = dataSplit[1].replace("-", " ");	//  Autor
 				res[2][i] = dataSplit[2].substring(0, dataSplit[2].indexOf("."));	//  Instrumento
 				res[3][i] = ficheroAImagen(ArrayScores[i]);	// Imagen
+				res[4][i] = ArrayScores[i].substring(ArrayScores[i].indexOf(".") + 1, ArrayScores[i].length());
 			}
 		}
 		
@@ -578,7 +583,7 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 		infoFicheros = darInfoFicheros(ficheros);
 				
 		for (int i = 0; i < ficheros.length; i++){
-			Score ss = new Score(infoFicheros[1][i], infoFicheros[0][i], null, infoFicheros[2][i]);
+			Score ss = new Score(infoFicheros[1][i], infoFicheros[0][i], null, infoFicheros[2][i], infoFicheros[4][i]);
 			
 			// Binds all strings into an array
 			arraylist.add(ss);
@@ -630,29 +635,21 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 		boolean subido = false;
 		
 		Button B_Upload = (Button) MDialog.findViewById(R.id.upload_pdf_button);
-		TextView TV_Upload_Name = (TextView) MDialog.findViewById(R.id.upload_pdf_name);
-		ProgressBar PB_Upload_Progress = (ProgressBar) MDialog.findViewById(R.id.upload_pdf_progress);
-		
-		TV_Upload_Name.setVisibility(View.GONE);
-		PB_Upload_Progress.setVisibility(View.GONE);
-		
+				
 		B_Upload.setOnClickListener(new OnClickListener(){
 
 			@Override
 			public void onClick(View arg0) {
-				Intent i = new Intent(MainScreenActivity.this, FileExplore.class);
+				Intent i = new Intent(context, FileExplore.class);
 				startActivity(i);
 				finish();
 			}
 			
-		});
+		});	
 		
 		if(subido){
-			TV_Upload_Name.setVisibility(View.VISIBLE);
-			TV_Upload_Name.setText("El nombre del fichero");
-			B_Upload.setText(R.string.upload);
+			
 		}
-		
 
 	}
 	//Comprueba si es un PDF por la extensión
@@ -671,4 +668,5 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 			return false;
 		}		
 	}
+
 }

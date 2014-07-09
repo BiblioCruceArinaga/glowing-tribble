@@ -50,6 +50,7 @@ public class ScoresAdapter extends BaseAdapter {
         TextView Author;
         TextView Title;
         ImageView image;
+        ImageView ImageLogo;
     }
     
     @Override
@@ -91,6 +92,7 @@ public class ScoresAdapter extends BaseAdapter {
             
             // Locate the ImageView in listview_item.xml
             holder.image = (ImageView) view.findViewById(R.id.iV_score);                   
+            holder.ImageLogo = (ImageView) view.findViewById(R.id.iV_logo_file);
             
             view.setTag(holder);
         }else{
@@ -104,7 +106,13 @@ public class ScoresAdapter extends BaseAdapter {
         //holder.image.setImageBitmap(imagenFichero(scores_list.get(position).getImage()));
         //holder.image.setBackground(imagenFichero(scores_list.get(position).getImage()));
         holder.image.setBackgroundDrawable(imagenFichero(scores_list.get(position).getImage()));
-                       
+                   
+        
+        //Terminar esto En todos los tamaños de pantalla
+        if(scores_list.get(position).getFormat().equals("pdf")){
+        	holder.ImageLogo.setBackgroundResource(R.drawable.logo);
+        }
+        
         return view;
     }
      

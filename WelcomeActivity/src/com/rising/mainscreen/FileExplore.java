@@ -4,24 +4,23 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FilenameFilter;
-import java.io.OutputStream;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 
+import net.sf.andpdf.nio.ByteBuffer;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.app.Dialog;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Bitmap.CompressFormat;
-import android.graphics.Bitmap.Config;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
+import android.graphics.RectF;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,11 +30,9 @@ import android.widget.ListAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.qoppa.android.pdf.source.FilePDFSource;
-import com.qoppa.android.pdfProcess.PDFDocument;
-import com.qoppa.android.pdfProcess.PDFPage;
-import com.qoppa.android.pdfViewer.fonts.StandardFontTF;
 import com.rising.drawing.R;
+import com.sun.pdfview.PDFFile;
+import com.sun.pdfview.PDFPage;
 
 public class FileExplore extends Activity {
 
@@ -46,44 +43,59 @@ public class FileExplore extends Activity {
 	private Boolean firstLvl = true;
 
 	private static final String TAG = "F_PATH";
-
 	private Item[] fileList;
 	private File path = new File(Environment.getExternalStorageDirectory() + "");
 	private String chosenFile;
 	private static final int DIALOG_LOAD_FILE = 1000;
 	private String scores_path = "/.RisingScores/scores/";
 	private String img_path = "/.RisingScores/scores_images/";
-
+	Context context = this;
 	ListAdapter adapter;
-
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
 		loadFileList();
 		
 		showDialog(DIALOG_LOAD_FILE);
-		Log.d(TAG, path.getAbsolutePath());
-
+	}
+	
+	@Override
+	public void onBackPressed() {
+		super.onBackPressed();
+        Intent i = new Intent(this, MainScreenActivity.class);
+        startActivity(i);
+		finish();
 	}
 
 	private void loadFileList() {
 		try {
 			path.mkdirs();
 		} catch (SecurityException e) {
-			Log.e(TAG, "unable to write on the sd card ");
+			Log.e("Error List", e.getMessage());
+			Toast.makeText(this, getString(R.string.no_space), Toast.LENGTH_LONG).show();
 		}
 
+		FilesPathExist();
+
+		FileAdapter();
+
+	}
+
+	private void FilesPathExist(){
+		
 		// Checks whether path exists
 		if (path.exists()) {
 			FilenameFilter filter = new FilenameFilter() {
+				
 				@Override
 				public boolean accept(File dir, String filename) {
 					File sel = new File(dir, filename);
+				
 					// Filters based on whether the file is hidden or not
-					return (sel.isFile() || sel.isDirectory())
-							&& !sel.isHidden();
-
+					return (sel.isFile() || sel.isDirectory())	&& !sel.isHidden();
 				}
 			};
 
@@ -98,9 +110,6 @@ public class FileExplore extends Activity {
 				// Set drawables
 				if (sel.isDirectory()) {
 					fileList[i].icon = R.drawable.directory_icon;
-					//Log.d("DIRECTORY", fileList[i].file);
-				} else {
-					//Log.d("FILE", fileList[i].file);
 				}
 			}
 
@@ -114,33 +123,31 @@ public class FileExplore extends Activity {
 			}
 		} else {
 			Log.e(TAG, "path does not exist");
+			Toast.makeText(this, getString(R.string.path_error), Toast.LENGTH_LONG).show();
 		}
+	}
 
-		adapter = new ArrayAdapter<Item>(this,
-				android.R.layout.select_dialog_item, android.R.id.text1,
-				fileList) {
+	private void FileAdapter(){
+		adapter = new ArrayAdapter<Item>(this, android.R.layout.select_dialog_item, android.R.id.text1,	fileList) {
+			
 			@Override
 			public View getView(int position, View convertView, ViewGroup parent) {
 				// creates view
 				View view = super.getView(position, convertView, parent);
-				TextView textView = (TextView) view
-						.findViewById(android.R.id.text1);
+				TextView textView = (TextView) view.findViewById(android.R.id.text1);
 
 				// put the image on the text view
-				textView.setCompoundDrawablesWithIntrinsicBounds(
-						fileList[position].icon, 0, 0, 0);
+				textView.setCompoundDrawablesWithIntrinsicBounds(fileList[position].icon, 0, 0, 0);
 
-				// add margin between image and text (support various screen
-				// densities)
+				// add margin between image and text (support various screen densities)
 				int dp5 = (int) (5 * getResources().getDisplayMetrics().density + 0.5f);
 				textView.setCompoundDrawablePadding(dp5);
 
 				return view;
 			}
 		};
-
 	}
-
+	
 	private class Item {
 		public String file;
 		public int icon;
@@ -159,7 +166,7 @@ public class FileExplore extends Activity {
 	@Override
 	protected Dialog onCreateDialog(int id) {
 		Dialog dialog = null;
-		AlertDialog.Builder builder = new Builder(this);
+		final AlertDialog.Builder builder = new Builder(this);
 
 		if (fileList == null) {
 			Log.e(TAG, "No files loaded");
@@ -168,72 +175,70 @@ public class FileExplore extends Activity {
 		}
 
 		switch (id) {
-		case DIALOG_LOAD_FILE:
-			builder.setTitle(getString(R.string.choose_directory));
-			builder.setAdapter(adapter, new DialogInterface.OnClickListener() {
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					chosenFile = fileList[which].file;
-					File sel = new File(path + "/" + chosenFile);
-					if (sel.isDirectory()) {
-						firstLvl = false;
+			case DIALOG_LOAD_FILE:
+				builder.setTitle(getString(R.string.choose_directory));
+				builder.setAdapter(adapter, new DialogInterface.OnClickListener() {
+					
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						chosenFile = fileList[which].file;
+						File sel = new File(path + "/" + chosenFile);
+						if (sel.isDirectory()) {
+							firstLvl = false;
+	
+							// Adds chosen directory to list
+							str.add(chosenFile);
+							fileList = null;
+							path = new File(sel + "");
+	
+							loadFileList();
 
-						// Adds chosen directory to list
-						str.add(chosenFile);
-						fileList = null;
-						path = new File(sel + "");
-
-						loadFileList();
-
-						removeDialog(DIALOG_LOAD_FILE);
-						showDialog(DIALOG_LOAD_FILE);
-						Log.d(TAG, path.getAbsolutePath());
-
-					}
-
-					// Checks if 'up' was clicked
-					else if (chosenFile.equalsIgnoreCase("up") && !sel.exists()) {
-
-						// present directory removed from list
-						String s = str.remove(str.size() - 1);
-
-						// path modified to exclude present directory
-						path = new File(path.toString().substring(0,
-								path.toString().lastIndexOf(s)));
-						fileList = null;
-
-						// if there are no more directories in the list, then
-						// its the first level
-						if (str.isEmpty()) {
-							firstLvl = true;
+							removeDialog(DIALOG_LOAD_FILE);
+							showDialog(DIALOG_LOAD_FILE);
+							Log.d(TAG, path.getAbsolutePath());
+	
 						}
-						loadFileList();
-
-						removeDialog(DIALOG_LOAD_FILE);
-						showDialog(DIALOG_LOAD_FILE);
-						Log.d(TAG, path.getAbsolutePath());
-
-					} else {
-						CopiarArchivos(path.getAbsolutePath().toString()+"/"+chosenFile);
-						finish();
+	
+						// Checks if 'up' was clicked
+						else if (chosenFile.equalsIgnoreCase("up") && !sel.exists()) {
+	
+							// present directory removed from list
+							String s = str.remove(str.size() - 1);
+	
+							// path modified to exclude present directory
+							path = new File(path.toString().substring(0, path.toString().lastIndexOf(s)));
+							fileList = null;
+	
+							// if there are no more directories in the list, then its the first level
+							if (str.isEmpty()) {
+								firstLvl = true;
+							}
+							loadFileList();
+	
+							removeDialog(DIALOG_LOAD_FILE);
+							showDialog(DIALOG_LOAD_FILE);
+							Log.d(TAG, path.getAbsolutePath());
+	
+						} else {
+							CopiarArchivos(path.getAbsolutePath().toString()+"/"+chosenFile);
+							finish();
+						}
 					}
-
-				}
-			});
-			break;
+				});
+				break;
 		}
-		dialog = builder.show();
+		
+		dialog = builder.show();		
 		return dialog;
 	}
 	
-	//Hacer esto y la extracción de las imagenes en un hilo aparte. 
 	public void CopiarArchivos(String path) {
                         	
 		File origen = new File(path);
         File destino = new File(Environment.getExternalStorageDirectory() + scores_path, chosenFile);
 
         if(ComprobarFichero(origen)){
-        	
+        	       	
         	//Falta hacer el progress bar e indicarle al usuario el proceso. 
         	   try{
         		  FileInputStream or = new FileInputStream(origen);
@@ -247,12 +252,12 @@ public class FileExplore extends Activity {
  	              out.close();
  	              or.close();
  	              des.close();
+ 	               	
+ 	              getRenderImagen();
  	              
- 	              Log.i("Destino", destino.toString() + ", String: " + Environment.getExternalStorageDirectory() + scores_path + chosenFile);
- 	              getPDFImagen();
- 	               	        
  	              Intent i = new Intent(this, MainScreenActivity.class);
  	              startActivity(i);
+ 	              finish();
  	              
  	        } catch(Exception e){
  	            Log.e("Error copiar", e.getMessage());
@@ -263,54 +268,43 @@ public class FileExplore extends Activity {
 
 	}
 	
-	public void getPDFImagen(){
-				
-		try{
-				
-			//this static allows the sdk to access font assets, 
-            //it must be set prior to utilizing libraries
-            StandardFontTF.mAssetMgr = getAssets();
-          
-            // Load a document and get the first page
-            PDFDocument pdf = new PDFDocument(new FilePDFSource(Environment.getExternalStorageDirectory() + scores_path + chosenFile), null);
-            //PDFFile pdf = new PDFFile(PDFSource(Environment.getExternalStorageDirectory() + scores_path + chosenFile));
-            
-            PDFPage page = pdf.getPage(0);
-              
-            // Create a bitmap and canvas to draw the page into
-            int width = (int)Math.ceil (page.getDisplayWidth());
-            int height = (int)Math.ceil(page.getDisplayHeight());
-            Bitmap bm = Bitmap.createBitmap(width, height, Config.ARGB_8888);
-              
-            // Create canvas to draw into the bitmap
-            Canvas c = new Canvas (bm);
-              
-            // Fill the bitmap with a white background
-            Paint whiteBgnd = new Paint();
-            whiteBgnd.setColor(Color.WHITE);
-            whiteBgnd.setStyle(Paint.Style.FILL);
-            c.drawRect(0, 0, width, height, whiteBgnd);
-                       
-            // paint the page into the canvas
-            page.paintPage(c);
-            
-            // Save the bitmap
-            OutputStream outStream = new FileOutputStream(Environment.getExternalStorageDirectory() + img_path + ChangeExtention(chosenFile, ".jpg"));
-          	bm.compress(CompressFormat.JPEG, 80, outStream);
-          	outStream.close();
+	public void getRenderImagen(){
+		byte[] bytes;
+	    try {
 
-        }
-        catch(Exception e){
-              Log.e("error", Log.getStackTraceString(e));
-        }
+	        File file = new File(Environment.getExternalStorageDirectory() + scores_path + chosenFile);
+	        FileInputStream is = new FileInputStream(file);
+
+	        // Get the size of the file
+	        long length = file.length();
+	        bytes = new byte[(int) length];
+	        int offset = 0;
+	        int numRead = 0;
+	        while (offset < bytes.length && (numRead=is.read(bytes, offset, bytes.length-offset)) >= 0) {
+	            offset += numRead;
+	        }
+
+	        ByteBuffer buffer = ByteBuffer.NEW(bytes);
+	        PDFFile pdf_file = new PDFFile(buffer);
+	        PDFPage page = pdf_file.getPage(0, true);
+
+	        RectF rect = new RectF(0, 0, (int) page.getBBox().width(), (int) page.getBBox().height());
+
+	        Bitmap image = page.getImage((int)page.getWidth(), (int)page.getHeight(), rect);
+	        FileOutputStream os = new FileOutputStream(Environment.getExternalStorageDirectory() + img_path + ChangeExtention(chosenFile, ".jpg"));
+	        image.compress(Bitmap.CompressFormat.JPEG, 80, os);
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
 	}
-	
-	public String ChangeExtention(String s, String extension){		
+		
+	public String ChangeExtention(String s, String extension){
 		String file = s.substring(0, s.lastIndexOf('.'));
 		
 		return file+extension.toLowerCase();
 	}
-		
+	
 	//Comprueba si es un PDF por la extensión
 	public boolean ComprobarFichero(File f){
 		
@@ -328,5 +322,5 @@ public class FileExplore extends Activity {
 			return false;
 		}		
 	}
-
+	
 }

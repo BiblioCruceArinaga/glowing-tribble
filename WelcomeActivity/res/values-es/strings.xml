@@ -80,7 +80,9 @@
     	<string name="upload">Subir</string>
     	<string name="select">Seleccionar</string>
     	<string name="choose_directory">Elige el archivo</string>
-    	<string name="pdf_error">El archivo seleccionado no es un archivo PDF</string>    	
+    	<string name="pdf_error">El archivo seleccionado no es un archivo PDF</string>   
+    	<string name="path_error">Hubo un error con el explorador</string>
+    	<string name="uploading">Subiendo archivo</string> 	
     	
     	<!-- Menú contextual -->
     	<string name="select_all">Seleccionar todos</string>
