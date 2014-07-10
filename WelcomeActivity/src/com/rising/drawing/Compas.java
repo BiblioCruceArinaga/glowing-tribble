@@ -11,10 +11,11 @@ public class Compas {
 	private ElementoGrafico[] clefs = {null, null};
 	private ArrayList<Integer> positions;
 	private ElementoGrafico dynamics;
+	private ElementoGrafico fifths;
 	private ElementoGrafico pedalStart;
 	private ElementoGrafico pedalStop;
 	private ElementoGrafico time;
-	private ElementoGrafico words;
+	private ArrayList<ElementoGrafico> words;
 	
 	//  Información ya analizada
 	private ArrayList<Nota> notas;
@@ -22,8 +23,9 @@ public class Compas {
 	private Intensidad intensidad;
 	private Pedal pedalInicio;
 	private Pedal pedalFin;
+	private Quintas quintas;
 	private Tempo tempo;
-	private Texto texto;
+	private ArrayList<Texto> textos;
     
     //  Bpm y su posición en el array de órdenes de dibujo
     private int bpm;
@@ -41,17 +43,19 @@ public class Compas {
 		barlines = new ArrayList<ElementoGrafico>();
 		positions = new ArrayList<Integer>();
 		dynamics = null;
+		fifths = null;
 		pedalStart = null;
 		pedalStop = null;
 		time = null;
-		words = null;
+		words = new ArrayList<ElementoGrafico>();
 		
 		notas = new ArrayList<Nota>();
 		intensidad = null;
 		pedalInicio = null;
 		pedalFin = null;
+		quintas = null;
 		tempo = null;
-		texto = null;
+		textos = new ArrayList<Texto>();
 		
 		bpm = -1;
 		bpmIndex = -1;
@@ -86,6 +90,14 @@ public class Compas {
 		if (note != null)
 			if (!positions.contains(note.getPosition())) 
 				positions.add(note.getPosition());
+	}
+	
+	public void addWords(ElementoGrafico words) {
+		this.words.add(words);
+		
+		if (words != null)
+			if (!positions.contains(words.getPosition()))
+				positions.add(words.getPosition());
 	}
 	
 	public void clearClefs() {
@@ -125,6 +137,10 @@ public class Compas {
 		return dynamics;
 	}
 	
+	public ElementoGrafico getFifths() {
+		return fifths;
+	}
+	
 	public Intensidad getIntensidad() {
 		return intensidad;
 	}
@@ -162,32 +178,36 @@ public class Compas {
 		return positions;
 	}
 	
+	public Quintas getQuintas() {
+		return quintas;
+	}
+	
 	public Tempo getTempo() {
 		return tempo;
 	}
 	
-	public Texto getTexto() {
-		return texto;
+	public Texto getTexto(int index) {
+		return textos.get(index);
 	}
 	
 	public ElementoGrafico getTime() {
 		return time;
 	}
 	
-	public ElementoGrafico getWords() {
-		return words;
+	public int getNumWords() {
+		return words.size();
 	}
 	
-	public byte getWordsLocation() {
-		return words.getValue(0);
+	public byte getWordsLocation(int index) {
+		return words.get(index).getValue(0);
 	}
 	
-	public int getWordsPosition() {
-		return words.getPosition();
+	public int getWordsPosition(int index) {
+		return words.get(index).getPosition();
 	}
 	
-	public String getWordsString() {
-		ArrayList<Byte> bytesWords = words.getValues();
+	public String getWordsString(int index) {
+		ArrayList<Byte> bytesWords = words.get(index).getValues();
 		byte[] bytesArray = new byte[bytesWords.size()];
         int len = bytesArray.length;
         for (int i=1; i<len; i++) bytesArray[i] = bytesWords.get(i);
@@ -271,6 +291,10 @@ public class Compas {
 		return dynamics != null;
 	}
 	
+	public boolean hayFifths() {
+		return fifths != null;
+	}
+	
 	public boolean hayIntensidad() {
 		return intensidad != null;
 	}
@@ -299,12 +323,16 @@ public class Compas {
 		return pedalStop != null;
 	}
 	
+	public boolean hayQuintas() {
+		return quintas != null;
+	}
+	
 	public boolean hayTempo() {
 		return tempo != null && tempo.dibujar();
 	}
 	
-	public boolean hayTexto() {
-		return texto != null;
+	public boolean hayTextos() {
+		return !textos.isEmpty();
 	}
 	
 	public boolean hayTime() {
@@ -345,6 +373,10 @@ public class Compas {
 	
 	public int numeroDePulsos() {
 		return tempo.numeroDePulsos();
+	}
+	
+	public int numeroDeTextos() {
+		return textos.size();
 	}
 	
 	//  Devuelve un array con cada valor de X de cada elemento
@@ -435,6 +467,10 @@ public class Compas {
 				positions.add(dynamics.getPosition());
 	}
 	
+	public void setFifths(ElementoGrafico fifths) {
+		this.fifths = fifths;
+	}
+	
 	public void setIntensidad(Intensidad intensidad) {
 		this.intensidad = intensidad;
 	}
@@ -466,13 +502,17 @@ public class Compas {
 			if (!positions.contains(pedalStop.getPosition()))
 				positions.add(pedalStop.getPosition());
 	}
+	
+	public void setQuintas(Quintas quintas) {
+		this.quintas = quintas;
+	}
 
 	public void setTempo(Tempo tempo) {
 		this.tempo = tempo;
 	}
 	
-	public void setTexto(Texto texto) {
-		this.texto = texto;
+	public void addTexto(Texto texto) {
+		textos.add(texto);
 	}
 	
 	public void setTime(ElementoGrafico time) {
@@ -481,14 +521,6 @@ public class Compas {
 		if (time != null)
 			if (!positions.contains(time.getPosition())) 
 				positions.add(time.getPosition());
-	}
-	
-	public void setWords(ElementoGrafico words) {
-		this.words = words;
-		
-		if (words != null)
-			if (!positions.contains(words.getPosition()))
-				positions.add(words.getPosition());
 	}
 	
 	public void setXIni(int x_ini) {
@@ -542,11 +574,14 @@ public class Compas {
 		nuevoCompas.addClef(clonarElementoGrafico(clefs[0]));
 		nuevoCompas.addClef(clonarElementoGrafico(clefs[1]));
 		
+		nuevoCompas.setFifths(clonarElementoGrafico(getFifths()));
 		nuevoCompas.setDynamics(clonarElementoGrafico(getDynamics()));
 		nuevoCompas.setPedalStart(clonarElementoGrafico(getPedalStart()));
 		nuevoCompas.setPedalStop(clonarElementoGrafico(getPedalStop()));
 		nuevoCompas.setTime(clonarElementoGrafico(getTime()));
-		nuevoCompas.setWords(clonarElementoGrafico(getWords()));
+		
+		for (int i=0; i<words.size(); i++)
+			nuevoCompas.addWords(clonarElementoGrafico(words.get(i)));
 	}
 	
 	private Nota clonarNota(Nota oldNote) {

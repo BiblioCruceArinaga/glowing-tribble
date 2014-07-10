@@ -196,6 +196,21 @@ public class DrawingMethods {
 		compas.setIntensidad(intensidad);
 	}
 	
+	private void calcularFifths(Compas compas) {
+		ElementoGrafico fifths = compas.getFifths();
+		byte notaQuintasByte = fifths.getValue(1);
+		byte valorQuintasByte = fifths.getValue(2);
+		int posicion = calcularPosicionX(compas.getPositions(), fifths.getPosition());
+
+		Quintas quintas = new Quintas();
+		quintas.setNotaQuintas(notaQuintasByte);
+		quintas.setValorQuintas(valorQuintasByte);
+		quintas.setX(compas_margin_x + posicion);
+		quintas.setMargenY(compas_margin_y);
+
+		compas.setQuintas(quintas);
+	}
+	
 	private void calcularPedals(Compas compas) {
 		if (compas.hayPedalStart()) {
 			ElementoGrafico dynamics = compas.getPedalStart();
@@ -229,6 +244,7 @@ public class DrawingMethods {
 		compas_margin_x += config.getMargenIzquierdoCompases();
 
 		if (compas.hayClefs()) calcularClefs(compas);
+		if (compas.hayFifths()) calcularFifths(compas);
 		calcularTime(compas);
 		if (compas.hayWords()) calcularWords(compas);
 		if (compas.hayDynamics()) calcularDynamics(compas);
@@ -344,6 +360,9 @@ public class DrawingMethods {
 				case 6:
 					inicializarTempo(tempo, compas, 3, 4);
 					break;
+				case 7:
+					inicializarTempo(tempo, compas, 6, 4);
+					break;
 				default:
 					break;
 			}
@@ -357,14 +376,18 @@ public class DrawingMethods {
 	}
 	
 	private void calcularWords(Compas compas) {
-		Texto texto = new Texto();
-		int posicionX = calcularPosicionX(compas.getPositions(), compas.getWordsPosition());
+		int numWords = compas.getNumWords();
 		
-		texto.setTexto(compas.getWordsString());
-		texto.setX(compas_margin_x + posicionX);
-		texto.setY(obtenerPosicionYDeElementoGrafico(3, compas.getWordsLocation()));
-		
-		compas.setTexto(texto);
+		for (int i=0; i<numWords; i++) {
+			Texto texto = new Texto();
+			int posicionX = calcularPosicionX(compas.getPositions(), compas.getWordsPosition(i));
+			
+			texto.setTexto(compas.getWordsString(i));
+			texto.setX(compas_margin_x + posicionX);
+			texto.setY(obtenerPosicionYDeElementoGrafico(3, compas.getWordsLocation(i)));
+			
+			compas.addTexto(texto);
+		}
 	}
 
 	private Tempo clonarTempo(Tempo tempoViejo) {
@@ -473,9 +496,11 @@ public class DrawingMethods {
 			compas.getTempo().setYDenominador(compas.getTempo().getYDenominador() + distancia_y);
 		}
 		
-		if (compas.hayTexto()) {
-			compas.getTexto().setX(compas.getTexto().getX() - distancia_x);
-			compas.getTexto().setY(compas.getTexto().getY() + distancia_y);
+		if (compas.hayTextos()) {
+			for (int i=0; i<compas.numeroDeTextos(); i++) {
+				compas.getTexto(i).setX(compas.getTexto(i).getX() - distancia_x);
+				compas.getTexto(i).setY(compas.getTexto(i).getY() + distancia_y);
+			}
 		}
 		
 		compas_margin_x = compas.getXFin();
@@ -612,7 +637,7 @@ public class DrawingMethods {
 			case 3:
 				switch (location) {
 					case 1:
-						return compas_margin_y - config.getDistanciaLineasPentagrama();
+						return compas_margin_y - config.getDistanciaLineasPentagrama() * 4;
 					case 2:
 						return compas_margin_y + config.getDistanciaLineasPentagrama() * 6;
 					case 4:
@@ -1539,11 +1564,13 @@ public class DrawingMethods {
         	}
         }
         
-        if (compas.hayTexto()) {
-        	if (compas.getTexto().getX() != xPrimeraNota) {
-        		multiplicador = xsDelCompas.indexOf(compas.getTexto().getX());
-	        	compas.getTexto().setX( 
-	        			compas.getTexto().getX() + anchoPorNota * multiplicador);
+        if (compas.hayTextos()) {
+        	for (int i=0; i<compas.numeroDeTextos(); i++) {
+	        	if (compas.getTexto(i).getX() != xPrimeraNota) {
+	        		multiplicador = xsDelCompas.indexOf(compas.getTexto(i).getX());
+		        	compas.getTexto(i).setX( 
+		        			compas.getTexto(i).getX() + anchoPorNota * multiplicador);
+	        	}
         	}
         }
 	}
@@ -1886,10 +1913,11 @@ public class DrawingMethods {
 			dibujarLineasDePentagramaDeCompas(compases.get(i));
 			dibujarClaves(compases.get(i));
 			
+			if (compases.get(i).hayQuintas()) dibujarQuintas(compases.get(i));
 			if (compases.get(i).hayIntensidad()) dibujarIntensidad(compases.get(i));
 			if (compases.get(i).hayPedales()) dibujarPedales(compases.get(i));
 			if (compases.get(i).hayTempo()) dibujarTempo(compases.get(i));
-			if (compases.get(i).hayTexto()) dibujarTexto(compases.get(i));
+			if (compases.get(i).hayTextos()) dibujarTextos(compases.get(i));
 			
 			dibujarNotasDeCompas(compases.get(i));
 			
@@ -2662,6 +2690,55 @@ public class DrawingMethods {
 
 		return !nota.tieneBeams();
 	}
+	
+	private void dibujarQuintas(Compas compas) {
+		Quintas quintas = compas.getQuintas();
+		
+		switch (quintas.getValorQuintas()) {
+			case -5:
+				if (quintas.getNotaQuintas() == 3) {
+					dibujarQuintasAlteraciones(flat, quintas.getX(), 
+							quintas.getMargenY() + config.getDistanciaLineasPentagrama());
+					dibujarQuintasAlteraciones(flat, quintas.getX() + 20, 
+							quintas.getMargenY() - config.getDistanciaLineasPentagramaMitad());
+					dibujarQuintasAlteraciones(flat, quintas.getX() + 40, 
+							quintas.getMargenY() + config.getDistanciaLineasPentagramaMitad() +
+							config.getDistanciaLineasPentagrama());
+					dibujarQuintasAlteraciones(flat, quintas.getX() + 60, quintas.getMargenY());
+					dibujarQuintasAlteraciones(flat, quintas.getX() + 80, 
+							quintas.getMargenY() + config.getDistanciaLineasPentagrama() * 2);
+					
+					if (partitura.getStaves() == 2) {
+						int offset = config.getDistanciaLineasPentagrama() * 4 +
+								config.getDistanciaPentagramas() + config.getDistanciaLineasPentagrama();
+						
+						dibujarQuintasAlteraciones(flat, quintas.getX(), 
+								quintas.getMargenY() + offset + config.getDistanciaLineasPentagrama());
+						dibujarQuintasAlteraciones(flat, quintas.getX() + 20, 
+								quintas.getMargenY() + offset - config.getDistanciaLineasPentagramaMitad());
+						dibujarQuintasAlteraciones(flat, quintas.getX() + 40, 
+								quintas.getMargenY() + offset + config.getDistanciaLineasPentagramaMitad() +
+								config.getDistanciaLineasPentagrama());
+						dibujarQuintasAlteraciones(flat, quintas.getX() + 60, quintas.getMargenY() + offset);
+						dibujarQuintasAlteraciones(flat, quintas.getX() + 80, 
+								quintas.getMargenY() + offset + config.getDistanciaLineasPentagrama() * 2);
+					}
+				}
+				break;
+				
+			default:
+				break;
+		}
+	}
+	
+	private void dibujarQuintasAlteraciones(Bitmap image, int x, int y) {
+		OrdenDibujo ordenDibujo = new OrdenDibujo();
+		ordenDibujo.setOrden(DrawOrder.DRAW_BITMAP);
+		ordenDibujo.setImagen(image);
+		ordenDibujo.setX1(x);
+		ordenDibujo.setY1(y);
+		ordenesDibujo.add(ordenDibujo);
+	}
 
 	private void dibujarSlash(int x, int y) {
 		OrdenDibujo ordenDibujo = new OrdenDibujo();
@@ -2716,16 +2793,20 @@ public class DrawingMethods {
 		}
 	}
 	
-	private void dibujarTexto(Compas compas) {
-		Texto texto = compas.getTexto();
+	private void dibujarTextos(Compas compas) {
+		int numTextos = compas.numeroDeTextos();
 		
-		OrdenDibujo ordenDibujo = new OrdenDibujo();
-		ordenDibujo.setOrden(DrawOrder.DRAW_TEXT);
-		ordenDibujo.setPaint(PaintOptions.SET_TEXT_SIZE, config.getTamanoLetraWords());
-		ordenDibujo.setTexto(texto.getTexto());
-		ordenDibujo.setX1(texto.getX());
-		ordenDibujo.setY1(texto.getY());
-		ordenesDibujo.add(ordenDibujo);
+		for (int i=0; i<numTextos; i++) {
+			Texto texto = compas.getTexto(i);
+			
+			OrdenDibujo ordenDibujo = new OrdenDibujo();
+			ordenDibujo.setOrden(DrawOrder.DRAW_TEXT);
+			ordenDibujo.setPaint(PaintOptions.SET_TEXT_SIZE, config.getTamanoLetraWords());
+			ordenDibujo.setTexto(texto.getTexto());
+			ordenDibujo.setX1(texto.getX());
+			ordenDibujo.setY1(texto.getY());
+			ordenesDibujo.add(ordenDibujo);
+		}
 	}
 	
 	//  Busca, en el array de ligaduras de unión, el índice

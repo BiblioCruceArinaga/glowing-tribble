@@ -269,8 +269,8 @@ public class Config {
 										
 						y_accent_up = 30;
 						x_accidental = 20;
-						y_accidental = 10;
-						y_accidental_flat = 17;
+						y_accidental = 5;
+						y_accidental_flat = 12;
 						y_bend = 40;
 						y_bpm = 30;
 						y_clave_sol_segunda = 63;

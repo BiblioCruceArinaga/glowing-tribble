@@ -127,7 +127,7 @@ public class FileMethods {
 			case 27:
 				elemento.addAllValues(leerHastaAlmohadilla());
 				elemento.setPosition(leerHastaAlmohadilla());
-				compas.setWords(elemento);
+				compas.addWords(elemento);
 				break;
 
 			case 28:
@@ -146,6 +146,13 @@ public class FileMethods {
 				elemento.addValue(fichero.readByte());
 				elemento.setPosition(leerHastaAlmohadilla());
 				compas.setTime(elemento);
+				break;
+				
+			case 32:
+				elemento.addValue(fichero.readByte());
+				elemento.addValue(fichero.readByte());
+				elemento.setPosition(leerHastaAlmohadilla());
+				compas.setFifths(elemento);
 				break;
 				
 			default: 
