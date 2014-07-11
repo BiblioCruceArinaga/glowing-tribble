@@ -9,20 +9,23 @@ public class Compas {
 	//  Información tal cual fue leída en el fichero
 	private ArrayList<ElementoGrafico> barlines;
 	private ElementoGrafico[] clefs = {null, null};
-	private ArrayList<Integer> positions;
 	private ElementoGrafico dynamics;
 	private ElementoGrafico fifths;
-	private ElementoGrafico pedalStart;
-	private ElementoGrafico pedalStop;
+	private ArrayList<ElementoGrafico> pedalStarts;
+	private ArrayList<ElementoGrafico> pedalStops;
+	private ArrayList<Integer> positions;
 	private ElementoGrafico time;
+	private ArrayList<ElementoGrafico> wedges;
 	private ArrayList<ElementoGrafico> words;
 	
 	//  Información ya analizada
 	private ArrayList<Nota> notas;
 	private Clave[] claves = {null, null};
+	private ArrayList<Wedge> crescendos;
+	private ArrayList<Wedge> diminuendos;
 	private Intensidad intensidad;
-	private Pedal pedalInicio;
-	private Pedal pedalFin;
+	private ArrayList<Pedal> pedalesInicio;
+	private ArrayList<Pedal> pedalesFin;
 	private Quintas quintas;
 	private Tempo tempo;
 	private ArrayList<Texto> textos;
@@ -44,15 +47,18 @@ public class Compas {
 		positions = new ArrayList<Integer>();
 		dynamics = null;
 		fifths = null;
-		pedalStart = null;
-		pedalStop = null;
+		pedalStarts = new ArrayList<ElementoGrafico>();
+		pedalStops = new ArrayList<ElementoGrafico>();
 		time = null;
+		wedges = new ArrayList<ElementoGrafico>();
 		words = new ArrayList<ElementoGrafico>();
 		
+		crescendos = new ArrayList<Wedge>();
+		diminuendos = new ArrayList<Wedge>();
 		notas = new ArrayList<Nota>();
 		intensidad = null;
-		pedalInicio = null;
-		pedalFin = null;
+		pedalesInicio = new ArrayList<Pedal>();
+		pedalesFin = new ArrayList<Pedal>();
 		quintas = null;
 		tempo = null;
 		textos = new ArrayList<Texto>();
@@ -84,12 +90,56 @@ public class Compas {
 				positions.add(clef.getPosition());
 	}
 	
+	public void addCrescendo(Wedge crescendo) {
+		crescendos.add(crescendo);
+	}
+	
+	public void addDiminuendo(Wedge diminuendo) {
+		diminuendos.add(diminuendo);
+	}
+	
 	public void addNote(Nota note) {
 		notas.add(note);
 		
 		if (note != null)
 			if (!positions.contains(note.getPosition())) 
 				positions.add(note.getPosition());
+	}
+	
+	public void addPedalFin(Pedal pedalFin) {
+		pedalesFin.add(pedalFin);
+	}
+	
+	public void addPedalInicio(Pedal pedalInicio) {
+		pedalesInicio.add(pedalInicio);
+	}
+
+	public void addPedalStart(ElementoGrafico pedalStart) {
+		pedalStarts.add(pedalStart);
+		
+		if (pedalStart != null)
+			if (!positions.contains(pedalStart.getPosition()))
+				positions.add(pedalStart.getPosition());
+	}
+	
+	public void addPedalStop(ElementoGrafico pedalStop) {
+		pedalStops.add(pedalStop);
+		
+		if (pedalStop != null)
+			if (!positions.contains(pedalStop.getPosition()))
+				positions.add(pedalStop.getPosition());
+	}
+	
+	public void addTexto(Texto texto) {
+		textos.add(texto);
+	}
+	
+	public void addWedge(ElementoGrafico wedge) {
+		wedges.add(wedge);
+		
+		if (wedge != null)
+			if (!positions.contains(wedge.getPosition()))
+				positions.add(wedge.getPosition());
 	}
 	
 	public void addWords(ElementoGrafico words) {
@@ -157,20 +207,20 @@ public class Compas {
 		return numeroCompas;
 	}
 	
-	public Pedal getPedalFin() {
-		return pedalFin;
+	public Pedal getPedalFin(int index) {
+		return pedalesFin.get(index);
 	}
 	
-	public Pedal getPedalInicio() {
-		return pedalInicio;
+	public Pedal getPedalInicio(int index) {
+		return pedalesInicio.get(index);
 	}
 	
-	public ElementoGrafico getPedalStart() {
-		return pedalStart;
+	public ElementoGrafico getPedalStart(int index) {
+		return pedalStarts.get(index);
 	}
 	
-	public ElementoGrafico getPedalStop() {
-		return pedalStop;
+	public ElementoGrafico getPedalStop(int index) {
+		return pedalStops.get(index);
 	}
 	
 	public ArrayList<Integer> getPositions() {
@@ -193,9 +243,25 @@ public class Compas {
 	public ElementoGrafico getTime() {
 		return time;
 	}
+
+	public int getNumPedalStarts() {
+		return pedalStarts.size();
+	}
+	
+	public int getNumPedalStops() {
+		return pedalStops.size();
+	}
+	
+	public int getNumWedges() {
+		return wedges.size();
+	}
 	
 	public int getNumWords() {
 		return words.size();
+	}
+	
+	public ElementoGrafico getWedge(int index) {
+		return wedges.get(index);
 	}
 	
 	public byte getWordsLocation(int index) {
@@ -300,27 +366,27 @@ public class Compas {
 	}
 
 	public boolean hayPedals() {
-		return pedalStart != null || pedalStop != null;
+		return hayPedalStart() || hayPedalStop();
 	}
 	
 	public boolean hayPedales() {
-		return pedalFin != null || pedalInicio != null;
+		return hayPedalInicio() || hayPedalFin();
 	}
 	
 	public boolean hayPedalFin() {
-		return pedalFin != null;
+		return !pedalesFin.isEmpty();
 	}
 	
 	public boolean hayPedalInicio() {
-		return pedalInicio != null;
+		return !pedalesInicio.isEmpty();
 	}
 	
 	public boolean hayPedalStart() {
-		return pedalStart != null;
+		return !pedalStarts.isEmpty();
 	}
 	
 	public boolean hayPedalStop() {
-		return pedalStop != null;
+		return !pedalStops.isEmpty();
 	}
 	
 	public boolean hayQuintas() {
@@ -337,6 +403,10 @@ public class Compas {
 	
 	public boolean hayTime() {
 		return time != null;
+	}
+	
+	public boolean hayWedges() {
+		return !wedges.isEmpty();
 	}
 	
 	public boolean hayWords() {
@@ -371,6 +441,14 @@ public class Compas {
 		return notas.size();
 	}
 	
+	public int numeroDePedalesFin() {
+		return pedalesFin.size();
+	}
+	
+	public int numeroDePedalesInicio() {
+		return pedalesInicio.size();
+	}
+	
 	public int numeroDePulsos() {
 		return tempo.numeroDePulsos();
 	}
@@ -401,12 +479,14 @@ public class Compas {
 				xEncontradas.add(getIntensidad().getX());
 		
 		if (hayPedalInicio())
-			if (!xEncontradas.contains(getPedalInicio().getX()))
-				xEncontradas.add(getPedalInicio().getX());
+			for (int i=0; i<pedalesInicio.size(); i++)
+				if (!xEncontradas.contains(getPedalInicio(i).getX()))
+					xEncontradas.add(getPedalInicio(i).getX());
 		
 		if (hayPedalFin())
-			if (!xEncontradas.contains(getPedalFin().getX()))
-				xEncontradas.add(getPedalFin().getX());
+			for (int i=0; i<pedalesFin.size(); i++)
+				if (!xEncontradas.contains(getPedalFin(i).getX()))
+					xEncontradas.add(getPedalFin(i).getX());
 		
 		if (hayTempo())
 			if (!xEncontradas.contains(getTempo().getX()))
@@ -479,40 +559,12 @@ public class Compas {
 		this.numeroCompas = numeroCompas;
 	}
 	
-	public void setPedalFin(Pedal pedalFin) {
-		this.pedalFin = pedalFin;
-	}
-	
-	public void setPedalInicio(Pedal pedalInicio) {
-		this.pedalInicio = pedalInicio;
-	}
-
-	public void setPedalStart(ElementoGrafico pedalStart) {
-		this.pedalStart = pedalStart;
-		
-		if (pedalStart != null)
-			if (!positions.contains(pedalStart.getPosition()))
-				positions.add(pedalStart.getPosition());
-	}
-	
-	public void setPedalStop(ElementoGrafico pedalStop) {
-		this.pedalStop = pedalStop;
-		
-		if (pedalStop != null)
-			if (!positions.contains(pedalStop.getPosition()))
-				positions.add(pedalStop.getPosition());
-	}
-	
 	public void setQuintas(Quintas quintas) {
 		this.quintas = quintas;
 	}
 
 	public void setTempo(Tempo tempo) {
 		this.tempo = tempo;
-	}
-	
-	public void addTexto(Texto texto) {
-		textos.add(texto);
 	}
 	
 	public void setTime(ElementoGrafico time) {
@@ -576,10 +628,12 @@ public class Compas {
 		
 		nuevoCompas.setFifths(clonarElementoGrafico(getFifths()));
 		nuevoCompas.setDynamics(clonarElementoGrafico(getDynamics()));
-		nuevoCompas.setPedalStart(clonarElementoGrafico(getPedalStart()));
-		nuevoCompas.setPedalStop(clonarElementoGrafico(getPedalStop()));
 		nuevoCompas.setTime(clonarElementoGrafico(getTime()));
 		
+		for (int i=0; i<pedalStarts.size(); i++)
+			nuevoCompas.addPedalStart(clonarElementoGrafico(getPedalStart(i)));
+		for (int i=0; i<pedalStops.size(); i++)
+			nuevoCompas.addPedalStop(clonarElementoGrafico(getPedalStop(i)));
 		for (int i=0; i<words.size(); i++)
 			nuevoCompas.addWords(clonarElementoGrafico(words.get(i)));
 	}

@@ -33,6 +33,7 @@ public class DrawingMethods {
 	//  Variables para la gestión de las múltiples notas
 	private ArrayList<IndiceNota> beams = new ArrayList<IndiceNota>();
 	private ArrayList<IndiceNota> ligaduras = new ArrayList<IndiceNota>();
+	private int ligaduraExpresionY = Integer.MAX_VALUE;
 	private int octavarium = 0;
 	private int x_ini_octavarium = 0;
 	private int y_ini_octavarium = 0;
@@ -213,27 +214,31 @@ public class DrawingMethods {
 	
 	private void calcularPedals(Compas compas) {
 		if (compas.hayPedalStart()) {
-			ElementoGrafico dynamics = compas.getPedalStart();
-			byte location = dynamics.getValue(0);
-			int posicion = calcularPosicionX(compas.getPositions(), dynamics.getPosition());
-
-			Pedal pedalInicio = new Pedal();
-			pedalInicio.setImagen(pedalStart);
-			pedalInicio.setX(compas_margin_x + posicion);
-			pedalInicio.setY(obtenerPosicionYDeElementoGrafico(2, location));
-			compas.setPedalInicio(pedalInicio);
+			for (int i=0; i<compas.getNumPedalStarts(); i++) {
+				ElementoGrafico pedal = compas.getPedalStart(i);
+				byte location = pedal.getValue(0);
+				int posicion = calcularPosicionX(compas.getPositions(), pedal.getPosition());
+	
+				Pedal pedalInicio = new Pedal();
+				pedalInicio.setImagen(pedalStart);
+				pedalInicio.setX(compas_margin_x + posicion);
+				pedalInicio.setY(obtenerPosicionYDeElementoGrafico(2, location));
+				compas.addPedalInicio(pedalInicio);
+			}
 		}
 		
 		if (compas.hayPedalStop()) {
-			ElementoGrafico dynamics = compas.getPedalStop();
-			byte location = dynamics.getValue(0);
-			int posicion = calcularPosicionX(compas.getPositions(), dynamics.getPosition());
-
-			Pedal pedalFin = new Pedal();
-			pedalFin.setImagen(pedalStop);
-			pedalFin.setX(compas_margin_x + posicion);
-			pedalFin.setY(obtenerPosicionYDeElementoGrafico(2, location));
-			compas.setPedalFin(pedalFin);
+			for (int i=0; i<compas.getNumPedalStops(); i++) {
+				ElementoGrafico pedal = compas.getPedalStop(i);
+				byte location = pedal.getValue(0);
+				int posicion = calcularPosicionX(compas.getPositions(), pedal.getPosition());
+	
+				Pedal pedalFin = new Pedal();
+				pedalFin.setImagen(pedalStop);
+				pedalFin.setX(compas_margin_x + posicion);
+				pedalFin.setY(obtenerPosicionYDeElementoGrafico(2, location));
+				compas.addPedalFin(pedalFin);
+			}
 		}
 	}
 	
@@ -249,6 +254,7 @@ public class DrawingMethods {
 		if (compas.hayWords()) calcularWords(compas);
 		if (compas.hayDynamics()) calcularDynamics(compas);
 		if (compas.hayPedals()) calcularPedals(compas);
+		if (compas.hayWedges()) calcularWedges(compas);
 		
 		compas.setXIniNotas(compas_margin_x);
 		
@@ -375,6 +381,20 @@ public class DrawingMethods {
 		}
 	}
 	
+	private void calcularWedges(Compas compas) {
+		int numWedges = compas.getNumWedges();
+		
+		for (int i=0; i<numWedges; i++) {
+			int posicionX = calcularPosicionX(compas.getPositions(), compas.getWedge(i).getPosition());
+			Wedge wedge = new Wedge(compas.getWedge(i).getValue(1), compas_margin_x + posicionX);
+
+			if (wedge.crescendo())
+				compas.addCrescendo(wedge);
+			else
+				compas.addDiminuendo(wedge);
+		}
+	}
+	
 	private void calcularWords(Compas compas) {
 		int numWords = compas.getNumWords();
 		
@@ -481,13 +501,17 @@ public class DrawingMethods {
 		}
 		
 		if (compas.hayPedalInicio()) {
-			compas.getPedalInicio().setX(compas.getPedalInicio().getX() - distancia_x);
-			compas.getPedalInicio().setY(compas.getPedalInicio().getY() + distancia_y);
+			for (int i=0; i<compas.numeroDePedalesInicio(); i++) {
+				compas.getPedalInicio(i).setX(compas.getPedalInicio(i).getX() - distancia_x);
+				compas.getPedalInicio(i).setY(compas.getPedalInicio(i).getY() + distancia_y);
+			}
 		}
 		
 		if (compas.hayPedalFin()) {
-			compas.getPedalFin().setX(compas.getPedalFin().getX() - distancia_x);
-			compas.getPedalFin().setY(compas.getPedalFin().getY() + distancia_y);
+			for (int i=0; i<compas.numeroDePedalesFin(); i++) {
+				compas.getPedalFin(i).setX(compas.getPedalFin(i).getX() - distancia_x);
+				compas.getPedalFin(i).setY(compas.getPedalFin(i).getY() + distancia_y);
+			}
 		}
 		
 		if (compas.hayTempo()) {
@@ -1493,10 +1517,12 @@ public class DrawingMethods {
 	            	compas.getIntensidad().setX(compas.getIntensidad().getX() + anchoParaCadaCompas);
 	            
 	            if (compas.hayPedalInicio())
-	            	compas.getPedalInicio().setX(compas.getPedalInicio().getX() + anchoParaCadaCompas);
+	            	for (int j=0; j<compas.numeroDePedalesInicio(); j++)
+	            		compas.getPedalInicio(j).setX(compas.getPedalInicio(j).getX() + anchoParaCadaCompas);
 	            
 	            if (compas.hayPedalFin())
-	            	compas.getPedalFin().setX(compas.getPedalFin().getX() + anchoParaCadaCompas);
+	            	for (int j=0; j<compas.numeroDePedalesFin(); j++)
+	            		compas.getPedalFin(j).setX(compas.getPedalFin(j).getX() + anchoParaCadaCompas);
 	            
 	            if (compas.hayTempo())
 	            	compas.getTempo().setX(compas.getTempo().getX() + anchoParaCadaCompas);
@@ -1549,18 +1575,22 @@ public class DrawingMethods {
     	}
         
     	if (compas.hayPedalInicio()) {
-    		if (compas.getPedalInicio().getX() != xPrimeraNota) {
-	    		multiplicador = xsDelCompas.indexOf(compas.getPedalInicio().getX());
-	        	compas.getPedalInicio().setX( 
-	        			compas.getPedalInicio().getX() + anchoPorNota * multiplicador);
+    		for (int i=0; i<compas.numeroDePedalesInicio(); i++) {
+	    		if (compas.getPedalInicio(i).getX() != xPrimeraNota) {
+		    		multiplicador = xsDelCompas.indexOf(compas.getPedalInicio(i).getX());
+		        	compas.getPedalInicio(i).setX( 
+		        			compas.getPedalInicio(i).getX() + anchoPorNota * multiplicador);
+	    		}
     		}
     	}
         
         if (compas.hayPedalFin()) {
-        	if (compas.getPedalFin().getX() != xPrimeraNota) {
-	        	multiplicador = xsDelCompas.indexOf(compas.getPedalFin().getX());
-	        	compas.getPedalFin().setX( 
-	        			compas.getPedalFin().getX() + anchoPorNota * multiplicador);
+        	for (int i=0; i<compas.numeroDePedalesInicio(); i++) {
+	        	if (compas.getPedalFin(i).getX() != xPrimeraNota) {
+		        	multiplicador = xsDelCompas.indexOf(compas.getPedalFin(i).getX());
+		        	compas.getPedalFin(i).setX( 
+		        			compas.getPedalFin(i).getX() + anchoPorNota * multiplicador);
+	        	}
         	}
         }
         
@@ -1878,6 +1908,11 @@ public class DrawingMethods {
 		ordenDibujo.setX1(nota.getX() + desplazamiento);
 		ordenDibujo.setY1(nota.getY());
 		
+		//  La y de la ligadura de expresión debe colocarse tan arriba como
+		//  obligue a ello la nota más alta en medio de las notas ligadas
+		if (ligaduraExpresionY > nota.getY())
+			ligaduraExpresionY = nota.getY();
+			
 		if (!nota.acorde()) y_anterior = nota.getY();
 
 		ordenesDibujo.add(ordenDibujo);
@@ -2178,6 +2213,7 @@ public class DrawingMethods {
 			case 33:
 				int indLigaduraExpresion = encontrarIndiceLigadura(nota.getLigaduraExpresion());
 				dibujarLigaduraExpresion(indLigaduraExpresion, posicionX, posicionY);
+				ligaduraExpresionY = Integer.MAX_VALUE;
 				break;
 				
 			case 34:
@@ -2254,18 +2290,34 @@ public class DrawingMethods {
 			ordenDibujo.setOrden(DrawOrder.DRAW_ARC);
 			ordenDibujo.setPaint(PaintOptions.SET_STYLE_STROKE, 0);
 			ordenDibujo.setPaint(PaintOptions.SET_STROKE_WIDTH, 2);
-			ordenDibujo.setAngulo(hallarAngulo(yInicio, yFinal));
 			
 			RectF rectf = null;
-			if (nota.ligaduraExpresionEncima()) {
-				int y = Math.min(yInicio, yFinal);
-				
-				rectf = new RectF(xInicio, y - config.getYLigadurasExpresion(), 
-					xFinal + config.getAnchoCabezaNota(), 
-					y + config.getAlturaArcoLigadurasExpresion());
-			}
-			ordenDibujo.setRectF(rectf, config.getAnchoLigaduraUnionMax(), config.getOffsetLigaduraExpresion());
+			int notasEnMedio = notaActual - notaInicio;
 			
+			if (nota.ligaduraExpresionEncima()) {
+				
+				//  No son notas contiguas
+				if (notasEnMedio > 1) {
+					ordenDibujo.setAngulo(0);
+					
+					rectf = new RectF(xInicio, ligaduraExpresionY - config.getYLigadurasExpresion(), 
+						xFinal + config.getAnchoCabezaNota(), ligaduraExpresionY);
+				}
+				
+				//  Son notas contiguas
+				else {
+					ordenDibujo.setAngulo(hallarAngulo(yInicio, yFinal));
+					
+					int y = Math.min(yInicio, yFinal);
+					rectf = new RectF(xInicio, y - config.getYLigadurasExpresion(), 
+						xFinal + config.getAnchoCabezaNota(), 
+						y + config.getAlturaArcoLigadurasExpresion());
+				}
+			}
+			
+			//  Else en el futuro para las ligaduras dibujadas por debajo
+			
+			ordenDibujo.setRectF(rectf, config.getAnchoLigaduraUnionMax(), config.getOffsetLigaduraExpresion());
 			ordenesDibujo.add(ordenDibujo);
 		}
 		
@@ -2632,25 +2684,29 @@ public class DrawingMethods {
 	
 	private void dibujarPedales(Compas compas) {
 		if (compas.hayPedalInicio()) {
-			Pedal pedalInicio = compas.getPedalInicio();
-			
-			OrdenDibujo ordenDibujo = new OrdenDibujo();
-			ordenDibujo.setOrden(DrawOrder.DRAW_BITMAP);
-			ordenDibujo.setImagen(pedalInicio.getImagen());
-			ordenDibujo.setX1(pedalInicio.getX());
-			ordenDibujo.setY1(pedalInicio.getY());
-			ordenesDibujo.add(ordenDibujo);
+			for (int i=0; i<compas.numeroDePedalesInicio(); i++) {
+				Pedal pedalInicio = compas.getPedalInicio(i);
+				
+				OrdenDibujo ordenDibujo = new OrdenDibujo();
+				ordenDibujo.setOrden(DrawOrder.DRAW_BITMAP);
+				ordenDibujo.setImagen(pedalInicio.getImagen());
+				ordenDibujo.setX1(pedalInicio.getX());
+				ordenDibujo.setY1(pedalInicio.getY());
+				ordenesDibujo.add(ordenDibujo);
+			}
 		}
 		
 		if (compas.hayPedalFin()) {
-			Pedal pedalFin = compas.getPedalFin();
-			
-			OrdenDibujo ordenDibujo = new OrdenDibujo();
-			ordenDibujo.setOrden(DrawOrder.DRAW_BITMAP);
-			ordenDibujo.setImagen(pedalFin.getImagen());
-			ordenDibujo.setX1(pedalFin.getX());
-			ordenDibujo.setY1(pedalFin.getY());
-			ordenesDibujo.add(ordenDibujo);
+			for (int i=0; i<compas.numeroDePedalesFin(); i++) {
+				Pedal pedalFin = compas.getPedalFin(i);
+				
+				OrdenDibujo ordenDibujo = new OrdenDibujo();
+				ordenDibujo.setOrden(DrawOrder.DRAW_BITMAP);
+				ordenDibujo.setImagen(pedalFin.getImagen());
+				ordenDibujo.setX1(pedalFin.getX());
+				ordenDibujo.setY1(pedalFin.getY());
+				ordenesDibujo.add(ordenDibujo);
+			}
 		}
 	}
 	

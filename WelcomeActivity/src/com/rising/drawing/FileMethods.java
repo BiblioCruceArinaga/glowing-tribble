@@ -115,13 +115,13 @@ public class FileMethods {
 			case 25:
 				elemento.addValue(figuraGrafica);
 				elemento.setPosition(leerHastaAlmohadilla());
-				compas.setPedalStart(elemento);
+				compas.addPedalStart(elemento);
 				break;
 
 			case 26:
 				elemento.addValue(figuraGrafica);
 				elemento.setPosition(leerHastaAlmohadilla());
-				compas.setPedalStop(elemento);
+				compas.addPedalStop(elemento);
 				break;
 
 			case 27:
@@ -153,6 +153,15 @@ public class FileMethods {
 				elemento.addValue(fichero.readByte());
 				elemento.setPosition(leerHastaAlmohadilla());
 				compas.setFifths(elemento);
+				break;
+				
+			case 33:
+			case 34:
+			case 35:
+			case 36:
+				elemento.addValue(figuraGrafica);
+				elemento.setPosition(leerHastaAlmohadilla());
+				compas.addWedge(elemento);
 				break;
 				
 			default: 
