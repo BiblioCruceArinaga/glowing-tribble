@@ -10,11 +10,13 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.text.util.Linkify;
@@ -262,11 +264,23 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 			
 			//Si es un PDF abre el PDF, si no, el otro. 
 			if(ComprobarFichero(ficheros[position])){
-				
-				Intent intent = new Intent(context, PDFReaderActivity.class);
-			    intent.putExtra(PdfViewerActivity.EXTRA_PDFFILENAME, Environment.getExternalStorageDirectory() + path + ficheros[position]);
-			    
-			    startActivity(intent);
+
+					//Abrir con lector pdf de la aplicación
+					Intent intent_scores = new Intent(context, PDFReaderActivity.class);
+				    intent_scores.putExtra(PdfViewerActivity.EXTRA_PDFFILENAME, Environment.getExternalStorageDirectory() + path + ficheros[position]);	    
+					
+				    //Abrir con lector pdf del sistema
+					File file = new File(Environment.getExternalStorageDirectory() + path + ficheros[position]);
+					Intent target = new Intent(Intent.ACTION_VIEW);
+					target.setDataAndType(Uri.fromFile(file), "application/pdf");
+					target.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+					Intent intent = Intent.createChooser(target, "Open File");
+					
+					try {
+						startActivity(intent_scores);
+					} catch (Exception e) {
+						startActivity(intent);
+					}  
 			}else{
 				if(new DownloadScoresEncrypter(context, infoFicheros[0][position]+conf.getUserId()).DescryptAndConfirm(ficheros[position])){
 					Intent i = new Intent(MainScreenActivity.this, MainActivity.class);
@@ -483,7 +497,7 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 				res[1][i] = "";	//  Autor
 				res[2][i] = "";	//  Instrumento
 				res[3][i] = ficheroAImagen(ArrayScores[i]);	// Imagen
-				res[4][i] = ArrayScores[i].substring(ArrayScores[i].indexOf(".") + 1, ArrayScores[i].length());
+				res[4][i] = ArrayScores[i].substring(ArrayScores[i].lastIndexOf(".") + 1, ArrayScores[i].length());
 			}else{
 				String[] dataSplit = ArrayScores[i].split("_");
 				//String imagenFichero = ArrayScores[i].substring(0, ArrayScores[i].lastIndexOf("."));
@@ -492,7 +506,7 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 				res[1][i] = dataSplit[1].replace("-", " ");	//  Autor
 				res[2][i] = dataSplit[2].substring(0, dataSplit[2].indexOf("."));	//  Instrumento
 				res[3][i] = ficheroAImagen(ArrayScores[i]);	// Imagen
-				res[4][i] = ArrayScores[i].substring(ArrayScores[i].indexOf(".") + 1, ArrayScores[i].length());
+				res[4][i] = ArrayScores[i].substring(ArrayScores[i].lastIndexOf(".") + 1, ArrayScores[i].length());
 			}
 		}
 		

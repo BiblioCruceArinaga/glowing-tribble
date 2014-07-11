@@ -122,6 +122,7 @@ public abstract class PdfViewerActivity extends Activity {
 	private boolean restoreInstance() {
 		mOldGraphView = null;
 		Log.e(TAG, "restoreInstance");
+		
 		if (getLastNonConfigurationInstance()==null)
 			return false;
 		PdfViewerActivity inst =(PdfViewerActivity)getLastNonConfigurationInstance();
@@ -188,7 +189,6 @@ public abstract class PdfViewerActivity extends Activity {
         else {
 	        mGraphView = new GraphView(this);	        
 	        Intent intent = getIntent();
-	        Log.i(TAG, ""+intent);
 
 	        boolean showImages = getIntent().getBooleanExtra(PdfViewerActivity.EXTRA_SHOWIMAGES, PdfViewerActivity.DEFAULTSHOWIMAGES);
 	        PDFImage.sShowImages = showImages;
@@ -852,8 +852,9 @@ public abstract class PdfViewerActivity extends Activity {
         	mPdfFile = new PDFFile(bb);
         else
         	mPdfFile = new PDFFile(bb, new PDFPassword(password));
-	        
+	                
         mGraphView.showText("Anzahl Seiten:" + mPdfFile.getNumPages());
+        raf.close();
     }
         
     /*private byte[] readBytes(File srcFile) throws IOException {

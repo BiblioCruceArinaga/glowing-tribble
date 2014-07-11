@@ -12,6 +12,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Environment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -106,11 +107,9 @@ public class ScoresAdapter extends BaseAdapter {
         //holder.image.setImageBitmap(imagenFichero(scores_list.get(position).getImage()));
         //holder.image.setBackground(imagenFichero(scores_list.get(position).getImage()));
         holder.image.setBackgroundDrawable(imagenFichero(scores_list.get(position).getImage()));
-                   
-        
-        //Terminar esto En todos los tamaños de pantalla
+                           
         if(scores_list.get(position).getFormat().equals("pdf")){
-        	holder.ImageLogo.setBackgroundResource(R.drawable.logo);
+        	holder.ImageLogo.setBackgroundResource(R.drawable.pdf_logo);
         }
         
         return view;

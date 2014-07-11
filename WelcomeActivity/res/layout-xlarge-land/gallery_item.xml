@@ -60,6 +60,12 @@
         android:gravity="center"
         android:background="?android:attr/activatedBackgroundIndicator" />
      
-
+	<ImageView
+         android:id="@+id/iV_logo_file"
+         android:layout_width="90dp"
+         android:layout_height="80dp"
+         android:layout_gravity="right|bottom"
+         android:layout_margin="30dp"
+         android:contentDescription="@string/contentDescription"/>
 
 </FrameLayout>

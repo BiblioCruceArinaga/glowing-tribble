@@ -6,21 +6,26 @@ import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import net.sf.andpdf.nio.ByteBuffer;
+import net.sf.andpdf.refs.WeakReference;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Bitmap.Config;
+import android.graphics.Color;
 import android.graphics.RectF;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,8 +36,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.rising.drawing.R;
+import com.sun.pdfview.Cache;
+import com.sun.pdfview.ImageInfo;
+import com.sun.pdfview.PDFCmd;
 import com.sun.pdfview.PDFFile;
 import com.sun.pdfview.PDFPage;
+import com.sun.pdfview.PDFRenderer;
 
 public class FileExplore extends Activity {
 
@@ -246,7 +255,7 @@ public class FileExplore extends Activity {
  	              FileChannel in = (or).getChannel();
  	              FileChannel out = (des).getChannel();
  	              
- 	              in.transferTo(0, origen.length(), out);
+ 	              in.transferTo(0, origen.length(), out); 
  	              
  	              in.close();
  	              out.close();
@@ -270,6 +279,7 @@ public class FileExplore extends Activity {
 	
 	public void getRenderImagen(){
 		byte[] bytes;
+		
 	    try {
 
 	        File file = new File(Environment.getExternalStorageDirectory() + scores_path + chosenFile);
@@ -283,19 +293,24 @@ public class FileExplore extends Activity {
 	        while (offset < bytes.length && (numRead=is.read(bytes, offset, bytes.length-offset)) >= 0) {
 	            offset += numRead;
 	        }
+	        
+	        is.close();
 
 	        ByteBuffer buffer = ByteBuffer.NEW(bytes);
 	        PDFFile pdf_file = new PDFFile(buffer);
 	        PDFPage page = pdf_file.getPage(0, true);
-
-	        RectF rect = new RectF(0, 0, (int) page.getBBox().width(), (int) page.getBBox().height());
-
+	        
+	        RectF rect = new RectF(0, 0, (int)page.getWidth(), (int)page.getHeight());
+	        
 	        Bitmap image = page.getImage((int)page.getWidth(), (int)page.getHeight(), rect);
 	        FileOutputStream os = new FileOutputStream(Environment.getExternalStorageDirectory() + img_path + ChangeExtention(chosenFile, ".jpg"));
 	        image.compress(Bitmap.CompressFormat.JPEG, 80, os);
 
+	        os.close();
+	        
 	    } catch (Exception e) {
 	        e.printStackTrace();
+	        Log.e("Error", "Error con el PDF");
 	    }
 	}
 		
