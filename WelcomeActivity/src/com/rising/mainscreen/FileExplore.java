@@ -6,13 +6,8 @@ import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import net.sf.andpdf.nio.ByteBuffer;
-import net.sf.andpdf.refs.WeakReference;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
@@ -21,8 +16,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Bitmap.Config;
-import android.graphics.Color;
 import android.graphics.RectF;
 import android.os.Bundle;
 import android.os.Environment;
@@ -36,12 +29,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.rising.drawing.R;
-import com.sun.pdfview.Cache;
-import com.sun.pdfview.ImageInfo;
-import com.sun.pdfview.PDFCmd;
 import com.sun.pdfview.PDFFile;
 import com.sun.pdfview.PDFPage;
-import com.sun.pdfview.PDFRenderer;
 
 public class FileExplore extends Activity {
 

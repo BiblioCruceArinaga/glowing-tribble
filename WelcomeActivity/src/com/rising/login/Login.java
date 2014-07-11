@@ -14,14 +14,12 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -40,7 +38,6 @@ import com.facebook.widget.LoginButton.OnErrorListener;
 import com.rising.conexiones.HttpPostAux;
 import com.rising.drawing.R;
 import com.rising.login.ActivityRegistro.OnTaskCompleted;
-import com.rising.login.UserDataNetworkConnection.OnLoginCompleted;
 import com.rising.mainscreen.MainScreenActivity;
 import com.rising.store.DatosUsuario;
 
@@ -49,58 +46,34 @@ import com.rising.store.DatosUsuario;
 
 public class Login extends FragmentActivity {
 	
-	SessionManager session;
+	SessionManager session; //Habría que separarlo también
 	LoginButton authButton;
-	public Configuration conf = new Configuration(this);
 	public static String FId;
 	public static String FName;
 	public static String FMail;
 
-	private EditText Mail, Pass;
 	private Button Login, Registro;
 	private TextView OlvidaPass;
 	private EditText Mail_OlvidoPass, Nombre_Registro, Mail_Registro, Pass_Registro, ConfiPass_Registro;	
-	private Button Confirm_Login, Cancel_Login;
 	private Button Confirm_OlvidoPass, Cancel_OlvidoPass;
 	private Button Confirm_Reg, Cancel_Reg;
 	private ProgressDialog PDialog;
 	private HttpPostAux HPA =  new HttpPostAux();
-	private Dialog LPDialog, LDialog, RDialog, EDialog;
-	private String usuario = "";
-	private String passw = "";
+	private Dialog LPDialog, RDialog;
 	private String pass = "";
 	private String confipass = "";
 	private String mail = "";
 	private String name = "";	
 	private String language = "";
 	private Context ctx;
-	private String URL_connect = "http://www.scores.rising.es/login-mobile";
 	private String URL_Check_Facebook = "http://www.scores.rising.es/login-facebook-mobile";
 	public static UserDataNetworkConnection dunc;
 	public static ArrayList<DatosUsuario> userData;
-	
-	private OnLoginCompleted listenerUser = new OnLoginCompleted(){
-		public void onLoginCompleted(){
-			
-			userData = dunc.devolverDatos();
-
-			Log.i("UserData", "" + dunc.devolverDatos().get(0).getMoney());
-			
-            conf.setUserId(userData.get(0).getId());
-            
-            Log.i("Conf", userData.get(0).getMoney() + "");
-            
-            conf.setUserName(userData.get(0).getName());
-
-            conf.setUserEmail(userData.get(0).getMail());
-            
-            conf.setUserMoney(userData.get(0).getMoney());
-		}
-	};
-	
+		
 	//  Recibir la señal del proceso que termina el registro
 	private OnTaskCompleted listener = new OnTaskCompleted() {
-	    public void onTaskCompleted(int details) {  
+
+	    public void onTaskCompleted(int details) { 
 	    	PDialog.dismiss();
 	    	
 	    	Pass_Registro.setText("");
@@ -130,16 +103,16 @@ public class Login extends FragmentActivity {
 	};
 	
 	@Override
+	
 	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
-		//setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);  
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.login_layout);
-		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);  
+		
 		language = Locale.getDefault().getDisplayLanguage();
 		
 		session = new SessionManager(getApplicationContext());
-		dunc = new UserDataNetworkConnection(listenerUser, getApplicationContext());
 		ctx = this;
 				
 		if (session.isLoggedIn()) {
@@ -165,54 +138,8 @@ public class Login extends FragmentActivity {
 
 			@Override
 			public void onClick(View v) {
-				if(isOnline()){	
-					LDialog = new Dialog(Login.this, R.style.cust_dialog);
-					
-					LDialog.setContentView(R.layout.login_dialog);
-					LDialog.setTitle(R.string.login_title);
-					
-					Confirm_Login = (Button)LDialog.findViewById(R.id.b_confirm_login);
-					Cancel_Login = (Button)LDialog.findViewById(R.id.b_cancel_login);
-					Mail = (EditText)LDialog.findViewById(R.id.et_mail);
-					Pass = (EditText)LDialog.findViewById(R.id.et_pass);
-					
-					Confirm_Login.setOnClickListener(new OnClickListener(){
-	
-						@Override
-						public void onClick(View v) {
-	
-				        	usuario = Mail.getText().toString();
-				        	passw = Pass.getText().toString();
-				        	
-				        	Log.i("Login", "Mail: " + usuario + ", Pass: " + passw);
-				        					        	
-			        		if (checkLoginData(usuario, passw)==true) {
-			        			
-			        			new asynclogin().execute(usuario,passw);    
-			        			Pass.setText("");		        			
-			        		}else{
-			        			errLogin(0);
-			        		} 
-			        		
-			        		LDialog.dismiss();
-						}
-						
-					});
-					
-					Cancel_Login.setOnClickListener(new OnClickListener(){
-	
-						@Override
-						public void onClick(View v) {
-							LDialog.dismiss();					
-						}
-						
-					});
-					
-					LDialog.show();
-				}else{
-					Toast.makeText(ctx, R.string.connection_err, Toast.LENGTH_LONG).show();
-				}	
-        	}  
+				new Login_Actions(ctx).LoginButton_Actions();
+			}  
 		});
 		
 		//  Acciones al presionar sobre la frase de nombre OlvidaPass
@@ -220,7 +147,7 @@ public class Login extends FragmentActivity {
 			
 			@Override
 			public void onClick(View v) {
-				if(isOnline()){
+				if(new Login_Utils(ctx).isOnline()){
 					LPDialog = new Dialog(Login.this, R.style.cust_dialog);
 					
 					LPDialog.setContentView(R.layout.olvidopass_dialog);
@@ -267,7 +194,7 @@ public class Login extends FragmentActivity {
 
 			@Override
 			public void onClick(View v) {
-				if(isOnline()){	
+				if(new Login_Utils(ctx).isOnline()){	
 					RDialog = new Dialog(Login.this, R.style.cust_dialog);
 					
 					RDialog.setContentView(R.layout.registro_dialog);
@@ -351,7 +278,7 @@ public class Login extends FragmentActivity {
 	    	
 			@Override
 			public void call(Session session, SessionState state, Exception exception) {
-				if(isOnline()){
+				if(new Login_Utils(ctx).isOnline()){
 					if(session.isOpened()){
 						Request.newMeRequest(session, new Request.GraphUserCallback() {
 							
@@ -382,58 +309,8 @@ public class Login extends FragmentActivity {
 		super.onActivityResult(requestCode, resultCode, data);
 	    Session.getActiveSession().onActivityResult(this, requestCode, resultCode, data);
 	}
-	
-	//  Mostrar errores
-    public void errLogin(int code){
-    	
-    	EDialog = new Dialog(Login.this, R.style.cust_dialog);
-    	EDialog.getWindow();
-        EDialog.requestWindowFeature(Window.FEATURE_NO_TITLE); 
-		EDialog.setContentView(R.layout.login_error_dialog);
-		EDialog.getWindow().setLayout(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
-		
-		TextView tv_E = (TextView)EDialog.findViewById(R.id.error_tV);
-		
-		switch (code) {
-			case 0:
-				tv_E.setText(R.string.err_campos_vacios);
-				break;
-			case 2:
-				tv_E.setText(R.string.err_login_unknown_user);
-				break;
-			case 3:
-				tv_E.setText(R.string.err_not_active);
-				break;
-			default:
-				tv_E.setText(R.string.err_login_unknown);
-		}
-		
-		Button  Login_Error_Close_Button = (Button)EDialog.findViewById(R.id.error_button);
-		
-		Login_Error_Close_Button.setOnClickListener(new OnClickListener(){
 
-			@Override
-			public void onClick(View v) {
-				
-				EDialog.dismiss();				
-			}
-		});
-    	
-		EDialog.show();		
-    }
-	
-    //  Este método valida que no haya ningun campo en blanco, 
-    //  devolviendo false si false si lo hay y true si no.
-    public boolean checkLoginData(String username ,String password ){
-    	
-	    if(username.equals("") || password.equals("")){
-	    	return false;
-	    }else{
-	    	return true;
-	    }
-    }
-
-    //  Este método valida que las contraseñas sean iguales
+	//  Este método valida que las contraseñas sean iguales
     public boolean checkPass(String pass, String confipass){
     	
     	if(confipass.equals(pass)){
@@ -442,85 +319,6 @@ public class Login extends FragmentActivity {
     		return false;
     	}
     } 
-
-	public boolean isOnline() {
-		ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-		try {
-			return cm.getActiveNetworkInfo().isConnectedOrConnecting();
-		} catch(NullPointerException n) {
-			return false;
-		}
-	}
-    
-    //  Validar el estado del login
-    public int loginStatus(String username, String password) {
-    	int logStatus=-1;
-    	
-    	ArrayList<NameValuePair> postparameters2send = new ArrayList<NameValuePair>();
-		postparameters2send.add(new BasicNameValuePair("usuario", username));
-		postparameters2send.add(new BasicNameValuePair("password", password));
-
-      	JSONArray jData = HPA.getServerData(postparameters2send, URL_connect);
-
-		if (jData!=null && jData.length() > 0){
-			JSONObject json_Data;
-			
-			try {
-				json_Data = jData.getJSONObject(0);
-				logStatus=json_Data.getInt("logstatus");
-				Log.e("LoginStatus","LogStatus= "+logStatus);
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}		            
-		             
-			//  Aquí se valida el valor obtenido
-		    if (logStatus==0) Log.e("LoginStatus ", "Invalido");
-		    else Log.e("LoginStatus ", "Valido");
-
-		}else{	
-			Log.e("JSON", "ERROR");
-		}
-		
-		return logStatus;
-    }   
-
-    //  Gestión del login
-    class asynclogin extends AsyncTask< String, String, Integer > {
-        	 
-    	String user,pass;
-        protected void onPreExecute() {
-            PDialog = new ProgressDialog(Login.this);
-            PDialog.setMessage(getString(R.string.auth));
-            PDialog.setIndeterminate(false);
-            PDialog.setCancelable(false);
-            PDialog.show();
-        }
-     
-    	protected Integer doInBackground(String... params){
-    		user=params[0];
-    		pass=params[1];
-    		
-        	return loginStatus(user,pass);  		
-    	}
-           
-        protected void onPostExecute(Integer result) {
-        	PDialog.dismiss();
-            Log.e("onPostExecute=",""+result);
-            
-            userData = new ArrayList<DatosUsuario>();
-            
-            if (result == 1) {
-            	dunc.execute(usuario);
-            	
-            	session.createLoginSession(user, "", "-1");            	
-    			Intent i=new Intent(Login.this, MainScreenActivity.class);
-    			startActivity(i); 
-    			finish();	
-            }else{
-               	errLogin(result);
-            }
-        }
-    }
 
     //  Gestión del login / registro mediante Facebook
     class asyncFacebook_process extends AsyncTask<String, String, Integer>{
