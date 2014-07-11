@@ -10,7 +10,6 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -258,44 +257,52 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 		
 		scores_gallery.setOnItemClickListener(new OnItemClickListener(){
 
-		@Override
-		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-			Log.i("Position", ficheros[position]);
-			
-			//Si es un PDF abre el PDF, si no, el otro. 
-			if(ComprobarFichero(ficheros[position])){
-
-					//Abrir con lector pdf de la aplicación
-					Intent intent_scores = new Intent(context, PDFReaderActivity.class);
-				    intent_scores.putExtra(PdfViewerActivity.EXTRA_PDFFILENAME, Environment.getExternalStorageDirectory() + path + ficheros[position]);	    
-					
-				    //Abrir con lector pdf del sistema
-					File file = new File(Environment.getExternalStorageDirectory() + path + ficheros[position]);
-					Intent target = new Intent(Intent.ACTION_VIEW);
-					target.setDataAndType(Uri.fromFile(file), "application/pdf");
-					target.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-					Intent intent = Intent.createChooser(target, "Open File");
-					
-					try {
-						startActivity(intent_scores);
-					} catch (Exception e) {
-						startActivity(intent);
-					}  
-			}else{
-				if(new DownloadScoresEncrypter(context, infoFicheros[0][position]+conf.getUserId()).DescryptAndConfirm(ficheros[position])){
-					Intent i = new Intent(MainScreenActivity.this, MainActivity.class);
-					i.putExtra("score", ficheros[position]);
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				Log.i("Position", ficheros[position]);
+				
+				//Si es un PDF abre el PDF, si no, el otro. 
+				if(ComprobarFichero(ficheros[position])){
 	
-					startActivity(i);
+					AbrirPDFExterno(position);
+					 				    
 				}else{
-					Incorrect_User.show();
+					if(new DownloadScoresEncrypter(context, infoFicheros[0][position]+conf.getUserId()).DescryptAndConfirm(ficheros[position])){
+						Intent i = new Intent(MainScreenActivity.this, MainActivity.class);
+						i.putExtra("score", ficheros[position]);
+		
+						startActivity(i);
+					}else{
+						Incorrect_User.show();
+					}
 				}
-			}
-		} 
-	});
+			} 
+		});
 	
 	}
 		
+	public void AbrirPDFExterno(int position){
+		
+		//Abrir con lector pdf del sistema
+		File file = new File(Environment.getExternalStorageDirectory() + path + ficheros[position]);
+		Intent target = new Intent(Intent.ACTION_VIEW);
+		target.setDataAndType(Uri.fromFile(file), "application/pdf");
+		target.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+		Intent intent = Intent.createChooser(target, "Open File");
+		startActivity(intent);
+		
+		//No he encontrado la manera de abrirlo a pantalla completa
+	}
+	
+	//No se usa actualmente, pero no lo descarto para el futuro
+	public void AbrirPDFInterno(int position){
+		//Abrir con lector pdf de la aplicación
+		Intent intent_scores = new Intent(context, PDFReaderActivity.class);
+	    intent_scores.putExtra(PdfViewerActivity.EXTRA_PDFFILENAME, Environment.getExternalStorageDirectory() + path + ficheros[position]);	    
+		
+	    startActivity(intent_scores);
+	} 
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.main, menu);
