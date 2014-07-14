@@ -6,6 +6,7 @@ public class Wedge {
 	private boolean crescendo = true;
 	
 	private int xIni = 0;
+	private int yIni = 0;
 	private int xFin = 0;
 	
 	public Wedge(byte value, int position) {
@@ -39,7 +40,23 @@ public class Wedge {
 		return xIni;
 	}
 	
+	public int getYIni() {
+		return yIni;
+	}
+	
 	public int getXFin() {
 		return xFin;
+	}
+	
+	public void setXIni(int xIni) {
+		this.xIni = xIni;
+	}
+	
+	public void setXFin(int xFin) {
+		this.xFin = xFin;
+	}
+	
+	public void setYIni(int yIni) {
+		this.yIni = yIni;
 	}
 }

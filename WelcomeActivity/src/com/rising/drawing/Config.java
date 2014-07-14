@@ -8,6 +8,7 @@ public class Config {
 	private int alto_dialog_bpm;
 	private int altura_arco_ligaduras_expresion;
 	private int altura_arco_ligaduras_union;
+	private int altura_crescendos;
 	private int ancho_beams;
 	private int ancho_beams_nota_gracia;
 	private int ancho_cabeza_nota;
@@ -118,6 +119,7 @@ public class Config {
 						alto_dialog_bpm = 850;
 						altura_arco_ligaduras_expresion = 30;
 						altura_arco_ligaduras_union = 50;
+						altura_crescendos = 20;
 						ancho_beams = 8;
 						ancho_beams_nota_gracia = 4;
 						ancho_cabeza_nota = 25;
@@ -213,6 +215,7 @@ public class Config {
 						alto_dialog_bpm = 850;
 						altura_arco_ligaduras_expresion = 30;
 						altura_arco_ligaduras_union = 50;
+						altura_crescendos = 20;
 						ancho_beams = 8;
 						ancho_beams_nota_gracia = 4;
 						ancho_cabeza_nota = 26;
@@ -322,6 +325,10 @@ public class Config {
 	
 	public int getAlturaArcoLigadurasUnion() {
 		return altura_arco_ligaduras_union;
+	}
+	
+	public int getAlturaCrescendos() {
+		return altura_crescendos;
 	}
 	
 	public int getAnchoBeams() {

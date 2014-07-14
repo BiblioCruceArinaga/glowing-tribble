@@ -90,6 +90,10 @@ public class Nota implements Comparable<Nota> {
 		return figurasGraficas.contains((byte) 4);
 	}
 	
+	public boolean finDeTresillo(int indFigura) {
+		return figurasGraficas.get(indFigura) == 4;
+	}
+	
 	public byte getBeam() {
 		return beam;
 	}

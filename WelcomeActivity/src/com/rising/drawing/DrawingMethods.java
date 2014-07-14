@@ -383,11 +383,24 @@ public class DrawingMethods {
 	
 	private void calcularWedges(Compas compas) {
 		int numWedges = compas.getNumWedges();
+		int posicionX = 0;
+		
+		//  Asumimos que los crescendos o diminuendos estarán siempre
+		//  contenidos dentro del mismo compás. También estamos
+		//  asumiendo que, en la partitura, siempre que se indique el
+		//  comienzo de un crescendo o diminuendo, su posición
+		//  final vendrá justo después
 		
 		for (int i=0; i<numWedges; i++) {
-			int posicionX = calcularPosicionX(compas.getPositions(), compas.getWedge(i).getPosition());
+			posicionX = calcularPosicionX(compas.getPositions(), compas.getWedge(i).getPosition());
 			Wedge wedge = new Wedge(compas.getWedge(i).getValue(1), compas_margin_x + posicionX);
+			wedge.setYIni(obtenerPosicionYDeElementoGrafico(4, compas.getWedge(i).getValue(0)));
 
+			i++;
+			
+			posicionX = calcularPosicionX(compas.getPositions(), compas.getWedge(i).getPosition());
+			wedge.setXFin(compas_margin_x + posicionX);
+			
 			if (wedge.crescendo())
 				compas.addCrescendo(wedge);
 			else
@@ -525,6 +538,18 @@ public class DrawingMethods {
 				compas.getTexto(i).setX(compas.getTexto(i).getX() - distancia_x);
 				compas.getTexto(i).setY(compas.getTexto(i).getY() + distancia_y);
 			}
+		}
+		
+		for (int i=0; i<compas.numeroDeCrescendos(); i++) {
+			compas.getCrescendo(i).setXIni(compas.getCrescendo(i).getXIni() - distancia_x);
+			compas.getCrescendo(i).setXFin(compas.getCrescendo(i).getXFin() - distancia_x);
+			compas.getCrescendo(i).setYIni(compas.getCrescendo(i).getYIni() + distancia_y);
+		}
+		
+		for (int i=0; i<compas.numeroDeDiminuendos(); i++) {
+			compas.getDiminuendo(i).setXIni(compas.getDiminuendo(i).getXIni() - distancia_x);
+			compas.getDiminuendo(i).setXFin(compas.getDiminuendo(i).getXFin() - distancia_x);
+			compas.getDiminuendo(i).setYIni(compas.getDiminuendo(i).getYIni() + distancia_y);
 		}
 		
 		compas_margin_x = compas.getXFin();
@@ -666,12 +691,27 @@ public class DrawingMethods {
 						return compas_margin_y + config.getDistanciaLineasPentagrama() * 6;
 					case 4:
 						return compas_margin_y + config.getDistanciaLineasPentagrama() * 4 + 
-								config.getDistanciaPentagramas() + config.getDistanciaLineasPentagrama() * 6;
+								config.getDistanciaPentagramas() + config.getDistanciaLineasPentagrama() * 8;
 					case 5:
 						return compas_margin_y + config.getDistanciaLineasPentagrama() * 4 +
 								config.getDistanciaPentagramas() / 2;
 					default:
 						return compas_margin_y - config.getDistanciaLineasPentagrama();
+				}
+				
+			//  Crescendos y diminuendos
+			case 4:
+				switch (location) {
+					case 1:
+						return 0;
+					case 2:
+						return compas_margin_y + config.getDistanciaLineasPentagrama() * 6;
+					case 4:
+						return 0;
+					case 5:
+						return 0;
+					default:
+						return 0;
 				}
 				
 			default:
@@ -1526,6 +1566,19 @@ public class DrawingMethods {
 	            
 	            if (compas.hayTempo())
 	            	compas.getTempo().setX(compas.getTempo().getX() + anchoParaCadaCompas);
+	            
+	            for (int j=0; j<compas.numeroDeTextos(); j++)
+	            	compas.getTexto(j).setX(compas.getTexto(j).getX() + anchoParaCadaCompas);
+	            
+	            for (int j=0; j<compas.numeroDeCrescendos(); j++) {
+	            	compas.getCrescendo(j).setXIni(compas.getCrescendo(j).getXIni() + anchoParaCadaCompas);
+	            	compas.getCrescendo(j).setXFin(compas.getCrescendo(j).getXFin() + anchoParaCadaCompas);
+	            }
+	            
+	            for (int j=0; j<compas.numeroDeDiminuendos(); j++) {
+	            	compas.getDiminuendo(j).setXIni(compas.getDiminuendo(j).getXIni() + anchoParaCadaCompas);
+	            	compas.getDiminuendo(j).setXFin(compas.getDiminuendo(j).getXFin() + anchoParaCadaCompas);
+	            }
         	}
         }
         
@@ -1593,15 +1646,33 @@ public class DrawingMethods {
 	        	}
         	}
         }
+
+    	for (int i=0; i<compas.numeroDeTextos(); i++) {
+        	//if (compas.getTexto(i).getX() != xPrimeraNota) {
+        		multiplicador = xsDelCompas.indexOf(compas.getTexto(i).getX());
+	        	compas.getTexto(i).setX( 
+	        			compas.getTexto(i).getX() + anchoPorNota * multiplicador);
+        	//}
+    	}
         
-        if (compas.hayTextos()) {
-        	for (int i=0; i<compas.numeroDeTextos(); i++) {
-	        	if (compas.getTexto(i).getX() != xPrimeraNota) {
-	        		multiplicador = xsDelCompas.indexOf(compas.getTexto(i).getX());
-		        	compas.getTexto(i).setX( 
-		        			compas.getTexto(i).getX() + anchoPorNota * multiplicador);
-	        	}
-        	}
+        for (int i=0; i<compas.numeroDeCrescendos(); i++) {
+    		multiplicador = xsDelCompas.indexOf(compas.getCrescendo(i).getXIni());
+    		compas.getCrescendo(i).setXIni( 
+        			compas.getCrescendo(i).getXIni() + anchoPorNota * multiplicador);
+    		
+    		multiplicador = xsDelCompas.indexOf(compas.getCrescendo(i).getXFin());
+    		compas.getCrescendo(i).setXFin( 
+        			compas.getCrescendo(i).getXFin() + anchoPorNota * multiplicador);
+        }
+        
+        for (int i=0; i<compas.numeroDeDiminuendos(); i++) {
+    		multiplicador = xsDelCompas.indexOf(compas.getDiminuendo(i).getXIni());
+    		compas.getDiminuendo(i).setXIni( 
+        			compas.getDiminuendo(i).getXIni() + anchoPorNota * multiplicador);
+    		
+    		multiplicador = xsDelCompas.indexOf(compas.getDiminuendo(i).getXFin());
+    		compas.getDiminuendo(i).setXFin( 
+        			compas.getDiminuendo(i).getXFin() + anchoPorNota * multiplicador);
         }
 	}
 	
@@ -1953,6 +2024,7 @@ public class DrawingMethods {
 			if (compases.get(i).hayPedales()) dibujarPedales(compases.get(i));
 			if (compases.get(i).hayTempo()) dibujarTempo(compases.get(i));
 			if (compases.get(i).hayTextos()) dibujarTextos(compases.get(i));
+			dibujarCrescendosYDiminuendos(compases.get(i));
 			
 			dibujarNotasDeCompas(compases.get(i));
 			
@@ -2017,31 +2089,31 @@ public class DrawingMethods {
 		ordenesDibujo.add(ordenDibujo);
 	}
 	
-	private void dibujarFiguraGrafica(Nota nota, byte figura, int posicionX, int posicionY, int y_beams) {
+	private void dibujarFiguraGrafica(Nota nota, byte figura, int y_beams, int Xsillo) {
 		OrdenDibujo ordenDibujo = new OrdenDibujo();
 
 		switch (figura) {
 			case 3:
-				x_ini_tresillo = posicionX;
+				x_ini_tresillo = nota.getX();
 				break;
 
 			case 4:
 				int margenTresillo = nota.haciaArriba() ? 
 						- config.getYTresilloArriba() : config.getYTresilloAbajo();
-				int x_tresillo = (posicionX + x_ini_tresillo) / 2;
+				int x_tresillo = (nota.getX() + x_ini_tresillo) / 2;
 				if (nota.haciaArriba()) x_tresillo += config.getXTresillo();
 
 				ordenDibujo.setOrden(DrawOrder.DRAW_TEXT);
 				ordenDibujo.setPaint(PaintOptions.SET_TEXT_SIZE, config.getTamanoLetraTresillo());
-				ordenDibujo.setTexto("3");
+				ordenDibujo.setTexto(Xsillo + "");
 				ordenDibujo.setX1(x_tresillo);
 				ordenDibujo.setY1(y_beams + margenTresillo);
 				ordenesDibujo.add(ordenDibujo);
 				break;
 
 			case 6:
-				x_ini_slide = posicionX;
-				y_ini_slide = posicionY;
+				x_ini_slide = nota.getX();
+				y_ini_slide = nota.getY();
 				break;
 				
 			case 7:
@@ -2049,8 +2121,8 @@ public class DrawingMethods {
 				ordenDibujo.setPaint(PaintOptions.SET_STROKE_WIDTH, 1);
 				ordenDibujo.setX1(x_ini_slide + config.getAnchoCabezaNota());
 				ordenDibujo.setY1(y_ini_slide + config.getMitadCabezaNotaVertical());
-				ordenDibujo.setX2(posicionX);
-				ordenDibujo.setY2(posicionY + config.getMitadCabezaNotaVertical());
+				ordenDibujo.setX2(nota.getX());
+				ordenDibujo.setY2(nota.getY() + config.getMitadCabezaNotaVertical());
 				ordenesDibujo.add(ordenDibujo);
 				break;
 				
@@ -2058,15 +2130,15 @@ public class DrawingMethods {
 				if (nota.haciaArriba()) {
 					ordenDibujo.setOrden(DrawOrder.DRAW_CIRCLE);
 					ordenDibujo.setRadius(config.getRadioStaccatos());
-					ordenDibujo.setX1(posicionX + config.getXStaccato());
-					ordenDibujo.setY1(posicionY + config.getYStaccatoArriba());
+					ordenDibujo.setX1(nota.getX() + config.getXStaccato());
+					ordenDibujo.setY1(nota.getY() + config.getYStaccatoArriba());
 					ordenesDibujo.add(ordenDibujo);
 				}
 				else {
 					ordenDibujo.setOrden(DrawOrder.DRAW_CIRCLE);
 					ordenDibujo.setRadius(config.getRadioStaccatos());
-					ordenDibujo.setX1(posicionX + config.getXStaccato());
-					ordenDibujo.setY1(posicionY - config.getYStaccatoAbajo());
+					ordenDibujo.setX1(nota.getX() + config.getXStaccato());
+					ordenDibujo.setY1(nota.getY() - config.getYStaccatoAbajo());
 					ordenesDibujo.add(ordenDibujo);
 				}
 				break;
@@ -2075,8 +2147,8 @@ public class DrawingMethods {
 				ordenDibujo.setOrden(DrawOrder.DRAW_TEXT);
 				ordenDibujo.setPaint(PaintOptions.SET_TEXT_SIZE, config.getTamanoLetraTapping());
 				ordenDibujo.setTexto("T");
-				ordenDibujo.setX1(posicionX);
-				ordenDibujo.setY1(posicionY - config.getYTapping());
+				ordenDibujo.setX1(nota.getX());
+				ordenDibujo.setY1(nota.getY() - config.getYTapping());
 				ordenesDibujo.add(ordenDibujo);
 				break;
 
@@ -2087,18 +2159,18 @@ public class DrawingMethods {
 				
 			case 11:
 				int indLigaduraUnion = encontrarIndiceLigadura(nota.getLigaduraUnion());
-				dibujarLigaduraUnion(indLigaduraUnion, posicionX);
+				dibujarLigaduraUnion(indLigaduraUnion, nota.getX());
 				break;
 			
 			case 12:
 				ordenDibujo.setOrden(DrawOrder.DRAW_BITMAP);
 				ordenDibujo.setImagen(sharp);
 
-				ordenDibujo.setX1(posicionX - config.getXAccidental());
+				ordenDibujo.setX1(nota.getX() - config.getXAccidental());
 				if (nota.desplazadaALaIzquierda()) 
 					ordenDibujo.setX1(ordenDibujo.getX1() - config.getAnchoCabezaNota());
 
-				ordenDibujo.setY1(posicionY - config.getYAccidental());
+				ordenDibujo.setY1(nota.getY() - config.getYAccidental());
 				ordenesDibujo.add(ordenDibujo);
 				break;
 
@@ -2106,11 +2178,11 @@ public class DrawingMethods {
 				ordenDibujo.setOrden(DrawOrder.DRAW_BITMAP);
 				ordenDibujo.setImagen(flat);
 
-				ordenDibujo.setX1(posicionX - config.getXAccidental());
+				ordenDibujo.setX1(nota.getX() - config.getXAccidental());
 				if (nota.desplazadaALaIzquierda()) 
 					ordenDibujo.setX1(ordenDibujo.getX1() - config.getAnchoCabezaNota());
 
-				ordenDibujo.setY1(posicionY - config.getYAccidentalFlat());
+				ordenDibujo.setY1(nota.getY() - config.getYAccidentalFlat());
 				ordenesDibujo.add(ordenDibujo);
 				break;
 
@@ -2118,51 +2190,51 @@ public class DrawingMethods {
 				ordenDibujo.setOrden(DrawOrder.DRAW_BITMAP);
 				ordenDibujo.setImagen(natural);
 
-				ordenDibujo.setX1(posicionX - config.getXAccidental());
+				ordenDibujo.setX1(nota.getX() - config.getXAccidental());
 				if (nota.desplazadaALaIzquierda()) 
 					ordenDibujo.setX1(ordenDibujo.getX1() - config.getAnchoCabezaNota());
 
-				ordenDibujo.setY1(posicionY - config.getYAccidental());
+				ordenDibujo.setY1(nota.getY() - config.getYAccidental());
 				ordenesDibujo.add(ordenDibujo);
 				break;
 
 			case 15:
 				ordenDibujo.setOrden(DrawOrder.DRAW_CIRCLE);
 				ordenDibujo.setRadius(config.getRadioPuntillos());
-				ordenDibujo.setX1(posicionX + config.getXPuntillo());
-				ordenDibujo.setY1(posicionY + config.getMitadCabezaNotaVertical());
+				ordenDibujo.setX1(nota.getX() + config.getXPuntillo());
+				ordenDibujo.setY1(nota.getY() + config.getMitadCabezaNotaVertical());
 				ordenesDibujo.add(ordenDibujo);
 				break;
 
 			case 16:
 				ordenDibujo.setOrden(DrawOrder.DRAW_CIRCLE);
 				ordenDibujo.setRadius(config.getRadioPuntillos());
-				ordenDibujo.setX1(posicionX + config.getXPuntillo());
-				ordenDibujo.setY1(posicionY + config.getYPuntilloArriba());
+				ordenDibujo.setX1(nota.getX() + config.getXPuntillo());
+				ordenDibujo.setY1(nota.getY() + config.getYPuntilloArriba());
 				ordenesDibujo.add(ordenDibujo);
 				break;
 
 			case 17:
 				ordenDibujo.setOrden(DrawOrder.DRAW_CIRCLE);
 				ordenDibujo.setRadius(config.getRadioPuntillos());
-				ordenDibujo.setX1(posicionX + config.getXPuntillo());
-				ordenDibujo.setY1(posicionY + config.getYPuntilloAbajo());
+				ordenDibujo.setX1(nota.getX() + config.getXPuntillo());
+				ordenDibujo.setY1(nota.getY() + config.getYPuntilloAbajo());
 				ordenesDibujo.add(ordenDibujo);
 				break;
 
 			case 22:
 				ordenDibujo.setOrden(DrawOrder.DRAW_BITMAP);
 				ordenDibujo.setImagen(bendrelease);
-				ordenDibujo.setX1(posicionX);
-				ordenDibujo.setY1(posicionY + config.getYBend());
+				ordenDibujo.setX1(nota.getX());
+				ordenDibujo.setY1(nota.getY() + config.getYBend());
 				ordenesDibujo.add(ordenDibujo);
 				break;
 				
 			case 26:
 				ordenDibujo.setOrden(DrawOrder.DRAW_BITMAP);
 				ordenDibujo.setImagen(vibrato);
-				ordenDibujo.setX1(posicionX);
-				ordenDibujo.setY1(posicionY + config.getYBend());
+				ordenDibujo.setX1(nota.getX());
+				ordenDibujo.setY1(nota.getY() + config.getYBend());
 				ordenesDibujo.add(ordenDibujo);
 				break;
 				
@@ -2170,8 +2242,8 @@ public class DrawingMethods {
 				ordenDibujo.setOrden(DrawOrder.DRAW_TEXT);
 				ordenDibujo.setPaint(PaintOptions.SET_TEXT_SIZE, config.getTamanoLetraPalmMute());
 				ordenDibujo.setTexto("P.M.");
-				ordenDibujo.setX1(posicionX);
-				ordenDibujo.setY1(posicionY - config.getYPalmMute());
+				ordenDibujo.setX1(nota.getX());
+				ordenDibujo.setY1(nota.getY() - config.getYPalmMute());
 				ordenesDibujo.add(ordenDibujo);
 				break;
 				
@@ -2179,8 +2251,8 @@ public class DrawingMethods {
 				ordenDibujo.setOrden(DrawOrder.DRAW_TEXT);
 				ordenDibujo.setPaint(PaintOptions.SET_TEXT_SIZE, config.getTamanoLetraPalmMute());
 				ordenDibujo.setTexto("P.M.");
-				ordenDibujo.setX1(posicionX);
-				ordenDibujo.setY1(posicionY + config.getYPalmMute());
+				ordenDibujo.setX1(nota.getX());
+				ordenDibujo.setY1(nota.getY() + config.getYPalmMute());
 				ordenesDibujo.add(ordenDibujo);
 				break;
 			
@@ -2188,8 +2260,8 @@ public class DrawingMethods {
 				ordenDibujo.setOrden(DrawOrder.DRAW_TEXT);
 				ordenDibujo.setPaint(PaintOptions.SET_TEXT_SIZE, config.getTamanoLetraTapping());
 				ordenDibujo.setTexto("T");
-				ordenDibujo.setX1(posicionX);
-				ordenDibujo.setY1(posicionY + config.getYTapping());
+				ordenDibujo.setX1(nota.getX());
+				ordenDibujo.setY1(nota.getY() + config.getYTapping());
 				ordenesDibujo.add(ordenDibujo);
 				
 			case 30:
@@ -2197,11 +2269,11 @@ public class DrawingMethods {
 				ordenDibujo.setImagen(accent);
 				
 				if (nota.haciaArriba()) 
-					ordenDibujo.setX1(posicionX - config.getOffsetAccent());
+					ordenDibujo.setX1(nota.getX() - config.getOffsetAccent());
 				else
-					ordenDibujo.setX1(posicionX);
+					ordenDibujo.setX1(nota.getX());
 				
-				ordenDibujo.setY1(posicionY - config.getYAccentUp());
+				ordenDibujo.setY1(nota.getY() - config.getYAccentUp());
 				ordenesDibujo.add(ordenDibujo);
 				break;
 				
@@ -2212,31 +2284,31 @@ public class DrawingMethods {
 				
 			case 33:
 				int indLigaduraExpresion = encontrarIndiceLigadura(nota.getLigaduraExpresion());
-				dibujarLigaduraExpresion(indLigaduraExpresion, posicionX, posicionY);
+				dibujarLigaduraExpresion(indLigaduraExpresion, nota.getX(), nota.getY());
 				ligaduraExpresionY = Integer.MAX_VALUE;
 				break;
 				
 			case 34:
 				ordenDibujo.setOrden(DrawOrder.DRAW_BITMAP);
 				ordenDibujo.setImagen(marcato);
-				ordenDibujo.setX1(posicionX);
-				ordenDibujo.setY1(posicionY - config.getYAccentUp());
+				ordenDibujo.setX1(nota.getX());
+				ordenDibujo.setY1(nota.getY() - config.getYAccentUp());
 				ordenesDibujo.add(ordenDibujo);
 				break;
 				
 			case 36:
 				ordenDibujo.setOrden(DrawOrder.DRAW_BITMAP);
 				ordenDibujo.setImagen(fermata);
-				ordenDibujo.setX1(posicionX - config.getXFermata());
-				ordenDibujo.setY1(posicionY - config.getYFermata());
+				ordenDibujo.setX1(nota.getX() - config.getXFermata());
+				ordenDibujo.setY1(nota.getY() - config.getYFermata());
 				ordenesDibujo.add(ordenDibujo);
 				break;
 				
 			case 37:
 				ordenDibujo.setOrden(DrawOrder.DRAW_BITMAP);
 				ordenDibujo.setImagen(fermata_inverted);
-				ordenDibujo.setX1(posicionX - config.getXFermata());
-				ordenDibujo.setY1(posicionY + config.getYFermata());
+				ordenDibujo.setX1(nota.getX() - config.getXFermata());
+				ordenDibujo.setY1(nota.getY() + config.getYFermata());
 				ordenesDibujo.add(ordenDibujo);
 				break;
 				
@@ -2259,9 +2331,14 @@ public class DrawingMethods {
 			} else if (nota.esAlteracion(i)) {
 				i = gestionarAlteracion(nota, figurasGraficas, i, y_beams);
 				
+			//  Gestión de finales de XSillo, que llevan un byte extra
+			} else if (nota.finDeTresillo(i)) {
+				dibujarFiguraGrafica(nota, figurasGraficas.get(i), y_beams, figurasGraficas.get(i + 1));
+				i++;
+				
 			//  Resto de figuras gráficas
 			} else {
-				dibujarFiguraGrafica(nota, figurasGraficas.get(i), nota.getX(), nota.getY(), y_beams);
+				dibujarFiguraGrafica(nota, figurasGraficas.get(i), y_beams, 0);
 			}
 		}
 	}
@@ -2865,6 +2942,57 @@ public class DrawingMethods {
 		}
 	}
 	
+	private void dibujarCrescendosYDiminuendos(Compas compas) {
+		int num = compas.numeroDeCrescendos();
+		Wedge wedge;
+		
+		for (int i=0; i<num; i++) {
+			wedge = compas.getCrescendo(i);
+			
+			OrdenDibujo ordenDibujo = new OrdenDibujo();
+			ordenDibujo.setOrden(DrawOrder.DRAW_LINE);
+			ordenDibujo.setPaint(PaintOptions.SET_STROKE_WIDTH, 2);
+			ordenDibujo.setX1(wedge.getXIni());
+			ordenDibujo.setY1(wedge.getYIni() + config.getAlturaCrescendos() / 2);
+			ordenDibujo.setX2(wedge.getXFin());
+			ordenDibujo.setY2(wedge.getYIni());
+			ordenesDibujo.add(ordenDibujo);
+			
+			ordenDibujo = new OrdenDibujo();
+			ordenDibujo.setOrden(DrawOrder.DRAW_LINE);
+			ordenDibujo.setPaint(PaintOptions.SET_STROKE_WIDTH, 2);
+			ordenDibujo.setX1(wedge.getXIni());
+			ordenDibujo.setY1(wedge.getYIni() + config.getAlturaCrescendos() / 2);
+			ordenDibujo.setX2(wedge.getXFin());
+			ordenDibujo.setY2(wedge.getYIni() + config.getAlturaCrescendos());
+			ordenesDibujo.add(ordenDibujo);
+		}
+		
+		num = compas.numeroDeDiminuendos();
+		
+		for (int i=0; i<num; i++) {
+			wedge = compas.getDiminuendo(i);
+			
+			OrdenDibujo ordenDibujo = new OrdenDibujo();
+			ordenDibujo.setOrden(DrawOrder.DRAW_LINE);
+			ordenDibujo.setPaint(PaintOptions.SET_STROKE_WIDTH, 2);
+			ordenDibujo.setX1(wedge.getXIni());
+			ordenDibujo.setY1(wedge.getYIni());
+			ordenDibujo.setX2(wedge.getXFin());
+			ordenDibujo.setY2(wedge.getYIni() + config.getAlturaCrescendos() / 2);
+			ordenesDibujo.add(ordenDibujo);
+			
+		    ordenDibujo = new OrdenDibujo();
+			ordenDibujo.setOrden(DrawOrder.DRAW_LINE);
+			ordenDibujo.setPaint(PaintOptions.SET_STROKE_WIDTH, 2);
+			ordenDibujo.setX1(wedge.getXIni());
+			ordenDibujo.setY1(wedge.getYIni() + config.getAlturaCrescendos());
+			ordenDibujo.setX2(wedge.getXFin());
+			ordenDibujo.setY2(wedge.getYIni() + config.getAlturaCrescendos() / 2);
+			ordenesDibujo.add(ordenDibujo);
+		}
+	}
+	
 	//  Busca, en el array de ligaduras de unión, el índice
 	//  del elemento que contiene el inicio de esta ligadura
 	private int encontrarIndiceLigadura(byte ligadura) {
@@ -2885,7 +3013,7 @@ public class DrawingMethods {
 		if (figurasGraficas.get(ind + 1) == 1)
 			nota.setX(nota.getX() - config.getAnchoCabezaNota());
 		
-		dibujarFiguraGrafica(nota, figurasGraficas.get(ind++), nota.getX(), nota.getY(), y_beams);
+		dibujarFiguraGrafica(nota, figurasGraficas.get(ind++), y_beams, 0);
 		return ind;
 	}
 	
@@ -2916,14 +3044,14 @@ public class DrawingMethods {
 	private int gestionarLigaduras(Nota nota, ArrayList<Byte> figurasGraficas, int ind, int y_beams) {
 		if (nota.esLigaduraUnion(ind)) {
 			nota.setLigaduraUnion(figurasGraficas.get(ind + 1));	
-			dibujarFiguraGrafica(nota, figurasGraficas.get(ind++), nota.getX(), nota.getY(), y_beams);
+			dibujarFiguraGrafica(nota, figurasGraficas.get(ind++), y_beams, 0);
 		}
 		else {
 			if (figurasGraficas.get(ind + 1) == 1) 
 				nota.setLigaduraExpresionOrientacion(true);
 			
 			nota.setLigaduraExpresion(figurasGraficas.get(ind + 2));
-			dibujarFiguraGrafica(nota, figurasGraficas.get(ind), nota.getX(), nota.getY(), y_beams);
+			dibujarFiguraGrafica(nota, figurasGraficas.get(ind), y_beams, 0);
 			ind += 2;
 		}
 		

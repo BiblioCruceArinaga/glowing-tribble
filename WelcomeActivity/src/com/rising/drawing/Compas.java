@@ -183,6 +183,14 @@ public class Compas {
 		return clefs;
 	}
 	
+	public Wedge getCrescendo(int index) {
+		return crescendos.get(index);
+	}
+	
+	public Wedge getDiminuendo(int index) {
+		return diminuendos.get(index);
+	}
+	
 	public ElementoGrafico getDynamics() {
 		return dynamics;
 	}
@@ -436,6 +444,14 @@ public class Compas {
 		Collections.sort(notasConPulsos);
 		return notasConPulsos;
 	}
+	
+	public int numeroDeCrescendos() {
+		return crescendos.size();
+	}
+	
+	public int numeroDeDiminuendos() {
+		return diminuendos.size();
+	}
 
 	public int numeroDeNotas() {
 		return notas.size();
@@ -491,6 +507,24 @@ public class Compas {
 		if (hayTempo())
 			if (!xEncontradas.contains(getTempo().getX()))
 				xEncontradas.add(getTempo().getX());
+		
+		for (int i=0; i<textos.size(); i++)
+			if (!xEncontradas.contains(getTexto(i).getX()))
+				xEncontradas.add(getTexto(i).getX());
+		
+		for (int i=0; i<crescendos.size(); i++) {
+			if (!xEncontradas.contains(getCrescendo(i).getXIni()))
+				xEncontradas.add(getCrescendo(i).getXIni());
+			if (!xEncontradas.contains(getCrescendo(i).getXFin()))
+				xEncontradas.add(getCrescendo(i).getXFin());
+		}
+		
+		for (int i=0; i<diminuendos.size(); i++) {
+			if (!xEncontradas.contains(getDiminuendo(i).getXIni()))
+				xEncontradas.add(getDiminuendo(i).getXIni());
+			if (!xEncontradas.contains(getDiminuendo(i).getXFin()))
+				xEncontradas.add(getDiminuendo(i).getXFin());
+		}
 		
 		Collections.sort(xEncontradas);
 		return xEncontradas;
@@ -595,6 +629,12 @@ public class Compas {
 		this.x_ini_notas = x_ini_notas;
 	}
 
+	/*
+	 * 
+	 * FUNCIONES DE CLONACIÓN
+	 * 
+	 */
+	
 	public Compas clonar() {
 		Compas nuevoCompas = new Compas();
 		
@@ -624,8 +664,7 @@ public class Compas {
 			nuevoCompas.addBarline(clonarElementoGrafico(barlines.get(i)));
 		
 		nuevoCompas.addClef(clonarElementoGrafico(clefs[0]));
-		nuevoCompas.addClef(clonarElementoGrafico(clefs[1]));
-		
+		nuevoCompas.addClef(clonarElementoGrafico(clefs[1]));	
 		nuevoCompas.setFifths(clonarElementoGrafico(getFifths()));
 		nuevoCompas.setDynamics(clonarElementoGrafico(getDynamics()));
 		nuevoCompas.setTime(clonarElementoGrafico(getTime()));
@@ -636,6 +675,14 @@ public class Compas {
 			nuevoCompas.addPedalStop(clonarElementoGrafico(getPedalStop(i)));
 		for (int i=0; i<words.size(); i++)
 			nuevoCompas.addWords(clonarElementoGrafico(words.get(i)));
+		for (int i=0; i<wedges.size(); i++)
+			nuevoCompas.addWedge(clonarElementoGrafico(wedges.get(i)));
+	}
+	
+	private void clonarNotas(Compas nuevoCompas) {
+		int numNotas = notas.size();
+		for (int i=0; i<numNotas; i++)
+			nuevoCompas.addNote(clonarNota(notas.get(i)));
 	}
 	
 	private Nota clonarNota(Nota oldNote) {
@@ -645,11 +692,5 @@ public class Compas {
 				oldNote.getPosicionArray());
 		
 		return newNote;
-	}
-	
-	private void clonarNotas(Compas nuevoCompas) {
-		int numNotas = notas.size();
-		for (int i=0; i<numNotas; i++)
-			nuevoCompas.addNote(clonarNota(notas.get(i)));
 	}
 }
