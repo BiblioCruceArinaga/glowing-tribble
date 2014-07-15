@@ -1,4 +1,4 @@
-package com.rising.login;
+package com.rising.login.login;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.rising.drawing.R;
+import com.rising.login.Login_Utils;
 
 //Clase que gestiona todo lo relacionado con el botón de Login
 public class Login_Actions {

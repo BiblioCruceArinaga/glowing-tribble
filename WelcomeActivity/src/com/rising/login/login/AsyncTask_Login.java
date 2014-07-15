@@ -1,4 +1,4 @@
-package com.rising.login;
+package com.rising.login.login;
 
 import java.util.ArrayList;
 
@@ -17,16 +17,16 @@ import android.util.Log;
 
 import com.rising.conexiones.HttpPostAux;
 import com.rising.drawing.R;
-import com.rising.login.UserDataNetworkConnection.OnLoginCompleted;
+import com.rising.login.Configuration;
+import com.rising.login.SessionManager;
+import com.rising.login.login.UserDataNetworkConnection.OnLoginCompleted;
 import com.rising.mainscreen.MainScreenActivity;
 import com.rising.store.DatosUsuario;
 
 //Clase de gestión del Login
 public class AsyncTask_Login extends AsyncTask< String, String, Integer >{
 
-	private SessionManager session;
 	private ProgressDialog PDialog; 
-	private String user;
 	private Context ctx;
 	private static ArrayList<DatosUsuario> userData;
 	private String usuario = "";
@@ -35,7 +35,9 @@ public class AsyncTask_Login extends AsyncTask< String, String, Integer >{
 	private HttpPostAux HPA =  new HttpPostAux();
 	public Configuration conf;
 	private static UserDataNetworkConnection dunc;
+	private SessionManager session;
 	
+	//URLs
 	private String URL_connect = "http://www.scores.rising.es/login-mobile";
 	
 	//Recibe la señal del proceso que termina el Login e introduce los datos del usuario en Configuration. 
@@ -45,18 +47,18 @@ public class AsyncTask_Login extends AsyncTask< String, String, Integer >{
 			userData = new ArrayList<DatosUsuario>();
 			
 			userData = dunc.devolverDatos();
-			//Borrar contraseña después de usarla
+			
 			conf.setUserId(userData.get(0).getId());	           
 			conf.setUserName(userData.get(0).getName());
 			conf.setUserEmail(userData.get(0).getMail());
 			conf.setUserMoney(userData.get(0).getMoney());
-						
-			
+									
 			session.createLoginSession(conf.getUserEmail(), conf.getUserName(), "-1");
-	    	PDialog.dismiss();
+	    	
 	    	Intent i = new Intent(ctx, MainScreenActivity.class);
 	    	ctx.startActivity(i); 
-	    	((Activity) ctx).finish();			
+	    	((Activity) ctx).finish();
+	    	PDialog.dismiss();
 		}
 	};
 
@@ -82,7 +84,9 @@ public class AsyncTask_Login extends AsyncTask< String, String, Integer >{
     	ArrayList<NameValuePair> postparameters2send = new ArrayList<NameValuePair>();
 		postparameters2send.add(new BasicNameValuePair("usuario", username));
 		postparameters2send.add(new BasicNameValuePair("password", password));
-
+		
+		usuario = username;
+		
       	JSONArray jData = HPA.getServerData(postparameters2send, URL_connect);
 
 		if (jData!=null && jData.length() > 0){
@@ -114,7 +118,7 @@ public class AsyncTask_Login extends AsyncTask< String, String, Integer >{
            
     protected void onPostExecute(Integer result) {
     	        
-		dunc = new UserDataNetworkConnection(listenerUser, ctx.getApplicationContext());
+		dunc = new UserDataNetworkConnection(listenerUser);
     	            
         if (result == 1) {
         	dunc.execute(usuario);            		

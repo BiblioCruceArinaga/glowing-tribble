@@ -2,19 +2,9 @@ package com.rising.login;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Locale;
 
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
@@ -23,7 +13,6 @@ import android.view.View.OnClickListener;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,83 +24,38 @@ import com.facebook.SessionState;
 import com.facebook.model.GraphUser;
 import com.facebook.widget.LoginButton;
 import com.facebook.widget.LoginButton.OnErrorListener;
-import com.rising.conexiones.HttpPostAux;
 import com.rising.drawing.R;
-import com.rising.login.ActivityRegistro.OnTaskCompleted;
+import com.rising.login.login.Login_Actions;
+import com.rising.login.login.UserDataNetworkConnection;
+import com.rising.login.olvidapass.OlvidaPass_Actions;
+import com.rising.login.registro.Registro_Actions;
 import com.rising.mainscreen.MainScreenActivity;
 import com.rising.store.DatosUsuario;
 
-//Clase login. Permite al usuario introducir correo electrónico y contraseña, registrarse o recuperar 
-//la contraseña olvidada.
-
+//Clase login. Permite al usuario loguearse y registrarse, con la aplicación o con Facebook, y cambiar la contraseña
 public class Login extends FragmentActivity {
 	
 	SessionManager session; //Habría que separarlo también
-	LoginButton authButton;
+	LoginButton Facebook_Button;
 	public static String FId;
 	public static String FName;
 	public static String FMail;
 
 	private Button Login, Registro;
 	private TextView OlvidaPass;
-	private EditText Mail_OlvidoPass, Nombre_Registro, Mail_Registro, Pass_Registro, ConfiPass_Registro;	
-	private Button Confirm_OlvidoPass, Cancel_OlvidoPass;
-	private Button Confirm_Reg, Cancel_Reg;
-	private ProgressDialog PDialog;
-	private HttpPostAux HPA =  new HttpPostAux();
-	private Dialog LPDialog, RDialog;
-	private String pass = "";
-	private String confipass = "";
-	private String mail = "";
-	private String name = "";	
-	private String language = "";
+		
 	private Context ctx;
-	private String URL_Check_Facebook = "http://www.scores.rising.es/login-facebook-mobile";
 	public static UserDataNetworkConnection dunc;
 	public static ArrayList<DatosUsuario> userData;
 		
-	//  Recibir la señal del proceso que termina el registro
-	private OnTaskCompleted listener = new OnTaskCompleted() {
-
-	    public void onTaskCompleted(int details) { 
-	    	PDialog.dismiss();
-	    	
-	    	Pass_Registro.setText("");
-			ConfiPass_Registro.setText("");
-			
-			if (details == 1) 
-				Toast.makeText(getApplicationContext(), R.string.ok_reg, Toast.LENGTH_LONG).show();
-			else
-				Toast.makeText(getApplicationContext(), R.string.ok_reg_mail, Toast.LENGTH_LONG).show();
-	    }
-
-		public void onTaskFailed(int details) {
-			PDialog.dismiss();
-			
-			Pass_Registro.setText("");
-			ConfiPass_Registro.setText("");
-			
-			if(details == 4){
-				Toast.makeText(getApplicationContext(), R.string.err_net, Toast.LENGTH_LONG).show();
-			}else{
-				if (details == 0) 
-					Toast.makeText(getApplicationContext(), R.string.err_reg, Toast.LENGTH_LONG).show();
-				else
-					Toast.makeText(getApplicationContext(), R.string.err_reg_mail, Toast.LENGTH_LONG).show();
-			}
-		}
-	};
 	
 	@Override
-	
 	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);  
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.login_layout);
-		
-		language = Locale.getDefault().getDisplayLanguage();
-		
+				
 		session = new SessionManager(getApplicationContext());
 		ctx = this;
 				
@@ -121,17 +65,11 @@ public class Login extends FragmentActivity {
 			finish();
 		}
 	
-		//  Datos login
 		Login = (Button) findViewById(R.id.button_login);
-				
-		//  Datos olvido pass
+		Facebook_Button = (LoginButton) findViewById(R.id.button_login_f);
 		OlvidaPass = (TextView)findViewById(R.id.tv_olvido_pass);
-		
-		//  Datos registro
 		Registro = (Button) findViewById(R.id.b_registro);
 		
-		final ActivityOlvidarPass AOP = new ActivityOlvidarPass();
-		final ActivityRegistro AR = new ActivityRegistro();
 		
 		//  Acciones al presionar el botón de nombre Login
 		Login.setOnClickListener(new OnClickListener(){
@@ -147,45 +85,7 @@ public class Login extends FragmentActivity {
 			
 			@Override
 			public void onClick(View v) {
-				if(new Login_Utils(ctx).isOnline()){
-					LPDialog = new Dialog(Login.this, R.style.cust_dialog);
-					
-					LPDialog.setContentView(R.layout.olvidopass_dialog);
-					LPDialog.setTitle(R.string.olvido_title);
-												
-					Confirm_OlvidoPass = (Button)LPDialog.findViewById(R.id.b_confirm_olpass);
-					Cancel_OlvidoPass = (Button)LPDialog.findViewById(R.id.b_cancel_olpass);
-					Mail_OlvidoPass = (EditText)LPDialog.findViewById(R.id.et_mail_olvidopass);
-									
-					Confirm_OlvidoPass.setOnClickListener(new OnClickListener(){
-	
-						@Override
-						public void onClick(View v) {
-							String mail = Mail_OlvidoPass.getText().toString();
-							if (mail.equals("")) {
-								Toast.makeText(getApplicationContext(), R.string.err_campos_vacios, Toast.LENGTH_SHORT).show();
-							}
-							else {
-								AOP.new asyncmail(getApplicationContext()).execute(mail, language); 
-								LPDialog.dismiss();
-							}
-						}
-						
-					});
-							
-					Cancel_OlvidoPass.setOnClickListener(new OnClickListener(){
-	
-						@Override
-						public void onClick(View v) {
-							LPDialog.dismiss();
-						}
-						
-					});	
-					
-					LPDialog.show();
-				}else{
-					Toast.makeText(ctx, R.string.connection_err, Toast.LENGTH_LONG).show();
-				}
+				new OlvidaPass_Actions(ctx).OlvidaPassButton_Actions();
 			}
 		});
 	 
@@ -194,78 +94,13 @@ public class Login extends FragmentActivity {
 
 			@Override
 			public void onClick(View v) {
-				if(new Login_Utils(ctx).isOnline()){	
-					RDialog = new Dialog(Login.this, R.style.cust_dialog);
-					
-					RDialog.setContentView(R.layout.registro_dialog);
-					RDialog.setTitle(R.string.registro_title);
-					
-					Nombre_Registro = (EditText)RDialog.findViewById(R.id.et_nombre_registro);
-					Mail_Registro = (EditText)RDialog.findViewById(R.id.et_mail_registro);
-					Pass_Registro = (EditText)RDialog.findViewById(R.id.et_pass_registro);
-					ConfiPass_Registro = (EditText)RDialog.findViewById(R.id.et_confipass_registro);
-					Confirm_Reg = (Button)RDialog.findViewById(R.id.b_confirm_reg);
-					Cancel_Reg = (Button)RDialog.findViewById(R.id.b_cancel_reg);
-									
-					Confirm_Reg.setOnClickListener(new OnClickListener(){
-	
-						@Override
-						public void onClick(View v) {
-							
-							if(Nombre_Registro.getText().toString().equals("") && 
-									Mail_Registro.getText().toString().equals("") && 
-									Pass_Registro.getText().toString().equals("") && 
-									ConfiPass_Registro.getText().toString().equals("")) {
-	 			        		
-								Toast.makeText(getApplicationContext(), 
-										R.string.err_campos_vacios, Toast.LENGTH_LONG).show();
-																						 							
-	 			        	}else{
-	 			        		
-	 			        		name = Nombre_Registro.getText().toString();
-								mail = Mail_Registro.getText().toString();
-								pass = Pass_Registro.getText().toString();
-								confipass = ConfiPass_Registro.getText().toString();
-								
-								if(checkPass(pass, confipass)){
-						            PDialog = new ProgressDialog(Login.this);
-						            PDialog.setMessage(getString(R.string.creating_account));
-						            PDialog.setIndeterminate(false);
-						            PDialog.setCancelable(false);
-						            PDialog.show();
-						            
-									AR.new asyncreg(listener).execute(name, mail, pass, language); 
-	 			        		}else{
-	 			        			Toast.makeText(getApplicationContext(), R.string.err_pass, Toast.LENGTH_LONG).show();
-	 			        		}
-	 			        	}
-	 			        	
-	 		        		RDialog.dismiss();
-						}
-						
-					});
-	
-					Cancel_Reg.setOnClickListener(new OnClickListener(){
-	
-						@Override
-						public void onClick(View v) {
-							RDialog.dismiss();
-						}
-						
-					});
-					
-	  				RDialog.show();
-				
-				}else{
-					Toast.makeText(ctx, R.string.connection_err, Toast.LENGTH_LONG).show();
-				}
+				new Registro_Actions(ctx).RegistroButton_Actions();
 			}
 		});
 		
+	
 		//Acciones al presionar sobre el botón de Facebook
-		authButton = (LoginButton) findViewById(R.id.button_login_f);
-
-		authButton.setOnErrorListener(new OnErrorListener() {
+		Facebook_Button.setOnErrorListener(new OnErrorListener() {
 	       
 	       @Override
 	       public void onError(FacebookException error) {
@@ -273,8 +108,8 @@ public class Login extends FragmentActivity {
 	       }
 	    });
 	    
-	    authButton.setReadPermissions(Arrays.asList("email"));
-	    authButton.setSessionStatusCallback(new Session.StatusCallback() {
+	    Facebook_Button.setReadPermissions(Arrays.asList("email"));
+	    Facebook_Button.setSessionStatusCallback(new Session.StatusCallback() {
 	    	
 			@Override
 			public void call(Session session, SessionState state, Exception exception) {
@@ -289,8 +124,7 @@ public class Login extends FragmentActivity {
 									FId = user.getId();
 									FName = user.getFirstName() + " " + user.getLastName();
 									FMail = user.getProperty("email").toString();
-									new asyncFacebook_process().execute(FMail, FName, FId);
-																
+									new AsyncTask_Facebook(ctx).execute(FMail, FName, FId);								
 								}
 								
 							}
@@ -301,106 +135,12 @@ public class Login extends FragmentActivity {
 				}	
 			}         
 	    }); 
-
 	}
-	
+		
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 	    Session.getActiveSession().onActivityResult(this, requestCode, resultCode, data);
 	}
-
-	//  Este método valida que las contraseñas sean iguales
-    public boolean checkPass(String pass, String confipass){
-    	
-    	if(confipass.equals(pass)){
-    		return true;
-    	}else{
-    		return false;
-    	}
-    } 
-
-    //  Gestión del login / registro mediante Facebook
-    class asyncFacebook_process extends AsyncTask<String, String, Integer>{
-
-    	@Override
-    	protected void onPreExecute() {
-            PDialog = new ProgressDialog(Login.this);
-            PDialog.setMessage(getString(R.string.auth));
-            PDialog.setIndeterminate(false);
-            PDialog.setCancelable(false);
-            PDialog.show();
-        }
-    	
-		@Override
-		protected Integer doInBackground(String... params) {
-			int status = -1;
-
-	    	ArrayList<NameValuePair> postparameters2send= new ArrayList<NameValuePair>();
-			postparameters2send.add(new BasicNameValuePair("mail", params[0]));
-			postparameters2send.add(new BasicNameValuePair("name", params[1]));
-			postparameters2send.add(new BasicNameValuePair("pass", params[2]));
-			
-	      	JSONArray jData = HPA.getServerData(postparameters2send, URL_Check_Facebook);
-
-			if (jData!=null && jData.length() > 0) {
-
-				JSONObject json_data;
-				
-				try{
-					json_data = jData.getJSONObject(0);
-					status = json_data.getInt("facebookStatus");
-					
-					Log.e("facebookStatus","facebookStatus= " + status);
-				}catch (JSONException e) {
-					e.printStackTrace();
-				}		            
-
-			}else{	
-				Log.e("JSON", "ERROR");
-			}
-			
-			return status;
-		} 	
-		
-		protected void onPostExecute(Integer result) {
-			Log.e("onPostExecute=",""+result);
-			
-        	switch (result) {
-	        	case 0: {
-	        		Toast.makeText(getApplicationContext(), R.string.err_campos_vacios, Toast.LENGTH_LONG).show();
-	        		break;
-	        	}
-	        	case 1: {
-	        		dunc.execute(FMail);
-	            	
-	        		session.createLoginSession(FMail, FName, FId);
-	                Intent i=new Intent(Login.this, MainScreenActivity.class);
-	                startActivity(i);
-	                finish();
-	        		break;
-	        	}
-	        	case 2: {
-	        		Toast.makeText(getApplicationContext(), R.string.err_login_unknown_user, Toast.LENGTH_LONG).show();
-	        		break;
-	        	}
-	        	case 3: {
-	        		dunc.execute(FMail);
-	        		
-	        		session.createLoginSession(FMail, FName, FId);
-	        		
-	                Intent i=new Intent(Login.this, MainScreenActivity.class);
-	                startActivity(i);
-	                finish();
-	        		break;
-	        	}
-	        	case 4: {
-	        		Toast.makeText(getApplicationContext(), R.string.err_login_unknown, Toast.LENGTH_LONG).show();
-	        		break;
-	        	}
-        		default: 
-        			Toast.makeText(getApplicationContext(), R.string.err_login_unknown, Toast.LENGTH_LONG).show();
-        	}
-        }
-    }
+   
 }
