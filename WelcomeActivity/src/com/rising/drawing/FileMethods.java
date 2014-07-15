@@ -103,15 +103,7 @@ public class FileMethods {
 		
 		byte figuraGrafica = fichero.readByte();
 		switch (figuraGrafica) {
-			case 1:
-			case 2:
-			case 3:
-			case 4:
-				elemento.addValue(figuraGrafica);
-				elemento.setPosition(leerHastaAlmohadilla());
-				compas.setDynamics(elemento);
-				break;
-
+		
 			case 25:
 				elemento.addValue(figuraGrafica);
 				elemento.setPosition(leerHastaAlmohadilla());
@@ -164,7 +156,10 @@ public class FileMethods {
 				compas.addWedge(elemento);
 				break;
 				
-			default: 
+			default:
+				elemento.addValue(figuraGrafica);
+				elemento.setPosition(leerHastaAlmohadilla());
+				compas.setDynamics(elemento);
 				break;
 		}
 	}

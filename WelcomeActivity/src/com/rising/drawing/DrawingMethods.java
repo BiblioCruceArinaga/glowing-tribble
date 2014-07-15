@@ -33,6 +33,7 @@ public class DrawingMethods {
 	//  Variables para la gestión de las múltiples notas
 	private ArrayList<IndiceNota> beams = new ArrayList<IndiceNota>();
 	private ArrayList<IndiceNota> ligaduras = new ArrayList<IndiceNota>();
+	private boolean buscandoLigaduraExpresion = false;
 	private int ligaduraExpresionY = Integer.MAX_VALUE;
 	private int octavarium = 0;
 	private int x_ini_octavarium = 0;
@@ -55,6 +56,7 @@ public class DrawingMethods {
 	private Bitmap fermata_inverted = null;
 	private Bitmap flat = null;
 	private Bitmap forte = null;
+	private Bitmap forzandop = null;
 	private Bitmap head = null;
 	private Bitmap headlittle = null;
 	private Bitmap headinv = null;
@@ -98,6 +100,7 @@ public class DrawingMethods {
 			fermata_inverted = BitmapFactory.decodeResource(resources, R.drawable.fermata_inverted);
 			flat = BitmapFactory.decodeResource(resources, R.drawable.flat);
 			forte = BitmapFactory.decodeResource(resources, R.drawable.forte);
+			forzandop = BitmapFactory.decodeResource(resources, R.drawable.forzandop);
 			head = BitmapFactory.decodeResource(resources, R.drawable.head);
 			headinv = BitmapFactory.decodeResource(resources, R.drawable.headinv);
 			headinvlittle = BitmapFactory.decodeResource(resources, R.drawable.headinvlittle);
@@ -638,6 +641,8 @@ public class DrawingMethods {
 				return piano;
 			case 4:
 				return pianissimo;
+			case 5:
+				return forzandop;
 			default:
 				return null;
 		}
@@ -1981,8 +1986,9 @@ public class DrawingMethods {
 		
 		//  La y de la ligadura de expresión debe colocarse tan arriba como
 		//  obligue a ello la nota más alta en medio de las notas ligadas
-		if (ligaduraExpresionY > nota.getY())
-			ligaduraExpresionY = nota.getY();
+		if (buscandoLigaduraExpresion)
+			if (ligaduraExpresionY > nota.getY())
+				ligaduraExpresionY = nota.getY();
 			
 		if (!nota.acorde()) y_anterior = nota.getY();
 
@@ -2178,9 +2184,9 @@ public class DrawingMethods {
 				ordenDibujo.setOrden(DrawOrder.DRAW_BITMAP);
 				ordenDibujo.setImagen(flat);
 
-				ordenDibujo.setX1(nota.getX() - config.getXAccidental());
+				ordenDibujo.setX1(nota.getX() - config.getXAccidental() - Xsillo);
 				if (nota.desplazadaALaIzquierda()) 
-					ordenDibujo.setX1(ordenDibujo.getX1() - config.getAnchoCabezaNota());
+					ordenDibujo.setX1(ordenDibujo.getX1() - config.getAnchoCabezaNota() - Xsillo);
 
 				ordenDibujo.setY1(nota.getY() - config.getYAccidentalFlat());
 				ordenesDibujo.add(ordenDibujo);
@@ -2277,15 +2283,25 @@ public class DrawingMethods {
 				ordenesDibujo.add(ordenDibujo);
 				break;
 				
+			case 31:
+				ordenDibujo.setOrden(DrawOrder.DRAW_BITMAP);
+				ordenDibujo.setImagen(accent);
+				ordenDibujo.setX1(nota.getX());
+				ordenDibujo.setY1(nota.getY() + config.getLongitudPlica() + config.getYAccentUp());
+				ordenesDibujo.add(ordenDibujo);
+				break;
+				
 			case 32:
 				ligaduras.add(new IndiceNota(compasActual, notaActual, 
 						nota.getLigaduraExpresion(), (byte) 0));
+				buscandoLigaduraExpresion = true;
 				break;
 				
 			case 33:
 				int indLigaduraExpresion = encontrarIndiceLigadura(nota.getLigaduraExpresion());
 				dibujarLigaduraExpresion(indLigaduraExpresion, nota.getX(), nota.getY());
 				ligaduraExpresionY = Integer.MAX_VALUE;
+				buscandoLigaduraExpresion = false;
 				break;
 				
 			case 34:
@@ -2320,8 +2336,11 @@ public class DrawingMethods {
 	private void dibujarFigurasGraficasDeNota(Nota nota, int y_beams) {
 		ArrayList<Byte> figurasGraficas = nota.getFigurasGraficas();
 		int numFiguras = figurasGraficas.size();
+		int xAlteraciones = 0;
 		
 		for (int i=0; i<numFiguras; i++) {
+			
+			xAlteraciones = config.getXAccidental2() * i;
 
 			//  Gestión de ligaduras, que llevan bytes extra
 			if (nota.esLigadura(i)) {
@@ -2329,7 +2348,7 @@ public class DrawingMethods {
 			
 			//  Gestión de alteraciones, que llevan un byte extra
 			} else if (nota.esAlteracion(i)) {
-				i = gestionarAlteracion(nota, figurasGraficas, i, y_beams);
+				i = gestionarAlteracion(nota, figurasGraficas, i, y_beams, xAlteraciones);
 				
 			//  Gestión de finales de XSillo, que llevan un byte extra
 			} else if (nota.finDeTresillo(i)) {
@@ -3009,11 +3028,13 @@ public class DrawingMethods {
 		return indice;
 	}
 
-	private int gestionarAlteracion(Nota nota, ArrayList<Byte> figurasGraficas, int ind, int y_beams) {
+	private int gestionarAlteracion(Nota nota, ArrayList<Byte> figurasGraficas, 
+			int ind, int y_beams, int xAlteraciones) {
+		
 		if (figurasGraficas.get(ind + 1) == 1)
 			nota.setX(nota.getX() - config.getAnchoCabezaNota());
 		
-		dibujarFiguraGrafica(nota, figurasGraficas.get(ind++), y_beams, 0);
+		dibujarFiguraGrafica(nota, figurasGraficas.get(ind++), y_beams, xAlteraciones);
 		return ind;
 	}
 	
