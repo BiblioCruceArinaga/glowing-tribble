@@ -2536,20 +2536,22 @@ public class DrawingMethods {
 	private void dibujarLineasFueraDelPentagrama(Nota nota, int yIniCompas) {
 		int y_margin_custom = yIniCompas + 
 				(config.getDistanciaLineasPentagrama() * 4 + 
-						config.getDistanciaPentagramas()) * (nota.getPentagrama() - 1);			
+						config.getDistanciaPentagramas()) * (nota.getPentagrama() - 1);
+		
+		int yNota = nota.notaDeGracia() ? nota.getY() - config.getMargenNotaGracia() : nota.getY();
 
-		if (nota.getY() == y_margin_custom + config.getDistanciaLineasPentagrama() * 4 + 
+		if (yNota == y_margin_custom + config.getDistanciaLineasPentagrama() * 4 + 
 				config.getDistanciaLineasPentagramaMitad()) {
 			dibujarLineasFueraDelPentagramaAuxiliar(nota.getX(), y_margin_custom +
 					config.getDistanciaLineasPentagrama() * 5);
 		}
 		
-		if (nota.getY()== y_margin_custom + config.getDistanciaLineasPentagrama() * 5) {
+		if (yNota == y_margin_custom + config.getDistanciaLineasPentagrama() * 5) {
 			dibujarLineasFueraDelPentagramaAuxiliar(nota.getX(), y_margin_custom +
 					config.getDistanciaLineasPentagrama() * 5);
 		}
 		
-		if (nota.getY() == y_margin_custom + config.getDistanciaLineasPentagrama() * 5 + 
+		if (yNota == y_margin_custom + config.getDistanciaLineasPentagrama() * 5 + 
 				config.getDistanciaLineasPentagramaMitad()) {
 			dibujarLineasFueraDelPentagramaAuxiliar(nota.getX(), y_margin_custom +
 					config.getDistanciaLineasPentagrama() * 5);
@@ -2557,25 +2559,16 @@ public class DrawingMethods {
 					config.getDistanciaLineasPentagrama() * 6);
 		}
 		
-		if (nota.getY() == y_margin_custom + config.getDistanciaLineasPentagrama() * 6) {
+		if (yNota == y_margin_custom + config.getDistanciaLineasPentagrama() * 6) {
 			dibujarLineasFueraDelPentagramaAuxiliar(nota.getX(), y_margin_custom +
 					config.getDistanciaLineasPentagrama() * 5);
 			dibujarLineasFueraDelPentagramaAuxiliar(nota.getX(), y_margin_custom +
 					config.getDistanciaLineasPentagrama() * 6);
 		}
 		
-		if (nota.getY() == y_margin_custom + config.getDistanciaLineasPentagrama() * 6 + 
+		if (yNota == y_margin_custom + config.getDistanciaLineasPentagrama() * 6 + 
 				config.getDistanciaLineasPentagramaMitad()) {
 
-			dibujarLineasFueraDelPentagramaAuxiliar(nota.getX(), y_margin_custom +
-					config.getDistanciaLineasPentagrama() * 5);
-			dibujarLineasFueraDelPentagramaAuxiliar(nota.getX(), y_margin_custom +
-					config.getDistanciaLineasPentagrama() * 6);
-			dibujarLineasFueraDelPentagramaAuxiliar(nota.getX(), y_margin_custom +
-					config.getDistanciaLineasPentagrama() * 7);
-		}
-		
-		if (nota.getY() == y_margin_custom + config.getDistanciaLineasPentagrama() * 7) {
 			dibujarLineasFueraDelPentagramaAuxiliar(nota.getX(), y_margin_custom +
 					config.getDistanciaLineasPentagrama() * 5);
 			dibujarLineasFueraDelPentagramaAuxiliar(nota.getX(), y_margin_custom +
@@ -2584,28 +2577,37 @@ public class DrawingMethods {
 					config.getDistanciaLineasPentagrama() * 7);
 		}
 		
-		if (nota.getY() == y_margin_custom + config.getDistanciaLineasPentagrama() * 7 + 
+		if (yNota == y_margin_custom + config.getDistanciaLineasPentagrama() * 7) {
+			dibujarLineasFueraDelPentagramaAuxiliar(nota.getX(), y_margin_custom +
+					config.getDistanciaLineasPentagrama() * 5);
+			dibujarLineasFueraDelPentagramaAuxiliar(nota.getX(), y_margin_custom +
+					config.getDistanciaLineasPentagrama() * 6);
+			dibujarLineasFueraDelPentagramaAuxiliar(nota.getX(), y_margin_custom +
+					config.getDistanciaLineasPentagrama() * 7);
+		}
+		
+		if (yNota == y_margin_custom + config.getDistanciaLineasPentagrama() * 7 + 
 				config.getDistanciaLineasPentagramaMitad()) {
 
 		}
 		
-		if (nota.getY() == y_margin_custom + config.getDistanciaLineasPentagrama() * 8) {
+		if (yNota == y_margin_custom + config.getDistanciaLineasPentagrama() * 8) {
 
 		}
 		
-		if (nota.getY() == y_margin_custom - config.getDistanciaLineasPentagrama() - 
+		if (yNota == y_margin_custom - config.getDistanciaLineasPentagrama() - 
 				config.getDistanciaLineasPentagramaMitad()) {
 
 			dibujarLineasFueraDelPentagramaAuxiliar(nota.getX(), y_margin_custom - 
 					config.getDistanciaLineasPentagrama());
 		}
 		
-		if (nota.getY() == y_margin_custom - config.getDistanciaLineasPentagrama() * 2) {
+		if (yNota == y_margin_custom - config.getDistanciaLineasPentagrama() * 2) {
 			dibujarLineasFueraDelPentagramaAuxiliar(nota.getX(), y_margin_custom - 
 					config.getDistanciaLineasPentagrama());
 		}
 		
-		if (nota.getY() == y_margin_custom - config.getDistanciaLineasPentagrama() * 2 - 
+		if (yNota == y_margin_custom - config.getDistanciaLineasPentagrama() * 2 - 
 				config.getDistanciaLineasPentagramaMitad()) {
 
 			dibujarLineasFueraDelPentagramaAuxiliar(nota.getX(), y_margin_custom - 
@@ -2614,14 +2616,14 @@ public class DrawingMethods {
 					config.getDistanciaLineasPentagrama() * 2);
 		}
 		
-		if (nota.getY() == y_margin_custom - config.getDistanciaLineasPentagrama() * 3) {
+		if (yNota == y_margin_custom - config.getDistanciaLineasPentagrama() * 3) {
 			dibujarLineasFueraDelPentagramaAuxiliar(nota.getX(), y_margin_custom - 
 					config.getDistanciaLineasPentagrama());
 			dibujarLineasFueraDelPentagramaAuxiliar(nota.getX(), y_margin_custom - 
 					config.getDistanciaLineasPentagrama() * 2);
 		}
 		
-		if (nota.getY() == y_margin_custom - config.getDistanciaLineasPentagrama() * 3 - 
+		if (yNota == y_margin_custom - config.getDistanciaLineasPentagrama() * 3 - 
 				config.getDistanciaLineasPentagramaMitad()) {
 
 			dibujarLineasFueraDelPentagramaAuxiliar(nota.getX(), y_margin_custom - 
@@ -2632,7 +2634,7 @@ public class DrawingMethods {
 					config.getDistanciaLineasPentagrama() * 3);
 		}
 		
-		if (nota.getY() == y_margin_custom - config.getDistanciaLineasPentagrama() * 4) {
+		if (yNota == y_margin_custom - config.getDistanciaLineasPentagrama() * 4) {
 			dibujarLineasFueraDelPentagramaAuxiliar(nota.getX(), y_margin_custom - 
 					config.getDistanciaLineasPentagrama());
 			dibujarLineasFueraDelPentagramaAuxiliar(nota.getX(), y_margin_custom - 
@@ -2641,7 +2643,7 @@ public class DrawingMethods {
 					config.getDistanciaLineasPentagrama() * 3);
 		}
 		
-		if (nota.getY() == y_margin_custom - config.getDistanciaLineasPentagrama() * 4 - 
+		if (yNota == y_margin_custom - config.getDistanciaLineasPentagrama() * 4 - 
 				config.getDistanciaLineasPentagramaMitad()) {
 			dibujarLineasFueraDelPentagramaAuxiliar(nota.getX(), y_margin_custom - 
 					config.getDistanciaLineasPentagrama());
