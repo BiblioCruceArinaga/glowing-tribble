@@ -99,6 +99,7 @@ public class Config {
 	private int x_tresillo;
 	private int y_tresillo_arriba;
 	private int y_tresillo_abajo;
+	private int y_trill;
 	
 	public Config(int densityDPI, int width, int height) {
 		
@@ -123,12 +124,12 @@ public class Config {
 						altura_crescendos = 20;
 						ancho_beams = 8;
 						ancho_beams_nota_gracia = 4;
-						ancho_cabeza_nota = 25;
+						ancho_cabeza_nota = 26;
 						ancho_cabeza_nota_gracia = 15;
-						ancho_claves = 88; 
+						ancho_claves = 88;
 						ancho_dialog_bpm = 600;
 						ancho_hooks = 16;
-						ancho_ligadura_union_max = 250;
+						ancho_ligadura_union_max = 150;
 						ancho_tempo = 65;
 						change_account_horizontal = 2;
 						change_account_vertical = 4;
@@ -136,22 +137,22 @@ public class Config {
 						distancia_corchetes = 15;
 						distancia_entre_beams = 12;
 						distancia_entre_beams_notas_gracia = 6;
-						distancia_lineas_pentagrama = 18; 
-						distancia_lineas_pentagrama_mitad = 9; 
-						distancia_pentagramas = 220; // 220
+						distancia_lineas_pentagrama = 19;
+						distancia_lineas_pentagrama_mitad = 9;
+						distancia_pentagramas = 240;
 						largo_imagen_corchete = 25;
 						largo_imagen_corchete_gracia = 5;
-						longitud_plica = 60; 
-						longitud_plica_nota_gracia = 30; 
+						longitud_plica = 60;
+						longitud_plica_nota_gracia = 30;
 						margen_ancho_cabeza_nota = 5;
-						margen_autor = 60; 
+						margen_autor = 180;
 						margen_barlines = 10;
 						margen_derecho_compases = 70;
-						margen_inferior_autor = 120; 
+						margen_inferior_autor = 320;
 						margen_izquierdo_compases = 50;
 						margen_nota_gracia = 4;
-						margen_obra = 20; 
-						margen_superior = 35;
+						margen_obra = 90;
+						margen_superior = 80;
 						mitad_cabeza_nota_vertical = 10;
 						mitad_cabeza_nota_gracia_vertical = 4;
 						offset_accent = 8;
@@ -161,12 +162,12 @@ public class Config {
 						radio_octavarium = 3;
 						radio_puntillos = 4;
 						radio_staccatos = 4;
-						tamano_letra_autor = 25;
+						tamano_letra_autor = 50;
 						tamano_letra_bip_preparacion = 300;
 						tamano_letra_bpm = 50;
-						tamano_letra_numero_compas = 30; 
-						tamano_letra_obra = 40; 
-						tamano_letra_palm_mute = 30;
+						tamano_letra_numero_compas = 30;
+						tamano_letra_obra = 80;
+						tamano_letra_palm_mute = 20;
 						tamano_letra_pulso = 50;
 						tamano_letra_tapping = 30;
 						tamano_letra_tresillo = 25;
@@ -178,8 +179,8 @@ public class Config {
 						y_accent_up = 30;
 						x_accidental = 20;
 						x_accidental_2 = 10;
-						y_accidental = 10;
-						y_accidental_flat = 17;
+						y_accidental = 5;
+						y_accidental_flat = 12;
 						y_bend = 40;
 						y_bpm = 30;
 						y_clave_sol_segunda = 63;
@@ -189,12 +190,15 @@ public class Config {
 						x_fin_slash = 5;
 						y_inicio_slash = 10;
 						y_fin_slash = 20;
+						y_intensidad_middle = 20;
+						x_fermata = 15;
+						y_fermata = 50;
 						y_ligaduras_expresion = 50;
 						x_ligaduras_union = 20;
 						y_ligaduras_union = 24;
 						x_numero_compas = 50;
 						y_numero_compas = 15;
-						y_octavarium = 8;
+						y_octavarium = 30;
 						y_palm_mute = 50;
 						x_puntillo = ancho_cabeza_nota + 10;
 						y_puntillo_arriba = mitad_cabeza_nota_vertical - 10;
@@ -206,6 +210,7 @@ public class Config {
 						x_tresillo = 18;
 						y_tresillo_arriba = 9;
 						y_tresillo_abajo = 26;
+						y_trill = 50;
 						break;
 					case 800:
 						
@@ -306,6 +311,7 @@ public class Config {
 						x_tresillo = 18;
 						y_tresillo_arriba = 9;
 						y_tresillo_abajo = 26;
+						y_trill = 44;
 						break;
 				}
 
@@ -688,6 +694,10 @@ public class Config {
 	
 	public int getYTresilloAbajo() {
 		return y_tresillo_abajo;
+	}
+	
+	public int getYTrill() {
+		return y_trill;
 	}
 	
 	/**

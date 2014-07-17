@@ -8,7 +8,7 @@ public class Compas {
 
 	//  Información tal cual fue leída en el fichero
 	private ArrayList<ElementoGrafico> barlines;
-	private ElementoGrafico[] clefs = {null, null};
+	private ArrayList<ElementoGrafico> clefs;
 	private ElementoGrafico dynamics;
 	private ElementoGrafico fifths;
 	private ArrayList<ElementoGrafico> pedalStarts;
@@ -20,7 +20,7 @@ public class Compas {
 	
 	//  Información ya analizada
 	private ArrayList<Nota> notas;
-	private Clave[] claves = {null, null};
+	private ArrayList<Clave> claves;
 	private ArrayList<Wedge> crescendos;
 	private ArrayList<Wedge> diminuendos;
 	private Intensidad intensidad;
@@ -44,6 +44,7 @@ public class Compas {
 	
 	public Compas() {
 		barlines = new ArrayList<ElementoGrafico>();
+		clefs = new ArrayList<ElementoGrafico>();
 		positions = new ArrayList<Integer>();
 		dynamics = null;
 		fifths = null;
@@ -53,6 +54,7 @@ public class Compas {
 		wedges = new ArrayList<ElementoGrafico>();
 		words = new ArrayList<ElementoGrafico>();
 		
+		claves = new ArrayList<Clave>();
 		crescendos = new ArrayList<Wedge>();
 		diminuendos = new ArrayList<Wedge>();
 		notas = new ArrayList<Nota>();
@@ -78,16 +80,18 @@ public class Compas {
 	public void addBarline(ElementoGrafico barline) {
 		barlines.add(barline);
 	}
+	
+	public void addClave(Clave clave) {
+		claves.add(clave);
+	}
 
 	public void addClef(ElementoGrafico clef) {
-		if (clefs[0] == null)
-			clefs[0] = clef;
-		else
-			clefs[1] = clef;
-		
-		if (clef != null)
+		if (clef != null) {
+			clefs.add(clef);
+			
 			if (!positions.contains(clef.getPosition()))
 				positions.add(clef.getPosition());
+		}
 	}
 	
 	public void addCrescendo(Wedge crescendo) {
@@ -151,8 +155,7 @@ public class Compas {
 	}
 	
 	public void clearClefs() {
-		clefs[0] = null;
-		clefs[1] = null;
+		clefs.clear();
 	}
 	
 	public ArrayList<ElementoGrafico> getBarlines() {
@@ -168,18 +171,18 @@ public class Compas {
 	}
 	
 	public Clave getClave(int index) {
-		return claves[index];
+		return claves.get(index);
 	}
 	
 	public Clave getClavePorPentagrama(int pentagrama) {
-		return claves[pentagrama - 1];
+		for (int i=0; i<claves.size(); i++)
+			if (claves.get(i).getPentagrama() == pentagrama)
+				return claves.get(i);
+		
+		return null;
 	}
 	
-	public Clave[] getClaves() {
-		return claves;
-	}
-	
-	public ElementoGrafico[] getClefs() {
+	public ArrayList<ElementoGrafico> getClefs() {
 		return clefs;
 	}
 	
@@ -354,11 +357,11 @@ public class Compas {
 	}
 	
 	public boolean hayClaves() {
-		return claves[0] != null || claves[1] != null;
+		return !claves.isEmpty();
 	}
 	
 	public boolean hayClefs() {
-		return clefs[0] != null || clefs[1] != null;
+		return !clefs.isEmpty();
 	}
 	
 	public boolean hayDynamics() {
@@ -445,6 +448,10 @@ public class Compas {
 		return notasConPulsos;
 	}
 	
+	public int numeroDeClaves() {
+		return claves.size();
+	}
+	
 	public int numeroDeCrescendos() {
 		return crescendos.size();
 	}
@@ -485,7 +492,7 @@ public class Compas {
 				xEncontradas.add(notas.get(i).getX());
 
 		if (hayClaves())
-			for (int i=0; i<claves.length; i++)
+			for (int i=0; i<claves.size(); i++)
 				if (getClave(i) != null)
 					if (!xEncontradas.contains(getClave(i).getX()))
 						xEncontradas.add(getClave(i).getX());
@@ -544,6 +551,12 @@ public class Compas {
 		return xEncontradas;
 	}
 	
+	public int saberXMasGrande() {
+		ArrayList<Integer> xsDelCompas = saberXsDelCompas();
+
+		return xsDelCompas.get(xsDelCompas.size() - 1);
+	}
+	
 	public int saberXPrimeraNota() {
 		return notas.get(0).getX();
 	}
@@ -567,10 +580,6 @@ public class Compas {
 	
 	public void setBpmIndex(int bpmIndex) {
 		this.bpmIndex = bpmIndex;
-	}
-	
-	public void setClave(Clave clave, byte pentagrama) {
-		claves[pentagrama - 1] = clave;
 	}
 	
 	public void setDynamics(ElementoGrafico dynamics) {
@@ -659,16 +668,10 @@ public class Compas {
 	}
 	
 	private void clonarFigurasGraficas(Compas nuevoCompas) {
-		int numBarlines = barlines.size();
-		for (int i=0; i<numBarlines; i++)
+		for (int i=0; i<barlines.size(); i++)
 			nuevoCompas.addBarline(clonarElementoGrafico(barlines.get(i)));
-		
-		nuevoCompas.addClef(clonarElementoGrafico(clefs[0]));
-		nuevoCompas.addClef(clonarElementoGrafico(clefs[1]));	
-		nuevoCompas.setFifths(clonarElementoGrafico(getFifths()));
-		nuevoCompas.setDynamics(clonarElementoGrafico(getDynamics()));
-		nuevoCompas.setTime(clonarElementoGrafico(getTime()));
-		
+		for (int i=0; i<clefs.size(); i++)
+			nuevoCompas.addClef(clonarElementoGrafico(clefs.get(i)));
 		for (int i=0; i<pedalStarts.size(); i++)
 			nuevoCompas.addPedalStart(clonarElementoGrafico(getPedalStart(i)));
 		for (int i=0; i<pedalStops.size(); i++)
@@ -677,6 +680,10 @@ public class Compas {
 			nuevoCompas.addWords(clonarElementoGrafico(words.get(i)));
 		for (int i=0; i<wedges.size(); i++)
 			nuevoCompas.addWedge(clonarElementoGrafico(wedges.get(i)));
+		
+		nuevoCompas.setFifths(clonarElementoGrafico(getFifths()));
+		nuevoCompas.setDynamics(clonarElementoGrafico(getDynamics()));
+		nuevoCompas.setTime(clonarElementoGrafico(getTime()));
 	}
 	
 	private void clonarNotas(Compas nuevoCompas) {

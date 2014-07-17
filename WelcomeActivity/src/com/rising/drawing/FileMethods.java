@@ -50,26 +50,6 @@ public class FileMethods {
 		
 		fichero.close();
 	}
-
-	private ArrayList<Byte> leerClaves() throws IOException {
-		ArrayList<Byte> arrayBytes = new ArrayList<Byte>();
-		
-		byte pentagrama = 0;
-		byte clave = 0;
-		
-		byte numClefs = fichero.readByte();
-		arrayBytes.add(numClefs);
-		
-		for (int i=0; i<numClefs; i++) {
-			pentagrama = fichero.readByte();
-			clave = fichero.readByte();
-			
-			arrayBytes.add(pentagrama);
-			arrayBytes.add(clave);
-		}
-
-		return arrayBytes;
-	}
 	
 	private void leerDatosBasicosDePartitura(Partitura horizontal, Partitura vertical) 
 			throws IOException {
@@ -129,7 +109,8 @@ public class FileMethods {
 				break;
 
 			case 30:
-				elemento.addAllValues(leerClaves());
+				elemento.addValue(fichero.readByte());
+				elemento.addValue(fichero.readByte());
 				elemento.setPosition(leerHastaAlmohadilla());
 				compas.addClef(elemento);
 				break;

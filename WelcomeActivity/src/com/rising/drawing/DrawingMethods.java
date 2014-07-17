@@ -76,6 +76,7 @@ public class DrawingMethods {
 	private Bitmap rectangle = null;
 	private Bitmap sharp = null;
 	private Bitmap trebleclef = null;
+	private Bitmap trill = null;
 	private Bitmap vibrato = null;
 	private Bitmap whitehead = null;
 
@@ -120,6 +121,7 @@ public class DrawingMethods {
 			rectangle = BitmapFactory.decodeResource(resources, R.drawable.rectangle);
 			sharp = BitmapFactory.decodeResource(resources, R.drawable.sharp);
 			trebleclef = BitmapFactory.decodeResource(resources, R.drawable.trebleclef);
+			trill = BitmapFactory.decodeResource(resources, R.drawable.trill);
 			vibrato = BitmapFactory.decodeResource(resources, R.drawable.vibrato);
 			whitehead = BitmapFactory.decodeResource(resources, R.drawable.whitehead);
 			
@@ -136,37 +138,32 @@ public class DrawingMethods {
 	}
 
 	private void calcularClefs(Compas compas) {
-		ElementoGrafico[] clefs = compas.getClefs();
-		
+		ArrayList<ElementoGrafico> clefs = compas.getClefs();
+		ElementoGrafico clef;
 		int x_position = -1;
-		int numClavesEnElemento = -1;
 		
-		for (int i=0; i<clefs.length; i++) {
+		for (int i=0; i<clefs.size(); i++) {
+			clef = clefs.get(i);
+			
+			x_position = calcularPosicionX(compas.getPositions(), clef.getPosition());
 
-			if (clefs[i] != null) {
-				x_position = calcularPosicionX(compas.getPositions(), clefs[i].getPosition());
-				numClavesEnElemento = clefs[i].getValue(1);
-	
-				for (int j=0; j<numClavesEnElemento; j++) {
-					byte pentagrama = clefs[i].getValue(2 + 2 * j);
-					byte claveByte = clefs[i].getValue(3 + 2 * j);
-	
-					//  El margen Y depende del pentagrama al que pertenezca el compás
-					int marginY = compas_margin_y + 
-							(config.getDistanciaLineasPentagrama() * 4 + 
-									config.getDistanciaPentagramas()) * (pentagrama - 1);
+			byte pentagrama = clef.getValue(1);
+			byte claveByte = clef.getValue(2);
 
-					Clave clave = new Clave();
-					clave.setImagenClave(obtenerImagenDeClave(claveByte));
-					clave.setX(compas_margin_x + x_position);
-					clave.setY(marginY + obtenerPosicionYDeClave(claveByte));
-					clave.setClave(claveByte);
-					clave.setPentagrama(pentagrama);
-					clave.setPosition(clefs[i].getPosition());
-					
-					compas.setClave(clave, pentagrama);
-				}
-			}
+			//  El margen Y depende del pentagrama al que pertenezca el compás
+			int marginY = compas_margin_y + 
+					(config.getDistanciaLineasPentagrama() * 4 + 
+							config.getDistanciaPentagramas()) * (pentagrama - 1);
+
+			Clave clave = new Clave();
+			clave.setImagenClave(obtenerImagenDeClave(claveByte));
+			clave.setX(compas_margin_x + x_position);
+			clave.setY(marginY + obtenerPosicionYDeClave(claveByte));
+			clave.setClave(claveByte);
+			clave.setPentagrama(pentagrama);
+			clave.setPosition(clef.getPosition());
+			
+			compas.addClave(clave);
 		}
 	}
 	
@@ -262,7 +259,10 @@ public class DrawingMethods {
 		compas.setXIniNotas(compas_margin_x);
 		
 		int distanciaX = calcularPosicionesDeNotas(compas);
+		int xMasGrande = compas.saberXMasGrande();
 		compas_margin_x += distanciaX;
+		if (xMasGrande > compas_margin_x)
+			compas_margin_x = xMasGrande;
 		compas_margin_x += config.getMargenDerechoCompases();
 		
 		compas.setXFin(compas_margin_x);
@@ -501,9 +501,7 @@ public class DrawingMethods {
 		compas.setXIniNotas(compas.getXIniNotas() - distancia_x);
 		
 		if (compas.hayClaves()) {
-			Clave[] claves = compas.getClaves();
- 
-			for (int i=0; i<claves.length; i++) {
+			for (int i=0; i<compas.numeroDeClaves(); i++) {
 				if (compas.getClave(i) != null) {
 					compas.getClave(i).setX(compas.getClave(i).getX() - distancia_x);
 					compas.getClave(i).setY(compas.getClave(i).getY() + distancia_y);
@@ -1551,9 +1549,7 @@ public class DrawingMethods {
 	            	compas.getNota(j).setX(compas.getNota(j).getX() + anchoParaCadaCompas);
 
 	            if (compas.hayClaves()) {
-	            	Clave[] claves = compas.getClaves();
-	            	 
-	    			for (int j=0; j<claves.length; j++)
+	    			for (int j=0; j<compas.numeroDeClaves(); j++)
 	    				if (compas.getClave(j) != null)
 	    					compas.getClave(j).setX(compas.getClave(j).getX() + anchoParaCadaCompas);
 	            }
@@ -1614,9 +1610,7 @@ public class DrawingMethods {
 		ArrayList<Integer> xsDelCompas = compas.saberXsDelCompas();
 
     	if (compas.hayClaves()) {
-        	Clave[] claves = compas.getClaves();
-        	
-			for (int j=0; j<claves.length; j++) {
+			for (int j=0; j<compas.numeroDeClaves(); j++) {
 				if (compas.getClave(j) != null) {
     				multiplicador = xsDelCompas.indexOf(compas.getClave(j).getX());
     				compas.getClave(j).setX(compas.getClave(j).getX() + anchoPorNota * multiplicador);
@@ -1996,18 +1990,18 @@ public class DrawingMethods {
 	}
 	
 	private void dibujarClaves(Compas compas) {
-		Clave[] claves = compas.getClaves();
-		int numClaves = claves.length;
+		OrdenDibujo ordenDibujo;
+		Clave clave;
 		
-		for (int i=0; i<numClaves; i++) {
-			if (claves[i] != null) {
-				OrdenDibujo ordenDibujo = new OrdenDibujo();
-				ordenDibujo.setOrden(DrawOrder.DRAW_BITMAP);
-				ordenDibujo.setImagen(claves[i].getImagenClave());
-				ordenDibujo.setX1(claves[i].getX());
-				ordenDibujo.setY1(claves[i].getY());
-				ordenesDibujo.add(ordenDibujo);
-			}
+		for (int i=0; i<compas.numeroDeClaves(); i++) {
+			clave = compas.getClave(i);
+			
+			ordenDibujo = new OrdenDibujo();
+			ordenDibujo.setOrden(DrawOrder.DRAW_BITMAP);
+			ordenDibujo.setImagen(clave.getImagenClave());
+			ordenDibujo.setX1(clave.getX());
+			ordenDibujo.setY1(clave.getY());
+			ordenesDibujo.add(ordenDibujo);
 		}
 	}
 	
@@ -2325,6 +2319,22 @@ public class DrawingMethods {
 				ordenDibujo.setImagen(fermata_inverted);
 				ordenDibujo.setX1(nota.getX() - config.getXFermata());
 				ordenDibujo.setY1(nota.getY() + config.getYFermata());
+				ordenesDibujo.add(ordenDibujo);
+				break;
+				
+			case 38:
+				ordenDibujo.setOrden(DrawOrder.DRAW_BITMAP);
+				ordenDibujo.setImagen(trill);
+				ordenDibujo.setX1(nota.getX());
+				ordenDibujo.setY1(nota.getY() - config.getYTrill());
+				ordenesDibujo.add(ordenDibujo);
+				break;
+				
+			case 39:
+				ordenDibujo.setOrden(DrawOrder.DRAW_BITMAP);
+				ordenDibujo.setImagen(trill);
+				ordenDibujo.setX1(nota.getX());
+				ordenDibujo.setY1(nota.getY() + config.getYTrill());
 				ordenesDibujo.add(ordenDibujo);
 				break;
 				
@@ -2707,7 +2717,7 @@ public class DrawingMethods {
 		ordenDibujo.setOrden(DrawOrder.DRAW_BITMAP);
 		ordenDibujo.setImagen(octavariumImage);
 		ordenDibujo.setX1(x_ini_octavarium);
-		ordenDibujo.setY1(y_ini_octavarium + config.getYOctavarium() / 2);
+		ordenDibujo.setY1(y_ini_octavarium + 5);
 		ordenesDibujo.add(ordenDibujo);
 		
 		if (x_ini_octavarium < x_fin_octavarium) {
