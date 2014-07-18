@@ -22,7 +22,7 @@ public class DrawingMethods {
 	//  Variables para la gestión y el tratamiento dinámico de los múltiples compases
 	private int compas_margin_x = 0;
 	private int compas_margin_y = 0;
-	private byte[] clavesActuales = {0, 0};
+	private byte[] claveActual = {0, 0};
 	private Tempo tempoActual = null;
 	
 	private int compasActual = 0;
@@ -131,7 +131,7 @@ public class DrawingMethods {
 	
 	private int calcularCabezaDeNota(Nota nota, int posicion) {
 		int y = obtenerPosicionYDeNota(nota, 
-				clavesActuales[nota.getPentagrama() - 1], partitura.getInstrument());
+				claveActual[nota.getPentagrama() - 1], partitura.getInstrument());
 		if (nota.notaDeGracia()) y += config.getMargenNotaGracia();
 
 		return y;
@@ -165,22 +165,6 @@ public class DrawingMethods {
 			
 			compas.addClave(clave);
 		}
-	}
-	
-	private int calcularDesplazamientoExtraNotaDeGracia(Nota nota, int posicionX) {
-		int desplazamientoExtra = 0;
-		
-		if (nota.notaDeGracia()) {
-			desplazamientoExtra = config.getDesplazamientoExtraNotaGracia();
-			
-			if (!nota.tieneBeams())
-				desplazamientoExtra -= config.getOffsetUltimaNotaGracia();
-			else
-				if (nota.beamFinal()) 
-					desplazamientoExtra -= config.getOffsetUltimaNotaGracia();
-		}
-		
-		return desplazamientoExtra;
 	}
 	
 	private void calcularDynamics(Compas compas) {
@@ -271,6 +255,16 @@ public class DrawingMethods {
 				(config.getDistanciaPentagramas() + config.getDistanciaLineasPentagrama() * 4) * 
 				(partitura.getStaves() - 1));
 		
+		//  Si hay claves al final de un compás, las notas del siguiente compás
+		//  deben regirse por dichas claves. Aquí nos aseguramos de eso
+		int[] clavesAlFinalDelCompas = compas.clavesAlFinalDelCompas(partitura.getStaves());
+		for (int i=0; i<clavesAlFinalDelCompas.length; i++) {
+			if (clavesAlFinalDelCompas[i] > 0) {
+				Clave clave = compas.getClave(clavesAlFinalDelCompas[i]);
+				claveActual[i] = clave.getByteClave();
+			}
+		}
+		
 		if (vista == Vista.VERTICAL) {
 			if (compas.getXFin() > config.getXFinalPentagramas()) {
 				moverCompasAlSiguienteRenglon(compas);
@@ -291,31 +285,20 @@ public class DrawingMethods {
 		}
 	}
 
-	private int calcularPosicionesDeNota(ArrayList<Integer> posiciones, 
-			Compas compas, Nota nota) {
+	private int calcularPosicionesDeNota(ArrayList<Integer> posiciones, Compas compas, Nota nota) {
 		int posicionX = nota.getPosition();
 		int posicionY = 0;
 		
 		if (posicionX != -1) {
 			posicionX = calcularPosicionX(posiciones, posicionX);
-			posicionX += calcularDesplazamientoExtraNotaDeGracia(nota, posicionX);
 			nota.setX(compas_margin_x + posicionX);
 			
 			//  Si se coloca una clave en el compás, las notas anteriores
 			//  a esta clave deben colocarse según la clave vieja, y las
 			//  posteriores según la clave nueva
-			Clave clave = compas.getClavePorPentagrama(nota.getPentagrama());
-			if (clave != null) {
-				if (clave.getX() <= nota.getX())
-					clavesActuales[nota.getPentagrama() - 1] = clave.getByteClave();
-				else {
-					
-					//  Si no hay notas después de esta clave en este compás,
-					//  las notas del siguiente compás deben calcularse con esta clave
-					if (compas.noHayNotasDelanteDeClave(clave))
-						clavesActuales[nota.getPentagrama() - 1] = clave.getByteClave();
-				}
-			}
+			byte clave = compas.getClavePorPentagrama(nota);
+			if (clave > -1) 
+				claveActual[nota.getPentagrama() - 1] = clave;
 			
 			posicionY = calcularCabezaDeNota(nota, posicionX);
 			nota.setY(posicionY);
@@ -2090,6 +2073,9 @@ public class DrawingMethods {
 	}
 	
 	private void dibujarFiguraGrafica(Nota nota, byte figura, int y_beams, int Xsillo) {
+		int xAccidental = nota.notaDeGracia() ? 
+				config.getXAccidentalNotaGracia() : config.getXAccidental();
+		
 		OrdenDibujo ordenDibujo = new OrdenDibujo();
 
 		switch (figura) {
@@ -2166,7 +2152,7 @@ public class DrawingMethods {
 				ordenDibujo.setOrden(DrawOrder.DRAW_BITMAP);
 				ordenDibujo.setImagen(sharp);
 
-				ordenDibujo.setX1(nota.getX() - config.getXAccidental());
+				ordenDibujo.setX1(nota.getX() - xAccidental);
 				if (nota.desplazadaALaIzquierda()) 
 					ordenDibujo.setX1(ordenDibujo.getX1() - config.getAnchoCabezaNota());
 
@@ -2178,7 +2164,7 @@ public class DrawingMethods {
 				ordenDibujo.setOrden(DrawOrder.DRAW_BITMAP);
 				ordenDibujo.setImagen(flat);
 
-				ordenDibujo.setX1(nota.getX() - config.getXAccidental() - Xsillo);
+				ordenDibujo.setX1(nota.getX() - xAccidental - Xsillo);
 				if (nota.desplazadaALaIzquierda()) 
 					ordenDibujo.setX1(ordenDibujo.getX1() - config.getAnchoCabezaNota() - Xsillo);
 
@@ -2190,7 +2176,7 @@ public class DrawingMethods {
 				ordenDibujo.setOrden(DrawOrder.DRAW_BITMAP);
 				ordenDibujo.setImagen(natural);
 
-				ordenDibujo.setX1(nota.getX() - config.getXAccidental());
+				ordenDibujo.setX1(nota.getX() - xAccidental);
 				if (nota.desplazadaALaIzquierda()) 
 					ordenDibujo.setX1(ordenDibujo.getX1() - config.getAnchoCabezaNota());
 
@@ -2390,6 +2376,9 @@ public class DrawingMethods {
 		Nota nota = partitura.getCompas(compasNotaInicio).getNota(notaInicio);
 		int xInicio = nota.getX();
 		int yInicio = nota.getY();
+		
+		int anchoCabezaNota = nota.notaDeGracia() ? 
+				config.getAnchoCabezaNotaGracia() : config.getAnchoCabezaNota();
 
 		if (xInicio < xFinal) {
 			OrdenDibujo ordenDibujo = new OrdenDibujo();
@@ -2401,13 +2390,14 @@ public class DrawingMethods {
 			int notasEnMedio = notaActual - notaInicio;
 			
 			if (nota.ligaduraExpresionEncima()) {
+				ordenDibujo.setClockwiseAngle(true);
 				
 				//  No son notas contiguas
 				if (notasEnMedio > 1) {
 					ordenDibujo.setAngulo(0);
 					
 					rectf = new RectF(xInicio, ligaduraExpresionY - config.getYLigadurasExpresion(), 
-						xFinal + config.getAnchoCabezaNota(), ligaduraExpresionY);
+						xFinal + anchoCabezaNota, ligaduraExpresionY);
 				}
 				
 				//  Son notas contiguas
@@ -2416,12 +2406,12 @@ public class DrawingMethods {
 					
 					int y = Math.min(yInicio, yFinal);
 					rectf = new RectF(xInicio, y - config.getYLigadurasExpresion(), 
-						xFinal + config.getAnchoCabezaNota(), 
+						xFinal + anchoCabezaNota, 
 						y + config.getAlturaArcoLigadurasExpresion());
 				}
 			}
 			
-			//  Else en el futuro para las ligaduras dibujadas por debajo
+			//  En el futuro, else para las ligaduras dibujadas por debajo
 			
 			ordenDibujo.setRectF(rectf, config.getAnchoLigaduraUnionMax(), config.getOffsetLigaduraExpresion());
 			ordenesDibujo.add(ordenDibujo);

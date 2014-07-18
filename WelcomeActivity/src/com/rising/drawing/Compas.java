@@ -174,12 +174,18 @@ public class Compas {
 		return claves.get(index);
 	}
 	
-	public Clave getClavePorPentagrama(int pentagrama) {
-		for (int i=0; i<claves.size(); i++)
-			if (claves.get(i).getPentagrama() == pentagrama)
-				return claves.get(i);
+	public byte getClavePorPentagrama(Nota nota) {
+		int claveMasCercana = -1;
+		for (int i=0; i<claves.size(); i++) {
+			if (claves.get(i).getPentagrama() == nota.getPentagrama()) {
+				if (claves.get(i).getX() <= nota.getX()) {
+					claveMasCercana = i;
+				}
+			}
+		}
 		
-		return null;
+		if (claveMasCercana > -1) return claves.get(claveMasCercana).getByteClave();
+		else return (byte) claveMasCercana;
 	}
 	
 	public ArrayList<ElementoGrafico> getClefs() {
@@ -424,9 +430,19 @@ public class Compas {
 		return words != null;
 	}
 	
-	//  Devuelve true si no hay notas en este compás
-	//  después de esta clave
-	public boolean noHayNotasDelanteDeClave(Clave clave) {
+	public int[] clavesAlFinalDelCompas(int staves) {
+		int[] clavesAlFinal = new int[staves];
+		
+		for (int i=0; i<claves.size(); i++) {
+			if (noHayNotasDelanteDeClave(claves.get(i))) {
+				clavesAlFinal[claves.get(i).getPentagrama() - 1] = i;
+			}
+		}
+		
+		return clavesAlFinal;
+	}
+	
+	private boolean noHayNotasDelanteDeClave(Clave clave) {
 		int numNotas = notas.size();
 		for (int i=0; i<numNotas; i++)
 			if (clave.getPentagrama() == getNota(i).getPentagrama())

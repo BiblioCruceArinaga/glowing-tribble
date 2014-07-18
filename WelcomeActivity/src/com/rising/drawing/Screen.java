@@ -234,7 +234,12 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 					Matrix matrix = getMatrix(rectf, ordenDibujo.getAngulo());
 					
 					Path path = new Path();
-					path.addArc(rectf, 0, -180);
+					
+					if (ordenDibujo.clockwiseAngle())
+						path.addArc(rectf, 0, -180);
+					else
+						path.addArc(rectf, 0, 180);
+					
 					path.transform(matrix, path);
 					
 					canvas.drawPath(path, ordenDibujo.getPaint());

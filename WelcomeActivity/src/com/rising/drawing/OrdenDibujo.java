@@ -13,6 +13,7 @@ public class OrdenDibujo {
 	private DrawOrder orden;
 	private RectF rectf;
 	private float angulo;
+	private boolean clockwiseAngle;
 	
 	private int x1;
 	private int y1;
@@ -27,12 +28,17 @@ public class OrdenDibujo {
 		orden = null;
 		rectf = null;
 		angulo = 0;
+		clockwiseAngle = false;
 		
 		x1 = -1;
 		x2 = -1;
 		y1 = -1;
 		y2 = -1;
 		radius = 0;
+	}
+	
+	public boolean clockwiseAngle() {
+		return clockwiseAngle;
 	}
 	
 	public float getAngulo() {
@@ -81,6 +87,10 @@ public class OrdenDibujo {
 	
 	public void setAngulo(float angulo) {
 		this.angulo = angulo;
+	}
+	
+	public void setClockwiseAngle(boolean clockwise) {
+		clockwiseAngle = clockwise;
 	}
 	
 	public void setImagen(Bitmap imagen) {

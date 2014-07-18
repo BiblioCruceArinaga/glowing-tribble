@@ -69,6 +69,7 @@ public class Config {
 	private int y_accent_up;
 	private int x_accidental;
 	private int x_accidental_2;
+	private int x_accidental_nota_gracia;
 	private int y_accidental;
 	private int y_accidental_flat;
 	private int y_bend;
@@ -179,6 +180,7 @@ public class Config {
 						y_accent_up = 30;
 						x_accidental = 20;
 						x_accidental_2 = 10;
+						x_accidental_nota_gracia = 10;
 						y_accidental = 5;
 						y_accidental_flat = 12;
 						y_bend = 40;
@@ -280,6 +282,7 @@ public class Config {
 						y_accent_up = 30;
 						x_accidental = 20;
 						x_accidental_2 = 10;
+						x_accidental_nota_gracia = 5;
 						y_accidental = 5;
 						y_accidental_flat = 12;
 						y_bend = 40;
@@ -566,6 +569,10 @@ public class Config {
 	
 	public int getXAccidental2() {
 		return x_accidental_2;
+	}
+	
+	public int getXAccidentalNotaGracia() {
+		return x_accidental_nota_gracia;
 	}
 	
 	public int getYAccidental() {
