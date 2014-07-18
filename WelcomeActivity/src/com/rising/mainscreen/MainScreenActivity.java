@@ -14,7 +14,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
-import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -34,7 +33,6 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
-import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.SearchView.OnQueryTextListener;
 import android.widget.TextView;
@@ -43,8 +41,11 @@ import android.widget.Toast;
 import com.rising.drawing.MainActivity;
 import com.rising.drawing.R;
 import com.rising.login.Configuration;
+import com.rising.login.Login_Utils;
 import com.rising.login.SessionManager;
-import com.rising.mainscreen.SendFeedback.OnSendingFeedback;
+import com.rising.mainscreen.preferencies.PreferenciesActivity;
+import com.rising.mainscreen.preferencies.SendFeedback;
+import com.rising.mainscreen.preferencies.SendFeedback.OnSendingFeedback;
 import com.rising.money.MoneyUpdateConnectionNetwork;
 import com.rising.money.MoneyUpdateConnectionNetwork.OnFailMoney;
 import com.rising.money.MoneyUpdateConnectionNetwork.OnUpdateMoney;
@@ -73,10 +74,10 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 	public MoneyUpdateConnectionNetwork mucn;
 	private Dialog MDialog;
 	private int fid;
-	Context context;
+	Context ctx;
 	Dialog Incorrect_User;
-	private TextView UploadFile;
-	private ProgressBar UploadProgressBar;
+//	private TextView UploadFile;
+//	private ProgressBar UploadProgressBar;
 	
 	//  Recibir la señal del proceso que envía Feedback
 	private OnSendingFeedback listenerFeedback = new OnSendingFeedback() {
@@ -105,7 +106,7 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 
 		@Override
 		public void onFailMoney() {
-			Toast.makeText(context, "Falló al actualizar el saldo", Toast.LENGTH_LONG).show();
+			Toast.makeText(ctx, "Falló al actualizar el saldo", Toast.LENGTH_LONG).show();
 		}
 	};
 		
@@ -119,7 +120,7 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 		conf = new Configuration(this);
 		session = new SessionManager(getApplicationContext());
 		ficheros = leeFicheros();
-		context = this;
+		ctx = this;
 		session.checkLogin();
 		fid = session.getFacebookId();
 		
@@ -267,7 +268,7 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 					AbrirPDFExterno(position);
 					 				    
 				}else{
-					if(new DownloadScoresEncrypter(context, infoFicheros[0][position]+conf.getUserId()).DescryptAndConfirm(ficheros[position])){
+					if(new DownloadScoresEncrypter(ctx, infoFicheros[0][position]+conf.getUserId()).DescryptAndConfirm(ficheros[position])){
 						Intent i = new Intent(MainScreenActivity.this, MainActivity.class);
 						i.putExtra("score", ficheros[position]);
 		
@@ -296,8 +297,9 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 	
 	//No se usa actualmente, pero no lo descarto para el futuro
 	public void AbrirPDFInterno(int position){
+		
 		//Abrir con lector pdf de la aplicación
-		Intent intent_scores = new Intent(context, PDFReaderActivity.class);
+		Intent intent_scores = new Intent(ctx, PDFReaderActivity.class);
 	    intent_scores.putExtra(PdfViewerActivity.EXTRA_PDFFILENAME, Environment.getExternalStorageDirectory() + path + ficheros[position]);	    
 		
 	    startActivity(intent_scores);
@@ -324,21 +326,12 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 		return false;
 	}
 	
-	public boolean isOnline() {
-		ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-		try {
-			return cm.getActiveNetworkInfo().isConnectedOrConnecting();
-		} catch(NullPointerException n) {
-			return false;
-		}
-	}
-	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 
 	    switch (item.getItemId()) {
 			case R.id.store_button:
-				if(isOnline()){
+				if(new Login_Utils(ctx).isOnline()){
 					Intent i = new Intent(MainScreenActivity.this, MainActivityStore.class);
 					startActivity(i);
 					finish();
@@ -393,7 +386,7 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 
 					@Override
 					public void onClick(View arg0) {
-						if(isOnline()){	
+						if(new Login_Utils(ctx).isOnline()){	
 							EditText feedbackCajaTexto = (EditText) MDialog.findViewById(R.id.feedbackCajaTexto);
 				    		String message = feedbackCajaTexto.getText().toString();
 							
@@ -406,7 +399,7 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 							}
 						
 						}else{
-							Toast.makeText(context, R.string.connection_err, Toast.LENGTH_LONG).show();	
+							Toast.makeText(ctx, R.string.connection_err, Toast.LENGTH_LONG).show();	
 						}
 					}
 	    	    });
@@ -417,6 +410,7 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 	        	
 	        	Intent in = new Intent(MainScreenActivity.this, PreferenciesActivity.class);
 	        	startActivity(in);
+	        	finish();
 	        	return true;
 	                	        	            
 	        default:
@@ -528,11 +522,11 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 
 			@Override
 			public void onClick(View v) {
-				if(isOnline()){
+				if(new Login_Utils(ctx).isOnline()){
 					Intent i = new Intent(MainScreenActivity.this, MainActivityStore.class);
 					startActivity(i);
 				}else{
-					Toast.makeText(context, R.string.connection_err, Toast.LENGTH_LONG).show();
+					Toast.makeText(ctx, R.string.connection_err, Toast.LENGTH_LONG).show();
 				}				
 			}	
 		});
@@ -583,10 +577,6 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 		        }
 		    }).show();
 		}
-	}
-	
-	private void listarFormatos() {
-		
 	}
 	
 	private void ordenarPorNombre() {
@@ -661,7 +651,7 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 
 			@Override
 			public void onClick(View arg0) {
-				Intent i = new Intent(context, FileExplore.class);
+				Intent i = new Intent(ctx, FileExplore.class);
 				startActivity(i);
 				finish();
 			}

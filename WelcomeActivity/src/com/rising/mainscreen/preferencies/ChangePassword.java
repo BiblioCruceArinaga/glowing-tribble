@@ -1,4 +1,4 @@
-package com.rising.mainscreen;
+package com.rising.mainscreen.preferencies;
 
 import java.util.ArrayList;
 
@@ -14,29 +14,30 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.rising.conexiones.HttpPostAux;
+import com.rising.drawing.R;
 
-public class EraseAccount extends AsyncTask<String, String, Integer> {
+public class ChangePassword extends AsyncTask<String, String, Integer> {
 
 	//  Enviar una señal cuando el proceso haya terminado
-	public interface OnTaskCompleted{
-        void onTaskCompleted(int details);
+	public interface OnPasswordChanging {
+        void onPasswordChanged(int details);
     }
 	
 	private Context ctx;
-	private OnTaskCompleted listener;
+	private OnPasswordChanging listener;
 	
 	private HttpPostAux HPA;
 	private ProgressDialog PDialog;
-	private final String URL_Erase_Account = "http://scores.rising.es/eliminar-cuenta-mobile";
+	private final String URL_Password_Change = "http://scores.rising.es/cambiar-clave-mobile";
 	
-	public EraseAccount(Context ctx, OnTaskCompleted listener) {
+	public ChangePassword(Context ctx, OnPasswordChanging listener) {
 		this.ctx = ctx;
 		this.listener = listener;
 	}
 	
 	protected void onPreExecute() {
         PDialog = new ProgressDialog(ctx);
-        PDialog.setMessage("Intentando eliminar cuenta. Por favor, espera...");
+        PDialog.setMessage(ctx.getString(R.string.try_change_pass));
         PDialog.setIndeterminate(false);
         PDialog.setCancelable(false);
         PDialog.show();
@@ -49,9 +50,10 @@ public class EraseAccount extends AsyncTask<String, String, Integer> {
 
 		ArrayList<NameValuePair> postparameters2send= new ArrayList<NameValuePair>();
 		postparameters2send.add(new BasicNameValuePair("mail", params[0]));
-		postparameters2send.add(new BasicNameValuePair("pass", params[1]));
+		postparameters2send.add(new BasicNameValuePair("passOld", params[1]));
+		postparameters2send.add(new BasicNameValuePair("passNew", params[2]));
 		
-      	JSONArray jData = HPA.getServerData(postparameters2send, URL_Erase_Account);
+      	JSONArray jData = HPA.getServerData(postparameters2send, URL_Password_Change);
 
 		if (jData!=null && jData.length() > 0) {
 
@@ -59,9 +61,9 @@ public class EraseAccount extends AsyncTask<String, String, Integer> {
 			
 			try{
 				json_data = jData.getJSONObject(0);
-				status = json_data.getInt("eraseAccount");
+				status = json_data.getInt("passwordChange");
 				
-				Log.e("eraseAccount","eraseAccount= " + status);
+				Log.e("passwordChange","passwordChange= " + status);
 			}catch (JSONException e) {
 				e.printStackTrace();
 			}		            
@@ -74,13 +76,13 @@ public class EraseAccount extends AsyncTask<String, String, Integer> {
 	}
 	
 	protected void onPostExecute(Integer result) {
-		Log.e("Erase Account: onPostExecute=", "" + result);
+		Log.e("Password Changing: onPostExecute=", "" + result);
 		PDialog.dismiss();
 
 		if (result == 1) Log.e("resultado ", "ok");
 		else Log.e("resultado ", "error");
 		
-		listener.onTaskCompleted(result);
+		listener.onPasswordChanged(result);
 	}
 
 }

@@ -82,7 +82,7 @@ public class UserDataNetworkConnection extends AsyncTask<String, Integer, String
             HttpEntity entitys = responses.getEntity();
              
             is = entitys.getContent();
-            Log.i("Params", "Parametros enviados: " + params.toString());
+            Log.i("Params", "Parametros enviados UDNC: " + params.toString());
         }catch(Exception e){
         	Log.e("User_Log_Tag_Connection", "Error in http connection: " + e.toString());
         	httppost.abort();

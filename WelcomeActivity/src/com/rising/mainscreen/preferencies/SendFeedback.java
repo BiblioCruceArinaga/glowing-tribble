@@ -1,4 +1,4 @@
-package com.rising.mainscreen;
+package com.rising.mainscreen.preferencies;
 
 import java.util.ArrayList;
 

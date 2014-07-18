@@ -1,4 +1,4 @@
-package com.rising.login;
+package com.rising.login.facebook;
 
 import java.util.ArrayList;
 
@@ -18,6 +18,8 @@ import android.widget.Toast;
 
 import com.rising.conexiones.HttpPostAux;
 import com.rising.drawing.R;
+import com.rising.login.Configuration;
+import com.rising.login.SessionManager;
 import com.rising.login.login.UserDataNetworkConnection;
 import com.rising.login.login.UserDataNetworkConnection.OnLoginCompleted;
 import com.rising.mainscreen.MainScreenActivity;
@@ -26,12 +28,12 @@ import com.rising.store.DatosUsuario;
 //Gestión del login / registro mediante Facebook
 public class AsyncTask_Facebook extends AsyncTask<String, String, Integer>{
 
-	private ProgressDialog PDialog;
 	private Context ctx;
 	private String FMail;
 	private String FName;
 	private String FId;
 	private static ArrayList<DatosUsuario> userData;
+	private ProgressDialog PDialog;
 	
 	//Clases utilizadas
 	private HttpPostAux HPA =  new HttpPostAux();
@@ -52,14 +54,14 @@ public class AsyncTask_Facebook extends AsyncTask<String, String, Integer>{
 			conf.setUserId(userData.get(0).getId());	           
 			conf.setUserName(userData.get(0).getName());
 			conf.setUserEmail(userData.get(0).getMail());
-			conf.setUserMoney(userData.get(0).getMoney());
-									
-			session.createLoginSession(conf.getUserEmail(), conf.getUserName(), "-1");
-	    	
-	    	Intent i = new Intent(ctx, MainScreenActivity.class);
-	    	ctx.startActivity(i); 
-	    	((Activity) ctx).finish();
-	    	PDialog.dismiss();
+			conf.setUserMoney(userData.get(0).getMoney());			
+								
+        	
+    		session.createLoginSession(FMail, FName, FId);
+            Intent i=new Intent(ctx, MainScreenActivity.class);
+            ctx.startActivity(i);
+            ((Activity) ctx).finish();
+            PDialog.dismiss();
 		}
 	};
 	
@@ -68,10 +70,9 @@ public class AsyncTask_Facebook extends AsyncTask<String, String, Integer>{
 		this.conf = new Configuration(ctx);
 		this.session = new SessionManager(ctx.getApplicationContext());
 	}
-	
-	@Override
-	protected void onPreExecute() {
-        PDialog = new ProgressDialog(ctx);
+		
+    protected void onPreExecute() {
+    	PDialog = new ProgressDialog(ctx);
         PDialog.setMessage(ctx.getString(R.string.auth));
         PDialog.setIndeterminate(false);
         PDialog.setCancelable(false);
@@ -80,10 +81,10 @@ public class AsyncTask_Facebook extends AsyncTask<String, String, Integer>{
 	
 	private int Facebook_Status(String mail, String name, String id){
 		int status = -1;
-
+		
 		FMail = mail;
 		FName = name;
-		FId = id;
+		FId = id; 
 		
     	ArrayList<NameValuePair> postparameters2send= new ArrayList<NameValuePair>();
 		postparameters2send.add(new BasicNameValuePair("mail", mail));
@@ -103,7 +104,7 @@ public class AsyncTask_Facebook extends AsyncTask<String, String, Integer>{
 				Log.e("FacebookStatus","FacebookStatus= " + status);
 			}catch (JSONException e) {
 				e.printStackTrace();
-			}		            
+			}		             
 
 		}else{	
 			Log.e("JSON", "ERROR");
@@ -129,11 +130,6 @@ public class AsyncTask_Facebook extends AsyncTask<String, String, Integer>{
         	}
         	case 1: {
         		dunc.execute(FMail);
-            	
-        		session.createLoginSession(FMail, FName, FId);
-                Intent i=new Intent(ctx, MainScreenActivity.class);
-                ctx.startActivity(i);
-                ((Activity) ctx).finish();
         		break;
         	}
         	case 2: {
@@ -142,12 +138,6 @@ public class AsyncTask_Facebook extends AsyncTask<String, String, Integer>{
         	}
         	case 3: {
         		dunc.execute(FMail);
-        		
-        		session.createLoginSession(FMail, FName, FId);
-        		
-                Intent i=new Intent(ctx, MainScreenActivity.class);
-                ctx.startActivity(i);
-                ((Activity) ctx).finish();
         		break;
         	}
         	case 4: {

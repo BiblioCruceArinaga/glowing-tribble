@@ -91,7 +91,7 @@ public class MoneyUpdateConnectionNetwork extends AsyncTask<String, Integer, Str
             HttpEntity entitys = responses.getEntity();
              
             is = entitys.getContent();
-            Log.i("Params", "Parametros enviados: " + params.toString());
+            Log.i("Params", "Parametros enviados MUCN: " + params.toString());
         }catch(Exception e){
         	Log.e("User_Log_Tag_Connection", "Error in http connection: " + e.toString());
         	if (failMoney != null) failMoney.onFailMoney();

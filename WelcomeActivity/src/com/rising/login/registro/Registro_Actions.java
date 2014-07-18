@@ -123,6 +123,7 @@ public class Registro_Actions {
 				break;
 			case 1:
 				tv_E.setText(R.string.ok_reg);
+				break;
 			case 2:
 				tv_E.setText(R.string.err_reg_mail);
 				break;

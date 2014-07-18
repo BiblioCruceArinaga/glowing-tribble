@@ -9,7 +9,6 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.rising.drawing.R;
 import com.rising.login.Login_Utils;
@@ -64,7 +63,7 @@ public class Login_Actions {
 			
 			LDialog.show();
 		}else{
-			Toast.makeText(ctx, R.string.connection_err, Toast.LENGTH_LONG).show();
+			errLogin(4);
 		}	
 
 	}
@@ -113,6 +112,9 @@ public class Login_Actions {
 				break;
 			case 3:
 				tv_E.setText(R.string.err_not_active);
+				break;
+			case 4: 
+				tv_E.setText(R.string.connection_err);
 				break;
 			default:
 				tv_E.setText(R.string.err_login_unknown);
