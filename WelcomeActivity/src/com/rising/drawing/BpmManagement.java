@@ -73,19 +73,17 @@ public class BpmManagement {
 	}
 	
 	private int dibujarBpm(Compas compas) {
-		OrdenDibujo ordenDibujo = new OrdenDibujo();
-		ordenDibujo.setOrden(DrawOrder.DRAW_TEXT);
-		ordenDibujo.setPaint(PaintOptions.SET_TEXT_SIZE, config.getTamanoLetraBpm());
-		ordenDibujo.setTexto("Bpm = " + compas.getBpm());
-		ordenDibujo.setX1(compas.getXIni());
-		ordenDibujo.setY1(compas.getYIni() - config.getYBpm());
 		
 		if (vista == Vista.VERTICAL) {
-			verticalDrawing.add(ordenDibujo);
+			verticalDrawing.add(new OrdenDibujo(config.getTamanoLetraBpm(), 
+					false, "Bpm = " + compas.getBpm(), compas.getXIni(), 
+					compas.getYIni() - config.getYBpm()));
 			return verticalDrawing.size() - 1;
 		}
 		else {
-			horizontalDrawing.add(ordenDibujo);
+			horizontalDrawing.add(new OrdenDibujo(config.getTamanoLetraBpm(), 
+					false, "Bpm = " + compas.getBpm(), compas.getXIni(), 
+					compas.getYIni() - config.getYBpm()));
 			return horizontalDrawing.size() - 1;
 		}
 	}

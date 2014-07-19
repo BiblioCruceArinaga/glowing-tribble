@@ -163,22 +163,15 @@ public class Metronome {
 	//  velocidad a la que deberá empezar a tocar
 	private void bipsDePreparacion(long speed, int pulsos) throws InterruptedException {
 		for (int j=0; j<pulsos; j++) {
-			
 			if (bip == null) emitirSonido(j, 0);
 			else emitirSonido(j, 1);
 			
 			int numero = pulsos - j;
 			
 			if (bip == null) {
-				bip = new OrdenDibujo();
-				bip.setOrden(DrawOrder.DRAW_TEXT);
-				bip.setPaint(PaintOptions.SET_TEXT_SIZE, config.getTamanoLetraBipPreparacion());
-				bip.setPaint(PaintOptions.SET_ARGB_RED, -1);
-				bip.setPaint(PaintOptions.SET_TEXT_ALIGN, -1);
-				bip.setTexto(numero + "");
-
-				bip.setX1(partitura.getWidth() / 2);
-				bip.setY1(partitura.getHeight() / 2);
+				bip = new OrdenDibujo(config.getTamanoLetraBipPreparacion(), 
+						true, numero + "", partitura.getWidth() / 2, partitura.getHeight() / 2);
+				bip.setARGBRed();
 			}
 			else
 				bip.setTexto(numero + "");
@@ -190,18 +183,11 @@ public class Metronome {
 	}
 	
 	private void dibujarBarra(Compas compas, Nota nota) {
-		barra = new OrdenDibujo();
-		barra.setOrden(DrawOrder.DRAW_LINE);
-		barra.setPaint(PaintOptions.SET_STROKE_WIDTH, 5);
-		barra.setPaint(PaintOptions.SET_ARGB_RED, -1);
-		
 		int x = nota.getX();
 		if (nota.haciaArriba()) x += config.getAnchoCabezaNota();
 		
-		barra.setX1(x);
-		barra.setY1(compas.getYIni());
-		barra.setX2(x);
-		barra.setY2(compas.getYFin());
+		barra = new OrdenDibujo(5, x, compas.getYIni(), x, compas.getYFin());
+		barra.setARGBRed();
 	}
 	
 	private void emitirSonido(int nota, int pulso) {
