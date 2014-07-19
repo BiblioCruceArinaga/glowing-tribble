@@ -56,7 +56,7 @@ public class Metronome {
                 	int ultimoCompas = 0;
                 	int distanciaDesplazamiento = 0;
                 	
-                	bipsDePreparacion(speed, partitura.getCompas(0).numeroDePulsos());
+                	bipsDePreparacion(speed, partitura.getCompas(0).numPulsos());
                 	
                 	int numCompases = partitura.getCompases().size();
                 	for (int i=0; i<numCompases; i++) {

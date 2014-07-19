@@ -154,6 +154,18 @@ public class Compas {
 				positions.add(words.getPosition());
 	}
 	
+	public int[] clavesAlFinalDelCompas(int staves) {
+		int[] clavesAlFinal = new int[staves];
+		
+		for (int i=0; i<claves.size(); i++) {
+			if (noHayNotasDelanteDeClave(claves.get(i))) {
+				clavesAlFinal[claves.get(i).getPentagrama() - 1] = i;
+			}
+		}
+		
+		return clavesAlFinal;
+	}
+	
 	public void clearClefs() {
 		clefs.clear();
 	}
@@ -260,22 +272,6 @@ public class Compas {
 	public ElementoGrafico getTime() {
 		return time;
 	}
-
-	public int getNumPedalStarts() {
-		return pedalStarts.size();
-	}
-	
-	public int getNumPedalStops() {
-		return pedalStops.size();
-	}
-	
-	public int getNumWedges() {
-		return wedges.size();
-	}
-	
-	public int getNumWords() {
-		return words.size();
-	}
 	
 	public ElementoGrafico getWedge(int index) {
 		return wedges.get(index);
@@ -357,91 +353,7 @@ public class Compas {
 				return 0;
 		}
 	}
-	
-	public boolean hayBarlines() {
-		return !barlines.isEmpty();
-	}
-	
-	public boolean hayClaves() {
-		return !claves.isEmpty();
-	}
-	
-	public boolean hayClefs() {
-		return !clefs.isEmpty();
-	}
-	
-	public boolean hayDynamics() {
-		return dynamics != null;
-	}
-	
-	public boolean hayFifths() {
-		return fifths != null;
-	}
-	
-	public boolean hayIntensidad() {
-		return intensidad != null;
-	}
 
-	public boolean hayPedals() {
-		return hayPedalStart() || hayPedalStop();
-	}
-	
-	public boolean hayPedales() {
-		return hayPedalInicio() || hayPedalFin();
-	}
-	
-	public boolean hayPedalFin() {
-		return !pedalesFin.isEmpty();
-	}
-	
-	public boolean hayPedalInicio() {
-		return !pedalesInicio.isEmpty();
-	}
-	
-	public boolean hayPedalStart() {
-		return !pedalStarts.isEmpty();
-	}
-	
-	public boolean hayPedalStop() {
-		return !pedalStops.isEmpty();
-	}
-	
-	public boolean hayQuintas() {
-		return quintas != null;
-	}
-	
-	public boolean hayTempo() {
-		return tempo != null && tempo.dibujar();
-	}
-	
-	public boolean hayTextos() {
-		return !textos.isEmpty();
-	}
-	
-	public boolean hayTime() {
-		return time != null;
-	}
-	
-	public boolean hayWedges() {
-		return !wedges.isEmpty();
-	}
-	
-	public boolean hayWords() {
-		return words != null;
-	}
-	
-	public int[] clavesAlFinalDelCompas(int staves) {
-		int[] clavesAlFinal = new int[staves];
-		
-		for (int i=0; i<claves.size(); i++) {
-			if (noHayNotasDelanteDeClave(claves.get(i))) {
-				clavesAlFinal[claves.get(i).getPentagrama() - 1] = i;
-			}
-		}
-		
-		return clavesAlFinal;
-	}
-	
 	private boolean noHayNotasDelanteDeClave(Clave clave) {
 		int numNotas = notas.size();
 		for (int i=0; i<numNotas; i++)
@@ -464,37 +376,84 @@ public class Compas {
 		return notasConPulsos;
 	}
 	
-	public int numeroDeClaves() {
+	public int numClaves() {
 		return claves.size();
 	}
 	
-	public int numeroDeCrescendos() {
+	public int numCrescendos() {
 		return crescendos.size();
 	}
 	
-	public int numeroDeDiminuendos() {
+	public int numDiminuendos() {
 		return diminuendos.size();
 	}
 
-	public int numeroDeNotas() {
+	public int numNotas() {
 		return notas.size();
 	}
 	
-	public int numeroDePedalesFin() {
+	public int numPedalesFin() {
 		return pedalesFin.size();
 	}
 	
-	public int numeroDePedalesInicio() {
+	public int numPedalesInicio() {
 		return pedalesInicio.size();
 	}
 	
-	public int numeroDePulsos() {
+	public int numPedalStarts() {
+		return pedalStarts.size();
+	}
+	
+	public int numPedalStops() {
+		return pedalStops.size();
+	}
+	
+	public int numPulsos() {
 		return tempo.numeroDePulsos();
 	}
 	
-	public int numeroDeTextos() {
+	public int numTextos() {
 		return textos.size();
 	}
+
+	public int numWedges() {
+		return wedges.size();
+	}
+	
+	public int numWords() {
+		return words.size();
+	}
+
+	
+	
+	public boolean hayDynamics() {
+		return dynamics != null;
+	}
+	
+	public boolean hayFifths() {
+		return fifths != null;
+	}
+	
+	public boolean hayIntensidad() {
+		return intensidad != null;
+	}
+	
+	public boolean hayQuintas() {
+		return quintas != null;
+	}
+	
+	public boolean hayTempo() {
+		return tempo != null && tempo.dibujar();
+	}
+	
+	public boolean hayTime() {
+		return time != null;
+	}
+	
+	public boolean hayWords() {
+		return words != null;
+	}
+
 	
 	//  Devuelve un array con cada valor de X de cada elemento
 	//  del compás. Por elemento se entiende cualquier nota, 
@@ -507,25 +466,22 @@ public class Compas {
 			if (!xEncontradas.contains(notas.get(i).getX()))
 				xEncontradas.add(notas.get(i).getX());
 
-		if (hayClaves())
-			for (int i=0; i<claves.size(); i++)
-				if (getClave(i) != null)
-					if (!xEncontradas.contains(getClave(i).getX()))
-						xEncontradas.add(getClave(i).getX());
+		for (int i=0; i<claves.size(); i++)
+			if (getClave(i) != null)
+				if (!xEncontradas.contains(getClave(i).getX()))
+					xEncontradas.add(getClave(i).getX());
 		
 		if (hayIntensidad())
 			if (!xEncontradas.contains(getIntensidad().getX()))
 				xEncontradas.add(getIntensidad().getX());
-		
-		if (hayPedalInicio())
-			for (int i=0; i<pedalesInicio.size(); i++)
-				if (!xEncontradas.contains(getPedalInicio(i).getX()))
-					xEncontradas.add(getPedalInicio(i).getX());
-		
-		if (hayPedalFin())
-			for (int i=0; i<pedalesFin.size(); i++)
-				if (!xEncontradas.contains(getPedalFin(i).getX()))
-					xEncontradas.add(getPedalFin(i).getX());
+
+		for (int i=0; i<pedalesInicio.size(); i++)
+			if (!xEncontradas.contains(getPedalInicio(i).getX()))
+				xEncontradas.add(getPedalInicio(i).getX());
+
+		for (int i=0; i<pedalesFin.size(); i++)
+			if (!xEncontradas.contains(getPedalFin(i).getX()))
+				xEncontradas.add(getPedalFin(i).getX());
 		
 		if (hayTempo())
 			if (!xEncontradas.contains(getTempo().getX()))

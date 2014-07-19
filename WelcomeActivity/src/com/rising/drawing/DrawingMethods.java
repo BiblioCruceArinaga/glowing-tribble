@@ -197,32 +197,29 @@ public class DrawingMethods {
 	}
 	
 	private void calcularPedals(Compas compas) {
-		if (compas.hayPedalStart()) {
-			for (int i=0; i<compas.getNumPedalStarts(); i++) {
-				ElementoGrafico pedal = compas.getPedalStart(i);
-				byte location = pedal.getValue(0);
-				int posicion = calcularPosicionX(compas.getPositions(), pedal.getPosition());
-	
-				Pedal pedalInicio = new Pedal();
-				pedalInicio.setImagen(pedalStart);
-				pedalInicio.setX(compas_margin_x + posicion);
-				pedalInicio.setY(obtenerPosicionYDeElementoGrafico(2, location));
-				compas.addPedalInicio(pedalInicio);
-			}
+		for (int i=0; i<compas.numPedalStarts(); i++) {
+			ElementoGrafico pedal = compas.getPedalStart(i);
+			byte location = pedal.getValue(0);
+			int posicion = calcularPosicionX(compas.getPositions(), pedal.getPosition());
+
+			Pedal pedalInicio = new Pedal();
+			pedalInicio.setImagen(pedalStart);
+			pedalInicio.setX(compas_margin_x + posicion);
+			pedalInicio.setY(obtenerPosicionYDeElementoGrafico(2, location));
+			compas.addPedalInicio(pedalInicio);
 		}
-		
-		if (compas.hayPedalStop()) {
-			for (int i=0; i<compas.getNumPedalStops(); i++) {
-				ElementoGrafico pedal = compas.getPedalStop(i);
-				byte location = pedal.getValue(0);
-				int posicion = calcularPosicionX(compas.getPositions(), pedal.getPosition());
-	
-				Pedal pedalFin = new Pedal();
-				pedalFin.setImagen(pedalStop);
-				pedalFin.setX(compas_margin_x + posicion);
-				pedalFin.setY(obtenerPosicionYDeElementoGrafico(2, location));
-				compas.addPedalFin(pedalFin);
-			}
+
+
+		for (int i=0; i<compas.numPedalStops(); i++) {
+			ElementoGrafico pedal = compas.getPedalStop(i);
+			byte location = pedal.getValue(0);
+			int posicion = calcularPosicionX(compas.getPositions(), pedal.getPosition());
+
+			Pedal pedalFin = new Pedal();
+			pedalFin.setImagen(pedalStop);
+			pedalFin.setX(compas_margin_x + posicion);
+			pedalFin.setY(obtenerPosicionYDeElementoGrafico(2, location));
+			compas.addPedalFin(pedalFin);
 		}
 	}
 	
@@ -232,13 +229,13 @@ public class DrawingMethods {
 		
 		compas_margin_x += config.getMargenIzquierdoCompases();
 
-		if (compas.hayClefs()) calcularClefs(compas);
+		calcularClefs(compas);
 		if (compas.hayFifths()) calcularFifths(compas);
 		calcularTime(compas);
 		if (compas.hayWords()) calcularWords(compas);
 		if (compas.hayDynamics()) calcularDynamics(compas);
-		if (compas.hayPedals()) calcularPedals(compas);
-		if (compas.hayWedges()) calcularWedges(compas);
+		calcularPedals(compas);
+		calcularWedges(compas);
 		
 		compas.setXIniNotas(compas_margin_x);
 		
@@ -368,7 +365,7 @@ public class DrawingMethods {
 	}
 	
 	private void calcularWedges(Compas compas) {
-		int numWedges = compas.getNumWedges();
+		int numWedges = compas.numWedges();
 		int posicionX = 0;
 		
 		//  Asumimos que los crescendos o diminuendos estarán siempre
@@ -395,7 +392,7 @@ public class DrawingMethods {
 	}
 	
 	private void calcularWords(Compas compas) {
-		int numWords = compas.getNumWords();
+		int numWords = compas.numWords();
 		
 		for (int i=0; i<numWords; i++) {
 			Texto texto = new Texto();
@@ -469,33 +466,27 @@ public class DrawingMethods {
 		if (compas.getXFin() > config.getXFinalPentagramas())
 			compas.setXFin(config.getXFinalPentagramas());
 		compas.setXIniNotas(compas.getXIniNotas() - distancia_x);
-		
-		if (compas.hayClaves()) {
-			for (int i=0; i<compas.numeroDeClaves(); i++) {
-				if (compas.getClave(i) != null) {
-					compas.getClave(i).setX(compas.getClave(i).getX() - distancia_x);
-					compas.getClave(i).setY(compas.getClave(i).getY() + distancia_y);
-				}
+
+		for (int i=0; i<compas.numClaves(); i++) {
+			if (compas.getClave(i) != null) {
+				compas.getClave(i).setX(compas.getClave(i).getX() - distancia_x);
+				compas.getClave(i).setY(compas.getClave(i).getY() + distancia_y);
 			}
 		}
- 		
+
 		if (compas.hayIntensidad()) {
 			compas.getIntensidad().setX(compas.getIntensidad().getX() - distancia_x);
 			compas.getIntensidad().setY(compas.getIntensidad().getY() + distancia_y);
 		}
 		
-		if (compas.hayPedalInicio()) {
-			for (int i=0; i<compas.numeroDePedalesInicio(); i++) {
-				compas.getPedalInicio(i).setX(compas.getPedalInicio(i).getX() - distancia_x);
-				compas.getPedalInicio(i).setY(compas.getPedalInicio(i).getY() + distancia_y);
-			}
+		for (int i=0; i<compas.numPedalesInicio(); i++) {
+			compas.getPedalInicio(i).setX(compas.getPedalInicio(i).getX() - distancia_x);
+			compas.getPedalInicio(i).setY(compas.getPedalInicio(i).getY() + distancia_y);
 		}
-		
-		if (compas.hayPedalFin()) {
-			for (int i=0; i<compas.numeroDePedalesFin(); i++) {
-				compas.getPedalFin(i).setX(compas.getPedalFin(i).getX() - distancia_x);
-				compas.getPedalFin(i).setY(compas.getPedalFin(i).getY() + distancia_y);
-			}
+
+		for (int i=0; i<compas.numPedalesFin(); i++) {
+			compas.getPedalFin(i).setX(compas.getPedalFin(i).getX() - distancia_x);
+			compas.getPedalFin(i).setY(compas.getPedalFin(i).getY() + distancia_y);
 		}
 		
 		if (compas.hayTempo()) {
@@ -504,20 +495,18 @@ public class DrawingMethods {
 			compas.getTempo().setYDenominador(compas.getTempo().getYDenominador() + distancia_y);
 		}
 		
-		if (compas.hayTextos()) {
-			for (int i=0; i<compas.numeroDeTextos(); i++) {
-				compas.getTexto(i).setX(compas.getTexto(i).getX() - distancia_x);
-				compas.getTexto(i).setY(compas.getTexto(i).getY() + distancia_y);
-			}
+		for (int i=0; i<compas.numTextos(); i++) {
+			compas.getTexto(i).setX(compas.getTexto(i).getX() - distancia_x);
+			compas.getTexto(i).setY(compas.getTexto(i).getY() + distancia_y);
 		}
 		
-		for (int i=0; i<compas.numeroDeCrescendos(); i++) {
+		for (int i=0; i<compas.numCrescendos(); i++) {
 			compas.getCrescendo(i).setXIni(compas.getCrescendo(i).getXIni() - distancia_x);
 			compas.getCrescendo(i).setXFin(compas.getCrescendo(i).getXFin() - distancia_x);
 			compas.getCrescendo(i).setYIni(compas.getCrescendo(i).getYIni() + distancia_y);
 		}
 		
-		for (int i=0; i<compas.numeroDeDiminuendos(); i++) {
+		for (int i=0; i<compas.numDiminuendos(); i++) {
 			compas.getDiminuendo(i).setXIni(compas.getDiminuendo(i).getXIni() - distancia_x);
 			compas.getDiminuendo(i).setXFin(compas.getDiminuendo(i).getXFin() - distancia_x);
 			compas.getDiminuendo(i).setYIni(compas.getDiminuendo(i).getYIni() + distancia_y);
@@ -532,7 +521,7 @@ public class DrawingMethods {
 				(config.getDistanciaPentagramas() + 
 						config.getDistanciaLineasPentagrama() * 4) * (partitura.getStaves() - 1));
 		
-		int numNotas = compas.numeroDeNotas();
+		int numNotas = compas.numNotas();
 		for (int i=0; i<numNotas; i++) {
 			compas.getNota(i).setX(compas.getNota(i).getX() - distancia_x);
 			compas.getNota(i).setY(compas.getNota(i).getY() + distancia_y);
@@ -1514,39 +1503,35 @@ public class DrawingMethods {
 	            if (i == ultimoCompas) posicionX = config.getXFinalPentagramas();
 	            compas.setXFin(posicionX);
 	            
-	            int numNotas = compas.numeroDeNotas();
+	            int numNotas = compas.numNotas();
 	            for (int j=0; j<numNotas; j++)
 	            	compas.getNota(j).setX(compas.getNota(j).getX() + anchoParaCadaCompas);
 
-	            if (compas.hayClaves()) {
-	    			for (int j=0; j<compas.numeroDeClaves(); j++)
-	    				if (compas.getClave(j) != null)
-	    					compas.getClave(j).setX(compas.getClave(j).getX() + anchoParaCadaCompas);
-	            }
+    			for (int j=0; j<compas.numClaves(); j++)
+    				if (compas.getClave(j) != null)
+    					compas.getClave(j).setX(compas.getClave(j).getX() + anchoParaCadaCompas);
 	            
 	            if (compas.hayIntensidad())
 	            	compas.getIntensidad().setX(compas.getIntensidad().getX() + anchoParaCadaCompas);
 	            
-	            if (compas.hayPedalInicio())
-	            	for (int j=0; j<compas.numeroDePedalesInicio(); j++)
-	            		compas.getPedalInicio(j).setX(compas.getPedalInicio(j).getX() + anchoParaCadaCompas);
+            	for (int j=0; j<compas.numPedalesInicio(); j++)
+            		compas.getPedalInicio(j).setX(compas.getPedalInicio(j).getX() + anchoParaCadaCompas);
 	            
-	            if (compas.hayPedalFin())
-	            	for (int j=0; j<compas.numeroDePedalesFin(); j++)
-	            		compas.getPedalFin(j).setX(compas.getPedalFin(j).getX() + anchoParaCadaCompas);
+            	for (int j=0; j<compas.numPedalesFin(); j++)
+            		compas.getPedalFin(j).setX(compas.getPedalFin(j).getX() + anchoParaCadaCompas);
 	            
 	            if (compas.hayTempo())
 	            	compas.getTempo().setX(compas.getTempo().getX() + anchoParaCadaCompas);
 	            
-	            for (int j=0; j<compas.numeroDeTextos(); j++)
+	            for (int j=0; j<compas.numTextos(); j++)
 	            	compas.getTexto(j).setX(compas.getTexto(j).getX() + anchoParaCadaCompas);
 	            
-	            for (int j=0; j<compas.numeroDeCrescendos(); j++) {
+	            for (int j=0; j<compas.numCrescendos(); j++) {
 	            	compas.getCrescendo(j).setXIni(compas.getCrescendo(j).getXIni() + anchoParaCadaCompas);
 	            	compas.getCrescendo(j).setXFin(compas.getCrescendo(j).getXFin() + anchoParaCadaCompas);
 	            }
 	            
-	            for (int j=0; j<compas.numeroDeDiminuendos(); j++) {
+	            for (int j=0; j<compas.numDiminuendos(); j++) {
 	            	compas.getDiminuendo(j).setXIni(compas.getDiminuendo(j).getXIni() + anchoParaCadaCompas);
 	            	compas.getDiminuendo(j).setXFin(compas.getDiminuendo(j).getXFin() + anchoParaCadaCompas);
 	            }
@@ -1579,14 +1564,12 @@ public class DrawingMethods {
 		
 		ArrayList<Integer> xsDelCompas = compas.saberXsDelCompas();
 
-    	if (compas.hayClaves()) {
-			for (int j=0; j<compas.numeroDeClaves(); j++) {
-				if (compas.getClave(j) != null) {
-    				multiplicador = xsDelCompas.indexOf(compas.getClave(j).getX());
-    				compas.getClave(j).setX(compas.getClave(j).getX() + anchoPorNota * multiplicador);
-				}
+		for (int j=0; j<compas.numClaves(); j++) {
+			if (compas.getClave(j) != null) {
+				multiplicador = xsDelCompas.indexOf(compas.getClave(j).getX());
+				compas.getClave(j).setX(compas.getClave(j).getX() + anchoPorNota * multiplicador);
 			}
-        }
+		}
 		
 		if (compas.hayIntensidad()) {
 			if (compas.getIntensidad().getX() != xPrimeraNota) {
@@ -1596,27 +1579,23 @@ public class DrawingMethods {
 			}
     	}
         
-    	if (compas.hayPedalInicio()) {
-    		for (int i=0; i<compas.numeroDePedalesInicio(); i++) {
-	    		if (compas.getPedalInicio(i).getX() != xPrimeraNota) {
-		    		multiplicador = xsDelCompas.indexOf(compas.getPedalInicio(i).getX());
-		        	compas.getPedalInicio(i).setX( 
-		        			compas.getPedalInicio(i).getX() + anchoPorNota * multiplicador);
-	    		}
+		for (int i=0; i<compas.numPedalesInicio(); i++) {
+    		if (compas.getPedalInicio(i).getX() != xPrimeraNota) {
+	    		multiplicador = xsDelCompas.indexOf(compas.getPedalInicio(i).getX());
+	        	compas.getPedalInicio(i).setX( 
+	        			compas.getPedalInicio(i).getX() + anchoPorNota * multiplicador);
     		}
-    	}
+		}
         
-        if (compas.hayPedalFin()) {
-        	for (int i=0; i<compas.numeroDePedalesInicio(); i++) {
-	        	if (compas.getPedalFin(i).getX() != xPrimeraNota) {
-		        	multiplicador = xsDelCompas.indexOf(compas.getPedalFin(i).getX());
-		        	compas.getPedalFin(i).setX( 
-		        			compas.getPedalFin(i).getX() + anchoPorNota * multiplicador);
-	        	}
+    	for (int i=0; i<compas.numPedalesFin(); i++) {
+        	if (compas.getPedalFin(i).getX() != xPrimeraNota) {
+	        	multiplicador = xsDelCompas.indexOf(compas.getPedalFin(i).getX());
+	        	compas.getPedalFin(i).setX( 
+	        			compas.getPedalFin(i).getX() + anchoPorNota * multiplicador);
         	}
-        }
+    	}
 
-    	for (int i=0; i<compas.numeroDeTextos(); i++) {
+    	for (int i=0; i<compas.numTextos(); i++) {
         	//if (compas.getTexto(i).getX() != xPrimeraNota) {
         		multiplicador = xsDelCompas.indexOf(compas.getTexto(i).getX());
 	        	compas.getTexto(i).setX( 
@@ -1624,7 +1603,7 @@ public class DrawingMethods {
         	//}
     	}
         
-        for (int i=0; i<compas.numeroDeCrescendos(); i++) {
+        for (int i=0; i<compas.numCrescendos(); i++) {
     		multiplicador = xsDelCompas.indexOf(compas.getCrescendo(i).getXIni());
     		compas.getCrescendo(i).setXIni( 
         			compas.getCrescendo(i).getXIni() + anchoPorNota * multiplicador);
@@ -1634,7 +1613,7 @@ public class DrawingMethods {
         			compas.getCrescendo(i).getXFin() + anchoPorNota * multiplicador);
         }
         
-        for (int i=0; i<compas.numeroDeDiminuendos(); i++) {
+        for (int i=0; i<compas.numDiminuendos(); i++) {
     		multiplicador = xsDelCompas.indexOf(compas.getDiminuendo(i).getXIni());
     		compas.getDiminuendo(i).setXIni( 
         			compas.getDiminuendo(i).getXIni() + anchoPorNota * multiplicador);
@@ -1868,7 +1847,7 @@ public class DrawingMethods {
 	private void dibujarClaves(Compas compas) {
 		Clave clave;
 		
-		for (int i=0; i<compas.numeroDeClaves(); i++) {
+		for (int i=0; i<compas.numClaves(); i++) {
 			clave = compas.getClave(i);
 
 			ordenesDibujo.add( new OrdenDibujo(clave.getImagenClave(), clave.getX(), clave.getY()));
@@ -1891,14 +1870,14 @@ public class DrawingMethods {
 			
 			if (compases.get(i).hayQuintas()) dibujarQuintas(compases.get(i));
 			if (compases.get(i).hayIntensidad()) dibujarIntensidad(compases.get(i));
-			if (compases.get(i).hayPedales()) dibujarPedales(compases.get(i));
+			dibujarPedales(compases.get(i));
 			if (compases.get(i).hayTempo()) dibujarTempo(compases.get(i));
-			if (compases.get(i).hayTextos()) dibujarTextos(compases.get(i));
+			dibujarTextos(compases.get(i));
 			dibujarCrescendosYDiminuendos(compases.get(i));
 			
 			dibujarNotasDeCompas(compases.get(i));
 			
-			if (compases.get(i).hayBarlines()) dibujarBarlines(compases.get(i));
+			dibujarBarlines(compases.get(i));
 		}
 	}
 
@@ -2494,22 +2473,18 @@ public class DrawingMethods {
 	}
 	
 	private void dibujarPedales(Compas compas) {
-		if (compas.hayPedalInicio()) {
-			for (int i=0; i<compas.numeroDePedalesInicio(); i++) {
-				Pedal pedalInicio = compas.getPedalInicio(i);
-				
-				ordenesDibujo.add( new OrdenDibujo(pedalInicio.getImagen(), 
-						pedalInicio.getX(), pedalInicio.getY()));
-			}
+		for (int i=0; i<compas.numPedalesInicio(); i++) {
+			Pedal pedalInicio = compas.getPedalInicio(i);
+			
+			ordenesDibujo.add( new OrdenDibujo(pedalInicio.getImagen(), 
+					pedalInicio.getX(), pedalInicio.getY()));
 		}
-		
-		if (compas.hayPedalFin()) {
-			for (int i=0; i<compas.numeroDePedalesFin(); i++) {
-				Pedal pedalFin = compas.getPedalFin(i);
-				
-				ordenesDibujo.add( new OrdenDibujo(pedalFin.getImagen(), 
-						pedalFin.getX(), pedalFin.getY()));
-			}
+
+		for (int i=0; i<compas.numPedalesFin(); i++) {
+			Pedal pedalFin = compas.getPedalFin(i);
+			
+			ordenesDibujo.add( new OrdenDibujo(pedalFin.getImagen(), 
+					pedalFin.getX(), pedalFin.getY()));
 		}
 	}
 	
@@ -2628,7 +2603,7 @@ public class DrawingMethods {
 	}
 	
 	private void dibujarTextos(Compas compas) {
-		int numTextos = compas.numeroDeTextos();
+		int numTextos = compas.numTextos();
 		
 		for (int i=0; i<numTextos; i++) {
 			Texto texto = compas.getTexto(i);
@@ -2639,7 +2614,7 @@ public class DrawingMethods {
 	}
 	
 	private void dibujarCrescendosYDiminuendos(Compas compas) {
-		int num = compas.numeroDeCrescendos();
+		int num = compas.numCrescendos();
 		Wedge wedge;
 		
 		for (int i=0; i<num; i++) {
@@ -2653,7 +2628,7 @@ public class DrawingMethods {
 					wedge.getXFin(), wedge.getYIni() + config.getAlturaCrescendos()));
 		}
 		
-		num = compas.numeroDeDiminuendos();
+		num = compas.numDiminuendos();
 		
 		for (int i=0; i<num; i++) {
 			wedge = compas.getDiminuendo(i);
