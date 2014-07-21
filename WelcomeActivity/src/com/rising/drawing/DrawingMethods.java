@@ -72,6 +72,7 @@ public class DrawingMethods {
 	private Bitmap pedalStop = null;
 	private Bitmap piano = null;
 	private Bitmap pianissimo = null;
+	private Bitmap pianississimo = null;
 	private Bitmap quarterrest = null;
 	private Bitmap rectangle = null;
 	private Bitmap sharp = null;
@@ -117,6 +118,7 @@ public class DrawingMethods {
 			pedalStop = BitmapFactory.decodeResource(resources, R.drawable.pedalstop);
 			piano = BitmapFactory.decodeResource(resources, R.drawable.piano);
 			pianissimo = BitmapFactory.decodeResource(resources, R.drawable.pianissimo);
+			pianississimo = BitmapFactory.decodeResource(resources, R.drawable.pianississimo);
 			quarterrest = BitmapFactory.decodeResource(resources, R.drawable.quarterrest);
 			rectangle = BitmapFactory.decodeResource(resources, R.drawable.rectangle);
 			sharp = BitmapFactory.decodeResource(resources, R.drawable.sharp);
@@ -313,6 +315,8 @@ public class DrawingMethods {
 		int distanciaActualX = 0;
 		
 		for (int i=0; i<numNotas; i++) {
+			notaActual = i;
+			
 			distanciaActualX = calcularPosicionesDeNota(posiciones, compas, notas.get(i));
 
 			if (distanciaActualX > mayorDistanciaX) 
@@ -600,6 +604,8 @@ public class DrawingMethods {
 				return pianissimo;
 			case 5:
 				return forzandop;
+			case 6:
+				return pianississimo;
 			default:
 				return null;
 		}
@@ -669,9 +675,11 @@ public class DrawingMethods {
 					case 2:
 						return compas_margin_y + config.getDistanciaLineasPentagrama() * 6;
 					case 4:
-						return 0;
+						return compas_margin_y + config.getDistanciaLineasPentagrama() * 4 +
+								config.getDistanciaPentagramas() + config.getDistanciaLineasPentagrama() * 7;
 					case 5:
-						return 0;
+						return compas_margin_y + config.getDistanciaLineasPentagrama() * 4 +
+								config.getDistanciaPentagramas() / 2;
 					default:
 						return 0;
 				}
@@ -1006,7 +1014,7 @@ public class DrawingMethods {
 										case 2:
 										case 9:
 										case 16:
-											coo_y = margenY + config.getDistanciaLineasPentagrama() + 5;
+											coo_y = margenY + config.getDistanciaLineasPentagrama() * 5;
 											break;
 
 										case 3:
