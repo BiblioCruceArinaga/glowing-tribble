@@ -56,6 +56,7 @@ public class DrawingMethods {
 	private Bitmap fermata_inverted = null;
 	private Bitmap flat = null;
 	private Bitmap forte = null;
+	private Bitmap fortissimo = null;
 	private Bitmap forzandop = null;
 	private Bitmap head = null;
 	private Bitmap headlittle = null;
@@ -102,6 +103,7 @@ public class DrawingMethods {
 			fermata_inverted = BitmapFactory.decodeResource(resources, R.drawable.fermata_inverted);
 			flat = BitmapFactory.decodeResource(resources, R.drawable.flat);
 			forte = BitmapFactory.decodeResource(resources, R.drawable.forte);
+			fortissimo = BitmapFactory.decodeResource(resources, R.drawable.fortissimo);
 			forzandop = BitmapFactory.decodeResource(resources, R.drawable.forzandop);
 			head = BitmapFactory.decodeResource(resources, R.drawable.head);
 			headinv = BitmapFactory.decodeResource(resources, R.drawable.headinv);
@@ -606,6 +608,8 @@ public class DrawingMethods {
 				return forzandop;
 			case 6:
 				return pianississimo;
+			case 7:
+				return fortissimo;
 			default:
 				return null;
 		}
@@ -1696,6 +1700,15 @@ public class DrawingMethods {
 		return y_beams;
 	}
 	
+	private void dibujarAlteraciones(Nota nota, Bitmap alteracion, int offset) {
+		int xAccidental = nota.notaDeGracia() ? 
+				config.getXAccidentalNotaGracia() : config.getXAccidental();
+		int x = nota.getX() - xAccidental - offset;
+		if (nota.desplazadaALaIzquierda()) x -= config.getAnchoCabezaNota() - offset;
+		
+		ordenesDibujo.add( new OrdenDibujo(alteracion, x, nota.getY() - config.getYAccidental()));
+	}
+	
 	//  Esta implementación por ahora sólo considera el barline de fin de partitura
 	//  Si en el futuro se añadieran más barlines, habría que usar un switch en el bucle
 	private void dibujarBarlines(Compas compas) {
@@ -1943,8 +1956,7 @@ public class DrawingMethods {
 	}
 	
 	private void dibujarFiguraGrafica(Nota nota, byte figura, int y_beams, int Xsillo) {
-		int xAccidental = nota.notaDeGracia() ? 
-				config.getXAccidentalNotaGracia() : config.getXAccidental();
+		
 		int x = 0;
 
 		switch (figura) {
@@ -1999,24 +2011,15 @@ public class DrawingMethods {
 				break;
 			
 			case 12:
-				x = nota.getX() - xAccidental;
-				if (nota.desplazadaALaIzquierda()) x -= config.getAnchoCabezaNota();
-				
-				ordenesDibujo.add( new OrdenDibujo(sharp, x, nota.getY() - config.getYAccidental()));
+				dibujarAlteraciones(nota, sharp, Xsillo);
 				break;
 
 			case 13:
-				x = nota.getX() - xAccidental - Xsillo;
-				if (nota.desplazadaALaIzquierda()) x -= config.getAnchoCabezaNota() - Xsillo;
-				
-				ordenesDibujo.add( new OrdenDibujo(flat, x, nota.getY() - config.getYAccidentalFlat()));
+				dibujarAlteraciones(nota, flat, Xsillo);
 				break;
 
 			case 14:
-				x = nota.getX() - xAccidental;
-				if (nota.desplazadaALaIzquierda()) x -= config.getAnchoCabezaNota();
-				
-				ordenesDibujo.add( new OrdenDibujo(natural, x, nota.getY() - config.getYAccidental()));
+				dibujarAlteraciones(nota, natural, Xsillo);
 				break;
 
 			case 15:
