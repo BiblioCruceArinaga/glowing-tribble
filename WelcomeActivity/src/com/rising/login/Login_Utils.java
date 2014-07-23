@@ -2,8 +2,10 @@ package com.rising.login;
 
 import java.util.Locale;
 
+import android.app.Activity;
 import android.content.Context;
 import android.net.ConnectivityManager;
+import android.view.inputmethod.InputMethodManager;
 
 //Clase que contiene métodos útiles en varias clases del paquete Login
 public class Login_Utils{
@@ -37,4 +39,9 @@ public class Login_Utils{
     	}
     }
 	
+    public void HideKeyboard(){
+    	InputMethodManager inputManager = (InputMethodManager) ctx.getSystemService(Context.INPUT_METHOD_SERVICE); 
+
+    	inputManager.hideSoftInputFromWindow(((Activity) ctx).getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+    }
 }

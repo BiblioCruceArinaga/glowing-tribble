@@ -1,13 +1,14 @@
 package com.rising.login.login;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import com.rising.drawing.R;
@@ -16,74 +17,30 @@ import com.rising.login.Login_Utils;
 //Clase que gestiona todo lo relacionado con el botón de Login
 public class Login_Actions {
 
-	private Dialog LDialog, EDialog;
-	private Button Confirm_Login, Cancel_Login;
-	private EditText Mail, Pass;
+	private Dialog EDialog;
 	private Context ctx;
 	
 	//Clases usadas
 	private Login_Utils UTILS;
-	private AsyncTask_Login ASYNCTASK;
 	
 	public Login_Actions(Context context){
 		this.ctx = context;
 		UTILS = new Login_Utils(ctx);
-		ASYNCTASK = new AsyncTask_Login(ctx);
 	}
 			
 	public void LoginButton_Actions(){
 		if(UTILS.isOnline()){	
-			LDialog = new Dialog(ctx, R.style.cust_dialog);
-			
-			LDialog.setContentView(R.layout.login_dialog);
-			LDialog.setTitle(R.string.login_title);
-			
-			Confirm_Login = (Button)LDialog.findViewById(R.id.b_confirm_login);
-			Cancel_Login = (Button)LDialog.findViewById(R.id.b_cancel_login);
-			Mail = (EditText)LDialog.findViewById(R.id.et_mail);
-			Pass = (EditText)LDialog.findViewById(R.id.et_pass);
-			
-			Confirm_Login.setOnClickListener(new OnClickListener(){
-
-				@Override
-				public void onClick(View v) {
-		        	LoginConfirm_Actions();
-				}
-				
-			});
-			
-			Cancel_Login.setOnClickListener(new OnClickListener(){
-
-				@Override
-				public void onClick(View v) {
-					LDialog.dismiss();					
-				}
-				
-			});
-			
-			LDialog.show();
+			Intent i = new Intent(ctx, Login_Fragment.class);
+			ctx.startActivity(i);
+			((Activity)ctx).finish();
 		}else{
 			errLogin(4);
 		}	
 
 	}
-
-	private void LoginConfirm_Actions(){
-		    	    	    					        	
-		if (checkLoginData(Mail.getText().toString(), Pass.getText().toString())==true) {
-			
-			ASYNCTASK.execute(Mail.getText().toString(),Pass.getText().toString());    
-
-			Pass.setText("");
-		}else{
-			errLogin(0);
-		} 
-		
-		LDialog.dismiss();
-	}
 	
 	// Este método valida que no haya ningun campo en blanco, devolviendo false si lo hay y true si no.
-    private boolean checkLoginData(String username ,String password){
+    public boolean checkLoginData(String username ,String password){
     	
 	    if(username.equals("") || password.equals("")){
 	    	return false;
@@ -94,7 +51,7 @@ public class Login_Actions {
 	
 //  Mostrar errores
     public void errLogin(int code){
-    	
+    	    	
     	EDialog = new Dialog(ctx, R.style.cust_dialog);
     	EDialog.getWindow();
         EDialog.requestWindowFeature(Window.FEATURE_NO_TITLE); 

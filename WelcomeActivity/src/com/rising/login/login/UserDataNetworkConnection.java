@@ -45,10 +45,16 @@ public class UserDataNetworkConnection extends AsyncTask<String, Integer, String
         void onLoginCompleted();
     }
 	
-	private OnLoginCompleted listenerUser;
+	public interface OnNetworkDown{
+		void onNetworkDown();
+	}
 	
-	public UserDataNetworkConnection(OnLoginCompleted listener2) {
+	private OnLoginCompleted listenerUser;
+	private OnNetworkDown NetworkDown;
+	
+	public UserDataNetworkConnection(OnLoginCompleted listener2, OnNetworkDown networkfail) {
 		this.listenerUser = listener2;
+		this.NetworkDown = networkfail;
 	}
 		
     protected String doInBackground(String... urls) {
@@ -62,12 +68,17 @@ public class UserDataNetworkConnection extends AsyncTask<String, Integer, String
     	return "";
     }
     
-    // This is called when doInBackground() is finished
     protected void onPostExecute(String result) {
     	if (listenerUser != null) listenerUser.onLoginCompleted();
     }
     
-    private void HttpPost(String mail){
+    @Override
+	protected void onCancelled(String result) {
+		Log.d("Cancelled UDNC", "El hilo UDNC fue cancelado");	
+		if(NetworkDown != null) NetworkDown.onNetworkDown();
+	}
+
+	private void HttpPost(String mail){
     	// Http post
         try{
         	httpcliente = new DefaultHttpClient();
@@ -113,19 +124,12 @@ public class UserDataNetworkConnection extends AsyncTask<String, Integer, String
     }
 
     private void HttpRequest(){
-    	// Making HTTP Request
     	try {
     		HttpResponse response = httpcliente.execute(httppost);
-    	 
-    	    // writing response to log
     	    Log.d("Http Response:", response.toString());
     	}catch (ClientProtocolException e0) {
-    	        	
-    		// writing exception to log 
     	    e0.printStackTrace();
     	}catch (IOException e1) {
-    	        	
-    		// writing exception to log
     	    e1.printStackTrace();
     	}
     }
@@ -154,7 +158,7 @@ public class UserDataNetworkConnection extends AsyncTask<String, Integer, String
 	        e1.printStackTrace();
 	    }
     } 
-    // Devolver la informaci�n le�da de la base de datos
+
     public ArrayList<DatosUsuario> devolverDatos() {
     	return resultado;
     }

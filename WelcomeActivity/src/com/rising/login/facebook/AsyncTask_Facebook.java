@@ -22,6 +22,7 @@ import com.rising.login.Configuration;
 import com.rising.login.SessionManager;
 import com.rising.login.login.UserDataNetworkConnection;
 import com.rising.login.login.UserDataNetworkConnection.OnLoginCompleted;
+import com.rising.login.login.UserDataNetworkConnection.OnNetworkDown;
 import com.rising.mainscreen.MainScreenActivity;
 import com.rising.store.DatosUsuario;
 
@@ -63,6 +64,15 @@ public class AsyncTask_Facebook extends AsyncTask<String, String, Integer>{
             ((Activity) ctx).finish();
             PDialog.dismiss();
 		}
+	};
+	
+	private OnNetworkDown NetworkDown = new OnNetworkDown(){
+
+		@Override
+		public void onNetworkDown() {
+			Log.e("Error", "Se perdió la red");		
+		}
+		
 	};
 	
 	public AsyncTask_Facebook(Context context){
@@ -121,7 +131,7 @@ public class AsyncTask_Facebook extends AsyncTask<String, String, Integer>{
 	protected void onPostExecute(Integer result) {
 		Log.e("onPostExecute=",""+result);
 		
-		dunc = new UserDataNetworkConnection(listenerUser);
+		dunc = new UserDataNetworkConnection(listenerUser, NetworkDown);
 		
     	switch (result) {
         	case 0: {

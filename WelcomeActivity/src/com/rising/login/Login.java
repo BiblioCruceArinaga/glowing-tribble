@@ -43,18 +43,18 @@ public class Login extends FragmentActivity {
 	private LoginButton Facebook_Button;
 	private Button Login, Registro;
 	private TextView OlvidaPass;
-		
-	private Context ctx;
 	
+	private Context ctx;
+
 	@Override
-	protected void onCreate(final Bundle savedInstanceState){
-		super.onCreate(savedInstanceState);
-		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);  
+	protected void onCreate(Bundle savedInstanceState){
+		super.onCreate(savedInstanceState);		
+		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.login_layout);
-				
-        ctx = this;
-					
+		
+        this.ctx = this;
+        
 		Login = (Button) findViewById(R.id.button_login);
 		Facebook_Button = (LoginButton) findViewById(R.id.button_login_f);
 		OlvidaPass = (TextView)findViewById(R.id.tv_olvido_pass);
@@ -125,12 +125,12 @@ public class Login extends FragmentActivity {
 			}         
 		}); 
 	}
-		
+
 
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 	    Session.getActiveSession().onActivityResult(this, requestCode, resultCode, data);
 	}
-		
+			
 }

@@ -11,7 +11,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
         android:layout_marginBottom="20dp"
-        android:textSize="23sp"
+        android:layout_marginRight="80dp"
+        android:layout_marginLeft="80dp"
+        android:textSize="30sp"
         android:hint="@string/mail"
         android:textColorHint="#DDD"
         android:textColor="#DDD"
@@ -27,7 +29,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:layout_marginBottom="40dp"
-        android:textSize="23sp"
+        android:layout_marginRight="80dp"
+        android:layout_marginLeft="80dp"
+        android:textSize="30sp"
         android:hint="@string/pass"
         android:textColorHint="#DDD"
         android:textColor="#DDD"
@@ -37,6 +41,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+		android:layout_marginRight="80dp"
+        android:layout_marginLeft="80dp"
         android:orientation="horizontal" >
 
         <Button
@@ -46,7 +52,7 @@
             android:layout_height="60dp"
             android:textColor="#EEE"
             android:background="@drawable/stores_buttons"
-            android:textSize="22sp"
+            android:textSize="30sp"
             android:layout_weight="2"
             android:text="@string/cancel" />
         
@@ -57,7 +63,7 @@
             android:layout_height="60dp"
             android:textColor="#EEE"
             android:background="@drawable/stores_buttons"
-            android:textSize="22sp"
+            android:textSize="30sp"
             android:layout_weight="2"
             android:text="@string/confirm_login" />
 

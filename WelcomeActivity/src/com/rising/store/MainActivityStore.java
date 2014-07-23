@@ -73,7 +73,7 @@ public class MainActivityStore extends FragmentActivity implements OnQueryTextLi
     	ABar = getActionBar();
     	ABar.setIcon(R.drawable.ic_menu);
     	ABar.setTitle(R.string.store);
-    	ABar.setDisplayHomeAsUpEnabled(true); 
+    	ABar.setDisplayHomeAsUpEnabled(true);
     	ABar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS); 
     	     	    	
     	ABar.addTab(ABar.newTab().setText(R.string.piano).setTabListener(new TabListener(new PianoFragment())));
