@@ -140,7 +140,7 @@ public class FileMethods {
 			default:
 				elemento.addValue(figuraGrafica);
 				elemento.setPosition(leerHastaAlmohadilla());
-				compas.setDynamics(elemento);
+				compas.addDynamics(elemento);
 				break;
 		}
 	}

@@ -9,7 +9,7 @@ public class Compas {
 	//  Información tal cual fue leída en el fichero
 	private ArrayList<ElementoGrafico> barlines;
 	private ArrayList<ElementoGrafico> clefs;
-	private ElementoGrafico dynamics;
+	private ArrayList<ElementoGrafico> dynamics;
 	private ElementoGrafico fifths;
 	private ArrayList<ElementoGrafico> pedalStarts;
 	private ArrayList<ElementoGrafico> pedalStops;
@@ -23,7 +23,7 @@ public class Compas {
 	private ArrayList<Clave> claves;
 	private ArrayList<Wedge> crescendos;
 	private ArrayList<Wedge> diminuendos;
-	private Intensidad intensidad;
+	private ArrayList<Intensidad> intensidades;
 	private ArrayList<Pedal> pedalesInicio;
 	private ArrayList<Pedal> pedalesFin;
 	private Quintas quintas;
@@ -46,7 +46,7 @@ public class Compas {
 		barlines = new ArrayList<ElementoGrafico>();
 		clefs = new ArrayList<ElementoGrafico>();
 		positions = new ArrayList<Integer>();
-		dynamics = null;
+		dynamics = new ArrayList<ElementoGrafico>();
 		fifths = null;
 		pedalStarts = new ArrayList<ElementoGrafico>();
 		pedalStops = new ArrayList<ElementoGrafico>();
@@ -58,7 +58,7 @@ public class Compas {
 		crescendos = new ArrayList<Wedge>();
 		diminuendos = new ArrayList<Wedge>();
 		notas = new ArrayList<Nota>();
-		intensidad = null;
+		intensidades = new ArrayList<Intensidad>();
 		pedalesInicio = new ArrayList<Pedal>();
 		pedalesFin = new ArrayList<Pedal>();
 		quintas = null;
@@ -100,6 +100,19 @@ public class Compas {
 	
 	public void addDiminuendo(Wedge diminuendo) {
 		diminuendos.add(diminuendo);
+	}
+	
+	public void addDynamics(ElementoGrafico dynamics) {
+		if (dynamics != null) {
+			this.dynamics.add(dynamics);
+			
+			if (!positions.contains(dynamics.getPosition()))
+				positions.add(dynamics.getPosition());
+		}
+	}
+	
+	public void addIntensidad(Intensidad intensidad) {
+		intensidades.add(intensidad);
 	}
 	
 	public void addNote(Nota note) {
@@ -212,16 +225,16 @@ public class Compas {
 		return diminuendos.get(index);
 	}
 	
-	public ElementoGrafico getDynamics() {
-		return dynamics;
+	public ElementoGrafico getDynamics(int index) {
+		return dynamics.get(index);
 	}
 	
 	public ElementoGrafico getFifths() {
 		return fifths;
 	}
 	
-	public Intensidad getIntensidad() {
-		return intensidad;
+	public Intensidad getIntensidad(int index) {
+		return intensidades.get(index);
 	}
 
 	public Nota getNota(int index) {
@@ -387,6 +400,14 @@ public class Compas {
 	public int numDiminuendos() {
 		return diminuendos.size();
 	}
+	
+	public int numDynamics() {
+		return dynamics.size();
+	}
+	
+	public int numIntensidades() {
+		return intensidades.size();
+	}
 
 	public int numNotas() {
 		return notas.size();
@@ -423,19 +444,9 @@ public class Compas {
 	public int numWords() {
 		return words.size();
 	}
-
-	
-	
-	public boolean hayDynamics() {
-		return dynamics != null;
-	}
 	
 	public boolean hayFifths() {
 		return fifths != null;
-	}
-	
-	public boolean hayIntensidad() {
-		return intensidad != null;
 	}
 	
 	public boolean hayQuintas() {
@@ -448,10 +459,6 @@ public class Compas {
 	
 	public boolean hayTime() {
 		return time != null;
-	}
-	
-	public boolean hayWords() {
-		return words != null;
 	}
 
 	
@@ -471,9 +478,10 @@ public class Compas {
 				if (!xEncontradas.contains(getClave(i).getX()))
 					xEncontradas.add(getClave(i).getX());
 		
-		if (hayIntensidad())
-			if (!xEncontradas.contains(getIntensidad().getX()))
-				xEncontradas.add(getIntensidad().getX());
+		for (int i=0; i<intensidades.size(); i++)
+			if (getIntensidad(i) != null)
+				if (!xEncontradas.contains(getIntensidad(i).getX()))
+					xEncontradas.add(getIntensidad(i).getX());
 
 		for (int i=0; i<pedalesInicio.size(); i++)
 			if (!xEncontradas.contains(getPedalInicio(i).getX()))
@@ -554,20 +562,8 @@ public class Compas {
 		this.bpmIndex = bpmIndex;
 	}
 	
-	public void setDynamics(ElementoGrafico dynamics) {
-		this.dynamics = dynamics;
-		
-		if (dynamics != null)
-			if (!positions.contains(dynamics.getPosition()))
-				positions.add(dynamics.getPosition());
-	}
-	
 	public void setFifths(ElementoGrafico fifths) {
 		this.fifths = fifths;
-	}
-	
-	public void setIntensidad(Intensidad intensidad) {
-		this.intensidad = intensidad;
 	}
 	
 	public void setNumeroCompas(int numeroCompas) {
@@ -644,6 +640,8 @@ public class Compas {
 			nuevoCompas.addBarline(clonarElementoGrafico(barlines.get(i)));
 		for (int i=0; i<clefs.size(); i++)
 			nuevoCompas.addClef(clonarElementoGrafico(clefs.get(i)));
+		for (int i=0; i<dynamics.size(); i++)
+			nuevoCompas.addDynamics(clonarElementoGrafico(dynamics.get(i)));
 		for (int i=0; i<pedalStarts.size(); i++)
 			nuevoCompas.addPedalStart(clonarElementoGrafico(getPedalStart(i)));
 		for (int i=0; i<pedalStops.size(); i++)
@@ -654,7 +652,6 @@ public class Compas {
 			nuevoCompas.addWedge(clonarElementoGrafico(wedges.get(i)));
 		
 		nuevoCompas.setFifths(clonarElementoGrafico(getFifths()));
-		nuevoCompas.setDynamics(clonarElementoGrafico(getDynamics()));
 		nuevoCompas.setTime(clonarElementoGrafico(getTime()));
 	}
 	

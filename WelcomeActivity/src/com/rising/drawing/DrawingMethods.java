@@ -57,6 +57,7 @@ public class DrawingMethods {
 	private Bitmap flat = null;
 	private Bitmap forte = null;
 	private Bitmap fortissimo = null;
+	private Bitmap forzando = null;
 	private Bitmap forzandop = null;
 	private Bitmap head = null;
 	private Bitmap headlittle = null;
@@ -104,6 +105,7 @@ public class DrawingMethods {
 			flat = BitmapFactory.decodeResource(resources, R.drawable.flat);
 			forte = BitmapFactory.decodeResource(resources, R.drawable.forte);
 			fortissimo = BitmapFactory.decodeResource(resources, R.drawable.fortissimo);
+			forzando = BitmapFactory.decodeResource(resources, R.drawable.forzando);
 			forzandop = BitmapFactory.decodeResource(resources, R.drawable.forzandop);
 			head = BitmapFactory.decodeResource(resources, R.drawable.head);
 			headinv = BitmapFactory.decodeResource(resources, R.drawable.headinv);
@@ -172,17 +174,21 @@ public class DrawingMethods {
 	}
 	
 	private void calcularDynamics(Compas compas) {
-		ElementoGrafico dynamics = compas.getDynamics();
-		byte location = dynamics.getValue(0);
-		byte intensidadByte = dynamics.getValue(1);
-		int posicion = calcularPosicionX(compas.getPositions(), dynamics.getPosition());
-
-		Intensidad intensidad = new Intensidad();
-		intensidad.setImagen(obtenerImagenDeIntensidad(intensidadByte));
-		intensidad.setX(compas_margin_x + posicion);
-		intensidad.setY(obtenerPosicionYDeElementoGrafico(1, location));
-
-		compas.setIntensidad(intensidad);
+		int numDynamics = compas.numDynamics();
+		
+		for (int i=0; i<numDynamics; i++) {
+			ElementoGrafico dynamics = compas.getDynamics(i);
+			byte location = dynamics.getValue(0);
+			byte intensidadByte = dynamics.getValue(1);
+			int posicion = calcularPosicionX(compas.getPositions(), dynamics.getPosition());
+	
+			Intensidad intensidad = new Intensidad();
+			intensidad.setImagen(obtenerImagenDeIntensidad(intensidadByte));
+			intensidad.setX(compas_margin_x + posicion);
+			intensidad.setY(obtenerPosicionYDeElementoGrafico(1, location));
+	
+			compas.addIntensidad(intensidad);
+		}
 	}
 	
 	private void calcularFifths(Compas compas) {
@@ -236,8 +242,8 @@ public class DrawingMethods {
 		calcularClefs(compas);
 		if (compas.hayFifths()) calcularFifths(compas);
 		calcularTime(compas);
-		if (compas.hayWords()) calcularWords(compas);
-		if (compas.hayDynamics()) calcularDynamics(compas);
+		calcularWords(compas);
+		calcularDynamics(compas);
 		calcularPedals(compas);
 		calcularWedges(compas);
 		
@@ -474,15 +480,13 @@ public class DrawingMethods {
 		compas.setXIniNotas(compas.getXIniNotas() - distancia_x);
 
 		for (int i=0; i<compas.numClaves(); i++) {
-			if (compas.getClave(i) != null) {
-				compas.getClave(i).setX(compas.getClave(i).getX() - distancia_x);
-				compas.getClave(i).setY(compas.getClave(i).getY() + distancia_y);
-			}
+			compas.getClave(i).setX(compas.getClave(i).getX() - distancia_x);
+			compas.getClave(i).setY(compas.getClave(i).getY() + distancia_y);
 		}
 
-		if (compas.hayIntensidad()) {
-			compas.getIntensidad().setX(compas.getIntensidad().getX() - distancia_x);
-			compas.getIntensidad().setY(compas.getIntensidad().getY() + distancia_y);
+		for (int i=0; i<compas.numIntensidades(); i++) {
+			compas.getIntensidad(i).setX(compas.getIntensidad(i).getX() - distancia_x);
+			compas.getIntensidad(i).setY(compas.getIntensidad(i).getY() + distancia_y);
 		}
 		
 		for (int i=0; i<compas.numPedalesInicio(); i++) {
@@ -610,6 +614,8 @@ public class DrawingMethods {
 				return pianississimo;
 			case 7:
 				return fortissimo;
+			case 8:
+				return forzando;
 			default:
 				return null;
 		}
@@ -633,6 +639,9 @@ public class DrawingMethods {
 					case 3:
 						return compas_margin_y + config.getDistanciaLineasPentagrama() * 4 + 
 								config.getDistanciaPentagramas() - config.getDistanciaLineasPentagrama() * 4;
+					case 4:
+						return compas_margin_y + config.getDistanciaLineasPentagrama() * 4 + 
+								config.getDistanciaPentagramas() + config.getDistanciaLineasPentagrama() * 8;
 					case 5:
 						return compas_margin_y + config.getDistanciaLineasPentagrama() * 4 +
 								config.getDistanciaPentagramas() / 2 - config.getYIntensidadMiddle();
@@ -1523,8 +1532,8 @@ public class DrawingMethods {
     				if (compas.getClave(j) != null)
     					compas.getClave(j).setX(compas.getClave(j).getX() + anchoParaCadaCompas);
 	            
-	            if (compas.hayIntensidad())
-	            	compas.getIntensidad().setX(compas.getIntensidad().getX() + anchoParaCadaCompas);
+    			for (int j=0; j<compas.numIntensidades(); j++)
+            		compas.getIntensidad(j).setX(compas.getIntensidad(j).getX() + anchoParaCadaCompas);
 	            
             	for (int j=0; j<compas.numPedalesInicio(); j++)
             		compas.getPedalInicio(j).setX(compas.getPedalInicio(j).getX() + anchoParaCadaCompas);
@@ -1583,13 +1592,13 @@ public class DrawingMethods {
 			}
 		}
 		
-		if (compas.hayIntensidad()) {
-			if (compas.getIntensidad().getX() != xPrimeraNota) {
-				multiplicador = xsDelCompas.indexOf(compas.getIntensidad().getX());
-	        	compas.getIntensidad().setX( 
-	        			compas.getIntensidad().getX() + anchoPorNota * multiplicador);
-			}
-    	}
+		for (int i=0; i<compas.numIntensidades(); i++) {
+    		if (compas.getIntensidad(i).getX() != xPrimeraNota) {
+	    		multiplicador = xsDelCompas.indexOf(compas.getIntensidad(i).getX());
+	        	compas.getIntensidad(i).setX( 
+	        			compas.getIntensidad(i).getX() + anchoPorNota * multiplicador);
+    		}
+		}
         
 		for (int i=0; i<compas.numPedalesInicio(); i++) {
     		if (compas.getPedalInicio(i).getX() != xPrimeraNota) {
@@ -1890,7 +1899,7 @@ public class DrawingMethods {
 			dibujarClaves(compases.get(i));
 			
 			if (compases.get(i).hayQuintas()) dibujarQuintas(compases.get(i));
-			if (compases.get(i).hayIntensidad()) dibujarIntensidad(compases.get(i));
+			dibujarIntensidades(compases.get(i));
 			dibujarPedales(compases.get(i));
 			if (compases.get(i).hayTempo()) dibujarTempo(compases.get(i));
 			dibujarTextos(compases.get(i));
@@ -2146,11 +2155,13 @@ public class DrawingMethods {
 		}
 	}
 	
-	private void dibujarIntensidad(Compas compas) {
-		Intensidad intensidad = compas.getIntensidad();
-		
-		ordenesDibujo.add( new OrdenDibujo(intensidad.getImagen(), 
-				intensidad.getX(), intensidad.getY()));
+	private void dibujarIntensidades(Compas compas) {
+		for (int i=0; i<compas.numIntensidades(); i++) {
+			Intensidad intensidad = compas.getIntensidad(i);
+			
+			ordenesDibujo.add( new OrdenDibujo(intensidad.getImagen(), 
+					intensidad.getX(), intensidad.getY()));
+		}
 	}
 	
 	private void dibujarLigaduraExpresion(int indLigadura, int xFinal, int yFinal) {
