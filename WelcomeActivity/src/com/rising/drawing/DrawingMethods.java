@@ -151,7 +151,7 @@ public class DrawingMethods {
 		for (int i=0; i<clefs.size(); i++) {
 			clef = clefs.get(i);
 			
-			x_position = calcularPosicionX(compas.getPositions(), clef.getPosition());
+			x_position = calcularPosicionX(clef.getPosition());
 
 			byte pentagrama = clef.getValue(1);
 			byte claveByte = clef.getValue(2);
@@ -180,7 +180,7 @@ public class DrawingMethods {
 			ElementoGrafico dynamics = compas.getDynamics(i);
 			byte location = dynamics.getValue(0);
 			byte intensidadByte = dynamics.getValue(1);
-			int posicion = calcularPosicionX(compas.getPositions(), dynamics.getPosition());
+			int posicion = calcularPosicionX(dynamics.getPosition());
 	
 			Intensidad intensidad = new Intensidad();
 			intensidad.setImagen(obtenerImagenDeIntensidad(intensidadByte));
@@ -195,7 +195,7 @@ public class DrawingMethods {
 		ElementoGrafico fifths = compas.getFifths();
 		byte notaQuintasByte = fifths.getValue(1);
 		byte valorQuintasByte = fifths.getValue(2);
-		int posicion = calcularPosicionX(compas.getPositions(), fifths.getPosition());
+		int posicion = calcularPosicionX(fifths.getPosition());
 
 		Quintas quintas = new Quintas();
 		quintas.setNotaQuintas(notaQuintasByte);
@@ -210,7 +210,7 @@ public class DrawingMethods {
 		for (int i=0; i<compas.numPedalStarts(); i++) {
 			ElementoGrafico pedal = compas.getPedalStart(i);
 			byte location = pedal.getValue(0);
-			int posicion = calcularPosicionX(compas.getPositions(), pedal.getPosition());
+			int posicion = calcularPosicionX(pedal.getPosition());
 
 			Pedal pedalInicio = new Pedal();
 			pedalInicio.setImagen(pedalStart);
@@ -223,7 +223,7 @@ public class DrawingMethods {
 		for (int i=0; i<compas.numPedalStops(); i++) {
 			ElementoGrafico pedal = compas.getPedalStop(i);
 			byte location = pedal.getValue(0);
-			int posicion = calcularPosicionX(compas.getPositions(), pedal.getPosition());
+			int posicion = calcularPosicionX(pedal.getPosition());
 
 			Pedal pedalFin = new Pedal();
 			pedalFin.setImagen(pedalStop);
@@ -249,24 +249,23 @@ public class DrawingMethods {
 		
 		compas.setXIniNotas(compas_margin_x);
 		
-		int distanciaX = calcularPosicionesDeNotas(compas);
-		int xMasGrande = compas.saberXMasGrande();
-		compas_margin_x += distanciaX;
-		if (xMasGrande > compas_margin_x)
-			compas_margin_x = xMasGrande;
-		compas_margin_x += config.getMargenDerechoCompases();
+		int lastX = calcularPosicionesDeNotas(compas);
+		if (compas_margin_x + lastX > compas.getXFin())
+			compas.setXFin(compas_margin_x + lastX);
 		
-		compas.setXFin(compas_margin_x);
+		compas.setXFin(compas.getXFin() + config.getMargenDerechoCompases());
 		compas.setYFin(compas_margin_y + 
 				config.getDistanciaLineasPentagrama() * 4 + 
 				(config.getDistanciaPentagramas() + config.getDistanciaLineasPentagrama() * 4) * 
 				(partitura.getStaves() - 1));
 		
+		compas_margin_x = compas.getXFin();
+		
 		//  Si hay claves al final de un compás, las notas del siguiente compás
 		//  deben regirse por dichas claves. Aquí nos aseguramos de eso
 		int[] clavesAlFinalDelCompas = compas.clavesAlFinalDelCompas(partitura.getStaves());
 		for (int i=0; i<clavesAlFinalDelCompas.length; i++) {
-			if (clavesAlFinalDelCompas[i] > 0) {
+			if (clavesAlFinalDelCompas[i] > -1) {
 				Clave clave = compas.getClave(clavesAlFinalDelCompas[i]);
 				claveActual[i] = clave.getByteClave();
 			}
@@ -292,12 +291,12 @@ public class DrawingMethods {
 		}
 	}
 
-	private int calcularPosicionesDeNota(ArrayList<Integer> posiciones, Compas compas, Nota nota) {
+	private int calcularPosicionesDeNota(Compas compas, Nota nota) {
 		int posicionX = nota.getPosition();
 		int posicionY = 0;
 		
 		if (posicionX != -1) {
-			posicionX = calcularPosicionX(posiciones, posicionX);
+			posicionX = calcularPosicionX(posicionX);
 			nota.setX(compas_margin_x + posicionX);
 			
 			//  Si se coloca una clave en el compás, las notas anteriores
@@ -317,15 +316,14 @@ public class DrawingMethods {
 	private int calcularPosicionesDeNotas(Compas compas) {
 		ArrayList<Nota> notas = compas.getNotas();
 		int numNotas = notas.size();
-		
-		ArrayList<Integer> posiciones = compas.getPositions();
+
 		int mayorDistanciaX = 0;
 		int distanciaActualX = 0;
 		
 		for (int i=0; i<numNotas; i++) {
 			notaActual = i;
 			
-			distanciaActualX = calcularPosicionesDeNota(posiciones, compas, notas.get(i));
+			distanciaActualX = calcularPosicionesDeNota(compas, notas.get(i));
 
 			if (distanciaActualX > mayorDistanciaX) 
 				mayorDistanciaX = distanciaActualX;
@@ -334,7 +332,7 @@ public class DrawingMethods {
 		return mayorDistanciaX;
 	}
 	
-	private int calcularPosicionX(ArrayList<Integer> posiciones, int position) {
+	private int calcularPosicionX(int position) {
 		return position * config.getUnidadDesplazamiento() / partitura.getDivisions();
 	}
 	
@@ -387,13 +385,13 @@ public class DrawingMethods {
 		//  final vendrá justo después
 		
 		for (int i=0; i<numWedges; i++) {
-			posicionX = calcularPosicionX(compas.getPositions(), compas.getWedge(i).getPosition());
+			posicionX = calcularPosicionX(compas.getWedge(i).getPosition());
 			Wedge wedge = new Wedge(compas.getWedge(i).getValue(1), compas_margin_x + posicionX);
 			wedge.setYIni(obtenerPosicionYDeElementoGrafico(4, compas.getWedge(i).getValue(0)));
 
 			i++;
 			
-			posicionX = calcularPosicionX(compas.getPositions(), compas.getWedge(i).getPosition());
+			posicionX = calcularPosicionX(compas.getWedge(i).getPosition());
 			wedge.setXFin(compas_margin_x + posicionX);
 			
 			if (wedge.crescendo())
@@ -408,7 +406,7 @@ public class DrawingMethods {
 		
 		for (int i=0; i<numWords; i++) {
 			Texto texto = new Texto();
-			int posicionX = calcularPosicionX(compas.getPositions(), compas.getWordsPosition(i));
+			int posicionX = calcularPosicionX(compas.getWordsPosition(i));
 			
 			texto.setTexto(compas.getWordsString(i));
 			texto.setX(compas_margin_x + posicionX);
@@ -454,7 +452,7 @@ public class DrawingMethods {
 	}
 
 	private void inicializarTempo(Tempo tempo, Compas compas, int numerador, int denominador) {
-		int x_position = calcularPosicionX(compas.getPositions(), compas.getTime().getPosition());
+		int x_position = calcularPosicionX(compas.getTime().getPosition());
 		
 		tempo.setDibujar(true);
 		tempo.setNumerador(numerador);
@@ -2244,14 +2242,14 @@ public class DrawingMethods {
 		RectF rectf = new RectF(xInicio + config.getAnchoCabezaNota() +
 				config.getXLigadurasUnion(), yInicio - config.getYLigadurasUnion(), 
 				config.getXFinalPentagramas(), yInicio + config.getAlturaArcoLigadurasUnion());
-		ordenesDibujo.add( new OrdenDibujo(2, rectf, 0, false));
+		ordenesDibujo.add( new OrdenDibujo(2, rectf, 0, true));
 
 		int yFinal = yInicio +
 				(config.getDistanciaLineasPentagrama() * 4 + config.getDistanciaPentagramas()) * 
 				(partitura.getStaves());
 		rectf = new RectF(config.getXInicialPentagramas(), yFinal - config.getYLigadurasUnion(), 
 				xFinal - config.getXLigadurasUnion(), yFinal + config.getAlturaArcoLigadurasUnion());
-		ordenesDibujo.add( new OrdenDibujo(2, rectf, 0, false));
+		ordenesDibujo.add( new OrdenDibujo(2, rectf, 0, true));
 	}
 	
 	private void dibujarLineasDePentagramaDeCompas(Compas compas) {

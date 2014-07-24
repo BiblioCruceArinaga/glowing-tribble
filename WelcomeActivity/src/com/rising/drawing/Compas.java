@@ -13,7 +13,6 @@ public class Compas {
 	private ElementoGrafico fifths;
 	private ArrayList<ElementoGrafico> pedalStarts;
 	private ArrayList<ElementoGrafico> pedalStops;
-	private ArrayList<Integer> positions;
 	private ElementoGrafico time;
 	private ArrayList<ElementoGrafico> wedges;
 	private ArrayList<ElementoGrafico> words;
@@ -45,7 +44,6 @@ public class Compas {
 	public Compas() {
 		barlines = new ArrayList<ElementoGrafico>();
 		clefs = new ArrayList<ElementoGrafico>();
-		positions = new ArrayList<Integer>();
 		dynamics = new ArrayList<ElementoGrafico>();
 		fifths = null;
 		pedalStarts = new ArrayList<ElementoGrafico>();
@@ -83,92 +81,82 @@ public class Compas {
 	
 	public void addClave(Clave clave) {
 		claves.add(clave);
+		
+		updateXFin(clave.getX());
 	}
 
 	public void addClef(ElementoGrafico clef) {
 		if (clef != null) {
 			clefs.add(clef);
-			
-			if (!positions.contains(clef.getPosition()))
-				positions.add(clef.getPosition());
 		}
 	}
 	
 	public void addCrescendo(Wedge crescendo) {
 		crescendos.add(crescendo);
+		
+		updateXFin(crescendo.getXFin());
 	}
 	
 	public void addDiminuendo(Wedge diminuendo) {
 		diminuendos.add(diminuendo);
+		
+		updateXFin(diminuendo.getXFin());
 	}
 	
 	public void addDynamics(ElementoGrafico dynamics) {
 		if (dynamics != null) {
 			this.dynamics.add(dynamics);
-			
-			if (!positions.contains(dynamics.getPosition()))
-				positions.add(dynamics.getPosition());
 		}
 	}
 	
 	public void addIntensidad(Intensidad intensidad) {
 		intensidades.add(intensidad);
+		
+		updateXFin(intensidad.getX());
 	}
 	
 	public void addNote(Nota note) {
 		notas.add(note);
-		
-		if (note != null)
-			if (!positions.contains(note.getPosition())) 
-				positions.add(note.getPosition());
 	}
 	
 	public void addPedalFin(Pedal pedalFin) {
 		pedalesFin.add(pedalFin);
+		
+		updateXFin(pedalFin.getX());
 	}
 	
 	public void addPedalInicio(Pedal pedalInicio) {
 		pedalesInicio.add(pedalInicio);
+		
+		updateXFin(pedalInicio.getX());
 	}
 
 	public void addPedalStart(ElementoGrafico pedalStart) {
 		pedalStarts.add(pedalStart);
-		
-		if (pedalStart != null)
-			if (!positions.contains(pedalStart.getPosition()))
-				positions.add(pedalStart.getPosition());
 	}
 	
 	public void addPedalStop(ElementoGrafico pedalStop) {
 		pedalStops.add(pedalStop);
-		
-		if (pedalStop != null)
-			if (!positions.contains(pedalStop.getPosition()))
-				positions.add(pedalStop.getPosition());
 	}
 	
 	public void addTexto(Texto texto) {
 		textos.add(texto);
+		
+		updateXFin(texto.getX());
 	}
 	
 	public void addWedge(ElementoGrafico wedge) {
 		wedges.add(wedge);
-		
-		if (wedge != null)
-			if (!positions.contains(wedge.getPosition()))
-				positions.add(wedge.getPosition());
 	}
 	
 	public void addWords(ElementoGrafico words) {
 		this.words.add(words);
-		
-		if (words != null)
-			if (!positions.contains(words.getPosition()))
-				positions.add(words.getPosition());
 	}
 	
 	public int[] clavesAlFinalDelCompas(int staves) {
 		int[] clavesAlFinal = new int[staves];
+		for (int i=0; i<clavesAlFinal.length; i++)
+			clavesAlFinal[i] = -1;
 		
 		for (int i=0; i<claves.size(); i++) {
 			if (noHayNotasDelanteDeClave(claves.get(i))) {
@@ -263,11 +251,6 @@ public class Compas {
 	
 	public ElementoGrafico getPedalStop(int index) {
 		return pedalStops.get(index);
-	}
-	
-	public ArrayList<Integer> getPositions() {
-		Collections.sort(positions);
-		return positions;
 	}
 	
 	public Quintas getQuintas() {
@@ -531,12 +514,6 @@ public class Compas {
 		return xEncontradas;
 	}
 	
-	public int saberXMasGrande() {
-		ArrayList<Integer> xsDelCompas = saberXsDelCompas();
-
-		return xsDelCompas.get(xsDelCompas.size() - 1);
-	}
-	
 	public int saberXPrimeraNota() {
 		return notas.get(0).getX();
 	}
@@ -572,18 +549,18 @@ public class Compas {
 	
 	public void setQuintas(Quintas quintas) {
 		this.quintas = quintas;
+		
+		updateXFin(quintas.getX());
 	}
 
 	public void setTempo(Tempo tempo) {
 		this.tempo = tempo;
+		
+		updateXFin(tempo.getX());
 	}
 	
 	public void setTime(ElementoGrafico time) {
 		this.time = time;
-		
-		if (time != null)
-			if (!positions.contains(time.getPosition())) 
-				positions.add(time.getPosition());
 	}
 	
 	public void setXIni(int x_ini) {
@@ -604,6 +581,11 @@ public class Compas {
 	
 	public void setXIniNotas(int x_ini_notas) {
 		this.x_ini_notas = x_ini_notas;
+	}
+	
+	private void updateXFin(int x_fin) {
+		if (x_fin > this.x_fin)
+			setXFin(x_fin);
 	}
 
 	/*
