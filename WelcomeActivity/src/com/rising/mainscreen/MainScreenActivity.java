@@ -3,18 +3,14 @@ package com.rising.mainscreen;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashSet;
 import java.util.List;
 
 import android.app.ActionBar;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.text.util.Linkify;
@@ -49,8 +45,6 @@ import com.rising.mainscreen.preferencies.SendFeedback.OnSendingFeedback;
 import com.rising.money.MoneyUpdateConnectionNetwork;
 import com.rising.money.MoneyUpdateConnectionNetwork.OnFailMoney;
 import com.rising.money.MoneyUpdateConnectionNetwork.OnUpdateMoney;
-import com.rising.pdf.PDFReaderActivity;
-import com.rising.pdf.PdfViewerActivity;
 import com.rising.security.DownloadScoresEncrypter;
 import com.rising.store.MainActivityStore;
 
@@ -61,8 +55,6 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 		
 	String[] ficheros;
 	String[][] infoFicheros;
-	String path = "/.RisingScores/scores/";
-	String image_path = "/.RisingScores/scores_images/";
 	private File f_toDelete;
 	private File f_image_toDelete;
 	private boolean delete;
@@ -74,10 +66,14 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 	public MoneyUpdateConnectionNetwork mucn;
 	private Dialog MDialog;
 	private int fid;
-	Context ctx;
-	Dialog Incorrect_User;
-//	private TextView UploadFile;
-//	private ProgressBar UploadProgressBar;
+	private Context ctx;
+	private Dialog Incorrect_User;
+	
+	//Clases usadas
+	private Ordenar_Partituras ORDENAR;
+	private MainScreen_Utils MSUTILS;
+	private CreateFolders CREATE;
+	private PDF_Methods PDF;
 	
 	//  Recibir la señal del proceso que envía Feedback
 	private OnSendingFeedback listenerFeedback = new OnSendingFeedback() {
@@ -124,8 +120,13 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 		session.checkLogin();
 		fid = session.getFacebookId();
 		
-		createScoreFolder();
-		createImageFolder();		
+		this.ORDENAR = new Ordenar_Partituras(ctx, s_adapter);
+		this.MSUTILS = new MainScreen_Utils();
+		this.CREATE = new CreateFolders(ctx);
+
+		
+		CREATE.createScoreFolder();
+		CREATE.createImageFolder();		
 
 		UpdateMoney(conf.getUserEmail());
 		
@@ -160,6 +161,9 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 	}
 		
 	public void interfazCuandoHayPartituras(final String[] ficheros){
+		
+		this.PDF = new PDF_Methods(ctx, ficheros);
+		
 		infoFicheros = darInfoFicheros(ficheros);
 				
 		Incorrect_User = new Dialog(MainScreenActivity.this, R.style.cust_dialog);
@@ -263,9 +267,9 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 				Log.i("Position", ficheros[position]);
 				
 				//Si es un PDF abre el PDF, si no, el otro. 
-				if(ComprobarFichero(ficheros[position])){
+				if(MSUTILS.ComprobarExtensionFichero(ficheros[position])){
 	
-					AbrirPDFExterno(position);
+					PDF.AbrirPDFExterno(position);
 					 				    
 				}else{
 					if(new DownloadScoresEncrypter(ctx, infoFicheros[0][position]+conf.getUserId()).DescryptAndConfirm(ficheros[position])){
@@ -281,30 +285,7 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 		});
 	
 	}
-		
-	public void AbrirPDFExterno(int position){
-		
-		//Abrir con lector pdf del sistema
-		File file = new File(Environment.getExternalStorageDirectory() + path + ficheros[position]);
-		Intent target = new Intent(Intent.ACTION_VIEW);
-		target.setDataAndType(Uri.fromFile(file), "application/pdf");
-		target.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-		Intent intent = Intent.createChooser(target, "Open File");
-		startActivity(intent);
-		
-		//No he encontrado la manera de abrirlo a pantalla completa
-	}
-	
-	//No se usa actualmente, pero no lo descarto para el futuro
-	public void AbrirPDFInterno(int position){
-		
-		//Abrir con lector pdf de la aplicación
-		Intent intent_scores = new Intent(ctx, PDFReaderActivity.class);
-	    intent_scores.putExtra(PdfViewerActivity.EXTRA_PDFFILENAME, Environment.getExternalStorageDirectory() + path + ficheros[position]);	    
-		
-	    startActivity(intent_scores);
-	} 
-	
+			
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.main, menu);
@@ -341,23 +322,23 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 				return true;
 				
 			case R.id.subir_archivo:
-				subirArchivo();
+				PDF.subirArchivo();
 				return true;
 				
 			case R.id.sort_author:
-				listarAutores();
+				ORDENAR.listarAutores();
 				return true;
 				
 			case R.id.sort_instrument:
-				listarInstrumentos();
+				ORDENAR.listarInstrumentos();
 				return true;
 				
 			case R.id.sort_name:
-				ordenarPorNombre();
+				ORDENAR.ordenarPorNombre();
 				return true;
 				
 			case R.id.show_all:
-				mostrarTodas();
+				ORDENAR.mostrarTodas();
 				return true;
             
 	        case R.id.about:
@@ -417,65 +398,9 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 	            return super.onOptionsItemSelected(item);
 	    }
 	}
-	
-	private void createScoreFolder(){
-		File file=new File(Environment.getExternalStorageDirectory() + path);
-        if(!file.exists()) {
-            boolean res = file.mkdirs();
-            if (!res) {
-            	if (!file.isDirectory()) {
-            		createScoreFolderInternal();
-            	}
-            }
-        }
-	}
-	
-	public void createScoreFolderInternal(){
-		File file=new File(Environment.getRootDirectory() + path);
-        if(!file.exists()) {
-            boolean res = file.mkdirs();
-            
-            if (!res) {
-            	if (!file.isDirectory()) {
-            		
-            		//  No se pudo crear el directorio, muy probablemente por los permisos
-            		Toast.makeText(getApplicationContext(), R.string.error_folder, Toast.LENGTH_LONG).show();
-            		//finish();
-            	}
-            }
-        }
-	} 
-	
-	public void createImageFolder(){
-		File file=new File(Environment.getExternalStorageDirectory() + image_path);
-        if(!file.exists()) {
-            boolean res = file.mkdirs();
-            if (!res) {
-            	if (!file.isDirectory()) {
-            		createImageFolderInternal();
-            	}
-            }
-        }
-	}
-	
-	//Si falla la creación en el directorio externo
-	public void createImageFolderInternal(){
-		File file=new File(Environment.getRootDirectory() + image_path);
-        if(!file.exists()) {
-            boolean res = file.mkdirs();
-            if (!res) {
-            	if (!file.isDirectory()) {
-            		
-            		//  No se pudo crear el directorio, muy probablemente por los permisos
-            		Toast.makeText(getApplicationContext(), R.string.error_folder, Toast.LENGTH_LONG).show();
-            		//finish();
-            	}
-            }
-        }
-	}
-	
+		
 	public String[] leeFicheros(){
-		File f = new File(Environment.getExternalStorageDirectory() + path);
+		File f = new File(Environment.getExternalStorageDirectory() + MSUTILS.getPath());
 		String[] lista = f.list();
 		//Habría que poner algo de seguridad y que solo muestre los archivos acabados en smts
 		return lista;
@@ -493,7 +418,7 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 		res = new String[5][len];
 		
 		for(int i=0; i < len; i++){
-			if(ComprobarFichero(ArrayScores[i])){
+			if(MSUTILS.ComprobarExtensionFichero(ArrayScores[i])){
 				res[0][i] = ArrayScores[i].substring(0, ArrayScores[i].indexOf(".")); 
 				res[1][i] = "";	//  Autor
 				res[2][i] = "";	//  Instrumento
@@ -535,58 +460,7 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 		scores_gallery = (GridView) findViewById(R.id.gV_scores);
 		scores_gallery.setVisibility(8);
 	}
-	
-	private void listarAutores() {
-		if (s_adapter != null) {
-			int size = s_adapter.getCount();
-			final CharSequence[] items = new CharSequence[size];
-			for (int i=0; i<size; i++) items[i] = s_adapter.getItemAuthor(i);
-	
-		    AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		    builder.setTitle(R.string.author_dialog_title);
-		    builder.setItems(items, new DialogInterface.OnClickListener() {
-		        public void onClick(DialogInterface dialog, int item) {
-		            s_adapter.filter(s_adapter.getItemAuthor(item));
-		        }
-		    }).show();
-		}
-	}
-	
-	private void listarInstrumentos() {	
-		if (s_adapter != null) {
-			int size = s_adapter.getCount();
-			
-			//  Evitar repeticiones
-			LinkedHashSet<String> hs = new LinkedHashSet<String>();
-			for (int i=0; i<size; i++) {
-				hs.add(s_adapter.getItemInstrument(i));
-			}
-			
-			size = hs.size();
-			final CharSequence[] items = new CharSequence[size];
-			ArrayList<String> al = new ArrayList<String>();
-			al.addAll(hs);
-			for (int i=0; i<size; i++) items[i] = al.get(i);
-	
-		    AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		    builder.setTitle(R.string.instrument_dialog_title);
-		    
-		    builder.setItems(items, new DialogInterface.OnClickListener() {
-		        public void onClick(DialogInterface dialog, int item) {
-		            s_adapter.filter(s_adapter.getItemInstrument(item));
-		        }
-		    }).show();
-		}
-	}
-	
-	private void ordenarPorNombre() {
-		if (s_adapter != null) s_adapter.sortByName();
-	}
-	
-	private void mostrarTodas() {
-		if (s_adapter != null) s_adapter.showAll();
-	}
-	
+		
 	//  Método que coge los archivos de las partituras en el 
 	//  dispositivo y los muestra en la pantalla principal
 	public void ColocarFicheros(){ 
@@ -607,8 +481,8 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 	   		for(int i = 0; i < ficherosLength(); i++){
 	   					   	   			
 	   			if(mSelected.containsKey(i)){
-	   				f_toDelete = new File(Environment.getExternalStorageDirectory() + path + ficheros2[i]);	
-	   				f_image_toDelete = new File(Environment.getExternalStorageDirectory() + image_path + ficheroAImagen(ficheros2[i]));
+	   				f_toDelete = new File(Environment.getExternalStorageDirectory() + MSUTILS.getPath() + ficheros2[i]);	
+	   				f_image_toDelete = new File(Environment.getExternalStorageDirectory() + MSUTILS.getImage_path() + ficheroAImagen(ficheros2[i]));
 	   				if(f_toDelete.exists() && f_image_toDelete.exists()){
 	   				if(f_toDelete.delete() && f_image_toDelete.delete()){
 	   					elementosAEliminar.add(s_adapter.getItem(i));
@@ -635,49 +509,5 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
    		}
    		mSelected.clear();
 	}
-	
-	public void subirArchivo(){
-		MDialog = new Dialog(MainScreenActivity.this, R.style.cust_dialog);
-		MDialog.setContentView(R.layout.upload_pdf);
-		MDialog.setTitle(R.string.upload_pdf);
-		MDialog.getWindow().setLayout(LayoutParams.MATCH_PARENT,LayoutParams.WRAP_CONTENT);
-		MDialog.show();
 		
-		boolean subido = false;
-		
-		Button B_Upload = (Button) MDialog.findViewById(R.id.upload_pdf_button);
-				
-		B_Upload.setOnClickListener(new OnClickListener(){
-
-			@Override
-			public void onClick(View arg0) {
-				Intent i = new Intent(ctx, FileExplore.class);
-				startActivity(i);
-				finish();
-			}
-			
-		});	
-		
-		if(subido){
-			
-		}
-
-	}
-	//Comprueba si es un PDF por la extensión
-	public boolean ComprobarFichero(String nombre){
-			
-		Log.i("Comprueba ficheros", nombre);
-				
-		int i = nombre.lastIndexOf('.');
-		
-		String pdf = nombre.substring(i+1, nombre.length()).toLowerCase();
-		Log.i("PDF", pdf);
-		
-		if(pdf.equals("pdf")){
-			return true;
-		}else{
-			return false;
-		}		
-	}
-
 }

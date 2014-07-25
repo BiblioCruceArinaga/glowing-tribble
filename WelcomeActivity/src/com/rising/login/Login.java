@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -25,9 +24,9 @@ import com.facebook.widget.LoginButton;
 import com.facebook.widget.LoginButton.OnErrorListener;
 import com.rising.drawing.R;
 import com.rising.login.facebook.Facebook_Fragment;
-import com.rising.login.login.Login_Actions;
+import com.rising.login.login.Login_Fragment;
 import com.rising.login.olvidapass.OlvidaPass_Actions;
-import com.rising.login.registro.Registro_Actions;
+import com.rising.login.registro.Registro_Fragment;
 
 //Clase login. Permite al usuario loguearse y registrarse, con la aplicación o con Facebook, y cambiar la contraseña
 public class Login extends FragmentActivity {
@@ -71,7 +70,7 @@ public class Login extends FragmentActivity {
 
 			@Override
 			public void onClick(View v) {
-				new Login_Actions(ctx).LoginButton_Actions();
+				UTILS.Open_Fragment(Login_Fragment.class);
 			}  
 		});
 		
@@ -87,7 +86,7 @@ public class Login extends FragmentActivity {
 
 			@Override
 			public void onClick(View v) {
-				new Registro_Actions(ctx).RegistroButton_Actions();
+				UTILS.Open_Fragment(Registro_Fragment.class);	
 			}
 		});
 					    						
@@ -105,20 +104,28 @@ public class Login extends FragmentActivity {
 							@Override
 							public void onCompleted(GraphUser user, Response response) {
 								if (user != null) {
-
-									FId = user.getId();
-									FName = user.getFirstName() + " " + user.getLastName();
-									FMail = user.getProperty("email").toString();
+											
+										FId = user.getId();
+										FName = user.getFirstName() + " " + user.getLastName();
+										FMail = user.getProperty("email").toString();
 									
-									final Bundle bundle = new Bundle();
-									bundle.putString("fmail", FMail);
-									bundle.putString("fname", FName);
-									bundle.putString("fid", FId);
+										final Bundle bundle = new Bundle();
+										bundle.putString("fmail", FMail);
+										bundle.putString("fname", FName);
+										bundle.putString("fid", FId);
 									
-									Intent i = new Intent(ctx, Facebook_Fragment.class);
-									i.putExtras(bundle);
-									startActivity(i);
-									finish();
+									if(UTILS.isOnline()){	
+										Intent i = new Intent(ctx, Facebook_Fragment.class);
+										i.putExtras(bundle);
+										startActivity(i);
+										finish();
+									}else{
+										
+										if(Session.getActiveSession() != null){
+											Session.getActiveSession().closeAndClearTokenInformation();
+										}
+										ERRORS.errLogin(4);
+									}
 								}	
 							}
 						}).executeAsync();
@@ -129,7 +136,9 @@ public class Login extends FragmentActivity {
 					       
 						@Override
 					    public void onError(FacebookException error) {
-							Log.e("Error", "Aquí");
+							if(Session.getActiveSession() != null){
+								Session.getActiveSession().closeAndClearTokenInformation();
+							}
 							ERRORS.errLogin(4);
 					    }
 					});

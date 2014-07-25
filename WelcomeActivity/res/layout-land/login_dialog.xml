@@ -38,35 +38,16 @@
         android:textColorHighlight="#DDD"
         android:inputType="textPassword" />
 
-    <LinearLayout
+ 	<Button
+        android:id="@+id/b_confirm_login"
+        style="?android:attr/buttonBarButtonStyle"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:layout_marginRight="20dp"
         android:layout_marginLeft="20dp"
-        android:orientation="horizontal" >
-
-        <Button
-            android:id="@+id/b_cancel_login"
-            style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:textColor="#EEE"
-            android:background="@drawable/stores_buttons"
-            android:textSize="20sp"
-            android:layout_weight="2"
-            android:text="@string/cancel" />
-        
-        <Button
-            android:id="@+id/b_confirm_login"
-            style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:textColor="#EEE"
-            android:background="@drawable/stores_buttons"
-            android:textSize="20sp"
-            android:layout_weight="2"
-            android:text="@string/confirm_login" />
-
-    </LinearLayout>
+        android:textColor="#EEE"
+        android:background="@drawable/stores_buttons"
+        android:textSize="20sp"
+		android:text="@string/confirm_login" />
 
 </LinearLayout>

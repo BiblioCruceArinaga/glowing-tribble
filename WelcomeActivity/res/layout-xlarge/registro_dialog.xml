@@ -9,76 +9,75 @@
         android:id="@+id/et_nombre_registro"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:layout_marginBottom="15dp"
-        android:textSize="24sp"
+        android:layout_marginTop="150dp"
+        android:layout_marginBottom="30dp"
+        android:layout_marginLeft="80dp"
+        android:layout_marginRight="80dp"        
+        android:textSize="30sp"
+        android:textColorHint="#DDD"
+        android:textColor="#DDD"
+        android:textColorHighlight="#DDD"
         android:hint="@string/nombre_registro" >
-        <requestFocus />
     </EditText>
         
 	<EditText
         android:id="@+id/et_mail_registro"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:layout_marginBottom="15dp"
-        android:textSize="24sp"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="30dp"
+        android:layout_marginLeft="80dp"
+        android:layout_marginRight="80dp"        
+        android:textSize="30sp"
+        android:textColorHint="#DDD"
+        android:textColor="#DDD"
+        android:textColorHighlight="#DDD"        
         android:inputType="textEmailAddress"
         android:hint="@string/mail_registro" >
-    
 	</EditText>
     
     <EditText
         android:id="@+id/et_pass_registro"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:layout_marginBottom="15dp"
-        android:textSize="24sp"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="30dp"
+        android:layout_marginLeft="80dp"
+        android:layout_marginRight="80dp"        
+        android:textSize="30sp"
+        android:textColorHint="#DDD"
+        android:textColor="#DDD"
+        android:textColorHighlight="#DDD"        
         android:inputType="textPassword"
-        android:hint="@string/pass_registro" >
-        
+        android:hint="@string/pass_registro" >       
     </EditText>
         
     <EditText
         android:id="@+id/et_confipass_registro"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:layout_marginBottom="30dp"
-        android:textSize="24sp"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="90dp"
+        android:layout_marginLeft="80dp"
+        android:layout_marginRight="80dp"        
+        android:textSize="30sp"
+        android:textColorHint="#DDD"
+        android:textColor="#DDD"
+        android:textColorHighlight="#DDD"        
         android:inputType="textPassword"
         android:hint="@string/confipass_registro" >
-
     </EditText>
-    
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal" >
-        
-        <Button
-            android:id="@+id/b_cancel_reg"
-            style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="0dp"
-            android:layout_height="70dp"
-            android:textColor="#EEE"
-            android:background="@drawable/stores_buttons"
-            android:textSize="30sp"
-            android:layout_weight="1"
-            android:text="@string/cancel" />
             
-        <Button
-            android:id="@+id/b_confirm_reg"
-            style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="0dp"
-            android:layout_height="70dp"
-            android:textColor="#EEE"
-            android:background="@drawable/stores_buttons"
-            android:textSize="30sp"
-            android:layout_weight="1"
-            android:text="@string/confirm_registro" />
-
-    </LinearLayout>
+  	<Button
+    	android:id="@+id/b_confirm_reg"
+        style="?android:attr/buttonBarButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_marginLeft="80dp"
+        android:layout_marginRight="80dp"
+        android:textColor="#EEE"
+        android:background="@drawable/stores_buttons"
+        android:textSize="30sp"
+        android:text="@string/confirm_registro" />
         
 </LinearLayout>

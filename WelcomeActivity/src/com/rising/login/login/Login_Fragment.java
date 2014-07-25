@@ -10,7 +10,6 @@ import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -31,7 +30,7 @@ import com.rising.store.DatosUsuario;
 
 public class Login_Fragment extends Activity implements AsyncTask_LoginFragment.TaskCallbacks {
     private AsyncTask_LoginFragment task;
-	private Button Confirm_Login, Cancel_Login;
+	private Button Confirm_Login;
 	private EditText Mail, Pass;
 	 
 	private Context ctx;
@@ -42,7 +41,6 @@ public class Login_Fragment extends Activity implements AsyncTask_LoginFragment.
 	private static UserDataNetworkConnection dunc;
 	private SessionManager session;
 	private Login_Utils UTILS;
-	private Login_Actions LOGIN_ACTIONS;
 	private Login_Errors ERRORS;
 
 	//Recibe la señal del proceso que termina el Login e introduce los datos del usuario en Configuration. 
@@ -100,7 +98,6 @@ public class Login_Fragment extends Activity implements AsyncTask_LoginFragment.
         this.ctx = this;
         this.UTILS = new Login_Utils(ctx);
         this.ERRORS = new Login_Errors(ctx);
-        this.LOGIN_ACTIONS = new Login_Actions(ctx);
         this.conf = new Configuration(this);
 		this.session = new SessionManager(getApplicationContext());
         
@@ -110,7 +107,6 @@ public class Login_Fragment extends Activity implements AsyncTask_LoginFragment.
     	ABar.setDisplayHomeAsUpEnabled(true);
 		
 	    Confirm_Login = (Button)findViewById(R.id.b_confirm_login);
-		Cancel_Login = (Button)findViewById(R.id.b_cancel_login);
 		Mail = (EditText)findViewById(R.id.et_mail);
 		Pass = (EditText)findViewById(R.id.et_pass);
 		
@@ -119,7 +115,7 @@ public class Login_Fragment extends Activity implements AsyncTask_LoginFragment.
 			@Override
 			public void onClick(View v) {
 				
-				if(LOGIN_ACTIONS.checkLoginData(Mail.getText().toString(), Pass.getText().toString())==true) {	
+				if(UTILS.checkLoginData(Mail.getText().toString(), Pass.getText().toString())==true) {	
 				
 					UTILS.HideKeyboard();
 					
@@ -142,16 +138,8 @@ public class Login_Fragment extends Activity implements AsyncTask_LoginFragment.
 			}
 					
 		});
-		
-		Cancel_Login.setOnClickListener(new OnClickListener(){
-	
-			@Override
-			public void onClick(View v) {
-				Log.e("Error de ", "mierda");				
-			}
-			
-		});
-    }
+
+	}
 
     @Override
 	public boolean onOptionsItemSelected(MenuItem item) {

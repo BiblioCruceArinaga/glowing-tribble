@@ -11,6 +11,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.facebook.Session;
 import com.rising.drawing.R;
 
 public class Login_Errors {
@@ -66,6 +67,11 @@ public class Login_Errors {
     }
 
     public void errFacebook(int code){
+    	
+    	if(Session.getActiveSession() != null){
+			Session.getActiveSession().closeAndClearTokenInformation();
+		}
+    	
     	Intent i = new Intent(ctx, Login.class);
     	ctx.startActivity(i);
     	((Activity)ctx).finish();  	
@@ -73,4 +79,54 @@ public class Login_Errors {
     	errLogin(code); 
     	
     } 
+    
+    public void errRegistro(int code){
+
+		EDialog = new Dialog(ctx, R.style.cust_dialog);
+    	EDialog.getWindow();
+        EDialog.requestWindowFeature(Window.FEATURE_NO_TITLE); 
+		EDialog.setContentView(R.layout.login_error_dialog);
+		EDialog.getWindow().setLayout(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
+		
+		TextView tv_E = (TextView)EDialog.findViewById(R.id.error_tV);
+		
+		switch (code) {
+			case 0:
+				tv_E.setText(R.string.err_reg);
+				break;
+			case 1:
+				tv_E.setText(R.string.ok_reg);
+				break;
+			case 2:
+				tv_E.setText(R.string.err_reg_mail);
+				break;
+			case 3:
+				tv_E.setText(R.string.ok_reg_mail);
+				break;
+			case 4:
+				tv_E.setText(R.string.err_net);
+				break;
+			case 5: 
+				tv_E.setText(R.string.err_campos_vacios);
+				break;
+			case 6:
+				tv_E.setText(R.string.err_pass);
+				break;
+			default:
+				tv_E.setText(R.string.err_reg);
+				break;
+		}
+		
+		Button  Login_Error_Close_Button = (Button)EDialog.findViewById(R.id.error_button);
+		
+		Login_Error_Close_Button.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {		
+				EDialog.dismiss();				
+			}
+		});
+    	
+		EDialog.show();	
+	}
 }
