@@ -1,4 +1,4 @@
-package com.rising.login.login;
+package com.rising.login.olvidapass;
 
 import java.util.ArrayList;
 
@@ -16,7 +16,8 @@ import android.util.Log;
 
 import com.rising.conexiones.HttpPostAux;
 
-public class AsyncTask_LoginFragment extends Fragment {
+
+public class AsyncTask_OlvidoPassFragment extends Fragment {
     private TaskCallbacks mCallbacks;
     private Task mTask;
 
@@ -34,17 +35,17 @@ public class AsyncTask_LoginFragment extends Fragment {
         setRetainInstance(true);
 
         String Mail = "";
-        String Pass = "";
-        
+        String Language = "";
+               
         Bundle args = getArguments();
         if (args  != null && args.containsKey("mail")){
         	Mail = args.getString("mail");
-        	Pass = args.getString("pass");
+        	Language = args.getString("language");
         }
         
         // Create and execute the background task.
         mTask = new Task();
-        mTask.execute(Mail, Pass);
+        mTask.execute(Mail, Language);
     }
 
     @Override
@@ -59,7 +60,9 @@ public class AsyncTask_LoginFragment extends Fragment {
     	private HttpPostAux HPA =  new HttpPostAux();
     	
     	//URLs
-    	private String URL_connect = "http://www.scores.rising.es/login-mobile";
+    	private String URL_connect = "http://www.scores.rising.es/recuperar-clave-mobile";
+    	private String URL_connect_en = "http://www.scores.rising.es/en/recuperar-clave-mobile";
+    	
     	
         @Override
         protected void onPreExecute() {
@@ -71,40 +74,43 @@ public class AsyncTask_LoginFragment extends Fragment {
             mCallbacks.onPostExecute(i);
         }
         
-        //  Validar el estado del login
-        public int LoginStatus(String username, String password) {
-        	int logStatus=-1;
-	        
-        	try{
-	        	ArrayList<NameValuePair> postparameters2send = new ArrayList<NameValuePair>();
-	    		postparameters2send.add(new BasicNameValuePair("usuario", username));
-	    		postparameters2send.add(new BasicNameValuePair("password", password));
-	 
-	          	JSONArray jData = HPA.getServerData(postparameters2send, URL_connect);
-	
-	    		if (jData!=null && jData.length() > 0){
-	    			JSONObject json_Data;
-	    			
-	    			try {
-	    				json_Data = jData.getJSONObject(0);
-	    				logStatus=json_Data.getInt("logstatus");
-	    				Log.e("LoginStatus","LogStatus= "+logStatus);
-	    			} catch (JSONException e) {
-	    				this.cancel(true);
-	    			}		            
-	    		             
-	    			//  Aquí se valida el valor obtenido
-	    		    if (logStatus==0) Log.e("LoginStatus ", "Invalido");
-	    		    else Log.e("LoginStatus ", "Valido");
-	
-	    		}else{	
-	    			Log.e("JSON", "ERROR");
-	    		}
-        	}catch(Exception e){
-        		this.cancel(true);
-        	}
-    		return logStatus;
-        }  
+        public int MailStatus(String mail, String language) {
+        	int status=-1;
+
+        	Log.d("Data", "Mail: " + mail + ", Language: " + language);
+        	
+        	ArrayList<NameValuePair> postparameters2send= new ArrayList<NameValuePair>();
+    		postparameters2send.add(new BasicNameValuePair("mail", mail));
+    		JSONArray jData = null;
+    		
+    		if(language != null && language != ""){
+    			if(language.equals("español")){
+    				jData = HPA.getServerData(postparameters2send, URL_connect);
+    			}else{
+    				jData = HPA.getServerData(postparameters2send, URL_connect_en);
+    			}
+    		}
+    		
+    		if (jData!=null && jData.length() > 0){
+    			JSONObject json_data;
+    			
+    			try{
+    				json_data = jData.getJSONObject(0);
+    				status = json_data.getInt("mailstatus");
+    				Log.e("Mailinstatus","Mailstatus = " + status);
+    			}catch (JSONException e) {
+    				e.printStackTrace();
+    			}		            
+    		             
+    		    if (status == 1) Log.e("Mailstatus ", "valido");
+    		    else Log.e("Mailstatus ", "invalido");
+
+    		}else{	
+    			Log.e("JSON", "ERROR");
+    		}
+    		
+    		return status;
+        } 
 
 		@Override
 		protected void onCancelled() {
@@ -113,7 +119,7 @@ public class AsyncTask_LoginFragment extends Fragment {
 
 		@Override
 		protected Integer doInBackground(String... params) {
-			return LoginStatus(params[0],params[1]);  
+			return MailStatus(params[0],params[1]);  
 		}
     }
 

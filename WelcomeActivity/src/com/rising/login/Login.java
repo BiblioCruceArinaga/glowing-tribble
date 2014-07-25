@@ -2,7 +2,6 @@ package com.rising.login;
 
 import java.util.Arrays;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -25,7 +24,7 @@ import com.facebook.widget.LoginButton.OnErrorListener;
 import com.rising.drawing.R;
 import com.rising.login.facebook.Facebook_Fragment;
 import com.rising.login.login.Login_Fragment;
-import com.rising.login.olvidapass.OlvidaPass_Actions;
+import com.rising.login.olvidapass.OlvidoPass_Fragment;
 import com.rising.login.registro.Registro_Fragment;
 
 //Clase login. Permite al usuario loguearse y registrarse, con la aplicación o con Facebook, y cambiar la contraseña
@@ -35,8 +34,7 @@ public class Login extends FragmentActivity {
 	public static String FId;
 	public static String FName;
 	public static String FMail;
-	public ProgressDialog PDialog;
-	
+		
 	//Elementos usados
 	private LoginButton Facebook_Button;
 	private Button Login, Registro;
@@ -78,7 +76,7 @@ public class Login extends FragmentActivity {
 			
 			@Override
 			public void onClick(View v) {
-				new OlvidaPass_Actions(ctx).OlvidaPassButton_Actions();
+				UTILS.Open_Fragment(OlvidoPass_Fragment.class);
 			}
 		});
 	 

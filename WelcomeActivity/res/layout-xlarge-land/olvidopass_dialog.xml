@@ -9,9 +9,11 @@
         android:id="@+id/et_mail_olvidopass"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:layout_marginBottom="30dp"
-        android:textSize="23sp"
+        android:layout_marginTop="150dp"
+        android:layout_marginBottom="50dp"
+        android:layout_marginRight="80dp"
+        android:layout_marginLeft="80dp"        
+        android:textSize="30sp"
         android:inputType="textEmailAddress"
        	android:textColorHint="#DDD"
         android:textColor="#DDD"
@@ -21,32 +23,16 @@
         <requestFocus />
     </EditText>
     
-	<LinearLayout
+	<Button
+    	android:id="@+id/b_confirm_olpass"
+        style="?android:attr/buttonBarButtonStyle"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal" >
-	    
-        <Button
-            android:id="@+id/b_cancel_olpass"
-            style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="0dp"
-            android:layout_height="60dp"
-            android:layout_weight="1"
-            android:textColor="#EEE"
-            android:background="@drawable/stores_buttons"
-            android:textSize="22sp"
-            android:text="@string/cancel" />
-	    
-        <Button
-            android:id="@+id/b_confirm_olpass"
-            style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="0dp"
-            android:layout_height="60dp"
-            android:layout_weight="1"
-            android:textColor="#EEE"
-            android:background="@drawable/stores_buttons"
-            android:textSize="22sp"
-            android:text="@string/confirm_olvidopass" />
+        android:layout_height="60dp"
+        android:layout_marginRight="80dp"
+        android:layout_marginLeft="80dp"        
+        android:textColor="#EEE"
+        android:background="@drawable/stores_buttons"
+        android:textSize="30sp"
+        android:text="@string/confirm_olvidopass" />
 
-    </LinearLayout>
 </LinearLayout>

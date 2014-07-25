@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.facebook.Session;
 import com.rising.drawing.R;
 
+//Clase que muestra los errores e informaciones en Dialog de todos los botones y Dialogs de la pantalla de Login
 public class Login_Errors {
 
 	private Context ctx;
@@ -129,4 +130,48 @@ public class Login_Errors {
     	
 		EDialog.show();	
 	}
+
+    public void errOlvidaPass(int code){
+    	
+    	EDialog = new Dialog(ctx, R.style.cust_dialog);
+    	EDialog.getWindow();
+        EDialog.requestWindowFeature(Window.FEATURE_NO_TITLE); 
+		EDialog.setContentView(R.layout.login_error_dialog);
+		EDialog.getWindow().setLayout(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
+		
+		TextView tv_E = (TextView)EDialog.findViewById(R.id.error_tV);
+		
+		switch (code) {
+	        case 0:
+	        	tv_E.setText(R.string.err_campos_vacios);
+	        	break;
+	        case 1:
+	        	tv_E.setText(R.string.olvidopass_ok);
+	        	break;
+	        case 2:
+	        	tv_E.setText(R.string.err_olvidopass_mail);
+	        	break;
+	        case 3:
+	        	tv_E.setText(R.string.err_not_active);
+	        	break;
+	        case 4:
+	        	tv_E.setText(R.string.err_olvidopass_mail_not_sent);
+	        	break;
+	    	default:
+	    		tv_E.setText(R.string.err_olvidopass_unknown);
+	    }
+		
+		Button OlvidaPass_Error_Close_Button = (Button)EDialog.findViewById(R.id.error_button);
+		
+		OlvidaPass_Error_Close_Button.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {		
+				EDialog.dismiss();				
+			}
+		});
+    	
+		EDialog.show();	
+    }
+
 }

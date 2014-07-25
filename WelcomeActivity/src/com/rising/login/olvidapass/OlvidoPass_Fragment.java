@@ -1,4 +1,4 @@
-package com.rising.login.registro;
+package com.rising.login.olvidapass;
 
 import java.util.Locale;
 
@@ -23,79 +23,62 @@ import com.rising.login.Login_Errors;
 import com.rising.login.Login_Utils;
 import com.rising.login.login.ProgressDialogFragment;
 
-public class Registro_Fragment extends Activity implements AsyncTask_RegistroFragment.TaskCallbacks {
-    private AsyncTask_RegistroFragment task;
-	private Button Confirm_Registro;
-	private EditText Mail, Pass, Nombre, ConfiPass;
-	private String RName, RMail, RPass, RConfipass, RLanguage;
+public class OlvidoPass_Fragment extends Activity implements AsyncTask_OlvidoPassFragment.TaskCallbacks {
+    private AsyncTask_OlvidoPassFragment task;
+	private Button Confirm_OlvidoPass;
+	private EditText Mail_OlvidoPass;
 	 
 	private Context ctx;
 	
 	//Clases utilizadas
 	private Login_Utils UTILS;
 	private Login_Errors ERRORS;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        setContentView(R.layout.registro_dialog);
+        setContentView(R.layout.olvidopass_dialog);
         
         this.ctx = this;
         this.UTILS = new Login_Utils(ctx);
         this.ERRORS = new Login_Errors(ctx);
- 
         
 		ActionBar ABar = getActionBar();
 		
 		ABar = getActionBar();
     	ABar.setDisplayHomeAsUpEnabled(true);
 		
-	    Confirm_Registro = (Button)findViewById(R.id.b_confirm_reg);
-		Mail = (EditText)findViewById(R.id.et_mail_registro);
-		Pass = (EditText)findViewById(R.id.et_pass_registro);
-		ConfiPass = (EditText) findViewById(R.id.et_confipass_registro);
-		Nombre = (EditText) findViewById(R.id.et_nombre_registro);
+	    Confirm_OlvidoPass = (Button)findViewById(R.id.b_confirm_olpass);
+		Mail_OlvidoPass = (EditText)findViewById(R.id.et_mail_olvidopass);
 		
-		Confirm_Registro.setOnClickListener(new OnClickListener(){
+		Confirm_OlvidoPass.setOnClickListener(new OnClickListener(){
 	
 			@Override
 			public void onClick(View v) {
 				
+				String mail = Mail_OlvidoPass.getText().toString();
+				String Language = Locale.getDefault().getDisplayLanguage();
 				
-				RName = Nombre.getText().toString();
-				RMail = Mail.getText().toString();
-				RPass = Pass.getText().toString();
-				RConfipass = ConfiPass.getText().toString();
-				RLanguage = Locale.getDefault().getDisplayLanguage();
-				
-				if(RName.equals("") && RMail.toString().equals("") && RPass.equals("") && RConfipass.equals("")) {			
-					ERRORS.errRegistro(5);
-		        }else{
-		        	
-					if(UTILS.checkPass(RPass, RConfipass)){	            
-						UTILS.HideKeyboard();
-						
-						final Bundle bundle = new Bundle();
-						bundle.putString("mail", RMail);
-						bundle.putString("pass", RPass);
-						bundle.putString("name", RName);
-						bundle.putString("language", RLanguage);
-										
-				        FragmentManager fm = getFragmentManager();
-		
-				        if(task == null){
-				            task = new AsyncTask_RegistroFragment();
-				            task.setArguments(bundle);
-				            fm.beginTransaction().add(task, "myTask").commit();
-				        }else{
-				        	ERRORS.errLogin(6);
-				        } 
-		        	}else{
-		        		ERRORS.errRegistro(6);
-		        	}
-		        }
-				
+				if (mail.equals("")) {
+					ERRORS.errLogin(0);
+				} else {
+					UTILS.HideKeyboard();
+					
+					final Bundle bundle = new Bundle();
+					bundle.putString("mail", Mail_OlvidoPass.getText().toString());
+					bundle.putString("language", Language);
+									
+			        FragmentManager fm = getFragmentManager();
+	
+			        if(task == null){
+			            task = new AsyncTask_OlvidoPassFragment();
+			            task.setArguments(bundle);
+			            fm.beginTransaction().add(task, "myTask").commit();
+			        }else{
+			        	ERRORS.errLogin(6);
+			        }
+				}					
 			}
 					
 		});
@@ -125,7 +108,7 @@ public class Registro_Fragment extends Activity implements AsyncTask_RegistroFra
         }
         ft.addToBackStack(null);
 
-        ProgressDialogFragment dialog = ProgressDialogFragment.newInstance(getString(R.string.creating_account));
+        ProgressDialogFragment dialog = ProgressDialogFragment.newInstance(getString(R.string.auth));
         dialog.setCancelable(false);
         dialog.show(ft, "myDialog");
     }
@@ -133,11 +116,12 @@ public class Registro_Fragment extends Activity implements AsyncTask_RegistroFra
     @Override
     public void onPostExecute(int result) {
     	         
-    	ERRORS.errRegistro(result);
+    	ERRORS.errOlvidaPass(result);  	
     }
 
 	@Override
 	public void onCancelled() {
 		ERRORS.errLogin(6);		
 	}
+
 }
