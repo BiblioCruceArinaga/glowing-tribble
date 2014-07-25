@@ -28,6 +28,7 @@
     	<string name="cerrar_sesion">Cerrar Sesión</string>
     	<string name="close_d">Cerrar</string>
     	<string name="auth">Autentificando&#8230;</string>
+    	<string name="err_session">No se pudo iniciar la sesión. Por favor, inténtelo de nuevo más tarde</string>
     	
     	<!-- Dialogo olvido contraseña -->
     	<string name="olvido_title">Recuperar contraseña</string>

@@ -33,26 +33,30 @@ public class SessionManager {
 	}
 	
 	public void createLoginSession(String email, String name, String fid){
-		editor = sPref.edit();
-		
-		// Storing login value as TRUE
-		editor.putBoolean(IS_LOGIN, true);
-		
-		// Storing data in pref
-		editor.putString(KEY_NAME, name);
-		editor.putString(KEY_EMAIL, email);
-		editor.putString(KEY_FID, fid);
-		
-		if(!fid.equals("-1")){
-			FSesion = Session.getActiveSession();
+		try{
+			editor = sPref.edit();
 			
-			if(FSesion == null){
-				FSesion = new Session(ctx);
-				Session.setActiveSession(FSesion);
+			// Storing login value as TRUE
+			editor.putBoolean(IS_LOGIN, true);
+			
+			// Storing data in pref
+			editor.putString(KEY_NAME, name);
+			editor.putString(KEY_EMAIL, email);
+			editor.putString(KEY_FID, fid);
+			
+			if(!fid.equals("-1")){
+				FSesion = Session.getActiveSession();
+				
+				if(FSesion == null){
+					FSesion = new Session(ctx);
+					Session.setActiveSession(FSesion);
+				}
 			}
+			
+			editor.commit();
+		}catch(Exception e){
+			new Login_Errors(ctx).errLogin(5);
 		}
-		
-		editor.commit();
 	}	
 	
 	/**
@@ -105,7 +109,6 @@ public class SessionManager {
 			
 		ctx.startActivity(i);
 	} 
-	
 	
 	public void LogOutUser(){
 		

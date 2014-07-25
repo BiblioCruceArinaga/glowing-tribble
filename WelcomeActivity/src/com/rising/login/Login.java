@@ -14,7 +14,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.facebook.FacebookException;
 import com.facebook.Request;
@@ -25,7 +24,7 @@ import com.facebook.model.GraphUser;
 import com.facebook.widget.LoginButton;
 import com.facebook.widget.LoginButton.OnErrorListener;
 import com.rising.drawing.R;
-import com.rising.login.facebook.AsyncTask_Facebook;
+import com.rising.login.facebook.Facebook_Fragment;
 import com.rising.login.login.Login_Actions;
 import com.rising.login.olvidapass.OlvidaPass_Actions;
 import com.rising.login.registro.Registro_Actions;
@@ -38,14 +37,16 @@ public class Login extends FragmentActivity {
 	public static String FName;
 	public static String FMail;
 	public ProgressDialog PDialog;
-
+	
 	//Elementos usados
 	private LoginButton Facebook_Button;
 	private Button Login, Registro;
 	private TextView OlvidaPass;
-	
+		
 	private Context ctx;
-
+	private Login_Utils UTILS;
+	private Login_Errors ERRORS;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);		
@@ -54,11 +55,17 @@ public class Login extends FragmentActivity {
 		setContentView(R.layout.login_layout);
 		
         this.ctx = this;
+        this.UTILS = new Login_Utils(ctx);
+        this.ERRORS = new Login_Errors(ctx);
         
 		Login = (Button) findViewById(R.id.button_login);
 		Facebook_Button = (LoginButton) findViewById(R.id.button_login_f);
 		OlvidaPass = (TextView)findViewById(R.id.tv_olvido_pass);
 		Registro = (Button) findViewById(R.id.b_registro);
+		
+		if(Session.getActiveSession() != null){
+			Session.getActiveSession().closeAndClearTokenInformation();
+		}
 		
 		Login.setOnClickListener(new OnClickListener(){
 
@@ -89,48 +96,54 @@ public class Login extends FragmentActivity {
 			@Override
 			public void call(Session session, SessionState state, Exception exception) {
 				
-				if(new Login_Utils(ctx).isOnline()){
-										
+				if(UTILS.isOnline()){
 					Facebook_Button.setReadPermissions(Arrays.asList("email"));
 				
 					if(session.isOpened()){
-										
 						Request.newMeRequest(session, new Request.GraphUserCallback() {
 							
 							@Override
 							public void onCompleted(GraphUser user, Response response) {
 								if (user != null) {
-									
+
 									FId = user.getId();
 									FName = user.getFirstName() + " " + user.getLastName();
 									FMail = user.getProperty("email").toString();
-									new AsyncTask_Facebook(ctx).execute(FMail, FName, FId);
-								}
-								
+									
+									final Bundle bundle = new Bundle();
+									bundle.putString("fmail", FMail);
+									bundle.putString("fname", FName);
+									bundle.putString("fid", FId);
+									
+									Intent i = new Intent(ctx, Facebook_Fragment.class);
+									i.putExtras(bundle);
+									startActivity(i);
+									finish();
+								}	
 							}
 						}).executeAsync();
 					}
 					
 				}else{
-					Toast.makeText(ctx, R.string.connection_err, Toast.LENGTH_LONG).show();
-					
 					Facebook_Button.setOnErrorListener(new OnErrorListener() {
 					       
 						@Override
 					    public void onError(FacebookException error) {
-							Log.e("FacebookError", error.toString());
+							Log.e("Error", "Aquí");
+							ERRORS.errLogin(4);
 					    }
 					});
 				}	
 			}         
+		
 		}); 
+	
 	}
-
 
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 	    Session.getActiveSession().onActivityResult(this, requestCode, resultCode, data);
 	}
-			
+
 }

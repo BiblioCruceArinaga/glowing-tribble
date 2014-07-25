@@ -27,6 +27,7 @@
     	<string name="cerrar_sesion">Logout</string>
     	<string name="close_d">Close</string>
     	<string name="auth">Authenticating&#8230;</string>
+    	<string name="err_session">Couldn\'t start the session. Please, try again later.</string>
     	
     	<!-- Dialogo olvido contraseña -->
     	<string name="olvido_title">Recover password</string>
@@ -36,7 +37,7 @@
     	    Please, try again later</string>
     	<string name="olvidopass_ok">We\'ve sent an email with instructions about your password</string>
     	<string name="err_olvidopass_mail">﻿We didn\'t find any account associated with this email</string>
-    	<string name="err_olvidopass_mail_not_sent">﻿Your password was changed but couldn”t send it. 
+    	<string name="err_olvidopass_mail_not_sent">﻿Your password was changed but couldn\'t send it. 
      Please, try again later</string>
     	
     	<!-- Dialogo registro usuario -->
@@ -50,8 +51,7 @@
     	<string name="err_pass">Passwords don\'t match</string>
     	<string name="err_reg">﻿There was an error trying to do the registration. 
     	    Please, try again later.</string>
-    	<string name="err_reg_mail">﻿This email is already in use, please choose another
-</string>
+    	<string name="err_reg_mail">﻿This email is already in use, please choose another</string>
     	<string name="ok_reg">An email have been sent</string>
     	<string name="ok_reg_mail">﻿Registration is completed but could not send the confirmation email. We\'ll send it manually within a maximum of 24 hours.</string>
     	<string name="creating_account">Creating your account&#8230;</string>

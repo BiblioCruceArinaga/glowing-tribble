@@ -1,0 +1,126 @@
+package com.rising.login.facebook;
+
+import java.util.ArrayList;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import android.app.Activity;
+import android.app.Fragment;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.util.Log;
+
+import com.rising.conexiones.HttpPostAux;
+
+public class AsyncTask_FacebookFragment extends Fragment {
+    private TaskCallbacks mCallbacks;
+    private Task mTask;
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        mCallbacks = (TaskCallbacks) activity;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        // Retain this fragment across configuration changes.
+        setRetainInstance(true);
+
+        String FMail = "";
+        String FName = "";
+        String FId = "";
+        
+        Bundle args = getArguments();
+        if (args  != null && args.containsKey("fmail")){
+        	FMail = args.getString("fmail");
+        	FName = args.getString("fname");
+        	FId = args.getString("fid");
+        }
+        
+        // Create and execute the background task.
+        mTask = new Task();
+        mTask.execute(FMail, FName, FId);
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mCallbacks = null;
+    }
+ 
+    private class Task extends AsyncTask<String, String, Integer> {
+      	
+    	//Clases utilizadas
+    	private HttpPostAux HPA =  new HttpPostAux();
+    	
+    	//URLs
+    	private String URL_Check_Facebook = "http://www.scores.rising.es/login-facebook-mobile";
+    	    	
+        @Override
+        protected void onPreExecute() {
+            mCallbacks.onPreExecute();
+        }
+
+        @Override
+        protected void onPostExecute(Integer i) {
+            mCallbacks.onPostExecute(i);
+        }
+        
+        private int Facebook_Status(String mail, String name, String id){
+    		int status = -1;
+    		
+    		try{
+	        	ArrayList<NameValuePair> postparameters2send= new ArrayList<NameValuePair>();
+	    		postparameters2send.add(new BasicNameValuePair("mail", mail));
+	    		postparameters2send.add(new BasicNameValuePair("name", name));
+	    		postparameters2send.add(new BasicNameValuePair("pass", id));
+	    		
+	          	JSONArray jData = HPA.getServerData(postparameters2send, URL_Check_Facebook);
+	
+	    		if (jData!=null && jData.length() > 0) {
+	
+	    			JSONObject json_data;
+	    			
+	    			try{
+	    				json_data = jData.getJSONObject(0);
+	    				status = json_data.getInt("facebookStatus");
+	    				
+	    				Log.e("FacebookStatus","FacebookStatus= " + status);
+	    			}catch (JSONException e) {
+	    				e.printStackTrace();
+	    			}		             
+	
+	    		}else{	
+	    			Log.e("JSON", "ERROR");
+	    		}
+    		}catch(Exception e){
+    			this.cancel(true);
+    		}
+    		return status;
+    	}
+
+		@Override
+		protected void onCancelled() {
+			mCallbacks.onPreExecute();
+		}
+
+		@Override
+		protected Integer doInBackground(String... params) {
+			return Facebook_Status(params[0], params[1], params[2]);  
+		}
+    }
+
+    public static interface TaskCallbacks {
+        void onPreExecute();
+        void onPostExecute(int Result);
+        void onCancelled();
+    }
+
+}
