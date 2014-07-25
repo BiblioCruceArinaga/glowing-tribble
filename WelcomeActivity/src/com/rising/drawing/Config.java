@@ -72,6 +72,7 @@ public class Config {
 	private int x_accidental_nota_gracia;
 	private int y_accidental;
 	private int y_accidental_flat;
+	private int x_arpegio;
 	private int y_bend;
 	private int y_bpm;
 	private int y_clave_sol_segunda;
@@ -79,7 +80,6 @@ public class Config {
 	private int x_fin_slash;
 	private int y_inicio_slash;
 	private int y_fin_slash;
-	private int y_intensidad_middle;
 	private int x_fermata;
 	private int y_fermata;
 	private int y_ligaduras_expresion;
@@ -93,6 +93,7 @@ public class Config {
 	private int y_puntillo_arriba;
 	private int y_puntillo_abajo;
 	private int y_silencio_blanca;
+	private int y_slide_truncado;
 	private int x_staccato;
 	private int y_staccato_arriba;
 	private int y_staccato_abajo;
@@ -183,6 +184,7 @@ public class Config {
 						x_accidental_nota_gracia = 10;
 						y_accidental = 5;
 						y_accidental_flat = 12;
+						x_arpegio = 20;
 						y_bend = 40;
 						y_bpm = 30;
 						y_clave_sol_segunda = 63;
@@ -192,7 +194,6 @@ public class Config {
 						x_fin_slash = 5;
 						y_inicio_slash = 10;
 						y_fin_slash = 20;
-						y_intensidad_middle = 20;
 						x_fermata = 15;
 						y_fermata = 50;
 						y_ligaduras_expresion = 50;
@@ -205,6 +206,8 @@ public class Config {
 						x_puntillo = ancho_cabeza_nota + 10;
 						y_puntillo_arriba = mitad_cabeza_nota_vertical - 10;
 						y_puntillo_abajo = mitad_cabeza_nota_vertical + 10;
+						y_silencio_blanca = 10;
+						y_slide_truncado = 20;
 						x_staccato = 15;
 						y_staccato_arriba = 28;
 						y_staccato_abajo = 14;
@@ -278,13 +281,14 @@ public class Config {
 						tamano_letra_words = 30;
 						unidad_desplazamiento = 50;
 						this.width = width;
-										
+						
 						y_accent_up = 30;
 						x_accidental = 20;
 						x_accidental_2 = 10;
 						x_accidental_nota_gracia = 5;
 						y_accidental = 5;
 						y_accidental_flat = 12;
+						x_arpegio = 55;
 						y_bend = 40;
 						y_bpm = 30;
 						y_clave_sol_segunda = 63;
@@ -294,7 +298,6 @@ public class Config {
 						x_fin_slash = 5;
 						y_inicio_slash = 10;
 						y_fin_slash = 20;
-						y_intensidad_middle = 20;
 						x_fermata = 15;
 						y_fermata = 50;
 						y_ligaduras_expresion = 50;
@@ -307,6 +310,8 @@ public class Config {
 						x_puntillo = ancho_cabeza_nota + 10;
 						y_puntillo_arriba = mitad_cabeza_nota_vertical - 10;
 						y_puntillo_abajo = mitad_cabeza_nota_vertical + 10;
+						y_silencio_blanca = 10;
+						y_slide_truncado = 20;
 						x_staccato = 15;
 						y_staccato_arriba = 28;
 						y_staccato_abajo = 14;
@@ -583,6 +588,10 @@ public class Config {
 		return y_accidental_flat;
 	}
 	
+	public int getXArpegio() {
+		return x_arpegio;
+	}
+	
 	public int getYBend() {
 		return y_bend;
 	}
@@ -617,10 +626,6 @@ public class Config {
 	
 	public int getYFinSlash() {
 		return y_fin_slash;
-	}
-	
-	public int getYIntensidadMiddle() {
-		return y_intensidad_middle;
 	}
 	
 	public int getXFermata() {
@@ -673,6 +678,10 @@ public class Config {
 	
 	public int getYSilencioBlanca() {
 		return y_silencio_blanca;
+	}
+	
+	public int getYSlideTruncado() {
+		return y_slide_truncado;
 	}
 	
 	public int getXStaccato() {

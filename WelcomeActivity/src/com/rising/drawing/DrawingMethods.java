@@ -34,7 +34,8 @@ public class DrawingMethods {
 	private ArrayList<IndiceNota> beams = new ArrayList<IndiceNota>();
 	private ArrayList<IndiceNota> ligaduras = new ArrayList<IndiceNota>();
 	private boolean buscandoLigaduraExpresion = false;
-	private int ligaduraExpresionY = Integer.MAX_VALUE;
+	private int ligaduraExpresionYArriba = Integer.MAX_VALUE;
+	private int ligaduraExpresionYAbajo = 0;
 	private int octavarium = 0;
 	private int x_ini_octavarium = 0;
 	private int y_ini_octavarium = 0;
@@ -47,6 +48,7 @@ public class DrawingMethods {
 
 	//  Bitmaps
 	private Bitmap accent = null;
+	private Bitmap arpegioImage = null;
 	private Bitmap bassclef = null;
 	private Bitmap bendrelease = null;
 	private Bitmap blackheadlittle = null;
@@ -95,6 +97,7 @@ public class DrawingMethods {
 			compas_margin_y = config.getMargenSuperior();
 
 			accent = BitmapFactory.decodeResource(resources, R.drawable.accent);
+			arpegioImage = BitmapFactory.decodeResource(resources, R.drawable.arpegio);
 			bassclef = BitmapFactory.decodeResource(resources, R.drawable.bassclef);
 			bendrelease = BitmapFactory.decodeResource(resources, R.drawable.bendrelease);
 			blackheadlittle = BitmapFactory.decodeResource(resources, R.drawable.blackheadlittle);
@@ -185,7 +188,7 @@ public class DrawingMethods {
 			Intensidad intensidad = new Intensidad();
 			intensidad.setImagen(obtenerImagenDeIntensidad(intensidadByte));
 			intensidad.setX(compas_margin_x + posicion);
-			intensidad.setY(obtenerPosicionYDeElementoGrafico(1, location));
+			intensidad.setY(obtenerPosicionYDeElementoGrafico(location));
 	
 			compas.addIntensidad(intensidad);
 		}
@@ -215,7 +218,7 @@ public class DrawingMethods {
 			Pedal pedalInicio = new Pedal();
 			pedalInicio.setImagen(pedalStart);
 			pedalInicio.setX(compas_margin_x + posicion);
-			pedalInicio.setY(obtenerPosicionYDeElementoGrafico(2, location));
+			pedalInicio.setY(obtenerPosicionYDeElementoGrafico(location));
 			compas.addPedalInicio(pedalInicio);
 		}
 
@@ -228,7 +231,7 @@ public class DrawingMethods {
 			Pedal pedalFin = new Pedal();
 			pedalFin.setImagen(pedalStop);
 			pedalFin.setX(compas_margin_x + posicion);
-			pedalFin.setY(obtenerPosicionYDeElementoGrafico(2, location));
+			pedalFin.setY(obtenerPosicionYDeElementoGrafico(location));
 			compas.addPedalFin(pedalFin);
 		}
 	}
@@ -387,7 +390,7 @@ public class DrawingMethods {
 		for (int i=0; i<numWedges; i++) {
 			posicionX = calcularPosicionX(compas.getWedge(i).getPosition());
 			Wedge wedge = new Wedge(compas.getWedge(i).getValue(1), compas_margin_x + posicionX);
-			wedge.setYIni(obtenerPosicionYDeElementoGrafico(4, compas.getWedge(i).getValue(0)));
+			wedge.setYIni(obtenerPosicionYDeElementoGrafico(compas.getWedge(i).getValue(0)));
 
 			i++;
 			
@@ -410,7 +413,7 @@ public class DrawingMethods {
 			
 			texto.setTexto(compas.getWordsString(i));
 			texto.setX(compas_margin_x + posicionX);
-			texto.setY(obtenerPosicionYDeElementoGrafico(3, compas.getWordsLocation(i)));
+			texto.setY(obtenerPosicionYDeElementoGrafico(compas.getWordsLocation(i)));
 			
 			compas.addTexto(texto);
 		}
@@ -626,75 +629,21 @@ public class DrawingMethods {
 		}
 	}
 	
-	private int obtenerPosicionYDeElementoGrafico(int tipoElemento, int location) {
-		switch (tipoElemento) {
-	
-			//  Intensidad
+	private int obtenerPosicionYDeElementoGrafico(int location) {
+		switch (location) {
 			case 1:
-				switch (location) {
-					case 2:
-						return compas_margin_y + config.getDistanciaLineasPentagrama() * 6;
-					case 3:
-						return compas_margin_y + config.getDistanciaLineasPentagrama() * 4 + 
-								config.getDistanciaPentagramas() - config.getDistanciaLineasPentagrama() * 4;
-					case 4:
-						return compas_margin_y + config.getDistanciaLineasPentagrama() * 4 + 
-								config.getDistanciaPentagramas() + config.getDistanciaLineasPentagrama() * 8;
-					case 5:
-						return compas_margin_y + config.getDistanciaLineasPentagrama() * 4 +
-								config.getDistanciaPentagramas() / 2 - config.getYIntensidadMiddle();
-					default:
-						return compas_margin_y - config.getDistanciaLineasPentagrama() * 6;
-				}
-	
-			//  Pedales
+				return compas_margin_y - config.getDistanciaLineasPentagrama() * 2;
 			case 2:
-				switch (location) {
-					case 4:
-						return compas_margin_y + config.getDistanciaLineasPentagrama() * 4 + 
-							config.getDistanciaPentagramas() + config.getDistanciaLineasPentagrama() * 8;
-					case 5:
-						return compas_margin_y + config.getDistanciaLineasPentagrama() * 4 +
-								config.getDistanciaPentagramas() / 2;
-					default:
-						return compas_margin_y + config.getDistanciaLineasPentagrama() * 4 + 
-							config.getDistanciaPentagramas() + config.getDistanciaLineasPentagrama() * 8;
-				}
-	
-			//  Texto
+				return compas_margin_y + config.getDistanciaLineasPentagrama() * 6;
 			case 3:
-				switch (location) {
-					case 1:
-						return compas_margin_y - config.getDistanciaLineasPentagrama() * 4;
-					case 2:
-						return compas_margin_y + config.getDistanciaLineasPentagrama() * 6;
-					case 4:
-						return compas_margin_y + config.getDistanciaLineasPentagrama() * 4 + 
-								config.getDistanciaPentagramas() + config.getDistanciaLineasPentagrama() * 8;
-					case 5:
-						return compas_margin_y + config.getDistanciaLineasPentagrama() * 4 +
-								config.getDistanciaPentagramas() / 2;
-					default:
-						return compas_margin_y - config.getDistanciaLineasPentagrama();
-				}
-				
-			//  Crescendos y diminuendos
+				return compas_margin_y + config.getDistanciaLineasPentagrama() * 4 + 
+						config.getDistanciaPentagramas() - config.getDistanciaLineasPentagrama() * 2;
 			case 4:
-				switch (location) {
-					case 1:
-						return 0;
-					case 2:
-						return compas_margin_y + config.getDistanciaLineasPentagrama() * 6;
-					case 4:
-						return compas_margin_y + config.getDistanciaLineasPentagrama() * 4 +
-								config.getDistanciaPentagramas() + config.getDistanciaLineasPentagrama() * 7;
-					case 5:
-						return compas_margin_y + config.getDistanciaLineasPentagrama() * 4 +
-								config.getDistanciaPentagramas() / 2;
-					default:
-						return 0;
-				}
-				
+				return compas_margin_y + config.getDistanciaLineasPentagrama() * 4 + 
+						config.getDistanciaPentagramas() + config.getDistanciaLineasPentagrama() * 6;
+			case 5:
+				return compas_margin_y + config.getDistanciaLineasPentagrama() * 4 +
+						config.getDistanciaPentagramas() / 2;
 			default:
 				return 0;
 		}
@@ -1557,22 +1506,22 @@ public class DrawingMethods {
         	}
         }
         
-        //  Segundo paso: reajustar posición de las notas
+        //  Segundo paso: reajustar posición de las notas y figuras gráficas
         for (int i=primerCompas; i<=ultimoCompas; i++) {
         	Compas compas = partitura.getCompas(i);
-        	ArrayList<Integer> xsDeNotas = compas.saberXsDeNotas();
+        	ArrayList<Integer> xsDeElementos = compas.saberXsDeElementos();
         	
-        	int lastX = compas.saberXUltimaNota();
+        	int lastX = xsDeElementos.get(xsDeElementos.size() - 1);
         	int anchoADistribuir = compas.getXFin() - config.getMargenDerechoCompases() - lastX;
         	
         	//  El primer elemento no lo vamos a mover, de ahí el -1
-        	int numElementos = xsDeNotas.size() - 1;
-        	int anchoPorNota = 0;
+        	int numElementos = xsDeElementos.size() - 1;
+        	int anchoPorElemento = 0;
         	if (numElementos > 0)
-        		anchoPorNota = anchoADistribuir / numElementos;
+        		anchoPorElemento = anchoADistribuir / numElementos;
         	
-        	reajustarNotas(compas, xsDeNotas, anchoPorNota);
-        	reajustarFigurasGraficas(compas, anchoPorNota);
+        	reajustarNotasYClaves(compas, xsDeElementos, anchoPorElemento);
+        	reajustarFigurasGraficas(compas, anchoPorElemento);
         }
 	}
 
@@ -1582,13 +1531,6 @@ public class DrawingMethods {
 		int xPrimeraNota = compas.saberXPrimeraNota();
 		
 		ArrayList<Integer> xsDelCompas = compas.saberXsDelCompas();
-
-		for (int j=0; j<compas.numClaves(); j++) {
-			if (compas.getClave(j) != null) {
-				multiplicador = xsDelCompas.indexOf(compas.getClave(j).getX());
-				compas.getClave(j).setX(compas.getClave(j).getX() + anchoPorNota * multiplicador);
-			}
-		}
 		
 		for (int i=0; i<compas.numIntensidades(); i++) {
     		if (compas.getIntensidad(i).getX() != xPrimeraNota) {
@@ -1615,11 +1557,9 @@ public class DrawingMethods {
     	}
 
     	for (int i=0; i<compas.numTextos(); i++) {
-        	//if (compas.getTexto(i).getX() != xPrimeraNota) {
-        		multiplicador = xsDelCompas.indexOf(compas.getTexto(i).getX());
-	        	compas.getTexto(i).setX( 
-	        			compas.getTexto(i).getX() + anchoPorNota * multiplicador);
-        	//}
+    		multiplicador = xsDelCompas.indexOf(compas.getTexto(i).getX());
+        	compas.getTexto(i).setX( 
+        		compas.getTexto(i).getX() + anchoPorNota * multiplicador);
     	}
         
         for (int i=0; i<compas.numCrescendos(); i++) {
@@ -1643,7 +1583,7 @@ public class DrawingMethods {
         }
 	}
 	
-	private void reajustarNotas(Compas compas, ArrayList<Integer> xsDeNotas, int anchoPorNota) {
+	private void reajustarNotasYClaves(Compas compas, ArrayList<Integer> xsDeElementos, int anchoPorNota) {
 		
 		//  A cada elemento se le suma una distancia cada vez
     	//  mayor, ya que de lo contrario sólo estaríamos
@@ -1653,9 +1593,15 @@ public class DrawingMethods {
     	int numNotas = notas.size();
     	int multiplicador = 0;
     	for (int j=0;j<numNotas;j++) {
-			multiplicador = xsDeNotas.indexOf(notas.get(j).getX());
+			multiplicador = xsDeElementos.indexOf(notas.get(j).getX());
 			notas.get(j).setX(notas.get(j).getX() + anchoPorNota * multiplicador);
     	}
+    	
+    	for (int j=0; j<compas.numClaves(); j++) {
+			multiplicador = xsDeElementos.indexOf(compas.getClave(j).getX());
+			compas.getClave(j).setX(compas.getClave(j).getX() + anchoPorNota * multiplicador);
+		}
+    	
 	}
 	
 	
@@ -1862,9 +1808,12 @@ public class DrawingMethods {
 		
 		//  La y de la ligadura de expresión debe colocarse tan arriba como
 		//  obligue a ello la nota más alta en medio de las notas ligadas
-		if (buscandoLigaduraExpresion)
-			if (ligaduraExpresionY > nota.getY())
-				ligaduraExpresionY = nota.getY();
+		if (buscandoLigaduraExpresion) {
+			if (ligaduraExpresionYArriba > nota.getY())
+				ligaduraExpresionYArriba = nota.getY();
+			if (ligaduraExpresionYAbajo < nota.getY())
+				ligaduraExpresionYAbajo = nota.getY();
+		}
 			
 		if (!nota.acorde()) y_anterior = nota.getY();
 
@@ -1986,11 +1935,8 @@ public class DrawingMethods {
 				y_ini_slide = nota.getY();
 				break;
 				
-			case 7:				
-				ordenesDibujo.add( new OrdenDibujo(
-						1, x_ini_slide + config.getAnchoCabezaNota(), 
-						y_ini_slide + config.getMitadCabezaNotaVertical(), nota.getX(), 
-						nota.getY() + config.getMitadCabezaNotaVertical()));
+			case 7:			
+				dibujarSlide(nota, x_ini_slide, y_ini_slide);
 				break;
 				
 			case 8:
@@ -2092,7 +2038,8 @@ public class DrawingMethods {
 			case 33:
 				int indLigaduraExpresion = encontrarIndiceLigadura(nota.getLigaduraExpresion());
 				dibujarLigaduraExpresion(indLigaduraExpresion, nota.getX(), nota.getY());
-				ligaduraExpresionY = Integer.MAX_VALUE;
+				ligaduraExpresionYArriba = Integer.MAX_VALUE;
+				ligaduraExpresionYAbajo = 0;
 				buscandoLigaduraExpresion = false;
 				break;
 				
@@ -2119,6 +2066,11 @@ public class DrawingMethods {
 				ordenesDibujo.add( new OrdenDibujo(trill, nota.getX(), nota.getY() + config.getYTrill()));
 				break;
 				
+			case 40:
+				ordenesDibujo.add( new OrdenDibujo(arpegioImage, 
+						nota.getX() - config.getXArpegio(), nota.getY()));
+				break;
+				
 			default:
 				break;
 		}
@@ -2128,25 +2080,21 @@ public class DrawingMethods {
 		ArrayList<Byte> figurasGraficas = nota.getFigurasGraficas();
 		int numFiguras = figurasGraficas.size();
 		int xAlteraciones = 0;
+		int numAlteraciones = 0;
 		
 		for (int i=0; i<numFiguras; i++) {
 			
-			xAlteraciones = config.getXAccidental2() * i;
-
-			//  Gestión de ligaduras, que llevan bytes extra
 			if (nota.esLigadura(i)) {
 				i = gestionarLigaduras(nota, figurasGraficas, i, y_beams);
-			
-			//  Gestión de alteraciones, que llevan un byte extra
+
 			} else if (nota.esAlteracion(i)) {
+				xAlteraciones = config.getXAccidental2() * numAlteraciones++;
 				i = gestionarAlteracion(nota, figurasGraficas, i, y_beams, xAlteraciones);
-				
-			//  Gestión de finales de XSillo, que llevan un byte extra
+
 			} else if (nota.finDeTresillo(i)) {
 				dibujarFiguraGrafica(nota, figurasGraficas.get(i), y_beams, figurasGraficas.get(i + 1));
 				i++;
-				
-			//  Resto de figuras gráficas
+
 			} else {
 				dibujarFiguraGrafica(nota, figurasGraficas.get(i), y_beams, 0);
 			}
@@ -2174,7 +2122,6 @@ public class DrawingMethods {
 				config.getAnchoCabezaNotaGracia() : config.getAnchoCabezaNota();
 				
 		boolean clockwise = true;
-		float angulo = 0;
 
 		if (xInicio < xFinal) {
 			
@@ -2185,23 +2132,36 @@ public class DrawingMethods {
 				
 				//  No son notas contiguas
 				if (notasEnMedio > 1) {
-					
-					rectf = new RectF(xInicio, ligaduraExpresionY - config.getYLigadurasExpresion(), 
-						xFinal + anchoCabezaNota, ligaduraExpresionY);
+					rectf = new RectF(xInicio, ligaduraExpresionYArriba - config.getYLigadurasExpresion(), 
+						xFinal + anchoCabezaNota, ligaduraExpresionYArriba);
 				}
 				
 				//  Son notas contiguas
 				else {
-					angulo = hallarAngulo(yInicio, yFinal);
-					
 					int y = Math.min(yInicio, yFinal);
 					rectf = new RectF(xInicio, y - config.getYLigadurasExpresion(), 
 						xFinal + anchoCabezaNota, y + config.getAlturaArcoLigadurasExpresion());
 				}
 			}
-			//  En el futuro, else para las ligaduras dibujadas por debajo
+			else {
+				clockwise = false;
+				
+				//  No son notas contiguas
+				if (notasEnMedio > 1) {
+					rectf = new RectF(xInicio, ligaduraExpresionYAbajo, 
+						xFinal + anchoCabezaNota, ligaduraExpresionYAbajo + config.getYLigadurasExpresion());
+				}
+				
+				//  Son notas contiguas
+				else {
+					int y = Math.min(yInicio, yFinal);
+					rectf = new RectF(xInicio, y + config.getYLigadurasExpresion() / 2, 
+						xFinal + anchoCabezaNota, 
+						y + config.getYLigadurasExpresion() / 2 + config.getAlturaArcoLigadurasExpresion());
+				}
+			}
 
-			ordenesDibujo.add( new OrdenDibujo(2, rectf, angulo, clockwise));
+			ordenesDibujo.add( new OrdenDibujo(2, rectf, 0, clockwise));
 		}
 		
 		//  En el futuro se añadirá un else para controlar
@@ -2602,6 +2562,27 @@ public class DrawingMethods {
 				y + config.getYInicioSlash(), x - config.getXFinSlash(), y + config.getYFinSlash()));
 	}
 	
+	private void dibujarSlide(Nota nota, int x_ini_slide, int y_ini_slide) {
+		if (x_ini_slide < nota.getX()) {
+			ordenesDibujo.add( new OrdenDibujo(
+				1, x_ini_slide + config.getAnchoCabezaNota(), 
+					y_ini_slide + config.getMitadCabezaNotaVertical(), nota.getX(), 
+						nota.getY() + config.getMitadCabezaNotaVertical()));
+		}
+		else {
+			ordenesDibujo.add( new OrdenDibujo(
+				1, x_ini_slide + config.getAnchoCabezaNota(), 
+					y_ini_slide + config.getMitadCabezaNotaVertical(), 
+						config.getXFinalPentagramas(), 
+								y_ini_slide - config.getYSlideTruncado()));
+			
+			ordenesDibujo.add( new OrdenDibujo(
+				1, config.getXInicialPentagramas(), 
+					nota.getY() + config.getMitadCabezaNotaVertical() + config.getYSlideTruncado(), 
+						nota.getX(), nota.getY() + config.getMitadCabezaNotaVertical()));
+		}
+	}
+	
 	private void dibujarTempo(Compas compas) {
 		if (compas.getTempo().dibujar()) {
 			Tempo tempo = compas.getTempo();
@@ -2717,7 +2698,7 @@ public class DrawingMethods {
 			dibujarFiguraGrafica(nota, figurasGraficas.get(ind++), y_beams, 0);
 		}
 		else {
-			if (figurasGraficas.get(ind + 1) == 1) 
+			if (figurasGraficas.get(ind + 1) == 0) 
 				nota.setLigaduraExpresionOrientacion(true);
 			
 			nota.setLigaduraExpresion(figurasGraficas.get(ind + 2));
@@ -2726,32 +2707,5 @@ public class DrawingMethods {
 		}
 		
 		return ind;
-	}
-	
-	//  Halla el ángulo de rotación de la ligadura de expresión
-	private float hallarAngulo(int yInicio, int yFinal) {
-		float angulo = 0;
-		
-		int signo = -1;
-		if (yFinal > yInicio) signo = 1;
-		
-		int distancia = Math.abs(yFinal - yInicio);
-		
-		if (distancia == config.getDistanciaLineasPentagramaMitad())
-			angulo = 0;
-		
-		if (distancia == config.getDistanciaLineasPentagrama() +
-				config.getDistanciaLineasPentagramaMitad())
-			angulo = 15;
-		
-		if (distancia == config.getDistanciaLineasPentagrama() * 2 +
-				config.getDistanciaLineasPentagramaMitad())
-			angulo = 8;
-		
-		if (distancia == config.getDistanciaLineasPentagrama() * 3 +
-				config.getDistanciaLineasPentagramaMitad())
-			angulo = 25;
-		
-		return angulo * signo;
 	}
 }

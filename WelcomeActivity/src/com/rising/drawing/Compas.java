@@ -500,15 +500,16 @@ public class Compas {
 		return xEncontradas;
 	}
 	
-	//  Devuelve un array con todas las posiciones x de
-	//  todas las notas del compás
-	public ArrayList<Integer> saberXsDeNotas() {
+	public ArrayList<Integer> saberXsDeElementos() {
 		ArrayList<Integer> xEncontradas = new ArrayList<Integer>();
 
-		int numNotas = notas.size();
-		for (int i=0; i<numNotas; i++)
+		for (int i=0; i<notas.size(); i++)
 			if (!xEncontradas.contains(notas.get(i).getX()))
 				xEncontradas.add(notas.get(i).getX());
+		
+		for (int i=0; i<claves.size(); i++)
+			if (!xEncontradas.contains(claves.get(i).getX()))
+				xEncontradas.add(claves.get(i).getX());
 		
 		Collections.sort(xEncontradas);
 		return xEncontradas;
@@ -516,19 +517,6 @@ public class Compas {
 	
 	public int saberXPrimeraNota() {
 		return notas.get(0).getX();
-	}
-	
-	//  Devuelve la posición X de la nota más cercana al margen derecho
-	public int saberXUltimaNota() {
-		int xMasGrande = 0;
-		
-		int numNotas = notas.size();
-		for (int i=0; i<numNotas; i++) {
-			if (xMasGrande < notas.get(i).getX())
-				xMasGrande = notas.get(i).getX();
-		}
-		
-		return xMasGrande;
 	}
 	
 	public void setBpm(int bpm) {

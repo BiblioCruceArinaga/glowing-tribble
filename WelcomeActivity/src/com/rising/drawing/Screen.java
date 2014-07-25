@@ -311,8 +311,7 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 	//  La rotación de una matriz produce una traslación
 	//  involuntaria e indeseada que debemos contrarrestar
 	//  manualmente para que el resultado quede bien.
-	//  Además, aquí controlamos que la rotación
-	//  se haga en el sentido adecuado
+	//  Además, aquí controlamos que la rotación se haga en el sentido adecuado
 	public Matrix getMatrix(RectF rectf, float angulo) {
 		Matrix matrix = new Matrix();
 		
