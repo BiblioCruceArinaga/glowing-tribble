@@ -43,10 +43,10 @@ public class Scroll {
     private boolean x_initialized = false;
 	
 	public Scroll(Config config) {;
-		margenFinalScrollY = config.getDistanciaPentagramas();
-		margenFinalScrollX = config.getXInicialPentagramas();
+		margenFinalScrollY = config.distanciaPentagramas;
+		margenFinalScrollX = config.xInicialPentagramas;
 		margenXPrimerCompas = margenFinalScrollX;
-		margenYPrimerCompas = config.getMargenInferiorAutor();
+		margenYPrimerCompas = config.margenInferiorAutor;
 		
 		orientation = 0;
 	}

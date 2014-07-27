@@ -93,8 +93,8 @@ public class DrawingMethods {
 			this.config = config;
 			this.vista = vista;
 			
-			compas_margin_x = config.getXInicialPentagramas();
-			compas_margin_y = config.getMargenSuperior();
+			compas_margin_x = config.xInicialPentagramas;
+			compas_margin_y = config.margenSuperior;
 
 			accent = BitmapFactory.decodeResource(resources, R.drawable.accent);
 			arpegioImage = BitmapFactory.decodeResource(resources, R.drawable.arpegio);
@@ -141,7 +141,7 @@ public class DrawingMethods {
 	private int calcularCabezaDeNota(Nota nota, int posicion) {
 		int y = obtenerPosicionYDeNota(nota, 
 				claveActual[nota.getPentagrama() - 1], partitura.getInstrument());
-		if (nota.notaDeGracia()) y += config.getMargenNotaGracia();
+		if (nota.notaDeGracia()) y += config.margenNotaGracia;
 
 		return y;
 	}
@@ -161,8 +161,8 @@ public class DrawingMethods {
 
 			//  El margen Y depende del pentagrama al que pertenezca el compás
 			int marginY = compas_margin_y + 
-					(config.getDistanciaLineasPentagrama() * 4 + 
-							config.getDistanciaPentagramas()) * (pentagrama - 1);
+					(config.distanciaLineasPentagrama * 4 + 
+							config.distanciaPentagramas) * (pentagrama - 1);
 
 			Clave clave = new Clave();
 			clave.setImagenClave(obtenerImagenDeClave(claveByte));
@@ -240,7 +240,7 @@ public class DrawingMethods {
 		compas.setXIni(compas_margin_x);
 		compas.setYIni(compas_margin_y);
 		
-		compas_margin_x += config.getMargenIzquierdoCompases();
+		compas_margin_x += config.margenIzquierdoCompases;
 
 		calcularClefs(compas);
 		if (compas.hayFifths()) calcularFifths(compas);
@@ -256,10 +256,10 @@ public class DrawingMethods {
 		if (compas_margin_x + lastX > compas.getXFin())
 			compas.setXFin(compas_margin_x + lastX);
 		
-		compas.setXFin(compas.getXFin() + config.getMargenDerechoCompases());
+		compas.setXFin(compas.getXFin() + config.margenDerechoCompases);
 		compas.setYFin(compas_margin_y + 
-				config.getDistanciaLineasPentagrama() * 4 + 
-				(config.getDistanciaPentagramas() + config.getDistanciaLineasPentagrama() * 4) * 
+				config.distanciaLineasPentagrama * 4 + 
+				(config.distanciaPentagramas + config.distanciaLineasPentagrama * 4) * 
 				(partitura.getStaves() - 1));
 		
 		compas_margin_x = compas.getXFin();
@@ -275,7 +275,7 @@ public class DrawingMethods {
 		}
 		
 		if (vista == Vista.VERTICAL) {
-			if (compas.getXFin() > config.getXFinalPentagramas()) {
+			if (compas.getXFin() > config.xFinalPentagramas) {
 				moverCompasAlSiguienteRenglon(compas);
 				
 				ultimoCompas = compasActual - 1;
@@ -336,7 +336,7 @@ public class DrawingMethods {
 	}
 	
 	private int calcularPosicionX(int position) {
-		return position * config.getUnidadDesplazamiento() / partitura.getDivisions();
+		return position * config.unidadDesplazamiento / partitura.getDivisions();
 	}
 	
 	private void calcularTime(Compas compas) {
@@ -440,14 +440,14 @@ public class DrawingMethods {
 
 		numerarCompases();
 
-		ordenesDibujo.add( new OrdenDibujo(config.getTamanoLetraObra(), 
-				true, partitura.getWork(), config.getWidth() / 2, 
-				compas_margin_y + config.getMargenObra()));
-		ordenesDibujo.add( new OrdenDibujo(config.getTamanoLetraAutor(), 
-				true, partitura.getCreator(), config.getWidth() / 2, 
-				compas_margin_y + config.getMargenAutor()));
+		ordenesDibujo.add( new OrdenDibujo(config.tamanoLetraObra, 
+				true, partitura.getWork(), config.width / 2, 
+				compas_margin_y + config.margenObra));
+		ordenesDibujo.add( new OrdenDibujo(config.tamanoLetraAutor, 
+				true, partitura.getCreator(), config.width / 2, 
+				compas_margin_y + config.margenAutor));
 		
-		compas_margin_y += config.getMargenInferiorAutor();
+		compas_margin_y += config.margenInferiorAutor;
 		
 		calcularPosicionesDeCompases();
 		dibujarCompases();
@@ -461,8 +461,8 @@ public class DrawingMethods {
 		tempo.setNumerador(numerador);
 		tempo.setDenominador(denominador);
 		tempo.setX(compas_margin_x + x_position);
-		tempo.setYNumerador(compas_margin_y + config.getDistanciaLineasPentagrama() * 2);
-		tempo.setYDenominador(compas_margin_y + config.getDistanciaLineasPentagrama() * 4);
+		tempo.setYNumerador(compas_margin_y + config.distanciaLineasPentagrama * 2);
+		tempo.setYDenominador(compas_margin_y + config.distanciaLineasPentagrama * 4);
 	}
 	
 	public boolean isValid() {
@@ -470,14 +470,14 @@ public class DrawingMethods {
 	}
 	
 	private void moverCompasAlSiguienteRenglon(Compas compas) {
-		int distancia_x = compas.getXIni() - config.getXInicialPentagramas();
-		int distancia_y = (config.getDistanciaLineasPentagrama() * 4 + 
-				config.getDistanciaPentagramas()) * partitura.getStaves();
+		int distancia_x = compas.getXIni() - config.xInicialPentagramas;
+		int distancia_y = (config.distanciaLineasPentagrama * 4 + 
+				config.distanciaPentagramas) * partitura.getStaves();
 
-		compas.setXIni(config.getXInicialPentagramas());
+		compas.setXIni(config.xInicialPentagramas);
 		compas.setXFin(compas.getXFin() - distancia_x);
-		if (compas.getXFin() > config.getXFinalPentagramas())
-			compas.setXFin(config.getXFinalPentagramas());
+		if (compas.getXFin() > config.xFinalPentagramas)
+			compas.setXFin(config.xFinalPentagramas);
 		compas.setXIniNotas(compas.getXIniNotas() - distancia_x);
 
 		for (int i=0; i<compas.numClaves(); i++) {
@@ -528,9 +528,9 @@ public class DrawingMethods {
 
 		compas.setYIni(compas_margin_y);
 		compas.setYFin(compas_margin_y + 
-				config.getDistanciaLineasPentagrama() * 4 + 
-				(config.getDistanciaPentagramas() + 
-						config.getDistanciaLineasPentagrama() * 4) * (partitura.getStaves() - 1));
+				config.distanciaLineasPentagrama * 4 + 
+				(config.distanciaPentagramas + 
+						config.distanciaLineasPentagrama * 4) * (partitura.getStaves() - 1));
 		
 		int numNotas = compas.numNotas();
 		for (int i=0; i<numNotas; i++) {
@@ -624,7 +624,7 @@ public class DrawingMethods {
 	
 	private int obtenerPosicionYDeClave(byte clave) {
 		switch (clave) {
-			case 1: return - config.getYClaveSolSegunda();
+			case 1: return - config.yClaveSolSegunda;
 			default: return 0;
 		}
 	}
@@ -632,18 +632,18 @@ public class DrawingMethods {
 	private int obtenerPosicionYDeElementoGrafico(int location) {
 		switch (location) {
 			case 1:
-				return compas_margin_y - config.getDistanciaLineasPentagrama() * 2;
+				return compas_margin_y - config.distanciaLineasPentagrama * 2;
 			case 2:
-				return compas_margin_y + config.getDistanciaLineasPentagrama() * 6;
+				return compas_margin_y + config.distanciaLineasPentagrama * 6;
 			case 3:
-				return compas_margin_y + config.getDistanciaLineasPentagrama() * 4 + 
-						config.getDistanciaPentagramas() - config.getDistanciaLineasPentagrama() * 2;
+				return compas_margin_y + config.distanciaLineasPentagrama * 4 + 
+						config.distanciaPentagramas - config.distanciaLineasPentagrama * 2;
 			case 4:
-				return compas_margin_y + config.getDistanciaLineasPentagrama() * 4 + 
-						config.getDistanciaPentagramas() + config.getDistanciaLineasPentagrama() * 6;
+				return compas_margin_y + config.distanciaLineasPentagrama * 4 + 
+						config.distanciaPentagramas + config.distanciaLineasPentagrama * 6;
 			case 5:
-				return compas_margin_y + config.getDistanciaLineasPentagrama() * 4 +
-						config.getDistanciaPentagramas() / 2;
+				return compas_margin_y + config.distanciaLineasPentagrama * 4 +
+						config.distanciaPentagramas / 2;
 			default:
 				return 0;
 		}
@@ -652,8 +652,8 @@ public class DrawingMethods {
 	private int obtenerPosicionYDeNota(Nota nota, byte clave, byte instrumento){
 		int coo_y = 0;
 		int margenY = compas_margin_y + 
-				(config.getDistanciaLineasPentagrama() * 4 + 
-						config.getDistanciaPentagramas()) * (nota.getPentagrama() - 1);
+				(config.distanciaLineasPentagrama * 4 + 
+						config.distanciaPentagramas) * (nota.getPentagrama() - 1);
 		
 		byte octava = nota.getOctava();
 		if (octava > 10) octava -= 12;
@@ -676,46 +676,46 @@ public class DrawingMethods {
 										case 1:
 										case 8:
 										case 15:
-											coo_y = margenY + config.getDistanciaLineasPentagrama() * 5 + 
-												config.getDistanciaLineasPentagramaMitad();
+											coo_y = margenY + config.distanciaLineasPentagrama * 5 + 
+												config.distanciaLineasPentagramaMitad;
 											break;
 
 										case 2:
 										case 9:
 										case 16:
-											coo_y = margenY + config.getDistanciaLineasPentagrama() * 5;
+											coo_y = margenY + config.distanciaLineasPentagrama * 5;
 											break;
 
 										case 3:
 										case 10:
 										case 17:
-											coo_y = margenY + config.getDistanciaLineasPentagrama() * 8;
+											coo_y = margenY + config.distanciaLineasPentagrama * 8;
 											break;
 
 										case 4:
 										case 11:
 										case 18:
-											coo_y = margenY + config.getDistanciaLineasPentagrama() * 7 + 
-												config.getDistanciaLineasPentagramaMitad();
+											coo_y = margenY + config.distanciaLineasPentagrama * 7 + 
+												config.distanciaLineasPentagramaMitad;
 											break;
 
 										case 5:
 										case 12:
 										case 19:
-											coo_y = margenY + config.getDistanciaLineasPentagrama() * 7;
+											coo_y = margenY + config.distanciaLineasPentagrama * 7;
 											break;
 
 										case 6:
 										case 13:
 										case 20:
-											coo_y = margenY + config.getDistanciaLineasPentagrama() * 6 + 
-												config.getDistanciaLineasPentagramaMitad();
+											coo_y = margenY + config.distanciaLineasPentagrama * 6 + 
+												config.distanciaLineasPentagramaMitad;
 											break;
 
 										case 7:
 										case 14:
 										case 21:
-											coo_y = margenY + config.getDistanciaLineasPentagrama() * 6;
+											coo_y = margenY + config.distanciaLineasPentagrama * 6;
 											break;
 
 										default:
@@ -731,47 +731,47 @@ public class DrawingMethods {
 										case 1:
 										case 8:
 										case 15:
-											coo_y = margenY + config.getDistanciaLineasPentagrama() * 2;
+											coo_y = margenY + config.distanciaLineasPentagrama * 2;
 											break;
 
 										case 2:
 										case 9:
 										case 16:
-											coo_y = margenY + config.getDistanciaLineasPentagrama() + 
-												config.getDistanciaLineasPentagramaMitad();
+											coo_y = margenY + config.distanciaLineasPentagrama + 
+												config.distanciaLineasPentagramaMitad;
 											break;
 
 										case 3:
 										case 10:
 										case 17:
-											coo_y = margenY + config.getDistanciaLineasPentagrama() * 4 + 
-												config.getDistanciaLineasPentagramaMitad();
+											coo_y = margenY + config.distanciaLineasPentagrama * 4 + 
+												config.distanciaLineasPentagramaMitad;
 											break;
 
 										case 4:
 										case 11:
 										case 18:
-											coo_y = margenY + config.getDistanciaLineasPentagrama() * 4;
+											coo_y = margenY + config.distanciaLineasPentagrama * 4;
 											break;
 
 										case 5:
 										case 12:
 										case 19:
-											coo_y = margenY + config.getDistanciaLineasPentagrama() * 3 + 
-												config.getDistanciaLineasPentagramaMitad();
+											coo_y = margenY + config.distanciaLineasPentagrama * 3 + 
+												config.distanciaLineasPentagramaMitad;
 											break;
 
 										case 6:
 										case 13:
 										case 20:
-											coo_y = margenY + config.getDistanciaLineasPentagrama() * 3;
+											coo_y = margenY + config.distanciaLineasPentagrama * 3;
 											break;
 
 										case 7:
 										case 14:
 										case 21:
-											coo_y = margenY + config.getDistanciaLineasPentagrama() * 2 + 
-												config.getDistanciaLineasPentagramaMitad();
+											coo_y = margenY + config.distanciaLineasPentagrama * 2 + 
+												config.distanciaLineasPentagramaMitad;
 											break;
 
 										default:
@@ -787,26 +787,26 @@ public class DrawingMethods {
 										case 1:
 										case 8:
 										case 15:
-											coo_y = margenY - config.getDistanciaLineasPentagrama() - 
-												config.getDistanciaLineasPentagramaMitad();
+											coo_y = margenY - config.distanciaLineasPentagrama - 
+												config.distanciaLineasPentagramaMitad;
 											break;
 
 										case 2:
 										case 9:
 										case 16:
-											coo_y = margenY - config.getDistanciaLineasPentagrama() * 2;
+											coo_y = margenY - config.distanciaLineasPentagrama * 2;
 											break;
 
 										case 3:
 										case 10:
 										case 17:
-											coo_y = margenY + config.getDistanciaLineasPentagrama();
+											coo_y = margenY + config.distanciaLineasPentagrama;
 											break;
 
 										case 4:
 										case 11:
 										case 18:
-											coo_y = margenY + config.getDistanciaLineasPentagramaMitad();
+											coo_y = margenY + config.distanciaLineasPentagramaMitad;
 											break;
 
 										case 5:
@@ -818,13 +818,13 @@ public class DrawingMethods {
 										case 6:
 										case 13:
 										case 20:
-											coo_y = margenY - config.getDistanciaLineasPentagramaMitad();
+											coo_y = margenY - config.distanciaLineasPentagramaMitad;
 											break;
 
 										case 7:
 										case 14:
 										case 21:
-											coo_y = margenY - config.getDistanciaLineasPentagrama();
+											coo_y = margenY - config.distanciaLineasPentagrama;
 											break;
 
 										default:
@@ -840,47 +840,47 @@ public class DrawingMethods {
 										case 1:
 										case 8:
 										case 15:
-											coo_y = margenY - config.getDistanciaLineasPentagrama() * 5;
+											coo_y = margenY - config.distanciaLineasPentagrama * 5;
 											break;
 
 										case 2:
 										case 9:
 										case 16:
-											coo_y = margenY - config.getDistanciaLineasPentagrama() * 5 - 
-												config.getDistanciaLineasPentagramaMitad();
+											coo_y = margenY - config.distanciaLineasPentagrama * 5 - 
+												config.distanciaLineasPentagramaMitad;
 											break;
 
 										case 3:
 										case 10:
 										case 17:
-											coo_y = margenY - config.getDistanciaLineasPentagrama() * 2 - 
-												config.getDistanciaLineasPentagramaMitad();
+											coo_y = margenY - config.distanciaLineasPentagrama * 2 - 
+												config.distanciaLineasPentagramaMitad;
 											break;
 
 										case 4:
 										case 11:
 										case 18:
-											coo_y = margenY - config.getDistanciaLineasPentagrama() * 3;
+											coo_y = margenY - config.distanciaLineasPentagrama * 3;
 											break;
 
 										case 5:
 										case 12:
 										case 19:
-											coo_y = margenY - config.getDistanciaLineasPentagrama() * 3 - 
-												config.getDistanciaLineasPentagramaMitad();
+											coo_y = margenY - config.distanciaLineasPentagrama * 3 - 
+												config.distanciaLineasPentagramaMitad;
 											break;
 
 										case 6:
 										case 13:
 										case 20:
-											coo_y = margenY - config.getDistanciaLineasPentagrama() * 4;
+											coo_y = margenY - config.distanciaLineasPentagrama * 4;
 											break;
 
 										case 7:
 										case 14:
 										case 21:
-											coo_y = margenY - config.getDistanciaLineasPentagrama() * 4 - 
-												config.getDistanciaLineasPentagramaMitad();
+											coo_y = margenY - config.distanciaLineasPentagrama * 4 - 
+												config.distanciaLineasPentagramaMitad;
 											break;
 
 										default:
@@ -911,47 +911,47 @@ public class DrawingMethods {
 										case 1:
 										case 8:
 										case 15:
-											coo_y = margenY + config.getDistanciaLineasPentagrama() * 9;
+											coo_y = margenY + config.distanciaLineasPentagrama * 9;
 											break;
 
 										case 2:
 										case 9:
 										case 16:
-											coo_y = margenY + config.getDistanciaLineasPentagrama() * 8 + 
-												config.getDistanciaLineasPentagramaMitad();
+											coo_y = margenY + config.distanciaLineasPentagrama * 8 + 
+												config.distanciaLineasPentagramaMitad;
 											break;
 
 										case 3:
 										case 10:
 										case 17:
-											coo_y = margenY + config.getDistanciaLineasPentagrama() * 11 + 
-												config.getDistanciaLineasPentagramaMitad();
+											coo_y = margenY + config.distanciaLineasPentagrama * 11 + 
+												config.distanciaLineasPentagramaMitad;
 											break;
 
 										case 4:
 										case 11:
 										case 18:
-											coo_y = margenY + config.getDistanciaLineasPentagrama() * 11;
+											coo_y = margenY + config.distanciaLineasPentagrama * 11;
 											break;
 
 										case 5:
 										case 12:
 										case 19:
-											coo_y = margenY + config.getDistanciaLineasPentagrama() * 10 + 
-												config.getDistanciaLineasPentagramaMitad();
+											coo_y = margenY + config.distanciaLineasPentagrama * 10 + 
+												config.distanciaLineasPentagramaMitad;
 											break;
 
 										case 6:
 										case 13:
 										case 20:
-											coo_y = margenY + config.getDistanciaLineasPentagrama() * 10;
+											coo_y = margenY + config.distanciaLineasPentagrama * 10;
 											break;
 
 										case 7:
 										case 14:
 										case 21:
-											coo_y = margenY + config.getDistanciaLineasPentagrama() * 9 + 
-												config.getDistanciaLineasPentagramaMitad();
+											coo_y = margenY + config.distanciaLineasPentagrama * 9 + 
+												config.distanciaLineasPentagramaMitad;
 											break;
 
 										default:
@@ -967,46 +967,46 @@ public class DrawingMethods {
 										case 1:
 										case 8:
 										case 15:
-											coo_y = margenY + config.getDistanciaLineasPentagrama() * 5 + 
-												config.getDistanciaLineasPentagramaMitad();
+											coo_y = margenY + config.distanciaLineasPentagrama * 5 + 
+												config.distanciaLineasPentagramaMitad;
 											break;
 
 										case 2:
 										case 9:
 										case 16:
-											coo_y = margenY + config.getDistanciaLineasPentagrama() * 5;
+											coo_y = margenY + config.distanciaLineasPentagrama * 5;
 											break;
 
 										case 3:
 										case 10:
 										case 17:
-											coo_y = margenY + config.getDistanciaLineasPentagrama() * 8;
+											coo_y = margenY + config.distanciaLineasPentagrama * 8;
 											break;
 
 										case 4:
 										case 11:
 										case 18:
-											coo_y = margenY + config.getDistanciaLineasPentagrama() * 7 + 
-												config.getDistanciaLineasPentagramaMitad();
+											coo_y = margenY + config.distanciaLineasPentagrama * 7 + 
+												config.distanciaLineasPentagramaMitad;
 											break;
 
 										case 5:
 										case 12:
 										case 19:
-											coo_y = margenY + config.getDistanciaLineasPentagrama() * 7;
+											coo_y = margenY + config.distanciaLineasPentagrama * 7;
 											break;
 
 										case 6:
 										case 13:
 										case 20:
-											coo_y = margenY + config.getDistanciaLineasPentagrama() * 6 + 
-												config.getDistanciaLineasPentagramaMitad();
+											coo_y = margenY + config.distanciaLineasPentagrama * 6 + 
+												config.distanciaLineasPentagramaMitad;
 											break;
 
 										case 7:
 										case 14:
 										case 21:
-											coo_y = margenY + config.getDistanciaLineasPentagrama() * 6;
+											coo_y = margenY + config.distanciaLineasPentagrama * 6;
 											break;
 
 										default:
@@ -1022,47 +1022,47 @@ public class DrawingMethods {
 										case 1:
 										case 8:
 										case 15:
-											coo_y = margenY + config.getDistanciaLineasPentagrama() * 2;
+											coo_y = margenY + config.distanciaLineasPentagrama * 2;
 											break;
 
 										case 2:
 										case 9:
 										case 16:
-											coo_y = margenY + config.getDistanciaLineasPentagrama() + 
-												config.getDistanciaLineasPentagramaMitad();
+											coo_y = margenY + config.distanciaLineasPentagrama + 
+												config.distanciaLineasPentagramaMitad;
 											break;
 
 										case 3:
 										case 10:
 										case 17:
-											coo_y = margenY + config.getDistanciaLineasPentagrama() * 4 + 
-												config.getDistanciaLineasPentagramaMitad();
+											coo_y = margenY + config.distanciaLineasPentagrama * 4 + 
+												config.distanciaLineasPentagramaMitad;
 											break;
 
 										case 4:
 										case 11:
 										case 18:
-											coo_y = margenY + config.getDistanciaLineasPentagrama() * 4;
+											coo_y = margenY + config.distanciaLineasPentagrama * 4;
 											break;
 
 										case 5:
 										case 12:
 										case 19:
-											coo_y = margenY + config.getDistanciaLineasPentagrama() * 3 + 
-												config.getDistanciaLineasPentagramaMitad();
+											coo_y = margenY + config.distanciaLineasPentagrama * 3 + 
+												config.distanciaLineasPentagramaMitad;
 											break;
 
 										case 6:
 										case 13:
 										case 20:
-											coo_y = margenY + config.getDistanciaLineasPentagrama() * 3;
+											coo_y = margenY + config.distanciaLineasPentagrama * 3;
 											break;
 
 										case 7:
 										case 14:
 										case 21:
-											coo_y = margenY + config.getDistanciaLineasPentagrama() * 2 + 
-												config.getDistanciaLineasPentagramaMitad();
+											coo_y = margenY + config.distanciaLineasPentagrama * 2 + 
+												config.distanciaLineasPentagramaMitad;
 											break;
 
 										default:
@@ -1078,26 +1078,26 @@ public class DrawingMethods {
 										case 1:
 										case 8:
 										case 15:
-											coo_y = margenY - config.getDistanciaLineasPentagrama() - 
-												config.getDistanciaLineasPentagramaMitad();
+											coo_y = margenY - config.distanciaLineasPentagrama - 
+												config.distanciaLineasPentagramaMitad;
 											break;
 
 										case 2:
 										case 9:
 										case 16:
-											coo_y = margenY - config.getDistanciaLineasPentagrama() * 2;
+											coo_y = margenY - config.distanciaLineasPentagrama * 2;
 											break;
 
 										case 3:
 										case 10:
 										case 17:
-											coo_y = margenY + config.getDistanciaLineasPentagrama();
+											coo_y = margenY + config.distanciaLineasPentagrama;
 											break;
 
 										case 4:
 										case 11:
 										case 18:
-											coo_y = margenY + config.getDistanciaLineasPentagramaMitad();
+											coo_y = margenY + config.distanciaLineasPentagramaMitad;
 											break;
 
 										case 5:
@@ -1109,13 +1109,13 @@ public class DrawingMethods {
 										case 6:
 										case 13:
 										case 20:
-											coo_y = margenY - config.getDistanciaLineasPentagramaMitad();
+											coo_y = margenY - config.distanciaLineasPentagramaMitad;
 											break;
 
 										case 7:
 										case 14:
 										case 21:
-											coo_y = margenY - config.getDistanciaLineasPentagrama();
+											coo_y = margenY - config.distanciaLineasPentagrama;
 											break;
 
 										default:
@@ -1131,47 +1131,47 @@ public class DrawingMethods {
 										case 1:
 										case 8:
 										case 15:
-											coo_y = margenY - config.getDistanciaLineasPentagrama() * 5;
+											coo_y = margenY - config.distanciaLineasPentagrama * 5;
 											break;
 
 										case 2:
 										case 9:
 										case 16:
-											coo_y = margenY - config.getDistanciaLineasPentagrama() * 5 - 
-												config.getDistanciaLineasPentagramaMitad();
+											coo_y = margenY - config.distanciaLineasPentagrama * 5 - 
+												config.distanciaLineasPentagramaMitad;
 											break;
 
 										case 3:
 										case 10:
 										case 17:
-											coo_y = margenY - config.getDistanciaLineasPentagrama() * 2 - 
-												config.getDistanciaLineasPentagramaMitad();
+											coo_y = margenY - config.distanciaLineasPentagrama * 2 - 
+												config.distanciaLineasPentagramaMitad;
 											break;
 
 										case 4:
 										case 11:
 										case 18:
-											coo_y = margenY - config.getDistanciaLineasPentagrama() * 3;
+											coo_y = margenY - config.distanciaLineasPentagrama * 3;
 											break;
 
 										case 5:
 										case 12:
 										case 19:
-											coo_y = margenY - config.getDistanciaLineasPentagrama() * 3 - 
-												config.getDistanciaLineasPentagramaMitad();
+											coo_y = margenY - config.distanciaLineasPentagrama * 3 - 
+												config.distanciaLineasPentagramaMitad;
 											break;
 
 										case 6:
 										case 13:
 										case 20:
-											coo_y = margenY - config.getDistanciaLineasPentagrama() * 4;
+											coo_y = margenY - config.distanciaLineasPentagrama * 4;
 											break;
 
 										case 7:
 										case 14:
 										case 21:
-											coo_y = margenY - config.getDistanciaLineasPentagrama() * 4 - 
-												config.getDistanciaLineasPentagramaMitad();
+											coo_y = margenY - config.distanciaLineasPentagrama * 4 - 
+												config.distanciaLineasPentagramaMitad;
 											break;
 
 										default:
@@ -1195,46 +1195,46 @@ public class DrawingMethods {
 										case 1:
 										case 8:
 										case 15:
-											coo_y = margenY + config.getDistanciaLineasPentagrama() * 6 + 
-												config.getDistanciaLineasPentagramaMitad();
+											coo_y = margenY + config.distanciaLineasPentagrama * 6 + 
+												config.distanciaLineasPentagramaMitad;
 											break;
 
 										case 2:
 										case 9:
 										case 16:
-											coo_y = margenY + config.getDistanciaLineasPentagrama() * 6;
+											coo_y = margenY + config.distanciaLineasPentagrama * 6;
 											break;
 
 										case 3:
 										case 10:
 										case 17:
-											coo_y = margenY + config.getDistanciaLineasPentagrama() * 9;
+											coo_y = margenY + config.distanciaLineasPentagrama * 9;
 											break;
 
 										case 4:
 										case 11:
 										case 18:
-											coo_y = margenY + config.getDistanciaLineasPentagrama() * 8 + 
-												config.getDistanciaLineasPentagramaMitad();
+											coo_y = margenY + config.distanciaLineasPentagrama * 8 + 
+												config.distanciaLineasPentagramaMitad;
 											break;
 
 										case 5:
 										case 12:
 										case 19:
-											coo_y = margenY + config.getDistanciaLineasPentagrama() * 8;
+											coo_y = margenY + config.distanciaLineasPentagrama * 8;
 											break;
 
 										case 6:
 										case 13:
 										case 20:
-											coo_y = margenY + config.getDistanciaLineasPentagrama() * 7 + 
-												config.getDistanciaLineasPentagramaMitad();
+											coo_y = margenY + config.distanciaLineasPentagrama * 7 + 
+												config.distanciaLineasPentagramaMitad;
 											break;
 
 										case 7:
 										case 14:
 										case 21:
-											coo_y = margenY + config.getDistanciaLineasPentagrama() * 7;
+											coo_y = margenY + config.distanciaLineasPentagrama * 7;
 											break;
 
 										default:
@@ -1250,47 +1250,47 @@ public class DrawingMethods {
 										case 1:
 										case 8:
 										case 15:
-											coo_y = margenY + config.getDistanciaLineasPentagrama() * 3;
+											coo_y = margenY + config.distanciaLineasPentagrama * 3;
 											break;
 
 										case 2:
 										case 9:
 										case 16:
-											coo_y = margenY + config.getDistanciaLineasPentagrama() * 2 + 
-												config.getDistanciaLineasPentagramaMitad();
+											coo_y = margenY + config.distanciaLineasPentagrama * 2 + 
+												config.distanciaLineasPentagramaMitad;
 											break;
 
 										case 3:
 										case 10:
 										case 17:
-											coo_y = margenY + config.getDistanciaLineasPentagrama() * 5 + 
-												config.getDistanciaLineasPentagramaMitad();
+											coo_y = margenY + config.distanciaLineasPentagrama * 5 + 
+												config.distanciaLineasPentagramaMitad;
 											break;
 
 										case 4:
 										case 11:
 										case 18:
-											coo_y = margenY + config.getDistanciaLineasPentagrama() * 5;
+											coo_y = margenY + config.distanciaLineasPentagrama * 5;
 											break;
 
 										case 5:
 										case 12:
 										case 19:
-											coo_y = margenY + config.getDistanciaLineasPentagrama() * 4 + 
-												config.getDistanciaLineasPentagramaMitad();
+											coo_y = margenY + config.distanciaLineasPentagrama * 4 + 
+												config.distanciaLineasPentagramaMitad;
 											break;
 
 										case 6:
 										case 13:
 										case 20:
-											coo_y = margenY + config.getDistanciaLineasPentagrama() * 4;
+											coo_y = margenY + config.distanciaLineasPentagrama * 4;
 											break;
 
 										case 7:
 										case 14:
 										case 21:
-											coo_y = margenY + config.getDistanciaLineasPentagrama() * 3 + 
-												config.getDistanciaLineasPentagramaMitad();
+											coo_y = margenY + config.distanciaLineasPentagrama * 3 + 
+												config.distanciaLineasPentagramaMitad;
 											break;
 
 										default:
@@ -1306,39 +1306,39 @@ public class DrawingMethods {
 										case 1:
 										case 8:
 										case 15:
-											coo_y = margenY - config.getDistanciaLineasPentagramaMitad();
+											coo_y = margenY - config.distanciaLineasPentagramaMitad;
 											break;
 
 										case 2:
 										case 9:
 										case 16:
-											coo_y = margenY - config.getDistanciaLineasPentagrama();
+											coo_y = margenY - config.distanciaLineasPentagrama;
 											break;
 
 										case 3:
 										case 10:
 										case 17:
-											coo_y = margenY + config.getDistanciaLineasPentagrama() * 2;
+											coo_y = margenY + config.distanciaLineasPentagrama * 2;
 											break;
 
 										case 4:
 										case 11:
 										case 18:
-											coo_y = margenY + config.getDistanciaLineasPentagrama() + 
-												config.getDistanciaLineasPentagramaMitad();
+											coo_y = margenY + config.distanciaLineasPentagrama + 
+												config.distanciaLineasPentagramaMitad;
 											break;
 
 										case 5:
 										case 12:
 										case 19:
-											coo_y = margenY + config.getDistanciaLineasPentagrama();
+											coo_y = margenY + config.distanciaLineasPentagrama;
 											break;
 
 										case 6:
 										case 13:
 										case 20:
-											coo_y = margenY + config.getDistanciaLineasPentagrama() - 
-												config.getDistanciaLineasPentagramaMitad();
+											coo_y = margenY + config.distanciaLineasPentagrama - 
+												config.distanciaLineasPentagramaMitad;
 											break;
 
 										case 7:
@@ -1360,47 +1360,47 @@ public class DrawingMethods {
 										case 1:
 										case 8:
 										case 15:
-											coo_y = margenY - config.getDistanciaLineasPentagrama() * 4;
+											coo_y = margenY - config.distanciaLineasPentagrama * 4;
 											break;
 
 										case 2:
 										case 9:
 										case 16:
-											coo_y = margenY - config.getDistanciaLineasPentagrama() * 4 - 
-												config.getDistanciaLineasPentagramaMitad();
+											coo_y = margenY - config.distanciaLineasPentagrama * 4 - 
+												config.distanciaLineasPentagramaMitad;
 											break;
 
 										case 3:
 										case 10:
 										case 17:
-											coo_y = margenY - config.getDistanciaLineasPentagrama() - 
-												config.getDistanciaLineasPentagramaMitad();
+											coo_y = margenY - config.distanciaLineasPentagrama - 
+												config.distanciaLineasPentagramaMitad;
 											break;
 
 										case 4:
 										case 11:
 										case 18:
-											coo_y = margenY - config.getDistanciaLineasPentagrama() * 2;
+											coo_y = margenY - config.distanciaLineasPentagrama * 2;
 											break;
 
 										case 5:
 										case 12:
 										case 19:
-											coo_y = margenY - config.getDistanciaLineasPentagrama() * 2 - 
-												config.getDistanciaLineasPentagramaMitad();
+											coo_y = margenY - config.distanciaLineasPentagrama * 2 - 
+												config.distanciaLineasPentagramaMitad;
 											break;
 
 										case 6:
 										case 13:
 										case 20:
-											coo_y = margenY - config.getDistanciaLineasPentagrama() * 3;
+											coo_y = margenY - config.distanciaLineasPentagrama * 3;
 											break;
 
 										case 7:
 										case 14:
 										case 21:
-											coo_y = margenY - config.getDistanciaLineasPentagrama() * 3 - 
-												config.getDistanciaLineasPentagramaMitad();
+											coo_y = margenY - config.distanciaLineasPentagrama * 3 - 
+												config.distanciaLineasPentagramaMitad;
 											break;
 
 										default:
@@ -1433,12 +1433,12 @@ public class DrawingMethods {
 					break;
 					
 				case 10:
-					coo_y = margenY + config.getDistanciaLineasPentagrama() + 
-						config.getDistanciaLineasPentagramaMitad() + config.getYSilencioBlanca();
+					coo_y = margenY + config.distanciaLineasPentagrama + 
+						config.distanciaLineasPentagramaMitad + config.ySilencioBlanca;
 					break;
 					
 				case 11:
-					coo_y = margenY + config.getDistanciaLineasPentagrama();
+					coo_y = margenY + config.distanciaLineasPentagrama;
 					break;
 
 				default: break;
@@ -1449,7 +1449,7 @@ public class DrawingMethods {
 	}
 	
 	private void reajustarCompases() {
-		int espacioADistribuir = config.getXFinalPentagramas() - partitura.getCompas(ultimoCompas).getXFin();
+		int espacioADistribuir = config.xFinalPentagramas - partitura.getCompas(ultimoCompas).getXFin();
 
     	int numCompases = (ultimoCompas - primerCompas) + 1;
         int anchoParaCadaCompas = espacioADistribuir / numCompases;
@@ -1468,7 +1468,7 @@ public class DrawingMethods {
 	        	compas.setXIniNotas(posicionX + distanciaXIni);
 	            
 	        	posicionX = compas.getXFin() + anchoParaCadaCompas;
-	            if (i == ultimoCompas) posicionX = config.getXFinalPentagramas();
+	            if (i == ultimoCompas) posicionX = config.xFinalPentagramas;
 	            compas.setXFin(posicionX);
 	            
 	            int numNotas = compas.numNotas();
@@ -1512,7 +1512,7 @@ public class DrawingMethods {
         	ArrayList<Integer> xsDeElementos = compas.saberXsDeElementos();
         	
         	int lastX = xsDeElementos.get(xsDeElementos.size() - 1);
-        	int anchoADistribuir = compas.getXFin() - config.getMargenDerechoCompases() - lastX;
+        	int anchoADistribuir = compas.getXFin() - config.margenDerechoCompases - lastX;
         	
         	//  El primer elemento no lo vamos a mover, de ahí el -1
         	int numElementos = xsDeElementos.size() - 1;
@@ -1645,7 +1645,7 @@ public class DrawingMethods {
 		}
 		
 		int longitudPlica = notaNormal ? 
-				config.getLongitudPlica() : config.getLongitudPlicaNotaGracia();
+				config.longitudPlica : config.longitudPlicaNotaGracia;
 		
 		if (haciaArriba) y_beams -= longitudPlica;
 		else y_beams += longitudPlica;
@@ -1655,11 +1655,11 @@ public class DrawingMethods {
 	
 	private void dibujarAlteraciones(Nota nota, Bitmap alteracion, int offset) {
 		int xAccidental = nota.notaDeGracia() ? 
-				config.getXAccidentalNotaGracia() : config.getXAccidental();
+				config.xAccidentalNotaGracia : config.xAccidental;
 		int x = nota.getX() - xAccidental - offset;
-		if (nota.desplazadaALaIzquierda()) x -= config.getAnchoCabezaNota() - offset;
+		if (nota.desplazadaALaIzquierda()) x -= config.anchoCabezaNota - offset;
 		
-		ordenesDibujo.add( new OrdenDibujo(alteracion, x, nota.getY() - config.getYAccidental()));
+		ordenesDibujo.add( new OrdenDibujo(alteracion, x, nota.getY() - config.yAccidental));
 	}
 	
 	//  Esta implementación por ahora sólo considera el barline de fin de partitura
@@ -1673,8 +1673,8 @@ public class DrawingMethods {
 				ordenesDibujo.add( new OrdenDibujo(
 					4, compas.getXFin(), compas.getYIni(), compas.getXFin(), compas.getYFin()));
 				ordenesDibujo.add( new OrdenDibujo(
-						2, compas.getXFin() - config.getMargenBarlines(), 
-						compas.getYIni(), compas.getXFin() - config.getMargenBarlines(), compas.getYFin()));
+						2, compas.getXFin() - config.margenBarlines, 
+						compas.getYIni(), compas.getXFin() - config.margenBarlines, compas.getYFin()));
 			}
 		}
 	}
@@ -1704,17 +1704,17 @@ public class DrawingMethods {
 			indNotaAnt = beams.get(i).getNota();
 			
 			distancia_beams = partitura.getCompas(indCompasAnt).getNota(indNotaAnt).notaDeGracia() ? 
-					config.getDistanciaEntreBeamsNotasGracia() : config.getDistanciaEntreBeams();
+					config.distanciaEntreBeamsNotaGracia : config.distanciaEntreBeams;
 			if (!haciaArriba) distancia_beams *= -1;
 			
 			ancho_beams = partitura.getCompas(indCompasAnt).getNota(indNotaAnt).notaDeGracia() ?
-					config.getAnchoBeamsNotaGracia() : config.getAnchoBeams();
+					config.anchoBeamsNotaGracia : config.anchoBeams;
 
 			if ( (i == numBeams - 1) || (beams.get(i + 1).getBeamId() != beamId) ) {
 				
 				int x_last_beam = 0;
 				Nota nota = partitura.getCompas(indCompasAnt).getNota(indNotaAnt);
-				int offset = nota.haciaArriba() ? config.getAnchoCabezaNota() : 0;
+				int offset = nota.haciaArriba() ? config.anchoCabezaNota : 0;
 				
 				//  Gestión de hooks en la última nota
 				switch (nota.getBeam()) {
@@ -1724,7 +1724,7 @@ public class DrawingMethods {
 						
 						ordenesDibujo.add( new OrdenDibujo(
 								ancho_beams, x_last_beam + offset, y_beams + distancia_beams * 2,
-								x_last_beam + offset - config.getAnchoHooks(), y_beams + distancia_beams * 2));
+								x_last_beam + offset - config.anchoHooks, y_beams + distancia_beams * 2));
 						break;
 						
 					case 6:
@@ -1732,7 +1732,7 @@ public class DrawingMethods {
 						
 						ordenesDibujo.add( new OrdenDibujo(
 								ancho_beams, x_last_beam + offset, y_beams + distancia_beams,
-								x_last_beam + offset - config.getAnchoHooks(), y_beams + distancia_beams));
+								x_last_beam + offset - config.anchoHooks, y_beams + distancia_beams));
 						break;
 						
 					default:
@@ -1749,7 +1749,7 @@ public class DrawingMethods {
 				if (haciaArriba) {
 					int anchoCabezaNota = 
 							partitura.getCompas(indCompasAnt).getNota(indNotaAnt).notaDeGracia() ? 
-							config.getAnchoCabezaNotaGracia() : config.getAnchoCabezaNota();
+							config.anchoCabezaNotaGracia : config.anchoCabezaNota;
 					x_ant_beams += anchoCabezaNota;
 					x_sig_beams += anchoCabezaNota;
 				}
@@ -1803,8 +1803,8 @@ public class DrawingMethods {
 
 	private void dibujarCabezaDeNota(Nota nota) {
 		int desplazamiento = 0;
-		if (nota.desplazadaALaIzquierda()) desplazamiento -= config.getAnchoCabezaNota();
-		if (nota.desplazadaALaDerecha()) desplazamiento += config.getAnchoCabezaNota();
+		if (nota.desplazadaALaIzquierda()) desplazamiento -= config.anchoCabezaNota;
+		if (nota.desplazadaALaDerecha()) desplazamiento += config.anchoCabezaNota;
 		
 		//  La y de la ligadura de expresión debe colocarse tan arriba como
 		//  obligue a ello la nota más alta en medio de las notas ligadas
@@ -1839,7 +1839,7 @@ public class DrawingMethods {
 			compasActual = i;
 			
 			//  Este compás da inicio al pentagrama, por tanto dibujamos su número
-			if (compases.get(i).getXIni() == config.getXInicialPentagramas())
+			if (compases.get(i).getXIni() == config.xInicialPentagramas)
 				dibujarNumeroDeCompas(compases.get(i));
 			
 			dibujarLineasDePentagramaDeCompas(compases.get(i));
@@ -1865,13 +1865,13 @@ public class DrawingMethods {
 		//  por lo que no hay que dibujarlo de nuevo
 		if (!nota.acorde() && !nota.silencio()) {
 			int anchoCabezaNota = nota.notaDeGracia() ? 
-					config.getAnchoCabezaNotaGracia() : config.getAnchoCabezaNota();
+					config.anchoCabezaNotaGracia : config.anchoCabezaNota;
 			int longitudPlica = nota.notaDeGracia() ? 
-					config.getLongitudPlicaNotaGracia() : config.getLongitudPlica();
+					config.longitudPlicaNotaGracia : config.longitudPlica;
 			int anchoCorchete = nota.notaDeGracia() ? 
-					config.getLargoImagenCorcheteGracia() : config.getLargoImagenCorchete();
+					config.largoImagenCorcheteNotaGracia : config.largoImagenCorchete;
 			int distanciaCorchete = nota.haciaArriba() ?
-					config.getDistanciaCorchetes() : - config.getDistanciaCorchetes();
+					config.distanciaCorchetes : - config.distanciaCorchetes;
 
 			int x;
 			int y;
@@ -1922,11 +1922,11 @@ public class DrawingMethods {
 
 			case 4:
 				int margenTresillo = nota.haciaArriba() ? 
-						- config.getYTresilloArriba() : config.getYTresilloAbajo();
+						- config.yTresilloArriba : config.yTresilloAbajo;
 				int x_tresillo = (nota.getX() + x_ini_tresillo) / 2;
-				if (nota.haciaArriba()) x_tresillo += config.getXTresillo();
+				if (nota.haciaArriba()) x_tresillo += config.xTresillo;
 				
-				ordenesDibujo.add( new OrdenDibujo(config.getTamanoLetraTresillo(), 
+				ordenesDibujo.add( new OrdenDibujo(config.tamanoLetraTresillo, 
 						false, Xsillo + "", x_tresillo, y_beams + margenTresillo));
 				break;
 
@@ -1941,16 +1941,16 @@ public class DrawingMethods {
 				
 			case 8:
 				if (nota.haciaArriba()) 
-					ordenesDibujo.add( new OrdenDibujo(config.getRadioStaccatos(), 
-							nota.getX() + config.getXStaccato(), nota.getY() + config.getYStaccatoArriba()));
+					ordenesDibujo.add( new OrdenDibujo(config.radioStaccatos, 
+							nota.getX() + config.xStaccato, nota.getY() + config.yStaccatoArriba));
 				else 
-					ordenesDibujo.add( new OrdenDibujo(config.getRadioStaccatos(), 
-							nota.getX() + config.getXStaccato(), nota.getY() - config.getYStaccatoAbajo()));
+					ordenesDibujo.add( new OrdenDibujo(config.radioStaccatos, 
+							nota.getX() + config.xStaccato, nota.getY() - config.yStaccatoAbajo));
 				break;
 
 			case 9:
-				ordenesDibujo.add( new OrdenDibujo(config.getTamanoLetraTapping(), 
-						false, "T", nota.getX(), nota.getY() - config.getYTapping()));
+				ordenesDibujo.add( new OrdenDibujo(config.tamanoLetraTapping, 
+						false, "T", nota.getX(), nota.getY() - config.yTapping));
 				break;
 
 			case 10:
@@ -1976,57 +1976,57 @@ public class DrawingMethods {
 				break;
 
 			case 15:
-				ordenesDibujo.add( new OrdenDibujo(config.getRadioPuntillos(), 
-						nota.getX() + config.getXPuntillo(), 
-						nota.getY() + config.getMitadCabezaNotaVertical()));
+				ordenesDibujo.add( new OrdenDibujo(config.radioPuntillos, 
+						nota.getX() + config.xPuntillo, 
+						nota.getY() + config.mitadCabezaVertical));
 				break;
 
 			case 16:
-				ordenesDibujo.add( new OrdenDibujo(config.getRadioPuntillos(), 
-						nota.getX() + config.getXPuntillo(), 
-						nota.getY() + config.getYPuntilloArriba()));
+				ordenesDibujo.add( new OrdenDibujo(config.radioPuntillos, 
+						nota.getX() + config.xPuntillo, 
+						nota.getY() + config.yPuntilloArriba));
 				break;
 
 			case 17:
-				ordenesDibujo.add( new OrdenDibujo(config.getRadioPuntillos(), 
-						nota.getX() + config.getXPuntillo(), 
-						nota.getY() + config.getYPuntilloAbajo()));
+				ordenesDibujo.add( new OrdenDibujo(config.radioPuntillos, 
+						nota.getX() + config.xPuntillo, 
+						nota.getY() + config.yPuntilloAbajo));
 				break;
 
 			case 22:
-				ordenesDibujo.add( new OrdenDibujo(bendrelease, nota.getX(), nota.getY() + config.getYBend()));
+				ordenesDibujo.add( new OrdenDibujo(bendrelease, nota.getX(), nota.getY() + config.yBend));
 				break;
 				
 			case 26:
-				ordenesDibujo.add( new OrdenDibujo(vibrato, nota.getX(), nota.getY() + config.getYBend()));
+				ordenesDibujo.add( new OrdenDibujo(vibrato, nota.getX(), nota.getY() + config.yBend));
 				break;
 				
 			case 27:
-				ordenesDibujo.add( new OrdenDibujo(config.getTamanoLetraPalmMute(), 
-						false, "P.M.", nota.getX(), nota.getY() - config.getYPalmMute()));
+				ordenesDibujo.add( new OrdenDibujo(config.tamanoLetraPalmMute, 
+						false, "P.M.", nota.getX(), nota.getY() - config.yPalmMute));
 				break;
 				
 			case 28:
-				ordenesDibujo.add( new OrdenDibujo(config.getTamanoLetraPalmMute(), 
-						false, "P.M.", nota.getX(), nota.getY() + config.getYPalmMute()));
+				ordenesDibujo.add( new OrdenDibujo(config.tamanoLetraPalmMute, 
+						false, "P.M.", nota.getX(), nota.getY() + config.yPalmMute));
 				break;
 			
 			case 29:
-				ordenesDibujo.add( new OrdenDibujo(config.getTamanoLetraTapping(), 
-						false, "T", nota.getX(), nota.getY() + config.getYTapping()));
+				ordenesDibujo.add( new OrdenDibujo(config.tamanoLetraTapping, 
+						false, "T", nota.getX(), nota.getY() + config.yTapping));
 				
 			case 30:
 				if (nota.haciaArriba()) 
-					x = nota.getX() - config.getOffsetAccent();
+					x = nota.getX() - config.offsetAccent;
 				else
 					x = nota.getX();
 				
-				ordenesDibujo.add( new OrdenDibujo(accent, x, nota.getY() - config.getYAccentUp()));
+				ordenesDibujo.add( new OrdenDibujo(accent, x, nota.getY() - config.yAccentUp));
 				break;
 				
 			case 31:
 				ordenesDibujo.add( new OrdenDibujo(accent, nota.getX(), 
-						nota.getY() + config.getLongitudPlica() + config.getYAccentUp()));
+						nota.getY() + config.longitudPlica + config.yAccentUp));
 				break;
 				
 			case 32:
@@ -2045,30 +2045,30 @@ public class DrawingMethods {
 				
 			case 34:
 				ordenesDibujo.add( new OrdenDibujo(marcato, nota.getX(), 
-						nota.getY() - config.getYAccentUp()));
+						nota.getY() - config.yAccentUp));
 				break;
 				
 			case 36:
-				ordenesDibujo.add( new OrdenDibujo(fermata, nota.getX() - config.getXFermata(), 
-						nota.getY() - config.getYFermata()));
+				ordenesDibujo.add( new OrdenDibujo(fermata, nota.getX() - config.xFermata, 
+						nota.getY() - config.yFermata));
 				break;
 				
 			case 37:
-				ordenesDibujo.add( new OrdenDibujo(fermata_inverted, nota.getX() - config.getXFermata(), 
-						nota.getY() + config.getYFermata()));
+				ordenesDibujo.add( new OrdenDibujo(fermata_inverted, nota.getX() - config.xFermata, 
+						nota.getY() + config.yFermata));
 				break;
 				
 			case 38:				
-				ordenesDibujo.add( new OrdenDibujo(trill, nota.getX(), nota.getY() - config.getYTrill()));
+				ordenesDibujo.add( new OrdenDibujo(trill, nota.getX(), nota.getY() - config.yTrill));
 				break;
 				
 			case 39:				
-				ordenesDibujo.add( new OrdenDibujo(trill, nota.getX(), nota.getY() + config.getYTrill()));
+				ordenesDibujo.add( new OrdenDibujo(trill, nota.getX(), nota.getY() + config.yTrill));
 				break;
 				
 			case 40:
 				ordenesDibujo.add( new OrdenDibujo(arpegioImage, 
-						nota.getX() - config.getXArpegio(), nota.getY()));
+						nota.getX() - config.xArpegio, nota.getY()));
 				break;
 				
 			default:
@@ -2088,7 +2088,7 @@ public class DrawingMethods {
 				i = gestionarLigaduras(nota, figurasGraficas, i, y_beams);
 
 			} else if (nota.esAlteracion(i)) {
-				xAlteraciones = config.getXAccidental2() * numAlteraciones++;
+				xAlteraciones = config.xAccidental2 * numAlteraciones++;
 				i = gestionarAlteracion(nota, figurasGraficas, i, y_beams, xAlteraciones);
 
 			} else if (nota.finDeTresillo(i)) {
@@ -2119,7 +2119,7 @@ public class DrawingMethods {
 		int yInicio = nota.getY();
 		
 		int anchoCabezaNota = nota.notaDeGracia() ? 
-				config.getAnchoCabezaNotaGracia() : config.getAnchoCabezaNota();
+				config.anchoCabezaNotaGracia : config.anchoCabezaNota;
 				
 		boolean clockwise = true;
 
@@ -2132,15 +2132,15 @@ public class DrawingMethods {
 				
 				//  No son notas contiguas
 				if (notasEnMedio > 1) {
-					rectf = new RectF(xInicio, ligaduraExpresionYArriba - config.getYLigadurasExpresion(), 
+					rectf = new RectF(xInicio, ligaduraExpresionYArriba - config.yLigadurasExpresion, 
 						xFinal + anchoCabezaNota, ligaduraExpresionYArriba);
 				}
 				
 				//  Son notas contiguas
 				else {
 					int y = Math.min(yInicio, yFinal);
-					rectf = new RectF(xInicio, y - config.getYLigadurasExpresion(), 
-						xFinal + anchoCabezaNota, y + config.getAlturaArcoLigadurasExpresion());
+					rectf = new RectF(xInicio, y - config.yLigadurasExpresion, 
+						xFinal + anchoCabezaNota, y + config.alturaArcoLigadurasExpresion);
 				}
 			}
 			else {
@@ -2149,15 +2149,15 @@ public class DrawingMethods {
 				//  No son notas contiguas
 				if (notasEnMedio > 1) {
 					rectf = new RectF(xInicio, ligaduraExpresionYAbajo, 
-						xFinal + anchoCabezaNota, ligaduraExpresionYAbajo + config.getYLigadurasExpresion());
+						xFinal + anchoCabezaNota, ligaduraExpresionYAbajo + config.yLigadurasExpresion);
 				}
 				
 				//  Son notas contiguas
 				else {
 					int y = Math.min(yInicio, yFinal);
-					rectf = new RectF(xInicio, y + config.getYLigadurasExpresion() / 2, 
+					rectf = new RectF(xInicio, y + config.yLigadurasExpresion / 2, 
 						xFinal + anchoCabezaNota, 
-						y + config.getYLigadurasExpresion() / 2 + config.getAlturaArcoLigadurasExpresion());
+						y + config.yLigadurasExpresion / 2 + config.alturaArcoLigadurasExpresion);
 				}
 			}
 
@@ -2181,9 +2181,9 @@ public class DrawingMethods {
 		int y = nota.getY();
 
 		if (xInicio < xFinal) {
-			RectF rectf = new RectF(xInicio + config.getAnchoCabezaNota() +
-					config.getXLigadurasUnion(), y - config.getYLigadurasUnion(), 
-					xFinal - config.getXLigadurasUnion(), y + config.getAlturaArcoLigadurasUnion());
+			RectF rectf = new RectF(xInicio + config.anchoCabezaNota +
+					config.xLigadurasUnion, y - config.yLigadurasUnion, 
+					xFinal - config.xLigadurasUnion, y + config.alturaArcoLigadurasUnion);
 
 			ordenesDibujo.add( new OrdenDibujo(2, rectf, 0, true));
 		}
@@ -2199,16 +2199,16 @@ public class DrawingMethods {
 	}
 	
 	private void dibujarLigaduraDeNotasEnDiferentesRenglones(int xInicio, int yInicio, int xFinal) {
-		RectF rectf = new RectF(xInicio + config.getAnchoCabezaNota() +
-				config.getXLigadurasUnion(), yInicio - config.getYLigadurasUnion(), 
-				config.getXFinalPentagramas(), yInicio + config.getAlturaArcoLigadurasUnion());
+		RectF rectf = new RectF(xInicio + config.anchoCabezaNota +
+				config.xLigadurasUnion, yInicio - config.yLigadurasUnion, 
+				config.xFinalPentagramas, yInicio + config.alturaArcoLigadurasUnion);
 		ordenesDibujo.add( new OrdenDibujo(2, rectf, 0, true));
 
 		int yFinal = yInicio +
-				(config.getDistanciaLineasPentagrama() * 4 + config.getDistanciaPentagramas()) * 
+				(config.distanciaLineasPentagrama * 4 + config.distanciaPentagramas) * 
 				(partitura.getStaves());
-		rectf = new RectF(config.getXInicialPentagramas(), yFinal - config.getYLigadurasUnion(), 
-				xFinal - config.getXLigadurasUnion(), yFinal + config.getAlturaArcoLigadurasUnion());
+		rectf = new RectF(config.xInicialPentagramas, yFinal - config.yLigadurasUnion, 
+				xFinal - config.xLigadurasUnion, yFinal + config.alturaArcoLigadurasUnion);
 		ordenesDibujo.add( new OrdenDibujo(2, rectf, 0, true));
 	}
 	
@@ -2228,10 +2228,10 @@ public class DrawingMethods {
 				ordenesDibujo.add( new OrdenDibujo(
 						1, compas.getXIni(), y_linea, compas.getXFin(), y_linea));
 
-				y_linea += config.getDistanciaLineasPentagrama();
+				y_linea += config.distanciaLineasPentagrama;
 			}
 
-			y_linea += config.getDistanciaPentagramas() - config.getDistanciaLineasPentagrama();
+			y_linea += config.distanciaPentagramas - config.distanciaLineasPentagrama;
 			pentagramas_pendientes--;
 
 		} while (pentagramas_pendientes > 0);
@@ -2241,132 +2241,132 @@ public class DrawingMethods {
 	//  unas pequeñas líneas debajo (o encima) que sirvan de orientación
 	private void dibujarLineasFueraDelPentagrama(Nota nota, int yIniCompas) {
 		int y_margin_custom = yIniCompas + 
-				(config.getDistanciaLineasPentagrama() * 4 + 
-						config.getDistanciaPentagramas()) * (nota.getPentagrama() - 1);
+				(config.distanciaLineasPentagrama * 4 + 
+						config.distanciaPentagramas) * (nota.getPentagrama() - 1);
 		
-		int yNota = nota.notaDeGracia() ? nota.getY() - config.getMargenNotaGracia() : nota.getY();
+		int yNota = nota.notaDeGracia() ? nota.getY() - config.margenNotaGracia : nota.getY();
 
-		if (yNota == y_margin_custom + config.getDistanciaLineasPentagrama() * 4 + 
-				config.getDistanciaLineasPentagramaMitad()) {
+		if (yNota == y_margin_custom + config.distanciaLineasPentagrama * 4 + 
+				config.distanciaLineasPentagramaMitad) {
 			dibujarLineasFueraDelPentagramaAuxiliar(nota.getX(), y_margin_custom +
-					config.getDistanciaLineasPentagrama() * 5);
+					config.distanciaLineasPentagrama * 5);
 		}
 		
-		if (yNota == y_margin_custom + config.getDistanciaLineasPentagrama() * 5) {
+		if (yNota == y_margin_custom + config.distanciaLineasPentagrama * 5) {
 			dibujarLineasFueraDelPentagramaAuxiliar(nota.getX(), y_margin_custom +
-					config.getDistanciaLineasPentagrama() * 5);
+					config.distanciaLineasPentagrama * 5);
 		}
 		
-		if (yNota == y_margin_custom + config.getDistanciaLineasPentagrama() * 5 + 
-				config.getDistanciaLineasPentagramaMitad()) {
+		if (yNota == y_margin_custom + config.distanciaLineasPentagrama * 5 + 
+				config.distanciaLineasPentagramaMitad) {
 			dibujarLineasFueraDelPentagramaAuxiliar(nota.getX(), y_margin_custom +
-					config.getDistanciaLineasPentagrama() * 5);
+					config.distanciaLineasPentagrama * 5);
 			dibujarLineasFueraDelPentagramaAuxiliar(nota.getX(), y_margin_custom +
-					config.getDistanciaLineasPentagrama() * 6);
+					config.distanciaLineasPentagrama * 6);
 		}
 		
-		if (yNota == y_margin_custom + config.getDistanciaLineasPentagrama() * 6) {
+		if (yNota == y_margin_custom + config.distanciaLineasPentagrama * 6) {
 			dibujarLineasFueraDelPentagramaAuxiliar(nota.getX(), y_margin_custom +
-					config.getDistanciaLineasPentagrama() * 5);
+					config.distanciaLineasPentagrama * 5);
 			dibujarLineasFueraDelPentagramaAuxiliar(nota.getX(), y_margin_custom +
-					config.getDistanciaLineasPentagrama() * 6);
+					config.distanciaLineasPentagrama * 6);
 		}
 		
-		if (yNota == y_margin_custom + config.getDistanciaLineasPentagrama() * 6 + 
-				config.getDistanciaLineasPentagramaMitad()) {
+		if (yNota == y_margin_custom + config.distanciaLineasPentagrama * 6 + 
+				config.distanciaLineasPentagramaMitad) {
 
 			dibujarLineasFueraDelPentagramaAuxiliar(nota.getX(), y_margin_custom +
-					config.getDistanciaLineasPentagrama() * 5);
+					config.distanciaLineasPentagrama * 5);
 			dibujarLineasFueraDelPentagramaAuxiliar(nota.getX(), y_margin_custom +
-					config.getDistanciaLineasPentagrama() * 6);
+					config.distanciaLineasPentagrama * 6);
 			dibujarLineasFueraDelPentagramaAuxiliar(nota.getX(), y_margin_custom +
-					config.getDistanciaLineasPentagrama() * 7);
+					config.distanciaLineasPentagrama * 7);
 		}
 		
-		if (yNota == y_margin_custom + config.getDistanciaLineasPentagrama() * 7) {
+		if (yNota == y_margin_custom + config.distanciaLineasPentagrama * 7) {
 			dibujarLineasFueraDelPentagramaAuxiliar(nota.getX(), y_margin_custom +
-					config.getDistanciaLineasPentagrama() * 5);
+					config.distanciaLineasPentagrama * 5);
 			dibujarLineasFueraDelPentagramaAuxiliar(nota.getX(), y_margin_custom +
-					config.getDistanciaLineasPentagrama() * 6);
+					config.distanciaLineasPentagrama * 6);
 			dibujarLineasFueraDelPentagramaAuxiliar(nota.getX(), y_margin_custom +
-					config.getDistanciaLineasPentagrama() * 7);
+					config.distanciaLineasPentagrama * 7);
 		}
 		
-		if (yNota == y_margin_custom + config.getDistanciaLineasPentagrama() * 7 + 
-				config.getDistanciaLineasPentagramaMitad()) {
-
-		}
-		
-		if (yNota == y_margin_custom + config.getDistanciaLineasPentagrama() * 8) {
+		if (yNota == y_margin_custom + config.distanciaLineasPentagrama * 7 + 
+				config.distanciaLineasPentagramaMitad) {
 
 		}
 		
-		if (yNota == y_margin_custom - config.getDistanciaLineasPentagrama() - 
-				config.getDistanciaLineasPentagramaMitad()) {
+		if (yNota == y_margin_custom + config.distanciaLineasPentagrama * 8) {
+
+		}
+		
+		if (yNota == y_margin_custom - config.distanciaLineasPentagrama - 
+				config.distanciaLineasPentagramaMitad) {
 
 			dibujarLineasFueraDelPentagramaAuxiliar(nota.getX(), y_margin_custom - 
-					config.getDistanciaLineasPentagrama());
+					config.distanciaLineasPentagrama);
 		}
 		
-		if (yNota == y_margin_custom - config.getDistanciaLineasPentagrama() * 2) {
+		if (yNota == y_margin_custom - config.distanciaLineasPentagrama * 2) {
 			dibujarLineasFueraDelPentagramaAuxiliar(nota.getX(), y_margin_custom - 
-					config.getDistanciaLineasPentagrama());
+					config.distanciaLineasPentagrama);
 		}
 		
-		if (yNota == y_margin_custom - config.getDistanciaLineasPentagrama() * 2 - 
-				config.getDistanciaLineasPentagramaMitad()) {
+		if (yNota == y_margin_custom - config.distanciaLineasPentagrama * 2 - 
+				config.distanciaLineasPentagramaMitad) {
 
 			dibujarLineasFueraDelPentagramaAuxiliar(nota.getX(), y_margin_custom - 
-					config.getDistanciaLineasPentagrama());
+					config.distanciaLineasPentagrama);
 			dibujarLineasFueraDelPentagramaAuxiliar(nota.getX(), y_margin_custom - 
-					config.getDistanciaLineasPentagrama() * 2);
+					config.distanciaLineasPentagrama * 2);
 		}
 		
-		if (yNota == y_margin_custom - config.getDistanciaLineasPentagrama() * 3) {
+		if (yNota == y_margin_custom - config.distanciaLineasPentagrama * 3) {
 			dibujarLineasFueraDelPentagramaAuxiliar(nota.getX(), y_margin_custom - 
-					config.getDistanciaLineasPentagrama());
+					config.distanciaLineasPentagrama);
 			dibujarLineasFueraDelPentagramaAuxiliar(nota.getX(), y_margin_custom - 
-					config.getDistanciaLineasPentagrama() * 2);
+					config.distanciaLineasPentagrama * 2);
 		}
 		
-		if (yNota == y_margin_custom - config.getDistanciaLineasPentagrama() * 3 - 
-				config.getDistanciaLineasPentagramaMitad()) {
+		if (yNota == y_margin_custom - config.distanciaLineasPentagrama * 3 - 
+				config.distanciaLineasPentagramaMitad) {
 
 			dibujarLineasFueraDelPentagramaAuxiliar(nota.getX(), y_margin_custom - 
-					config.getDistanciaLineasPentagrama());
+					config.distanciaLineasPentagrama);
 			dibujarLineasFueraDelPentagramaAuxiliar(nota.getX(), y_margin_custom - 
-					config.getDistanciaLineasPentagrama() * 2);
+					config.distanciaLineasPentagrama * 2);
 			dibujarLineasFueraDelPentagramaAuxiliar(nota.getX(), y_margin_custom - 
-					config.getDistanciaLineasPentagrama() * 3);
+					config.distanciaLineasPentagrama * 3);
 		}
 		
-		if (yNota == y_margin_custom - config.getDistanciaLineasPentagrama() * 4) {
+		if (yNota == y_margin_custom - config.distanciaLineasPentagrama * 4) {
 			dibujarLineasFueraDelPentagramaAuxiliar(nota.getX(), y_margin_custom - 
-					config.getDistanciaLineasPentagrama());
+					config.distanciaLineasPentagrama);
 			dibujarLineasFueraDelPentagramaAuxiliar(nota.getX(), y_margin_custom - 
-					config.getDistanciaLineasPentagrama() * 2);
+					config.distanciaLineasPentagrama * 2);
 			dibujarLineasFueraDelPentagramaAuxiliar(nota.getX(), y_margin_custom - 
-					config.getDistanciaLineasPentagrama() * 3);
+					config.distanciaLineasPentagrama * 3);
 		}
 		
-		if (yNota == y_margin_custom - config.getDistanciaLineasPentagrama() * 4 - 
-				config.getDistanciaLineasPentagramaMitad()) {
+		if (yNota == y_margin_custom - config.distanciaLineasPentagrama * 4 - 
+				config.distanciaLineasPentagramaMitad) {
 			dibujarLineasFueraDelPentagramaAuxiliar(nota.getX(), y_margin_custom - 
-					config.getDistanciaLineasPentagrama());
+					config.distanciaLineasPentagrama);
 			dibujarLineasFueraDelPentagramaAuxiliar(nota.getX(), y_margin_custom - 
-					config.getDistanciaLineasPentagrama() * 2);
+					config.distanciaLineasPentagrama * 2);
 			dibujarLineasFueraDelPentagramaAuxiliar(nota.getX(), y_margin_custom - 
-					config.getDistanciaLineasPentagrama() * 3);
+					config.distanciaLineasPentagrama * 3);
 			dibujarLineasFueraDelPentagramaAuxiliar(nota.getX(), y_margin_custom - 
-					config.getDistanciaLineasPentagrama() * 4);
+					config.distanciaLineasPentagrama * 4);
 		}
 	}
 	
 	//  Función auxiliar para las líneas de fuera del pentagrama
 	private void dibujarLineasFueraDelPentagramaAuxiliar(int x, int y) {
 		ordenesDibujo.add( new OrdenDibujo(
-				1, x - config.getMargenAnchoCabezaNota(), y, 
-				x + config.getAnchoCabezaNota() + config.getMargenAnchoCabezaNota(), y));
+				1, x - config.margenAnchoCabezaNota, y, 
+				x + config.anchoCabezaNota + config.margenAnchoCabezaNota, y));
 	}
 	
 	private void dibujarNotasDeCompas(Compas compas) {
@@ -2389,14 +2389,14 @@ public class DrawingMethods {
 			dibujarLineasFueraDelPentagrama(notas.get(i), compas.getYIni());
 			
 			gestionarOctavarium(notas.get(i), compas.getYIni() - 
-					config.getDistanciaLineasPentagrama() * 6);
+					config.distanciaLineasPentagrama * 6);
 		}
 	}
 	
 	private void dibujarNumeroDeCompas(Compas compas) {
-		ordenesDibujo.add( new OrdenDibujo(config.getTamanoLetraNumeroCompas(), 
+		ordenesDibujo.add( new OrdenDibujo(config.tamanoLetraNumeroCompas, 
 				false, compas.getNumeroCompas() + "", 
-				compas.getXIni() - config.getXNumeroCompas(), compas.getYIni() - config.getYNumeroCompas()));
+				compas.getXIni() - config.xNumeroCompas, compas.getYIni() - config.yNumeroCompas));
 	}
 	
 	private void dibujarOctavarium() {		
@@ -2406,20 +2406,20 @@ public class DrawingMethods {
 		if (x_ini_octavarium < x_fin_octavarium) {
 			ordenesDibujo.add( new OrdenDibujo(
 					2, x_ini_octavarium, y_ini_octavarium, 
-					x_fin_octavarium + config.getAnchoCabezaNota(), y_fin_octavarium));
+					x_fin_octavarium + config.anchoCabezaNota, y_fin_octavarium));
 		}
 		else {
 			ordenesDibujo.add( new OrdenDibujo(
 					2, x_ini_octavarium, y_ini_octavarium, 
-					config.getXFinalPentagramas(), y_ini_octavarium));
+					config.xFinalPentagramas, y_ini_octavarium));
 			ordenesDibujo.add( new OrdenDibujo(
-					2, config.getXInicialPentagramas(), y_fin_octavarium, 
-					x_fin_octavarium + config.getAnchoCabezaNota(), y_fin_octavarium));
+					2, config.xInicialPentagramas, y_fin_octavarium, 
+					x_fin_octavarium + config.anchoCabezaNota, y_fin_octavarium));
 		}
 		
 		ordenesDibujo.add( new OrdenDibujo(
-				2, x_fin_octavarium + config.getAnchoCabezaNota(), y_fin_octavarium, 
-				x_fin_octavarium + config.getAnchoCabezaNota(), y_fin_octavarium + config.getYOctavarium()));
+				2, x_fin_octavarium + config.anchoCabezaNota, y_fin_octavarium, 
+				x_fin_octavarium + config.anchoCabezaNota, y_fin_octavarium + config.yOctavarium));
 	}
 	
 	private void gestionarOctavarium(Nota nota, int margin_y) {
@@ -2471,11 +2471,11 @@ public class DrawingMethods {
 	private boolean dibujarPlicaDeNota(Nota nota, int y_beams) {
 		if (nota.tienePlica()) {
 			int mitadCabezaNota = nota.notaDeGracia() ? 
-					config.getMitadCabezaNotaGraciaVertical() : config.getMitadCabezaNotaVertical();
+					config.mitadCabezaVerticalNotaGracia : config.mitadCabezaVertical;
 			int anchoCabezaNota = nota.notaDeGracia() ? 
-					config.getAnchoCabezaNotaGracia() : config.getAnchoCabezaNota();
+					config.anchoCabezaNotaGracia : config.anchoCabezaNota;
 			int longitudPlica = nota.notaDeGracia() ? 
-					config.getLongitudPlicaNotaGracia() : config.getLongitudPlica();
+					config.longitudPlicaNotaGracia : config.longitudPlica;
 			
 			int x1 = 0;
 			int y1 = nota.getY() + mitadCabezaNota;
@@ -2520,30 +2520,30 @@ public class DrawingMethods {
 			case -5:
 				if (quintas.getNotaQuintas() == 3) {
 					dibujarQuintasAlteraciones(flat, quintas.getX(), 
-							quintas.getMargenY() + config.getDistanciaLineasPentagrama());
+							quintas.getMargenY() + config.distanciaLineasPentagrama);
 					dibujarQuintasAlteraciones(flat, quintas.getX() + 20, 
-							quintas.getMargenY() - config.getDistanciaLineasPentagramaMitad());
+							quintas.getMargenY() - config.distanciaLineasPentagramaMitad);
 					dibujarQuintasAlteraciones(flat, quintas.getX() + 40, 
-							quintas.getMargenY() + config.getDistanciaLineasPentagramaMitad() +
-							config.getDistanciaLineasPentagrama());
+							quintas.getMargenY() + config.distanciaLineasPentagramaMitad +
+							config.distanciaLineasPentagrama);
 					dibujarQuintasAlteraciones(flat, quintas.getX() + 60, quintas.getMargenY());
 					dibujarQuintasAlteraciones(flat, quintas.getX() + 80, 
-							quintas.getMargenY() + config.getDistanciaLineasPentagrama() * 2);
+							quintas.getMargenY() + config.distanciaLineasPentagrama * 2);
 					
 					if (partitura.getStaves() == 2) {
-						int offset = config.getDistanciaLineasPentagrama() * 4 +
-								config.getDistanciaPentagramas() + config.getDistanciaLineasPentagrama();
+						int offset = config.distanciaLineasPentagrama * 4 +
+								config.distanciaPentagramas + config.distanciaLineasPentagrama;
 						
 						dibujarQuintasAlteraciones(flat, quintas.getX(), 
-								quintas.getMargenY() + offset + config.getDistanciaLineasPentagrama());
+								quintas.getMargenY() + offset + config.distanciaLineasPentagrama);
 						dibujarQuintasAlteraciones(flat, quintas.getX() + 20, 
-								quintas.getMargenY() + offset - config.getDistanciaLineasPentagramaMitad());
+								quintas.getMargenY() + offset - config.distanciaLineasPentagramaMitad);
 						dibujarQuintasAlteraciones(flat, quintas.getX() + 40, 
-								quintas.getMargenY() + offset + config.getDistanciaLineasPentagramaMitad() +
-								config.getDistanciaLineasPentagrama());
+								quintas.getMargenY() + offset + config.distanciaLineasPentagramaMitad +
+								config.distanciaLineasPentagrama);
 						dibujarQuintasAlteraciones(flat, quintas.getX() + 60, quintas.getMargenY() + offset);
 						dibujarQuintasAlteraciones(flat, quintas.getX() + 80, 
-								quintas.getMargenY() + offset + config.getDistanciaLineasPentagrama() * 2);
+								quintas.getMargenY() + offset + config.distanciaLineasPentagrama * 2);
 					}
 				}
 				break;
@@ -2558,28 +2558,28 @@ public class DrawingMethods {
 	}
 
 	private void dibujarSlash(int x, int y) {
-		ordenesDibujo.add( new OrdenDibujo(2, x + config.getXInicioSlash(), 
-				y + config.getYInicioSlash(), x - config.getXFinSlash(), y + config.getYFinSlash()));
+		ordenesDibujo.add( new OrdenDibujo(2, x + config.xInicioSlash, 
+				y + config.yInicioSlash, x - config.xFinSlash, y + config.yFinSlash));
 	}
 	
 	private void dibujarSlide(Nota nota, int x_ini_slide, int y_ini_slide) {
 		if (x_ini_slide < nota.getX()) {
 			ordenesDibujo.add( new OrdenDibujo(
-				1, x_ini_slide + config.getAnchoCabezaNota(), 
-					y_ini_slide + config.getMitadCabezaNotaVertical(), nota.getX(), 
-						nota.getY() + config.getMitadCabezaNotaVertical()));
+				1, x_ini_slide + config.anchoCabezaNota, 
+					y_ini_slide + config.mitadCabezaVertical, nota.getX(), 
+						nota.getY() + config.mitadCabezaVertical));
 		}
 		else {
 			ordenesDibujo.add( new OrdenDibujo(
-				1, x_ini_slide + config.getAnchoCabezaNota(), 
-					y_ini_slide + config.getMitadCabezaNotaVertical(), 
-						config.getXFinalPentagramas(), 
-								y_ini_slide - config.getYSlideTruncado()));
+				1, x_ini_slide + config.anchoCabezaNota, 
+					y_ini_slide + config.mitadCabezaVertical, 
+						config.xFinalPentagramas, 
+								y_ini_slide - config.ySlideTruncado));
 			
 			ordenesDibujo.add( new OrdenDibujo(
-				1, config.getXInicialPentagramas(), 
-					nota.getY() + config.getMitadCabezaNotaVertical() + config.getYSlideTruncado(), 
-						nota.getX(), nota.getY() + config.getMitadCabezaNotaVertical()));
+				1, config.xInicialPentagramas, 
+					nota.getY() + config.mitadCabezaVertical + config.ySlideTruncado, 
+						nota.getX(), nota.getY() + config.mitadCabezaVertical));
 		}
 	}
 	
@@ -2587,17 +2587,17 @@ public class DrawingMethods {
 		if (compas.getTempo().dibujar()) {
 			Tempo tempo = compas.getTempo();
 						
-			ordenesDibujo.add( new OrdenDibujo(config.getTamanoLetraTempo(), 
+			ordenesDibujo.add( new OrdenDibujo(config.tamanoLetraTempo, 
 					false, tempo.getNumeradorString(), tempo.getX(), tempo.getYNumerador()));
-			ordenesDibujo.add( new OrdenDibujo(config.getTamanoLetraTempo(), 
+			ordenesDibujo.add( new OrdenDibujo(config.tamanoLetraTempo, 
 					false, tempo.getDenominadorString(), tempo.getX(), tempo.getYDenominador()));
 	
 			if (partitura.getStaves() == 2) {
-				int margenY = config.getDistanciaLineasPentagrama() * 4 + config.getDistanciaPentagramas();
+				int margenY = config.distanciaLineasPentagrama * 4 + config.distanciaPentagramas;
 				
-				ordenesDibujo.add( new OrdenDibujo(config.getTamanoLetraTempo(), 
+				ordenesDibujo.add( new OrdenDibujo(config.tamanoLetraTempo, 
 						false, tempo.getNumeradorString(), tempo.getX(), tempo.getYNumerador() + margenY));
-				ordenesDibujo.add( new OrdenDibujo(config.getTamanoLetraTempo(), 
+				ordenesDibujo.add( new OrdenDibujo(config.tamanoLetraTempo, 
 						false, tempo.getDenominadorString(), tempo.getX(), tempo.getYDenominador() + margenY));
 			}
 		}
@@ -2609,7 +2609,7 @@ public class DrawingMethods {
 		for (int i=0; i<numTextos; i++) {
 			Texto texto = compas.getTexto(i);
 			
-			ordenesDibujo.add( new OrdenDibujo(config.getTamanoLetraWords(), 
+			ordenesDibujo.add( new OrdenDibujo(config.tamanoLetraWords, 
 					false, texto.getTexto(), texto.getX(), texto.getY()));
 		}
 	}
@@ -2622,11 +2622,11 @@ public class DrawingMethods {
 			wedge = compas.getCrescendo(i);
 			
 			ordenesDibujo.add( new OrdenDibujo(2, wedge.getXIni(), 
-					wedge.getYIni() + config.getAlturaCrescendos() / 2,
+					wedge.getYIni() + config.alturaCrescendos / 2,
 					wedge.getXFin(), wedge.getYIni()));
 			ordenesDibujo.add( new OrdenDibujo(2, wedge.getXIni(), 
-					wedge.getYIni() + config.getAlturaCrescendos() / 2,
-					wedge.getXFin(), wedge.getYIni() + config.getAlturaCrescendos()));
+					wedge.getYIni() + config.alturaCrescendos / 2,
+					wedge.getXFin(), wedge.getYIni() + config.alturaCrescendos));
 		}
 		
 		num = compas.numDiminuendos();
@@ -2635,10 +2635,10 @@ public class DrawingMethods {
 			wedge = compas.getDiminuendo(i);
 			
 			ordenesDibujo.add( new OrdenDibujo(2, wedge.getXIni(), 
-					wedge.getYIni(), wedge.getXFin(), wedge.getYIni() + config.getAlturaCrescendos() / 2));
+					wedge.getYIni(), wedge.getXFin(), wedge.getYIni() + config.alturaCrescendos / 2));
 			ordenesDibujo.add( new OrdenDibujo(2, wedge.getXIni(), 
-					wedge.getYIni() + config.getAlturaCrescendos(), 
-					wedge.getXFin(), wedge.getYIni() + config.getAlturaCrescendos() / 2));
+					wedge.getYIni() + config.alturaCrescendos, 
+					wedge.getXFin(), wedge.getYIni() + config.alturaCrescendos / 2));
 		}
 	}
 	
@@ -2662,7 +2662,7 @@ public class DrawingMethods {
 			int ind, int y_beams, int xAlteraciones) {
 		
 		if (figurasGraficas.get(ind + 1) == 1)
-			nota.setX(nota.getX() - config.getAnchoCabezaNota());
+			nota.setX(nota.getX() - config.anchoCabezaNota);
 		
 		dibujarFiguraGrafica(nota, figurasGraficas.get(ind++), y_beams, xAlteraciones);
 		return ind;

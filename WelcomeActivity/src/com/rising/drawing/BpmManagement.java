@@ -75,15 +75,15 @@ public class BpmManagement {
 	private int dibujarBpm(Compas compas) {
 		
 		if (vista == Vista.VERTICAL) {
-			verticalDrawing.add(new OrdenDibujo(config.getTamanoLetraBpm(), 
-					false, "Bpm = " + compas.getBpm(), compas.getXIni(), 
-					compas.getYIni() - config.getYBpm()));
+			verticalDrawing.add(new OrdenDibujo(config.tamanoLetraBpm, 
+				false, "Bpm = " + compas.getBpm(), compas.getXIni(), 
+					compas.getYIni() - config.yBpm));
 			return verticalDrawing.size() - 1;
 		}
 		else {
-			horizontalDrawing.add(new OrdenDibujo(config.getTamanoLetraBpm(), 
-					false, "Bpm = " + compas.getBpm(), compas.getXIni(), 
-					compas.getYIni() - config.getYBpm()));
+			horizontalDrawing.add(new OrdenDibujo(config.tamanoLetraBpm, 
+				false, "Bpm = " + compas.getBpm(), compas.getXIni(), 
+					compas.getYIni() - config.yBpm));
 			return horizontalDrawing.size() - 1;
 		}
 	}
@@ -94,7 +94,7 @@ public class BpmManagement {
 		MDialog = new Dialog(context,  R.style.cust_dialog);	
 		MDialog.setContentView(R.layout.metronome_dialog_compas);
 		MDialog.setTitle(R.string.metronome);
-		MDialog.getWindow().setLayout(config.getAnchoDialogBpm(), config.getAltoDialogBpm());	
+		MDialog.getWindow().setLayout(config.anchoDialogBpm, config.altoDialogBpm);	
 
 		final SeekBar seekBar_metronome = (SeekBar)MDialog.findViewById(R.id.seekBar_metronome);
 		

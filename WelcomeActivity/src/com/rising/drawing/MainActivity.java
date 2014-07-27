@@ -356,7 +356,7 @@ public class MainActivity extends Activity{
 		MDialog = new Dialog(MainActivity.this, R.style.cust_dialog);	
 		MDialog.setContentView(R.layout.metronome_dialog);
 		MDialog.setTitle(R.string.metronome);
-		MDialog.getWindow().setLayout(config.getAnchoDialogBpm(), config.getAltoDialogBpm());
+		MDialog.getWindow().setLayout(config.anchoDialogBpm, config.altoDialogBpm);
 		
 		seekBar_metronome = (SeekBar)MDialog.findViewById(R.id.seekBar_metronome);
 		metronome_speed = (NumberPicker)MDialog.findViewById(R.id.nm_metronome);

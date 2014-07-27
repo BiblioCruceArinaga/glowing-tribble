@@ -496,9 +496,9 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 			float distancia = Math.abs(yOffset - yIni);
 			
 			if (yIni < yOffset)
-				scroll.hacerScroll(vista, (int) -distancia - config.getDistanciaPentagramas());
+				scroll.hacerScroll(vista, (int) -distancia - config.distanciaPentagramas);
 			else
-				scroll.hacerScroll(vista, (int) distancia - config.getDistanciaPentagramas());
+				scroll.hacerScroll(vista, (int) distancia - config.distanciaPentagramas);
 		}
 		
 		return true;

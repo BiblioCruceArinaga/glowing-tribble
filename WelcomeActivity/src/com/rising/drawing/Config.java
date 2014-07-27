@@ -1,107 +1,107 @@
 package com.rising.drawing;
 
-
 public class Config {
 	
 	private boolean supported = true;
 	
-	private int alto_dialog_bpm;
-	private int altura_arco_ligaduras_expresion;
-	private int altura_arco_ligaduras_union;
-	private int altura_crescendos;
-	private int ancho_beams;
-	private int ancho_beams_nota_gracia;
-	private int ancho_cabeza_nota;
-	private int ancho_cabeza_nota_gracia;
-	private int ancho_claves;
-	private int ancho_dialog_bpm;
-	private int ancho_hooks;
-	private int ancho_ligadura_union_max;
-	private int ancho_tempo;
-	private int change_account_horizontal;
-	private int change_account_vertical;
-	private int desplazamiento_extra_nota_gracia;
-	private int distancia_corchetes;
-	private int distancia_entre_beams;
-	private int distancia_entre_beams_notas_gracia;
-	private int distancia_lineas_pentagrama;
-	private int distancia_lineas_pentagrama_mitad;
-	private int distancia_pentagramas;
-	private int x_inicial_pentagramas;
-	private int x_final_pentagramas;
-	private int largo_imagen_corchete;
-	private int largo_imagen_corchete_gracia;
-	private int longitud_plica;
-	private int longitud_plica_nota_gracia;
-	private int margen_ancho_cabeza_nota;
-	private int margen_autor;
-	private int margen_barlines;
-	private int margen_derecho_compases;
-	private int margen_inferior_autor;
-	private int margen_izquierdo_compases;
-	private int margen_nota_gracia;
-	private int margen_obra;
-	private int margen_superior;
-	private int mitad_cabeza_nota_vertical;
-	private int mitad_cabeza_nota_gracia_vertical;
-	private int offset_accent;
-	private int offset_ultima_nota_gracia;
-	private int offset_ligadura_expresion;
-	private int offset_ligadura_union;
-	private int radio_octavarium;
-	private int radio_puntillos;
-	private int radio_staccatos;
-	private int tamano_letra_autor;
-	private int tamano_letra_bip_preparacion;
-	private int tamano_letra_bpm;
-	private int tamano_letra_numero_compas;
-	private int tamano_letra_obra;
-	private int tamano_letra_palm_mute;
-	private int tamano_letra_pulso;
-	private int tamano_letra_tapping;
-	private int tamano_letra_tempo;
-	private int tamano_letra_tresillo;
-	private int tamano_letra_words;
-	private int unidad_desplazamiento;
-	private int width;
-	private int height;
+	public int altoDialogBpm;
+	public int alturaArcoLigadurasExpresion;
+	public int alturaArcoLigadurasUnion;
+	public int alturaCrescendos;
+	public int anchoBeams;
+	public int anchoBeamsNotaGracia;
+	public int anchoCabezaNota;
+	public int anchoCabezaNotaGracia;
+	public int anchoClaves;
+	public int anchoDialogBpm;
+	public int anchoHooks;
+	public int anchoLigaduraUnionMax;
+	public int anchoTempo;
+	public int changeAccountHorizontal;
+	public int changeAccountVertical;
+	public int desplazamientoExtraNotaGracia;
+	public int distanciaCorchetes;
+	public int distanciaEntreBeams;
+	public int distanciaEntreBeamsNotaGracia;
+	public int distanciaLineasPentagrama;
+	public int distanciaLineasPentagramaMitad;
+	public int distanciaPentagramas;
+	public int largoImagenCorchete;
+	public int largoImagenCorcheteNotaGracia;
+	public int longitudPlica;
+	public int longitudPlicaNotaGracia;
+	public int margenAnchoCabezaNota;
+	public int margenAutor;
+	public int margenBarlines;
+	public int margenDerechoCompases;
+	public int margenInferiorAutor;
+	public int margenIzquierdoCompases;
+	public int margenNotaGracia;
+	public int margenObra;
+	public int margenSuperior;
+	public int mitadCabezaVertical;
+	public int mitadCabezaVerticalNotaGracia;
+	public int offsetAccent;
+	public int offsetUltimaNotaGracia;
+	public int offsetLigaduraExpresion;
+	public int offsetLigaduraUnion;
+	public int radioOctavarium;
+	public int radioPuntillos;
+	public int radioStaccatos;
+	public int tamanoLetraAutor;
+	public int tamanoLetraBipPreparacion;
+	public int tamanoLetraBpm;
+	public int tamanoLetraNumeroCompas;
+	public int tamanoLetraObra;
+	public int tamanoLetraPalmMute;
+	public int tamanoLetraPulso;
+	public int tamanoLetraTapping;
+	public int tamanoLetraTempo;
+	public int tamanoLetraTresillo;
+	public int tamanoLetraWords;
+	public int unidadDesplazamiento;
+	public int width;
+	public int height;
 	
-	private int y_accent_up;
-	private int x_accidental;
-	private int x_accidental_2;
-	private int x_accidental_nota_gracia;
-	private int y_accidental;
-	private int y_accidental_flat;
-	private int x_arpegio;
-	private int y_bend;
-	private int y_bpm;
-	private int y_clave_sol_segunda;
-	private int x_inicio_slash;
-	private int x_fin_slash;
-	private int y_inicio_slash;
-	private int y_fin_slash;
-	private int x_fermata;
-	private int y_fermata;
-	private int y_ligaduras_expresion;
-	private int x_ligaduras_union;
-	private int y_ligaduras_union;
-	private int x_numero_compas;
-	private int y_numero_compas;
-	private int y_octavarium;
-	private int y_palm_mute;
-	private int x_puntillo;
-	private int y_puntillo_arriba;
-	private int y_puntillo_abajo;
-	private int y_silencio_blanca;
-	private int y_slide_truncado;
-	private int x_staccato;
-	private int y_staccato_arriba;
-	private int y_staccato_abajo;
-	private int y_tapping;
-	private int x_tresillo;
-	private int y_tresillo_arriba;
-	private int y_tresillo_abajo;
-	private int y_trill;
+	public int xAccidental;
+	public int xAccidental2;
+	public int xAccidentalNotaGracia;
+	public int xArpegio;
+	public int xFermata;
+	public int xFinalPentagramas;
+	public int xFinSlash;
+	public int xInicialPentagramas;
+	public int xInicioSlash;
+	public int xLigadurasUnion;
+	public int xNumeroCompas;
+	public int xPuntillo;
+	public int xStaccato;
+	public int xTresillo;
+
+	public int yAccentUp;
+	public int yAccidental;
+	public int yAccidentalFlat;
+	public int yBend;
+	public int yBpm;
+	public int yClaveSolSegunda;
+	public int yFermata;
+	public int yFinSlash;
+	public int yInicioSlash;
+	public int yLigadurasExpresion;
+	public int yLigadurasUnion;
+	public int yNumeroCompas;
+	public int yOctavarium;
+	public int yPalmMute;
+	public int yPuntilloArriba;
+	public int yPuntilloAbajo;
+	public int ySilencioBlanca;
+	public int ySlideTruncado;
+	public int yStaccatoAbajo;
+	public int yStaccatoArriba;
+	public int yTapping;
+	public int yTresilloAbajo;
+	public int yTresilloArriba;
+	public int yTrill;
 	
 	public Config(int densityDPI, int width, int height) {
 		
@@ -120,102 +120,103 @@ public class Config {
 				
 				switch(height){
 					case 720:
-						alto_dialog_bpm = 850;
-						altura_arco_ligaduras_expresion = 30;
-						altura_arco_ligaduras_union = 50;
-						altura_crescendos = 20;
-						ancho_beams = 8;
-						ancho_beams_nota_gracia = 4;
-						ancho_cabeza_nota = 26;
-						ancho_cabeza_nota_gracia = 15;
-						ancho_claves = 88;
-						ancho_dialog_bpm = 600;
-						ancho_hooks = 16;
-						ancho_ligadura_union_max = 150;
-						ancho_tempo = 65;
-						change_account_horizontal = 2;
-						change_account_vertical = 4;
-						desplazamiento_extra_nota_gracia = 40;
-						distancia_corchetes = 15;
-						distancia_entre_beams = 12;
-						distancia_entre_beams_notas_gracia = 6;
-						distancia_lineas_pentagrama = 19;
-						distancia_lineas_pentagrama_mitad = 9;
-						distancia_pentagramas = 240;
-						largo_imagen_corchete = 25;
-						largo_imagen_corchete_gracia = 5;
-						longitud_plica = 60;
-						longitud_plica_nota_gracia = 30;
-						margen_ancho_cabeza_nota = 5;
-						margen_autor = 180;
-						margen_barlines = 10;
-						margen_derecho_compases = 70;
-						margen_inferior_autor = 320;
-						margen_izquierdo_compases = 50;
-						margen_nota_gracia = 4;
-						margen_obra = 90;
-						margen_superior = 80;
-						mitad_cabeza_nota_vertical = 10;
-						mitad_cabeza_nota_gracia_vertical = 4;
-						offset_accent = 8;
-						offset_ligadura_expresion = 40;
-						offset_ligadura_union = 50;
-						offset_ultima_nota_gracia = 24;
-						radio_octavarium = 3;
-						radio_puntillos = 4;
-						radio_staccatos = 4;
-						tamano_letra_autor = 50;
-						tamano_letra_bip_preparacion = 300;
-						tamano_letra_bpm = 50;
-						tamano_letra_numero_compas = 30;
-						tamano_letra_obra = 80;
-						tamano_letra_palm_mute = 20;
-						tamano_letra_pulso = 50;
-						tamano_letra_tapping = 30;
-						tamano_letra_tresillo = 25;
-						tamano_letra_tempo = 45;
-						tamano_letra_words = 30;
-						unidad_desplazamiento = 50;
+						altoDialogBpm = 850;
+						alturaArcoLigadurasExpresion = 30;
+						alturaArcoLigadurasUnion = 50;
+						alturaCrescendos = 20;
+						anchoBeams = 8;
+						anchoBeamsNotaGracia = 4;
+						anchoCabezaNota = 26;
+						anchoCabezaNotaGracia = 15;
+						anchoClaves = 88;
+						anchoDialogBpm = 600;
+						anchoHooks = 16;
+						anchoLigaduraUnionMax = 150;
+						anchoTempo = 65;
+						changeAccountHorizontal = 2;
+						changeAccountVertical = 4;
+						desplazamientoExtraNotaGracia = 40;
+						distanciaCorchetes = 15;
+						distanciaEntreBeams = 12;
+						distanciaEntreBeamsNotaGracia = 6;
+						distanciaLineasPentagrama = 19;
+						distanciaLineasPentagramaMitad = 9;
+						distanciaPentagramas = 240;
+						largoImagenCorchete = 25;
+						largoImagenCorcheteNotaGracia = 5;
+						longitudPlica = 60;
+						longitudPlicaNotaGracia = 30;
+						margenAnchoCabezaNota = 5;
+						margenAutor = 180;
+						margenBarlines = 10;
+						margenDerechoCompases = 70;
+						margenInferiorAutor = 320;
+						margenIzquierdoCompases = 50;
+						margenNotaGracia = 4;
+						margenObra = 90;
+						margenSuperior = 80;
+						mitadCabezaVertical = 10;
+						mitadCabezaVerticalNotaGracia = 4;
+						offsetAccent = 8;
+						offsetLigaduraExpresion = 40;
+						offsetLigaduraUnion = 50;
+						offsetUltimaNotaGracia = 24;
+						radioOctavarium = 3;
+						radioPuntillos = 4;
+						radioStaccatos = 4;
+						tamanoLetraAutor = 50;
+						tamanoLetraBipPreparacion = 300;
+						tamanoLetraBpm = 50;
+						tamanoLetraNumeroCompas = 30;
+						tamanoLetraObra = 80;
+						tamanoLetraPalmMute = 20;
+						tamanoLetraPulso = 50;
+						tamanoLetraTapping = 30;
+						tamanoLetraTresillo = 25;
+						tamanoLetraTempo = 45;
+						tamanoLetraWords = 30;
+						unidadDesplazamiento = 50;
 						this.width = width;
-										
-						y_accent_up = 30;
-						x_accidental = 20;
-						x_accidental_2 = 10;
-						x_accidental_nota_gracia = 10;
-						y_accidental = 5;
-						y_accidental_flat = 12;
-						x_arpegio = 20;
-						y_bend = 40;
-						y_bpm = 30;
-						y_clave_sol_segunda = 63;
-						x_inicial_pentagramas = 80;
-						x_final_pentagramas = width - x_inicial_pentagramas;
-						x_inicio_slash = 15;
-						x_fin_slash = 5;
-						y_inicio_slash = 10;
-						y_fin_slash = 20;
-						x_fermata = 15;
-						y_fermata = 50;
-						y_ligaduras_expresion = 50;
-						x_ligaduras_union = 20;
-						y_ligaduras_union = 24;
-						x_numero_compas = 50;
-						y_numero_compas = 15;
-						y_octavarium = 30;
-						y_palm_mute = 50;
-						x_puntillo = ancho_cabeza_nota + 10;
-						y_puntillo_arriba = mitad_cabeza_nota_vertical - 10;
-						y_puntillo_abajo = mitad_cabeza_nota_vertical + 10;
-						y_silencio_blanca = 10;
-						y_slide_truncado = 20;
-						x_staccato = 15;
-						y_staccato_arriba = 28;
-						y_staccato_abajo = 14;
-						y_tapping = 50;
-						x_tresillo = 18;
-						y_tresillo_arriba = 9;
-						y_tresillo_abajo = 26;
-						y_trill = 50;
+						
+						xAccidental = 20;
+						xAccidental2 = 10;
+						xAccidentalNotaGracia = 5;
+						xArpegio = 55;
+						xInicialPentagramas = 80;
+						xInicioSlash = 15;
+						xFermata = 15;
+						xFinalPentagramas = width - xInicialPentagramas;
+						xFinSlash = 5;
+						xLigadurasUnion = 20;
+						xNumeroCompas = 50;
+						xPuntillo = anchoCabezaNota + 10;
+						xStaccato = 15;
+						xTresillo = 18;
+						
+						yAccentUp = 30;
+						yAccidental = 5;
+						yAccidentalFlat = 12;
+						yBend = 40;
+						yBpm = 30;
+						yClaveSolSegunda = 63;
+						yInicioSlash = 10;
+						yFermata = 50;
+						yFinSlash = 20;
+						yLigadurasExpresion = 50;
+						yLigadurasUnion = 24;
+						yNumeroCompas = 15;
+						yOctavarium = 30;
+						yPalmMute = 50;
+						yPuntilloArriba = mitadCabezaVertical - 10;
+						yPuntilloAbajo = mitadCabezaVertical + 10;
+						ySilencioBlanca = 10;
+						ySlideTruncado = 20;
+						yStaccatoArriba = 28;
+						yStaccatoAbajo = 14;
+						yTapping = 50;
+						yTresilloArriba = 9;
+						yTresilloAbajo = 26;
+						yTrill = 44;
 						break;
 					case 800:
 						
@@ -224,102 +225,103 @@ public class Config {
 					case 1080:
 						break;
 					default:
-						alto_dialog_bpm = 850;
-						altura_arco_ligaduras_expresion = 30;
-						altura_arco_ligaduras_union = 50;
-						altura_crescendos = 20;
-						ancho_beams = 8;
-						ancho_beams_nota_gracia = 4;
-						ancho_cabeza_nota = 26;
-						ancho_cabeza_nota_gracia = 15;
-						ancho_claves = 88;
-						ancho_dialog_bpm = 600;
-						ancho_hooks = 16;
-						ancho_ligadura_union_max = 150;
-						ancho_tempo = 65;
-						change_account_horizontal = 2;
-						change_account_vertical = 4;
-						desplazamiento_extra_nota_gracia = 40;
-						distancia_corchetes = 15;
-						distancia_entre_beams = 12;
-						distancia_entre_beams_notas_gracia = 6;
-						distancia_lineas_pentagrama = 19;
-						distancia_lineas_pentagrama_mitad = 9;
-						distancia_pentagramas = 240;
-						largo_imagen_corchete = 25;
-						largo_imagen_corchete_gracia = 5;
-						longitud_plica = 60;
-						longitud_plica_nota_gracia = 30;
-						margen_ancho_cabeza_nota = 5;
-						margen_autor = 180;
-						margen_barlines = 10;
-						margen_derecho_compases = 70;
-						margen_inferior_autor = 320;
-						margen_izquierdo_compases = 50;
-						margen_nota_gracia = 4;
-						margen_obra = 90;
-						margen_superior = 80;
-						mitad_cabeza_nota_vertical = 10;
-						mitad_cabeza_nota_gracia_vertical = 4;
-						offset_accent = 8;
-						offset_ligadura_expresion = 40;
-						offset_ligadura_union = 50;
-						offset_ultima_nota_gracia = 24;
-						radio_octavarium = 3;
-						radio_puntillos = 4;
-						radio_staccatos = 4;
-						tamano_letra_autor = 50;
-						tamano_letra_bip_preparacion = 300;
-						tamano_letra_bpm = 50;
-						tamano_letra_numero_compas = 30;
-						tamano_letra_obra = 80;
-						tamano_letra_palm_mute = 20;
-						tamano_letra_pulso = 50;
-						tamano_letra_tapping = 30;
-						tamano_letra_tresillo = 25;
-						tamano_letra_tempo = 45;
-						tamano_letra_words = 30;
-						unidad_desplazamiento = 50;
+						altoDialogBpm = 850;
+						alturaArcoLigadurasExpresion = 30;
+						alturaArcoLigadurasUnion = 50;
+						alturaCrescendos = 20;
+						anchoBeams = 8;
+						anchoBeamsNotaGracia = 4;
+						anchoCabezaNota = 26;
+						anchoCabezaNotaGracia = 15;
+						anchoClaves = 88;
+						anchoDialogBpm = 600;
+						anchoHooks = 16;
+						anchoLigaduraUnionMax = 150;
+						anchoTempo = 65;
+						changeAccountHorizontal = 2;
+						changeAccountVertical = 4;
+						desplazamientoExtraNotaGracia = 40;
+						distanciaCorchetes = 15;
+						distanciaEntreBeams = 12;
+						distanciaEntreBeamsNotaGracia = 6;
+						distanciaLineasPentagrama = 19;
+						distanciaLineasPentagramaMitad = 9;
+						distanciaPentagramas = 240;
+						largoImagenCorchete = 25;
+						largoImagenCorcheteNotaGracia = 5;
+						longitudPlica = 60;
+						longitudPlicaNotaGracia = 30;
+						margenAnchoCabezaNota = 5;
+						margenAutor = 180;
+						margenBarlines = 10;
+						margenDerechoCompases = 70;
+						margenInferiorAutor = 320;
+						margenIzquierdoCompases = 50;
+						margenNotaGracia = 4;
+						margenObra = 90;
+						margenSuperior = 80;
+						mitadCabezaVertical = 10;
+						mitadCabezaVerticalNotaGracia = 4;
+						offsetAccent = 8;
+						offsetLigaduraExpresion = 40;
+						offsetLigaduraUnion = 50;
+						offsetUltimaNotaGracia = 24;
+						radioOctavarium = 3;
+						radioPuntillos = 4;
+						radioStaccatos = 4;
+						tamanoLetraAutor = 50;
+						tamanoLetraBipPreparacion = 300;
+						tamanoLetraBpm = 50;
+						tamanoLetraNumeroCompas = 30;
+						tamanoLetraObra = 80;
+						tamanoLetraPalmMute = 20;
+						tamanoLetraPulso = 50;
+						tamanoLetraTapping = 30;
+						tamanoLetraTresillo = 25;
+						tamanoLetraTempo = 45;
+						tamanoLetraWords = 30;
+						unidadDesplazamiento = 50;
 						this.width = width;
 						
-						y_accent_up = 30;
-						x_accidental = 20;
-						x_accidental_2 = 10;
-						x_accidental_nota_gracia = 5;
-						y_accidental = 5;
-						y_accidental_flat = 12;
-						x_arpegio = 55;
-						y_bend = 40;
-						y_bpm = 30;
-						y_clave_sol_segunda = 63;
-						x_inicial_pentagramas = 80;
-						x_final_pentagramas = width - x_inicial_pentagramas;
-						x_inicio_slash = 15;
-						x_fin_slash = 5;
-						y_inicio_slash = 10;
-						y_fin_slash = 20;
-						x_fermata = 15;
-						y_fermata = 50;
-						y_ligaduras_expresion = 50;
-						x_ligaduras_union = 20;
-						y_ligaduras_union = 24;
-						x_numero_compas = 50;
-						y_numero_compas = 15;
-						y_octavarium = 30;
-						y_palm_mute = 50;
-						x_puntillo = ancho_cabeza_nota + 10;
-						y_puntillo_arriba = mitad_cabeza_nota_vertical - 10;
-						y_puntillo_abajo = mitad_cabeza_nota_vertical + 10;
-						y_silencio_blanca = 10;
-						y_slide_truncado = 20;
-						x_staccato = 15;
-						y_staccato_arriba = 28;
-						y_staccato_abajo = 14;
-						y_tapping = 50;
-						x_tresillo = 18;
-						y_tresillo_arriba = 9;
-						y_tresillo_abajo = 26;
-						y_trill = 44;
+						xAccidental = 20;
+						xAccidental2 = 10;
+						xAccidentalNotaGracia = 5;
+						xArpegio = 55;
+						xInicialPentagramas = 80;
+						xInicioSlash = 15;
+						xFermata = 15;
+						xFinalPentagramas = width - xInicialPentagramas;
+						xFinSlash = 5;
+						xLigadurasUnion = 20;
+						xNumeroCompas = 50;
+						xPuntillo = anchoCabezaNota + 10;
+						xStaccato = 15;
+						xTresillo = 18;
+						
+						yAccentUp = 30;
+						yAccidental = 5;
+						yAccidentalFlat = 12;
+						yBend = 40;
+						yBpm = 30;
+						yClaveSolSegunda = 63;
+						yInicioSlash = 10;
+						yFermata = 50;
+						yFinSlash = 20;
+						yLigadurasExpresion = 50;
+						yLigadurasUnion = 24;
+						yNumeroCompas = 15;
+						yOctavarium = 30;
+						yPalmMute = 50;
+						yPuntilloArriba = mitadCabezaVertical - 10;
+						yPuntilloAbajo = mitadCabezaVertical + 10;
+						ySilencioBlanca = 10;
+						ySlideTruncado = 20;
+						yStaccatoArriba = 28;
+						yStaccatoAbajo = 14;
+						yTapping = 50;
+						yTresilloArriba = 9;
+						yTresilloAbajo = 26;
+						yTrill = 44;
 						break;
 				}
 
@@ -330,390 +332,6 @@ public class Config {
 			default: 
 				supported = false;
 		}
-	}
-	
-	public int getAltoDialogBpm() {
-		return alto_dialog_bpm;
-	}
-	
-	public int getAlturaArcoLigadurasExpresion() {
-		return altura_arco_ligaduras_expresion;
-	}
-	
-	public int getAlturaArcoLigadurasUnion() {
-		return altura_arco_ligaduras_union;
-	}
-	
-	public int getAlturaCrescendos() {
-		return altura_crescendos;
-	}
-	
-	public int getAnchoBeams() {
-		return ancho_beams;
-	}
-	
-	public int getAnchoBeamsNotaGracia() {
-		return ancho_beams_nota_gracia;
-	}
-	
-	public int getAnchoCabezaNota() {
-		return ancho_cabeza_nota;
-	}
-	
-	public int getAnchoCabezaNotaGracia() {
-		return ancho_cabeza_nota_gracia;
-	}
-	
-	public int getAnchoClaves() {
-		return ancho_claves;
-	}
-	
-	public int getAnchoDialogBpm() {
-		return ancho_dialog_bpm;
-	}
-	
-	public int getAnchoHooks() {
-		return ancho_hooks;
-	}
-	
-	public int getAnchoLigaduraUnionMax() {
-		return ancho_ligadura_union_max;
-	}
-	
-	public int getAnchoTempo() {
-		return ancho_tempo;
-	}
-	
-	public int getChangeAccountHorizontal() {
-		return change_account_horizontal;
-	}
-	
-	public int getChangeAccountVertical() {
-		return change_account_vertical;
-	}
-	
-	public int getDesplazamientoExtraNotaGracia() {
-		return desplazamiento_extra_nota_gracia;
-	}
-	
-	public int getDistanciaCorchetes() {
-		return distancia_corchetes;
-	}
-
-	public int getDistanciaEntreBeams() {
-		return distancia_entre_beams;
-	}
-	
-	public int getDistanciaEntreBeamsNotasGracia() {
-		return distancia_entre_beams_notas_gracia;
-	}
-	
-	public int getDistanciaLineasPentagrama() {
-		return distancia_lineas_pentagrama;
-	}
-	
-	public int getDistanciaLineasPentagramaMitad() {
-		return distancia_lineas_pentagrama_mitad;
-	}
-	
-	public int getDistanciaPentagramas() {
-		return distancia_pentagramas;
-	}
-	
-	public int getLargoImagenCorchete() {
-		return largo_imagen_corchete;
-	}
-	
-	public int getLargoImagenCorcheteGracia() {
-		return largo_imagen_corchete_gracia;
-	}
-	
-	public int getLongitudPlica() {
-		return longitud_plica;
-	}
-	
-	public int getLongitudPlicaNotaGracia() {
-		return longitud_plica_nota_gracia;
-	}
-	
-	public int getMargenAnchoCabezaNota() {
-		return margen_ancho_cabeza_nota;
-	}
- 	
-	public int getMargenAutor() {
-		return margen_autor;
-	}
-	
-	public int getMargenBarlines() {
-		return margen_barlines;
-	}
-	
-	public int getMargenInferiorAutor() {
-		return margen_inferior_autor;
-	}
-	
-	public int getMargenDerechoCompases() {
-		return margen_derecho_compases;
-	}
-	
-	public int getMargenIzquierdoCompases() {
-		return margen_izquierdo_compases;
-	}
-	
-	public int getMargenNotaGracia() {
-		return margen_nota_gracia;
-	}
-	
-	public int getMargenObra() {
-		return margen_obra;
-	}
-	
-	public int getMargenSuperior() {
-		return margen_superior;
-	}
-	
-	public int getMitadCabezaNotaVertical() {
-		return mitad_cabeza_nota_vertical;
-	}
-	
-	public int getMitadCabezaNotaGraciaVertical() {
-		return mitad_cabeza_nota_gracia_vertical;
-	}
-	
-	public int getOffsetAccent() {
-		return offset_accent;
-	}
-	
-	public int getOffsetLigaduraExpresion() {
-		return offset_ligadura_expresion;
-	}
-	
-	public int getOffsetLigaduraUnion() {
-		return offset_ligadura_union;
-	}
-	
-	public int getOffsetUltimaNotaGracia() {
-		return offset_ultima_nota_gracia;
-	}
-	
-	public int getRadioOctavarium() {
-		return radio_octavarium;
-	}
-	
-	public int getRadioPuntillos() {
-		return radio_puntillos;
-	}
-	
-	public int getRadioStaccatos() {
-		return radio_staccatos;
-	}
-	
-	public int getTamanoLetraAutor() {
-		return tamano_letra_autor;
-	}
-	
-	public int getTamanoLetraBipPreparacion() {
-		return tamano_letra_bip_preparacion;
-	}
-	
-	public int getTamanoLetraBpm() {
-		return tamano_letra_bpm;
-	}
-	
-	public int getTamanoLetraNumeroCompas() {
-		return tamano_letra_numero_compas;
-	}
-	
-	public int getTamanoLetraObra() {
-		return tamano_letra_obra;
-	}
-	
-	public int getTamanoLetraPalmMute() {
-		return tamano_letra_palm_mute;
-	}
-	
-	public int getTamanoLetraPulso() {
-		return tamano_letra_pulso;
-	}
-	
-	public int getTamanoLetraTapping() {
-		return tamano_letra_tapping;
-	}
-	
-	public int getTamanoLetraTempo() {
-		return tamano_letra_tempo;
-	}
-	
-	public int getTamanoLetraTresillo() {
-		return tamano_letra_tresillo;
-	}
-	
-	public int getTamanoLetraWords() {
-		return tamano_letra_words;
-	}
-	
-	public int getUnidadDesplazamiento() {
-		return unidad_desplazamiento;
-	}
-	
-	public int getWidth() {
-		return width;
-	}
-	
-	public int getHeight() {
-		return height;
-	}
-	
-	public int getYAccentUp() {
-		return y_accent_up;
-	}
-	
-	public int getXAccidental() {
-		return x_accidental;
-	}
-	
-	public int getXAccidental2() {
-		return x_accidental_2;
-	}
-	
-	public int getXAccidentalNotaGracia() {
-		return x_accidental_nota_gracia;
-	}
-	
-	public int getYAccidental() {
-		return y_accidental;
-	}
-	
-	public int getYAccidentalFlat() {
-		return y_accidental_flat;
-	}
-	
-	public int getXArpegio() {
-		return x_arpegio;
-	}
-	
-	public int getYBend() {
-		return y_bend;
-	}
-	
-	public int getYBpm() {
-		return y_bpm;
-	}
-	
-	public int getYClaveSolSegunda() {
-		return y_clave_sol_segunda;
-	}
-	
-	public int getXInicialPentagramas() {
-		return x_inicial_pentagramas;
-	}
-	
-	public int getXFinalPentagramas() {
-		return x_final_pentagramas;
-	}
-	
-	public int getXInicioSlash() {
-		return x_inicio_slash;
-	}
-	
-	public int getXFinSlash() {
-		return x_fin_slash;
-	}
-	
-	public int getYInicioSlash() {
-		return y_inicio_slash;
-	}
-	
-	public int getYFinSlash() {
-		return y_fin_slash;
-	}
-	
-	public int getXFermata() {
-		return x_fermata;
-	}
-	
-	public int getYFermata() {
-		return y_fermata;
-	}
-	
-	public int getYLigadurasExpresion() {
-		return y_ligaduras_expresion;
-	}
-	
-	public int getXLigadurasUnion() {
-		return x_ligaduras_union;
-	}
-	
-	public int getYLigadurasUnion() {
-		return y_ligaduras_union;
-	}
-	
-	public int getXNumeroCompas() {
-		return x_numero_compas;
-	}
-	
-	public int getYNumeroCompas() {
-		return y_numero_compas;
-	}
-
-	public int getYOctavarium() {
-		return y_octavarium;
-	}
-	
-	public int getYPalmMute() {
-		return y_palm_mute;
-	}
-	
-	public int getXPuntillo() {
-		return x_puntillo;
-	}
-	
-	public int getYPuntilloArriba() {
-		return y_puntillo_arriba;
-	}
-	
-	public int getYPuntilloAbajo() {
-		return y_puntillo_abajo;
-	}
-	
-	public int getYSilencioBlanca() {
-		return y_silencio_blanca;
-	}
-	
-	public int getYSlideTruncado() {
-		return y_slide_truncado;
-	}
-	
-	public int getXStaccato() {
-		return x_staccato;
-	}
-	
-	public int getYStaccatoArriba() {
-		return y_staccato_arriba;
-	}
-	
-	public int getYStaccatoAbajo() {
-		return y_staccato_abajo;
-	}
-	
-	public int getYTapping() {
-		return y_tapping;
-	}
-	
-	public int getXTresillo() {
-		return x_tresillo;
-	}
-	
-	public int getYTresilloArriba() {
-		return y_tresillo_arriba;
-	}
-	
-	public int getYTresilloAbajo() {
-		return y_tresillo_abajo;
-	}
-	
-	public int getYTrill() {
-		return y_trill;
 	}
 	
 	/**

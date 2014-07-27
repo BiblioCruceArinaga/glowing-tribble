@@ -169,7 +169,7 @@ public class Metronome {
 			int numero = pulsos - j;
 			
 			if (bip == null) {
-				bip = new OrdenDibujo(config.getTamanoLetraBipPreparacion(), 
+				bip = new OrdenDibujo(config.tamanoLetraBipPreparacion, 
 						true, numero + "", partitura.getWidth() / 2, partitura.getHeight() / 2);
 				bip.setARGBRed();
 			}
@@ -184,7 +184,7 @@ public class Metronome {
 	
 	private void dibujarBarra(Compas compas, Nota nota) {
 		int x = nota.getX();
-		if (nota.haciaArriba()) x += config.getAnchoCabezaNota();
+		if (nota.haciaArriba()) x += config.anchoCabezaNota;
 		
 		barra = new OrdenDibujo(5, x, compas.getYIni(), x, compas.getYFin());
 		barra.setARGBRed();
