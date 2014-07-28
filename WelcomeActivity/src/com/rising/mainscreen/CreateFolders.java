@@ -19,7 +19,7 @@ public class CreateFolders {
 	}
 	
 	public void createScoreFolder(){
-		File file=new File(Environment.getExternalStorageDirectory() + MSUTILS.getPath());
+		File file=new File(Environment.getExternalStorageDirectory() + MSUTILS.path);
         if(!file.exists()) {
             boolean res = file.mkdirs();
             if (!res) {
@@ -31,7 +31,7 @@ public class CreateFolders {
 	}
 	
 	public void createScoreFolderInternal(){
-		File file=new File(Environment.getRootDirectory() + MSUTILS.getPath());
+		File file=new File(Environment.getRootDirectory() + MSUTILS.path);
         if(!file.exists()) {
             boolean res = file.mkdirs();
             
@@ -47,7 +47,7 @@ public class CreateFolders {
 	} 
 	
 	public void createImageFolder(){
-		File file=new File(Environment.getExternalStorageDirectory() + MSUTILS.getImage_path());
+		File file=new File(Environment.getExternalStorageDirectory() + MSUTILS.image_path);
         if(!file.exists()) {
             boolean res = file.mkdirs();
             if (!res) {
@@ -59,7 +59,7 @@ public class CreateFolders {
 	}
 	
 	public void createImageFolderInternal(){
-		File file=new File(Environment.getRootDirectory() + MSUTILS.getImage_path());
+		File file=new File(Environment.getRootDirectory() + MSUTILS.image_path);
         if(!file.exists()) {
             boolean res = file.mkdirs();
             if (!res) {

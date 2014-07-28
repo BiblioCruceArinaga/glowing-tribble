@@ -87,26 +87,28 @@ public class Login extends FragmentActivity {
 				UTILS.Open_Fragment(Registro_Fragment.class);	
 			}
 		});
-					    						
+			
+		Facebook_Button.setReadPermissions(Arrays.asList("email"));
+		
 		Facebook_Button.setSessionStatusCallback(new Session.StatusCallback() {
-		    	
+		    			
 			@Override
 			public void call(Session session, SessionState state, Exception exception) {
-				
+								
 				if(UTILS.isOnline()){
-					Facebook_Button.setReadPermissions(Arrays.asList("email"));
-				
+																				
 					if(session.isOpened()){
+												
 						Request.newMeRequest(session, new Request.GraphUserCallback() {
 							
 							@Override
 							public void onCompleted(GraphUser user, Response response) {
 								if (user != null) {
-											
+																				
 										FId = user.getId();
 										FName = user.getFirstName() + " " + user.getLastName();
 										FMail = user.getProperty("email").toString();
-									
+										
 										final Bundle bundle = new Bundle();
 										bundle.putString("fmail", FMail);
 										bundle.putString("fname", FName);
@@ -144,7 +146,6 @@ public class Login extends FragmentActivity {
 			}         
 		
 		}); 
-	
 	}
 
 	@Override

@@ -33,6 +33,7 @@ public class PreferenciesActivity extends Activity{
 	private SessionManager session;	
 	private int fid;
 	private Dialog MDialog;
+	private Preferencies_Utils UTILS;
 	
 	
 	//  Recibir la señal del proceso que cambia la contraseña
@@ -104,6 +105,8 @@ public class PreferenciesActivity extends Activity{
 		setContentView(R.layout.preferencies);
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		
+		this.UTILS = new Preferencies_Utils(this);
+		
 		conf = new Configuration(ctx);
 		session = new SessionManager(getApplicationContext());
 		
@@ -154,7 +157,7 @@ public class PreferenciesActivity extends Activity{
 
 			@Override
 			public void onClick(View v) {
-				Legal_Displays(getString(R.string.terminos));
+				UTILS.Legal_Displays(getString(R.string.terminos));
 			}
 			
 		});
@@ -163,7 +166,7 @@ public class PreferenciesActivity extends Activity{
 
 			@Override
 			public void onClick(View v) {
-				Legal_Displays(getString(R.string.condiciones));
+				UTILS.Legal_Displays(getString(R.string.condiciones));
 			}
 			
 		});
@@ -265,16 +268,6 @@ public class PreferenciesActivity extends Activity{
 	    });
 	    MDialog.show();
 
-	}
-
-	private void Legal_Displays(String text){
-		MDialog = new Dialog(PreferenciesActivity.this, R.style.cust_dialog);
-		MDialog.setContentView(R.layout.condiciones_compra);
-		MDialog.setTitle(R.string.condiciones_compra);
-		MDialog.getWindow().setLayout(LayoutParams.MATCH_PARENT,LayoutParams.WRAP_CONTENT);
-		TextView Text = (TextView) MDialog.findViewById(R.id.textView1);
-		Text.setText(text);
-		MDialog.show();
 	}
 
 	private void DeleteAccountButton_Actions(){

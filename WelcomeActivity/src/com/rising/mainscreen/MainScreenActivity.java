@@ -69,6 +69,11 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 	private Context ctx;
 	private Dialog Incorrect_User;
 	
+	//URLs que quiero quitar de aquí
+	public String path = "/.RisingScores/scores/";
+	public String image_path = "/.RisingScores/scores_images/";
+	
+	
 	//Clases usadas
 	private Ordenar_Partituras ORDENAR;
 	private MainScreen_Utils MSUTILS;
@@ -400,9 +405,9 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 	}
 		
 	public String[] leeFicheros(){
-		File f = new File(Environment.getExternalStorageDirectory() + MSUTILS.getPath());
+		Log.i("Eh", ""+path);
+		File f = new File(Environment.getExternalStorageDirectory() + path);
 		String[] lista = f.list();
-		//Habría que poner algo de seguridad y que solo muestre los archivos acabados en smts
 		return lista;
 	}
 	
@@ -481,8 +486,8 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 	   		for(int i = 0; i < ficherosLength(); i++){
 	   					   	   			
 	   			if(mSelected.containsKey(i)){
-	   				f_toDelete = new File(Environment.getExternalStorageDirectory() + MSUTILS.getPath() + ficheros2[i]);	
-	   				f_image_toDelete = new File(Environment.getExternalStorageDirectory() + MSUTILS.getImage_path() + ficheroAImagen(ficheros2[i]));
+	   				f_toDelete = new File(Environment.getExternalStorageDirectory() + path + ficheros2[i]);	
+	   				f_image_toDelete = new File(Environment.getExternalStorageDirectory() + image_path + ficheroAImagen(ficheros2[i]));
 	   				if(f_toDelete.exists() && f_image_toDelete.exists()){
 	   				if(f_toDelete.delete() && f_image_toDelete.delete()){
 	   					elementosAEliminar.add(s_adapter.getItem(i));

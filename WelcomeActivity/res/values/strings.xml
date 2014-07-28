@@ -55,6 +55,11 @@
     	<string name="ok_reg">An email have been sent</string>
     	<string name="ok_reg_mail">﻿Registration is completed but could not send the confirmation email. We\'ll send it manually within a maximum of 24 hours.</string>
     	<string name="creating_account">Creating your account&#8230;</string>
+    	<string name="aviso_registro_1">By registering you agree to the </string>
+    	<string name="aviso_registro_2">Terms </string>
+    	<string name="aviso_registro_3">and </string>
+    	<string name="aviso_registro_4">Conditions </string>
+    	<string name="aviso_registro_5">of the application</string>
     	
 	<!-- Pantalla principal -->
     <string name="titulo_coleccion">My collection</string>
@@ -454,17 +459,6 @@ You can buy scores in our store.</string>
 			    	<string name="tweet_done">Tweet sent successfully</string>
 			    	<string name="tweet_fail">There was an error and could not send the tweet</string>
 			    	<string name="fail_market_app">Unable to find market app</string>			    	
-    		    		
-    		<!-- Pantalla encuesta -->
-    		<string name="quest_explain">In our efforts to improve and want to always bring you the best and right what
- 	    	you need we bring you this short survey through which we can know what exactly we can offer you 
-		to make your experience in Scores the best.</string>	    	
-    			    	
-    		<string name="quest_instruments">What other instruments would you add to the store?</string>
-    		<string name="quest_scores">¿You think ?</string>	 
-    		<string name="quest_observations">If you have any other comments you can comment on:</string>   	
-    		<string name="quest_yes">Yes</string>
-    		<string name="quest_no">No</string>
     		
     <!-- Pantalla perfil partituras -->
     	<string name="share">Share</string>

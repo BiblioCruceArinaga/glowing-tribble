@@ -79,5 +79,76 @@
         android:background="@drawable/stores_buttons"
         android:textSize="30sp"
         android:text="@string/confirm_registro" />
+  	
+  	
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="40dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp"
+        android:orientation="horizontal" >
+        
+        <TextView
+	        android:id="@+id/tV_registro_term_1"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_marginLeft="2dp"
+	        android:layout_marginRight="2dp"
+	        android:textColor="#222"
+	        android:textSize="20sp"
+	        android:text="@string/aviso_registro_1" />
+        
+        <TextView
+	        android:id="@+id/tV_registro_term"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_marginLeft="2dp"
+	        android:layout_marginRight="2dp"	        
+	        android:textColor="#05197C"
+	        android:textSize="20sp"
+	        android:text="@string/aviso_registro_2" />
+   </LinearLayout>
+        
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp"
+        android:orientation="horizontal" >        
+        
+        <TextView
+	        android:id="@+id/tV_registro_term_2"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_marginLeft="2dp"
+	        android:layout_marginRight="2dp"
+	        android:textColor="#222"
+	        android:textSize="20sp"
+	        android:text="@string/aviso_registro_3" />
+        
+        <TextView
+	        android:id="@+id/tV_registro_conds"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_marginLeft="2dp"
+	        android:layout_marginRight="2dp"	        
+	        android:textColor="#05197C"
+	        android:textSize="20sp"
+	        android:text="@string/aviso_registro_4" />
+        
+        <TextView
+	        android:id="@+id/tV_registro_term_3"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+			android:layout_marginLeft="2dp"
+	        android:layout_marginRight="2dp"
+	        android:textColor="#222"
+	        android:textSize="20sp"
+	        android:text="@string/aviso_registro_5" />
+    </LinearLayout>
         
 </LinearLayout>

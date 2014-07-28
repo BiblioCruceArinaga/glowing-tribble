@@ -57,6 +57,11 @@
     	<string name="ok_reg_mail">Se completó el registro pero no se pudo enviar el email de 
     	    confirmación. Te lo enviaremos manualmente en un plazo máximo de 24 horas.</string>
     	<string name="creating_account">Creando tu cuenta&#8230;</string>
+    	<string name="aviso_registro_1">Al registrarse está aceptando los </string>
+    	<string name="aviso_registro_2">Términos </string>
+    	<string name="aviso_registro_3">y </string>
+    	<string name="aviso_registro_4">Condiciones </string>
+    	<string name="aviso_registro_5">de la aplicación</string>
     	
 	<!-- Pantalla principal -->
     <string name="titulo_coleccion">Mi colección</string>
@@ -523,18 +528,6 @@
 			    	<string name="tweet_done">El tweet se envió correctamente</string>
 			    	<string name="tweet_fail">Hubo un error y no se pudo enviar el tweet</string>
 			    	<string name="fail_market_app">No se encontró la tienda de aplicaciones</string>	
-
-    
-    		<!-- Pantalla encuesta -->
-    		<string name="quest_explain">En nuestro afán de mejorar y querer traerte siempre lo mejor y justo
-    		    lo que necesitas te presentamos esta pequeña encuesta gracias a la cual podremos saber qué es 
-    		    exáctamente lo que podemos ofrecerte para que tu experiencia en Scores sea la mejor.</string>	    	
-    			    	
-    		<string name="quest_instruments">¿Qué otro instrumento añadiría a la tienda?</string>
-    		<string name="quest_scores">¿Le parece ?</string>	 
-    		<string name="quest_observations">Si tiene alguna otra observación puede comentarla:</string>   	
-    		<string name="quest_yes">Sí</string>
-    		<string name="quest_no">No</string>
     		
     <!-- Pantalla perfil partituras -->
     	<string name="share">Compartir</string>

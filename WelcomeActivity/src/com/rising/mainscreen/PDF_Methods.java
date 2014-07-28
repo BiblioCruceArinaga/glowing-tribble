@@ -62,7 +62,7 @@ public class PDF_Methods {
 	public void AbrirPDFExterno(int position){
 		
 		//Abrir con lector pdf del sistema
-		File file = new File(Environment.getExternalStorageDirectory() + MSUTILS.getPath() + ficheros[position]);
+		File file = new File(Environment.getExternalStorageDirectory() + MSUTILS.path + ficheros[position]);
 		Intent target = new Intent(Intent.ACTION_VIEW);
 		target.setDataAndType(Uri.fromFile(file), "application/pdf");
 		target.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
@@ -77,7 +77,7 @@ public class PDF_Methods {
 		
 		//Abrir con lector pdf de la aplicación
 		Intent intent_scores = new Intent(ctx, PDFReaderActivity.class);
-	    intent_scores.putExtra(PdfViewerActivity.EXTRA_PDFFILENAME, Environment.getExternalStorageDirectory() + MSUTILS.getPath() + ficheros[position]);	    
+	    intent_scores.putExtra(PdfViewerActivity.EXTRA_PDFFILENAME, Environment.getExternalStorageDirectory() + MSUTILS.path + ficheros[position]);	    
 		
 	    ctx.startActivity(intent_scores);
 	} 

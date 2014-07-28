@@ -16,17 +16,20 @@ import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.rising.drawing.R;
 import com.rising.login.Login;
 import com.rising.login.Login_Errors;
 import com.rising.login.Login_Utils;
 import com.rising.login.login.ProgressDialogFragment;
+import com.rising.mainscreen.preferencies.Preferencies_Utils;
 
 public class Registro_Fragment extends Activity implements AsyncTask_RegistroFragment.TaskCallbacks {
     private AsyncTask_RegistroFragment task;
 	private Button Confirm_Registro;
 	private EditText Mail, Pass, Nombre, ConfiPass;
+	private TextView Terminos, Condiciones;
 	private String RName, RMail, RPass, RConfipass, RLanguage;
 	 
 	private Context ctx;
@@ -34,6 +37,7 @@ public class Registro_Fragment extends Activity implements AsyncTask_RegistroFra
 	//Clases utilizadas
 	private Login_Utils UTILS;
 	private Login_Errors ERRORS;
+	private Preferencies_Utils PUTILS;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -44,13 +48,37 @@ public class Registro_Fragment extends Activity implements AsyncTask_RegistroFra
         this.ctx = this;
         this.UTILS = new Login_Utils(ctx);
         this.ERRORS = new Login_Errors(ctx);
- 
+        this.PUTILS = new Preferencies_Utils(ctx);
         
 		ActionBar ABar = getActionBar();
 		
 		ABar = getActionBar();
     	ABar.setDisplayHomeAsUpEnabled(true);
 		
+    	//Aviso
+    	Terminos = (TextView) findViewById(R.id.tV_registro_term);
+    	Condiciones = (TextView) findViewById(R.id.tV_registro_conds);
+    	
+    	Terminos.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				PUTILS.Legal_Displays(getString(R.string.terminos));
+			}
+    		
+    	});
+    	
+    	Condiciones.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				PUTILS.Legal_Displays(getString(R.string.condiciones));
+			}
+    		
+    	});
+    	
+    	
+    	//Datos necesarios
 	    Confirm_Registro = (Button)findViewById(R.id.b_confirm_reg);
 		Mail = (EditText)findViewById(R.id.et_mail_registro);
 		Pass = (EditText)findViewById(R.id.et_pass_registro);
@@ -61,8 +89,7 @@ public class Registro_Fragment extends Activity implements AsyncTask_RegistroFra
 	
 			@Override
 			public void onClick(View v) {
-				
-				
+								
 				RName = Nombre.getText().toString();
 				RMail = Mail.getText().toString();
 				RPass = Pass.getText().toString();
@@ -72,34 +99,37 @@ public class Registro_Fragment extends Activity implements AsyncTask_RegistroFra
 				if(RName.equals("") && RMail.toString().equals("") && RPass.equals("") && RConfipass.equals("")) {			
 					ERRORS.errRegistro(5);
 		        }else{
-		        	
-					if(UTILS.checkPass(RPass, RConfipass)){	            
-						UTILS.HideKeyboard();
-						
-						final Bundle bundle = new Bundle();
-						bundle.putString("mail", RMail);
-						bundle.putString("pass", RPass);
-						bundle.putString("name", RName);
-						bundle.putString("language", RLanguage);
-										
-				        FragmentManager fm = getFragmentManager();
-		
-				        if(task == null){
-				            task = new AsyncTask_RegistroFragment();
-				            task.setArguments(bundle);
-				            fm.beginTransaction().add(task, "myTask").commit();
-				        }else{
-				        	ERRORS.errLogin(6);
-				        } 
+		        	if(UTILS.isOnline()){
+						if(UTILS.checkPass(RPass, RConfipass)){	            
+							UTILS.HideKeyboard();
+							
+							final Bundle bundle = new Bundle();
+							bundle.putString("mail", RMail);
+							bundle.putString("pass", RPass);
+							bundle.putString("name", RName);
+							bundle.putString("language", RLanguage);
+											
+					        FragmentManager fm = getFragmentManager();
+			
+					        if(task == null){
+					            task = new AsyncTask_RegistroFragment();
+					            task.setArguments(bundle);
+					            fm.beginTransaction().add(task, "myTask").commit();
+					        }else{
+					        	ERRORS.errLogin(6);
+					        } 
+			        	}else{
+			        		ERRORS.errRegistro(6);
+			        	}
 		        	}else{
-		        		ERRORS.errRegistro(6);
+		        		ERRORS.errLogin(4);
 		        	}
 		        }
 				
 			}
 					
 		});
-
+ 
 	}
 
     @Override
@@ -132,12 +162,29 @@ public class Registro_Fragment extends Activity implements AsyncTask_RegistroFra
 
     @Override
     public void onPostExecute(int result) {
-    	         
+    	
+    	task = null;
+    	
+    	ProgressDialogFragment dialog = (ProgressDialogFragment) getFragmentManager().findFragmentByTag("myDialog");
+     	
+        if (dialog!=null) {
+            dialog.dismiss();
+        }
+    	
     	ERRORS.errRegistro(result);
     }
 
 	@Override
 	public void onCancelled() {
+		
+		task = null;
+    	
+    	ProgressDialogFragment dialog = (ProgressDialogFragment) getFragmentManager().findFragmentByTag("myDialog");
+     	
+        if (dialog!=null) {
+            dialog.dismiss();
+        }
+        
 		ERRORS.errLogin(6);		
 	}
 }

@@ -96,7 +96,7 @@ public class AsyncTask_RegistroFragment extends Fragment {
     		}else{
     			jData = HPA.getServerData(postparameters2send, URL_connect_en);
     		}
-    		
+    		 
     		if(jData!=null && jData.length() > 0){
 
     			JSONObject json_data;
@@ -116,7 +116,7 @@ public class AsyncTask_RegistroFragment extends Fragment {
 
 		@Override
 		protected void onCancelled() {
-			mCallbacks.onPreExecute();
+			mCallbacks.onCancelled();
 		}
 
 		@Override
