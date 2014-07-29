@@ -17,7 +17,9 @@ public class Nota implements Comparable<Nota> {
 
 	private byte ligaduraUnion;
 	private byte ligaduraExpresion;
+	private boolean ligaduraUnionEncima;
 	private boolean ligaduraExpresionEncima;
+	private float anguloRotacionLigaduraExpresion;
 	
 	ArrayList<Byte> figurasGraficas;
 	ArrayList<Byte> posicion;
@@ -44,7 +46,9 @@ public class Nota implements Comparable<Nota> {
 		
 		ligaduraUnion = 0;
 		ligaduraExpresion = 0;
+		ligaduraUnionEncima = false;
 		ligaduraExpresionEncima = false;
+		anguloRotacionLigaduraExpresion = 0;
 
 		x = 0;
 		y = 0;
@@ -92,6 +96,10 @@ public class Nota implements Comparable<Nota> {
 	
 	public boolean finDeTresillo(int indFigura) {
 		return figurasGraficas.get(indFigura) == 4;
+	}
+	
+	public float getAnguloRotacionLigaduraExpresion() {
+		return anguloRotacionLigaduraExpresion;
 	}
 	
 	public byte getBeam() {
@@ -178,6 +186,10 @@ public class Nota implements Comparable<Nota> {
 		return ligaduraExpresionEncima;
 	}
 	
+	public boolean ligaduraUnionEncima() {
+		return ligaduraUnionEncima;
+	}
+	
 	public boolean notaDeGracia() {
 		return figurasGraficas.contains((byte) 18) || figurasGraficas.contains((byte) 19);
 	}
@@ -196,6 +208,14 @@ public class Nota implements Comparable<Nota> {
 	
 	public void setLigaduraExpresionOrientacion(boolean orientacion) {
 		ligaduraExpresionEncima = orientacion;
+	}
+	
+	public void setLigaduraUnionOrientacion(boolean orientacion)  {
+		ligaduraUnionEncima = orientacion;
+	}
+	
+	public void setAnguloRotacionLigaduraExpresion(byte angulo) {
+		this.anguloRotacionLigaduraExpresion = (float) angulo;
 	}
 	
 	public void setX(int x) {

@@ -1960,7 +1960,7 @@ public class DrawingMethods {
 				
 			case 11:
 				int indLigaduraUnion = encontrarIndiceLigadura(nota.getLigaduraUnion());
-				dibujarLigaduraUnion(indLigaduraUnion, nota.getX());
+				dibujarLigadura(indLigaduraUnion, nota, true);
 				break;
 			
 			case 12:
@@ -2037,7 +2037,8 @@ public class DrawingMethods {
 				
 			case 33:
 				int indLigaduraExpresion = encontrarIndiceLigadura(nota.getLigaduraExpresion());
-				dibujarLigaduraExpresion(indLigaduraExpresion, nota.getX(), nota.getY());
+				dibujarLigadura(indLigaduraExpresion, nota, false);
+				
 				ligaduraExpresionYArriba = Integer.MAX_VALUE;
 				ligaduraExpresionYAbajo = 0;
 				buscandoLigaduraExpresion = false;
@@ -2110,106 +2111,99 @@ public class DrawingMethods {
 		}
 	}
 	
-	private void dibujarLigaduraExpresion(int indLigadura, int xFinal, int yFinal) {
+	private void dibujarLigadura(int indLigadura, Nota notaFinal, boolean union) {
 		int compasNotaInicio = ligaduras.get(indLigadura).getCompas();
 		int notaInicio = ligaduras.get(indLigadura).getNota();
-		
-		Nota nota = partitura.getCompas(compasNotaInicio).getNota(notaInicio);
-		int xInicio = nota.getX();
-		int yInicio = nota.getY();
-		
-		int anchoCabezaNota = nota.notaDeGracia() ? 
-				config.anchoCabezaNotaGracia : config.anchoCabezaNota;
-				
-		boolean clockwise = true;
+		Nota notaInicial = partitura.getCompas(compasNotaInicio).getNota(notaInicio);
 
-		if (xInicio < xFinal) {
-			
-			RectF rectf = null;
-			int notasEnMedio = notaActual - notaInicio;
-			
-			if (nota.ligaduraExpresionEncima()) {
-				
-				//  No son notas contiguas
-				if (notasEnMedio > 1) {
-					rectf = new RectF(xInicio, ligaduraExpresionYArriba - config.yLigadurasExpresion, 
-						xFinal + anchoCabezaNota, ligaduraExpresionYArriba);
-				}
-				
-				//  Son notas contiguas
-				else {
-					int y = Math.min(yInicio, yFinal);
-					rectf = new RectF(xInicio, y - config.yLigadurasExpresion, 
-						xFinal + anchoCabezaNota, y + config.alturaArcoLigadurasExpresion);
-				}
-			}
-			else {
-				clockwise = false;
-				
-				//  No son notas contiguas
-				if (notasEnMedio > 1) {
-					rectf = new RectF(xInicio, ligaduraExpresionYAbajo, 
-						xFinal + anchoCabezaNota, ligaduraExpresionYAbajo + config.yLigadurasExpresion);
-				}
-				
-				//  Son notas contiguas
-				else {
-					int y = Math.min(yInicio, yFinal);
-					rectf = new RectF(xInicio, y + config.yLigadurasExpresion / 2, 
-						xFinal + anchoCabezaNota, 
-						y + config.yLigadurasExpresion / 2 + config.alturaArcoLigadurasExpresion);
-				}
-			}
-
-			ordenesDibujo.add( new OrdenDibujo(2, rectf, 0, clockwise));
+		if (union) {
+			boolean clockwise = notaInicial.ligaduraUnionEncima();
+			dibujarLigaduraUnion(notaInicial, notaFinal, clockwise);
 		}
-		
-		//  En el futuro se añadirá un else para controlar
-		//  las ligaduras de expresión que terminan en un
-		//  compás inferior
-		
-		ligaduras.remove(indLigadura);
-	}
-	
-	
-	private void dibujarLigaduraUnion(int indLigadura, int xFinal) {
-		int compasNotaInicio = ligaduras.get(indLigadura).getCompas();
-		int notaInicio = ligaduras.get(indLigadura).getNota();
-		
-		Nota nota = partitura.getCompas(compasNotaInicio).getNota(notaInicio);
-		int xInicio = nota.getX();
-		int y = nota.getY();
-
-		if (xInicio < xFinal) {
-			RectF rectf = new RectF(xInicio + config.anchoCabezaNota +
-					config.xLigadurasUnion, y - config.yLigadurasUnion, 
-					xFinal - config.xLigadurasUnion, y + config.alturaArcoLigadurasUnion);
-
-			ordenesDibujo.add( new OrdenDibujo(2, rectf, 0, true));
-		}
-		
-		//  La ligadura es con una nota de un compás
-		//  que fue desplazado hacia abajo porque no cabía,
-		//  así que la dibujamos al frente
 		else {
-			dibujarLigaduraDeNotasEnDiferentesRenglones(xInicio, y, xFinal);
+			boolean clockwise = notaInicial.ligaduraExpresionEncima();
+			dibujarLigaduraExpresion(notaInicial, notaFinal, clockwise);
 		}
-
+		
 		ligaduras.remove(indLigadura);
 	}
 	
-	private void dibujarLigaduraDeNotasEnDiferentesRenglones(int xInicio, int yInicio, int xFinal) {
-		RectF rectf = new RectF(xInicio + config.anchoCabezaNota +
-				config.xLigadurasUnion, yInicio - config.yLigadurasUnion, 
-				config.xFinalPentagramas, yInicio + config.alturaArcoLigadurasUnion);
-		ordenesDibujo.add( new OrdenDibujo(2, rectf, 0, true));
+	private void dibujarLigaduraExpresion(Nota notaInicial, Nota notaFinal, boolean clockwise) {
+		if (notaInicial.getX() < notaFinal.getX())
+			dibujarLigaduraExpresionNormal(notaInicial, notaFinal, clockwise);
+		else
+			dibujarLigaduraExpresionPartida(notaInicial, notaFinal, clockwise);
+	}
+	
+	private void dibujarLigaduraExpresionNormal(Nota notaInicial, Nota notaFinal, boolean clockwise) {
+		int anchoCabezaNota = notaInicial.notaDeGracia() ? 
+				config.anchoCabezaNotaGracia : config.anchoCabezaNota;
+		RectF rectf = null;
+		int y = Math.min(notaInicial.getY(), notaFinal.getY());
+		
+		if (notaInicial.ligaduraExpresionEncima())
+			rectf = new RectF(notaInicial.getX(), y - config.yLigadurasExpresion, 
+				notaFinal.getX() + anchoCabezaNota, y + config.alturaArcoLigadurasExpresion);
+		else 
+			rectf = new RectF(notaInicial.getX(), y + config.yLigadurasExpresion / 2, 
+				notaFinal.getX() + anchoCabezaNota, 
+				y + config.yLigadurasExpresion / 2 + config.alturaArcoLigadurasExpresion);
+		
+		ordenesDibujo.add( new OrdenDibujo(2, rectf, 
+				notaFinal.getAnguloRotacionLigaduraExpresion(), clockwise));
+	}
+	
+	private void dibujarLigaduraExpresionPartida(Nota notaInicial, Nota notaFinal, boolean clockwise) {
+		int anchoCabezaNota = notaInicial.notaDeGracia() ? 
+				config.anchoCabezaNotaGracia : config.anchoCabezaNota;
+		
+		RectF rectf = new RectF(notaInicial.getX(), notaInicial.getY() - config.yLigadurasExpresion, 
+				config.xFinalPentagramas, notaInicial.getY() + config.alturaArcoLigadurasExpresion);
+		ordenesDibujo.add( new OrdenDibujo(2, rectf, 0, clockwise));
 
-		int yFinal = yInicio +
+		rectf = new RectF(config.xInicialPentagramas, notaFinal.getY() - config.yLigadurasExpresion, 
+				notaFinal.getX() + anchoCabezaNota, notaFinal.getY() + config.alturaArcoLigadurasExpresion);
+		ordenesDibujo.add( new OrdenDibujo(2, rectf, 0, clockwise));
+	}
+	
+	private void dibujarLigaduraUnion(Nota notaInicial, Nota notaFinal, boolean clockwise) {
+		if (notaInicial.getX() < notaFinal.getX())
+			dibujarLigaduraUnionNormal(notaInicial, notaFinal, clockwise);
+		else
+			dibujarLigaduraUnionPartida(notaInicial, notaFinal, clockwise);
+	}
+	
+	private void dibujarLigaduraUnionNormal(Nota notaInicial, Nota notaFinal, boolean clockwise) {
+		int anchoCabezaNota = notaInicial.notaDeGracia() ? 
+				config.anchoCabezaNotaGracia : config.anchoCabezaNota;
+		RectF rectf = null;
+		
+		if (notaInicial.ligaduraUnionEncima())
+			rectf = new RectF(notaInicial.getX() + anchoCabezaNota +
+				config.xLigadurasUnion, notaFinal.getY() - config.yLigadurasUnion, 
+					notaFinal.getX() - config.xLigadurasUnion, 
+						notaFinal.getY() + config.alturaArcoLigadurasUnion);
+		else
+			rectf = new RectF(notaInicial.getX() + anchoCabezaNota +
+				config.xLigadurasUnion, notaFinal.getY(), 
+					notaFinal.getX() - config.xLigadurasUnion, 
+						notaFinal.getY() + config.alturaArcoLigadurasUnion);
+		
+		ordenesDibujo.add( new OrdenDibujo(2, rectf, 0, clockwise));
+	}
+	
+	private void dibujarLigaduraUnionPartida(Nota notaInicial, Nota notaFinal, boolean clockwise) {
+		RectF rectf = new RectF(notaInicial.getX() + config.anchoCabezaNota +
+				config.xLigadurasUnion, notaInicial.getY() - config.yLigadurasUnion, 
+				config.xFinalPentagramas, notaInicial.getY() + config.alturaArcoLigadurasUnion);
+		ordenesDibujo.add( new OrdenDibujo(2, rectf, 0, clockwise));
+
+		int yFinal = notaInicial.getY() +
 				(config.distanciaLineasPentagrama * 4 + config.distanciaPentagramas) * 
 				(partitura.getStaves());
 		rectf = new RectF(config.xInicialPentagramas, yFinal - config.yLigadurasUnion, 
-				xFinal - config.xLigadurasUnion, yFinal + config.alturaArcoLigadurasUnion);
-		ordenesDibujo.add( new OrdenDibujo(2, rectf, 0, true));
+				notaFinal.getX() - config.xLigadurasUnion, yFinal + config.alturaArcoLigadurasUnion);
+		ordenesDibujo.add( new OrdenDibujo(2, rectf, 0, clockwise));
 	}
 	
 	private void dibujarLineasDePentagramaDeCompas(Compas compas) {
@@ -2693,18 +2687,21 @@ public class DrawingMethods {
 	}
 	
 	private int gestionarLigaduras(Nota nota, ArrayList<Byte> figurasGraficas, int ind, int y_beams) {
-		if (nota.esLigaduraUnion(ind)) {
-			nota.setLigaduraUnion(figurasGraficas.get(ind + 1));	
-			dibujarFiguraGrafica(nota, figurasGraficas.get(ind++), y_beams, 0);
-		}
-		else {
-			if (figurasGraficas.get(ind + 1) == 0) 
+		
+		if (figurasGraficas.get(ind + 1) == 0) {
+			if (nota.esLigaduraUnion(ind)) {
+				nota.setLigaduraUnionOrientacion(true);
+				nota.setLigaduraUnion(figurasGraficas.get(ind + 2));
+			}
+			else {
 				nota.setLigaduraExpresionOrientacion(true);
-			
-			nota.setLigaduraExpresion(figurasGraficas.get(ind + 2));
-			dibujarFiguraGrafica(nota, figurasGraficas.get(ind), y_beams, 0);
-			ind += 2;
+				nota.setAnguloRotacionLigaduraExpresion(figurasGraficas.get(ind + 2));
+				nota.setLigaduraExpresion(figurasGraficas.get(ind + 3));
+			}
 		}
+		
+		dibujarFiguraGrafica(nota, figurasGraficas.get(ind), y_beams, 0);
+		ind += 2;
 		
 		return ind;
 	}
