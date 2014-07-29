@@ -1611,10 +1611,10 @@ public class DrawingMethods {
 	 * 
 	 */
 
-	//  NOTA: Esta implementación está ignorando las plicas dobles
-	private int colocarBeamsALaMismaAltura(boolean haciaArriba, int beamId) {
+	private int colocarBeamsALaMismaAltura(int beamId) {
 		int numBeams = beams.size();
-		int y_beams = haciaArriba ? Integer.MAX_VALUE : 0;
+		int y_beams = -1;
+		int pentagrama = -1;
 		
 		//  Nota que no es de gracia
 		boolean notaNormal = false;
@@ -1625,6 +1625,17 @@ public class DrawingMethods {
 				int indCompas = beams.get(i).getCompas();
 				int indNota = beams.get(i).getNota();
 				Nota nota = partitura.getCompas(indCompas).getNota(indNota);
+				if (y_beams == -1) {
+					y_beams = nota.haciaArriba() ? Integer.MAX_VALUE : 0;
+					pentagrama = nota.getPentagrama();
+				}
+				
+				//  No todas las notas están en el mismo pentagrama
+				if (pentagrama != nota.getPentagrama()) {
+					y_beams = partitura.getCompas(indCompas).getYIni() +
+							config.distanciaLineasPentagrama * 4 + config.distanciaPentagramas / 2;
+					break;
+				}
 				
 				//  Previene que puedan haber notas normales y de gracia
 				//  mezcladas en un mismo beam, en cuyo caso la altura
@@ -1633,7 +1644,7 @@ public class DrawingMethods {
 					if (!nota.notaDeGracia()) 
 						notaNormal = true;
 				
-				if (haciaArriba) {
+				if (nota.haciaArriba()) {
 					if (y_beams > nota.getY())
 						y_beams = nota.getY();
 				}
@@ -1641,15 +1652,17 @@ public class DrawingMethods {
 					if (y_beams < nota.getY())
 						y_beams = nota.getY();
 				}
+				
+				if (i == numBeams - 1) {
+					int longitudPlica = notaNormal ? 
+							config.longitudPlica : config.longitudPlicaNotaGracia;
+					
+					if (nota.haciaArriba()) y_beams -= longitudPlica;
+					else y_beams += longitudPlica;
+				}
 			}
 		}
-		
-		int longitudPlica = notaNormal ? 
-				config.longitudPlica : config.longitudPlicaNotaGracia;
-		
-		if (haciaArriba) y_beams -= longitudPlica;
-		else y_beams += longitudPlica;
-		
+
 		return y_beams;
 	}
 	
@@ -1680,7 +1693,7 @@ public class DrawingMethods {
 	}
 	
 	//  Esta implementación está ignorando las plicas dobles
-	private void dibujarBeams(int y_beams, boolean haciaArriba, int beamId) {
+	private void dibujarBeams(int y_beams, int beamId) {
 		int numBeams = beams.size();
 		
 		int indCompasAnt = 0;
@@ -1702,10 +1715,11 @@ public class DrawingMethods {
 			
 			indCompasAnt = beams.get(i).getCompas();
 			indNotaAnt = beams.get(i).getNota();
+			Nota notaAnt = partitura.getCompas(indCompasAnt).getNota(indNotaAnt);
 			
 			distancia_beams = partitura.getCompas(indCompasAnt).getNota(indNotaAnt).notaDeGracia() ? 
 					config.distanciaEntreBeamsNotaGracia : config.distanciaEntreBeams;
-			if (!haciaArriba) distancia_beams *= -1;
+			if (!notaAnt.haciaArriba()) distancia_beams *= -1;
 			
 			ancho_beams = partitura.getCompas(indCompasAnt).getNota(indNotaAnt).notaDeGracia() ?
 					config.anchoBeamsNotaGracia : config.anchoBeams;
@@ -1713,14 +1727,14 @@ public class DrawingMethods {
 			if ( (i == numBeams - 1) || (beams.get(i + 1).getBeamId() != beamId) ) {
 				
 				int x_last_beam = 0;
-				Nota nota = partitura.getCompas(indCompasAnt).getNota(indNotaAnt);
-				int offset = nota.haciaArriba() ? config.anchoCabezaNota : 0;
+				
+				int offset = notaAnt.haciaArriba() ? config.anchoCabezaNota : 0;
 				
 				//  Gestión de hooks en la última nota
-				switch (nota.getBeam()) {
+				switch (notaAnt.getBeam()) {
 						
 					case 4:
-						x_last_beam = nota.getX();
+						x_last_beam = notaAnt.getX();
 						
 						ordenesDibujo.add( new OrdenDibujo(
 								ancho_beams, x_last_beam + offset, y_beams + distancia_beams * 2,
@@ -1728,7 +1742,7 @@ public class DrawingMethods {
 						break;
 						
 					case 6:
-						x_last_beam = nota.getX();
+						x_last_beam = notaAnt.getX();
 						
 						ordenesDibujo.add( new OrdenDibujo(
 								ancho_beams, x_last_beam + offset, y_beams + distancia_beams,
@@ -1743,14 +1757,21 @@ public class DrawingMethods {
 				int indCompasSig = beams.get(i + 1).getCompas();
 				int indNotaSig = beams.get(i + 1).getNota();
 				
-				int x_ant_beams = partitura.getCompas(indCompasAnt).getNota(indNotaAnt).getX();
-				int x_sig_beams = partitura.getCompas(indCompasSig).getNota(indNotaSig).getX();
+				int x_ant_beams = notaAnt.getX();
+				Nota notaSig = partitura.getCompas(indCompasSig).getNota(indNotaSig);
+				int x_sig_beams = notaSig.getX();
 				
-				if (haciaArriba) {
+				if (notaAnt.haciaArriba()) {
 					int anchoCabezaNota = 
-							partitura.getCompas(indCompasAnt).getNota(indNotaAnt).notaDeGracia() ? 
+						partitura.getCompas(indCompasAnt).getNota(indNotaAnt).notaDeGracia() ? 
 							config.anchoCabezaNotaGracia : config.anchoCabezaNota;
 					x_ant_beams += anchoCabezaNota;
+				}
+				
+				if (notaSig.haciaArriba()) {
+					int anchoCabezaNota = 
+							partitura.getCompas(indCompasSig).getNota(indNotaSig).notaDeGracia() ? 
+							config.anchoCabezaNotaGracia : config.anchoCabezaNota;
 					x_sig_beams += anchoCabezaNota;
 				}
 				
@@ -2679,8 +2700,8 @@ public class DrawingMethods {
 		
 		int y_beams = 0;
 		if (dibujarBeams) {
-			y_beams = colocarBeamsALaMismaAltura(nota.haciaArriba(), beamId);
-			dibujarBeams(y_beams, nota.haciaArriba(), beamId);
+			y_beams = colocarBeamsALaMismaAltura(beamId);
+			dibujarBeams(y_beams, beamId);
 		}
 		
 		return y_beams;
