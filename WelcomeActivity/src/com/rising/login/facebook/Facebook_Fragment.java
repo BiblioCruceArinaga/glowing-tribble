@@ -87,7 +87,7 @@ public class Facebook_Fragment extends Activity implements AsyncTask_FacebookFra
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.facebook_fragment);
+        setContentView(R.layout.login_facebook_facebookfragment);
         
         this.ctx = this;
         this.ERRORS = new Login_Errors(ctx);

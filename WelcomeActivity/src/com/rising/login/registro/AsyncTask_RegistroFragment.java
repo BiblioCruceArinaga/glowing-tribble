@@ -105,6 +105,7 @@ public class AsyncTask_RegistroFragment extends Fragment {
     				status = json_data.getInt("regstatus"); 
     				Log.e("RegisStatus","RegStatus= " + status);
     			}catch (JSONException e) {
+    				this.cancel(true);
     				e.printStackTrace();
     			}		            
     		}else{	

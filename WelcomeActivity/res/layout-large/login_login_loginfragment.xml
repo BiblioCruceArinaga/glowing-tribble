@@ -18,8 +18,6 @@
         android:textColorHint="#CCC"
         android:textColor="#EEE"
         android:inputType="textEmailAddress" >
-
-        <requestFocus />
     </EditText>
 
     <EditText

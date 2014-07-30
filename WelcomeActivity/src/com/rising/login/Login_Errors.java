@@ -29,7 +29,7 @@ public class Login_Errors {
     	EDialog = new Dialog(ctx, R.style.cust_dialog);
     	EDialog.getWindow();
         EDialog.requestWindowFeature(Window.FEATURE_NO_TITLE); 
-		EDialog.setContentView(R.layout.login_error_dialog);
+		EDialog.setContentView(R.layout.error_errordialog);
 		EDialog.getWindow().setLayout(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
 		
 		TextView tv_E = (TextView)EDialog.findViewById(R.id.error_tV);
@@ -86,7 +86,7 @@ public class Login_Errors {
 		EDialog = new Dialog(ctx, R.style.cust_dialog);
     	EDialog.getWindow();
         EDialog.requestWindowFeature(Window.FEATURE_NO_TITLE); 
-		EDialog.setContentView(R.layout.login_error_dialog);
+		EDialog.setContentView(R.layout.error_errordialog);
 		EDialog.getWindow().setLayout(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
 		
 		TextView tv_E = (TextView)EDialog.findViewById(R.id.error_tV);
@@ -136,7 +136,7 @@ public class Login_Errors {
     	EDialog = new Dialog(ctx, R.style.cust_dialog);
     	EDialog.getWindow();
         EDialog.requestWindowFeature(Window.FEATURE_NO_TITLE); 
-		EDialog.setContentView(R.layout.login_error_dialog);
+		EDialog.setContentView(R.layout.error_errordialog);
 		EDialog.getWindow().setLayout(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
 		
 		TextView tv_E = (TextView)EDialog.findViewById(R.id.error_tV);
@@ -174,4 +174,36 @@ public class Login_Errors {
 		EDialog.show();	
     }
 
+    public void errSession(int code){
+    	EDialog = new Dialog(ctx, R.style.cust_dialog);
+    	EDialog.getWindow();
+        EDialog.requestWindowFeature(Window.FEATURE_NO_TITLE); 
+		EDialog.setContentView(R.layout.error_errordialog);
+		EDialog.getWindow().setLayout(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
+		
+		TextView tv_E = (TextView)EDialog.findViewById(R.id.error_tV);
+		
+		switch (code) {
+	        case 0:
+	        	tv_E.setText(R.string.err_close_session);
+	        	break;
+	        case 1:
+	        	tv_E.setText(R.string.connection_err);
+	        	break;
+	    	default:
+	    		tv_E.setText(R.string.err_olvidopass_unknown);
+	    }
+		
+		Button OlvidaPass_Error_Close_Button = (Button)EDialog.findViewById(R.id.error_button);
+		
+		OlvidaPass_Error_Close_Button.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {		
+				EDialog.dismiss();				
+			}
+		});
+    	
+		EDialog.show();	
+    }
 }

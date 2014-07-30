@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background_scoresapp"
+    android:orientation="vertical" >
+
+    <EditText 
+        android:id="@+id/misDatosClaveVieja"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"        
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:textSize="25sp"
+        android:hint="@string/mis_datos_clave_vieja"
+        android:textColorHint="#DDD"
+        android:textColor="#DDD"
+        android:textColorHighlight="#DDD"
+        android:inputType="textPassword" />
+    
+    <EditText 
+        android:id="@+id/misDatosClaveNueva"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"        
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:textSize="25sp"
+        android:hint="@string/mis_datos_clave_nueva"
+        android:textColorHint="#DDD"
+        android:textColor="#DDD"
+        android:textColorHighlight="#DDD"
+        android:inputType="textPassword" />
+    
+    <EditText 
+        android:id="@+id/misDatosClaveRepetir"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"  
+        android:layout_marginBottom="50dp"              
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"   
+        android:textSize="25sp"    
+        android:hint="@string/mis_datos_clave_repetir"
+        android:textColorHint="#DDD"
+        android:textColor="#DDD"
+        android:textColorHighlight="#DDD"
+        android:inputType="textPassword" />
+    
+    <Button 
+        android:id="@+id/misDatosBoton"
+        style="?android:attr/buttonBarButtonStyle"
+        android:background="@drawable/stores_buttons"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginLeft="40dp"
+        android:textColor="#EEE"
+        android:textSize="25sp"
+        android:text="@string/mis_datos_boton"/>
+</LinearLayout>

@@ -19,8 +19,6 @@
         android:textColor="#DDD"
         android:textColorHighlight="#DDD"
         android:inputType="textEmailAddress" >
-
-        <requestFocus />
     </EditText>
 
     <EditText
@@ -41,12 +39,12 @@
  	<Button
         android:id="@+id/b_confirm_login"
         style="?android:attr/buttonBarButtonStyle"
+        android:background="@drawable/stores_buttons"        
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginRight="20dp"
         android:layout_marginLeft="20dp"
         android:textColor="#EEE"
-        android:background="@drawable/stores_buttons"
         android:textSize="20sp"
 		android:text="@string/confirm_login" />
 

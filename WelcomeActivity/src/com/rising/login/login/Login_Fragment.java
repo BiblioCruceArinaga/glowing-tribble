@@ -93,7 +93,7 @@ public class Login_Fragment extends Activity implements AsyncTask_LoginFragment.
 	protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        setContentView(R.layout.login_dialog);
+        setContentView(R.layout.login_login_loginfragment);
         
         this.ctx = this;
         this.UTILS = new Login_Utils(ctx);

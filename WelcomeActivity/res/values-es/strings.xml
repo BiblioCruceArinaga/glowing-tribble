@@ -161,6 +161,8 @@
     	<string name="mis_datos_clave_erronea">Contraseña incorrecta</string>
     	<string name="mis_datos_saldo">Saldo:</string>
     	<string name="try_change_pass">Intentando cambiar tu contraseña. Por favor, espera&#8230;</string>
+    	<string name="err_close_session">Ocurrió un error al cerrar la sesión</string>
+    	
         	
     <string name="feedback">Feedback</string>
     	<string name="feedback_envianos">

@@ -21,53 +21,22 @@ import com.rising.login.Configuration;
 import com.rising.login.Login_Utils;
 import com.rising.login.SessionManager;
 import com.rising.mainscreen.MainScreenActivity;
-import com.rising.mainscreen.preferencies.ChangePassword.OnPasswordChanging;
 import com.rising.mainscreen.preferencies.EraseAccount.OnTaskCompleted;
 
 public class PreferenciesActivity extends Activity{
 
 	private Button Logout, ChangePass, Terms_Conditions, Terms_Purchase, Delete_Account;
 	private TextView Name, Mail, Credit;
-	private Configuration conf;
-	private Context ctx = this;	
-	private SessionManager session;	
+	
+	private Context ctx = this;		
 	private int fid;
 	private Dialog MDialog;
 	private Preferencies_Utils UTILS;
 	
+	//Clases usadas
+	private Configuration CONF;
+	private SessionManager SESSION;
 	
-	//  Recibir la señal del proceso que cambia la contraseña
-	private OnPasswordChanging listenerPass = new OnPasswordChanging() {
-	    public void onPasswordChanged(int details) {       
-			switch (details) {
-				case 1: {
-					Toast.makeText(getApplicationContext(), 
-							R.string.mis_datos_clave_cambiada, Toast.LENGTH_LONG).show();
-					break;
-				}
-				case 2: {
-					Toast.makeText(getApplicationContext(), 
-							R.string.mis_datos_error_verif, Toast.LENGTH_LONG).show();
-					break;
-				}
-				case 3: {
-					Toast.makeText(getApplicationContext(), 
-							R.string.mis_datos_clave_erronea, Toast.LENGTH_LONG).show();
-					break;
-				}
-				case 4: {
-					Toast.makeText(getApplicationContext(), 
-							R.string.err_login_unknown, Toast.LENGTH_LONG).show();
-					break;
-				}
-				default:
-					Toast.makeText(getApplicationContext(), 
-							R.string.err_login_unknown, Toast.LENGTH_LONG).show();
-			}		
-			MDialog.dismiss();
-	    }
-	};
-
 	//  Recibir la señal del proceso que elimina la cuenta
 	private OnTaskCompleted listener = new OnTaskCompleted() {
 	    public void onTaskCompleted(int details) {       
@@ -76,7 +45,7 @@ public class PreferenciesActivity extends Activity{
 					Toast.makeText(getApplicationContext(), 
 							R.string.cuenta_eliminada, Toast.LENGTH_LONG).show();
 					
-					session.LogOutUser();
+					SESSION.LogOutUser();
 					finish();
 					break;
 				}
@@ -102,38 +71,28 @@ public class PreferenciesActivity extends Activity{
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);	
-		setContentView(R.layout.preferencies);
+		setContentView(R.layout.preferencies_preferencieslayout);
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		
-		this.UTILS = new Preferencies_Utils(this);
-		
-		conf = new Configuration(ctx);
-		session = new SessionManager(getApplicationContext());
-		
-		fid = session.getFacebookId();
-		
 		ActionBar ABar = getActionBar();
-    	
     	ABar.setDisplayHomeAsUpEnabled(true);
-					
+		
+		this.UTILS = new Preferencies_Utils(this);
+		this.CONF = new Configuration(ctx);
+		this.SESSION = new SessionManager(getApplicationContext());
+    	
+		Name = (TextView) findViewById(R.id.name_preferencies);
+		Mail = (TextView) findViewById(R.id.mail_preferencies);
+		Credit = (TextView) findViewById(R.id.credit_preferencies);
 		Logout = (Button) findViewById(R.id.logout_button_preferencies);
 		ChangePass = (Button) findViewById(R.id.changepass_preferencies);
 		Terms_Conditions = (Button) findViewById(R.id.term_conditions_preferencies);
 		Terms_Purchase = (Button) findViewById(R.id.term_purchase_preferencies);
 		Delete_Account = (Button) findViewById(R.id.delete_account_preferencies);
+
+		fid = SESSION.getFacebookId();
 		
-		if(fid != -1){
-			ChangePass.setVisibility(View.GONE);
-		}
-		
-		Name = (TextView) findViewById(R.id.name_preferencies);
-		Mail = (TextView) findViewById(R.id.mail_preferencies);
-		Credit = (TextView) findViewById(R.id.credit_preferencies);
-				
-		Name.setText(Name.getText() + " " + conf.getUserName());
-		Mail.setText(Mail.getText() + " " + conf.getUserEmail());
-		Credit.setText(Credit.getText() + " " + conf.getUserMoney());
-		Credit.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.money_ico, 0);
+		ShowUser_Data();
 		
 		Logout.setOnClickListener(new OnClickListener(){
 
@@ -141,7 +100,6 @@ public class PreferenciesActivity extends Activity{
 			public void onClick(View v) {
 				 LogoutButton_Actions();
  			}
-			
 		});
 
 		ChangePass.setOnClickListener(new OnClickListener(){
@@ -183,8 +141,7 @@ public class PreferenciesActivity extends Activity{
 		
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		
-		
+			
 		switch(item.getItemId()){
 		
 			case android.R.id.home:
@@ -198,75 +155,34 @@ public class PreferenciesActivity extends Activity{
 		}
 	}
 	
+	private void ShowUser_Data(){		
+		Name.setText(Name.getText() + " " + CONF.getUserName());
+		Mail.setText(Mail.getText() + " " + CONF.getUserEmail());
+		Credit.setText(Credit.getText() + " " + CONF.getUserMoney());
+		Credit.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.money_ico, 0);
+		
+		if(fid != -1){
+			ChangePass.setVisibility(View.GONE);
+		}
+	}
+	
 	private void LogoutButton_Actions(){
 		
 		if(fid > -1){
-			session.LogOutFacebook();	    			
+			SESSION.LogOutFacebook();	    			
 		}else{
-			session.LogOutUser();
+			SESSION.LogOutUser();
 		}
-		conf.setUserEmail("");
-		conf.setUserId("");
-		conf.setUserMoney(0);
-		conf.setUserName("");
+		CONF.setUserEmail("");
+		CONF.setUserId("");
+		CONF.setUserMoney(0);
+		CONF.setUserName("");
     	finish();
 	}
 	
 	private void ChangePassButton_Actions(){
-		MDialog = new Dialog(PreferenciesActivity.this, R.style.cust_dialog);
-    	MDialog.setTitle(R.string.cambiar_pass);
-		MDialog.getWindow().setLayout(LayoutParams.MATCH_PARENT,LayoutParams.WRAP_CONTENT);
-		MDialog.setContentView(R.layout.mis_datos);
-    	
-		final EditText claveVieja = (EditText) MDialog.findViewById(R.id.misDatosClaveVieja);
-	    final EditText claveNueva = (EditText) MDialog.findViewById(R.id.misDatosClaveNueva);
-	    final EditText claveRepetir = (EditText) MDialog.findViewById(R.id.misDatosClaveRepetir);
-	        				    		
-		Button misDatosBoton = (Button)MDialog.findViewById(R.id.misDatosBoton);
-	   
-		misDatosBoton.setOnClickListener(new Button.OnClickListener() {
-
-			@Override
-			public void onClick(View arg0) {
-				
-				if(new Login_Utils(ctx).isOnline()){	
-					
-					//  Usuario normal
-					if (fid == -1) {
-						
-						if ( 
-							( claveVieja.getText().length() == 0 ) ||
-							( claveNueva.getText().length() == 0 ) ||
-							( claveRepetir.getText().length() == 0 )
-						) {
-							Toast.makeText(getApplicationContext(), 
-								R.string.err_campos_vacios, Toast.LENGTH_LONG).show();
-						} else {
-							if (!claveNueva.getText().toString().equals(
-									claveRepetir.getText().toString())) {
-								Toast.makeText(getApplicationContext(), 
-									R.string.err_pass, Toast.LENGTH_LONG).show();
-							}
-							else {
-								new ChangePassword(PreferenciesActivity.this, listenerPass).execute(
-									session.getMail(), 
-									claveVieja.getText().toString(), 
-									claveNueva.getText().toString());    
-			        			
-								claveVieja.setText("");
-								claveNueva.setText("");
-								claveRepetir.setText("");
-							}
-						}
-					}
-				}else{
-					Toast.makeText(ctx, R.string.connection_err, Toast.LENGTH_LONG).show();	
-				}
-				
-			}
-	    	
-	    });
-	    MDialog.show();
+			        				    		
+		new Login_Utils(ctx).Open_Fragment(ChangePassword_Fragment.class);
 
 	}
 
@@ -291,7 +207,7 @@ public class PreferenciesActivity extends Activity{
 			@Override
 			public void onClick(View arg0) {
 				if(new Login_Utils(ctx).isOnline()){
-					String mail = session.getMail();
+					String mail = SESSION.getMail();
 					
 					//  Usuario normal
 					if (clave.getText().length() > 0) {

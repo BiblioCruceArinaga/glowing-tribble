@@ -111,16 +111,19 @@ public class SessionManager {
 	} 
 	
 	public void LogOutUser(){
-		
-		// Clearing all data from Shared Preferences
-		editor.clear();
-		editor.commit();
-		
-		Intent i = new Intent(ctx, Login.class);
-		i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-		i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		
-		ctx.startActivity(i);
+		try{
+			// Clearing all data from Shared Preferences
+			editor.clear();
+			editor.commit();
+			
+			Intent i = new Intent(ctx, Login.class);
+			i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			
+			ctx.startActivity(i);
+		}catch(Exception e){
+			new Login_Errors(ctx).errSession(0);
+		}
 	}
 	
 	/**

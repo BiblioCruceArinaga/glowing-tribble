@@ -18,11 +18,12 @@ public class Preferencies_Utils {
 	
 	public void Legal_Displays(String text){
 		MDialog = new Dialog(ctx, R.style.cust_dialog);
-		MDialog.setContentView(R.layout.condiciones_compra);
+		MDialog.setContentView(R.layout.preferencies_legaldisplay);
 		MDialog.setTitle(R.string.terminos_condiciones);
 		MDialog.getWindow().setLayout(LayoutParams.MATCH_PARENT,LayoutParams.WRAP_CONTENT);
 		TextView Text = (TextView) MDialog.findViewById(R.id.textView1);
 		Text.setText(text);
 		MDialog.show();
 	}
+	
 }

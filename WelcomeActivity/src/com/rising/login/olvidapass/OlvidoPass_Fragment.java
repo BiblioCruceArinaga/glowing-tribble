@@ -38,7 +38,7 @@ public class OlvidoPass_Fragment extends Activity implements AsyncTask_OlvidoPas
 	protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        setContentView(R.layout.olvidopass_dialog);
+        setContentView(R.layout.login_olvidopass_olvidopassfragment);
         
         this.ctx = this;
         this.UTILS = new Login_Utils(ctx);
@@ -115,12 +115,27 @@ public class OlvidoPass_Fragment extends Activity implements AsyncTask_OlvidoPas
 
     @Override
     public void onPostExecute(int result) {
-    	         
+    	task = null;
+    	
+    	ProgressDialogFragment dialog = (ProgressDialogFragment) getFragmentManager().findFragmentByTag("myDialog");
+     	
+        if (dialog!=null) {
+            dialog.dismiss();
+        }        
+    	
     	ERRORS.errOlvidaPass(result);  	
     }
 
 	@Override
 	public void onCancelled() {
+    	task = null;
+    	
+    	ProgressDialogFragment dialog = (ProgressDialogFragment) getFragmentManager().findFragmentByTag("myDialog");
+     	
+        if (dialog!=null) {
+            dialog.dismiss();
+        }
+		
 		ERRORS.errLogin(6);		
 	}
 

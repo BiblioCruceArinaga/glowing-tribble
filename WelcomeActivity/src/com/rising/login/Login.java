@@ -49,7 +49,7 @@ public class Login extends FragmentActivity {
 		super.onCreate(savedInstanceState);		
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		setContentView(R.layout.login_layout);
+		setContentView(R.layout.login_loginlayout);
 		
         this.ctx = this;
         this.UTILS = new Login_Utils(ctx);
