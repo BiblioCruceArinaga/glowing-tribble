@@ -375,6 +375,7 @@ You can buy scores in our store.</string>
     	   We were unable to verify this account. The operation has been canceled.
     	</string>
     	<string name="cuenta_eliminada">Your account have been delete successfully.</string>
+    	<string name="eliminando_cuenta">Deleting account&#8230;</string>
     	<string name="eliminar_cuenta_clave">Password</string>
     	<string name="yes">Yes</string>
     	<string name="no">No</string>

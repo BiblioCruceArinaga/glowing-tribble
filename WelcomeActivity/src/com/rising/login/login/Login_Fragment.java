@@ -187,12 +187,14 @@ public class Login_Fragment extends Activity implements AsyncTask_LoginFragment.
 	        }
 	       
 	        ERRORS.errLogin(result);
+	        Pass.setText("");
         }   	
     }
 
 	@Override
 	public void onCancelled() {
-		ERRORS.errLogin(6);		
+		ERRORS.errLogin(6);	
+		Pass.setText("");
 	}
 
 }

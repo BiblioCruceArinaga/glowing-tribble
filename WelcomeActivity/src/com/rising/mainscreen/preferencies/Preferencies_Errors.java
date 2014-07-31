@@ -1,5 +1,6 @@
 package com.rising.mainscreen.preferencies;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.rising.drawing.R;
+import com.rising.login.SessionManager;
 
 public class Preferencies_Errors {
 	
@@ -73,4 +75,51 @@ public class Preferencies_Errors {
 		EDialog.show();	
     }
 
+	public void errDeleteAccount(int code){
+		
+    	EDialog = new Dialog(ctx, R.style.cust_dialog);
+    	EDialog.getWindow();
+        EDialog.requestWindowFeature(Window.FEATURE_NO_TITLE); 
+		EDialog.setContentView(R.layout.error_errordialog);
+		EDialog.getWindow().setLayout(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
+		
+		TextView tv_E = (TextView)EDialog.findViewById(R.id.error_tV);
+		
+		switch (code) {
+			case 0:
+				tv_E.setText(R.string.err_campos_vacios);
+				break;
+			
+			case 1: {
+				tv_E.setText(R.string.cuenta_eliminada);
+				
+				new SessionManager(ctx).LogOutUser();
+				((Activity)ctx).finish();
+				break;
+			}
+			case 2:
+				tv_E.setText(R.string.error_eliminar_cuenta_fallo_verif);
+				break;
+			case 3: 
+				tv_E.setText(R.string.error_eliminar_cuenta_identidad);
+				break;
+			case 4:
+				tv_E.setText(R.string.connection_err);
+				break;
+			default:
+				tv_E.setText(R.string.error_eliminar_cuenta);
+		}
+		
+		Button  Login_Error_Close_Button = (Button)EDialog.findViewById(R.id.error_button);
+		
+		Login_Error_Close_Button.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {		
+				EDialog.dismiss();				
+			}
+		});
+    	
+		EDialog.show();	
+	}
 }

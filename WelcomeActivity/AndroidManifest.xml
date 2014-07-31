@@ -149,6 +149,7 @@
         <activity android:label="@string/app_name" android:name="com.rising.login.registro.Registro_Fragment" android:theme="@style/AppBaseTheme"></activity>
         <activity android:label="@string/app_name" android:name="com.rising.login.olvidapass.OlvidoPass_Fragment" android:theme="@style/AppBaseTheme"></activity>
         <activity android:theme="@style/AppBaseTheme" android:name="com.rising.mainscreen.preferencies.ChangePassword_Fragment" android:label="@string/app_name"></activity>
+        <activity android:name="com.rising.mainscreen.preferencies.DeleteAccount_Fragment" android:label="@string/app_name" android:theme="@style/AppBaseTheme"></activity>
 
     </application>
 

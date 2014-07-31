@@ -445,6 +445,7 @@
     	    No hemos podido identificar esta cuenta. La operación se ha cancelado.
     	</string>
     	<string name="cuenta_eliminada">Tu cuenta ha sido eliminada con éxito.</string>
+    	<string name="eliminando_cuenta">Eliminando cuenta&#8230;</string>
     	<string name="eliminar_cuenta_clave">Contraseña</string>
     	<string name="yes">Sí</string>
     	<string name="no">No</string>
