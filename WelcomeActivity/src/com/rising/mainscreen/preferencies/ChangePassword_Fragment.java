@@ -22,7 +22,7 @@ import com.rising.login.Login_Utils;
 import com.rising.login.SessionManager;
 import com.rising.login.login.ProgressDialogFragment;
 
-
+//Clase que se encarga del manejo del cambio de contraseñas
 public class ChangePassword_Fragment extends Activity implements AsyncTask_ChangePassword.TaskCallbacks {
     private AsyncTask_ChangePassword task;
 	

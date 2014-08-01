@@ -159,7 +159,7 @@ You can buy scores in our store.</string>
     	<string name="mis_datos_clave_erronea">Incorrect password</string>
     	<string name="mis_datos_saldo">Credit:</string>
     	<string name="try_change_pass">Trying to change your password. Please wait&#8230;</string>
-    	<string name="err_close_session">An error have ocurred with signout</string>
+    	<string name="err_close_session">An error have occurred with signout</string>
     
     <string name="feedback">Feedback</string>
     	<string name="feedback_envianos">
@@ -168,6 +168,7 @@ You can buy scores in our store.</string>
     	</string>
     	<string name="feedback_boton">Send feedback</string>
     	<string name="feedback_enviado">Feedback sent. Thank you for helping us to improve.</string>
+    	<string name="sending_feedback">Sending feedback&#8230;</string>
     
     <string name="terminos_condiciones">Terms and conditions</string>
     	<string name="terminos">

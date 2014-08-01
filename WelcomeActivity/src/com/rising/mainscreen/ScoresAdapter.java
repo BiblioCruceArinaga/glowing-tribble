@@ -157,15 +157,15 @@ public class ScoresAdapter extends BaseAdapter {
         scores_list.clear();
         String Author;
         String Title;
-        //String Instrument;
+        String Instrument;
         if(charText.length() == 0){
         	scores_list.addAll(arraylist);
         }else{
             for(Score ss : arraylist){
             	Author = ss.getAuthor().toLowerCase(Locale.getDefault());
             	Title = ss.getTitle().toLowerCase(Locale.getDefault());
-            	//Instrument = ss.getInstrument().toLowerCase(Locale.getDefault());
-                if(Author.contains(charText) || Title.contains(charText) /*|| Instrument.contains(charText)*/){
+            	Instrument = ss.getInstrument().toLowerCase(Locale.getDefault());
+                if(Author.contains(charText) || Title.contains(charText) || Instrument.contains(charText)){
                 	scores_list.add(ss);
                 }
             }

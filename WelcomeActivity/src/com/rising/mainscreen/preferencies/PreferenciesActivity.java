@@ -18,6 +18,7 @@ import com.rising.login.Login_Utils;
 import com.rising.login.SessionManager;
 import com.rising.mainscreen.MainScreenActivity;
 
+//Clase que muestra las distintas opciones de la pantalla de preferencias
 public class PreferenciesActivity extends Activity{
 
 	private Button Logout, ChangePass, Terms_Conditions, Terms_Purchase, Delete_Account;

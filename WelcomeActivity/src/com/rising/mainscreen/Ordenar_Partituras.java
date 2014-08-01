@@ -53,7 +53,6 @@ public class Ordenar_Partituras {
 	
 		    AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
 		    builder.setTitle(R.string.instrument_dialog_title);
-		    
 		    builder.setItems(items, new DialogInterface.OnClickListener() {
 		        public void onClick(DialogInterface dialog, int item) {
 		            s_adapter.filter(s_adapter.getItemInstrument(item));

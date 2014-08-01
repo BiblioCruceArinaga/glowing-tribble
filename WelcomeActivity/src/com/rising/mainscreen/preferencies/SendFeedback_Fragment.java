@@ -14,19 +14,18 @@ import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import com.rising.drawing.R;
 import com.rising.login.Login_Utils;
 import com.rising.login.SessionManager;
 import com.rising.login.login.ProgressDialogFragment;
 
-//Clase que maneja el borrado de cuentas
-public class DeleteAccount_Fragment extends Activity implements AsyncTask_DeleteAccount.TaskCallbacks {
-    private AsyncTask_DeleteAccount task;
+//Clase que maneja el envio de feedback
+public class SendFeedback_Fragment extends Activity implements AsyncTask_SendFeedbackFragment.TaskCallbacks {
+    private AsyncTask_SendFeedbackFragment task;
 	
-	private EditText Clave;
-    private Button BotonEliminarCuenta;
+	private EditText mensaje;
+    private Button FeedBoton;
     
 	private Context ctx;
 	
@@ -34,13 +33,12 @@ public class DeleteAccount_Fragment extends Activity implements AsyncTask_Delete
 	private Login_Utils UTILS;
 	private Preferencies_Errors ERRORS;
 	private SessionManager SESSION;
-	
-	
+		
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        setContentView(R.layout.preferencies_deleteaccount);
+        setContentView(R.layout.preferencies_feedback);
         
         this.ctx = this;
         this.UTILS = new Login_Utils(ctx);
@@ -52,64 +50,46 @@ public class DeleteAccount_Fragment extends Activity implements AsyncTask_Delete
 		ABar = getActionBar();
     	ABar.setDisplayHomeAsUpEnabled(true);
     	
-    	Clave = (EditText) findViewById(R.id.claveEliminarCuenta);
-    	BotonEliminarCuenta = (Button) findViewById(R.id.botonEliminarCuenta);
+    	mensaje = (EditText) findViewById(R.id.feedbackCajaTexto);
+    	FeedBoton = (Button) findViewById(R.id.feedbackBoton);
     	
-    	if (SESSION.getFacebookId() > -1) {
-			Clave.setVisibility(View.INVISIBLE);
-			
-			TextView texto = (TextView) findViewById(R.id.textoEliminarCuenta);
-			texto.setText(R.string.esta_seguro_facebook);
-		}
-    	    	
-		BotonEliminarCuenta.setOnClickListener(new OnClickListener(){
+		FeedBoton.setOnClickListener(new OnClickListener(){
 	
 			@Override
 			public void onClick(View v) {
 				
 				if(UTILS.isOnline()){	
-										
-					final Bundle bundle = new Bundle();
-					
-					if (Clave.getText().length() > 0) {
-						UTILS.HideKeyboard();						
 						
+					if (mensaje.getText().length() == 0) {
+						ERRORS.errFeedback(0);
+					} else {
+								
+						UTILS.HideKeyboard();
+												
+						final Bundle bundle = new Bundle();
 						bundle.putString("mail", SESSION.getMail());
-						bundle.putString("pass", Clave.getText().toString());
-						
-						InicioFragment(bundle);
-					}else{
-						if (SESSION.getFacebookId() > -1) {
-							bundle.putString("mail", SESSION.getMail());
-							bundle.putString("pass", String.valueOf(SESSION.getFacebookId()));
-							
-							InicioFragment(bundle);
-						}else{
-							ERRORS.errDeleteAccount(0);
-						}
-					}
-															
+						bundle.putString("mensaje", mensaje.getText().toString());
+										
+				        FragmentManager fm = getFragmentManager();
+			
+				        if(task == null){
+				        	task = new AsyncTask_SendFeedbackFragment();
+				        	task.setArguments(bundle);
+					        fm.beginTransaction().add(task, "myTask").commit();       
+				        }else{
+				        	ERRORS.errFeedback(10);
+					    }
+					}				
+					
 				}else{
-					ERRORS.errDeleteAccount(4);	
+					ERRORS.errFeedback(2);
 				}
 			}
-			    	
+					
 		});
+
 	}
 
-	private void InicioFragment(Bundle bundle){
-		FragmentManager fm = getFragmentManager();
-		
-        if(task == null){
-            task = new AsyncTask_DeleteAccount();
-            task.setArguments(bundle);
-            fm.beginTransaction().add(task, "myTask").commit();
-			Clave.setText("");
-        }else{
-        	ERRORS.errDeleteAccount(10);
-        }
-	}
-	
     @Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    switch (item.getItemId()) {
@@ -133,7 +113,7 @@ public class DeleteAccount_Fragment extends Activity implements AsyncTask_Delete
         }
         ft.addToBackStack(null);
 
-        ProgressDialogFragment dialog = ProgressDialogFragment.newInstance(getString(R.string.eliminando_cuenta));
+        ProgressDialogFragment dialog = ProgressDialogFragment.newInstance(getString(R.string.sending_feedback));
         dialog.setCancelable(false);
         dialog.show(ft, "myDialog");
     }
@@ -147,7 +127,7 @@ public class DeleteAccount_Fragment extends Activity implements AsyncTask_Delete
         if (dialog!=null) {
             dialog.dismiss();
         }        
-        ERRORS.errDeleteAccount(result);
+        ERRORS.errFeedback(result);
     }
 
 	@Override
@@ -160,7 +140,7 @@ public class DeleteAccount_Fragment extends Activity implements AsyncTask_Delete
             dialog.dismiss();
         }
 		
-		ERRORS.errChangePass(1);		
+		ERRORS.errFeedback(10);		
 	}
 
 }

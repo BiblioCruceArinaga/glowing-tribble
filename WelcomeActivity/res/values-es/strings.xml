@@ -171,6 +171,7 @@
     	</string>
     	<string name="feedback_boton">Enviar feedback</string>
     	<string name="feedback_enviado">Feedback enviado. Gracias por ayudarnos a mejorar.</string>
+    	<string name="sending_feedback">Enviando feedback&#8230;</string>
     
     <string name="terminos_condiciones">Términos y condiciones</string>
     	<string name="terminos">

@@ -81,7 +81,7 @@ public class Login_Errors {
     	
     } 
     
-    public void errRegistro(int code){
+    public void errRegistro(final int code){
 
 		EDialog = new Dialog(ctx, R.style.cust_dialog);
     	EDialog.getWindow();
@@ -123,8 +123,14 @@ public class Login_Errors {
 		Login_Error_Close_Button.setOnClickListener(new OnClickListener(){
 
 			@Override
-			public void onClick(View v) {		
-				EDialog.dismiss();				
+			public void onClick(View v) {	
+				if(code == 1 || code == 3){
+					Intent i = new Intent(ctx, Login.class);
+					ctx.startActivity(i);
+					((Activity)ctx).finish();
+				}else{
+					EDialog.dismiss();
+				}
 			}
 		});
     	

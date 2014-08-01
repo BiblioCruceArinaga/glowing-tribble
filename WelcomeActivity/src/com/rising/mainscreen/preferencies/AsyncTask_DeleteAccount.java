@@ -16,6 +16,7 @@ import android.util.Log;
 
 import com.rising.conexiones.HttpPostAux;
 
+//Hilo que envía los datos y recibe la repuesta del borrado de cuentas 
 public class AsyncTask_DeleteAccount extends Fragment {
     private TaskCallbacks mCallbacks;
     private Task mTask;

@@ -9,10 +9,12 @@
         android:id="@+id/feedbackTexto"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         android:layout_marginTop="37dp"
-        android:textSize="16sp"
+        android:textSize="18sp"
         android:textColor="#222"
         android:text="@string/feedback_envianos" />
 
@@ -21,11 +23,12 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
+        android:layout_gravity="center"
+        android:gravity="top"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         android:layout_marginTop="10dp"
-        android:inputType="textMultiLine"
-        android:layout_gravity="center" />
+        android:inputType="textMultiLine" />
 
     <Button 
         android:id="@+id/feedbackBoton"

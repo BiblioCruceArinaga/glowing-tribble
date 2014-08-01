@@ -16,8 +16,7 @@ import android.util.Log;
 
 import com.rising.conexiones.HttpPostAux;
 
-//Hilo que envía los datos y recibe la respuesta del cambio de contraseña
-public class AsyncTask_ChangePassword extends Fragment {
+public class AsyncTask_SendFeedbackFragment extends Fragment {
     private TaskCallbacks mCallbacks;
     private Task mTask;
 
@@ -35,19 +34,17 @@ public class AsyncTask_ChangePassword extends Fragment {
         setRetainInstance(true);
 
         String Mail = "";
-        String OldPass = "";
-        String NewPass = "";
+        String Mensaje = "";
                
         Bundle args = getArguments();
         if (args  != null && args.containsKey("mail")){
         	Mail = args.getString("mail");
-        	OldPass = args.getString("oldpass");
-        	NewPass = args.getString("newpass");
+        	Mensaje = args.getString("mensaje");
         }
         
         // Create and execute the background task.
         mTask = new Task();
-        mTask.execute(Mail, OldPass, NewPass);
+        mTask.execute(Mail, Mensaje);
     }
 
     @Override
@@ -62,7 +59,7 @@ public class AsyncTask_ChangePassword extends Fragment {
     	private HttpPostAux HPA =  new HttpPostAux();
     	
     	//URLs
-    	private final String URL_Password_Change = "http://scores.rising.es/cambiar-clave-mobile";
+    	private String URL_Send_Feedback = "http://scores.rising.es/enviar-feedback-mobile";
     	
     	
         @Override
@@ -75,16 +72,15 @@ public class AsyncTask_ChangePassword extends Fragment {
             mCallbacks.onPostExecute(i);
         }
         
-        public int ChangeStatus(String mail, String OldPass, String NewPass) {
+        public int FeedStatus(String mail, String Mensaje) {
         	int status=-1;
         
 			ArrayList<NameValuePair> postparameters2send= new ArrayList<NameValuePair>();
 			postparameters2send.add(new BasicNameValuePair("mail", mail));
-			postparameters2send.add(new BasicNameValuePair("passOld", OldPass));
-			postparameters2send.add(new BasicNameValuePair("passNew", NewPass));
+			postparameters2send.add(new BasicNameValuePair("message", Mensaje));
 			JSONArray jData = null;
 
-			jData = HPA.getServerData(postparameters2send, URL_Password_Change);    		
+			jData = HPA.getServerData(postparameters2send, URL_Send_Feedback);    		
 
 			if (jData!=null && jData.length() > 0) {
 
@@ -92,9 +88,9 @@ public class AsyncTask_ChangePassword extends Fragment {
 				
 				try{
 					json_data = jData.getJSONObject(0);
-					status = json_data.getInt("passwordChange");
+					status = json_data.getInt("feedbackSent");
 					
-					Log.e("passwordChange","passwordChange= " + status);
+					Log.e("feedbackSent","feedbackSent= " + status);
 				}catch (JSONException e) {
 					e.printStackTrace();
 				}		            
@@ -113,7 +109,7 @@ public class AsyncTask_ChangePassword extends Fragment {
 		
 		@Override
 		protected Integer doInBackground(String... params) {
-			return ChangeStatus(params[0],params[1], params[2]);
+			return FeedStatus(params[0],params[1]);
 		}
     }
 

@@ -27,7 +27,6 @@ import android.widget.AbsListView.MultiChoiceModeListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.SearchView;
 import android.widget.SearchView.OnQueryTextListener;
@@ -40,8 +39,7 @@ import com.rising.login.Configuration;
 import com.rising.login.Login_Utils;
 import com.rising.login.SessionManager;
 import com.rising.mainscreen.preferencies.PreferenciesActivity;
-import com.rising.mainscreen.preferencies.SendFeedback;
-import com.rising.mainscreen.preferencies.SendFeedback.OnSendingFeedback;
+import com.rising.mainscreen.preferencies.SendFeedback_Fragment;
 import com.rising.money.MoneyUpdateConnectionNetwork;
 import com.rising.money.MoneyUpdateConnectionNetwork.OnFailMoney;
 import com.rising.money.MoneyUpdateConnectionNetwork.OnUpdateMoney;
@@ -65,7 +63,6 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 	ArrayList<Score> arraylist = new ArrayList<Score>();
 	public MoneyUpdateConnectionNetwork mucn;
 	private Dialog MDialog;
-	private int fid;
 	private Context ctx;
 	private Dialog Incorrect_User;
 	
@@ -79,21 +76,7 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 	private MainScreen_Utils MSUTILS;
 	private CreateFolders CREATE;
 	private PDF_Methods PDF;
-	
-	//  Recibir la señal del proceso que envía Feedback
-	private OnSendingFeedback listenerFeedback = new OnSendingFeedback() {
-	    public void onFeedbackSent(int details) {       
-			if (details == 1)
-				Toast.makeText(getApplicationContext(), 
-					R.string.feedback_enviado, Toast.LENGTH_LONG).show();
-	    	else
-				Toast.makeText(getApplicationContext(), 
-					R.string.err_login_unknown, Toast.LENGTH_LONG).show();
-			
-			MDialog.dismiss();
-	    }
-	};
-	 
+		 
 	private OnUpdateMoney moneyUpdate = new OnUpdateMoney(){
 
 		@Override
@@ -123,9 +106,7 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 		ficheros = leeFicheros();
 		ctx = this;
 		session.checkLogin();
-		fid = session.getFacebookId();
 		
-		this.ORDENAR = new Ordenar_Partituras(ctx, s_adapter);
 		this.MSUTILS = new MainScreen_Utils();
 		this.CREATE = new CreateFolders(ctx);
 
@@ -182,6 +163,7 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 		}
 		
 		s_adapter = new ScoresAdapter(this, arraylist);
+		this.ORDENAR = new Ordenar_Partituras(ctx, s_adapter);
 		
 		scores_gallery = (GridView) findViewById(R.id.gV_scores);
 		scores_gallery.setAdapter(s_adapter);
@@ -361,35 +343,9 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 	    		return true;
 	                
 	        case R.id.feedback:
-	        	MDialog = new Dialog(MainScreenActivity.this, R.style.cust_dialog);
-	    		MDialog.setContentView(R.layout.feedback);
-	    		MDialog.setTitle(R.string.feedback);
-	    		MDialog.getWindow().setLayout(LayoutParams.MATCH_PARENT,LayoutParams.WRAP_CONTENT);
-	    		MDialog.show();
-
-	    		Button feedbackBoton = (Button)MDialog.findViewById(R.id.feedbackBoton);
-	    		feedbackBoton.setOnClickListener(new Button.OnClickListener() {
-
-					@Override
-					public void onClick(View arg0) {
-						if(new Login_Utils(ctx).isOnline()){	
-							EditText feedbackCajaTexto = (EditText) MDialog.findViewById(R.id.feedbackCajaTexto);
-				    		String message = feedbackCajaTexto.getText().toString();
-							
-							if (message.equals("")) {
-								Toast.makeText(getApplicationContext(), 
-									R.string.err_campos_vacios, Toast.LENGTH_LONG).show();
-							} else {
-								new SendFeedback(MainScreenActivity.this, 
-										listenerFeedback).execute(session.getMail(), message);
-							}
-						
-						}else{
-							Toast.makeText(ctx, R.string.connection_err, Toast.LENGTH_LONG).show();	
-						}
-					}
-	    	    });
-	    		
+	        	Intent i = new Intent(this, SendFeedback_Fragment.class);
+	        	startActivity(i);
+	    		finish();
 	            return true;
 	            
 	        case R.id.mis_datos:
@@ -489,13 +445,13 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 	   				f_toDelete = new File(Environment.getExternalStorageDirectory() + path + ficheros2[i]);	
 	   				f_image_toDelete = new File(Environment.getExternalStorageDirectory() + image_path + ficheroAImagen(ficheros2[i]));
 	   				if(f_toDelete.exists() && f_image_toDelete.exists()){
-	   				if(f_toDelete.delete() && f_image_toDelete.delete()){
-	   					elementosAEliminar.add(s_adapter.getItem(i));
-	   					delete = true;
-	   				}else{
-	   					delete = false;
-	   					break;
-	   				}
+		   				if(f_toDelete.delete() && f_image_toDelete.delete()){
+		   					elementosAEliminar.add(s_adapter.getItem(i));
+		   					delete = true;
+		   				}else{
+		   					delete = false;
+		   					break;
+		   				}
 	   				}		
 	   			}
 	   		}

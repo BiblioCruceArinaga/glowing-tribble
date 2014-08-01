@@ -171,7 +171,7 @@ public class Registro_Fragment extends Activity implements AsyncTask_RegistroFra
             dialog.dismiss();
         }
     	
-    	ERRORS.errRegistro(result);
+    	ERRORS.errRegistro(result);   	
     }
 
 	@Override
