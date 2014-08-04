@@ -23,6 +23,10 @@
 		        android:title="@string/name"/>
 		    
 		    <item 
+		        android:id="@+id/sort_format"
+		        android:title="@string/format" />
+		    
+		    <item 
 		        android:id="@+id/show_all"
 		        android:title="@string/show_all"/>
         </menu>

@@ -18,4 +18,9 @@ public class MainScreen_Utils {
 			return false;
 		}		
 	}
+	
+	public String ficheroAImagen(String fichero){
+		String imagenFichero = fichero.substring(0, fichero.lastIndexOf("."));
+		return imagenFichero + ".jpg";
+	}
 }

@@ -75,6 +75,10 @@ public class ScoresAdapter extends BaseAdapter {
     	return scores_list.get(position).getInstrument();
     }
     
+    public String getItemFormat(int position){
+    	return scores_list.get(position).getFormat();
+    }
+    
     @Override
     public long getItemId(int position) {
         return position;
@@ -158,6 +162,7 @@ public class ScoresAdapter extends BaseAdapter {
         String Author;
         String Title;
         String Instrument;
+        String Format;
         if(charText.length() == 0){
         	scores_list.addAll(arraylist);
         }else{
@@ -165,7 +170,8 @@ public class ScoresAdapter extends BaseAdapter {
             	Author = ss.getAuthor().toLowerCase(Locale.getDefault());
             	Title = ss.getTitle().toLowerCase(Locale.getDefault());
             	Instrument = ss.getInstrument().toLowerCase(Locale.getDefault());
-                if(Author.contains(charText) || Title.contains(charText) || Instrument.contains(charText)){
+            	Format = ss.getFormat().toLowerCase(Locale.getDefault());
+                if(Author.contains(charText) || Title.contains(charText) || Instrument.contains(charText) || Format.contains(charText)){
                 	scores_list.add(ss);
                 }
             }

@@ -106,7 +106,7 @@ public class MainActivityStore extends FragmentActivity implements OnQueryTextLi
 	   //super.onBackPressed();
 	   Log.d("CDA", "onBackPressed Called");
 	   Intent setIntent = new Intent(this, MainScreenActivity.class);
-	   new MainScreenActivity().ColocarFicheros();
+	   //new RecopilarInfoFicheros().ColocarFicheros();
 	   startActivity(setIntent);
 	   finish();
 	}

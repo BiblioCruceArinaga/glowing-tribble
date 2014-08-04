@@ -70,6 +70,8 @@
     <string name="instrument">Instrument</string>
     <string name="instrument_dialog_title">Select an instrument</string>
     <string name="name">Sort by name</string>
+    <string name="format_dialog_title">Select a format</string>
+    <string name="format">Sort by format</string>
     <string name="show_all">Show all</string>
     <string name="action_search">Search</string>
     <string name="no_scores">Your scores collection is empty. 

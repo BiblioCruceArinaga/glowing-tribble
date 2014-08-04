@@ -19,6 +19,7 @@ import com.rising.drawing.R;
 import com.rising.login.Login_Utils;
 import com.rising.login.SessionManager;
 import com.rising.login.login.ProgressDialogFragment;
+import com.rising.mainscreen.MainScreenActivity;
 
 //Clase que maneja el envio de feedback
 public class SendFeedback_Fragment extends Activity implements AsyncTask_SendFeedbackFragment.TaskCallbacks {
@@ -95,7 +96,7 @@ public class SendFeedback_Fragment extends Activity implements AsyncTask_SendFee
 	    switch (item.getItemId()) {
 	        
 	    	case android.R.id.home:
-	    		Intent in = new Intent(this, PreferenciesActivity.class);
+	    		Intent in = new Intent(this, MainScreenActivity.class);
 	    		startActivity(in);
 	    		finish();
 	    	

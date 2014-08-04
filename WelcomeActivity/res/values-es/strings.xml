@@ -72,6 +72,8 @@
     <string name="instrument">Instrumento</string>
     <string name="instrument_dialog_title">Elige un instrumento</string>
     <string name="name">Ordenar por nombre</string>
+    <string name="format_dialog_title">Elige un formato</string>
+    <string name="format">Ordenar por formato</string>
     <string name="show_all">Mostrar todas</string>
     <string name="action_search">Buscar</string>
     <string name="no_scores">Tu colección de partituras está vacía. 
