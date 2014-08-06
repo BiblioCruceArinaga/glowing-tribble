@@ -82,6 +82,10 @@
     <string name="error_folder">Hubo un problema al iniciar Scores</string>
     <string name="incorrect_security_line">No puedes abrir esta partitura, está registrada por otro usuario</string>
     <string name="incorrect_user">Incorrect user</string>
+    <string name="sort_no_scores">No hay partituras para ordenar</string>
+    <string name="sort_error">Ocurrió un error al ordenar</string>
+    <string name="pdf_upload_error">Ocurrió un error al subir el PDF</string>
+    
     
     	<!-- Pantalla subir archivos PDF -->
     	<string name="upload_pdf">Subir PDF</string>

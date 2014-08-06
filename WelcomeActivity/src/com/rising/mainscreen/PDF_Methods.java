@@ -30,16 +30,13 @@ public class PDF_Methods {
 		this.MSUTILS = new MainScreen_Utils();
 		this.ficheros = ficheros_datos;
 	}
-	
-	
+		
 	public void subirArchivo(){
 		MDialog = new Dialog(ctx, R.style.cust_dialog);
 		MDialog.setContentView(R.layout.upload_pdf);
 		MDialog.setTitle(R.string.upload_pdf);
 		MDialog.getWindow().setLayout(LayoutParams.MATCH_PARENT,LayoutParams.WRAP_CONTENT);
 		MDialog.show();
-		
-		boolean subido = false;
 		
 		Button B_Upload = (Button) MDialog.findViewById(R.id.upload_pdf_button);
 				
@@ -51,12 +48,7 @@ public class PDF_Methods {
 				ctx.startActivity(i);
 				((Activity)ctx).finish();
 			}
-			
 		});	
-		
-		if(subido){
-			
-		}
 	}
 	
 	public void AbrirPDFExterno(int position){

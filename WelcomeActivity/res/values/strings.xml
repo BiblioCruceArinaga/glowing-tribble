@@ -80,6 +80,9 @@ You can buy scores in our store.</string>
     <string name="error_folder">There was a problem iniciating Scores</string>
     <string name="incorrect_security_line">You cannot open this score, is registered by other user</string>
     <string name="incorrect_user">Incorrect user</string>
+	<string name="sort_no_scores">There isn\'t Scores to sort</string>
+    <string name="sort_error">There was an error in sort</string> 
+    <string name="pdf_upload_error">There was an error when uploading the PDF file</string>       
     
     	<!-- Pantalla de subir archivos -->
     	<string name="upload_pdf">Upload PDF file</string>

@@ -23,4 +23,5 @@ public class MainScreen_Utils {
 		String imagenFichero = fichero.substring(0, fichero.lastIndexOf("."));
 		return imagenFichero + ".jpg";
 	}
+	
 }

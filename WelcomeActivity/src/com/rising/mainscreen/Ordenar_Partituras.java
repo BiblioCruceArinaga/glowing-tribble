@@ -6,6 +6,7 @@ import java.util.LinkedHashSet;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.util.Log;
 
 import com.rising.drawing.R;
 
@@ -17,6 +18,9 @@ public class Ordenar_Partituras {
 	public Ordenar_Partituras(Context context, ScoresAdapter SAdapter){
 		this.s_adapter = SAdapter;
 		this.ctx = context;
+		if(s_adapter == null){
+			Log.e("S_adapter", "¡¡ES NULL!!");
+		}
 	}
 	
 	public void listarAutores() {

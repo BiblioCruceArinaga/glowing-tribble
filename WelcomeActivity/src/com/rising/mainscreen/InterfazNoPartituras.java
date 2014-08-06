@@ -18,13 +18,13 @@ public class InterfazNoPartituras {
 	
 	private Context ctx;
 	private GridView scores_gallery;
-	
+		
 	public InterfazNoPartituras(Context context, GridView Scores_Gallery){
 		this.ctx = context;
 		this.scores_gallery = Scores_Gallery;
+		interfazCuandoNoHayPartituras();
 	}
-	
-	
+		
 	public void interfazCuandoNoHayPartituras() {
 		TextView textoColeccionVacia = (TextView) ((Activity)ctx).findViewById(R.id.textoColeccionVacia);
 		textoColeccionVacia.setVisibility(0);
