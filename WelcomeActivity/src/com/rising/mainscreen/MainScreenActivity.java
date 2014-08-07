@@ -37,6 +37,7 @@ import com.rising.mainscreen.preferencies.SendFeedback_Fragment;
 import com.rising.money.MoneyUpdateConnectionNetwork;
 import com.rising.money.MoneyUpdateConnectionNetwork.OnFailMoney;
 import com.rising.money.MoneyUpdateConnectionNetwork.OnUpdateMoney;
+import com.rising.pdf.PDF_Methods;
 import com.rising.security.DownloadScoresEncrypter;
 import com.rising.store.MainActivityStore;
 
@@ -323,6 +324,7 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 				if(MSUTILS.ComprobarExtensionFichero(ficheros[position])){
 
 					PDF.AbrirPDFExterno(position);
+					//PDF.AbrirPDFInterno(position);
 
 				}else{
 					if(new DownloadScoresEncrypter(ctx, infoFicheros[0][position]+CONF.getUserId()).DescryptAndConfirm(ficheros[position])){

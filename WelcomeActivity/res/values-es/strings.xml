@@ -85,6 +85,8 @@
     <string name="sort_no_scores">No hay partituras para ordenar</string>
     <string name="sort_error">Ocurrió un error al ordenar</string>
     <string name="pdf_upload_error">Ocurrió un error al subir el PDF</string>
+    <string name="open_file">Abrir archivo</string>
+    <string name="pdf_advise">Debes tener una aplicación que abra archivos PDF para visualizarlos</string>
     
     
     	<!-- Pantalla subir archivos PDF -->

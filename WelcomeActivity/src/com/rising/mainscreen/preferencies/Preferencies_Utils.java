@@ -29,8 +29,9 @@ public class Preferencies_Utils {
 	}
 	
 	public void AboutDialog(){
-    	MDialog = new Dialog(ctx, R.style.cust_dialog);
+    	MDialog = new Dialog(ctx, R.style.AppBaseTheme);
 		MDialog.setContentView(R.layout.preferencies_about);
+		
 		MDialog.setTitle(R.string.about);
 		MDialog.getWindow().setLayout(LayoutParams.MATCH_PARENT,LayoutParams.WRAP_CONTENT);
 		TextView Link_Web = (TextView) MDialog.findViewById(R.id.link);

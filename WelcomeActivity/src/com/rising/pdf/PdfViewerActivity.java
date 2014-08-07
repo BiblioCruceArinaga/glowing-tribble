@@ -96,14 +96,9 @@ public abstract class PdfViewerActivity extends Activity {
 	private float mZoom;
     private File mTmpFile;
     private ProgressDialog progress;
-
-    /*private View navigationPanel;
-    private Handler closeNavigationHandler;
-    private Thread closeNavigationThread;*/
-
     
-    private PDFPage mPdfPage; 
     
+    private PDFPage mPdfPage;     
     private Thread backgroundThread;
     private Handler uiHandler;
 
@@ -114,6 +109,7 @@ public abstract class PdfViewerActivity extends Activity {
 		Log.e(TAG, "onRetainNonConfigurationInstance");
 		return this;
 	}
+	
 	/**
 	 * restore member variables from previously saved instance
 	 * @see onRetainNonConfigurationInstance
@@ -150,25 +146,7 @@ public abstract class PdfViewerActivity extends Activity {
                 
         ActionBar ABar = getActionBar();
         ABar.setDisplayShowHomeEnabled(true);    
-        
-        //progress = ProgressDialog.show(PdfViewerActivity.this, "Loading", "Loading PDF Page");
-        /*closeNavigationHandler = new Handler();
-        closeNavigationThread = new Thread(new Runnable() {
-
-        	public void run() {
-        		navigationPanel.startAnimation(AnimationUtils.loadAnimation(PdfViewerActivity.this,
-        				R.anim.slide_out));
-        		navigationPanel.setVisibility(View.GONE);
-        	}
-        });*/
-
-        /*if (navigationPanel == null) {
-        	navigationPanel = ((ViewStub) findViewById(R.id.stub_navigation)).inflate();
-        	navigationPanel.setVisibility(View.GONE);
-        	ImageButton previous = (ImageButton)navigationPanel.findViewById(R.id.navigation_previous);
-        	previous.setBackgroundDrawable(null);
-        }*/
-        
+          
         uiHandler = new Handler();
         restoreInstance();
         if (mOldGraphView != null) {
@@ -185,8 +163,7 @@ public abstract class PdfViewerActivity extends Activity {
 	        mGraphView.mImageView.setImageBitmap(mGraphView.mBi);
 	        mGraphView.updateTexts();
 	        setContentView(mGraphView);
-        }
-        else {
+        } else {
 	        mGraphView = new GraphView(this);	        
 	        Intent intent = getIntent();
 
@@ -202,8 +179,7 @@ public abstract class PdfViewerActivity extends Activity {
 	        if (intent != null) {
 	        	if ("android.intent.action.VIEW".equals(intent.getAction())) {
         			pdffilename = storeUriContentToFile(intent.getData());
-	        	}
-	        	else {
+	        	} else {
 	                pdffilename = getIntent().getStringExtra(PdfViewerActivity.EXTRA_PDFFILENAME);
 	        	}
 	        }
@@ -243,6 +219,7 @@ public abstract class PdfViewerActivity extends Activity {
 			});
         }
 	}
+	
 	private synchronized void startRenderThread(final int page, final float zoom) {
 		if (backgroundThread != null)
 			return;
@@ -477,18 +454,8 @@ public abstract class PdfViewerActivity extends Activity {
     }
     
 	private class GraphView extends FullScrollView {
-    	//private String mText;
-    	//private long fileMillis;
-    	//private long pageParseMillis;
-    	//private long pageRenderMillis;
     	private Bitmap mBi;
-    	//private String mLine1;
-    	//private String mLine2;
-    	//private String mLine3;
     	private ImageView mImageView;
-    	//private TextView mLine1View; 
-    	//private TextView mLine2View; 
-    	//private TextView mLine3View; 
     	private Button mBtPage;
     	private Button mBtPage2;
     	
@@ -521,56 +488,9 @@ public abstract class PdfViewerActivity extends Activity {
 		        mImageView.setLayoutParams(lpWrap1);
 		        mImageView.setPadding(5, 5, 5, 5);
 		        vl.addView(mImageView);
-		        /*mImageView = (ImageView) findViewById(R.id.pdf_image);
-		        if (mImageView == null) {
-		        	Log.i(TAG, "mImageView is null!!!!!!");
-		        }
-		        setPageBitmap(null);
-		        updateImage();*/
-		        
-		        /*
-		        navigationPanel = new ViewStub(PdfViewerActivity.this, R.layout.navigation_overlay);
-		        final ImageButton previous = (ImageButton)navigationPanel.findViewById(R.id.navigation_previous);
-		        previous.setBackgroundDrawable(null);
-		        previous.setOnClickListener(new OnClickListener() {
-					
-					@Override
-					public void onClick(View v) {
-						prevPage();
-					}
-				});
 
-		        final ImageButton next = (ImageButton)navigationPanel.findViewById(R.id.navigation_next);
-		        next.setBackgroundDrawable(null);
-		        previous.setOnClickListener(new OnClickListener() {
-					
-					@Override
-					public void onClick(View v) {
-						nextPage();
-					}
-				});
- 
-		        //stub.setLayoutParams(Layou)
-		        vl.addView(navigationPanel);
-		        
-		        vl.setOnTouchListener(new OnTouchListener() {
-					
-					@Override
-					public boolean onTouch(View v, MotionEvent event) {
-						if (navigationPanel.getVisibility() != View.VISIBLE) {
-							navigationPanel.startAnimation(AnimationUtils.loadAnimation(PdfViewerActivity.this,
-									R.anim.slide_in));
-							navigationPanel.setVisibility(View.VISIBLE);
-						}
-
-						return false;
-					}
-				});
-				*/
-
-		        //addNavButtons(vl);
 			    
-			setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT, 100));
+			setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, 100));
 			setBackgroundColor(Color.LTGRAY);
 			setHorizontalScrollBarEnabled(true);
 			setHorizontalFadingEdgeEnabled(true);
@@ -662,21 +582,7 @@ public abstract class PdfViewerActivity extends Activity {
 		        hl.addView(bNext);
         
 		        addSpace(hl, 20, 20);
-        
-				// exit button
-		        /*
-				Button bExit=new Button(context);
-		        bExit.setLayoutParams(lpChild1);
-		        bExit.setText("Back");
-		        bExit.setWidth(60);
-		        bExit.setOnClickListener(new OnClickListener() {
-					@Override
-					public void onClick(View v) {
-			            finish();
-					}
-				});
-		        hl.addView(bExit);*/
-        	        
+          	        
 		        vg.addView(hl);
 		    
 	        addSpace(vg, 6, 6);
@@ -721,36 +627,12 @@ public abstract class PdfViewerActivity extends Activity {
 			if (bi != null)
 				mBi = bi;
 			else {
-				/*
-				mBi = Bitmap.createBitmap(100, 100, Config.RGB_565);
-	            Canvas can = new Canvas(mBi);
-	            can.drawColor(Color.RED);
-	            
-				Paint paint = new Paint();
-	            paint.setColor(Color.BLUE);
-	            can.drawCircle(50, 50, 50, paint);
-	            
-	            paint.setStrokeWidth(0);
-	            paint.setColor(Color.BLACK);
-	            can.drawText("Bitmap", 10, 50, paint);
-	            */
+				
 			}
 		}
         
 		protected void updateTexts() {
-			/*
-            mLine1 = "PdfViewer: "+mText;
-            float fileTime = fileMillis*0.001f;
-            float pageRenderTime = pageRenderMillis*0.001f;
-            float pageParseTime = pageParseMillis*0.001f;
-            mLine2 = "render page="+format(pageRenderTime,2)+", parse page="+format(pageParseTime,2)+", parse file="+format(fileTime,2);
-    		int maxCmds = PDFPage.getParsedCommands();
-    		int curCmd = PDFPage.getLastRenderedCommand()+1;
-    		mLine3 = "PDF-Commands: "+curCmd+"/"+maxCmds;
-    		//mLine1View.setText(mLine1);
-    		//mLine2View.setText(mLine2);
-    		//mLine3View.setText(mLine3);
-    		 */
+
     		if (mPdfPage != null) {
 	    		if (mBtPage != null)
 	    			mBtPage.setText(mPdfPage.getPageNumber()+"/"+mPdfFile.getNumPages());
@@ -758,14 +640,6 @@ public abstract class PdfViewerActivity extends Activity {
 	    			mBtPage2.setText(mPdfPage.getPageNumber()+"/"+mPdfFile.getNumPages());
     		}
         }
-
-		/*private String format(double value, int num) {
-			NumberFormat nf = NumberFormat.getNumberInstance();
-			nf.setGroupingUsed(false);
-			nf.setMaximumFractionDigits(num);
-			String result = nf.format(value);
-			return result;
-		}*/
     }
 	
     private void showPage(int page, float zoom) throws Exception {
@@ -857,20 +731,6 @@ public abstract class PdfViewerActivity extends Activity {
         raf.close();
     }
         
-    /*private byte[] readBytes(File srcFile) throws IOException {
-    	long fileLength = srcFile.length();
-    	int len = (int)fileLength;
-    	byte[] result = new byte[len];
-    	FileInputStream fis = new FileInputStream(srcFile);
-    	int pos = 0;
-		int cnt = fis.read(result, pos, len-pos);
-    	while (cnt > 0) {
-    		pos += cnt;
-    		cnt = fis.read(result, pos, len-pos);
-    	}
-		return result;
-	}*/
-
 	private String storeUriContentToFile(Uri uri) {
     	String result = null;
     	try {
@@ -912,12 +772,6 @@ public abstract class PdfViewerActivity extends Activity {
     		mTmpFile = null;
     	}
     }
-
-    /*private void postHideNavigation() {
-    	// Start a time to hide the panel after 3 seconds
-    	closeNavigationHandler.removeCallbacks(closeNavigationThread);
-    	closeNavigationHandler.postDelayed(closeNavigationThread, 3000);
-    }*/
 
     public abstract int getPreviousPageImageResource(); // R.drawable.left_arrow
     public abstract int getNextPageImageResource(); // R.drawable.right_arrow

@@ -1,4 +1,4 @@
-package com.rising.mainscreen;
+package com.rising.pdf;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -30,17 +30,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.rising.drawing.R;
+import com.rising.mainscreen.MainScreenActivity;
+import com.rising.mainscreen.MainScreen_Errors;
 import com.sun.pdfview.PDFFile;
 import com.sun.pdfview.PDFPage;
 
 public class FileExplore extends Activity {
 
-	// Stores names of traversed directories
-	ArrayList<String> str = new ArrayList<String>();
-
-	// Check if the first level of the directory structure is the one showing
+	private Context ctx = this;
+	private ListAdapter adapter;
+	private ArrayList<String> str = new ArrayList<String>();
 	private Boolean firstLvl = true;
-
 	private static final String TAG = "F_PATH";
 	private Item[] fileList;
 	private File path = new File(Environment.getExternalStorageDirectory() + "");
@@ -51,16 +51,17 @@ public class FileExplore extends Activity {
 	//Folders
 	private String scores_path = "/.RisingScores/scores/";
 	private String img_path = "/.RisingScores/scores_images/";
-	
-	
-	Context ctx = this;
-	ListAdapter adapter;
+		
+	//Clases usadas
+	private MainScreen_Errors ERRORS;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		setContentView(R.layout.mainscreen_pdf_fileexplorer);
+		
+		this.ERRORS = new MainScreen_Errors(ctx);
 		
 		LV_FileExplorer = (ListView) findViewById(R.id.lv_fileexplorer);
 				
@@ -77,8 +78,10 @@ public class FileExplore extends Activity {
 
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View view, int position, long id) {
+				
 				chosenFile = fileList[position].file;
 				File sel = new File(path + "/" + chosenFile);
+				
 				if (sel.isDirectory()) {
 					firstLvl = false;
 
@@ -88,10 +91,7 @@ public class FileExplore extends Activity {
 					path = new File(sel + "");
 
 					loadFileList();
-				}
-
-				// Checks if 'up' was clicked
-				else {
+				} else {
 					CopiarArchivos(path.getAbsolutePath().toString()+"/"+chosenFile);
 				}
 			}
@@ -233,10 +233,9 @@ public class FileExplore extends Activity {
                         	
 		File origen = new File(path);
         File destino = new File(Environment.getExternalStorageDirectory() + scores_path, chosenFile);
-
+        
         if(ComprobarFichero(origen)){
         	       	
-        	//Falta hacer el progress bar e indicarle al usuario el proceso. 
         	   try{
         		  FileInputStream or = new FileInputStream(origen);
                   FileOutputStream des = new FileOutputStream(destino); 
@@ -257,7 +256,7 @@ public class FileExplore extends Activity {
  	              finish();
  	              
  	        } catch(Exception e){
- 	            Log.e("Error copiar", e.getMessage());
+ 	            ERRORS.ErrPDF(0);
  	        }
 		}else{
 			Toast.makeText(this, getString(R.string.pdf_error), Toast.LENGTH_LONG).show();
@@ -308,7 +307,6 @@ public class FileExplore extends Activity {
 		return file+extension.toLowerCase();
 	}
 	
-	//Comprueba si es un PDF por la extensión
 	public boolean ComprobarFichero(File f){
 		
 		Log.i("Comprueba ficheros", f.getName());

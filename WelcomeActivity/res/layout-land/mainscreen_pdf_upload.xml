@@ -5,25 +5,17 @@
     android:background="@drawable/background_scoresapp"
     android:orientation="vertical" >
 
-   <!--  <TextView
-        android:id="@+id/tV_file_name"
-        android:layout_width="wrap_content"
+   <TextView
+        android:id="@+id/tV_advise"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:gravity="center"
         android:layout_marginTop="30dp"
         android:textColor="#222"
-        android:textSize="20sp"
-        android:visibility="gone"
+        android:textSize="18sp"
+        android:text="@string/pdf_advise"
         android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <ProgressBar
-        android:id="@+id/pB_upload"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="20dp"
-        android:visibility="gone" /> -->
 
     <Button
         android:id="@+id/upload_pdf_button"
@@ -31,7 +23,7 @@
         android:layout_height="50dp"
         android:layout_gravity="center"
         android:gravity="center"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:layout_marginBottom="30dp"
         style="?android:attr/buttonBarButtonStyle"
         android:textColor="#EEE"

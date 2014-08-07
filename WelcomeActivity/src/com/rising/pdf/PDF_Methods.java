@@ -1,4 +1,4 @@
-package com.rising.mainscreen;
+package com.rising.pdf;
 
 import java.io.File;
 
@@ -14,8 +14,7 @@ import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
 
 import com.rising.drawing.R;
-import com.rising.pdf.PDFReaderActivity;
-import com.rising.pdf.PdfViewerActivity;
+import com.rising.mainscreen.MainScreen_Utils;
 
 public class PDF_Methods {
 
@@ -33,7 +32,7 @@ public class PDF_Methods {
 		
 	public void subirArchivo(){
 		MDialog = new Dialog(ctx, R.style.cust_dialog);
-		MDialog.setContentView(R.layout.upload_pdf);
+		MDialog.setContentView(R.layout.mainscreen_pdf_upload);
 		MDialog.setTitle(R.string.upload_pdf);
 		MDialog.getWindow().setLayout(LayoutParams.MATCH_PARENT,LayoutParams.WRAP_CONTENT);
 		MDialog.show();
@@ -58,10 +57,8 @@ public class PDF_Methods {
 		Intent target = new Intent(Intent.ACTION_VIEW);
 		target.setDataAndType(Uri.fromFile(file), "application/pdf");
 		target.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-		Intent intent = Intent.createChooser(target, "Open File");
+		Intent intent = Intent.createChooser(target, ctx.getString(R.string.open_file));
 		ctx.startActivity(intent);
-		
-		//No he encontrado la manera de abrirlo a pantalla completa
 	}
 	
 	//No se usa actualmente, pero no lo descarto para el futuro

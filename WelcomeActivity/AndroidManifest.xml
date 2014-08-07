@@ -132,14 +132,14 @@
             android:theme="@style/AppBaseTheme" >
         </activity>
         <activity
-            android:name="com.rising.mainscreen.FileExplore"
+            android:name="com.rising.pdf.FileExplore"
             android:label="@string/app_name"
-            android:theme="@style/Theme.Tabs" >
+            android:theme="@style/AppBaseTheme" >
         </activity>
         <activity
             android:name="com.rising.pdf.PDFReaderActivity"
             android:label="@string/app_name"
-            android:theme="@style/Theme.Tabs" >
+            android:theme="@style/AppBaseTheme" >
         </activity>
         <activity android:name="com.rising.login.Facebook_Actions" >
         </activity>

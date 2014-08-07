@@ -26,19 +26,20 @@ import com.rising.drawing.R;
 // Porque BaseAdapter es una subclase de Adapter
 // estos m�todos en este ejemplo son: getCount(), getItem(), getItemId(), getView()
 public class ScoresAdapter extends BaseAdapter {
-	String[] titulos;
-	String[] autores; 
+	
+	public String[] titulos;
+	public String[] autores; 
 	MainScreenActivity MSA = new MainScreenActivity();
 	private String img_path = "/.RisingScores/scores_images/";
 	
 	// Declare Variables
-    Context mContext;
+    public Context ctx;
     LayoutInflater inflater;
     private List<Score> scores_list = null;
     private ArrayList<Score> arraylist;
  
     public ScoresAdapter(Context context, List<Score> scores_list) {
-        mContext = context;
+        ctx = context;
         this.scores_list = scores_list;
         //inflater = LayoutInflater.from(mContext);
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE); 
@@ -145,10 +146,10 @@ public class ScoresAdapter extends BaseAdapter {
 		    //myBitmap = BitmapFactory.decodeFile(f.getAbsolutePath());
 		    myBitmap = BitmapFactory.decodeFile(f.getAbsolutePath(), o2);
 		}else{
-			myBitmap = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.cover); 
+			myBitmap = BitmapFactory.decodeResource(ctx.getResources(), R.drawable.cover); 
 		}
 		
-		Drawable drawable = new BitmapDrawable(mContext.getResources(),myBitmap);
+		Drawable drawable = new BitmapDrawable(ctx.getResources(),myBitmap);
 		
 	//return myBitmap;
 	return drawable;
