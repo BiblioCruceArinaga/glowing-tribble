@@ -43,6 +43,7 @@ import com.rising.store.MainActivityStore;
 
 public class MainScreenActivity extends Activity implements OnQueryTextListener{
 
+	//Variables
 	private Context ctx;
 	private String[] ficheros;
 	private String[][] infoFicheros;
@@ -84,7 +85,7 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 
 		@Override
 		public void onFailMoney() {
-			Toast.makeText(ctx, "Falló al actualizar el saldo", Toast.LENGTH_LONG).show();
+			Toast.makeText(ctx, getString(R.string.errcredit), Toast.LENGTH_LONG).show();
 		}
 	};
 
@@ -327,6 +328,7 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 					//PDF.AbrirPDFInterno(position);
 
 				}else{
+					//Intentar usar el método de AbrirFicheros en Store_Utils
 					if(new DownloadScoresEncrypter(ctx, infoFicheros[0][position]+CONF.getUserId()).DescryptAndConfirm(ficheros[position])){
 						Intent i = new Intent(MainScreenActivity.this, MainActivity.class);
 						i.putExtra("score", ficheros[position]);

@@ -1,4 +1,4 @@
-package com.rising.store;
+package com.rising.store.downloads;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -8,9 +8,6 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -18,23 +15,19 @@ import android.os.AsyncTask;
 import android.os.Environment;
 import android.util.Log;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.rising.drawing.R;
 
 public class DownloadImages extends AsyncTask<String, Integer, String>{
 	
-//  Comunicaci�n HTTP con el servidor
-	HttpPost httppost;
-	HttpClient httpcliente;
+	// Variables
+	private Context ctx;
+	
+	//Folders
 	private String path = "/.RisingScores/scores_images/";
-	ImageLoader iml;
 	
-	//  Contexto
-	Context context;
-	
-	//  Informaci�n obtenida de la base de datos
-	String res;
-	
+	//Clases usadas
+	private Download_Utils UTILS;
+		
 	public interface OnDownloadICompleted{
         void onDownloadICompleted();
     }
@@ -43,36 +36,25 @@ public class DownloadImages extends AsyncTask<String, Integer, String>{
 		void onDownloadIFailed();
 	}
 	
-	private OnDownloadIFailed failedDownloadImage;
+	private OnDownloadIFailed FailedDownloadImage;
 	
-	private OnDownloadICompleted listenerDownloadImage;
+	private OnDownloadICompleted SuccessedDownloadImage;
 	
-	public DownloadImages(OnDownloadICompleted listener, OnDownloadIFailed failed, Context ctx) {
-		this.context = ctx;
-		this.listenerDownloadImage = listener;
-		this.failedDownloadImage = failed;
+	public DownloadImages(OnDownloadICompleted success, OnDownloadIFailed fail, Context context) {
+		this.ctx = context;
+		this.UTILS = new Download_Utils();
+		this.SuccessedDownloadImage = success;
+		this.FailedDownloadImage = fail;
 	}
 	
-	public String FileNameURL(URL urlComplete){
-		
-		String urlCompleto = urlComplete.toString();
-		int position = urlCompleto.lastIndexOf('/');
-		
-		String name = urlCompleto.substring(position, urlCompleto.length());
-		
-		return name;
-	}	
-			
-	@Override
-    protected String doInBackground(String... sUrl) {
-    	
-        try {
+	private String DownloadImageStatus(String URL){
+		try {
             InputStream input = null;
             OutputStream output = null;
             HttpURLConnection connection = null;
             
             try {
-                URL url = new URL(sUrl[0]);
+                URL url = new URL(URL);
                 connection = (HttpURLConnection) url.openConnection();
                 connection.connect();
 
@@ -81,24 +63,14 @@ public class DownloadImages extends AsyncTask<String, Integer, String>{
                 if (connection.getResponseCode() != HttpURLConnection.HTTP_OK)
                      return "Server returned HTTP " + connection.getResponseCode() + " " + connection.getResponseMessage();
 
-                // this will be useful to display download percentage
-                // might be -1: server did not report the length
                 int fileLength = connection.getContentLength();
                 
-                // download the file
                 input = connection.getInputStream();
-                output = new FileOutputStream(Environment.getExternalStorageDirectory() + path + FileNameURL(url));
+                output = new FileOutputStream(Environment.getExternalStorageDirectory() + path + UTILS.FileNameURL(url));
 
                 byte data[] = new byte[fileLength];
-                long total = 0;
                 int count;
                 while ((count = input.read(data)) != -1) {
-                	
-                    // allow canceling with back button
-                    if (isCancelled())
-                        return null;
-                    total += count;
-                    
                     output.write(data, 0, count);
                 }
             } catch (IOException IOE) {
@@ -118,24 +90,29 @@ public class DownloadImages extends AsyncTask<String, Integer, String>{
                     connection.disconnect();
             }
             
-        } finally {
-        	
+        }catch(Exception e){
+        	Log.e("Exception BigTry DownloadImages", "" + e.getMessage());
         }
         return null;
+	}
+				
+	@Override
+    protected String doInBackground(String... sUrl) {
+    	return DownloadImageStatus(sUrl[0]);        
     }
 		
 	@Override
 	protected void onPostExecute(String result) {	
 		
         if (result != null){        	
-        	if(failedDownloadImage != null) failedDownloadImage.onDownloadIFailed();
+        	if(FailedDownloadImage != null) FailedDownloadImage.onDownloadIFailed();
         }else{ 
-        	if(listenerDownloadImage != null) listenerDownloadImage.onDownloadICompleted();	            
+        	if(SuccessedDownloadImage != null) SuccessedDownloadImage.onDownloadICompleted();	            
         }
 	}
 
 	public void resourceToBitmap(String url){
-		Bitmap bmp = BitmapFactory.decodeResource(context.getResources(), R.drawable.cover);
+		Bitmap bmp = BitmapFactory.decodeResource(ctx.getResources(), R.drawable.cover);
 		
 		URL urll = null;
 		try {
@@ -147,7 +124,7 @@ public class DownloadImages extends AsyncTask<String, Integer, String>{
 		
 		FileOutputStream out = null;
 		try {
-		       out = new FileOutputStream(Environment.getExternalStorageDirectory() + path + FileNameURL(urll));
+		       out = new FileOutputStream(Environment.getExternalStorageDirectory() + path + UTILS.FileNameURL(urll));
 		       bmp.compress(Bitmap.CompressFormat.JPEG, 90, out);
 		} catch (Exception e) {
 		    e.printStackTrace();
@@ -157,6 +134,5 @@ public class DownloadImages extends AsyncTask<String, Integer, String>{
 		       } catch(Throwable ignore) {}
 		}
 	}
-	
 	
 }

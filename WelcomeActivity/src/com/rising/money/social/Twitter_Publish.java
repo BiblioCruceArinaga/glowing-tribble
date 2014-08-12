@@ -1,4 +1,4 @@
-package com.rising.money;
+package com.rising.money.social;
 
 import java.util.Locale;
 
@@ -16,6 +16,8 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.rising.drawing.R;
+import com.rising.money.EnableButtonsData;
+import com.rising.money.SocialBonificationNetworkConnection;
 import com.rising.money.SocialBonificationNetworkConnection.OnBonificationDone;
 import com.rising.money.SocialBonificationNetworkConnection.OnFailBonification;
 

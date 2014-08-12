@@ -8,6 +8,7 @@ import android.widget.Toast;
 
 import com.rising.drawing.R;
 
+//Clase que crea las carpetas necesarias para albergar las partituras y las imagenes
 public class CreateFolders {
 	
 	private Context ctx;

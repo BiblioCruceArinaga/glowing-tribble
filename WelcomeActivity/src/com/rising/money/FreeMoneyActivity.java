@@ -7,7 +7,6 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -23,6 +22,9 @@ import android.widget.Toast;
 import com.rising.drawing.R;
 import com.rising.money.Invitations.OnInvitationFail;
 import com.rising.money.Invitations.OnInvitationOk;
+import com.rising.money.social.Facebook_Publish;
+import com.rising.money.social.Google_Rate;
+import com.rising.money.social.Twitter_Publish;
 
 public class FreeMoneyActivity extends Activity{
 	

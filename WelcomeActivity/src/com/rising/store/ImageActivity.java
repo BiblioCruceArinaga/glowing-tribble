@@ -23,11 +23,15 @@ import com.nostra13.universalimageloader.utils.DiskCacheUtils;
 import com.nostra13.universalimageloader.utils.MemoryCacheUtils;
 import com.rising.drawing.R;
 
+//Clase que muestra en pantalla completa una imagen
 public class ImageActivity extends Activity{
 	
-	static ImageLoader iml;
+	//Variables
 	private String url;
-	ProgressDialog Image_PDialog;	
+	private ProgressDialog Image_PDialog;
+	
+	//Clases usadas
+	private ImageLoader IML;	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -35,9 +39,11 @@ public class ImageActivity extends Activity{
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		setContentView(R.layout.imageactivity_layout);	
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		
 		Bundle bundle=getIntent().getExtras();
 		url = bundle.getString("imagen");
-		iml = ImageLoader.getInstance();
+		
+		this.IML = ImageLoader.getInstance();
 		final Context ctx = this;
 						
 		ImageView IV_Score_Preview = (ImageView) findViewById(R.id.iV_score_preview);
@@ -53,16 +59,16 @@ public class ImageActivity extends Activity{
                
 		Image_PDialog = ProgressDialog.show(ctx, "", getString(R.string.pleasewait));
 		
-		iml.displayImage(url, IV_Score_Preview, options, new SimpleImageLoadingListener(){
-       	 boolean cacheFound;
+		IML.displayImage(url, IV_Score_Preview, options, new SimpleImageLoadingListener(){
+       	 	boolean cacheFound;
 
             @Override
             public void onLoadingStarted(String url, View view) {
-                List<String> memCache = MemoryCacheUtils.findCacheKeysForImageUri(url, iml.getMemoryCache());
+                List<String> memCache = MemoryCacheUtils.findCacheKeysForImageUri(url, IML.getMemoryCache());
                 cacheFound = !memCache.isEmpty();
                 if (!cacheFound) {
                 	Log.i("Start Cache", "Loading Cache of: " + url);
-                    File discCache = DiskCacheUtils.findInCache(url, iml.getDiskCache());
+                    File discCache = DiskCacheUtils.findInCache(url, IML.getDiskCache());
                     if (discCache != null) {
                         cacheFound = discCache.exists();
                     }
@@ -72,10 +78,10 @@ public class ImageActivity extends Activity{
             @Override
             public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
                 if (cacheFound) {
-                    MemoryCacheUtils.removeFromCache(imageUri, iml.getMemoryCache());
-                    DiskCacheUtils.removeFromCache(imageUri, iml.getDiskCache());
+                    MemoryCacheUtils.removeFromCache(imageUri, IML.getMemoryCache());
+                    DiskCacheUtils.removeFromCache(imageUri, IML.getDiskCache());
 
-                    iml.displayImage(imageUri, (ImageView) view, options);
+                    IML.displayImage(imageUri, (ImageView) view, options);
                     Log.i("Complete Cache", "Loading Cache Complete");
                 }
                 

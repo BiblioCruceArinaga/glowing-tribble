@@ -1,4 +1,4 @@
-package com.rising.store;
+package com.rising.store.search;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,32 +16,38 @@ import android.widget.TextView;
 
 import com.rising.drawing.R;
 import com.rising.login.Configuration;
-import com.rising.store.SearchNetworkConnection.OnTaskCompleted;
+import com.rising.store.CustomAdapter;
+import com.rising.store.MainActivityStore;
+import com.rising.store.PartituraTienda;
+import com.rising.store.purchases.InfoBuyNetworkConnection;
+import com.rising.store.purchases.InfoCompra;
+import com.rising.store.search.AsyncTask_Search.OnTaskCompleted;
 
+//Clase que muestra el resultado de la búsqueda de partituras a partir de una palabra que se le pasa
 public class SearchStoreActivity extends Activity{
 			
-	public String word; 
-	public CustomAdapter CAdapter;
-	public List<PartituraTienda> infoPart = new ArrayList<PartituraTienda>();
-	private static ArrayList<InfoCompra> ICompra = new ArrayList<InfoCompra>();
-	static InfoBuyNetworkConnection ibnc;
-	public SearchNetworkConnection snc;
-	public ProgressDialog PDialog;
-	ActionBar ABar;
-	TextView result;
+	//Variables
+	private String word;
+	private List<PartituraTienda> infoPart = new ArrayList<PartituraTienda>();
+	private ArrayList<InfoCompra> ICompra = new ArrayList<InfoCompra>();
+	private ProgressDialog PDialog;
+	private ActionBar ABar;
+	private TextView result;
 	
-	//Esto cargará todo aquello que dependa del hilo para ejecutarse, y que de no ser así no interesa que se ejecute
-	private OnTaskCompleted listener = new OnTaskCompleted() {
+	//Clases usadas
+	private InfoBuyNetworkConnection INFO_ASYNCTASK;
+	private AsyncTask_Search SEARCH_ASYNCTASK;
+	
+	private OnTaskCompleted Search = new OnTaskCompleted() {
 	    public void onTaskCompleted() {     	    		
 	    	
-	    	infoPart = snc.devolverPartituras();
-	    	ICompra = ibnc.devolverCompra();
+	    	infoPart = SEARCH_ASYNCTASK.devolverPartituras();
+	    	ICompra = INFO_ASYNCTASK.devolverCompra();
 	    	
 	    	if(infoPart.size() == 0){
 	    		result.setVisibility(View.VISIBLE);
 	    	}else{ 
 	    	
-		    	//Trozo de código dónde se ve si la partitura ha sido comprada por el usuario. En tal caso se pone a true el valor "Comprado"
 		    	for(int i = 0; i < infoPart.size(); i++){
 			    	for(int j = 0; j < ICompra.size(); j++){	
 			    		if(infoPart.get(i).getId() == ICompra.get(j).getId_S()){
@@ -61,14 +67,13 @@ public class SearchStoreActivity extends Activity{
 	@Override
 	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
-		//setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		setContentView(R.layout.searchstore_layout);
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-			
-		//Recibo la palabra de la activity anterior
+		
+		this.SEARCH_ASYNCTASK = new AsyncTask_Search(Search);
+		this.INFO_ASYNCTASK = new InfoBuyNetworkConnection();
+		
 		Bundle b = this.getIntent().getExtras();
-				
-		//La paso a una variable String
 		word = b.getString("SearchText");
 		
 		result = (TextView)findViewById(R.id.empty_result);
@@ -82,13 +87,9 @@ public class SearchStoreActivity extends Activity{
 		
         ABar = getActionBar();
         ABar.setDisplayHomeAsUpEnabled(true);
-        
-		snc = new SearchNetworkConnection(listener, this);
-		ibnc = new InfoBuyNetworkConnection(this);
-		
-		ibnc.execute(new Configuration(this).getUserId());
-		
-		snc.execute(word);
+        		
+		INFO_ASYNCTASK.execute(new Configuration(this).getUserId());
+		SEARCH_ASYNCTASK.execute(word);
 	}   
 			
 	@Override

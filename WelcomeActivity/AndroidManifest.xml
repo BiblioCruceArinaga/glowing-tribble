@@ -107,22 +107,22 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.rising.store.SearchStoreActivity"
+            android:name="com.rising.store.search.SearchStoreActivity"
             android:label="@string/app_name"
             android:theme="@style/Theme.Tabs" >
         </activity>
-        <activity android:name="com.rising.money.Facebook_Publish" >
+        <activity android:name="com.rising.money.social.Facebook_Publish" >
         </activity>
-        <activity android:name="com.rising.money.Twitter_Publish" >
+        <activity android:name="com.rising.money.social.Twitter_PublishPublish" >
         </activity>
         <activity android:name="com.rising.store.ImageActivity" >
         </activity>
-        <activity android:name="com.rising.money.Google_Rate" >
+        <activity android:name="com.rising.money.social.Google_Rate" >
         </activity>
         <activity android:name="com.facebook.LoginActivity" >
         </activity>
         <activity
-            android:name="com.rising.store.MyPurchases"
+            android:name="com.rising.store.purchases.MyPurchases"
             android:label="@string/app_name"
             android:theme="@style/Theme.Tabs" >
         </activity>

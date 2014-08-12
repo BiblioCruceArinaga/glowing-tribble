@@ -93,7 +93,6 @@ public class AsyncTask_LoginFragment extends Fragment {
 	    				this.cancel(true);
 	    			}		            
 	    		             
-	    			//  Aquí se valida el valor obtenido
 	    		    if (logStatus==0) Log.e("LoginStatus ", "Invalido");
 	    		    else Log.e("LoginStatus ", "Valido");
 	

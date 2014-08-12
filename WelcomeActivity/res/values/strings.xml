@@ -426,6 +426,8 @@ You can buy scores in our store.</string>
     	<string name="win_buy">You have received 0,01 credit!</string>
     	<string name="no_space">You haven\'t got space enough in your device</string>
     	<string name="my_purchases">My purchases</string>
+    	<string name="errcredit">There was an error updating your credit. </string>
+    	<string name="errbuy">There was an error in the buy process. Please, try it again later.</string>
     	    	
     		<!-- Pantalla busqueda -->
     		<string name="list">List</string>

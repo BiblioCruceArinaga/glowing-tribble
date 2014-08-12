@@ -1,27 +1,19 @@
 package com.rising.store;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -39,75 +31,84 @@ import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 import com.nostra13.universalimageloader.utils.DiskCacheUtils;
 import com.nostra13.universalimageloader.utils.MemoryCacheUtils;
-import com.rising.conexiones.HttpPostAux;
-import com.rising.drawing.MainActivity;
 import com.rising.drawing.R;
 import com.rising.login.Configuration;
 import com.rising.money.MoneyActivity;
+import com.rising.money.SocialBonificationNetworkConnection;
+import com.rising.money.SocialBonificationNetworkConnection.OnBonificationDone;
+import com.rising.money.SocialBonificationNetworkConnection.OnFailBonification;
 import com.rising.store.BuyNetworkConnection.OnBuyCompleted;
 import com.rising.store.BuyNetworkConnection.OnBuyFailed;
-import com.rising.store.DownloadScores.OnDownloadCompleted;
-import com.rising.store.DownloadScores.OnDownloadFailed;
+import com.rising.store.downloads.DownloadScores;
+import com.rising.store.downloads.DownloadScores.OnDownloadCompleted;
+import com.rising.store.downloads.DownloadScores.OnDownloadFailed;
 
+//Clase que muestra toda la información de la partitura seleccionada
 public class ScoreProfile extends Activity{
 	
-	//Declaro variables  
-	Context ctx;
-	Configuration conf;
+	//Variables  
+	private Context ctx;
+	private String ID_BONIFICATION = "6";
 	private int Id;
-	private String name;
-	private String author;
-	private String year;
-	private String instrument;
-	private String description;
+	private String name, author, year, instrument, description, URL, URL_Image, Id_User, Id_Score;
 	private float price;
 	private boolean comprado;
-	private String urlD;
-	private String URL_Image;
-	static String selectedURL = "";
-	private String path = "/.RisingScores/scores/";
-	Dialog BDialog, NMDialog;
-	Button Confirm_Buy, Cancel_Buy, Buy_Money;
-	private ImageLoader iml;
-	private Button B_Price;
-		
-	String Id_User = "";
-	String Id_Score = "";
-	
+	private Dialog NoMoneyDialog;
+	private Button B_Price, Buy_Money;
+	private ProgressDialog mProgressDialog, Image_PDialog;
 	//  private String style -> Dato para el futuro. Estilo musical
 	//  Al final del perfil de la partitura se recomienda al usuario más del mismo estilo
+	
+	//URL	
+	private String path = "/.RisingScores/scores/";
+	
+	//Clases usadas
+	private Configuration CONF;
+	private ImageLoader IML;
+	private DownloadScores DOWNLOAD;
+	private BuyNetworkConnection BUY_ASYNCTASK;	
+	private SocialBonificationNetworkConnection BONIFICATION_ASYNCTASK;
+	private Store_Utils UTILS;
+	
+	private OnBonificationDone SuccessBonification = new OnBonificationDone(){
 
-	//private ShareActionProvider share;
-	private DownloadScores download;
-	BuyNetworkConnection bnc;
-	String URL_Buy = "http://www.scores.rising.es/store-buyscore";
+		@Override
+		public void onBonificationDone() {
+			Toast.makeText(ctx, R.string.win_buy, Toast.LENGTH_LONG).show();
+		}		
+	};
 	
-	private HttpPostAux HPA =  new HttpPostAux();
 	
-	// declare the dialog as a member field of your activity
-	ProgressDialog mProgressDialog, Image_PDialog;
+	private OnFailBonification FailBonification = new OnFailBonification(){
+
+		@Override
+		public void onFailBonification() {
+			Toast.makeText(ctx, R.string.fail_social, Toast.LENGTH_LONG).show();
+		}		
+	};
 	
-	private OnBuyCompleted buyComplete = new OnBuyCompleted(){
+	private OnBuyCompleted RegisterCompletedBuyAndDownload = new OnBuyCompleted(){
 
 		@Override
 		public void onBuyCompleted() {
+			((MainActivityStore) ctx).StartMoneyUpdate(CONF.getUserEmail());
+			BONIFICATION_ASYNCTASK.execute(ID_BONIFICATION);     				
 			
-			//Hay que poner algo aquí para que cuando falle la aplicación no se cierre     				
-			download.execute(urlD, URL_Image, name+conf.getUserId());
+			DOWNLOAD.execute(URL, URL_Image, name + CONF.getUserId());
 			comprado = true;
 		}
 	};
-	
-	private OnBuyFailed failedBuy = new OnBuyFailed(){
+		
+	private OnBuyFailed FailedBuy = new OnBuyFailed(){
 
 		@Override
 		public void onBuyFailed() {
-			Toast.makeText(ctx, "Falló", Toast.LENGTH_LONG).show();
+			Toast.makeText(ctx, ctx.getString(R.string.errbuy), Toast.LENGTH_LONG).show();
 		}
 		
 	};
 	
-	private OnDownloadCompleted listenerDownload = new OnDownloadCompleted(){
+	private OnDownloadCompleted SuccessedDownload = new OnDownloadCompleted(){
 		@Override
 		public void onDownloadCompleted() {
 			
@@ -118,7 +119,8 @@ public class ScoreProfile extends Activity{
 		}		
 	};
 	
-	private OnDownloadFailed failedDownload = new OnDownloadFailed(){
+	
+	private OnDownloadFailed FailedDownload = new OnDownloadFailed(){
 		@Override
 		public void onDownloadFailed() {
 			//Acciones a ejecutar cuando la descarga fall�(Dialog o  Activity????)
@@ -131,10 +133,13 @@ public class ScoreProfile extends Activity{
 		setContentView(R.layout.score_profile_layout);
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		
-		ctx = this;
-		download = new DownloadScores(listenerDownload, failedDownload, this);
-		bnc = new BuyNetworkConnection(buyComplete, failedBuy, this);		
-		iml = ImageLoader.getInstance();
+		this.ctx = this;
+		this.DOWNLOAD = new DownloadScores(SuccessedDownload, FailedDownload, this);
+		this.BUY_ASYNCTASK = new BuyNetworkConnection(RegisterCompletedBuyAndDownload, FailedBuy);
+		this.BONIFICATION_ASYNCTASK = new SocialBonificationNetworkConnection(SuccessBonification, FailBonification, ctx);
+		this.UTILS = new Store_Utils(ctx);
+		this.IML = ImageLoader.getInstance();
+		
 		Image_PDialog = ProgressDialog.show(ctx, "", getString(R.string.pleasewait));
 		
 		mProgressDialog = new ProgressDialog(ScoreProfile.this);
@@ -152,7 +157,7 @@ public class ScoreProfile extends Activity{
 		price = b.getFloat("price");
 		description = b.getString("description");
 		comprado = b.getBoolean("comprado");
-		urlD = b.getString("url");
+		URL = b.getString("url");
 		URL_Image = b.getString("url_imagen");
 		
 		ActionBar ABar = getActionBar();
@@ -169,7 +174,6 @@ public class ScoreProfile extends Activity{
 		final TextView TV_Description = (TextView) findViewById(R.id.tv_description_profile);
 		ImageView IV_Partitura = (ImageView) findViewById(R.id.imagenPartitura_profile);
 						
-	//  Cambiamos el texto de los TextView por el de la partitura seleccionada 
 		TV_Name.setText("");
 		TV_Author.setText("");
 		TV_Year.setText("");
@@ -185,7 +189,7 @@ public class ScoreProfile extends Activity{
         .displayer(new RoundedBitmapDisplayer(10))
         .build();
                
-		iml.displayImage(URL_Image, IV_Partitura, options, new SimpleImageLoadingListener(){
+		IML.displayImage(URL_Image, IV_Partitura, options, new SimpleImageLoadingListener(){
 	       	 boolean cacheFound;
 
 	            @Override
@@ -217,9 +221,7 @@ public class ScoreProfile extends Activity{
 	                Image_PDialog.dismiss();
 	            }
 	       });
-		
-		//iml.displayImage(URL_Image, IV_Partitura, options);	
-		
+				
 		IV_Partitura.setOnClickListener(new OnClickListener(){
 
 			@Override
@@ -230,11 +232,9 @@ public class ScoreProfile extends Activity{
 			}
 			
 		});
-		
-		
-		
+				
 		if(comprado){
-			if(buscarArchivos(FileNameString(urlD))){
+			if(UTILS.buscarArchivos(UTILS.FileNameString(URL), path)){
 				B_Price.setText(R.string.open);
 			}else{
 				B_Price.setText(R.string.download);
@@ -248,123 +248,98 @@ public class ScoreProfile extends Activity{
 	        	B_Price.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.money_ico, 0);
 			}
 		}
-				
-		//Dialog que pregunta al usuario si quiere comprar la partitura
- 		BDialog = new Dialog(this, R.style.cust_dialog);
- 		BDialog.setContentView(R.layout.buy_dialog);
-		BDialog.setTitle(R.string.confirm_buy);
-										
-		Confirm_Buy = (Button)BDialog.findViewById(R.id.b_confirm_buy);
-		Cancel_Buy = (Button)BDialog.findViewById(R.id.b_cancel_buy);
-			
+		
+		final AlertDialog.Builder BuyDialog = new AlertDialog.Builder(ctx);  
+        BuyDialog.setTitle(R.string.confirm_buy);  
+        BuyDialog.setMessage(R.string.buy_agree);            
+        BuyDialog.setCancelable(false);  
+        BuyDialog.setPositiveButton(R.string.buy, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface BuyDialog, int id) {  
+                
+            	
+            	if(price == 0.0){	
+    					
+					BUY_ASYNCTASK.execute(Id_User, Id_Score, Locale.getDefault().getDisplayLanguage());
+	 			
+	 				BuyDialog.dismiss();
+							     						     								     							     							     				
+				}else{
+									 								 														 			
+	     			if(price < CONF.getUserMoney()){		 					
+	 							     								     				
+		     			BUY_ASYNCTASK.execute(Id_User, Id_Score, Locale.getDefault().getDisplayLanguage());
+		     			
+		     			BuyDialog.dismiss();					     							     			
+					}else{
+							
+						NoMoneyDialog = new Dialog(ctx, R.style.cust_dialog);
+							
+						NoMoneyDialog.setContentView(R.layout.no_money_dialog);
+						NoMoneyDialog.setTitle(R.string.not_enough_credit);
+							
+						Buy_Money = (Button)NoMoneyDialog.findViewById(R.id.b_buy_credit);
+							
+						Buy_Money.setOnClickListener(new OnClickListener(){
+	
+							@Override
+							public void onClick(View v) {
+								Intent i = new Intent(ctx, MoneyActivity.class);
+								startActivity(i);
+							}
+								
+						});
+							
+						NoMoneyDialog.show();			 						
+					}
+						
+				}            	
+            	
+            }  
+        });  
+        
+        BuyDialog.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface BuyDialog, int id) {  
+                BuyDialog.cancel();
+            }  
+        });            
+        
 		B_Price.setOnClickListener(new OnClickListener(){
 
 			@Override
 			public void onClick(View v) {
-				conf = new Configuration(ctx);
-        		Id_User = conf.getUserId();
+				CONF = new Configuration(ctx);
+        		Id_User = CONF.getUserId();
         		Id_Score = String.valueOf(Id);
                 
-                Id_User = conf.getUserId();
+                Id_User = CONF.getUserId();
         		Id_Score = String.valueOf(Id);
                 
-        		//  Si la partitura ya está comprada lanza la descarga 
-        		//  sin registrar la compra en la base de datos.
         		if(comprado){
         			
-        			//Si la partitura ya est� en el dispositivo la abre
-        			if(buscarArchivos(FileNameString(urlD))){
+        			if(UTILS.buscarArchivos(UTILS.FileNameString(URL), path)){
         							
-        				AbrirFichero(ctx, FileNameString(urlD));				
+        				UTILS.AbrirFichero(UTILS.FileNameString(URL), path);				
         			}else{
         				     				
-	     				download.execute(urlD, URL_Image, name+conf.getUserId());
+	     				DOWNLOAD.execute(URL, URL_Image, name + CONF.getUserId());
         			}  				
         			     				
      				mProgressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
      				    @Override
      				    public void onCancel(DialogInterface dialog) {
-     				    	download.cancel(true);
+     				    	DOWNLOAD.cancel(true);
      				    }
      				});
      				
         		}else{
-        			
-					//Se le pregunta al usuario si realmente desea comprar la partitura	
-					BDialog.show();
-					
-					Confirm_Buy.setOnClickListener(new OnClickListener(){
-							
-						@Override
-						public void onClick(View arg0) {
+        				
+					BuyDialog.show();
 										
-							selectedURL = urlD;
-							
-							//Aquí tiene lugar la descarga y la compra, y el registro de la compra en la base de datos
-							if(price == 0.0){	
-									     							     							     							     					
-								bnc.execute(Id_User, Id_Score, Locale.getDefault().getDisplayLanguage());
-				 			
-				 				BDialog.dismiss();
-										     						     								     							     							     				
-							}else{
-												 								 														 			
-				     			if(price < conf.getUserMoney()){		 					
-				 							     								     				
-					     			bnc.execute(Id_User, Id_Score, Locale.getDefault().getDisplayLanguage());
-					     			
-					     			BDialog.dismiss();					     							     			
-								}else{
-										
-									NMDialog = new Dialog(ctx, R.style.cust_dialog);
-										
-									NMDialog.setContentView(R.layout.no_money_dialog);
-									NMDialog.setTitle(R.string.not_enough_credit);
-										
-									Buy_Money = (Button)NMDialog.findViewById(R.id.b_buy_credit);
-										
-									Buy_Money.setOnClickListener(new OnClickListener(){
-				
-										@Override
-										public void onClick(View v) {
-											Intent i = new Intent(ctx, MoneyActivity.class);
-											startActivity(i);
-										}
-											
-									});
-										
-									NMDialog.show();			 						
-								}
-									
-							}
-						}
-							
-						});
-					
-					Cancel_Buy.setOnClickListener(new OnClickListener(){
-				
-						@Override
-						public void onClick(View v) {
-							BDialog.dismiss();							
-						}
-							
-					});
-						
 				}
 			}
         });
 	} 
-	
-	public String FileNameString(String urlComplete){
 		
-		String urlCompleto = urlComplete.toString();
-		int position = urlCompleto.lastIndexOf('/');
-		
-		String name = urlCompleto.substring(position + 1, urlCompleto.length());
-		
-		return name;
-	}
-	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.menu_score_profile, menu); 
@@ -392,25 +367,6 @@ public class ScoreProfile extends Activity{
 	            return super.onOptionsItemSelected(item);
 	    }
 	}
-	
-	//Busca en el dispositivo archivos con el mismo nombre que el que se le pasa
-	public boolean buscarArchivos(String name){
-			//String[] ficheros = new MainScreenActivity().leeFicheros();
-			File f = new File(Environment.getExternalStorageDirectory() + path + name);
-			
-			if(f.exists()){
-				return true;
-			}else{
-				return false;
-			}
-		}
-		
-	public void AbrirFichero(Context ctx, String path){
-			Intent in = new Intent(ctx, MainActivity.class);
-			in.putExtra("score", path);
-			
-			startActivity(in);
-		}
 		
 	/*
 	//  Este método se utiliza en el menú. ShareActionProvider
@@ -423,54 +379,4 @@ public class ScoreProfile extends Activity{
         return shareIntent;
     }
     */
-		
-	class AsyncBuyScore extends AsyncTask<String, String, String>{
-
-		@Override
-		protected String doInBackground(String... params) {
-			int buyStatus=-1;
-	    	
-	    	/*Creamos un ArrayList del tipo nombre-valor para agregar los datos recibidos por los parametros 
-	    	 *anteriores (Mail y Pass) y enviarlo mediante POST a nuestro sistema para relizar la validacion*/ 
-	    	ArrayList<NameValuePair> postparameters2send= new ArrayList<NameValuePair>();
-	     		
-			postparameters2send.add(new BasicNameValuePair("id_u", params[0]));
-			postparameters2send.add(new BasicNameValuePair("id_s", params[1]));
-			postparameters2send.add(new BasicNameValuePair("lenguaje", params[2]));
-			
-			//Se realiza una peticion, y como respuesta se obtiene un array JSON
-	      	JSONArray jData = HPA.getServerData(postparameters2send, URL_Buy);
-	      	
-			//Si lo que obtuvimos  y guardamos en el jData no es null
-			if (jData!=null && jData.length() > 0){
-
-				JSONObject json_Data; //Se crea un objeto JSON
-				try {
-					json_Data = jData.getJSONObject(0); //Se lee el primer segmento, en nuestro caso el único
-					buyStatus=json_Data.getInt("buystatus"); //Se accede al valor 
-					Log.e("LoginStatus","buyStatus= "+buyStatus);//Se muestra por log que obtuvimos
-				} catch (JSONException e) {
-					e.printStackTrace();
-				}		            
-			             
-				//Aquí se valida el valor obtenido. Si es 0 será invalido, y si es 1 será valido
-			    if (buyStatus==0){// [{"logstatus":"0"}] 
-			    	Log.e("BuyStatus ", "Invalido");
-			    	
-			    	return "Inval";
-			    	
-			    }else{// [{"logstatus":"1"}]
-			    	Log.e("BuyStatus ", "Valido");
-			    	return "Val";
-			    } 
-			}else{	
-					  
-				//Si el JSON obtenido es null se mostrará el error en Log.
-				Log.e("JSON", "ERROR");
-				
-			}
-			return null;
-		}
-		
-	}
 }

@@ -4,14 +4,11 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+//Métodos copiados de "http://developer.android.com/training/displaying-bitmaps/load-bitmap.html" para reescalar imágenes
 public class BitmapUtils {
 
-	/**
-	 * Métodos copiados de http://developer.android.com/training/displaying-bitmaps/load-bitmap.html
-	 * para reescalar imágenes
-	 */
 	public static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
-	    // Raw height and width of image
+
 	    final int height = options.outHeight;
 	    final int width = options.outWidth;
 	    int inSampleSize = 1;
@@ -33,33 +30,17 @@ public class BitmapUtils {
 	        
 	public static Bitmap decodeSampledBitmapFromResource(Resources res, int id, int reqWidth, int reqHeight) {
 
-	            // First decode with inJustDecodeBounds=true to check dimensions
-	            final BitmapFactory.Options options = new BitmapFactory.Options();
-	            options.inJustDecodeBounds = true;
-	            BitmapFactory.decodeResource(res, id, options);
+		// First decode with inJustDecodeBounds=true to check dimensions
+	    final BitmapFactory.Options options = new BitmapFactory.Options();
+	    options.inJustDecodeBounds = true;
+	    BitmapFactory.decodeResource(res, id, options);
 
-	            // Calculate inSampleSize
-	            options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
+	    // Calculate inSampleSize
+	    options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
 
-	            // Decode bitmap with inSampleSize set
-	            options.inJustDecodeBounds = false;
-	            return BitmapFactory.decodeResource(res, id, options);
+	    // Decode bitmap with inSampleSize set
+	    options.inJustDecodeBounds = false;
+	    return BitmapFactory.decodeResource(res, id, options);
 	}
-	
-	/*Clase para cuando los archivos de imagen de cover sean descargados
-	public static Bitmap decodeSampledBitmapFromResource(String path, int reqWidth, int reqHeight) {
-
-        // First decode with inJustDecodeBounds=true to check dimensions
-        final BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(path, options);
-
-        // Calculate inSampleSize
-        options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
-
-        // Decode bitmap with inSampleSize set
-        options.inJustDecodeBounds = false;
-        return BitmapFactory.decodeFile(path, options);
-	}*/
 
 }

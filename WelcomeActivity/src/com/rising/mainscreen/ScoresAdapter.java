@@ -21,28 +21,23 @@ import android.widget.TextView;
 
 import com.rising.drawing.R;
  
-// Un BaseAdapter puede usarse para un Adapter en un listview o gridview
-// hay que implementar algunos m�todos heredados de la clase Adapter,
-// Porque BaseAdapter es una subclase de Adapter
-// estos m�todos en este ejemplo son: getCount(), getItem(), getItemId(), getView()
+//Adaptador de la vista de la biblioteca de partituras. 
 public class ScoresAdapter extends BaseAdapter {
 	
-	public String[] titulos;
-	public String[] autores; 
-	MainScreenActivity MSA = new MainScreenActivity();
-	private String img_path = "/.RisingScores/scores_images/";
+	//Variables
+	private Context ctx;
+	private ViewHolder holder;
+	private LayoutInflater inflater;
+	private List<Score> scores_list = null;
+	private ArrayList<Score> arraylist;
 	
-	// Declare Variables
-    public Context ctx;
-    LayoutInflater inflater;
-    private List<Score> scores_list = null;
-    private ArrayList<Score> arraylist;
- 
+	//Folders
+	private String img_path = "/.RisingScores/scores_images/";
+	       
     public ScoresAdapter(Context context, List<Score> scores_list) {
-        ctx = context;
+        this.ctx = context;
         this.scores_list = scores_list;
-        //inflater = LayoutInflater.from(mContext);
-        inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE); 
+        this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE); 
         this.arraylist = new ArrayList<Score>();
         this.arraylist.addAll(scores_list);
     }
@@ -85,17 +80,15 @@ public class ScoresAdapter extends BaseAdapter {
         return position;
     }
     
-    public View getView(final int position, View view, ViewGroup parent) {
-        final ViewHolder holder;
+    @SuppressWarnings("deprecation")
+	public View getView(final int position, View view, ViewGroup parent) {
+            	
         if(view == null){
             holder = new ViewHolder();
-            view = inflater.inflate(R.layout.gallery_item, null);
+            view = inflater.inflate(R.layout.gallery_item, parent, false);
             
-            // Locate the TextViews in listview_item.xml
             holder.Title = (TextView) view.findViewById(R.id.tV_score_title);
             holder.Author = (TextView) view.findViewById(R.id.tV_score_author);
-            
-            // Locate the ImageView in listview_item.xml
             holder.image = (ImageView) view.findViewById(R.id.iV_score);                   
             holder.ImageLogo = (ImageView) view.findViewById(R.id.iV_logo_file);
             
@@ -104,12 +97,9 @@ public class ScoresAdapter extends BaseAdapter {
             holder = (ViewHolder) view.getTag();
         }
         
-        // Set the results into TextViews
         holder.Title.setText(scores_list.get(position).getTitle());
         holder.Author.setText(scores_list.get(position).getAuthor());
 
-        //holder.image.setImageBitmap(imagenFichero(scores_list.get(position).getImage()));
-        //holder.image.setBackground(imagenFichero(scores_list.get(position).getImage()));
         holder.image.setBackgroundDrawable(imagenFichero(scores_list.get(position).getImage()));
                            
         if(scores_list.get(position).getFormat().equals("pdf")){
@@ -122,28 +112,23 @@ public class ScoresAdapter extends BaseAdapter {
     public Drawable imagenFichero(String nombreImagen){
 	     	
 		File f = new File(Environment.getExternalStorageDirectory() + img_path + nombreImagen);
-					
-		//Decode image size
+				
 		BitmapFactory.Options o = new BitmapFactory.Options();
 		o.inJustDecodeBounds = true;
 		BitmapFactory.decodeFile(f.getAbsolutePath(),o);
 
-		//The new size we want to scale to
 		final int REQUIRED_WIDTH=120;
 		final int REQUIRED_HIGHT=500;
 		
-		//Find the correct scale value. It should be the power of 2.
 		int scale=1;
 		while(o.outWidth/scale/2>=REQUIRED_WIDTH && o.outHeight/scale/2>=REQUIRED_HIGHT)
 			scale*=2;
 
-		//Decode with inSampleSize
 		BitmapFactory.Options o2 = new BitmapFactory.Options();
 		o2.inSampleSize=scale;
 				 	
 		Bitmap myBitmap;
 		if(f.exists()){
-		    //myBitmap = BitmapFactory.decodeFile(f.getAbsolutePath());
 		    myBitmap = BitmapFactory.decodeFile(f.getAbsolutePath(), o2);
 		}else{
 			myBitmap = BitmapFactory.decodeResource(ctx.getResources(), R.drawable.cover); 
@@ -151,11 +136,9 @@ public class ScoresAdapter extends BaseAdapter {
 		
 		Drawable drawable = new BitmapDrawable(ctx.getResources(),myBitmap);
 		
-	//return myBitmap;
 	return drawable;
 }  
     
-    // Filter Class
     public void filter(String charText){
     	charText = charText.toLowerCase(Locale.getDefault());
     	

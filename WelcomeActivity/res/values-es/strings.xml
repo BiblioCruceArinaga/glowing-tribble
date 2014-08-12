@@ -65,29 +65,26 @@
     	
 	<!-- Pantalla principal -->
     <string name="titulo_coleccion">Mi colección</string>
-    <string name="bin">Delete</string>
-    <string name="action_sort">Ordenar</string>
-    <string name="author">Autor</string>
-    <string name="author_dialog_title">Elige un autor</string>
-    <string name="instrument">Instrumento</string>
-    <string name="instrument_dialog_title">Elige un instrumento</string>
-    <string name="name">Ordenar por nombre</string>
-    <string name="format_dialog_title">Elige un formato</string>
-    <string name="format">Ordenar por formato</string>
-    <string name="show_all">Mostrar todas</string>
-    <string name="action_search">Buscar</string>
+   	<string name="action_search">Buscar</string>
     <string name="no_scores">Tu colección de partituras está vacía. 
         Puedes comprar partituras en nuestra tienda.</string>
     <string name="no_scores_button">Ir a la tienda</string>
     <string name="error_folder">Hubo un problema al iniciar Scores</string>
     <string name="incorrect_security_line">No puedes abrir esta partitura, está registrada por otro usuario</string>
-    <string name="incorrect_user">Incorrect user</string>
-    <string name="sort_no_scores">No hay partituras para ordenar</string>
-    <string name="sort_error">Ocurrió un error al ordenar</string>
-    <string name="pdf_upload_error">Ocurrió un error al subir el PDF</string>
-    <string name="open_file">Abrir archivo</string>
-    <string name="pdf_advise">Debes tener una aplicación que abra archivos PDF para visualizarlos</string>
-    
+    <string name="incorrect_user">Usuario incorrecto</string>
+    	
+    	<!-- Ordenar archivos -->
+        <string name="action_sort">Ordenar</string>
+	    <string name="author">Autor</string>
+	    <string name="author_dialog_title">Elige un autor</string>
+	    <string name="instrument">Instrumento</string>
+	    <string name="instrument_dialog_title">Elige un instrumento</string>
+	    <string name="name">Ordenar por nombre</string>
+	    <string name="format_dialog_title">Elige un formato</string>
+	    <string name="format">Ordenar por formato</string>
+	    <string name="show_all">Mostrar todas</string>
+	    <string name="sort_no_scores">No hay partituras para ordenar</string>
+   		<string name="sort_error">Ocurrió un error al ordenar</string>
     
     	<!-- Pantalla subir archivos PDF -->
     	<string name="upload_pdf">Subir PDF</string>
@@ -97,8 +94,12 @@
     	<string name="pdf_error">El archivo seleccionado no es un archivo PDF</string>   
     	<string name="path_error">Hubo un error con el explorador</string>
     	<string name="uploading">Subiendo archivo</string> 	
+    	<string name="pdf_upload_error">Ocurrió un error al subir el PDF</string>
+    	<string name="open_file">Abrir archivo</string>
+    	<string name="pdf_advise">Debes tener una aplicación que abra archivos PDF para visualizarlos</string>
     	
     	<!-- Menú contextual -->
+    	<string name="bin">Borrar</string>
     	<string name="select_all">Seleccionar todos</string>
     	<string name="select_none">Deseleccionar todos</string>
     	<string name="title">Selecciona partituras</string>
@@ -110,66 +111,66 @@
     
     <!-- Pantalla partitura -->
     <string name="metronome">Metrónomo</string>	
-    	<string name="metronome_pause">Pausa</string>
-    	<string name="metronome_stop">Para</string>
-    	<string name="metronome_play">Inicia</string>
-    	<string name="metronome_back">Volver al inicio</string>
-    	<string name="close_metronome">Cerrar metrónomo</string>
-    	<string name="tempo">Tempo</string>
-        <string name="score">Scores</string>
-    	<string name="speed_allowed">Velocidad mínima: 1 bpm. Velocidad máxima: 300 bpm.</string>
+    <string name="metronome_pause">Pausa</string>
+    <string name="metronome_stop">Para</string>
+    <string name="metronome_play">Inicia</string>
+    <string name="metronome_back">Volver al inicio</string>
+    <string name="close_metronome">Cerrar metrónomo</string>
+    <string name="tempo">Tempo</string>
+    <string name="score">Scores</string>
+    <string name="speed_allowed">Velocidad mínima: 1 bpm. Velocidad máxima: 300 bpm.</string>
     	
-    <!-- Pantalla panorámica -->
-    <string name="panoramic_view">Panorámica</string>
-    <string name="vertical_view">Vertical</string>
-    	
-    <!-- Leer micrófono -->
-    <string name="readMicrophone">Micrófono</string>
-    	<string name="microphone_sensitivity">Sensibilidad</string>
-    	<string name="microphone_speed">Velocidad</string>
-	    <string name="microphone_start">Empezar</string>
-	    <string name="microphone_stop">Parar</string>
-    	<string name="startPlaying">Ya puedes empezar a tocar</string>
-    	<string name="setSensitivity">Ajustar sensibilidad</string>
-    	<string name="setSpeed">Ajustar velocidad</string>
-    	<string name="sensitivityText">
-	        Ajusta la sensibilidad del micrófono. \n\n
-	        \t\t-Si este valor es demasiado bajo,tendrás que tocar muy fuerte para que la aplicación te oiga. \n
-	        \t\t-Si este valor es demasiado alto, el ruido ambiente podría interferir en la aplicación y estorbarte. \n
-	        Busca un valor apropiado que te permita tocar de manera cómoda.
-	    </string>
-	    <string name="sensitivityButton">Ajustar</string>
-	    <string name="speedText">
-	        Ajusta la velocidad a la que se recogen muestras del micrófono. \n\n
-	        Ajusta este valor si crees que la partitura se está moviendo demasiado despacio o demasiado deprisa.
-	    </string>
-    
-    <!-- Navegación -->
-    <string name="navigate">Navegación</string>
-    <string name="navigate_top">Ir al principio</string>
-    <string name="navigate_bottom">Ir al final</string>
-    <string name="navigate_to_bar">Ir al compás&#8230;</string>
-    <string name="number_of_bar">Número de compás</string>
-    <string name="go_to_bar">Ir al compás</string>
-    <string name="wrong_bar_number">No hay ningún compás con ese número</string>
-        	
+	    <!-- Pantalla panorámica -->
+	    <string name="panoramic_view">Panorámica</string>
+	    <string name="vertical_view">Vertical</string>
+	    	
+	    <!-- Leer micrófono -->
+	    <string name="readMicrophone">Micrófono</string>
+	    <string name="microphone_sensitivity">Sensibilidad</string>
+	    <string name="microphone_speed">Velocidad</string>
+		<string name="microphone_start">Empezar</string>
+		<string name="microphone_stop">Parar</string>
+	    <string name="startPlaying">Ya puedes empezar a tocar</string>
+	    <string name="setSensitivity">Ajustar sensibilidad</string>
+	    <string name="setSpeed">Ajustar velocidad</string>
+	    <string name="sensitivityText">
+		        Ajusta la sensibilidad del micrófono. \n\n
+		        \t\t-Si este valor es demasiado bajo,tendrás que tocar muy fuerte para que la aplicación te oiga. \n
+		        \t\t-Si este valor es demasiado alto, el ruido ambiente podría interferir en la aplicación y estorbarte. \n
+		        Busca un valor apropiado que te permita tocar de manera cómoda.
+		</string>
+		<string name="sensitivityButton">Ajustar</string>
+		<string name="speedText">
+		        Ajusta la velocidad a la que se recogen muestras del micrófono. \n\n
+		        Ajusta este valor si crees que la partitura se está moviendo demasiado despacio o demasiado deprisa.
+		</string>
+	    
+	    <!-- Navegación -->
+	    <string name="navigate">Navegación</string>
+	    <string name="navigate_top">Ir al principio</string>
+	    <string name="navigate_bottom">Ir al final</string>
+	    <string name="navigate_to_bar">Ir al compás&#8230;</string>
+	    <string name="number_of_bar">Número de compás</string>
+	    <string name="go_to_bar">Ir al compás</string>
+	    <string name="wrong_bar_number">No hay ningún compás con ese número</string>
+	        	
     <string name="contentDescription">Imagen</string>
 
-    <!-- Menú principal contextual -->
+    <!-- Preferencias -->
     <string name="mis_datos">Mis datos</string>
-    	<string name="mis_datos_nombre">Nombre:</string>
-    	<string name="mis_datos_email">Email:</string>
-    	<string name="mis_datos_clave">Cambiar contraseña</string>
-    	<string name="mis_datos_clave_vieja">Contraseña antigua</string>
-    	<string name="mis_datos_clave_nueva">Contraseña nueva</string>
-    	<string name="mis_datos_clave_repetir">Repetir contraseña nueva</string>
-    	<string name="mis_datos_boton">Cambiar contraseña</string>
-    	<string name="mis_datos_clave_cambiada">Se ha cambiado tu contraseña</string>
-    	<string name="mis_datos_error_verif">No hemos podido verificar su identidad</string>
-    	<string name="mis_datos_clave_erronea">Contraseña incorrecta</string>
-    	<string name="mis_datos_saldo">Saldo:</string>
-    	<string name="try_change_pass">Intentando cambiar tu contraseña. Por favor, espera&#8230;</string>
-    	<string name="err_close_session">Ocurrió un error al cerrar la sesión</string>
+    <string name="mis_datos_nombre">Nombre:</string>
+    <string name="mis_datos_email">Email:</string>
+    <string name="mis_datos_clave">Cambiar contraseña</string>
+    <string name="mis_datos_clave_vieja">Contraseña antigua</string>
+    <string name="mis_datos_clave_nueva">Contraseña nueva</string>
+    <string name="mis_datos_clave_repetir">Repetir contraseña nueva</string>
+    <string name="mis_datos_boton">Cambiar contraseña</string>
+    <string name="mis_datos_clave_cambiada">Se ha cambiado tu contraseña</string>
+    <string name="mis_datos_error_verif">No hemos podido verificar su identidad</string>
+    <string name="mis_datos_clave_erronea">Contraseña incorrecta</string>
+    <string name="mis_datos_saldo">Saldo:</string>
+    <string name="try_change_pass">Intentando cambiar tu contraseña. Por favor, espera&#8230;</string>
+    <string name="err_close_session">Ocurrió un error al cerrar la sesión</string>
     	
         	
     <string name="feedback">Feedback</string>
@@ -497,6 +498,8 @@
     	<string name="win_buy">¡Has recibido 0,01 crédito!</string>
     	<string name="no_space">No tienes espacio suficiente en tu dispositivo</string>
     	<string name="my_purchases">Mis compras</string>
+    	<string name="errcredit">Falló al actualizar el saldo. </string>
+    	<string name="errbuy">Ocurrió un error al registrar la compra. Por favor, inténtalo de nuevo más tarde.</string>
     	
     		<!-- Pantalla busqueda -->
     		<string name="list">Lista</string>

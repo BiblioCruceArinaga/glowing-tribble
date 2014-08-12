@@ -1,4 +1,4 @@
-package com.rising.money;
+package com.rising.money.social;
 
 import java.util.Locale;
 
@@ -17,6 +17,9 @@ import com.facebook.widget.FacebookDialog;
 import com.facebook.widget.WebDialog;
 import com.facebook.widget.WebDialog.OnCompleteListener;
 import com.rising.drawing.R;
+import com.rising.money.EnableButtonsData;
+import com.rising.money.FreeMoneyActivity;
+import com.rising.money.SocialBonificationNetworkConnection;
 import com.rising.money.SocialBonificationNetworkConnection.OnBonificationDone;
 import com.rising.money.SocialBonificationNetworkConnection.OnFailBonification;
 
