@@ -35,8 +35,8 @@ import com.rising.mainscreen.preferencies.PreferenciesActivity;
 import com.rising.mainscreen.preferencies.Preferencies_Utils;
 import com.rising.mainscreen.preferencies.SendFeedback_Fragment;
 import com.rising.money.MoneyUpdateConnectionNetwork;
-import com.rising.money.MoneyUpdateConnectionNetwork.OnFailMoney;
-import com.rising.money.MoneyUpdateConnectionNetwork.OnUpdateMoney;
+import com.rising.money.MoneyUpdateConnectionNetwork.OnFailUpdateMoney;
+import com.rising.money.MoneyUpdateConnectionNetwork.OnSuccessUpdateMoney;
 import com.rising.pdf.PDF_Methods;
 import com.rising.security.DownloadScoresEncrypter;
 import com.rising.store.MainActivityStore;
@@ -72,19 +72,19 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 	private MainScreen_Errors ERRORS;
 
 
-	private OnUpdateMoney moneyUpdate = new OnUpdateMoney(){
+	private OnSuccessUpdateMoney moneyUpdate = new OnSuccessUpdateMoney(){
 
 		@Override
-		public void onUpdateMoney() {
+		public void onSuccessUpdateMoney() {
 
 			CONF.setUserMoney(mucn.devolverDatos());
 		}
 	};
 
-	private OnFailMoney failMoney = new OnFailMoney(){
+	private OnFailUpdateMoney failMoney = new OnFailUpdateMoney(){
 
 		@Override
-		public void onFailMoney() {
+		public void onFailUpdateMoney() {
 			Toast.makeText(ctx, getString(R.string.errcredit), Toast.LENGTH_LONG).show();
 		}
 	};

@@ -500,6 +500,7 @@
     	<string name="my_purchases">Mis compras</string>
     	<string name="errcredit">Falló al actualizar el saldo. </string>
     	<string name="errbuy">Ocurrió un error al registrar la compra. Por favor, inténtalo de nuevo más tarde.</string>
+    	<string name="err_update">Ocurrió un error al actualizar</string>
     	
     		<!-- Pantalla busqueda -->
     		<string name="list">Lista</string>

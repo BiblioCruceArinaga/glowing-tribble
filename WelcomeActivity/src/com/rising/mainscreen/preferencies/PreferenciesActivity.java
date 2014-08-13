@@ -120,7 +120,7 @@ public class PreferenciesActivity extends Activity{
 		Name.setText(Name.getText() + " " + CONF.getUserName());
 		Mail.setText(Mail.getText() + " " + CONF.getUserEmail());
 		Credit.setText(Credit.getText() + " " + CONF.getUserMoney());
-		Credit.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.money_ico, 0);
+		Credit.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.money, 0);
 		
 		if(SESSION.getFacebookId() != -1){
 			ChangePass.setVisibility(View.GONE);

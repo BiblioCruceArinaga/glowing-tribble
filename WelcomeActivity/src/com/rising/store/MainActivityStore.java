@@ -22,8 +22,8 @@ import com.rising.drawing.R;
 import com.rising.login.Configuration;
 import com.rising.mainscreen.MainScreenActivity;
 import com.rising.money.MoneyUpdateConnectionNetwork;
-import com.rising.money.MoneyUpdateConnectionNetwork.OnFailMoney;
-import com.rising.money.MoneyUpdateConnectionNetwork.OnUpdateMoney;
+import com.rising.money.MoneyUpdateConnectionNetwork.OnFailUpdateMoney;
+import com.rising.money.MoneyUpdateConnectionNetwork.OnSuccessUpdateMoney;
 import com.rising.store.instruments.InstrumentFragment;
 import com.rising.store.purchases.MyPurchases;
 import com.rising.store.search.SearchStoreActivity;
@@ -42,19 +42,19 @@ public class MainActivityStore extends FragmentActivity implements OnQueryTextLi
 	private MoneyUpdateConnectionNetwork MONEY_ASYNCTASK;
 	private Configuration CONF;
 			
-	private OnUpdateMoney MoneyUpdateSuccess = new OnUpdateMoney(){
+	private OnSuccessUpdateMoney MoneyUpdateSuccess = new OnSuccessUpdateMoney(){
 
 		@Override
-		public void onUpdateMoney() {							
+		public void onSuccessUpdateMoney() {							
 			CONF.setUserMoney(MONEY_ASYNCTASK.devolverDatos());
 			invalidateOptionsMenu();
 		}
 	};
 	
-	private OnFailMoney MoneyUpdateFail = new OnFailMoney(){
+	private OnFailUpdateMoney MoneyUpdateFail = new OnFailUpdateMoney(){
 
 		@Override
-		public void onFailMoney() {		
+		public void onFailUpdateMoney() {		
 			Toast.makeText(ctx, getString(R.string.errcredit), Toast.LENGTH_LONG).show();
 		}		
 	};
@@ -63,7 +63,7 @@ public class MainActivityStore extends FragmentActivity implements OnQueryTextLi
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);				
-		setContentView(R.layout.activity_main_store);		
+		setContentView(R.layout.store_storeactivity);		
 		
 		ctx = this;
 		this.CONF = new Configuration(this);
@@ -139,7 +139,7 @@ public class MainActivityStore extends FragmentActivity implements OnQueryTextLi
 	    //Crea y muestra el saldo del usuario
 	    item = menu.findItem(R.id.money);    
 	    item.setTitle("" + CONF.getUserMoney());
-	    item.setIcon(R.drawable.money_ico);
+	    item.setIcon(R.drawable.money);
 	    
 		return true;
 	}
@@ -164,7 +164,7 @@ public class MainActivityStore extends FragmentActivity implements OnQueryTextLi
 	    					getFragmentManager().beginTransaction().replace(R.id.fragment_container, new InstrumentFragment(2)).commit();
 	    				}else{
 	    					Log.e("Error actualizar", "Falló al actualizar");
-	    					Toast.makeText(getApplicationContext(), "Hubo un error en la actualización", Toast.LENGTH_SHORT).show();
+	    					Toast.makeText(getApplicationContext(), ctx.getString(R.string.err_update), Toast.LENGTH_SHORT).show();
 	    				}
 	    			}
 	    		}

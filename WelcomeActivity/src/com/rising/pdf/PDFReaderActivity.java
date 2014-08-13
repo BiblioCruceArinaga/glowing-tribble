@@ -25,7 +25,7 @@ public class PDFReaderActivity extends PdfViewerActivity{
     }
     
     public int getPdfPageNumberResource() { 
-    	return R.layout.dialog_pagenumber; 
+    	return R.layout.pdf_pagenumberdialog; 
     }
     
     public int getPdfPasswordEditField() { 

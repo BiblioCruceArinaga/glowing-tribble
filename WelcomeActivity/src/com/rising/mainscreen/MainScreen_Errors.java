@@ -85,7 +85,7 @@ public class MainScreen_Errors {
 	
 	public void Incorrect_User(){
 		EDialog = new Dialog(ctx, R.style.cust_dialog);
-		EDialog.setContentView(R.layout.incorrect_user_dialog);
+		EDialog.setContentView(R.layout.error_errordialog);
 		EDialog.setTitle(R.string.incorrect_user);
 		EDialog.show();
 	}

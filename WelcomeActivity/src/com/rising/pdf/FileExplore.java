@@ -35,8 +35,10 @@ import com.rising.mainscreen.MainScreen_Errors;
 import com.sun.pdfview.PDFFile;
 import com.sun.pdfview.PDFPage;
 
+//Explorador de ficheros para los PDF
 public class FileExplore extends Activity {
 
+	//Variables
 	private Context ctx = this;
 	private ListAdapter adapter;
 	private ArrayList<String> str = new ArrayList<String>();

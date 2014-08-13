@@ -15,6 +15,7 @@ import android.util.Log;
 import com.rising.conexiones.HttpPostAux;
 import com.rising.login.Configuration;
 
+//Clase que registra las compras de saldo
 public class BuyMoneyNetworkConnection extends AsyncTask<String, Integer, Integer>{
 			
 	//Variables
@@ -27,11 +28,11 @@ public class BuyMoneyNetworkConnection extends AsyncTask<String, Integer, Intege
 	private HttpPostAux HPA = new HttpPostAux();
 	private Configuration CONF;
 	
-	private OnBuyMoney SuccessedBuyMoney;
+	private OnSuccessBuyMoney SuccessedBuyMoney;
 	private OnFailBuyMoney FailedBuyMoney;
 	
-	public interface OnBuyMoney{
-        void onBuyMoney();
+	public interface OnSuccessBuyMoney{
+        void onSuccessBuyMoney();
     }
 		
 	public interface OnFailBuyMoney{
@@ -39,7 +40,7 @@ public class BuyMoneyNetworkConnection extends AsyncTask<String, Integer, Intege
 	}
 	
 	
-	public BuyMoneyNetworkConnection(OnBuyMoney listener, OnFailBuyMoney failMoney, Context context) {
+	public BuyMoneyNetworkConnection(OnSuccessBuyMoney listener, OnFailBuyMoney failMoney, Context context) {
 		this.ctx = context;
 		this.SuccessedBuyMoney = listener;
 		this.FailedBuyMoney = failMoney;
@@ -88,7 +89,7 @@ public class BuyMoneyNetworkConnection extends AsyncTask<String, Integer, Intege
     protected void onPostExecute(String result) {
     	
     	if(result.equals("1")){
-    		if (SuccessedBuyMoney != null) SuccessedBuyMoney.onBuyMoney();
+    		if (SuccessedBuyMoney != null) SuccessedBuyMoney.onSuccessBuyMoney();
     	}else{
     		if (FailedBuyMoney != null) FailedBuyMoney.onFailBuyMoney();
     	}

@@ -27,7 +27,7 @@ public class ErrorFragment extends Fragment{
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		
-		view = inflater.inflate(R.layout.store_error_layout, container, false);
+		view = inflater.inflate(R.layout.store_errorlayout, container, false);
 			
 		Button errButton = (Button) view.findViewById(R.id.b_retry_store);
 				

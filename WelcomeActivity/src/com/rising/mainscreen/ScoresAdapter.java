@@ -85,7 +85,7 @@ public class ScoresAdapter extends BaseAdapter {
             	
         if(view == null){
             holder = new ViewHolder();
-            view = inflater.inflate(R.layout.gallery_item, parent, false);
+            view = inflater.inflate(R.layout.mainscreen_galleryitem, parent, false);
             
             holder.Title = (TextView) view.findViewById(R.id.tV_score_title);
             holder.Author = (TextView) view.findViewById(R.id.tV_score_author);

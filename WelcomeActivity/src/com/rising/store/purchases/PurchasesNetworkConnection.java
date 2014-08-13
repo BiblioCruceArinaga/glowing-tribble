@@ -43,7 +43,6 @@ public class PurchasesNetworkConnection extends AsyncTask<String, Integer, Strin
     	params.add(new BasicNameValuePair("Lenguaje", Language));
     	
     	try{
-	    	
 	    	JSONArray jArray = HPA.getServerData(params, URL_Purchases); 
 		   	
 			if (jArray!=null && jArray.length() > 0){
@@ -73,9 +72,9 @@ public class PurchasesNetworkConnection extends AsyncTask<String, Integer, Strin
 				    }
 				}catch(JSONException e1){
 					
-					Log.d("JSONException PurchasesAsynctask", "Pues eso, JSONException: " + e1.getMessage() + ", Result: " + jArray.toString());
+					Log.e("JSONException PurchasesAsynctask", "Pues eso, JSONException: " + e1.getMessage() + ", Result: " + jArray.toString());
 				}catch (ParseException e1) {
-			        e1.printStackTrace();
+			        Log.e("ParseException PurchasesAsynctask", "" + e1.getMessage());
 			    }	
 				
 			}else{	

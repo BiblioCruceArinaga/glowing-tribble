@@ -16,13 +16,16 @@ import android.widget.Button;
 import com.rising.drawing.R;
 import com.rising.mainscreen.MainScreen_Utils;
 
+//Clase con los métodos necesarios para hacer uso de archivos PDF
 public class PDF_Methods {
 
+	//Variables
 	private Context ctx;
-	private MainScreen_Utils MSUTILS;
 	private Dialog MDialog;
-	
 	private String[] ficheros;
+	
+	//Clases usadas
+	private MainScreen_Utils MSUTILS;
 	
 	public PDF_Methods(Context context, String[] ficheros_datos){
 		this.ctx = context;

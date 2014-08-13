@@ -67,7 +67,7 @@ public class SearchStoreActivity extends Activity{
 	@Override
 	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.searchstore_layout);
+		setContentView(R.layout.store_search_searchstorelayout);
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		
 		this.SEARCH_ASYNCTASK = new AsyncTask_Search(Search);

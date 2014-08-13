@@ -94,7 +94,7 @@ public class BpmManagement {
 	//  escoger una velocidad de metrónomo para este compás
 	private void establecerVelocidadAlCompas(final int index) {
 		MDialog = new Dialog(context,  R.style.cust_dialog);	
-		MDialog.setContentView(R.layout.metronome_dialog_compas);
+		MDialog.setContentView(R.layout.drawing_metronomecompasdialog);
 		MDialog.setTitle(R.string.metronome);
 		MDialog.getWindow().setLayout(config.getAnchoDialogBpm(), config.getAltoDialogBpm());	
 

@@ -140,7 +140,7 @@ public class MainActivity extends Activity{
 	    		
 	    	case R.id.navigate_to_bar:
 	    		MDialog = new Dialog(MainActivity.this, R.style.cust_dialog);	
-				MDialog.setContentView(R.layout.gotobar);
+				MDialog.setContentView(R.layout.drawing_gotobar);
 				MDialog.setTitle(R.string.navigate_to_bar);	
 
 				final EditText barEditText = (EditText) MDialog.findViewById(R.id.editTextNumberOfBar);
@@ -255,7 +255,7 @@ public class MainActivity extends Activity{
 		
 		private void gestionarSensibilidad() {
 			MicrophoneDialog = new Dialog(MainActivity.this, R.style.cust_dialog);	
-			MicrophoneDialog.setContentView(R.layout.microphone_sensitivity_dialog);
+			MicrophoneDialog.setContentView(R.layout.drawing_microphonesensitivitydialog);
 			MicrophoneDialog.setTitle(R.string.setSensitivity);	
 			MicrophoneDialog.getWindow().setLayout(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 						
@@ -298,7 +298,7 @@ public class MainActivity extends Activity{
 		
 		private void gestionarVelocidad() {
 			MicrophoneDialog = new Dialog(MainActivity.this, R.style.cust_dialog);	
-			MicrophoneDialog.setContentView(R.layout.microphone_speed_dialog);
+			MicrophoneDialog.setContentView(R.layout.drawing_microphonespeeddialog);
 			MicrophoneDialog.setTitle(R.string.setSpeed);	
 			
 			final TextView texto = (TextView) MicrophoneDialog.findViewById(R.id.speedValue);
@@ -354,7 +354,7 @@ public class MainActivity extends Activity{
 		Log.i("Window", screenWith + ", " + screenHeight);
 		
 		MDialog = new Dialog(MainActivity.this, R.style.cust_dialog);	
-		MDialog.setContentView(R.layout.metronome_dialog);
+		MDialog.setContentView(R.layout.drawing_metronomedialog);
 		MDialog.setTitle(R.string.metronome);
 		MDialog.getWindow().setLayout(config.getAnchoDialogBpm(), config.getAltoDialogBpm());
 		

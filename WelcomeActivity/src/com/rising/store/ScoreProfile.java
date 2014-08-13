@@ -35,8 +35,8 @@ import com.rising.drawing.R;
 import com.rising.login.Configuration;
 import com.rising.money.MoneyActivity;
 import com.rising.money.SocialBonificationNetworkConnection;
-import com.rising.money.SocialBonificationNetworkConnection.OnBonificationDone;
 import com.rising.money.SocialBonificationNetworkConnection.OnFailBonification;
+import com.rising.money.SocialBonificationNetworkConnection.OnSuccessBonification;
 import com.rising.store.BuyNetworkConnection.OnBuyCompleted;
 import com.rising.store.BuyNetworkConnection.OnBuyFailed;
 import com.rising.store.downloads.DownloadScores;
@@ -70,10 +70,10 @@ public class ScoreProfile extends Activity{
 	private SocialBonificationNetworkConnection BONIFICATION_ASYNCTASK;
 	private Store_Utils UTILS;
 	
-	private OnBonificationDone SuccessBonification = new OnBonificationDone(){
+	private OnSuccessBonification SuccessBonification = new OnSuccessBonification(){
 
 		@Override
-		public void onBonificationDone() {
+		public void onSuccessBonification() {
 			Toast.makeText(ctx, R.string.win_buy, Toast.LENGTH_LONG).show();
 		}		
 	};
@@ -130,7 +130,7 @@ public class ScoreProfile extends Activity{
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.score_profile_layout);
+		setContentView(R.layout.store_scoreprofilelayout);
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		
 		this.ctx = this;
@@ -242,10 +242,10 @@ public class ScoreProfile extends Activity{
 		}else{
 			if(price == 0.0){
 				B_Price.setText(R.string.free);
-				B_Price.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.money_ico, 0);
+				B_Price.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.money, 0);
 			}else{
 				B_Price.setText(price + "");
-	        	B_Price.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.money_ico, 0);
+	        	B_Price.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.money, 0);
 			}
 		}
 		
@@ -274,7 +274,7 @@ public class ScoreProfile extends Activity{
 							
 						NoMoneyDialog = new Dialog(ctx, R.style.cust_dialog);
 							
-						NoMoneyDialog.setContentView(R.layout.no_money_dialog);
+						NoMoneyDialog.setContentView(R.layout.store_nomoneydialog);
 						NoMoneyDialog.setTitle(R.string.not_enough_credit);
 							
 						Buy_Money = (Button)NoMoneyDialog.findViewById(R.id.b_buy_credit);

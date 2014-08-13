@@ -428,6 +428,7 @@ You can buy scores in our store.</string>
     	<string name="my_purchases">My purchases</string>
     	<string name="errcredit">There was an error updating your credit. </string>
     	<string name="errbuy">There was an error in the buy process. Please, try it again later.</string>
+    	<string name="err_update">There was an error when updating</string>
     	    	
     		<!-- Pantalla busqueda -->
     		<string name="list">List</string>

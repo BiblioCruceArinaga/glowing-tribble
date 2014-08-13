@@ -71,7 +71,7 @@ public class InstrumentFragment extends Fragment{
 	
 	public View main(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
 				
-		rootView = inflater.inflate(R.layout.priano_fragment, container, false);
+		rootView = inflater.inflate(R.layout.store_instruments_instrumentfragment, container, false);
 		
 		this.ctx = rootView.getContext();
 		this.CONF = new Configuration(ctx);
@@ -84,7 +84,7 @@ public class InstrumentFragment extends Fragment{
 	}
 	
 	public View errorView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-		rootView = inflater.inflate(R.layout.store_error_layout, container, false);
+		rootView = inflater.inflate(R.layout.store_errorlayout, container, false);
 		
 		return rootView;
 	}

@@ -13,49 +13,50 @@ import android.content.Context;
 import android.os.Environment;
 import android.util.Log;
 
+//Clase que se encarga de la linea de seguridad de las partituras que se descargan
 public class DownloadScoresEncrypter {
 
+	//Variables
 	private String User_Token;
+	
+	//Folder
 	private String path = "/.RisingScores/scores/";
 	
-	//Constructor 
 	public DownloadScoresEncrypter(Context ctx, String token){
 		this.User_Token = token.toLowerCase();
 	}
     
-	//Crea un archivo e inserta en él la linea de seguridad
-	public void CreateAndInsert(OutputStream f){	
-		 		 
-		 try{
+	public void CreateAndInsertSecurityLine(OutputStream f){
+		try{
 			 Log.i("UserToken", User_Token);
-			 byte[] coded = Base64.encode(User_Token.getBytes(Charset.forName("UTF-8")));			 
+			 byte[] securityLine = Base64.encode(User_Token.getBytes(Charset.forName("UTF-8")));			 
 			 
-			 //Dar la vuelta al array para que el signo = esté al principio y se pueda colocar la cadena al final
-			 byte[] aux = new byte[coded.length];
-			 for(int i = 0; i < coded.length; i++){
-				 aux[i] = coded[aux.length - (i + 1)];
+			 byte[] turnTheLine = new byte[securityLine.length];
+			 for(int i = 0; i < securityLine.length; i++){
+				 turnTheLine[i] = securityLine[turnTheLine.length - (i + 1)];
 			 }	 
 						 
-			 String codid = new String(coded);
-			 Log.i("Coded", codid);
-			 String auxi = new String(aux);
-			 Log.i("Aux", auxi);
+			 String SecurityLine = new String(securityLine);
+			 Log.i("SecurityLine", SecurityLine);
+			 String lineTurned= new String(turnTheLine);
+			 Log.i("lineTurned", lineTurned);
 			 
-			 f.write(aux);
-			 			 
+			 try{
+				 f.write(turnTheLine);
+			 }catch(Exception e){
+				 Log.e("Error Writing DownloadEncrypter", e.getMessage());
+			 }		 
 		 }catch(Exception e){
 			 Log.e("Error DownloadEncrypter", e.getMessage());
 		 }
 	 }
 
-	//Desencripta la linea de seguridad en el archivo que se le pase y devuelve true o false si es igual o no
 	public boolean DescryptAndConfirm(String fichero){
 		
-		String tempp = getSecurityLine(fichero); 
+		String securityLine = getSecurityLine(fichero); 
 		
-		//Devuelve un array de bytes y convierte estos en una string
-		byte[] decoded = Base64.decode(tempp);
-	    String strDecoded = new String(decoded).toLowerCase();
+		byte[] decodedLine = Base64.decode(securityLine);
+	    String strDecoded = new String(decodedLine).toLowerCase();
 	    		
 	    Log.d("Comparation", "Decode: " + strDecoded + ", UT: " + User_Token);
 		
@@ -65,18 +66,7 @@ public class DownloadScoresEncrypter {
 			return false;
 		}		 
 	 }
-	 	 
-	//Esto extrae el nombre del fichero a partir de la URL. Está en varias clases, debería estar solo en una común a todas. 
-	public String FileNameURL(String urlCompleto){
-			
-		int position = urlCompleto.lastIndexOf('/');
-			
-		String name = urlCompleto.substring(position, urlCompleto.length());
-			
-		return name;
-	}	
-	 
-	//Coge la linea de seguridad del archivo que se le pasa
+	 	 	 
 	public String getSecurityLine(String fichero){
 		File f = null;
 		String line = "";
@@ -94,37 +84,40 @@ public class DownloadScoresEncrypter {
 			
 			while((b = (byte)fis.read())!=-128){
 			}
+			
 			Log.i("LineLength", ""+SecurityLineLength(f));
+			
 			while((b = (byte)fis.read()) != -1){
 				ArrayLine[i] = b;
 				i++;
 			}
 			
-			byte[] ArrayAux = new byte[ArrayLine.length];
+			byte[] ArrayLineTurned = new byte[ArrayLine.length];
 			for(int j = 0; j < ArrayLine.length; j++){
-				ArrayAux[j] = ArrayLine[ArrayAux.length - (j + 1)];
+				ArrayLineTurned[j] = ArrayLine[ArrayLineTurned.length - (j + 1)];
 			}
 			
-			line = new String(ArrayAux);
-			Log.i("Complettempp", line);
+			line = new String(ArrayLineTurned);
+			Log.i("CompletedLine", line);
 					 
 		}catch (EOFException EOF){
+			Log.e("EOFException Encrypt", EOF.getMessage());
 		}catch(IOException IOE){
-			IOE.printStackTrace(); 
+			Log.e("IOException Encrypt", IOE.getMessage());
 		}finally{
 			try {
 				fis.close();
 			} catch (IOException e) {
-				e.printStackTrace();
+				Log.e("Finally IOException Encrypt", e.getMessage());
 			}
 		}
 		return line;
 	}
 	
-	//Mide la longitud de la linea de seguridad del archivo que se le pasa
 	public int SecurityLineLength(File f){
 		FileInputStream fis = null;
 		int length = 0;
+		@SuppressWarnings("unused")
 		byte bb = 0;
 		try{
 			fis = new FileInputStream(f);
@@ -136,12 +129,12 @@ public class DownloadScoresEncrypter {
 			}
 			
 		}catch(Exception e){
-			Log.e("ExceptionLineLength", e.getMessage());
+			Log.e("ExceptionLineLength Encrypt", e.getMessage());
 		}finally{
 			try {
 				fis.close();
 			} catch (IOException e) {
-				e.printStackTrace();
+				Log.e("Finally ExceptionLineLength Encrypt", e.getMessage());
 			}
 		}
 		

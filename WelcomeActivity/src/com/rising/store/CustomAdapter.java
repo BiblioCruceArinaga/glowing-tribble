@@ -32,8 +32,8 @@ import com.rising.drawing.R;
 import com.rising.login.Configuration;
 import com.rising.money.MoneyActivity;
 import com.rising.money.SocialBonificationNetworkConnection;
-import com.rising.money.SocialBonificationNetworkConnection.OnBonificationDone;
 import com.rising.money.SocialBonificationNetworkConnection.OnFailBonification;
+import com.rising.money.SocialBonificationNetworkConnection.OnSuccessBonification;
 import com.rising.store.BuyNetworkConnection.OnBuyCompleted;
 import com.rising.store.BuyNetworkConnection.OnBuyFailed;
 import com.rising.store.downloads.DownloadScores;
@@ -70,10 +70,10 @@ public class CustomAdapter extends BaseAdapter {
 	private ImageLoader IML;
 	private Store_Utils UTILS;
 	
-	private OnBonificationDone SuccessBonification = new OnBonificationDone(){
+	private OnSuccessBonification SuccessBonification = new OnSuccessBonification(){
 
 		@Override
-		public void onBonificationDone() {
+		public void onSuccessBonification() {
 			Toast.makeText(ctx, R.string.win_buy, Toast.LENGTH_LONG).show();
 		}		
 	};
@@ -181,7 +181,7 @@ public class CustomAdapter extends BaseAdapter {
 		IML = ImageLoader.getInstance();
         if (view == null) {
         	holder = new ViewHolder();
-        	view = inflater.inflate(R.layout.grid_element, parent, false);
+        	view = inflater.inflate(R.layout.store_gridelement, parent, false);
         	
             holder.Title = (TextView) view.findViewById(R.id.nombrePartitura);
             holder.Author = (TextView) view.findViewById(R.id.autorPartitura);
@@ -246,16 +246,16 @@ public class CustomAdapter extends BaseAdapter {
 	    }else{
 	    	if(lista.get(position).getPrecio() == 0.0){
 	        	holder.botonCompra.setText(R.string.free);	        	
-	        	holder.botonCompra.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.money_ico, 0);
+	        	holder.botonCompra.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.money, 0);
 	        }else{
 	        	holder.botonCompra.setText(lista.get(position).getPrecio() + "");
-	        	holder.botonCompra.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.money_ico, 0);
+	        	holder.botonCompra.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.money, 0);
 	        }
 	    }        
  		
  		//Dialog que pregunta al usuario si quiere comprar la partitura
  		BDialog = new Dialog(ctx, R.style.cust_dialog);
- 		BDialog.setContentView(R.layout.buy_dialog);
+ 		BDialog.setContentView(R.layout.store_buydialog);
 		BDialog.setTitle(R.string.confirm_buy);
 										
 		Confirm_Buy = (Button)BDialog.findViewById(R.id.b_confirm_buy);
@@ -317,8 +317,6 @@ public class CustomAdapter extends BaseAdapter {
         				}
         			}
         		}else{
-        		        			
-        			//Se le pregunta al usuario si realmente desea comprar la partitura	
         			BDialog.show();
         			
         			Confirm_Buy.setOnClickListener(new OnClickListener(){
@@ -329,7 +327,6 @@ public class CustomAdapter extends BaseAdapter {
 							selectedURL = lista.get(position).getUrl();
 							imagenURL = lista.get(position).getImagen();
 							
-							//Aquí tiene lugar la descarga y la compra, y el registro de la compra en la base de datos
 			 				if(lista.get(position).getPrecio() == 0.0){	
 			 						     							     							     							     					
 			     				BUY_ASYNCTASK.execute(Id_User, Id_Score);
@@ -347,7 +344,7 @@ public class CustomAdapter extends BaseAdapter {
 			 						
 			 						NMDialog = new Dialog(ctx, R.style.cust_dialog);
 			 						
-			 						NMDialog.setContentView(R.layout.no_money_dialog);
+			 						NMDialog.setContentView(R.layout.store_nomoneydialog);
 			 						NMDialog.setTitle(R.string.not_enough_credit);
 			 						
 			 						Buy_Money = (Button)NMDialog.findViewById(R.id.b_buy_credit);

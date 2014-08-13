@@ -52,6 +52,10 @@ public class DownloadScores extends AsyncTask<String, Integer, String>{
 		}		
 	};
 	
+	private OnDownloadFailed FailedDownload;
+	
+	private OnDownloadCompleted SuccessedDownload;
+	
 	public interface OnDownloadCompleted{
         void onDownloadCompleted();
     }
@@ -60,9 +64,7 @@ public class DownloadScores extends AsyncTask<String, Integer, String>{
 		void onDownloadFailed();
 	}
 	
-	private OnDownloadFailed FailedDownload;
 	
-	private OnDownloadCompleted SuccessedDownload;
 	
 	public DownloadScores(OnDownloadCompleted success, OnDownloadFailed failed, Context context) {
 		this.ctx = context;
@@ -77,8 +79,6 @@ public class DownloadScores extends AsyncTask<String, Integer, String>{
  		mProgressDialog.setCancelable(true);
 
 	}
-	
-	
 			
 	@SuppressLint("Wakelock")
 	private String DownloadStatus(String URL_Score, String URL_Image, String NameAndNumberForEncrypt){
@@ -129,7 +129,7 @@ public class DownloadScores extends AsyncTask<String, Integer, String>{
 	                try {
 	                	
 	                	//Crea el fichero e incluye en él la linea de seguridad
-	                    new DownloadScoresEncrypter(ctx, NameAndNumberForEncrypt).CreateAndInsert(output);
+	                    new DownloadScoresEncrypter(ctx, NameAndNumberForEncrypt).CreateAndInsertSecurityLine(output);
 	                    Log.w("User_Token_Download", ""+NameAndNumberForEncrypt);
 	                    if (output != null)
 	                        output.close();

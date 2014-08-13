@@ -66,7 +66,7 @@ public class MyPurchases extends Activity{
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.my_purchases_layout);
+		setContentView(R.layout.store_purchases_mypurchaseslayout);
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		
 		this.CONF = new Configuration(this);

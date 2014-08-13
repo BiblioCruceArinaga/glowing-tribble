@@ -51,7 +51,6 @@ import com.sun.pdfview.decrypt.PDFAuthenticationFailureException;
 import com.sun.pdfview.decrypt.PDFPassword;
 import com.sun.pdfview.font.PDFFont;
 
-
 /**
  * U:\Android\android-sdk-windows-1.5_r1\tools\adb push u:\Android\simple_T.pdf /data/test.pdf
  * @author ferenc.hechler
@@ -97,7 +96,6 @@ public abstract class PdfViewerActivity extends Activity {
     private File mTmpFile;
     private ProgressDialog progress;
     
-    
     private PDFPage mPdfPage;     
     private Thread backgroundThread;
     private Handler uiHandler;
@@ -115,6 +113,7 @@ public abstract class PdfViewerActivity extends Activity {
 	 * @see onRetainNonConfigurationInstance
 	 * @return true if instance to restore from was found
 	 */
+	@SuppressWarnings("deprecation")
 	private boolean restoreInstance() {
 		mOldGraphView = null;
 		Log.e(TAG, "restoreInstance");
@@ -398,6 +397,7 @@ public abstract class PdfViewerActivity extends Activity {
     	}
 	}
     
+	@SuppressWarnings("deprecation")
 	private void gotoPage() {
     	if (mPdfFile != null) {
             showDialog(DIALOG_PAGENUM);
@@ -499,7 +499,8 @@ public abstract class PdfViewerActivity extends Activity {
 			addView(vl);
         }
 
-        private void addNavButtons(ViewGroup vg) {
+        @SuppressWarnings("deprecation")
+		private void addNavButtons(ViewGroup vg) {
         	
 	        addSpace(vg, 6, 6);
 	        

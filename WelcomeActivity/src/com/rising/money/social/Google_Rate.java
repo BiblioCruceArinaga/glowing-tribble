@@ -9,29 +9,32 @@ import android.os.Bundle;
 import android.widget.Toast;
 
 import com.rising.drawing.R;
-import com.rising.money.EnableButtonsData;
 import com.rising.money.SocialBonificationNetworkConnection;
-import com.rising.money.SocialBonificationNetworkConnection.OnBonificationDone;
 import com.rising.money.SocialBonificationNetworkConnection.OnFailBonification;
+import com.rising.money.SocialBonificationNetworkConnection.OnSuccessBonification;
 
+//Clase que da opción a hacer una crítica en Google Play y da la bonificación correspondiente
 public class Google_Rate extends Activity{
 
-	private EnableButtonsData EBD;
+	//Variables
+	private Context ctx;
 	private String ID_BONIFICATION = "11";
-	private SocialBonificationNetworkConnection sbnc;
-	private Context ctx = this;
+		
+	//Clases usadas
+	private EnableButtonsData ENABLE_BUTTONS;
+	private SocialBonificationNetworkConnection SOCIALBONIFICATION_ASYNCTASK;
 	
-	private OnBonificationDone successbonification = new OnBonificationDone(){
+	private OnSuccessBonification SuccessBonification = new OnSuccessBonification(){
 	
 		@Override
-		public void onBonificationDone() {
+		public void onSuccessBonification() {
 			Toast.makeText(ctx, R.string.win_social, Toast.LENGTH_LONG).show();
-			EBD.setEnable_Rate(false);	
+			ENABLE_BUTTONS.setEnable_Rate(false);	
 			finish();
 		}		
 	};
 	
-	private OnFailBonification failbonification = new OnFailBonification(){
+	private OnFailBonification FailBonification = new OnFailBonification(){
 	
 		@Override
 		public void onFailBonification() {
@@ -43,8 +46,10 @@ public class Google_Rate extends Activity{
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		sbnc = new SocialBonificationNetworkConnection(successbonification, failbonification, ctx);
-		EBD = new EnableButtonsData(ctx);
+		
+		this.ctx = this;
+		SOCIALBONIFICATION_ASYNCTASK = new SocialBonificationNetworkConnection(SuccessBonification, FailBonification, ctx);
+		ENABLE_BUTTONS = new EnableButtonsData(ctx);
 		launchMarket();
 	}
 
@@ -61,8 +66,8 @@ public class Google_Rate extends Activity{
 	@Override
 	protected void onRestart() {
 		super.onRestart();
-		if(EBD.getEnable_Rate()){
-			sbnc.execute(ID_BONIFICATION);
+		if(ENABLE_BUTTONS.getEnable_Rate()){
+			SOCIALBONIFICATION_ASYNCTASK.execute(ID_BONIFICATION);
 		}
 	}
 	
