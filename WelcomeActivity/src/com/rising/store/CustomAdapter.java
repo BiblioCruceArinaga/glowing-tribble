@@ -57,7 +57,7 @@ public class CustomAdapter extends BaseAdapter {
 	private static int selected = -1; 
 	private String ID_BONIFICATION = "6";
 	private Button Confirm_Buy, Cancel_Buy, Buy_Money;
-	private Dialog BDialog, NMDialog;
+	private Dialog BuyDialog, NoMoneyDialog;
 		
 	//Folder
 	private String path = "/.RisingScores/scores/";
@@ -254,12 +254,12 @@ public class CustomAdapter extends BaseAdapter {
 	    }        
  		
  		//Dialog que pregunta al usuario si quiere comprar la partitura
- 		BDialog = new Dialog(ctx, R.style.cust_dialog);
- 		BDialog.setContentView(R.layout.store_buydialog);
-		BDialog.setTitle(R.string.confirm_buy);
+ 		BuyDialog = new Dialog(ctx, R.style.cust_dialog);
+ 		BuyDialog.setContentView(R.layout.store_buydialog);
+		BuyDialog.setTitle(R.string.confirm_buy);
 										
-		Confirm_Buy = (Button)BDialog.findViewById(R.id.b_confirm_buy);
-		Cancel_Buy = (Button)BDialog.findViewById(R.id.b_cancel_buy);
+		Confirm_Buy = (Button)BuyDialog.findViewById(R.id.b_confirm_buy);
+		Cancel_Buy = (Button)BuyDialog.findViewById(R.id.b_cancel_buy);
  			
 		holder.image.setOnClickListener(new OnClickListener(){
 
@@ -317,7 +317,7 @@ public class CustomAdapter extends BaseAdapter {
         				}
         			}
         		}else{
-        			BDialog.show();
+        			BuyDialog.show();
         			
         			Confirm_Buy.setOnClickListener(new OnClickListener(){
      					
@@ -331,7 +331,7 @@ public class CustomAdapter extends BaseAdapter {
 			 						     							     							     							     					
 			     				BUY_ASYNCTASK.execute(Id_User, Id_Score);
 			     				
-			     				BDialog.dismiss();
+			     				BuyDialog.dismiss();
 			    							     						     								     							     							     				
 			 				}else{
 			 								 								 					
@@ -339,15 +339,15 @@ public class CustomAdapter extends BaseAdapter {
 			     							     								     				
 					     			BUY_ASYNCTASK.execute(Id_User, Id_Score);
 					     			
-					     			BDialog.dismiss();					     							     			
+					     			BuyDialog.dismiss();					     							     			
 			 					}else{
 			 						
-			 						NMDialog = new Dialog(ctx, R.style.cust_dialog);
+			 						NoMoneyDialog = new Dialog(ctx, R.style.cust_dialog);
 			 						
-			 						NMDialog.setContentView(R.layout.store_nomoneydialog);
-			 						NMDialog.setTitle(R.string.not_enough_credit);
+			 						NoMoneyDialog.setContentView(R.layout.store_nomoneydialog);
+			 						NoMoneyDialog.setTitle(R.string.not_enough_credit);
 			 						
-			 						Buy_Money = (Button)NMDialog.findViewById(R.id.b_buy_credit);
+			 						Buy_Money = (Button)NoMoneyDialog.findViewById(R.id.b_buy_credit);
 			 						
 			 						Buy_Money.setOnClickListener(new OnClickListener(){
 
@@ -359,7 +359,7 @@ public class CustomAdapter extends BaseAdapter {
 			 							
 			 						});
 			 						
-			 						NMDialog.show();			 						
+			 						NoMoneyDialog.show();			 						
 			 					}
 			 					
 			 				}
@@ -373,7 +373,7 @@ public class CustomAdapter extends BaseAdapter {
 
 						@Override
 						public void onClick(View v) { 
-							BDialog.dismiss();							
+							BuyDialog.dismiss();							
 						}
      					
      				});

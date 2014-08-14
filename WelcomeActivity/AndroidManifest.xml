@@ -91,7 +91,7 @@
 
         <!-- Free Money Activity -->
         <activity
-            android:name="com.rising.money.FreeMoneyActivity"
+            android:name="com.rising.money.social.FreeMoneyActivity"
             android:label="@string/app_name"
             android:theme="@style/Theme.Tabs" >
         </activity>

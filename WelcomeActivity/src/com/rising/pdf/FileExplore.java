@@ -61,7 +61,7 @@ public class FileExplore extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-		setContentView(R.layout.mainscreen_pdf_fileexplorer);
+		setContentView(R.layout.pdf_fileexplorer);
 		
 		this.ERRORS = new MainScreen_Errors(ctx);
 		

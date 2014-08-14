@@ -35,7 +35,7 @@ public class PDF_Methods {
 		
 	public void subirArchivo(){
 		MDialog = new Dialog(ctx, R.style.cust_dialog);
-		MDialog.setContentView(R.layout.mainscreen_pdf_upload);
+		MDialog.setContentView(R.layout.pdf_upload);
 		MDialog.setTitle(R.string.upload_pdf);
 		MDialog.getWindow().setLayout(LayoutParams.MATCH_PARENT,LayoutParams.WRAP_CONTENT);
 		MDialog.show();
