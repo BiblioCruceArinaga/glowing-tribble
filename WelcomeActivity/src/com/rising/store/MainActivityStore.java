@@ -1,12 +1,11 @@
 package com.rising.store;
 
 import android.app.ActionBar;
-import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.WindowManager;
@@ -20,11 +19,16 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.rising.drawing.R;
 import com.rising.login.Configuration;
+import com.rising.login.Login_Errors;
+import com.rising.login.Login_Utils;
 import com.rising.mainscreen.MainScreenActivity;
+import com.rising.money.MoneyActivity;
 import com.rising.money.MoneyUpdateConnectionNetwork;
 import com.rising.money.MoneyUpdateConnectionNetwork.OnFailUpdateMoney;
 import com.rising.money.MoneyUpdateConnectionNetwork.OnSuccessUpdateMoney;
-import com.rising.store.instruments.InstrumentFragment;
+import com.rising.store.instruments.FreeFragment;
+import com.rising.store.instruments.GuitarFragment;
+import com.rising.store.instruments.PianoFragment;
 import com.rising.store.purchases.MyPurchases;
 import com.rising.store.search.SearchStoreActivity;
 
@@ -34,8 +38,6 @@ public class MainActivityStore extends FragmentActivity implements OnQueryTextLi
 	//Variables
 	public Context ctx;
 	private ActionBar ABar;
-	private String fragment_Complete;
-	private String fragment_Name;
 	public MenuItem item;	
 	
 	//Clases usadas
@@ -62,6 +64,7 @@ public class MainActivityStore extends FragmentActivity implements OnQueryTextLi
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);				
 		setContentView(R.layout.store_storeactivity);		
 		
@@ -76,10 +79,10 @@ public class MainActivityStore extends FragmentActivity implements OnQueryTextLi
     	ABar.setDisplayHomeAsUpEnabled(true);
     	ABar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS); 
     	     	    	
-       	ABar.addTab(ABar.newTab().setText(R.string.piano).setTabListener(new TabListener(new InstrumentFragment(0))));
-    	ABar.addTab(ABar.newTab().setText(R.string.guitar).setTabListener(new TabListener(new InstrumentFragment(1))));
-    	ABar.addTab(ABar.newTab().setText(R.string.free).setTabListener(new TabListener(new InstrumentFragment(2))));
-		
+       	ABar.addTab(ABar.newTab().setText(R.string.piano).setTabListener(new TabListener(new PianoFragment())));
+    	ABar.addTab(ABar.newTab().setText(R.string.guitar).setTabListener(new TabListener(new GuitarFragment())));
+    	ABar.addTab(ABar.newTab().setText(R.string.free).setTabListener(new TabListener(new FreeFragment())));
+		    	
 		ImageOptions();
    	}
 	
@@ -113,13 +116,7 @@ public class MainActivityStore extends FragmentActivity implements OnQueryTextLi
         super.onSaveInstanceState(outState);
         outState.putInt("tab", getActionBar().getSelectedNavigationIndex());
     }   
-	
-	public void getFragment(Fragment fragment){
-		this.fragment_Complete = fragment.toString();
-		int i = fragment_Complete.indexOf('{');
-		fragment_Name = fragment_Complete.substring(0, i);
-	}
-    	
+	    		
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu){
 		item = menu.findItem(R.id.money);
@@ -147,34 +144,42 @@ public class MainActivityStore extends FragmentActivity implements OnQueryTextLi
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    switch (item.getItemId()) {
-	    	/*case R.id.money:
-	    		Intent i = new Intent(this, MoneyActivity.class);
-	    	    startActivity(i);
-	    	    return true;*/
-    	    
-	    	case R.id.update_store:
-	    		    		
-	    		if(fragment_Name.equals("PianoFragment")){
-	    			getFragmentManager().beginTransaction().replace(R.id.fragment_container, new InstrumentFragment(0)).commit();
+	    	case R.id.money:
+	    		if(new Login_Utils(ctx).isOnline()){
+		    		Intent i = new Intent(this, MoneyActivity.class);
+		    	    startActivity(i);
 	    		}else{
-	    			if(fragment_Name.equals("GuitarFragment")){
-	    				getFragmentManager().beginTransaction().replace(R.id.fragment_container, new InstrumentFragment(1)).commit();
-	    			}else{
-	    				if(fragment_Complete.equals("FreeFragment")){
-	    					getFragmentManager().beginTransaction().replace(R.id.fragment_container, new InstrumentFragment(2)).commit();
-	    				}else{
-	    					Log.e("Error actualizar", "Falló al actualizar");
-	    					Toast.makeText(getApplicationContext(), ctx.getString(R.string.err_update), Toast.LENGTH_SHORT).show();
-	    				}
-	    			}
+	    			new Login_Errors(ctx).errLogin(4);
+	    		}
+	    	    return true;
+       	    
+	    	case R.id.update_store:
+	    		
+	    		switch(ABar.getSelectedNavigationIndex()){
+	    			case 0:
+	    				getFragmentManager().beginTransaction().replace(R.id.fragment_container, new PianoFragment()).commit();
+	    				break;
+	    			case 1:
+	    				getFragmentManager().beginTransaction().replace(R.id.fragment_container, new GuitarFragment()).commit();
+	    				break;
+	    			case 2:
+	    				getFragmentManager().beginTransaction().replace(R.id.fragment_container, new FreeFragment()).commit();
+	    				break;
+	    			default:
+	    				super.onOptionsItemSelected(item);
+	    		
 	    		}
 	    			    		
 	    		return true;
 	    		
 	    	case R.id.my_purchases:
-	    		Intent intent = new Intent(this, MyPurchases.class);
-	    		startActivity(intent);
-	    		finish();
+		    	if(new Login_Utils(ctx).isOnline()){
+		    		Intent intent = new Intent(this, MyPurchases.class);
+		    		startActivity(intent);
+		    		finish();
+		    	}else{
+	    			new Login_Errors(ctx).errLogin(4);
+	    		}
 	    		return true;
 	        
 	    	case android.R.id.home:
@@ -187,15 +192,18 @@ public class MainActivityStore extends FragmentActivity implements OnQueryTextLi
 	    }
 	}
 	
-	/*********************************Bloque de métodos de busqueda*****************************************/
+	/*************************Bloque de métodos de busqueda************************/
 	@Override
 	public boolean onQueryTextSubmit(String text) {
-		 
-		Intent i = new Intent(this, SearchStoreActivity.class);
-		Bundle b = new Bundle();
-		b.putString("SearchText", text);
-		i.putExtras(b);
-		startActivity(i);		
+		if(new Login_Utils(ctx).isOnline()){	
+			Intent i = new Intent(this, SearchStoreActivity.class);
+			Bundle b = new Bundle();
+			b.putString("SearchText", text);
+			i.putExtras(b);
+			startActivity(i);	
+		}else{
+			new Login_Errors(ctx).errLogin(4);
+		}
 		return false;
 	}
 		
@@ -203,5 +211,5 @@ public class MainActivityStore extends FragmentActivity implements OnQueryTextLi
 	public boolean onQueryTextChange(String newText) {
 		return false;
 	}
-	/**************************************************************************/	
+	/*****************************************************************************/	
 }

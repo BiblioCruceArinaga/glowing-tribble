@@ -18,7 +18,6 @@ import com.rising.store.PartituraTienda;
 public class AsyncTask_Instruments extends AsyncTask<String, Integer, String>{
 
 	//Variables
-	private String result = null;
 	private int id, year;
 	private String nombre, autor, instrumento, description, URL, URL_Imagen;
 	private float precio;
@@ -42,16 +41,16 @@ public class AsyncTask_Instruments extends AsyncTask<String, Integer, String>{
 		void onTaskUncomplete();
 	}
 
-    private OnTaskCompleted listener;
-    private OnTaskUncomplete listen;
+    private OnTaskCompleted Success;
+    private OnTaskUncomplete Fail;
 	
 	public AsyncTask_Instruments(OnTaskUncomplete listen, OnTaskCompleted listener, int instrument) {
-		this.listener = listener;
-		this.listen = listen;
+		this.Success = listener;
+		this.Fail = listen;
 		this.instrument = instrument;
 	}
 			
-    protected String doInBackground(String... urls) {
+	protected String doInBackground(String... urls) {
        
         try{
             ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();  
@@ -94,7 +93,7 @@ public class AsyncTask_Instruments extends AsyncTask<String, Integer, String>{
     			        resultado.add(new PartituraTienda(id,nombre,autor,instrumento,precio, description, year, comprado, URL, URL_Imagen));
     			    }
     			}catch(JSONException e1){
-    				Log.d("JSONException AsyncTask_Instrument", "Pues eso, JSONException: " + e1.getMessage() + ", Result: " + result.toString());
+    				Log.d("JSONException AsyncTask_Instrument", "Pues eso, JSONException: " + e1.getMessage() + ", Result: " + jArray.toString());
     				this.cancel(true);
     			}catch (ParseException e1) {
     				Log.e("Parse Error Instrument", e1.getMessage());
@@ -103,18 +102,19 @@ public class AsyncTask_Instruments extends AsyncTask<String, Integer, String>{
     			
     		}else{	
     			Log.e("JSON_AsyncTask_Instrument", "ERROR");
+    			this.cancel(true);
     		}
 	    
         }catch(Exception e){
-        	this.cancel(true);
         	Log.e("Gran Try AsyncTask_Instrument", e.getMessage());
+        	this.cancel(true);
         }
       
     	return "";
     }
     
     protected void onPostExecute(String result) {
-    	if (listener != null) listener.onTaskCompleted();
+    	if (Success != null) Success.onTaskCompleted();
     }
     
     public ArrayList<PartituraTienda> devolverPartituras() {
@@ -123,6 +123,6 @@ public class AsyncTask_Instruments extends AsyncTask<String, Integer, String>{
         
     @Override
 	protected void onCancelled(String result) {
-    	if(listen != null) listen.onTaskUncomplete();
+    	if(Fail != null) Fail.onTaskUncomplete();
 	}    
 }

@@ -21,7 +21,7 @@ import com.rising.store.instruments.AsyncTask_Instruments.OnTaskUncomplete;
 import com.rising.store.purchases.InfoBuyNetworkConnection;
 import com.rising.store.purchases.InfoCompra;
 
-public class InstrumentFragment extends Fragment{
+public class GuitarFragment extends Fragment{
 
 	private static ArrayList<PartituraTienda> partiturasPiano = new ArrayList<PartituraTienda>();
 	private static ArrayList<InfoCompra> ICompra = new ArrayList<InfoCompra>();
@@ -29,18 +29,14 @@ public class InstrumentFragment extends Fragment{
 	private Context ctx;
 	private View rootView;
 	private ProgressDialog progressDialog;
-	private int Instrumento; //Indica que es el piano
+	private int Instrumento = 1; //Guitarra
 	
 	//Clases usadas
 	private AsyncTask_Instruments ASYNCTASK;
 	private Configuration CONF;
 	private InfoBuyNetworkConnection INFOBUY;	
 	private Store_Instruments_Utils UTILS;
-		
-	public InstrumentFragment(int instrument){
-		this.Instrumento = instrument;
-	}
-	
+			
 	private OnTaskCompleted Success = new OnTaskCompleted() {
 	    public void onTaskCompleted() {     	    		
 	    	
@@ -63,7 +59,6 @@ public class InstrumentFragment extends Fragment{
 		} 
 	};
 	
-	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		return main(inflater, container, savedInstanceState);		
@@ -72,7 +67,7 @@ public class InstrumentFragment extends Fragment{
 	public View main(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
 				
 		rootView = inflater.inflate(R.layout.store_instruments_instrumentfragment, container, false);
-		
+					
 		this.ctx = rootView.getContext();
 		this.CONF = new Configuration(ctx);
 		this.INFOBUY = new InfoBuyNetworkConnection();
@@ -92,7 +87,8 @@ public class InstrumentFragment extends Fragment{
 	@Override
 	public void onResume() {
 		super.onResume();
-				
+		this.setRetainInstance(true);	
+						
 		progressDialog = ProgressDialog.show(ctx, "", getString(R.string.pleasewait));
 				
 		ASYNCTASK = new AsyncTask_Instruments(Fail, Success, Instrumento);
@@ -105,17 +101,17 @@ public class InstrumentFragment extends Fragment{
 		ASYNCTASK.cancel(true);
 	}
 
-	public void ConnectionExceptionHandle(){	
-		 
+	public void ConnectionExceptionHandle(){
 		ASYNCTASK.cancel(true);
 		onDestroyProgress();
-		UTILS.OpenErrorFragment(getFragmentManager(),"Piano");
+		UTILS.OpenErrorFragment(getFragmentManager(),"Guitar");
 	}
 	
 	public void onDestroyProgress() {
 		if(progressDialog != null)
 	        progressDialog.dismiss();
-	    progressDialog = null;
 	}
+
+			
 		
 }

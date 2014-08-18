@@ -3,6 +3,7 @@ package com.rising.store.instruments;
 import java.util.ArrayList;
 
 import android.app.FragmentManager;
+import android.util.Log;
 
 import com.rising.drawing.R;
 import com.rising.store.ErrorFragment;
@@ -22,9 +23,14 @@ public class Store_Instruments_Utils {
 	}
 
 	public void OpenErrorFragment(FragmentManager fm, String fromFragment){
-		ErrorFragment EF = new ErrorFragment();		
-		EF.getFragment(fromFragment);
-		fm.beginTransaction().replace(R.id.fragment_container, EF).commit();
+		try{
+			ErrorFragment EF = new ErrorFragment();		
+			EF.getFragment(fromFragment);
+			fm.beginTransaction().replace(R.id.fragment_container, EF).commit();
+		}catch(Exception e){
+			
+			Log.i("Exception ErrorFragment", fromFragment + ", " + e.toString());
+		}
 	}
 
 }

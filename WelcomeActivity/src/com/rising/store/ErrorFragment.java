@@ -10,7 +10,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.rising.drawing.R;
-import com.rising.store.instruments.InstrumentFragment;
+import com.rising.store.instruments.FreeFragment;
+import com.rising.store.instruments.GuitarFragment;
+import com.rising.store.instruments.PianoFragment;
 
 public class ErrorFragment extends Fragment{
 
@@ -18,8 +20,6 @@ public class ErrorFragment extends Fragment{
 	private View view; 
 	private String fragment;
 			
-	public ErrorFragment() {}
-	
 	public void getFragment(String fragment){
 		this.fragment = fragment;
 	}
@@ -38,19 +38,18 @@ public class ErrorFragment extends Fragment{
 				
 				//Identifica dónde está el fallo y vuelve a cargar ese fragment
 				if(fragment.equals("Piano")){
-					
 					Log.i("Fragment", fragment);
-					getFragmentManager().beginTransaction().replace(R.id.fragment_container, new InstrumentFragment(0)).commit();
+					getFragmentManager().beginTransaction().replace(R.id.fragment_container, new PianoFragment()).commit();
 										
 				}else{
 					if(fragment.equals("Guitar")){
 						Log.i("Fragment", fragment);						
-						getFragmentManager().beginTransaction().replace(R.id.fragment_container, new InstrumentFragment(1)).commit();
+						getFragmentManager().beginTransaction().replace(R.id.fragment_container, new GuitarFragment()).commit();
 												
 					}else{
 						if(fragment.equals("Free")){
 							Log.i("Fragment", fragment);
-							getFragmentManager().beginTransaction().replace(R.id.fragment_container, new InstrumentFragment(2)).commit();
+							getFragmentManager().beginTransaction().replace(R.id.fragment_container, new FreeFragment()).commit();
 						}
 					}
 				}			

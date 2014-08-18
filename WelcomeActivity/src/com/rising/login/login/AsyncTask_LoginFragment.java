@@ -30,7 +30,6 @@ public class AsyncTask_LoginFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Retain this fragment across configuration changes.
         setRetainInstance(true);
 
         String Mail = "";
@@ -42,7 +41,6 @@ public class AsyncTask_LoginFragment extends Fragment {
         	Pass = args.getString("pass");
         }
         
-        // Create and execute the background task.
         mTask = new Task();
         mTask.execute(Mail, Pass);
     }
@@ -121,4 +119,5 @@ public class AsyncTask_LoginFragment extends Fragment {
         void onPostExecute(int Result);
         void onCancelled();
     }
+
 }

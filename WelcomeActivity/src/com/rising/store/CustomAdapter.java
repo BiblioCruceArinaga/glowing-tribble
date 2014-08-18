@@ -30,6 +30,8 @@ import com.nostra13.universalimageloader.utils.DiskCacheUtils;
 import com.nostra13.universalimageloader.utils.MemoryCacheUtils;
 import com.rising.drawing.R;
 import com.rising.login.Configuration;
+import com.rising.login.Login_Errors;
+import com.rising.login.Login_Utils;
 import com.rising.money.MoneyActivity;
 import com.rising.money.SocialBonificationNetworkConnection;
 import com.rising.money.SocialBonificationNetworkConnection.OnFailBonification;
@@ -39,7 +41,9 @@ import com.rising.store.BuyNetworkConnection.OnBuyFailed;
 import com.rising.store.downloads.DownloadScores;
 import com.rising.store.downloads.DownloadScores.OnDownloadCompleted;
 import com.rising.store.downloads.DownloadScores.OnDownloadFailed;
-import com.rising.store.instruments.InstrumentFragment;
+import com.rising.store.instruments.FreeFragment;
+import com.rising.store.instruments.GuitarFragment;
+import com.rising.store.instruments.PianoFragment;
 
 //Adaptador de la vista de la tienda de partituras. Alberga toda la lógica de las descargas
 public class CustomAdapter extends BaseAdapter {
@@ -231,9 +235,9 @@ public class CustomAdapter extends BaseAdapter {
                      IML.displayImage(imageUri, (ImageView) view, options);
                  }
                  
-                 new InstrumentFragment(0).onDestroyProgress();
-                 new InstrumentFragment(1).onDestroyProgress();
-                 new InstrumentFragment(2).onDestroyProgress();
+                 new PianoFragment().onDestroyProgress();
+                 new GuitarFragment().onDestroyProgress();
+                 new FreeFragment().onDestroyProgress();
              }
         });
                          
@@ -265,10 +269,14 @@ public class CustomAdapter extends BaseAdapter {
 
 			@Override
 			public void onClick(View v) {
-				Intent i = new Intent(ctx, ImageActivity.class);
-				i.putExtra("imagen", lista.get(position).getImagen());
-				Log.i("Imagen", "" + lista.get(position).getImagen());
-				ctx.startActivity(i);
+				if(new Login_Utils(ctx).isOnline()){
+					Intent i = new Intent(ctx, ImageActivity.class);
+					i.putExtra("imagen", lista.get(position).getImagen());
+					Log.i("Imagen", "" + lista.get(position).getImagen());
+					ctx.startActivity(i);
+				}else{
+					new Login_Errors(ctx).errLogin(4);
+				}
 			}
 			
 		});
@@ -277,19 +285,23 @@ public class CustomAdapter extends BaseAdapter {
         	 
 			@Override
 			public void onClick(View v) {
-				Intent i = new Intent(ctx, ScoreProfile.class);
-				i.putExtra("id", lista.get(position).getId());
-				i.putExtra("name", lista.get(position).getNombre());
-				i.putExtra("year", lista.get(position).getYear());
-				i.putExtra("author", lista.get(position).getAutor());
-				i.putExtra("instrument", lista.get(position).getInstrumento());
-				i.putExtra("price", lista.get(position).getPrecio());
-				i.putExtra("description", lista.get(position).getDescription());
-				i.putExtra("url", lista.get(position).getUrl());
-				i.putExtra("comprado", lista.get(position).getComprado());
-				i.putExtra("url_imagen", lista.get(position).getImagen());
-				Log.i("Datos", "Id: " + lista.get(position).getId() + ", name: " + lista.get(position).getNombre());
-				ctx.startActivity(i);
+				if(new Login_Utils(ctx).isOnline()){	
+					Intent i = new Intent(ctx, ScoreProfile.class);
+					i.putExtra("id", lista.get(position).getId());
+					i.putExtra("name", lista.get(position).getNombre());
+					i.putExtra("year", lista.get(position).getYear());
+					i.putExtra("author", lista.get(position).getAutor());
+					i.putExtra("instrument", lista.get(position).getInstrumento());
+					i.putExtra("price", lista.get(position).getPrecio());
+					i.putExtra("description", lista.get(position).getDescription());
+					i.putExtra("url", lista.get(position).getUrl());
+					i.putExtra("comprado", lista.get(position).getComprado());
+					i.putExtra("url_imagen", lista.get(position).getImagen());
+					Log.i("Datos", "Id: " + lista.get(position).getId() + ", name: " + lista.get(position).getNombre());
+					ctx.startActivity(i);
+				}else{
+					new Login_Errors(ctx).errLogin(4);
+				}
 			}
         	
          });
@@ -301,7 +313,7 @@ public class CustomAdapter extends BaseAdapter {
  		        		 
         		Id_User = CONF.getUserId();
         		Id_Score = String.valueOf(lista.get(position).getId());
-        		        		
+        		       		
         		//Si la partitura ya está comprada lanza la descarga sin registrar la compra en la base de datos.
         		if(lista.get(position).getComprado()){
         			
@@ -309,75 +321,83 @@ public class CustomAdapter extends BaseAdapter {
         			if(UTILS.buscarArchivos(UTILS.FileNameString(lista.get(position).getUrl()), path)){       	
         				UTILS.AbrirFichero(lista.get(position).getNombre(), UTILS.FileNameString(lista.get(position).getUrl()));	
         			}else{
-        				if(UTILS.spaceOnDisc()){
-	     					DOWNLOAD.execute(lista.get(position).getUrl(), lista.get(position).getImagen(), 
-	     							String.valueOf(lista.get(position).getNombre())+CONF.getUserId());
+        				if(new Login_Utils(ctx).isOnline()){
+	        				if(UTILS.spaceOnDisc()){
+		     					DOWNLOAD.execute(lista.get(position).getUrl(), lista.get(position).getImagen(), 
+		     							String.valueOf(lista.get(position).getNombre())+CONF.getUserId());
+	        				}else{
+	        					new AlertDialog.Builder(ctx).setMessage(ctx.getString(R.string.no_space)).show();
+	        				}
         				}else{
-        					new AlertDialog.Builder(ctx).setMessage(ctx.getString(R.string.no_space)).show();
+        					new Login_Errors(ctx).errLogin(4);
         				}
         			}
         		}else{
-        			BuyDialog.show();
-        			
-        			Confirm_Buy.setOnClickListener(new OnClickListener(){
-     					
-						@Override
-						public void onClick(View arg0) {
-									
-							selectedURL = lista.get(position).getUrl();
-							imagenURL = lista.get(position).getImagen();
-							
-			 				if(lista.get(position).getPrecio() == 0.0){	
-			 						     							     							     							     					
-			     				BUY_ASYNCTASK.execute(Id_User, Id_Score);
-			     				
-			     				BuyDialog.dismiss();
-			    							     						     								     							     							     				
-			 				}else{
-			 								 								 					
-				     			if(lista.get(position).getPrecio() < CONF.getUserMoney()){		 					
-			     							     								     				
-					     			BUY_ASYNCTASK.execute(Id_User, Id_Score);
-					     			
-					     			BuyDialog.dismiss();					     							     			
-			 					}else{
-			 						
-			 						NoMoneyDialog = new Dialog(ctx, R.style.cust_dialog);
-			 						
-			 						NoMoneyDialog.setContentView(R.layout.store_nomoneydialog);
-			 						NoMoneyDialog.setTitle(R.string.not_enough_credit);
-			 						
-			 						Buy_Money = (Button)NoMoneyDialog.findViewById(R.id.b_buy_credit);
-			 						
-			 						Buy_Money.setOnClickListener(new OnClickListener(){
-
-										@Override
-										public void onClick(View v) {
-											Intent i = new Intent(ctx, MoneyActivity.class);
-											ctx.startActivity(i);
-										}
-			 							
-			 						});
-			 						
-			 						NoMoneyDialog.show();			 						
-			 					}
-			 					
-			 				}
-							
-			 				
-						}
-     					
-     				});
-        			
-     				Cancel_Buy.setOnClickListener(new OnClickListener(){
-
-						@Override
-						public void onClick(View v) { 
-							BuyDialog.dismiss();							
-						}
-     					
-     				});
-     				
+	        			
+        			if(new Login_Utils(ctx).isOnline()){
+        				BuyDialog.show();
+	        			
+	        			Confirm_Buy.setOnClickListener(new OnClickListener(){
+	     					
+							@Override
+							public void onClick(View arg0) {
+										
+								selectedURL = lista.get(position).getUrl();
+								imagenURL = lista.get(position).getImagen();
+								
+				 				if(lista.get(position).getPrecio() == 0.0){	
+				 						     							     							     							     					
+				     				BUY_ASYNCTASK.execute(Id_User, Id_Score);
+				     				
+				     				BuyDialog.dismiss();
+				    							     						     								     							     							     				
+				 				}else{
+				 								 								 					
+					     			if(lista.get(position).getPrecio() < CONF.getUserMoney()){		 					
+				     							     								     				
+						     			BUY_ASYNCTASK.execute(Id_User, Id_Score);
+						     			
+						     			BuyDialog.dismiss();					     							     			
+				 					}else{
+				 						
+				 						NoMoneyDialog = new Dialog(ctx, R.style.cust_dialog);
+				 						
+				 						NoMoneyDialog.setContentView(R.layout.store_nomoneydialog);
+				 						NoMoneyDialog.setTitle(R.string.not_enough_credit);
+				 						
+				 						Buy_Money = (Button)NoMoneyDialog.findViewById(R.id.b_buy_credit);
+				 						
+				 						Buy_Money.setOnClickListener(new OnClickListener(){
+	
+											@Override
+											public void onClick(View v) {
+												Intent i = new Intent(ctx, MoneyActivity.class);
+												ctx.startActivity(i);
+											}
+				 							
+				 						});
+				 						
+				 						NoMoneyDialog.show();			 						
+				 					}
+				 					
+				 				}
+								
+				 				
+							}
+	     					
+	     				});
+	        			
+	     				Cancel_Buy.setOnClickListener(new OnClickListener(){
+	
+							@Override
+							public void onClick(View v) { 
+								BuyDialog.dismiss();							
+							}
+	     					
+	     				});
+        			}else{
+        				new Login_Errors(ctx).errLogin(4);
+        			}	
         		}
  			}
         	 

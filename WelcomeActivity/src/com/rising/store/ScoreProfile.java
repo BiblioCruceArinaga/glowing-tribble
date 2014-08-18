@@ -77,8 +77,7 @@ public class ScoreProfile extends Activity{
 			Toast.makeText(ctx, R.string.win_buy, Toast.LENGTH_LONG).show();
 		}		
 	};
-	
-	
+		
 	private OnFailBonification FailBonification = new OnFailBonification(){
 
 		@Override
@@ -118,15 +117,15 @@ public class ScoreProfile extends Activity{
             
 		}		
 	};
-	
-	
+		
 	private OnDownloadFailed FailedDownload = new OnDownloadFailed(){
 		@Override
 		public void onDownloadFailed() {
 			//Acciones a ejecutar cuando la descarga fall�(Dialog o  Activity????)
 		}
 	};	
-		
+	
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -377,6 +376,5 @@ public class ScoreProfile extends Activity{
         shareIntent.putExtra(Intent.EXTRA_STREAM, uri);
         shareIntent.putExtra(Intent.EXTRA_TITLE, "This is an android icon");
         return shareIntent;
-    }
-    */
+    }*/
 }
