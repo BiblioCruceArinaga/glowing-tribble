@@ -98,8 +98,6 @@ public class DownloadScores extends AsyncTask<String, Integer, String>{
 	                connection = (HttpURLConnection) url.openConnection();
 	                connection.connect();
 	                
-					// expect HTTP 200 OK, so we don't mistakenly save error report 
-	                // instead of the file
 	                if (connection.getResponseCode() != HttpURLConnection.HTTP_OK)
 	                     return "Server returned HTTP " + connection.getResponseCode() + " " + connection.getResponseMessage();
 
@@ -124,13 +122,17 @@ public class DownloadScores extends AsyncTask<String, Integer, String>{
 	                }
 	            } catch (Exception e) {
 	            	e.getMessage();
-	            	Log.e("Error descargar partitura", e.getMessage());	
+	            	Log.e("Error descargar DownloadScores", e.getMessage());
+	            	if(!e.getMessage().equals("-1")){
+	            		this.cancel(true);
+	            	}
+	            	
 	            } finally {
 	                try {
 	                	
 	                	//Crea el fichero e incluye en él la linea de seguridad
 	                    new DownloadScoresEncrypter(ctx, NameAndNumberForEncrypt).CreateAndInsertSecurityLine(output);
-	                    Log.w("User_Token_Download", ""+NameAndNumberForEncrypt);
+	                    Log.w("User_Token_Download", "" + NameAndNumberForEncrypt);
 	                    if (output != null)
 	                        output.close();
 	                    if (input != null)
@@ -138,6 +140,7 @@ public class DownloadScores extends AsyncTask<String, Integer, String>{
 	                } 
 	                catch (IOException ignored) { 
 	                	Log.e("IOException DownloadEncrypt", "" + ignored.getMessage());
+	                	this.cancel(true);
 	                }
 
 	                if (connection != null)
@@ -146,6 +149,7 @@ public class DownloadScores extends AsyncTask<String, Integer, String>{
 	             
 	        }catch(Exception e){
 	        	Log.e("Exception BigTry Download", "" + e.getMessage());
+	        	this.cancel(true);
 	        }finally{
 	        	wl.release();
 	        }
@@ -165,8 +169,8 @@ public class DownloadScores extends AsyncTask<String, Integer, String>{
 	
 	@Override
 	protected void onCancelled() {
-		// TODO Auto-generated method stub
-		super.onCancelled();
+		mProgressDialog.dismiss();
+		if(FailedDownload != null) FailedDownload.onDownloadFailed();
 	}
 
 	@Override
@@ -186,7 +190,7 @@ public class DownloadScores extends AsyncTask<String, Integer, String>{
         	if(FailedDownload != null) FailedDownload.onDownloadFailed();
         	Log.e("Error descarga partitura", "Error descarga: " + result);
         }else{ 
-        	Log.i("Download", "Listener Good");
+        	Log.i("Download", "Listener Good: " + result);
         	if (SuccessedDownload != null) SuccessedDownload.onDownloadCompleted();
         }
 	}

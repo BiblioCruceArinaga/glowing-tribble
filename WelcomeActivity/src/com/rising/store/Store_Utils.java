@@ -55,7 +55,7 @@ public class Store_Utils {
 			ctx.startActivity(in);
 		}else{
 			ERRORS.Incorrect_User();
-		}		
+		}		 
 	}
 	
 	public String FileNameString(String urlComplete){
@@ -66,7 +66,7 @@ public class Store_Utils {
 		String name = urlCompleto.substring(position + 1, urlCompleto.length());
 		
 		return name;
-	}
+	} 
 
 	public void DialogCompra(String title, String message, String PositiveButton, String NegativeButton){
 		AlertDialog.Builder dialogo1 = new AlertDialog.Builder(ctx);  

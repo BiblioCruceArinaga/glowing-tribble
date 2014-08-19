@@ -144,7 +144,6 @@ public class CustomAdapter extends BaseAdapter {
 		this.ctx = context;
 		this.CONF = new Configuration(ctx);
 		this.BUY_ASYNCTASK = new BuyNetworkConnection(RegisterCompletedBuyAndDownload, FailedBuy);	
-		this.DOWNLOAD = new DownloadScores(SuccessedDownload, FailedDownload, ctx);
 		this.BONIFICATION_ASYNCTASK = new SocialBonificationNetworkConnection(SuccessBonification, FailBonification, ctx);
 		this.UTILS = new Store_Utils(ctx);
 		this.lista = partituras;
@@ -314,15 +313,15 @@ public class CustomAdapter extends BaseAdapter {
         		Id_User = CONF.getUserId();
         		Id_Score = String.valueOf(lista.get(position).getId());
         		       		
-        		//Si la partitura ya está comprada lanza la descarga sin registrar la compra en la base de datos.
         		if(lista.get(position).getComprado()){
         			
-        			//Si la partitura ya est� en el dispositivo la abre
-        			if(UTILS.buscarArchivos(UTILS.FileNameString(lista.get(position).getUrl()), path)){       	
+        			if(UTILS.buscarArchivos(UTILS.FileNameString(lista.get(position).getUrl()), path)){ 
+        				Log.i("Paritura", "Abriendo fichero...");
         				UTILS.AbrirFichero(lista.get(position).getNombre(), UTILS.FileNameString(lista.get(position).getUrl()));	
         			}else{
         				if(new Login_Utils(ctx).isOnline()){
 	        				if(UTILS.spaceOnDisc()){
+	        					DOWNLOAD = new DownloadScores(SuccessedDownload, FailedDownload, ctx);
 		     					DOWNLOAD.execute(lista.get(position).getUrl(), lista.get(position).getImagen(), 
 		     							String.valueOf(lista.get(position).getNombre())+CONF.getUserId());
 	        				}else{

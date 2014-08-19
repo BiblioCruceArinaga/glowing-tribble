@@ -47,13 +47,16 @@ public class DownloadScoresEncrypter {
 				 Log.e("Error Writing DownloadEncrypter", e.getMessage());
 			 }		 
 		 }catch(Exception e){
-			 Log.e("Error DownloadEncrypter", e.getMessage());
+			 Log.e("Error DownloadEncrypter", e.toString());
 		 }
 	 }
 
 	public boolean DescryptAndConfirm(String fichero){
 		
+		Log.i("Fichero P", ""+fichero);
 		String securityLine = getSecurityLine(fichero); 
+		
+		Log.i("Fichero P", "paso 2");
 		
 		byte[] decodedLine = Base64.decode(securityLine);
 	    String strDecoded = new String(decodedLine).toLowerCase();
@@ -71,17 +74,19 @@ public class DownloadScoresEncrypter {
 		File f = null;
 		String line = "";
 		FileInputStream fis = null;
-				
+		
+		Log.i("Fichero S", ""+fichero);
+		
 		try{
 			f = new File(Environment.getExternalStorageDirectory() + path + fichero);
-			
+			Log.i("Fichero SS", path+fichero);
 			byte[] ArrayLine = new byte[SecurityLineLength(f)];
 						
 			fis = new FileInputStream(f);
 			
 			byte b = 0;
 			int i = 0;
-			
+			Log.i("Fichero SSS", path+" + más + "+fichero);
 			while((b = (byte)fis.read())!=-128){
 			}
 			
@@ -104,6 +109,8 @@ public class DownloadScoresEncrypter {
 			Log.e("EOFException Encrypt", EOF.getMessage());
 		}catch(IOException IOE){
 			Log.e("IOException Encrypt", IOE.getMessage());
+		}catch(Exception e){
+			Log.e("Exception Encrypt", e.getMessage());
 		}finally{
 			try {
 				fis.close();
@@ -115,10 +122,12 @@ public class DownloadScoresEncrypter {
 	}
 	
 	public int SecurityLineLength(File f){
+		Log.i("Fichero L", path+f);
 		FileInputStream fis = null;
 		int length = 0;
 		@SuppressWarnings("unused")
 		byte bb = 0;
+		Log.i("Fichero LL", path+f);
 		try{
 			fis = new FileInputStream(f);
 			while((bb = (byte)fis.read())!=-128){

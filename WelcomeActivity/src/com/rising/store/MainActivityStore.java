@@ -67,7 +67,7 @@ public class MainActivityStore extends FragmentActivity implements OnQueryTextLi
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);				
 		setContentView(R.layout.store_storeactivity);		
-		
+				
 		ctx = this;
 		this.CONF = new Configuration(this);
 		

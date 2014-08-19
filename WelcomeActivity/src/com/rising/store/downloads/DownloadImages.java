@@ -74,9 +74,11 @@ public class DownloadImages extends AsyncTask<String, Integer, String>{
                     output.write(data, 0, count);
                 }
             } catch (IOException IOE) {
-                //resourceToBitmap(sUrl[0]);
+                Log.e("IOException DownloadImages", "" + IOE.getMessage());
+            	//this.cancel(true);
             } catch(Exception e){
-            	return e.toString(); 
+            	Log.e("Exception DownloadImages", "" + e.getMessage());
+            	this.cancel(true); 
             }finally {
                 try {
                     if (output != null)
@@ -84,7 +86,10 @@ public class DownloadImages extends AsyncTask<String, Integer, String>{
                     if (input != null)
                         input.close();
                 } 
-                catch (IOException ignored) { }
+                catch (IOException ignored) { 
+                	Log.e("IOException Finally DownloadImages", "" + ignored.getMessage());
+                	//this.cancel(true);
+                }
 
                 if (connection != null)
                     connection.disconnect();
@@ -92,6 +97,7 @@ public class DownloadImages extends AsyncTask<String, Integer, String>{
             
         }catch(Exception e){
         	Log.e("Exception BigTry DownloadImages", "" + e.getMessage());
+        	this.cancel(true);
         }
         return null;
 	}
@@ -101,6 +107,12 @@ public class DownloadImages extends AsyncTask<String, Integer, String>{
     	return DownloadImageStatus(sUrl[0]);        
     }
 		
+	@Override
+	protected void onCancelled() {
+		if(FailedDownloadImage != null) FailedDownloadImage.onDownloadIFailed();
+	}
+	
+
 	@Override
 	protected void onPostExecute(String result) {	
 		

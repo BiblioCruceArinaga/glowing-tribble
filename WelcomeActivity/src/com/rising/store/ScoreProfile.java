@@ -33,6 +33,8 @@ import com.nostra13.universalimageloader.utils.DiskCacheUtils;
 import com.nostra13.universalimageloader.utils.MemoryCacheUtils;
 import com.rising.drawing.R;
 import com.rising.login.Configuration;
+import com.rising.login.Login_Errors;
+import com.rising.login.Login_Utils;
 import com.rising.money.MoneyActivity;
 import com.rising.money.SocialBonificationNetworkConnection;
 import com.rising.money.SocialBonificationNetworkConnection.OnFailBonification;
@@ -121,7 +123,8 @@ public class ScoreProfile extends Activity{
 	private OnDownloadFailed FailedDownload = new OnDownloadFailed(){
 		@Override
 		public void onDownloadFailed() {
-			//Acciones a ejecutar cuando la descarga fall�(Dialog o  Activity????)
+			B_Price.setText(R.string.download);	
+			Toast.makeText(ctx,R.string.errordownload, Toast.LENGTH_LONG).show();
 		}
 	};	
 	
@@ -133,7 +136,6 @@ public class ScoreProfile extends Activity{
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		
 		this.ctx = this;
-		this.DOWNLOAD = new DownloadScores(SuccessedDownload, FailedDownload, this);
 		this.BUY_ASYNCTASK = new BuyNetworkConnection(RegisterCompletedBuyAndDownload, FailedBuy);
 		this.BONIFICATION_ASYNCTASK = new SocialBonificationNetworkConnection(SuccessBonification, FailBonification, ctx);
 		this.UTILS = new Store_Utils(ctx);
@@ -145,7 +147,6 @@ public class ScoreProfile extends Activity{
 		mProgressDialog.setMessage(getString(R.string.downloading));
 		mProgressDialog.setIndeterminate(true);
 		mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-		mProgressDialog.setCancelable(true);
 		
 		Bundle b = getIntent().getExtras();
 		Id = b.getInt("id");
@@ -189,45 +190,61 @@ public class ScoreProfile extends Activity{
         .build();
                
 		IML.displayImage(URL_Image, IV_Partitura, options, new SimpleImageLoadingListener(){
-	       	 boolean cacheFound;
-
-	            @Override
-	            public void onLoadingStarted(String url, View view) {
-	                List<String> memCache = MemoryCacheUtils.findCacheKeysForImageUri(url, ImageLoader.getInstance().getMemoryCache());
-	                cacheFound = !memCache.isEmpty();
-	                if (!cacheFound) {
-	                    File discCache = DiskCacheUtils.findInCache(url, ImageLoader.getInstance().getDiskCache());
-	                    if (discCache != null) {
-	                        cacheFound = discCache.exists();
-	                    }
-	                }
+		   	 boolean cacheFound;
+	
+	         @Override
+	         public void onLoadingStarted(String url, View view) {
+	        	 if(new Login_Utils(ctx).isOnline()){
+	        		 List<String> memCache = MemoryCacheUtils.findCacheKeysForImageUri(url, ImageLoader.getInstance().getMemoryCache());
+		             cacheFound = !memCache.isEmpty();
+		             
+		             if (!cacheFound) {
+		            	 File discCache = DiskCacheUtils.findInCache(url, ImageLoader.getInstance().getDiskCache());
+		            
+		                 if (discCache != null) {
+		                	 cacheFound = discCache.exists();
+		                 }
+		             }
+	        	 }else{
+	            	new Login_Errors(ctx).errLogin(4);
 	            }
+	         }
+	
+	         @Override
+	         public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+	           	if(new Login_Utils(ctx).isOnline()){
+	           		Log.i("Pasos", "Paso4");
+	           		if (cacheFound) {
 
-	            @Override
-	            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-	                if (cacheFound) {
-	                    MemoryCacheUtils.removeFromCache(imageUri, ImageLoader.getInstance().getMemoryCache());
-	                    DiskCacheUtils.removeFromCache(imageUri, ImageLoader.getInstance().getDiskCache());
-
-	                    ImageLoader.getInstance().displayImage(imageUri, (ImageView) view);
-	                }
-	            //  Cambiamos el texto de los TextView por el de la partitura seleccionada 
-	        		TV_Name.setText(name);
-	        		TV_Author.setText(author);
-	        		TV_Year.setText(year);
-	        		TV_Instrument.setText(instrument);
-	        		TV_Description.setText(description);
-	                Image_PDialog.dismiss();
+	           			MemoryCacheUtils.removeFromCache(imageUri, ImageLoader.getInstance().getMemoryCache());
+		                DiskCacheUtils.removeFromCache(imageUri, ImageLoader.getInstance().getDiskCache());
+		               
+		                ImageLoader.getInstance().displayImage(imageUri, (ImageView) view);
+	           		}
+	           		
+		        	TV_Name.setText(name);
+		        	TV_Author.setText(author);
+		        	TV_Year.setText(year);
+		        	TV_Instrument.setText(instrument);
+		        	TV_Description.setText(description);
+		            Image_PDialog.dismiss();
+	            }else{
+	            	new Login_Errors(ctx).errLogin(4);
 	            }
-	       });
+	         }
+	    });
 				
 		IV_Partitura.setOnClickListener(new OnClickListener(){
 
 			@Override
 			public void onClick(View v) {
-				Intent i = new Intent(ctx, ImageActivity.class);
-				i.putExtra("imagen", URL_Image);
-				ctx.startActivity(i);
+				if(new Login_Utils(ctx).isOnline()){
+					Intent i = new Intent(ctx, ImageActivity.class);
+					i.putExtra("imagen", URL_Image);
+					ctx.startActivity(i);
+				}else{
+					new Login_Errors(ctx).errLogin(4);
+				}
 			}
 			
 		});
@@ -254,8 +271,7 @@ public class ScoreProfile extends Activity{
         BuyDialog.setCancelable(false);  
         BuyDialog.setPositiveButton(R.string.buy, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface BuyDialog, int id) {  
-                
-            	
+                            	
             	if(price == 0.0){	
     					
 					BUY_ASYNCTASK.execute(Id_User, Id_Score, Locale.getDefault().getDisplayLanguage());
@@ -319,26 +335,21 @@ public class ScoreProfile extends Activity{
         							
         				UTILS.AbrirFichero(UTILS.FileNameString(URL), path);				
         			}else{
-        				     				
-	     				DOWNLOAD.execute(URL, URL_Image, name + CONF.getUserId());
-        			}  				
-        			     				
-     				mProgressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-     				    @Override
-     				    public void onCancel(DialogInterface dialog) {
-     				    	DOWNLOAD.cancel(true);
-     				    }
-     				});
-     				
+        				if(new Login_Utils(ctx).isOnline()){	
+        					DOWNLOAD = new DownloadScores(SuccessedDownload, FailedDownload, ctx);
+        					DOWNLOAD.execute(URL, URL_Image, name + CONF.getUserId());
+        				}else{
+        					new Login_Errors(ctx).errLogin(4);
+        				}
+        			}  				     				
         		}else{
-        				
-					BuyDialog.show();
-										
+					BuyDialog.show();						
 				}
 			}
         });
 	} 
-		
+			
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.menu_score_profile, menu); 
