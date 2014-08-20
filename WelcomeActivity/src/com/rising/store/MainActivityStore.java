@@ -11,7 +11,6 @@ import android.view.MenuItem;
 import android.view.WindowManager;
 import android.widget.SearchView;
 import android.widget.SearchView.OnQueryTextListener;
-import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -57,7 +56,8 @@ public class MainActivityStore extends FragmentActivity implements OnQueryTextLi
 
 		@Override
 		public void onFailUpdateMoney() {		
-			Toast.makeText(ctx, getString(R.string.errcredit), Toast.LENGTH_LONG).show();
+			CONF.setUserMoney(CONF.getUserMoney());
+			//Toast.makeText(ctx, getString(R.string.errcredit), Toast.LENGTH_LONG).show();
 		}		
 	};
 				
@@ -195,12 +195,14 @@ public class MainActivityStore extends FragmentActivity implements OnQueryTextLi
 	/*************************Bloque de métodos de busqueda************************/
 	@Override
 	public boolean onQueryTextSubmit(String text) {
-		if(new Login_Utils(ctx).isOnline()){	
+		if(new Login_Utils(ctx).isOnline()){
+			new Login_Utils(ctx).HideKeyboard();
 			Intent i = new Intent(this, SearchStoreActivity.class);
 			Bundle b = new Bundle();
 			b.putString("SearchText", text);
 			i.putExtras(b);
 			startActivity(i);	
+			finish();
 		}else{
 			new Login_Errors(ctx).errLogin(4);
 		}

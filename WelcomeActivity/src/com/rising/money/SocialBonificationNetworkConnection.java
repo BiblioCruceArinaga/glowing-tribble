@@ -65,12 +65,15 @@ public class SocialBonificationNetworkConnection extends AsyncTask<String, Integ
 						status = json_data.getInt("bonificationstatus"); 
 						Log.e("Bonification","bonificationstatus= " + status);
 					}catch (JSONException e) {
+						this.cancel(true);
 						Log.e("JSONException Bonification_AsyncTask", e.getMessage().toString());
 					}		            
 				}else{	
+					this.cancel(true);
 					Log.e("JSON Bonification_AsyncTask", "ERROR");
 				}
 		}catch(Exception e){
+			this.cancel(true);
 			Log.e("Exception BigTry Bonification_AsyncTask", "" + e.getMessage());
 		}
 		return status;
@@ -89,6 +92,11 @@ public class SocialBonificationNetworkConnection extends AsyncTask<String, Integ
 	    }else{
 	    	if (FailBonification != null) FailBonification.onFailBonification();
 	    }
+	}
+
+	@Override
+	protected void onCancelled() {
+		if (FailBonification != null) FailBonification.onFailBonification();
 	}
 	
 }

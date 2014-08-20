@@ -31,12 +31,18 @@ public class PurchasesNetworkConnection extends AsyncTask<String, Integer, Strin
         void onTaskCompleted();
     }
 	
-	private OnTaskCompleted Purchases;
-	
-	public PurchasesNetworkConnection(OnTaskCompleted listener2) {
-		this.Purchases = listener2;
+	public interface OnTaskUncompleted{
+		void onTaskUncompleted();
 	}
 	
+	private OnTaskCompleted Purchases;
+	private OnTaskUncompleted NoPurchases;
+	
+	public PurchasesNetworkConnection(OnTaskCompleted success, OnTaskUncompleted fail) {
+		this.Purchases = success;
+		this.NoPurchases = fail;
+	}
+		
 	public String Purchases_Status(String Id_U, String Language){
 		ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
 		params.add(new BasicNameValuePair("Id_U", Id_U));
@@ -96,7 +102,12 @@ public class PurchasesNetworkConnection extends AsyncTask<String, Integer, Strin
     	if (Purchases != null) Purchases.onTaskCompleted();
     }
     
-    public ArrayList<PartituraTienda> devolverPartituras() {
+    @Override
+	protected void onCancelled() {
+    	if (NoPurchases != null) NoPurchases.onTaskUncompleted();
+	}
+
+	public ArrayList<PartituraTienda> devolverPartituras() {
     	return searchinfo;
     }
 }

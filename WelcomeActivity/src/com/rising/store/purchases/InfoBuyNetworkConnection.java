@@ -27,8 +27,17 @@ public class InfoBuyNetworkConnection extends AsyncTask<String, Integer, String>
 	//Clases utilizadas
 	private HttpPostAux HPA =  new HttpPostAux();
 		
+	private OnTaskNoInfo NoInfo;
 	
-	private String InfoStatus(String Id_U){	
+	public interface OnTaskNoInfo{
+		void onTaskNoInfo();
+	}
+	
+	public InfoBuyNetworkConnection(OnTaskNoInfo fail) {
+		this.NoInfo = fail;
+	}
+	
+	private String InfoStatus(String Id_U){
 		try{
             ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();  
             params.add(new BasicNameValuePair("id_u", Id_U));
@@ -52,11 +61,12 @@ public class InfoBuyNetworkConnection extends AsyncTask<String, Integer, String>
     				this.cancel(true);
     			}catch (ParseException e1) {
     				Log.e("Parse Error InfoNetwork", e1.getMessage());
-    				this.cancel(true);
+    				this.cancel(true); 
     		    }	
     			
     		}else{	
     			Log.e("JSON InfoNetwork", "ERROR");
+    			this.cancel(true);
     		}
 	    
         }catch(Exception e){
@@ -70,7 +80,12 @@ public class InfoBuyNetworkConnection extends AsyncTask<String, Integer, String>
     	return InfoStatus(urls[0]);
     }
        
-    public ArrayList<InfoCompra> devolverCompra() {
+    @Override
+	protected void onCancelled() {
+    	if(NoInfo != null) NoInfo.onTaskNoInfo();
+    }
+
+	public ArrayList<InfoCompra> devolverCompra() {
     	return S_Bought;
     }
     

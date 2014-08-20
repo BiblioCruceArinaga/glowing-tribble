@@ -20,7 +20,9 @@ import com.rising.login.Configuration;
 import com.rising.store.CustomAdapter;
 import com.rising.store.MainActivityStore;
 import com.rising.store.PartituraTienda;
+import com.rising.store.purchases.InfoBuyNetworkConnection.OnTaskNoInfo;
 import com.rising.store.purchases.PurchasesNetworkConnection.OnTaskCompleted;
+import com.rising.store.purchases.PurchasesNetworkConnection.OnTaskUncompleted;
 
 //Clase que muestra una lista de todas las partituras que ha comprado el usuario
 public class MyPurchases extends Activity{
@@ -63,6 +65,25 @@ public class MyPurchases extends Activity{
 	    }	
 	};
 	
+	private OnTaskUncompleted NoPurchases = new OnTaskUncompleted(){
+
+		@Override
+		public void onTaskUncompleted() {
+			PDialog.dismiss();
+			result.setVisibility(View.VISIBLE);			
+		}
+		
+	};
+	
+	private OnTaskNoInfo NoInfo = new OnTaskNoInfo(){
+
+		@Override
+		public void onTaskNoInfo() {
+			PDialog.dismiss();
+			result.setVisibility(View.VISIBLE);					
+		}
+	};
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -70,8 +91,8 @@ public class MyPurchases extends Activity{
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		
 		this.CONF = new Configuration(this);
-		this.PURCHASES_ASYNCTASK = new PurchasesNetworkConnection(Purchases);
-		this.INFO_ASYNCTASK = new InfoBuyNetworkConnection();
+		this.PURCHASES_ASYNCTASK = new PurchasesNetworkConnection(Purchases, NoPurchases);
+		this.INFO_ASYNCTASK = new InfoBuyNetworkConnection(NoInfo);
 				
 		result = (TextView)findViewById(R.id.empty_result_purchases);
 		result.setVisibility(View.INVISIBLE);

@@ -67,12 +67,15 @@ public class MoneyUpdateConnectionNetwork extends AsyncTask<String, Integer, Str
 				    }
 				}catch(JSONException e1){
 					Log.e("JSONException MoneyUpdateAsynctask", "Pues eso, JSONException: " + e1.getMessage() + ", Result: " + jArray.toString());
+					this.cancel(true);
 				}catch (ParseException e1) {
 			        Log.e("ParseException MoneyUpdateAsynctask", "" + e1.getMessage());
+			        this.cancel(true);
 			    }	
 				
 			}else{	
 				Log.e("JSON MoneyUpdateAsynctask", "ERROR");
+				this.cancel(true);
 			}
 	    
 	    }catch(Exception e){
@@ -99,7 +102,12 @@ public class MoneyUpdateConnectionNetwork extends AsyncTask<String, Integer, Str
     	return this.getMoney();
     }
     
-    public double getMoney() {
+    @Override
+	protected void onCancelled() {
+		if (FailUpdateMoney != null) FailUpdateMoney.onFailUpdateMoney();
+	}
+
+	public double getMoney() {
 		return money;
 	}
 

@@ -20,8 +20,10 @@ import com.rising.store.CustomAdapter;
 import com.rising.store.MainActivityStore;
 import com.rising.store.PartituraTienda;
 import com.rising.store.purchases.InfoBuyNetworkConnection;
+import com.rising.store.purchases.InfoBuyNetworkConnection.OnTaskNoInfo;
 import com.rising.store.purchases.InfoCompra;
 import com.rising.store.search.AsyncTask_Search.OnTaskCompleted;
+import com.rising.store.search.AsyncTask_Search.OnTaskFailed;
 
 //Clase que muestra el resultado de la búsqueda de partituras a partir de una palabra que se le pasa
 public class SearchStoreActivity extends Activity{
@@ -64,14 +66,35 @@ public class SearchStoreActivity extends Activity{
 	    }	
 	};
 	
+	private OnTaskFailed NoSearch = new OnTaskFailed(){
+
+		@Override
+		public void onTaskFailed() {
+			PDialog.dismiss();
+			result.setVisibility(View.VISIBLE);
+		}		
+	}; 
+	
+	
+	private OnTaskNoInfo NoInfo = new OnTaskNoInfo(){
+
+		@Override
+		public void onTaskNoInfo() {
+			PDialog.dismiss();
+			result.setText(R.string.connection_err);
+			result.setVisibility(View.VISIBLE);
+		}
+		
+	};
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.store_search_searchstorelayout);
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		
-		this.SEARCH_ASYNCTASK = new AsyncTask_Search(Search);
-		this.INFO_ASYNCTASK = new InfoBuyNetworkConnection();
+		this.SEARCH_ASYNCTASK = new AsyncTask_Search(Search, NoSearch);
+		this.INFO_ASYNCTASK = new InfoBuyNetworkConnection(NoInfo);
 		
 		Bundle b = this.getIntent().getExtras();
 		word = b.getString("SearchText");

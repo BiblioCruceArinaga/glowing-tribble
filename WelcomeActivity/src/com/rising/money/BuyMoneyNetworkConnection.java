@@ -70,12 +70,15 @@ public class BuyMoneyNetworkConnection extends AsyncTask<String, Integer, Intege
 					Log.e("regisstatus","regstatus= " + status);
 				}catch (JSONException e) {
 					Log.e("JSONException BuyMoney", "" + e.getMessage());
+					this.cancel(true);
 				}		            
 			}else{	
 				Log.e("JSON BuyMoney", "ERROR");
+				this.cancel(true);
 			}
 		}catch(Exception e){
 			Log.e("BigTry BuyMoney", "" + e.getMessage());
+			this.cancel(true);
 		}
 		
 		return status;
@@ -86,7 +89,12 @@ public class BuyMoneyNetworkConnection extends AsyncTask<String, Integer, Intege
 		return BuyMoney_Status(CONF.getUserId(), params[1], params[2], params[3]);
 	}
 
-    protected void onPostExecute(String result) {
+    @Override
+	protected void onCancelled() {
+		if (FailedBuyMoney != null) FailedBuyMoney.onFailBuyMoney();    	
+	}
+
+	protected void onPostExecute(String result) {
     	
     	if(result.equals("1")){
     		if (SuccessedBuyMoney != null) SuccessedBuyMoney.onSuccessBuyMoney();
@@ -94,5 +102,5 @@ public class BuyMoneyNetworkConnection extends AsyncTask<String, Integer, Intege
     		if (FailedBuyMoney != null) FailedBuyMoney.onFailBuyMoney();
     	}
     }
-
+    
 }

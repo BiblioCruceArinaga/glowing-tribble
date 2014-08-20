@@ -71,6 +71,7 @@ public class BuyNetworkConnection extends AsyncTask<String, Integer, String>{
     			
     		}else{	
     			Log.e("JSON BuyNetwork", "ERROR");
+    			this.cancel(true);
     		}
 	    
         }catch(Exception e){
@@ -92,7 +93,12 @@ public class BuyNetworkConnection extends AsyncTask<String, Integer, String>{
     	}
     }
    
-    public String Resultado() {
+    @Override
+	protected void onCancelled() {
+    	if (FailedBuy != null) FailedBuy.onBuyFailed();
+	}
+
+	public String Resultado() {
     	return res;
     }
 

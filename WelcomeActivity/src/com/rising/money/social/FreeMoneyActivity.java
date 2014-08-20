@@ -20,6 +20,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.rising.drawing.R;
+import com.rising.login.Login_Errors;
+import com.rising.login.Login_Utils;
 import com.rising.money.MoneyActivity;
 import com.rising.money.social.Invitations.OnInvitationFail;
 import com.rising.money.social.Invitations.OnInvitationOk;
@@ -78,30 +80,34 @@ public class FreeMoneyActivity extends Activity{
 
 			@Override
 			public void onClick(View v) {
-				friends = new Dialog(FreeMoneyActivity.this, R.style.cust_dialog);
-				
-				friends.setContentView(R.layout.money_social_friendssharedialog);
-				friends.setTitle(R.string.friendmail);
-				B_SFriendsDialog = (Button) friends.findViewById(R.id.b_sharefriend_dialog);
-				ET_SFriendsDialog = (EditText) friends.findViewById(R.id.eT_sharefriend_dialog);
-								
-				B_SFriendsDialog.setOnClickListener(new OnClickListener(){
-
-					@Override
-					public void onClick(View v) {			
-						
-						if(ET_SFriendsDialog.getText().toString().equals("")){
-							Toast.makeText(ctx, R.string.friendmail_empty, Toast.LENGTH_LONG).show();
-						}else{
-						
-							INVITATIONS.execute(ET_SFriendsDialog.getText().toString());
-							friends.dismiss(); 
-						}
-					}
+				if(new Login_Utils(ctx).isOnline()){
+					friends = new Dialog(FreeMoneyActivity.this, R.style.cust_dialog);
 					
-				});
-				
-				friends.show();
+					friends.setContentView(R.layout.money_social_friendssharedialog);
+					friends.setTitle(R.string.friendmail);
+					B_SFriendsDialog = (Button) friends.findViewById(R.id.b_sharefriend_dialog);
+					ET_SFriendsDialog = (EditText) friends.findViewById(R.id.eT_sharefriend_dialog);
+									
+					B_SFriendsDialog.setOnClickListener(new OnClickListener(){
+	
+						@Override
+						public void onClick(View v) {			
+							
+							if(ET_SFriendsDialog.getText().toString().equals("")){
+								Toast.makeText(ctx, R.string.friendmail_empty, Toast.LENGTH_LONG).show();
+							}else{
+							
+								INVITATIONS.execute(ET_SFriendsDialog.getText().toString());
+								friends.dismiss(); 
+							}
+						}
+						
+					});
+					
+					friends.show();
+				}else{
+					new Login_Errors(ctx).errLogin(4);
+				}
 			}
 		});
     	
@@ -109,72 +115,75 @@ public class FreeMoneyActivity extends Activity{
 
 			@Override
 			public void onClick(View v) {
-				
-				social = new Dialog(FreeMoneyActivity.this, R.style.cust_dialog);
-				social.setContentView(R.layout.money_social_socialsharedialog);
-				social.setTitle(R.string.share_social);
-				ImageButton B_FB_SocialShareDialog = (ImageButton) social.findViewById(R.id.ib_fb_social);
-				ImageButton B_TWT_SocialShareDialog = (ImageButton) social.findViewById(R.id.ib_twt_social);
-												
-				B_FB_SocialShareDialog.setOnClickListener(new OnClickListener(){
-
-					@Override
-					public void onClick(View v) {
-						
-						Log.i("Dialog_Enable", "" + ENABLE_BUTTONS.getEnable_FB());
-						Calendar c = Calendar.getInstance();
-						long time = c.getTimeInMillis();
-						
-						if(ENABLE_BUTTONS.getEnable_FB()){
-							Intent i = new Intent(ctx, Facebook_Publish.class);
-							startActivity(i);
-
-							ENABLE_BUTTONS.setEnable_FB(false);
-							ENABLE_BUTTONS.setTime_FB(c.getTimeInMillis());
-						}else{
-																					
-							if(ENABLE_BUTTONS.getTime_FB() != -1 && cantidadTotalHoras(ENABLE_BUTTONS.getTime_FB(), time) >= 12){
-								ENABLE_BUTTONS.setEnable_FB(true);
-							}else{
-								Toast.makeText(ctx, getString(R.string.wait) + " " +(12-cantidadTotalHoras(ENABLE_BUTTONS.getTime_FB(), time)) + " " + getString(R.string.hours), Toast.LENGTH_LONG).show();
-							}
+				if(new Login_Utils(ctx).isOnline()){
+					social = new Dialog(FreeMoneyActivity.this, R.style.cust_dialog);
+					social.setContentView(R.layout.money_social_socialsharedialog);
+					social.setTitle(R.string.share_social);
+					ImageButton B_FB_SocialShareDialog = (ImageButton) social.findViewById(R.id.ib_fb_social);
+					ImageButton B_TWT_SocialShareDialog = (ImageButton) social.findViewById(R.id.ib_twt_social);
+													
+					B_FB_SocialShareDialog.setOnClickListener(new OnClickListener(){
+	
+						@Override
+						public void onClick(View v) {
 							
-						}
-						Log.i("Time", "Time: "+time+ ", Diferencias: " + (12 - cantidadTotalHoras(ENABLE_BUTTONS.getTime_FB(), time)) + ", Horas: " + ENABLE_BUTTONS.getTime_FB());
-					} 
-						
-				});
-				
-				B_TWT_SocialShareDialog.setOnClickListener(new OnClickListener(){
-
-					@Override
-					public void onClick(View v) {
-												
-						Log.i("Dialog_Enable", ""+ENABLE_BUTTONS.getEnable_TW());
-						Calendar c = Calendar.getInstance();
-						long time = c.getTimeInMillis();
-						
-						if(ENABLE_BUTTONS.getEnable_TW()){
-							Intent i = new Intent(ctx, Twitter_Publish.class);
-							startActivity(i);	
-
-							ENABLE_BUTTONS.setEnable_TW(false);
-							ENABLE_BUTTONS.setTime_TW(c.getTimeInMillis());
-						}else{
-																					
-							if(ENABLE_BUTTONS.getTime_TW() != -1 && cantidadTotalHoras(ENABLE_BUTTONS.getTime_TW(), time) >= 12){
-								ENABLE_BUTTONS.setEnable_TW(true);
-							}else{
-								Toast.makeText(ctx, getString(R.string.wait) + " " +(12-cantidadTotalHoras(ENABLE_BUTTONS.getTime_TW(), time)) + " " + getString(R.string.hours), Toast.LENGTH_LONG).show();
-							}
+							Log.i("Dialog_Enable", "" + ENABLE_BUTTONS.getEnable_FB());
+							Calendar c = Calendar.getInstance();
+							long time = c.getTimeInMillis();
 							
-						}
-						Log.i("Time", "Time: "+time+ ", Diferencias: " + (12 - cantidadTotalHoras(ENABLE_BUTTONS.getTime_TW(), time)) + ", Horas: " + ENABLE_BUTTONS.getTime_TW());		
-					}
+							if(ENABLE_BUTTONS.getEnable_FB()){
+								Intent i = new Intent(ctx, Facebook_Publish.class);
+								startActivity(i);
+	
+								ENABLE_BUTTONS.setEnable_FB(false);
+								ENABLE_BUTTONS.setTime_FB(c.getTimeInMillis());
+							}else{
+																						
+								if(ENABLE_BUTTONS.getTime_FB() != -1 && cantidadTotalHoras(ENABLE_BUTTONS.getTime_FB(), time) >= 12){
+									ENABLE_BUTTONS.setEnable_FB(true);
+								}else{
+									Toast.makeText(ctx, getString(R.string.wait) + " " +(12-cantidadTotalHoras(ENABLE_BUTTONS.getTime_FB(), time)) + " " + getString(R.string.hours), Toast.LENGTH_LONG).show();
+								}
+								
+							}
+							Log.i("Time", "Time: "+time+ ", Diferencias: " + (12 - cantidadTotalHoras(ENABLE_BUTTONS.getTime_FB(), time)) + ", Horas: " + ENABLE_BUTTONS.getTime_FB());
+						} 
+							
+					});
 					
-				});
-				
-				social.show();
+					B_TWT_SocialShareDialog.setOnClickListener(new OnClickListener(){
+	
+						@Override
+						public void onClick(View v) {
+													
+							Log.i("Dialog_Enable", ""+ENABLE_BUTTONS.getEnable_TW());
+							Calendar c = Calendar.getInstance();
+							long time = c.getTimeInMillis();
+							
+							if(ENABLE_BUTTONS.getEnable_TW()){
+								Intent i = new Intent(ctx, Twitter_Publish.class);
+								startActivity(i);	
+	
+								ENABLE_BUTTONS.setEnable_TW(false);
+								ENABLE_BUTTONS.setTime_TW(c.getTimeInMillis());
+							}else{
+																						
+								if(ENABLE_BUTTONS.getTime_TW() != -1 && cantidadTotalHoras(ENABLE_BUTTONS.getTime_TW(), time) >= 12){
+									ENABLE_BUTTONS.setEnable_TW(true);
+								}else{
+									Toast.makeText(ctx, getString(R.string.wait) + " " +(12-cantidadTotalHoras(ENABLE_BUTTONS.getTime_TW(), time)) + " " + getString(R.string.hours), Toast.LENGTH_LONG).show();
+								}
+								
+							}
+							Log.i("Time", "Time: "+time+ ", Diferencias: " + (12 - cantidadTotalHoras(ENABLE_BUTTONS.getTime_TW(), time)) + ", Horas: " + ENABLE_BUTTONS.getTime_TW());		
+						}
+						
+					});
+					
+					social.show();
+				}else{
+					new Login_Errors(ctx).errLogin(4);
+				}
 			}
     		
     	});
@@ -183,9 +192,13 @@ public class FreeMoneyActivity extends Activity{
 
 			@Override
 			public void onClick(View v) {
-				Intent i = new Intent(ctx, Google_Rate.class);
-				startActivity(i);
-				onPause();
+				if(new Login_Utils(ctx).isOnline()){
+					Intent i = new Intent(ctx, Google_Rate.class);
+					startActivity(i);
+					onPause();
+				}else{
+					new Login_Errors(ctx).errLogin(4);
+				}
 			}
     	});
     	

@@ -41,9 +41,6 @@ import com.rising.store.BuyNetworkConnection.OnBuyFailed;
 import com.rising.store.downloads.DownloadScores;
 import com.rising.store.downloads.DownloadScores.OnDownloadCompleted;
 import com.rising.store.downloads.DownloadScores.OnDownloadFailed;
-import com.rising.store.instruments.FreeFragment;
-import com.rising.store.instruments.GuitarFragment;
-import com.rising.store.instruments.PianoFragment;
 
 //Adaptador de la vista de la tienda de partituras. Alberga toda la lógica de las descargas
 public class CustomAdapter extends BaseAdapter {
@@ -234,9 +231,10 @@ public class CustomAdapter extends BaseAdapter {
                      IML.displayImage(imageUri, (ImageView) view, options);
                  }
                  
-                 new PianoFragment().onDestroyProgress();
+                 //Por si quiero que el ProgressDialog se cierre después de que se hayan cargado las imagenes
+                 /*new PianoFragment().onDestroyProgress();
                  new GuitarFragment().onDestroyProgress();
-                 new FreeFragment().onDestroyProgress();
+                 new FreeFragment().onDestroyProgress();*/
              }
         });
                          
@@ -316,7 +314,6 @@ public class CustomAdapter extends BaseAdapter {
         		if(lista.get(position).getComprado()){
         			
         			if(UTILS.buscarArchivos(UTILS.FileNameString(lista.get(position).getUrl()), path)){ 
-        				Log.i("Paritura", "Abriendo fichero...");
         				UTILS.AbrirFichero(lista.get(position).getNombre(), UTILS.FileNameString(lista.get(position).getUrl()));	
         			}else{
         				if(new Login_Utils(ctx).isOnline()){

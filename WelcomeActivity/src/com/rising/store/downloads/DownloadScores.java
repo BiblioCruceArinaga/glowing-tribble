@@ -107,17 +107,17 @@ public class DownloadScores extends AsyncTask<String, Integer, String>{
 	                input = connection.getInputStream();
 	                output = new FileOutputStream(Environment.getExternalStorageDirectory() + path + UTILS.FileNameURL(url), true);
 	                                                
-	                byte data[] = new byte[fileLength];
+	                byte data[] = new byte[4096];
 	                long total = 0;
 	                int count;
 	                                
 	                while ((count = input.read(data)) != -1) {
-	                                	 
+	                                	
 	                    total += count;
 	                   
 	                    if (fileLength > 0) 
 	                        publishProgress((int) (total * 100 / fileLength));
-	                    
+	                    	                    
 	                    output.write(data, 0, count);
 	                }
 	            } catch (Exception e) {
@@ -128,6 +128,7 @@ public class DownloadScores extends AsyncTask<String, Integer, String>{
 	            	}
 	            	
 	            } finally {
+	            	
 	                try {
 	                	
 	                	//Crea el fichero e incluye en él la linea de seguridad

@@ -19,6 +19,7 @@ import com.rising.store.PartituraTienda;
 import com.rising.store.instruments.AsyncTask_Instruments.OnTaskCompleted;
 import com.rising.store.instruments.AsyncTask_Instruments.OnTaskUncomplete;
 import com.rising.store.purchases.InfoBuyNetworkConnection;
+import com.rising.store.purchases.InfoBuyNetworkConnection.OnTaskNoInfo;
 import com.rising.store.purchases.InfoCompra;
 
 public class FreeFragment extends Fragment{
@@ -58,6 +59,14 @@ public class FreeFragment extends Fragment{
 			ConnectionExceptionHandle();
 		} 
 	};
+	
+	private OnTaskNoInfo NoInfo = new OnTaskNoInfo(){
+
+		@Override
+		public void onTaskNoInfo() {
+			ConnectionExceptionHandle();			
+		}
+	};
 		
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -70,7 +79,7 @@ public class FreeFragment extends Fragment{
 					
 		this.ctx = rootView.getContext();
 		this.CONF = new Configuration(ctx);
-		this.INFOBUY = new InfoBuyNetworkConnection();
+		this.INFOBUY = new InfoBuyNetworkConnection(NoInfo);
 		this.UTILS = new Store_Instruments_Utils();
 		
 		INFOBUY.execute(CONF.getUserId());

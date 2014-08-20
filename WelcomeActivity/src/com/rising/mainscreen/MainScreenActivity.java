@@ -85,7 +85,8 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 
 		@Override
 		public void onFailUpdateMoney() {
-			Toast.makeText(ctx, getString(R.string.errcredit), Toast.LENGTH_LONG).show();
+			CONF.setUserMoney(CONF.getUserMoney());
+			//Toast.makeText(ctx, getString(R.string.errcredit), Toast.LENGTH_LONG).show();
 		}
 	};
 
@@ -426,7 +427,7 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 		return res;
 	}
 	
-	/*********************************************Fin de bloque recopliación******************************************/
+	/*********************************************Fin de bloque recopilación******************************************/
 
 	
 	

@@ -213,7 +213,6 @@ public class ScoreProfile extends Activity{
 	         @Override
 	         public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
 	           	if(new Login_Utils(ctx).isOnline()){
-	           		Log.i("Pasos", "Paso4");
 	           		if (cacheFound) {
 
 	           			MemoryCacheUtils.removeFromCache(imageUri, ImageLoader.getInstance().getMemoryCache());
@@ -332,8 +331,7 @@ public class ScoreProfile extends Activity{
         		if(comprado){
         			
         			if(UTILS.buscarArchivos(UTILS.FileNameString(URL), path)){
-        							
-        				UTILS.AbrirFichero(UTILS.FileNameString(URL), path);				
+        				UTILS.AbrirFichero(name , UTILS.FileNameString(URL));				
         			}else{
         				if(new Login_Utils(ctx).isOnline()){	
         					DOWNLOAD = new DownloadScores(SuccessedDownload, FailedDownload, ctx);
@@ -349,7 +347,6 @@ public class ScoreProfile extends Activity{
         });
 	} 
 			
-
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.menu_score_profile, menu); 

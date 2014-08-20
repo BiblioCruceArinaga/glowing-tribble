@@ -77,12 +77,15 @@ public class Invitations extends AsyncTask<String, Integer, String>{
 				    }
 				}catch(JSONException e1){
 					Log.e("JSONException Invitations_AsyncTask", "Pues eso, JSONException: " + e1.getMessage() + ", Result: " + mensaje.toString());
+					this.cancel(true);
 				}catch (ParseException e1) {
 					Log.e("Parse Error Invitations_AsyncTask", e1.getMessage());
+					this.cancel(true);
 			    }	
 				
 			}else{	
 				Log.e("JSON Invitations_AsyncTask", "ERROR");
+				this.cancel(true);
 			}
 	    
 	    }catch(Exception e){
@@ -106,7 +109,12 @@ public class Invitations extends AsyncTask<String, Integer, String>{
     	}
     }
 
-    public String getMensaje() {
+    @Override
+	protected void onCancelled() {
+		if (FailInvitation != null) FailInvitation.onInvitationFail();
+	}
+
+	public String getMensaje() {
 		return mensaje;
 	}
 
