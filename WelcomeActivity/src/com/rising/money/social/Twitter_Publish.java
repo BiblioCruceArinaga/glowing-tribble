@@ -36,7 +36,7 @@ public class Twitter_Publish extends Activity {
 	
 	//Mensajes
 	private String MESSAGE = "Estoy usando Scores. La aplicación para partituras en formato digital. ¡PRUEBALA! http://scores.rising.es #rising #scores";
-	private String MESSAGE_EN = "I'm using Scores. The app of the scores in digital format. TEST IT!! http://scores.rising.es/en/ #rising #scores";
+	private String MESSAGE_EN = "I'm using Scores. The app of the scores in digital format. CHECK IT!! http://scores.rising.es/en/ #rising #scores";
 	
 	//Clases usadas
 	private SocialBonificationNetworkConnection SOCIALBONIFICATION_ASYNCTASK;
@@ -94,7 +94,7 @@ public class Twitter_Publish extends Activity {
 	    twitter.setOAuthAccessToken(new AccessToken(TOKEN_ACCESS, TOKEN_SECRET));
 	 
 	    StatusUpdate statusUpdate;
-	    if(Language.equals("spanish")){
+	    if(Language.equals("español")){
 	    	statusUpdate = new StatusUpdate(MESSAGE);
 	    }else{
 	    	statusUpdate = new StatusUpdate(MESSAGE_EN);

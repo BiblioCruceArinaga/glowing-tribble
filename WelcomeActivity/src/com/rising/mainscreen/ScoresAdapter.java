@@ -60,7 +60,7 @@ public class ScoresAdapter extends BaseAdapter {
     }
  
     public String getItemAuthor(int position){
-    	return scores_list.get(position).getAuthor();
+    	return scores_list.get(position).getAuthor();   	
     }
     
     public String getItemTitle(int position){

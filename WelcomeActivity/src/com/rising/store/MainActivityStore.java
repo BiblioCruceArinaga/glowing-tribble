@@ -3,7 +3,6 @@ package com.rising.store;
 import android.app.ActionBar;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
@@ -57,14 +56,12 @@ public class MainActivityStore extends FragmentActivity implements OnQueryTextLi
 		@Override
 		public void onFailUpdateMoney() {		
 			CONF.setUserMoney(CONF.getUserMoney());
-			//Toast.makeText(ctx, getString(R.string.errcredit), Toast.LENGTH_LONG).show();
 		}		
 	};
 				
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);				
 		setContentView(R.layout.store_storeactivity);		
 				
@@ -85,6 +82,13 @@ public class MainActivityStore extends FragmentActivity implements OnQueryTextLi
 		    	
 		ImageOptions();
    	}
+		
+	@Override
+	public void onRestoreInstanceState(Bundle savedInstanceState) {
+	    if (savedInstanceState.containsKey("tab")) {
+	    	getActionBar().setSelectedNavigationItem(savedInstanceState.getInt("tab"));
+	    }
+	}
 	
 	public void StartMoneyUpdate(String user){
 		MONEY_ASYNCTASK = new MoneyUpdateConnectionNetwork(MoneyUpdateSuccess, MoneyUpdateFail, ctx);	

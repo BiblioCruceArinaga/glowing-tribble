@@ -39,12 +39,13 @@ public class FreeMoneyActivity extends Activity{
 	//Clases usadas
 	private Invitations INVITATIONS;
 	private EnableButtonsData ENABLE_BUTTONS;
+	private Social_Utils UTILS;
 	
 	private OnInvitationOk SuccessInvitation = new OnInvitationOk(){
 
 		@Override
 		public void onInvitationOk() {
-			Toast.makeText(ctx, INVITATIONS.getMensaje(), Toast.LENGTH_SHORT).show();
+			UTILS.Dialog_Aviso(INVITATIONS.getMensaje());
 		}	
 	};
 	
@@ -52,7 +53,7 @@ public class FreeMoneyActivity extends Activity{
 
 		@Override
 		public void onInvitationFail() {
-			Toast.makeText(ctx, INVITATIONS.getMensaje(), Toast.LENGTH_SHORT).show();	
+			UTILS.Dialog_Aviso(INVITATIONS.getMensaje());	
 		}
 	};
 	
@@ -65,6 +66,7 @@ public class FreeMoneyActivity extends Activity{
 		this.ctx = this;
 		this.ENABLE_BUTTONS = new EnableButtonsData(ctx);
 		this.INVITATIONS = new Invitations(SuccessInvitation, FailInvitation, ctx);
+		this.UTILS = new Social_Utils(ctx);
 		
     	ActionBar ABar = getActionBar();
     	
@@ -127,9 +129,10 @@ public class FreeMoneyActivity extends Activity{
 						@Override
 						public void onClick(View v) {
 							
-							Log.i("Dialog_Enable", "" + ENABLE_BUTTONS.getEnable_FB());
 							Calendar c = Calendar.getInstance();
 							long time = c.getTimeInMillis();
+							
+							Log.i("Dialog_Enable", "" + ENABLE_BUTTONS.getEnable_FB());
 							
 							if(ENABLE_BUTTONS.getEnable_FB()){
 								Intent i = new Intent(ctx, Facebook_Publish.class);
@@ -139,14 +142,14 @@ public class FreeMoneyActivity extends Activity{
 								ENABLE_BUTTONS.setTime_FB(c.getTimeInMillis());
 							}else{
 																						
-								if(ENABLE_BUTTONS.getTime_FB() != -1 && cantidadTotalHoras(ENABLE_BUTTONS.getTime_FB(), time) >= 12){
+								if(ENABLE_BUTTONS.getTime_FB() != -1 && UTILS.cantidadTotalHoras(ENABLE_BUTTONS.getTime_FB(), time) >= 12){
 									ENABLE_BUTTONS.setEnable_FB(true);
 								}else{
-									Toast.makeText(ctx, getString(R.string.wait) + " " +(12-cantidadTotalHoras(ENABLE_BUTTONS.getTime_FB(), time)) + " " + getString(R.string.hours), Toast.LENGTH_LONG).show();
+									Toast.makeText(ctx, getString(R.string.wait) + " " +(12 - UTILS.cantidadTotalHoras(ENABLE_BUTTONS.getTime_FB(), time)) + " " + getString(R.string.hours), Toast.LENGTH_LONG).show();
 								}
 								
 							}
-							Log.i("Time", "Time: "+time+ ", Diferencias: " + (12 - cantidadTotalHoras(ENABLE_BUTTONS.getTime_FB(), time)) + ", Horas: " + ENABLE_BUTTONS.getTime_FB());
+							Log.i("Time", "Time Now: " + time + ", Diferencias (Cuanto falta): " + (12 - UTILS.cantidadTotalHoras(ENABLE_BUTTONS.getTime_FB(), time)) + ", Hora almacenada: " + ENABLE_BUTTONS.getTime_FB());
 						} 
 							
 					});
@@ -168,14 +171,14 @@ public class FreeMoneyActivity extends Activity{
 								ENABLE_BUTTONS.setTime_TW(c.getTimeInMillis());
 							}else{
 																						
-								if(ENABLE_BUTTONS.getTime_TW() != -1 && cantidadTotalHoras(ENABLE_BUTTONS.getTime_TW(), time) >= 12){
+								if(ENABLE_BUTTONS.getTime_TW() != -1 && UTILS.cantidadTotalHoras(ENABLE_BUTTONS.getTime_TW(), time) >= 12){
 									ENABLE_BUTTONS.setEnable_TW(true);
 								}else{
-									Toast.makeText(ctx, getString(R.string.wait) + " " +(12-cantidadTotalHoras(ENABLE_BUTTONS.getTime_TW(), time)) + " " + getString(R.string.hours), Toast.LENGTH_LONG).show();
+									Toast.makeText(ctx, getString(R.string.wait) + " " +(12 - UTILS.cantidadTotalHoras(ENABLE_BUTTONS.getTime_TW(), time)) + " " + getString(R.string.hours), Toast.LENGTH_LONG).show();
 								}
 								
 							}
-							Log.i("Time", "Time: "+time+ ", Diferencias: " + (12 - cantidadTotalHoras(ENABLE_BUTTONS.getTime_TW(), time)) + ", Horas: " + ENABLE_BUTTONS.getTime_TW());		
+							Log.i("Time", "Time: " + time + ", Diferencias: " + (12 - UTILS.cantidadTotalHoras(ENABLE_BUTTONS.getTime_TW(), time)) + ", Horas: " + ENABLE_BUTTONS.getTime_TW());		
 						}
 						
 					});
@@ -217,13 +220,7 @@ public class FreeMoneyActivity extends Activity{
     		TV_Rate.setVisibility(View.INVISIBLE);
     	}
 	}
- 
-	public static long cantidadTotalHoras(long fechaInicial, long fechaFinal){
-		long totalMinutos=0; 
-		totalMinutos=((fechaFinal-fechaInicial)/1000/60/60); 
-		return totalMinutos; 
-	}
-	
+ 	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    switch (item.getItemId()) {

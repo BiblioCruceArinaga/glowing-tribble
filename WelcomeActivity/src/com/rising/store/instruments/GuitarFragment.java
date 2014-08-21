@@ -4,9 +4,10 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 import android.app.Fragment;
-import android.app.ProgressDialog;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,13 +15,14 @@ import android.widget.GridView;
 
 import com.rising.drawing.R;
 import com.rising.login.Configuration;
+import com.rising.login.login.ProgressDialogFragment;
 import com.rising.store.CustomAdapter;
 import com.rising.store.PartituraTienda;
 import com.rising.store.instruments.AsyncTask_Instruments.OnTaskCompleted;
 import com.rising.store.instruments.AsyncTask_Instruments.OnTaskUncomplete;
 import com.rising.store.purchases.InfoBuyNetworkConnection;
-import com.rising.store.purchases.InfoCompra;
 import com.rising.store.purchases.InfoBuyNetworkConnection.OnTaskNoInfo;
+import com.rising.store.purchases.InfoCompra;
 
 public class GuitarFragment extends Fragment{
 
@@ -29,7 +31,6 @@ public class GuitarFragment extends Fragment{
 	
 	private Context ctx;
 	private View rootView;
-	private ProgressDialog progressDialog;
 	private int Instrumento = 1; //Guitarra
 	
 	//Clases usadas
@@ -83,7 +84,7 @@ public class GuitarFragment extends Fragment{
 		this.UTILS = new Store_Instruments_Utils();
 		
 		INFOBUY.execute(CONF.getUserId());
-		
+		onDestroyProgress();
 		return rootView;	
 	}
 	
@@ -97,8 +98,17 @@ public class GuitarFragment extends Fragment{
 	public void onResume() {
 		super.onResume();
 		this.setRetainInstance(true);	
-						
-		progressDialog = ProgressDialog.show(ctx, "", getString(R.string.pleasewait));
+		
+		FragmentTransaction ft = getFragmentManager().beginTransaction();
+	    Fragment prev = getFragmentManager().findFragmentByTag("myDialog");
+	    if (prev != null) {
+	      	ft.remove(prev);
+	    }
+	    ft.addToBackStack(null);  
+	            
+	    ProgressDialogFragment dialog = ProgressDialogFragment.newInstance(getString(R.string.pleasewait));
+	    dialog.setCancelable(false);
+	    dialog.show(ft, "myDialog");
 				
 		ASYNCTASK = new AsyncTask_Instruments(Fail, Success, Instrumento);
 		ASYNCTASK.execute(Locale.getDefault().getDisplayLanguage());
@@ -117,8 +127,15 @@ public class GuitarFragment extends Fragment{
 	}
 	
 	public void onDestroyProgress() {
-		if(progressDialog != null)
-	        progressDialog.dismiss();
+		try{
+			ProgressDialogFragment dialog = (ProgressDialogFragment) getFragmentManager().findFragmentByTag("myDialog");
+	     	
+	        if (dialog != null) { 
+	            dialog.dismiss();
+	        }
+		}catch(Exception e){
+			Log.e("Exception", "Exception por aquí en GuitarF: " + e.getMessage());
+		}
 	}
 
 			

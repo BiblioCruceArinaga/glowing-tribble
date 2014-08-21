@@ -57,8 +57,7 @@ public class BuyMoneyNetworkConnection extends AsyncTask<String, Integer, Intege
 		postparameters2send.add(new BasicNameValuePair("money", Money));
 		postparameters2send.add(new BasicNameValuePair("Lenguaje", Language));
 				
-		try{
-		
+		try{		
 			JSONArray jData = HPA.getServerData(postparameters2send, URL_connect);
 			
 			if(jData!=null && jData.length() > 0){

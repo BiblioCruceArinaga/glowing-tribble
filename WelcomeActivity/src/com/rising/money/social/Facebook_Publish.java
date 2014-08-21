@@ -139,7 +139,7 @@ public class Facebook_Publish extends Activity{
 	
 	private void publishApp(){
 		FacebookDialog shareDialog;
-		if(Locale.getDefault().getDisplayLanguage().toString().equals("spanish")){
+		if(Locale.getDefault().getDisplayLanguage().toString().equals("español")){
 			shareDialog = new FacebookDialog.ShareDialogBuilder(this)
 			.setLink(LINK).setName(NAME).setDescription(DESCRIPTION).setCaption(SUBTITLE).setPicture(PICTURE).build();
 		}else{
@@ -171,27 +171,18 @@ public class Facebook_Publish extends Activity{
 	        new WebDialog.FeedDialogBuilder(ctx, Session.getActiveSession(), params)).setOnCompleteListener(new OnCompleteListener() {
 
 	            @Override
-	            public void onComplete(Bundle values,
-	                FacebookException error) {
+	            public void onComplete(Bundle values, FacebookException error) {
 	                if (error == null) {
 	                    final String postId = values.getString("post_id");
 	                    if (postId != null) {
-	                        Toast.makeText(ctx,
-	                            "Posted story, id: "+postId,
-	                            Toast.LENGTH_SHORT).show();
+	                        Toast.makeText(ctx, "Posted story, id: "+postId, Toast.LENGTH_SHORT).show();
 	                    } else {
-	                        Toast.makeText(ctx.getApplicationContext(), 
-	                            "Publish cancelled", 
-	                            Toast.LENGTH_SHORT).show();
+	                        Toast.makeText(ctx.getApplicationContext(), "Publish cancelled",Toast.LENGTH_SHORT).show();
 	                    }
 	                } else if (error instanceof FacebookOperationCanceledException) {
-	                    Toast.makeText(ctx.getApplicationContext(), 
-	                        "Publish cancelled", 
-	                        Toast.LENGTH_SHORT).show();
+	                    Toast.makeText(ctx.getApplicationContext(), "Publish cancelled", Toast.LENGTH_SHORT).show();
 	                } else {
-	                    Toast.makeText(ctx.getApplicationContext(), 
-	                        "Error posting story", 
-	                        Toast.LENGTH_SHORT).show();
+	                    Toast.makeText(ctx.getApplicationContext(), "Error posting story", Toast.LENGTH_SHORT).show();
 	                }
 	            }
 

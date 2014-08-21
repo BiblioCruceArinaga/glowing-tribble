@@ -8,6 +8,8 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -35,6 +37,7 @@ import com.rising.drawing.R;
 import com.rising.login.Configuration;
 import com.rising.login.Login_Errors;
 import com.rising.login.Login_Utils;
+import com.rising.login.login.ProgressDialogFragment;
 import com.rising.money.MoneyActivity;
 import com.rising.money.SocialBonificationNetworkConnection;
 import com.rising.money.SocialBonificationNetworkConnection.OnFailBonification;
@@ -57,7 +60,8 @@ public class ScoreProfile extends Activity{
 	private boolean comprado;
 	private Dialog NoMoneyDialog;
 	private Button B_Price, Buy_Money;
-	private ProgressDialog mProgressDialog, Image_PDialog;
+	private ProgressDialog mProgressDialog;
+
 	//  private String style -> Dato para el futuro. Estilo musical
 	//  Al final del perfil de la partitura se recomienda al usuario más del mismo estilo
 	
@@ -128,7 +132,6 @@ public class ScoreProfile extends Activity{
 		}
 	};	
 	
-	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -140,9 +143,7 @@ public class ScoreProfile extends Activity{
 		this.BONIFICATION_ASYNCTASK = new SocialBonificationNetworkConnection(SuccessBonification, FailBonification, ctx);
 		this.UTILS = new Store_Utils(ctx);
 		this.IML = ImageLoader.getInstance();
-		
-		Image_PDialog = ProgressDialog.show(ctx, "", getString(R.string.pleasewait));
-		
+						
 		mProgressDialog = new ProgressDialog(ScoreProfile.this);
 		mProgressDialog.setMessage(getString(R.string.downloading));
 		mProgressDialog.setIndeterminate(true);
@@ -226,7 +227,13 @@ public class ScoreProfile extends Activity{
 		        	TV_Year.setText(year);
 		        	TV_Instrument.setText(instrument);
 		        	TV_Description.setText(description);
-		            Image_PDialog.dismiss();
+		        	
+		        	ProgressDialogFragment dialog = (ProgressDialogFragment) getFragmentManager().findFragmentByTag("myDialog");
+			     	
+			        if (dialog!=null) { 
+			            dialog.dismiss();
+			        }
+		        	
 	            }else{
 	            	new Login_Errors(ctx).errLogin(4);
 	            }
@@ -345,8 +352,31 @@ public class ScoreProfile extends Activity{
 				}
 			}
         });
+	
+		ProgressDialogFragment dialog = (ProgressDialogFragment) getFragmentManager().findFragmentByTag("myDialog");
+     	
+        if (dialog!=null) { 
+            dialog.dismiss();
+        }
 	} 
 			
+	@Override
+	protected void onResume() {
+		super.onResume();
+		
+		FragmentTransaction ft = getFragmentManager().beginTransaction();
+	    Fragment prev = getFragmentManager().findFragmentByTag("myDialog");
+	    if (prev != null) {
+	      	ft.remove(prev);
+	    }
+	    ft.addToBackStack(null);  
+	            
+	    ProgressDialogFragment dialog = ProgressDialogFragment.newInstance(getString(R.string.pleasewait));
+	    dialog.setCancelable(false);
+	    dialog.show(ft, "myDialog");	 
+	}
+
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.menu_score_profile, menu); 
@@ -363,6 +393,7 @@ public class ScoreProfile extends Activity{
 		*/
 	    return super.onCreateOptionsMenu(menu);
 	}
+	
 	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {

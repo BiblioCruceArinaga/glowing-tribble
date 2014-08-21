@@ -73,7 +73,7 @@ public class Invitations extends AsyncTask<String, Integer, String>{
 				try{
 					for(int i=0; i<jArray.length(); i++){ 
 				    	json_data = jArray.getJSONObject(i);
-				    	this.setMensaje(json_data.getString("invitation"));	
+				    	setMensaje(json_data.getString("invitation"));	
 				    }
 				}catch(JSONException e1){
 					Log.e("JSONException Invitations_AsyncTask", "Pues eso, JSONException: " + e1.getMessage() + ", Result: " + mensaje.toString());

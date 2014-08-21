@@ -4,9 +4,10 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 import android.app.Fragment;
-import android.app.ProgressDialog;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import android.widget.GridView;
 
 import com.rising.drawing.R;
 import com.rising.login.Configuration;
+import com.rising.login.login.ProgressDialogFragment;
 import com.rising.store.CustomAdapter;
 import com.rising.store.PartituraTienda;
 import com.rising.store.instruments.AsyncTask_Instruments.OnTaskCompleted;
@@ -29,7 +31,6 @@ public class FreeFragment extends Fragment{
 	
 	private Context ctx;
 	private View rootView;
-	private ProgressDialog progressDialog;
 	private int Instrumento = 2; //Free
 	
 	//Clases usadas
@@ -83,7 +84,7 @@ public class FreeFragment extends Fragment{
 		this.UTILS = new Store_Instruments_Utils();
 		
 		INFOBUY.execute(CONF.getUserId());
-		
+		onDestroyProgress();
 		return rootView;	
 	}
 	
@@ -98,7 +99,16 @@ public class FreeFragment extends Fragment{
 		super.onResume();
 		this.setRetainInstance(true);	
 		
-		progressDialog = ProgressDialog.show(ctx, "", getString(R.string.pleasewait));
+		FragmentTransaction ft = getFragmentManager().beginTransaction();
+	    Fragment prev = getFragmentManager().findFragmentByTag("myDialog");
+	    if (prev != null) {
+	      	ft.remove(prev);
+	    }
+	    ft.addToBackStack(null);  
+	            
+	    ProgressDialogFragment dialog = ProgressDialogFragment.newInstance(getString(R.string.pleasewait));
+	    dialog.setCancelable(false);
+	    dialog.show(ft, "myDialog");
 				
 		ASYNCTASK = new AsyncTask_Instruments(Fail, Success, Instrumento);
 		ASYNCTASK.execute(Locale.getDefault().getDisplayLanguage());
@@ -111,14 +121,21 @@ public class FreeFragment extends Fragment{
 	}
 
 	public void ConnectionExceptionHandle(){
-		//ASYNCTASK.cancel(true);
+		ASYNCTASK.cancel(true);
 		onDestroyProgress();
 		UTILS.OpenErrorFragment(getFragmentManager(),"Free");
 	}
 	
 	public void onDestroyProgress() {
-		if(progressDialog != null)
-	        progressDialog.dismiss();
+		try{
+			ProgressDialogFragment dialog = (ProgressDialogFragment) getFragmentManager().findFragmentByTag("myDialog");
+	     	
+	        if (dialog != null) { 
+	            dialog.dismiss();
+	        }
+		}catch(Exception e){
+			Log.e("Exception", "Exception por aquí en FreeF: " + e.getMessage());
+		}
 	}
 		
 }

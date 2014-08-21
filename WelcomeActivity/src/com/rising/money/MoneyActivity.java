@@ -205,7 +205,7 @@ public class MoneyActivity extends Activity implements IabHelper.OnIabSetupFinis
 		Toast.makeText(getApplicationContext(), R.string.buy_fail, Toast.LENGTH_LONG).show();
 	}
 	
-	protected void compraCorrecta(IabResult result, Purchase info){		 
+	protected void compraCorrecta(IabResult result, Purchase info){
 		billingHelper.consumeAsync(info, this);
 	}
 	

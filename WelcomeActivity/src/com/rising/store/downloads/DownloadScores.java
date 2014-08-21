@@ -73,11 +73,14 @@ public class DownloadScores extends AsyncTask<String, Integer, String>{
 		this.FailedDownload = failed;
 		this.DOWNLOADIMAGES = new DownloadImages(SuccessDownloadImages, FailDownloadImages, ctx);
 		this.mProgressDialog = new ProgressDialog(ctx);
+		
+		//////////////////Hacer una public interface para los métodos preExecute y postExecute
+		
+		
 		mProgressDialog.setMessage(ctx.getString(R.string.downloading));
  		mProgressDialog.setIndeterminate(true);
  		mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
  		mProgressDialog.setCancelable(true);
-
 	}
 			
 	@SuppressLint("Wakelock")

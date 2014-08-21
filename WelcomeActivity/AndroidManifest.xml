@@ -113,8 +113,6 @@
         </activity>
         <activity android:name="com.rising.money.social.Facebook_Publish" >
         </activity>
-        <activity android:name="com.rising.money.social.Twitter_PublishPublish" >
-        </activity>
         <activity android:name="com.rising.store.ImageActivity" >
         </activity>
         <activity android:name="com.rising.money.social.Google_Rate" >
@@ -151,6 +149,7 @@
         <activity android:theme="@style/AppBaseTheme" android:name="com.rising.mainscreen.preferencies.ChangePassword_Fragment" android:label="@string/app_name"></activity>
         <activity android:name="com.rising.mainscreen.preferencies.DeleteAccount_Fragment" android:label="@string/app_name" android:theme="@style/AppBaseTheme"></activity>
         <activity android:theme="@style/AppBaseTheme" android:label="@string/app_name" android:name="com.rising.mainscreen.preferencies.SendFeedback_Fragment"></activity>
+        <activity android:name="com.rising.money.social.Twitter_Publish"></activity>
 
     </application>
 
