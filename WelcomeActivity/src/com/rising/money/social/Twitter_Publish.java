@@ -56,7 +56,7 @@ public class Twitter_Publish extends Activity {
 
 		@Override
 		public void onFailBonification() {
-			Toast.makeText(ctx, R.string.fail_social, Toast.LENGTH_LONG).show();
+			new Social_Utils(ctx).Dialog_Aviso(ctx.getString( R.string.fail_social));
 			finish();
 		}		
 	};
@@ -75,8 +75,9 @@ public class Twitter_Publish extends Activity {
 		
 		try {
 			publish();
-			Toast.makeText(ctx, ctx.getString(R.string.tweet_done), Toast.LENGTH_LONG).show();
+			new Social_Utils(ctx).Dialog_Aviso(ctx.getString( R.string.tweet_done));
 		} catch (TwitterException e) {
+			new Social_Utils(ctx).Dialog_Aviso(ctx.getString( R.string.tweet_fail));
 			Toast.makeText(ctx, ctx.getString(R.string.tweet_fail), Toast.LENGTH_LONG).show();
 			Log.e("TwitterError", e.getMessage());
 			finish();

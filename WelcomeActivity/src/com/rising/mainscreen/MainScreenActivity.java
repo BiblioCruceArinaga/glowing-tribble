@@ -86,7 +86,6 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 		@Override
 		public void onFailUpdateMoney() {
 			CONF.setUserMoney(CONF.getUserMoney());
-			//Toast.makeText(ctx, getString(R.string.errcredit), Toast.LENGTH_LONG).show();
 		}
 	};
 
@@ -330,7 +329,7 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 
 				}else{
 					//Intentar usar el método de AbrirFicheros en Store_Utils
-					if(new DownloadScoresEncrypter(ctx, infoFicheros[0][position]+CONF.getUserId()).DescryptAndConfirm(ficheros[position])){
+					if(new DownloadScoresEncrypter(ctx, infoFicheros[0][position] + CONF.getUserId()).DescryptAndConfirm(ficheros[position])){
 						Intent i = new Intent(MainScreenActivity.this, MainActivity.class);
 						i.putExtra("score", ficheros[position]);
 
@@ -383,7 +382,6 @@ public class MainScreenActivity extends Activity implements OnQueryTextListener{
 	/**************************************Recopilación de información de los ficheros*********************************/
 	
 	public String[] leeFicheros(){
-		Log.i("Eh", ""+path);
 		File f = new File(Environment.getExternalStorageDirectory() + path);
 		String[] lista = f.list();
 		return lista;

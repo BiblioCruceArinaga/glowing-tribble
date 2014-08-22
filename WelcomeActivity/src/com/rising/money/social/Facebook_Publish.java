@@ -60,7 +60,7 @@ public class Facebook_Publish extends Activity{
 
 		@Override
 		public void onFailBonification() {
-			Toast.makeText(ctx, R.string.fail_social, Toast.LENGTH_LONG).show();
+			new Social_Utils(ctx).Dialog_Aviso(ctx.getString( R.string.fail_social));
 			finish();
 		}		
 	};
@@ -86,6 +86,7 @@ public class Facebook_Publish extends Activity{
 	    	@Override
 	        public void onError(FacebookDialog.PendingCall pendingCall, Exception error, Bundle data) {
 	            Log.e("Activity", String.format("Error: %s", error.toString()));
+	            new Social_Utils(ctx).Dialog_Aviso(error.toString());
 	            finish();
 	        }
 

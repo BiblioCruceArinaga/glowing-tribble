@@ -5,7 +5,8 @@ import java.util.List;
 
 import android.app.ActionBar;
 import android.app.Activity;
-import android.app.ProgressDialog;
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 
 import com.rising.drawing.R;
 import com.rising.login.Configuration;
+import com.rising.login.login.ProgressDialogFragment;
 import com.rising.store.CustomAdapter;
 import com.rising.store.MainActivityStore;
 import com.rising.store.PartituraTienda;
@@ -32,7 +34,7 @@ public class SearchStoreActivity extends Activity{
 	private String word;
 	private List<PartituraTienda> infoPart = new ArrayList<PartituraTienda>();
 	private ArrayList<InfoCompra> ICompra = new ArrayList<InfoCompra>();
-	private ProgressDialog PDialog;
+	//private ProgressDialog PDialog;
 	private ActionBar ABar;
 	private TextView result;
 	
@@ -62,7 +64,11 @@ public class SearchStoreActivity extends Activity{
 				
 	    	GV_Search.setAdapter(new CustomAdapter(SearchStoreActivity.this, infoPart));	  
 	    	
-	    	PDialog.dismiss();
+	    	ProgressDialogFragment dialog = (ProgressDialogFragment) getFragmentManager().findFragmentByTag("myDialog");
+	     	
+	        if (dialog!=null) { 
+	            dialog.dismiss();
+	        }
 	    }	
 	};
 	
@@ -70,7 +76,11 @@ public class SearchStoreActivity extends Activity{
 
 		@Override
 		public void onTaskFailed() {
-			PDialog.dismiss();
+			ProgressDialogFragment dialog = (ProgressDialogFragment) getFragmentManager().findFragmentByTag("myDialog");
+	     	
+	        if (dialog!=null) { 
+	            dialog.dismiss();
+	        }
 			result.setVisibility(View.VISIBLE);
 		}		
 	}; 
@@ -80,7 +90,11 @@ public class SearchStoreActivity extends Activity{
 
 		@Override
 		public void onTaskNoInfo() {
-			PDialog.dismiss();
+			ProgressDialogFragment dialog = (ProgressDialogFragment) getFragmentManager().findFragmentByTag("myDialog");
+	     	
+	        if (dialog!=null) { 
+	            dialog.dismiss();
+	        }
 			result.setText(R.string.connection_err);
 			result.setVisibility(View.VISIBLE);
 		}
@@ -102,18 +116,34 @@ public class SearchStoreActivity extends Activity{
 		result = (TextView)findViewById(R.id.empty_result);
 		result.setVisibility(View.INVISIBLE);
 		
-		PDialog = new ProgressDialog(this);
-		PDialog.setMessage(getString(R.string.searching));
-        PDialog.setIndeterminate(false);
-        PDialog.setCancelable(false);
-        PDialog.show();
-		
         ABar = getActionBar();
         ABar.setDisplayHomeAsUpEnabled(true);
         		
 		INFO_ASYNCTASK.execute(new Configuration(this).getUserId());
 		SEARCH_ASYNCTASK.execute(word);
+		
+		ProgressDialogFragment dialog = (ProgressDialogFragment) getFragmentManager().findFragmentByTag("myDialog");
+     	
+        if (dialog!=null) { 
+            dialog.dismiss();
+        }
 	}   
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		
+		FragmentTransaction ft = getFragmentManager().beginTransaction();
+	    Fragment prev = getFragmentManager().findFragmentByTag("myDialog");
+	    if (prev != null) {
+	      	ft.remove(prev);
+	    }
+	    ft.addToBackStack(null);  
+	            
+	    ProgressDialogFragment dialog = ProgressDialogFragment.newInstance(getString(R.string.searching));
+	    dialog.setCancelable(false);
+	    dialog.show(ft, "myDialog");	 
+	}
 			
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {

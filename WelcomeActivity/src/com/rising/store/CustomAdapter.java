@@ -211,7 +211,6 @@ public class CustomAdapter extends BaseAdapter {
 
              @Override
              public void onLoadingStarted(String url, View view) {
-
                  List<String> memCache = MemoryCacheUtils.findCacheKeysForImageUri(url, IML.getMemoryCache());
                  cacheFound = !memCache.isEmpty();
                  if (!cacheFound) {
@@ -423,5 +422,7 @@ public class CustomAdapter extends BaseAdapter {
         
         notifyDataSetChanged();
     }
+
+	
 
 }

@@ -6,7 +6,8 @@ import java.util.Locale;
 
 import android.app.ActionBar;
 import android.app.Activity;
-import android.app.ProgressDialog;
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 
 import com.rising.drawing.R;
 import com.rising.login.Configuration;
+import com.rising.login.login.ProgressDialogFragment;
 import com.rising.store.CustomAdapter;
 import com.rising.store.MainActivityStore;
 import com.rising.store.PartituraTienda;
@@ -30,7 +32,6 @@ public class MyPurchases extends Activity{
 	//Variables
 	private List<PartituraTienda> infoPart = new ArrayList<PartituraTienda>();
 	private ArrayList<InfoCompra> ICompra = new ArrayList<InfoCompra>();
-	private ProgressDialog PDialog;
 	private ActionBar ABar;
 	private TextView result;
 	
@@ -61,7 +62,11 @@ public class MyPurchases extends Activity{
 					
 	    	GV_Purchases.setAdapter(new CustomAdapter(MyPurchases.this, infoPart));	  
 	    	
-	    	PDialog.dismiss();
+	    	ProgressDialogFragment dialog = (ProgressDialogFragment) getFragmentManager().findFragmentByTag("myDialog");
+	     	
+	        if (dialog!=null) { 
+	            dialog.dismiss();
+	        }
 	    }	
 	};
 	
@@ -69,7 +74,11 @@ public class MyPurchases extends Activity{
 
 		@Override
 		public void onTaskUncompleted() {
-			PDialog.dismiss();
+			ProgressDialogFragment dialog = (ProgressDialogFragment) getFragmentManager().findFragmentByTag("myDialog");
+	     	
+	        if (dialog!=null) { 
+	            dialog.dismiss();
+	        }
 			result.setVisibility(View.VISIBLE);			
 		}
 		
@@ -79,7 +88,11 @@ public class MyPurchases extends Activity{
 
 		@Override
 		public void onTaskNoInfo() {
-			PDialog.dismiss();
+			ProgressDialogFragment dialog = (ProgressDialogFragment) getFragmentManager().findFragmentByTag("myDialog");
+	     	
+	        if (dialog!=null) { 
+	            dialog.dismiss();
+	        }
 			result.setVisibility(View.VISIBLE);					
 		}
 	};
@@ -96,12 +109,6 @@ public class MyPurchases extends Activity{
 				
 		result = (TextView)findViewById(R.id.empty_result_purchases);
 		result.setVisibility(View.INVISIBLE);
-		
-		PDialog = new ProgressDialog(this);
-		PDialog.setMessage(getString(R.string.searching));
-		PDialog.setIndeterminate(false);
-		PDialog.setCancelable(false);
-		PDialog.show();
 				
 		ABar = getActionBar();
 		ABar.setTitle(R.string.my_purchases);
@@ -110,6 +117,28 @@ public class MyPurchases extends Activity{
 	
 		INFO_ASYNCTASK.execute(new Configuration(this).getUserId());				
 		PURCHASES_ASYNCTASK.execute(CONF.getUserId(), Locale.getDefault().getDisplayLanguage());
+		
+		ProgressDialogFragment dialog = (ProgressDialogFragment) getFragmentManager().findFragmentByTag("myDialog");
+     	
+        if (dialog!=null) { 
+            dialog.dismiss();
+        }
+	}
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		
+		FragmentTransaction ft = getFragmentManager().beginTransaction();
+	    Fragment prev = getFragmentManager().findFragmentByTag("myDialog");
+	    if (prev != null) {
+	      	ft.remove(prev);
+	    }
+	    ft.addToBackStack(null);  
+	            
+	    ProgressDialogFragment dialog = ProgressDialogFragment.newInstance(getString(R.string.searching));
+	    dialog.setCancelable(false);
+	    dialog.show(ft, "myDialog");	 
 	}
 
 	@Override

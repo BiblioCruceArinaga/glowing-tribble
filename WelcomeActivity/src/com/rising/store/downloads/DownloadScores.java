@@ -63,9 +63,7 @@ public class DownloadScores extends AsyncTask<String, Integer, String>{
 	public interface OnDownloadFailed{
 		void onDownloadFailed();
 	}
-	
-	
-	
+		
 	public DownloadScores(OnDownloadCompleted success, OnDownloadFailed failed, Context context) {
 		this.ctx = context;
 		this.UTILS = new Download_Utils();
@@ -73,16 +71,13 @@ public class DownloadScores extends AsyncTask<String, Integer, String>{
 		this.FailedDownload = failed;
 		this.DOWNLOADIMAGES = new DownloadImages(SuccessDownloadImages, FailDownloadImages, ctx);
 		this.mProgressDialog = new ProgressDialog(ctx);
-		
-		//////////////////Hacer una public interface para los métodos preExecute y postExecute
-		
-		
+				
 		mProgressDialog.setMessage(ctx.getString(R.string.downloading));
  		mProgressDialog.setIndeterminate(true);
  		mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
  		mProgressDialog.setCancelable(true);
 	}
-			
+				
 	@SuppressLint("Wakelock")
 	private String DownloadStatus(String URL_Score, String URL_Image, String NameAndNumberForEncrypt){
 		   	PowerManager pm = (PowerManager) ctx.getSystemService(Context.POWER_SERVICE);
@@ -128,6 +123,7 @@ public class DownloadScores extends AsyncTask<String, Integer, String>{
 	            	Log.e("Error descargar DownloadScores", e.getMessage());
 	            	if(!e.getMessage().equals("-1")){
 	            		this.cancel(true);
+		            	//De alguna manera hacer que si falla se borre el archivo que se ha creado hasta ese momento	
 	            	}
 	            	
 	            } finally {
@@ -168,19 +164,24 @@ public class DownloadScores extends AsyncTask<String, Integer, String>{
 	@Override
 	protected void onPreExecute() {
 	    super.onPreExecute();
-	    mProgressDialog.show();
+	    mProgressDialog.show();	    
 	}
 	
 	@Override
 	protected void onCancelled() {
-		mProgressDialog.dismiss();
+		try{
+			mProgressDialog.dismiss();
+		}catch(Exception e){
+			Log.e("Exception DownloadScores onCancelled", e.getMessage());
+		}
 		if(FailedDownload != null) FailedDownload.onDownloadFailed();
 	}
 
 	@Override
 	protected void onProgressUpdate(Integer... progress) {
 	    super.onProgressUpdate(progress);
-	    
+        
+	   
 		mProgressDialog.setIndeterminate(false);
 		mProgressDialog.setMax(100);
 		mProgressDialog.setProgress(progress[0]);
@@ -188,8 +189,13 @@ public class DownloadScores extends AsyncTask<String, Integer, String>{
 	
 	@Override
 	protected void onPostExecute(String result) {
-	    mProgressDialog.dismiss();
 	    
+		try{
+			mProgressDialog.dismiss();
+		}catch(Exception e){
+			Log.e("Exception DownloadScores PostExecute", e.getMessage());
+		}
+		
         if (result != null){
         	if(FailedDownload != null) FailedDownload.onDownloadFailed();
         	Log.e("Error descarga partitura", "Error descarga: " + result);

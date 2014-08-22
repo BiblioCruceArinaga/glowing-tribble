@@ -77,14 +77,16 @@ public class PurchasesNetworkConnection extends AsyncTask<String, Integer, Strin
 				        searchinfo.add(new PartituraTienda(id, nombre, autor, instrumento, precio, description, year, comprado, URL, URL_Imagen));  
 				    }
 				}catch(JSONException e1){
-					
+					this.cancel(true);
 					Log.e("JSONException PurchasesAsynctask", "Pues eso, JSONException: " + e1.getMessage() + ", Result: " + jArray.toString());
 				}catch (ParseException e1) {
 			        Log.e("ParseException PurchasesAsynctask", "" + e1.getMessage());
+			        this.cancel(true);
 			    }	
 				
 			}else{	
 				Log.e("JSON PurchasesAsynctask", "ERROR");
+				this.cancel(true);
 			}
 	    
 	    }catch(Exception e){
