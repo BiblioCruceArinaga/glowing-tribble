@@ -84,7 +84,6 @@ public class DrawingMethods {
 	private Bitmap trill = null;
 	private Bitmap vibrato = null;
 	private Bitmap whitehead = null;
-
 	
 	public DrawingMethods(Partitura partitura, Config config, Resources resources, Vista vista) {
 		if (config.supported()) {
@@ -336,7 +335,7 @@ public class DrawingMethods {
 	}
 	
 	private int calcularPosicionX(int position) {
-		return position * config.unidadDesplazamiento / partitura.getDivisions();
+		return position * config.unidadDesplazamiento / config.divisions;
 	}
 	
 	private void calcularTime(Compas compas) {
@@ -2111,7 +2110,7 @@ public class DrawingMethods {
 
 			} else if (nota.esAlteracion(i)) {
 				xAlteraciones = config.xAccidental2 * numAlteraciones++;
-				i = gestionarAlteracion(nota, figurasGraficas, i, y_beams, xAlteraciones);
+				gestionarAlteracion(nota, figurasGraficas, i, y_beams, xAlteraciones);
 
 			} else if (nota.finDeTresillo(i)) {
 				dibujarFiguraGrafica(nota, figurasGraficas.get(i), y_beams, figurasGraficas.get(i + 1));
@@ -2673,14 +2672,15 @@ public class DrawingMethods {
 		return indice;
 	}
 
-	private int gestionarAlteracion(Nota nota, ArrayList<Byte> figurasGraficas, 
+	private void gestionarAlteracion(Nota nota, ArrayList<Byte> figurasGraficas, 
 			int ind, int y_beams, int xAlteraciones) {
 		
-		if (figurasGraficas.get(ind + 1) == 1)
+		if (nota.desplazadaALaIzquierda())
 			nota.setX(nota.getX() - config.anchoCabezaNota);
+		else if (nota.desplazadaALaDerecha())
+			nota.setX(nota.getX() + config.anchoCabezaNota);
 		
-		dibujarFiguraGrafica(nota, figurasGraficas.get(ind++), y_beams, xAlteraciones);
-		return ind;
+		dibujarFiguraGrafica(nota, figurasGraficas.get(ind), y_beams, xAlteraciones);
 	}
 	
 	//  Guarda las posiciones de las notas que tienen beams para,

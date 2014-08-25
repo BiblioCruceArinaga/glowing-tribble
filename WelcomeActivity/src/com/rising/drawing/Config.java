@@ -26,6 +26,7 @@ public class Config {
 	public int distanciaLineasPentagrama;
 	public int distanciaLineasPentagramaMitad;
 	public int distanciaPentagramas;
+	public int divisions;
 	public int largoImagenCorchete;
 	public int largoImagenCorcheteNotaGracia;
 	public int longitudPlica;
@@ -142,6 +143,7 @@ public class Config {
 						distanciaLineasPentagrama = 19;
 						distanciaLineasPentagramaMitad = 9;
 						distanciaPentagramas = 240;
+						divisions = 16;
 						largoImagenCorchete = 25;
 						largoImagenCorcheteNotaGracia = 5;
 						longitudPlica = 60;
@@ -247,6 +249,7 @@ public class Config {
 						distanciaLineasPentagrama = 19;
 						distanciaLineasPentagramaMitad = 9;
 						distanciaPentagramas = 240;
+						divisions = 16;
 						largoImagenCorchete = 25;
 						largoImagenCorcheteNotaGracia = 5;
 						longitudPlica = 60;

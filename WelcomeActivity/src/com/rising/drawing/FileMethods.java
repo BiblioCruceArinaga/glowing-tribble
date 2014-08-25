@@ -57,21 +57,18 @@ public class FileMethods {
 		ArrayList<Byte> creator = leerHastaAlmohadilla();
 		byte staves = fichero.readByte();
 		byte instrument = fichero.readByte();
-		ArrayList<Byte> divisions = leerHastaAlmohadilla();
 		int numeroCompas = fichero.readByte();
 		
 		vertical.setWork(work);
 		vertical.setCreator(creator);
 		vertical.setStaves(staves);
 		vertical.setInstrument(instrument);
-		vertical.setDivisions(divisions);
 		vertical.setFirstNumber(numeroCompas);
 		
 		horizontal.setWork(work);
 		horizontal.setCreator(creator);
 		horizontal.setStaves(staves);
 		horizontal.setInstrument(instrument);
-		horizontal.setDivisions(divisions);
 		horizontal.setFirstNumber(numeroCompas);
 	}
 	

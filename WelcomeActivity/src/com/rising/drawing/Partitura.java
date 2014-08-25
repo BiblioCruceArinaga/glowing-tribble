@@ -8,7 +8,6 @@ public class Partitura {
     
     private int staves;
     private byte instrument;
-    private int divisions;
     private int firstNumber;
     
     private int width;
@@ -22,7 +21,6 @@ public class Partitura {
         compases = new ArrayList<Compas>();
         
         instrument = 0;
-        divisions = 0;
         staves = 1;
         firstNumber = 1;
         
@@ -53,7 +51,6 @@ public class Partitura {
     	compases.clear();
     	
     	instrument = 0;
-    	divisions = 0;
     	staves = 1;
     }
     
@@ -67,10 +64,6 @@ public class Partitura {
     
     public String getCreator() {
     	return creator;
-    }
-    
-    public int getDivisions() {
-    	return divisions;
     }
     
     public int getFirstNumber() {
@@ -148,11 +141,6 @@ public class Partitura {
     public void setCreator(ArrayList<Byte> creator) {
     	String creatorString = bytesArrayToString(creator);
         this.creator = sanitizeString(creatorString);
-    }
-    
-    public void setDivisions(ArrayList<Byte> divisions) {
-        String divisionsString = bytesArrayToString(divisions);
-        this.divisions = Integer.parseInt(divisionsString);
     }
     
     public void setFirstNumber(int firstNumber) {
