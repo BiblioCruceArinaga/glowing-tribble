@@ -22,9 +22,9 @@ public class FileMethods {
 		compas = new Compas();
 	}
 	
-	public void cargarDatosDeFichero(Partitura horizontal, Partitura vertical) 
+	public void cargarDatosDeFichero(Partitura partitura) 
 			throws IOException, CloneNotSupportedException {
-		leerDatosBasicosDePartitura(horizontal, vertical);
+		leerDatosBasicosDePartitura(partitura);
 		
 		byte byteLeido = fichero.readByte();
 		while (byteLeido != -128) {
@@ -35,8 +35,7 @@ public class FileMethods {
 					break;
 					
 				case 127:
-					horizontal.addCompas(compas);
-					vertical.addCompas(compas.clonar());
+					partitura.addCompas(compas);
 					compas = new Compas();
 					break;
 				
@@ -51,7 +50,7 @@ public class FileMethods {
 		fichero.close();
 	}
 	
-	private void leerDatosBasicosDePartitura(Partitura horizontal, Partitura vertical) 
+	private void leerDatosBasicosDePartitura(Partitura partitura) 
 			throws IOException {
 		ArrayList<Byte> work = leerHastaAlmohadilla();
 		ArrayList<Byte> creator = leerHastaAlmohadilla();
@@ -59,17 +58,11 @@ public class FileMethods {
 		byte instrument = fichero.readByte();
 		int numeroCompas = fichero.readByte();
 		
-		vertical.setWork(work);
-		vertical.setCreator(creator);
-		vertical.setStaves(staves);
-		vertical.setInstrument(instrument);
-		vertical.setFirstNumber(numeroCompas);
-		
-		horizontal.setWork(work);
-		horizontal.setCreator(creator);
-		horizontal.setStaves(staves);
-		horizontal.setInstrument(instrument);
-		horizontal.setFirstNumber(numeroCompas);
+		partitura.setWork(work);
+		partitura.setCreator(creator);
+		partitura.setStaves(staves);
+		partitura.setInstrument(instrument);
+		partitura.setFirstNumber(numeroCompas);
 	}
 	
 	private void leerFiguraGraficaCompas() throws IOException {

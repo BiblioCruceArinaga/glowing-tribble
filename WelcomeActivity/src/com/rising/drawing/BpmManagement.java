@@ -18,29 +18,24 @@ import android.widget.SeekBar.OnSeekBarChangeListener;
 public class BpmManagement {
 
 	private Vista vista;
-	private Partitura horizontalScore;
-	private Partitura verticalScore;
-	private ArrayList<OrdenDibujo> horizontalDrawing;
-	private ArrayList<OrdenDibujo> verticalDrawing;
+	private Partitura partitura;
+	private ArrayList<OrdenDibujo> ordenesDibujo;
 	private Config config;
 	private Context context;
 	private Dialog MDialog = null;
 	
-	public BpmManagement(Vista vista, Partitura horizontalScore, Partitura verticalScore,
-			ArrayList<OrdenDibujo> horizontalDrawing, ArrayList<OrdenDibujo> verticalDrawing,
-			Config config, Context context) {
-		
+	public BpmManagement(Vista vista, Partitura partitura, 
+			ArrayList<OrdenDibujo> ordenesDibujo, Context context) 
+	{
 		this.vista = vista;
-		this.config = config;
+		this.config = Config.getInstance();
 		this.context = context;
-		
-		this.horizontalDrawing = horizontalDrawing;
-		this.horizontalScore = horizontalScore;
-		this.verticalDrawing = verticalDrawing;
-		this.verticalScore = verticalScore;
+		this.partitura = partitura;
+		this.ordenesDibujo = ordenesDibujo;
 	}
 	
-	public void tapManagement(MotionEvent e, Scroll scroll) {
+	public void tapManagement(MotionEvent e, Scroll scroll) 
+	{
 		int compas;
 		
 		if (vista == Vista.VERTICAL)
@@ -53,12 +48,9 @@ public class BpmManagement {
 	
 	//  Devuelve el índice del compás que se encuentra
 	//  en la posición X e Y del tap del usuario
-	private int compasAPartirDeTap(float x, float y) {
-		ArrayList<Compas> compases;
-		if (vista == Vista.VERTICAL)
-			compases = verticalScore.getCompases();
-		else
-			compases = horizontalScore.getCompases();
+	private int compasAPartirDeTap(float x, float y) 
+	{
+		ArrayList<Compas> compases = partitura.getCompases();
 		
 		int numCompases = compases.size();
 		for (int i=0; i<numCompases; i++) {
@@ -72,20 +64,12 @@ public class BpmManagement {
 		return -1;
 	}
 	
-	private int dibujarBpm(Compas compas) {
-		
-		if (vista == Vista.VERTICAL) {
-			verticalDrawing.add(new OrdenDibujo(config.tamanoLetraBpm, 
-				false, "Bpm = " + compas.getBpm(), compas.getXIni(), 
-					compas.getYIni() - config.yBpm));
-			return verticalDrawing.size() - 1;
-		}
-		else {
-			horizontalDrawing.add(new OrdenDibujo(config.tamanoLetraBpm, 
-				false, "Bpm = " + compas.getBpm(), compas.getXIni(), 
-					compas.getYIni() - config.yBpm));
-			return horizontalDrawing.size() - 1;
-		}
+	private int dibujarBpm(Compas compas) 
+	{
+		ordenesDibujo.add(new OrdenDibujo(config.tamanoLetraBpm, 
+			false, "Bpm = " + compas.getBpm(), compas.getXIni(), 
+				compas.getYIni() - config.yBpm));
+		return ordenesDibujo.size() - 1;
 	}
 	
 	//  Prepara el diálogo que permitirá al usuario
@@ -150,19 +134,12 @@ public class BpmManagement {
 				    toast1.show();
 				}
 				else {
-					Compas compas;
-					if (vista == Vista.VERTICAL)
-						compas = verticalScore.getCompas(index);
-					else
-						compas = horizontalScore.getCompas(index);
+					Compas compas = partitura.getCompas(index);
 					
 					compas.setBpm(bpm);
 					
 					if (compas.getBpmIndex() > -1) {
-						if (vista == Vista.VERTICAL)
-							verticalDrawing.set(compas.getBpmIndex(), null);
-						else
-							horizontalDrawing.set(compas.getBpmIndex(), null);
+						ordenesDibujo.set(compas.getBpmIndex(), null);
 					}
 					
 					int bpmIndex = dibujarBpm(compas);
@@ -179,18 +156,11 @@ public class BpmManagement {
 
 			@Override
 			public void onClick(View v) {
-				Compas compas;
-				if (vista == Vista.VERTICAL)
-					compas = verticalScore.getCompas(index);
-				else
-					compas = horizontalScore.getCompas(index);
+				Compas compas = partitura.getCompas(index);
 
 				if (compas.getBpmIndex() > -1) {
 					if (compas.getBpmIndex() > -1) {
-						if (vista == Vista.VERTICAL)
-							verticalDrawing.set(compas.getBpmIndex(), null);
-						else
-							horizontalDrawing.set(compas.getBpmIndex(), null);
+						ordenesDibujo.set(compas.getBpmIndex(), null);
 					}
 					
 					compas.setBpm(-1);

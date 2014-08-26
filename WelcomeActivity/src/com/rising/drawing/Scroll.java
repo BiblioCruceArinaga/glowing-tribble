@@ -42,7 +42,10 @@ public class Scroll {
     private float xDown = 0;
     private boolean x_initialized = false;
 	
-	public Scroll(Config config) {;
+	public Scroll() 
+	{
+		Config config = Config.getInstance();
+		
 		margenFinalScrollY = config.distanciaPentagramas;
 		margenFinalScrollX = config.xInicialPentagramas;
 		margenXPrimerCompas = margenFinalScrollX;

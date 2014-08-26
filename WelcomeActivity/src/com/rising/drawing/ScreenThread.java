@@ -8,31 +8,44 @@ public class ScreenThread extends Thread {
     private SurfaceHolder msurfaceHolder;
     private Screen screenView;
 	private boolean run;
+	private Vista vista = Vista.HORIZONTAL;
 
-	public ScreenThread(SurfaceHolder SH, Screen screenView){
+	public ScreenThread(SurfaceHolder SH, Screen screenView) {
 		this.msurfaceHolder = SH;
 		this.screenView = screenView;
 		run = false;
 	}
 	
-	public void setRunning(boolean run){
+	public void setRunning(boolean run) {
 		this.run = run;
 	}
 	
-	public void run(){
-		Canvas c;
-		while(run){
-			c = null;
-			try{
+	public void run() {
+		Canvas c = null;
+		
+		while(run)
+		{
+			changeView(screenView.getVista());
+			
+			try {
 				c = msurfaceHolder.lockCanvas(null);			
-				synchronized(msurfaceHolder){
+				synchronized(msurfaceHolder) {
 					screenView.draw(c);
 				}
-			}finally{
-				if(c != null){
+			} finally {
+				if (c != null) {
 					msurfaceHolder.unlockCanvasAndPost(c);
 				}
 			}
+		}
+	}
+	
+	private void changeView(Vista vista)
+	{
+		if (this.vista != vista) 
+		{
+			screenView.crearOrdenesDibujo(vista);
+			this.vista = vista;
 		}
 	}
 }

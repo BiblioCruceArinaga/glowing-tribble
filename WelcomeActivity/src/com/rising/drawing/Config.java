@@ -2,6 +2,7 @@ package com.rising.drawing;
 
 public class Config {
 	
+	private static Config configInstance = null;
 	private boolean supported = true;
 	
 	public int altoDialogBpm;
@@ -104,7 +105,7 @@ public class Config {
 	public int yTresilloArriba;
 	public int yTrill;
 	
-	public Config(int densityDPI, int width, int height) {
+	private Config(int densityDPI, int width, int height) {
 		
 		switch (densityDPI) {
 			case 120:
@@ -337,11 +338,20 @@ public class Config {
 		}
 	}
 	
-	/**
-	 * 
-	 * @return True if the screen specifications of the device are supported, false otherwise
-	 */
 	public boolean supported() {
 		return supported;
+	}
+	
+	public static synchronized Config getInstance(int densityDPI, int width, int height)
+	{
+		if (configInstance == null)
+			configInstance = new Config(densityDPI, width, height);
+		
+		return configInstance;
+	}
+	
+	public static synchronized Config getInstance()
+	{
+		return configInstance;
 	}
 }

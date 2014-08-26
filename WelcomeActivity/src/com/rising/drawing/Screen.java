@@ -27,17 +27,13 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 	private Context context = null;
 	private Config config = null;
 	private String path_folder = "/.RisingScores/scores/";
-
-	private Partitura partituraHorizontal = new Partitura();
-	private Partitura partituraVertical = new Partitura();
 	
 	//  Gestión de las posibles vistas y su scroll
-	private ArrayList<OrdenDibujo> verticalDrawing = new ArrayList<OrdenDibujo>();
-	private ArrayList<OrdenDibujo> horizontalDrawing = new ArrayList<OrdenDibujo>();
-	private Vista vista;
+	private Partitura partitura = new Partitura();
+	private DrawingMethods metodosDibujo;
+	private ArrayList<OrdenDibujo> ordenesDibujo = new ArrayList<OrdenDibujo>();
+	private Vista vista = Vista.VERTICAL;
 	private Scroll scroll;
-	private Thread verticalThread;
-	private Thread horizontalThread;
 	
 	//  Gestión de la lectura de micrófono
 	private SoundReader soundReader = null;
@@ -63,18 +59,11 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 			this.context = context;
 			
 			FileMethods fileMethods = new FileMethods(path_folder, path);
-			fileMethods.cargarDatosDeFichero(partituraHorizontal, partituraVertical);
+			fileMethods.cargarDatosDeFichero(partitura);
 
-			config = new Config(densityDPI, width, height);
-			scroll = new Scroll(config);			
-			
-			crearVistasDePartitura();
-			
-			horizontalThread.join();
-			verticalThread.join();
-
-			cambiarVista(Vista.VERTICAL);
-									
+			config = Config.getInstance(densityDPI, width, height);
+			scroll = new Scroll();			
+							
 			isValidScreen = true;
 						
 		} catch (FileNotFoundException e) {
@@ -83,8 +72,6 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 			Log.e("StreamCorruptedException: ", e.getMessage() + "\n");
 		} catch (IOException e) {
 			Log.i("IOException: ", e.getMessage() + "\n");
-		} catch (InterruptedException e) {
-			e.printStackTrace();
 		} catch (CloneNotSupportedException e) {
 			e.printStackTrace();
 		}
@@ -112,15 +99,11 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 		
 		isValidScreen = false;
 		
-		partituraHorizontal.destruir();
-		partituraHorizontal = null;
-		partituraVertical.destruir();
-		partituraVertical = null;
+		partitura.destruir();
+		partitura = null;
 		
-		verticalDrawing.clear();
-		verticalDrawing = null;
-		horizontalDrawing.clear();
-		horizontalDrawing = null;
+		ordenesDibujo.clear();
+		ordenesDibujo = null;
 		
 		scroll.back(vista);
 		scroll = null;
@@ -143,8 +126,7 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 	        case MotionEvent.ACTION_UP:
 	        	if (scroll.up(e)) {
 	        		BpmManagement bpmManagement = new BpmManagement(vista,
-	        				partituraHorizontal, partituraVertical, 
-	        				horizontalDrawing, verticalDrawing, config, context); 
+	        				partitura, ordenesDibujo, context); 
 	    			bpmManagement.tapManagement(e, scroll);
 	        	}
 	        	break;
@@ -170,11 +152,7 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 		
 	    return super.dispatchTouchEvent(ev);
 	}
-	
-	public Config getConfig() {
-		return config;
-	}
-	
+
 	public boolean isValidScreen() {
 		return isValidScreen;
 	}
@@ -200,16 +178,11 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 		}
     }
 	
-	private void drawToCanvas(Canvas canvas) {
-		ArrayList<OrdenDibujo> ordenes;
-		if (vista == Vista.VERTICAL)
-			ordenes = verticalDrawing;
-		else
-			ordenes = horizontalDrawing;
-		
-		int numOrdenes = ordenes.size();
+	private void drawToCanvas(Canvas canvas) 
+	{
+		int numOrdenes = ordenesDibujo.size();
 		for (int i=0; i<numOrdenes; i++) {
-			OrdenDibujo ordenDibujo = ordenes.get(i);
+			OrdenDibujo ordenDibujo = ordenesDibujo.get(i);
 			if (ordenDibujo == null) continue;
 			
 			switch (ordenDibujo.getOrden()) {
@@ -260,50 +233,32 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 				canvas.drawLine(barra.getX1(), barra.getY1(), barra.getX2(), barra.getY2(), barra.getPaint());
 		}
 	}
-	
-	private void crearVistasDePartitura() {
-			
-		verticalThread = new Thread(new Runnable(){
-    		public void run() {
-    			DrawingMethods metodosDibujo = 
-    					new DrawingMethods(partituraVertical, config, getResources(), Vista.VERTICAL);
-				if (metodosDibujo.isValid()) {
-					verticalDrawing = metodosDibujo.crearOrdenesDeDibujo();
-				}
-    		}
-		});
-		
-		horizontalThread = new Thread(new Runnable(){
-    		public void run() {
-    			DrawingMethods metodosDibujo = 
-    					new DrawingMethods(partituraHorizontal, config, getResources(), Vista.HORIZONTAL);
-				if (metodosDibujo.isValid()) {
-					horizontalDrawing = metodosDibujo.crearOrdenesDeDibujo();
-				}
-    		}
-		});
-		
-		horizontalThread.start();
-		verticalThread.start();
-	}
 
-	public void cambiarVista(Vista vista) {
+	public void cambiarVista(Vista vista) 
+	{
 		this.vista = vista;
 	}
 	
+	public Vista getVista()
+	{
+		return vista;
+	}
+	
+	public void crearOrdenesDibujo(Vista vista)
+	{
+		metodosDibujo = new DrawingMethods(partitura, getResources());
+		if (metodosDibujo.isValid())
+			ordenesDibujo = metodosDibujo.crearOrdenesDeDibujo(vista);
+	}
+	
 	private void inicializarParametrosScroll(Canvas canvas) {
-		if (vista == Vista.VERTICAL) {
-			partituraVertical.setWidth(canvas.getWidth());
-			partituraVertical.setHeight(canvas.getHeight());
-			
-			scroll.inicializarVertical(canvas.getHeight(), partituraVertical.getLastMarginY());
-		}
-		else {
-			partituraHorizontal.setWidth(canvas.getWidth());
-			partituraHorizontal.setHeight(canvas.getHeight());
-			
-			int xFin = partituraHorizontal.getCompas(
-					partituraHorizontal.getNumeroDeCompases() - 1).getXFin();
+		partitura.setWidth(canvas.getWidth());
+		partitura.setHeight(canvas.getHeight());
+		
+		scroll.inicializarVertical(canvas.getHeight(), partitura.getLastMarginY());
+		
+		if (vista == Vista.HORIZONTAL) {
+			int xFin = partitura.getCompas(partitura.getNumeroDeCompases() - 1).getXFin();
 			scroll.inicializarHorizontal(canvas.getWidth(), xFin);
 		}
 	}
@@ -347,13 +302,11 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 	}
 	
 	public void Metronome_Play(int bpm){
-		if (metronomo == null) {
-			Partitura partitura = 
-        			vista == Vista.VERTICAL ? partituraVertical : partituraHorizontal;
-			
+		if (metronomo == null) 
+		{
 			scroll.setOrientation(getResources().getConfiguration().orientation);
 			
-    		metronomo = new Metronome(bpm, context, vista, partitura, config, scroll);
+    		metronomo = new Metronome(bpm, context, vista, partitura, scroll);
     		metronomo.run();
 		}
 	}
@@ -375,9 +328,7 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 		soundReader = new SoundReader(velocidad);
 		soundReader.addObserver(this);
 		soundReader.setSensitivity(sensibilidad);
-		
-		Partitura partitura = vista == Vista.HORIZONTAL ?
-				partituraHorizontal : partituraVertical;
+
 		xActual = partitura.getCompas(0).getXIni();
 		
 		ArrayList<Integer> golpesSonido = new ArrayList<Integer>();
@@ -397,13 +348,10 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 	}
 
 	@Override
-	public void update(Observable observable, Object data) {
-		int sound = (Integer) data;
-		if (sound > 0) {
-			
-			Partitura partitura = vista == Vista.HORIZONTAL ?
-					partituraHorizontal : partituraVertical;
-			
+	public void update(Observable observable, Object data) 
+	{
+		if ((Integer) data > 0) 
+		{
 			Compas compas = partitura.getCompas(compasActual);
 			int golpesSonido = compas.golpesDeSonido();
 			
@@ -448,10 +396,8 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 		scroll.forward(vista);
 	}
 	
-	public boolean goToBar(int bar) {
-		Partitura partitura = vista == Vista.HORIZONTAL ?
-				partituraHorizontal : partituraVertical;
-
+	public boolean goToBar(int bar) 
+	{
 		//  El número está fuera de los límites
 		if (bar > partitura.getNumeroDeCompases()) 
 			return false; 

@@ -166,11 +166,7 @@ public class Compas {
 		
 		return clavesAlFinal;
 	}
-	
-	public void clearClefs() {
-		clefs.clear();
-	}
-	
+
 	public ArrayList<ElementoGrafico> getBarlines() {
 		return barlines;
 	}
@@ -638,5 +634,34 @@ public class Compas {
 				oldNote.getPosicionArray());
 		
 		return newNote;
+	}
+	
+	public void clear() 
+	{
+		for (int i=0; i<notas.size(); i++) {
+			notas.get(i).setX(0);
+			notas.get(i).setY(0);
+		}
+		
+		claves.clear();
+		crescendos.clear();
+		diminuendos.clear();
+		intensidades.clear();
+		pedalesInicio.clear();
+		pedalesFin.clear();
+		quintas = null;
+		tempo = null;
+		textos.clear();
+
+		bpm = -1;
+		bpmIndex = -1;
+
+		x_ini = -1;
+		x_fin = -1;
+		y_ini = -1;
+		y_fin = -1;
+		x_ini_notas = -1;
+		
+		numeroCompas = -1;
 	}
 }

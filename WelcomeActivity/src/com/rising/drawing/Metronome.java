@@ -25,7 +25,7 @@ public class Metronome {
     int bipGraveInt = 0;
 
     public Metronome(int bpm, Context context, Vista vista,
-    		Partitura partitura, Config config, Scroll scroll) {
+    		Partitura partitura, Scroll scroll) {
     	
         mPauseLock = new Object();
         mPaused = false;
@@ -33,7 +33,7 @@ public class Metronome {
 
         this.vista = vista;
         this.partitura = partitura;
-        this.config = config;
+        this.config = Config.getInstance();
         this.scroll = scroll;
         	        
         bipAgudo = new SoundPool(5, AudioManager.STREAM_MUSIC, 0);

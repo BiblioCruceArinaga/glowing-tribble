@@ -85,7 +85,7 @@ public class MainActivity extends Activity{
 		s = new Screen(this, score, dm.widthPixels, dm.heightPixels ,dm.densityDpi);
 		if (s.isValidScreen()) {
 			myScreenThread = new ScreenThread(holder, s);
-			config = s.getConfig();
+			config = Config.getInstance();
 		}else{
 			Log.e("Valid Screen", "Is not a valid screen");
 		}
