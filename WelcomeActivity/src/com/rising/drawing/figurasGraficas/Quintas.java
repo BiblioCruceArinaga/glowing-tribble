@@ -1,4 +1,4 @@
-package com.rising.drawing;
+package com.rising.drawing.figurasGraficas;
 
 public class Quintas {
 	private byte notaQuintas;

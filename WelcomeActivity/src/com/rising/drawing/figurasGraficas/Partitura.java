@@ -1,4 +1,4 @@
-package com.rising.drawing;
+package com.rising.drawing.figurasGraficas;
 
 import java.util.ArrayList;
 

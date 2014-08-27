@@ -7,6 +7,9 @@ import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
+import com.rising.drawing.figurasGraficas.Compas;
+import com.rising.drawing.figurasGraficas.Partitura;
+
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Canvas;

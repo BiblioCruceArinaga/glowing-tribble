@@ -2,6 +2,17 @@ package com.rising.drawing;
 
 import java.util.ArrayList;
 
+import com.rising.drawing.figurasGraficas.Clave;
+import com.rising.drawing.figurasGraficas.Compas;
+import com.rising.drawing.figurasGraficas.Intensidad;
+import com.rising.drawing.figurasGraficas.Nota;
+import com.rising.drawing.figurasGraficas.Partitura;
+import com.rising.drawing.figurasGraficas.Pedal;
+import com.rising.drawing.figurasGraficas.Quintas;
+import com.rising.drawing.figurasGraficas.Tempo;
+import com.rising.drawing.figurasGraficas.Texto;
+import com.rising.drawing.figurasGraficas.Wedge;
+
 import android.graphics.Bitmap;
 
 public class Calculador {
@@ -18,19 +29,19 @@ public class Calculador {
 	private int primerCompas = 0;
 	private int ultimoCompas = 0;
 	
-	public Calculador(Partitura partitura, int compas_margin_y, 
-			BitmapManager bitmapManager, Vista vista)
+	public Calculador(Partitura partitura, BitmapManager bitmapManager, Vista vista)
 	{
 		this.partitura = partitura;
-		this.compas_margin_y = compas_margin_y;
 		this.bitmapManager = bitmapManager;
 		this.vista = vista;
 		
 		config = Config.getInstance();
 		compas_margin_x = config.xInicialPentagramas;
+		compas_margin_y = config.margenSuperior + config.margenInferiorAutor;
 	}
 	
-	private int calcularCabezaDeNota(Nota nota, int posicion) {
+	private int calcularCabezaDeNota(Nota nota, int posicion) 
+	{
 		int y = obtenerPosicionYDeNota(nota, 
 				claveActual[nota.getPentagrama() - 1], partitura.getInstrument());
 		if (nota.notaDeGracia()) y += config.margenNotaGracia;
@@ -38,7 +49,8 @@ public class Calculador {
 		return y;
 	}
 
-	private void calcularClefs(Compas compas) {
+	private void calcularClefs(Compas compas) 
+	{
 		ArrayList<ElementoGrafico> clefs = compas.getClefs();
 		ElementoGrafico clef;
 		int x_position = -1;

@@ -1,5 +1,7 @@
 package com.rising.drawing;
 
+import com.rising.drawing.figurasGraficas.Partitura;
+
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.view.MotionEvent;

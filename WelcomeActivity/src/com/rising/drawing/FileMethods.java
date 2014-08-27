@@ -7,6 +7,10 @@ import java.io.ObjectInputStream;
 import java.io.StreamCorruptedException;
 import java.util.ArrayList;
 
+import com.rising.drawing.figurasGraficas.Compas;
+import com.rising.drawing.figurasGraficas.Nota;
+import com.rising.drawing.figurasGraficas.Partitura;
+
 import android.os.Environment;
 
 public class FileMethods {

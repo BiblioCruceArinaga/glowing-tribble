@@ -1,4 +1,4 @@
-package com.rising.drawing;
+package com.rising.drawing.figurasGraficas;
 
 /*
  * Esta clase almacena una posición de una nota
