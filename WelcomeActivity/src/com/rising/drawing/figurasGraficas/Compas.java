@@ -199,8 +199,8 @@ public class Compas {
 		else return (byte) claveMasCercana;
 	}
 	
-	public ArrayList<ElementoGrafico> getClefs() {
-		return clefs;
+	public ElementoGrafico getClef(int index) {
+		return clefs.get(index);
 	}
 	
 	public Wedge getCrescendo(int index) {
@@ -368,6 +368,11 @@ public class Compas {
 		
 		Collections.sort(notasConPulsos);
 		return notasConPulsos;
+	}
+	
+	public int numClefs()
+	{
+		return clefs.size();
 	}
 	
 	public int numClaves() {

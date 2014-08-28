@@ -71,7 +71,6 @@ public class DrawingMethods {
 		clearMeasures();
 		
 		calculador = new Calculador(partitura, bitmapManager, vista);
-		calculador.numerarCompases();
 		calculador.calcularPosicionesDeCompases();
 		
 		dibujarPartitura();
