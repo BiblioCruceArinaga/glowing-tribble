@@ -1,111 +1,111 @@
 package com.rising.drawing;
 
-public class Config {
+public final class Config {
 	
-	private static Config configInstance = null;
-	private boolean supported = true;
+	private static Config configInstance;
+	private boolean supportedConfig = true;
 	
-	public int altoDialogBpm;
-	public int alturaArcoLigadurasExpresion;
-	public int alturaArcoLigadurasUnion;
-	public int alturaCrescendos;
-	public int anchoBeams;
-	public int anchoBeamsNotaGracia;
-	public int anchoCabezaNota;
-	public int anchoCabezaNotaGracia;
-	public int anchoClaves;
-	public int anchoDialogBpm;
-	public int anchoHooks;
-	public int anchoLigaduraUnionMax;
-	public int anchoTempo;
-	public int changeAccountHorizontal;
-	public int changeAccountVertical;
-	public int desplazamientoExtraNotaGracia;
-	public int distanciaCorchetes;
-	public int distanciaEntreBeams;
-	public int distanciaEntreBeamsNotaGracia;
-	public int distanciaLineasPentagrama;
-	public int distanciaLineasPentagramaMitad;
-	public int distanciaPentagramas;
-	public int divisions;
-	public int largoImagenCorchete;
-	public int largoImagenCorcheteNotaGracia;
-	public int longitudPlica;
-	public int longitudPlicaNotaGracia;
-	public int margenAnchoCabezaNota;
-	public int margenAutor;
-	public int margenBarlines;
-	public int margenDerechoCompases;
-	public int margenInferiorAutor;
-	public int margenIzquierdoCompases;
-	public int margenNotaGracia;
-	public int margenObra;
-	public int margenSuperior;
-	public int mitadCabezaVertical;
-	public int mitadCabezaVerticalNotaGracia;
-	public int offsetAccent;
-	public int offsetUltimaNotaGracia;
-	public int offsetLigaduraExpresion;
-	public int offsetLigaduraUnion;
-	public int radioOctavarium;
-	public int radioPuntillos;
-	public int radioStaccatos;
-	public int tamanoLetraAutor;
-	public int tamanoLetraBipPreparacion;
-	public int tamanoLetraBpm;
-	public int tamanoLetraNumeroCompas;
-	public int tamanoLetraObra;
-	public int tamanoLetraPalmMute;
-	public int tamanoLetraPulso;
-	public int tamanoLetraTapping;
-	public int tamanoLetraTempo;
-	public int tamanoLetraTresillo;
-	public int tamanoLetraWords;
-	public int unidadDesplazamiento;
-	public int width;
-	public int height;
+	public transient int altoDialogBpm;
+	public transient int alturaArcoLigadurasExpresion;
+	public transient int alturaArcoLigadurasUnion;
+	public transient int alturaCrescendos;
+	public transient int anchoBeams;
+	public transient int anchoBeamsNotaGracia;
+	public transient int anchoCabezaNota;
+	public transient int anchoCabezaNotaGracia;
+	public transient int anchoClaves;
+	public transient int anchoDialogBpm;
+	public transient int anchoHooks;
+	public transient int anchoLigaduraUnionMax;
+	public transient int anchoTempo;
+	public transient int changeAccountHorizontal;
+	public transient int changeAccountVertical;
+	public transient int desplazamientoExtraNotaGracia;
+	public transient int distanciaCorchetes;
+	public transient int distanciaEntreBeams;
+	public transient int distanciaEntreBeamsNotaGracia;
+	public transient int distanciaLineasPentagrama;
+	public transient int distanciaLineasPentagramaMitad;
+	public transient int distanciaPentagramas;
+	public transient int divisions;
+	public transient int largoImagenCorchete;
+	public transient int largoImagenCorcheteNotaGracia;
+	public transient int longitudPlica;
+	public transient int longitudPlicaNotaGracia;
+	public transient int margenAnchoCabezaNota;
+	public transient int margenAutor;
+	public transient int margenBarlines;
+	public transient int margenDerechoCompases;
+	public transient int margenInferiorAutor;
+	public transient int margenIzquierdoCompases;
+	public transient int margenNotaGracia;
+	public transient int margenObra;
+	public transient int margenSuperior;
+	public transient int mitadCabezaVertical;
+	public transient int mitadCabezaVerticalNotaGracia;
+	public transient int offsetAccent;
+	public transient int offsetUltimaNotaGracia;
+	public transient int offsetLigaduraExpresion;
+	public transient int offsetLigaduraUnion;
+	public transient int radioOctavarium;
+	public transient int radioPuntillos;
+	public transient int radioStaccatos;
+	public transient int tamanoLetraAutor;
+	public transient int tamanoLetraBipPreparacion;
+	public transient int tamanoLetraBpm;
+	public transient int tamanoLetraNumeroCompas;
+	public transient int tamanoLetraObra;
+	public transient int tamanoLetraPalmMute;
+	public transient int tamanoLetraPulso;
+	public transient int tamanoLetraTapping;
+	public transient int tamanoLetraTempo;
+	public transient int tamanoLetraTresillo;
+	public transient int tamanoLetraWords;
+	public transient int unidadDesplazamiento;
+	public transient int width;
+	public transient int height;
 	
-	public int xAccidental;
-	public int xAccidental2;
-	public int xAccidentalNotaGracia;
-	public int xArpegio;
-	public int xFermata;
-	public int xFinalPentagramas;
-	public int xFinSlash;
-	public int xInicialPentagramas;
-	public int xInicioSlash;
-	public int xLigadurasUnion;
-	public int xNumeroCompas;
-	public int xPuntillo;
-	public int xStaccato;
-	public int xTresillo;
+	public transient int xAccidental;
+	public transient int xAccidental2;
+	public transient int xAccidentalNotaGracia;
+	public transient int xArpegio;
+	public transient int xFermata;
+	public transient int xFinalPentagramas;
+	public transient int xFinSlash;
+	public transient int xInicialPentagramas;
+	public transient int xInicioSlash;
+	public transient int xLigadurasUnion;
+	public transient int xNumeroCompas;
+	public transient int xPuntillo;
+	public transient int xStaccato;
+	public transient int xTresillo;
 
-	public int yAccentUp;
-	public int yAccidental;
-	public int yAccidentalFlat;
-	public int yBend;
-	public int yBpm;
-	public int yClaveSolSegunda;
-	public int yFermata;
-	public int yFinSlash;
-	public int yInicioSlash;
-	public int yLigadurasExpresion;
-	public int yLigadurasUnion;
-	public int yNumeroCompas;
-	public int yOctavarium;
-	public int yPalmMute;
-	public int yPuntilloArriba;
-	public int yPuntilloAbajo;
-	public int ySilencioBlanca;
-	public int ySlideTruncado;
-	public int yStaccatoAbajo;
-	public int yStaccatoArriba;
-	public int yTapping;
-	public int yTresilloAbajo;
-	public int yTresilloArriba;
-	public int yTrill;
+	public transient int yAccentUp;
+	public transient int yAccidental;
+	public transient int yAccidentalFlat;
+	public transient int yBend;
+	public transient int yBpm;
+	public transient int yClaveSolSegunda;
+	public transient int yFermata;
+	public transient int yFinSlash;
+	public transient int yInicioSlash;
+	public transient int yLigadurasExpresion;
+	public transient int yLigadurasUnion;
+	public transient int yNumeroCompas;
+	public transient int yOctavarium;
+	public transient int yPalmMute;
+	public transient int yPuntilloArriba;
+	public transient int yPuntilloAbajo;
+	public transient int ySilencioBlanca;
+	public transient int ySlideTruncado;
+	public transient int yStaccatoAbajo;
+	public transient int yStaccatoArriba;
+	public transient int yTapping;
+	public transient int yTresilloAbajo;
+	public transient int yTresilloArriba;
+	public transient int yTrill;
 	
-	private Config(int densityDPI, int width, int height) {
+	private Config(final int densityDPI, final int width, final int height) {
 		
 		switch (densityDPI) {
 			case 120:
@@ -334,18 +334,19 @@ public class Config {
 			case 480:
 				break;
 			default: 
-				supported = false;
+				supportedConfig = false;
 		}
 	}
 	
 	public boolean supported() {
-		return supported;
+		return supportedConfig;
 	}
 	
-	public static synchronized Config getInstance(int densityDPI, int width, int height)
+	public static synchronized Config getInstance(final int densityDPI, final int width, final int height)
 	{
-		if (configInstance == null)
+		if (configInstance == null) {
 			configInstance = new Config(densityDPI, width, height);
+		}
 		
 		return configInstance;
 	}

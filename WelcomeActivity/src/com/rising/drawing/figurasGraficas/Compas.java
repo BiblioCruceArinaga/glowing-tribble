@@ -348,6 +348,11 @@ public class Compas {
 		}
 	}
 
+	public boolean hasBpm()
+	{
+		return bpm != -1;
+	}
+	
 	private boolean noHayNotasDelanteDeClave(Clave clave) {
 		int numNotas = notas.size();
 		for (int i=0; i<numNotas; i++)

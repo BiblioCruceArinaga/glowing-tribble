@@ -17,27 +17,27 @@ import android.graphics.Bitmap;
 
 public class Calculador {
 	
-	private Vista vista;
-	private Config config;
-	private Partitura partitura;
-	private BitmapManager bitmapManager;
-	private int compas_margin_x = 0;
-	private int compas_margin_y = 0;
-	private int compasActual = 0;
-	private byte[] claveActual = {0, 0};
-	private Tempo tempoActual = null;
-	private int primerCompas = 0;
-	private int ultimoCompas = 0;
+	private transient final Vista vista;
+	private transient final Config config;
+	private transient final Partitura partitura;
+	private transient final BitmapManager bitmapManager;
+	private transient int compasMarginX;
+	private transient int compasMarginY;
+	private transient int compasActual;
+	private transient byte[] claveActual = {0, 0};
+	private transient Tempo tempoActual;
+	private transient int primerCompas;
+	private transient int ultimoCompas;
 	
-	public Calculador(Partitura partitura, BitmapManager bitmapManager, Vista vista)
+	public Calculador(final Partitura partitura, final BitmapManager bitmapManager, final Vista vista)
 	{
 		this.partitura = partitura;
 		this.bitmapManager = bitmapManager;
 		this.vista = vista;
 		
 		config = Config.getInstance();
-		compas_margin_x = config.xInicialPentagramas;
-		compas_margin_y = config.margenSuperior + config.margenInferiorAutor;
+		compasMarginX = config.xInicialPentagramas;
+		compasMarginY = config.margenSuperior + config.margenInferiorAutor;
 	}
 
 	public void calcularPosicionesDeCompases() 
@@ -49,14 +49,14 @@ public class Calculador {
 		{
 			compasActual = i;
 			
-			Compas compas = partitura.getCompas(compasActual);
+			final Compas compas = partitura.getCompas(compasActual);
 			compas.setNumeroCompas(numeroCompas++);
 			
 			calcularPosicionesDeCompas(compas);
 		}
 	}
 	
-	private void calcularPosicionesDeCompas(Compas compas) 
+	private void calcularPosicionesDeCompas(final Compas compas) 
 	{
 		establecerPosicionInicialDeCompas(compas);
 		calcularFigurasGraficasDeCompas(compas);
@@ -66,15 +66,15 @@ public class Calculador {
 		recolocarCompases(compas);
 	}
 	
-	private void establecerPosicionInicialDeCompas(Compas compas)
+	private void establecerPosicionInicialDeCompas(final Compas compas)
 	{
-		compas.setXIni(compas_margin_x);
-		compas.setYIni(compas_margin_y);
+		compas.setXIni(compasMarginX);
+		compas.setYIni(compasMarginY);
 		
-		compas_margin_x += config.margenIzquierdoCompases;
+		compasMarginX += config.margenIzquierdoCompases;
 	}
 	
-	private void calcularFigurasGraficasDeCompas(Compas compas)
+	private void calcularFigurasGraficasDeCompas(final Compas compas)
 	{
 		calcularClefs(compas);
 		calcularFifths(compas);
@@ -85,29 +85,29 @@ public class Calculador {
 		calcularWedges(compas);
 	}
 	
-	private void calcularClefs(Compas compas) 
+	private void calcularClefs(final Compas compas) 
 	{
 		final int numClefs = compas.numClefs();
 		
 		for (int i=0; i<numClefs; i++) 
 		{
-			Clave clave = obtenerClave(compas.getClef(i));
+			final Clave clave = obtenerClave(compas.getClef(i));
 			compas.addClave(clave);
 		}
 	}
 	
-	private Clave obtenerClave(ElementoGrafico clef)
+	private Clave obtenerClave(final ElementoGrafico clef)
 	{		
 		final int posicionX = calcularPosicionX(clef.getPosition());
 		final byte pentagrama = clef.getValue(1);
 		final byte claveByte = clef.getValue(2);
-		final int marginY = compas_margin_y + 
+		final int marginY = compasMarginY + 
 				(config.distanciaLineasPentagrama * 4 + 
 						config.distanciaPentagramas) * (pentagrama - 1);
 
-		Clave clave = new Clave();
+		final Clave clave = new Clave();
 		clave.setImagenClave(obtenerImagenDeClave(claveByte));
-		clave.setX(compas_margin_x + posicionX);
+		clave.setX(compasMarginX + posicionX);
 		clave.setY(marginY + obtenerPosicionYDeClave(claveByte));
 		clave.setClave(claveByte);
 		clave.setPentagrama(pentagrama);
@@ -116,12 +116,12 @@ public class Calculador {
 		return clave;
 	}
 	
-	private int calcularPosicionX(int position) 
+	private int calcularPosicionX(final int position) 
 	{
 		return position * config.unidadDesplazamiento / config.divisions;
 	}
 	
-	private Bitmap obtenerImagenDeClave(byte clave) 
+	private Bitmap obtenerImagenDeClave(final byte clave) 
 	{
 		switch (clave) {
 			case 1:
@@ -133,35 +133,35 @@ public class Calculador {
 		}
 	}
 	
-	private int obtenerPosicionYDeClave(byte clave)
+	private int obtenerPosicionYDeClave(final byte clave)
 	{
 		return clave == 1 ? - config.yClaveSolSegunda : 0;
 	}
 	
-	private void calcularFifths(Compas compas) 
+	private void calcularFifths(final Compas compas) 
 	{
 		if (compas.hayFifths())
 		{
-			ElementoGrafico fifths = compas.getFifths();
-			byte notaQuintasByte = fifths.getValue(1);
-			byte valorQuintasByte = fifths.getValue(2);
-			int posicion = calcularPosicionX(fifths.getPosition());
+			final ElementoGrafico fifths = compas.getFifths();
+			final byte notaQuintasByte = fifths.getValue(1);
+			final byte valorQuintasByte = fifths.getValue(2);
+			final int posicion = calcularPosicionX(fifths.getPosition());
 	
-			Quintas quintas = new Quintas();
+			final Quintas quintas = new Quintas();
 			quintas.setNotaQuintas(notaQuintasByte);
 			quintas.setValorQuintas(valorQuintasByte);
-			quintas.setX(compas_margin_x + posicion);
-			quintas.setMargenY(compas_margin_y);
+			quintas.setX(compasMarginX + posicion);
+			quintas.setMargenY(compasMarginY);
 	
 			compas.setQuintas(quintas);
 		}
 	}
 	
-	private void calcularTime(Compas compas) 
+	private void calcularTime(final Compas compas) 
 	{
 		if (compas.hayTime()) 
 		{
-			Tempo tempo = obtenerTempo(compas.getTime());
+			final Tempo tempo = obtenerTempo(compas.getTime());
 			compas.setTempo(tempo);
 			tempoActual = tempo;
 		}
@@ -170,9 +170,9 @@ public class Calculador {
 		}
 	}
 	
-	private Tempo obtenerTempo(ElementoGrafico time)
+	private Tempo obtenerTempo(final ElementoGrafico time)
 	{
-		Tempo tempo = new Tempo();
+		final Tempo tempo = new Tempo();
 
 		switch (time.getValue(1)) 
 		{
@@ -204,22 +204,23 @@ public class Calculador {
 		return tempo;
 	}
 	
-	private void inicializarTempo(Tempo tempo, int xPosition, int numerador, int denominador) 
+	private void inicializarTempo(final Tempo tempo, final int xPosition, 
+			final int numerador, final int denominador) 
 	{
 		final int posicionX = calcularPosicionX(xPosition);
 		
 		tempo.setDibujar(true);
 		tempo.setNumerador(numerador);
 		tempo.setDenominador(denominador);
-		tempo.setX(compas_margin_x + posicionX);
-		tempo.setYNumerador(compas_margin_y + config.distanciaLineasPentagrama * 2);
-		tempo.setYDenominador(compas_margin_y + config.distanciaLineasPentagrama * 4);
+		tempo.setX(compasMarginX + posicionX);
+		tempo.setYNumerador(compasMarginY + config.distanciaLineasPentagrama * 2);
+		tempo.setYDenominador(compasMarginY + config.distanciaLineasPentagrama * 4);
 	}
 
 	//  Los tempos clonados no se dibujan, ya que comparten tempo con un compás anterior
-	private Tempo clonarTempo(Tempo tempoViejo) 
+	private Tempo clonarTempo(final Tempo tempoViejo) 
 	{
-		Tempo tempoNuevo = new Tempo();
+		final Tempo tempoNuevo = new Tempo();
 
 		tempoNuevo.setNumerador(tempoViejo.getNumerador());
 		tempoNuevo.setDenominador(tempoViejo.getDenominador());
@@ -231,65 +232,65 @@ public class Calculador {
 		return tempoNuevo;
 	}
 
-	private void calcularWords(Compas compas) 
+	private void calcularWords(final Compas compas) 
 	{
 		final int numWords = compas.numWords();
 		
 		for (int i=0; i<numWords; i++) 
 		{
-			int posicionX = calcularPosicionX(compas.getWordsPosition(i));
+			final int posicionX = calcularPosicionX(compas.getWordsPosition(i));
 			
-			Texto texto = new Texto();
+			final Texto texto = new Texto();
 			texto.setTexto(compas.getWordsString(i));
-			texto.setX(compas_margin_x + posicionX);
+			texto.setX(compasMarginX + posicionX);
 			texto.setY(obtenerPosicionYDeElementoGrafico(compas.getWordsLocation(i)));
 			
 			compas.addTexto(texto);
 		}
 	}
 	
-	private int obtenerPosicionYDeElementoGrafico(int location) 
+	private int obtenerPosicionYDeElementoGrafico(final int location) 
 	{
 		switch (location) {
 			case 1:
-				return compas_margin_y - config.distanciaLineasPentagrama * 2;
+				return compasMarginY - config.distanciaLineasPentagrama * 2;
 			case 2:
-				return compas_margin_y + config.distanciaLineasPentagrama * 6;
+				return compasMarginY + config.distanciaLineasPentagrama * 6;
 			case 3:
-				return compas_margin_y + config.distanciaLineasPentagrama * 4 + 
+				return compasMarginY + config.distanciaLineasPentagrama * 4 + 
 						config.distanciaPentagramas - config.distanciaLineasPentagrama * 2;
 			case 4:
-				return compas_margin_y + config.distanciaLineasPentagrama * 4 + 
+				return compasMarginY + config.distanciaLineasPentagrama * 4 + 
 						config.distanciaPentagramas + config.distanciaLineasPentagrama * 6;
 			case 5:
-				return compas_margin_y + config.distanciaLineasPentagrama * 4 +
+				return compasMarginY + config.distanciaLineasPentagrama * 4 +
 						config.distanciaPentagramas / 2;
 			default:
 				return 0;
 		}
 	}
 	
-	private void calcularDynamics(Compas compas) 
+	private void calcularDynamics(final Compas compas) 
 	{
 		final int numDynamics = compas.numDynamics();
 		
 		for (int i=0; i<numDynamics; i++) 
 		{
-			ElementoGrafico dynamics = compas.getDynamics(i);
-			byte location = dynamics.getValue(0);
-			byte intensidadByte = dynamics.getValue(1);
-			int posicion = calcularPosicionX(dynamics.getPosition());
+			final ElementoGrafico dynamics = compas.getDynamics(i);
+			final byte location = dynamics.getValue(0);
+			final byte intensidadByte = dynamics.getValue(1);
+			final int posicion = calcularPosicionX(dynamics.getPosition());
 	
-			Intensidad intensidad = new Intensidad();
+			final Intensidad intensidad = new Intensidad();
 			intensidad.setImagen(obtenerImagenDeIntensidad(intensidadByte));
-			intensidad.setX(compas_margin_x + posicion);
+			intensidad.setX(compasMarginX + posicion);
 			intensidad.setY(obtenerPosicionYDeElementoGrafico(location));
 	
 			compas.addIntensidad(intensidad);
 		}
 	}
 	
-	private Bitmap obtenerImagenDeIntensidad(byte intensidad) 
+	private Bitmap obtenerImagenDeIntensidad(final byte intensidad) 
 	{
 		switch (intensidad) {
 			case 1:
@@ -313,18 +314,18 @@ public class Calculador {
 		}
 	}
 	
-	private void calcularPedals(Compas compas) 
+	private void calcularPedals(final Compas compas) 
 	{
 		int numPedals = compas.numPedalStarts();
 		for (int i=0; i<numPedals; i++) 
 		{
-			ElementoGrafico pedal = compas.getPedalStart(i);
-			byte location = pedal.getValue(0);
-			int posicion = calcularPosicionX(pedal.getPosition());
+			final ElementoGrafico pedal = compas.getPedalStart(i);
+			final byte location = pedal.getValue(0);
+			final int posicion = calcularPosicionX(pedal.getPosition());
 
-			Pedal pedalInicio = new Pedal();
+			final Pedal pedalInicio = new Pedal();
 			pedalInicio.setImagen(bitmapManager.getPedalStart());
-			pedalInicio.setX(compas_margin_x + posicion);
+			pedalInicio.setX(compasMarginX + posicion);
 			pedalInicio.setY(obtenerPosicionYDeElementoGrafico(location));
 			
 			compas.addPedalInicio(pedalInicio);
@@ -333,20 +334,20 @@ public class Calculador {
 		numPedals = compas.numPedalStops();
 		for (int i=0; i<numPedals; i++) 
 		{
-			ElementoGrafico pedal = compas.getPedalStop(i);
-			byte location = pedal.getValue(0);
-			int posicion = calcularPosicionX(pedal.getPosition());
+			final ElementoGrafico pedal = compas.getPedalStop(i);
+			final byte location = pedal.getValue(0);
+			final int posicion = calcularPosicionX(pedal.getPosition());
 
-			Pedal pedalFin = new Pedal();
+			final Pedal pedalFin = new Pedal();
 			pedalFin.setImagen(bitmapManager.getPedalStop());
-			pedalFin.setX(compas_margin_x + posicion);
+			pedalFin.setX(compasMarginX + posicion);
 			pedalFin.setY(obtenerPosicionYDeElementoGrafico(location));
 			
 			compas.addPedalFin(pedalFin);
 		}
 	}
 	
-	private void calcularWedges(Compas compas) 
+	private void calcularWedges(final Compas compas) 
 	{
 		final int numWedges = compas.numWedges();
 		
@@ -359,92 +360,98 @@ public class Calculador {
 		for (int i=0; i<numWedges; i++) 
 		{
 			int posicionX = calcularPosicionX(compas.getWedge(i).getPosition());
-			Wedge wedge = new Wedge(compas.getWedge(i).getValue(1), compas_margin_x + posicionX);
+			final Wedge wedge = new Wedge(compas.getWedge(i).getValue(1), compasMarginX + posicionX);
 			wedge.setYIni(obtenerPosicionYDeElementoGrafico(compas.getWedge(i).getValue(0)));
 
 			i++;
 			
 			posicionX = calcularPosicionX(compas.getWedge(i).getPosition());
-			wedge.setXFin(compas_margin_x + posicionX);
+			wedge.setXFin(compasMarginX + posicionX);
 			
-			if (wedge.crescendo())
+			if (wedge.crescendo()) {
 				compas.addCrescendo(wedge);
-			else
+			} else {
 				compas.addDiminuendo(wedge);
+			}
 		}
 	}
 	
-	private void calcularNotasDeCompas(Compas compas)
+	private void calcularNotasDeCompas(final Compas compas)
 	{
-		compas.setXIniNotas(compas_margin_x);
+		compas.setXIniNotas(compasMarginX);
 		
-		int xOfLastNote = calcularPosicionesDeNotas(compas);
+		final int xOfLastNote = calcularPosicionesDeNotas(compas);
 		
 		//  Actualizamos la posición x del final del compás
 		//  si la nota calculada sobrepasa este valor
-		if (compas_margin_x + xOfLastNote > compas.getXFin())
-			compas.setXFin(compas_margin_x + xOfLastNote);
+		if (compasMarginX + xOfLastNote > compas.getXFin()) {
+			compas.setXFin(compasMarginX + xOfLastNote);
+		}
 	}
 	
-	private int calcularPosicionesDeNotas(Compas compas) 
+	private int calcularPosicionesDeNotas(final Compas compas) 
 	{
-		ArrayList<Nota> notas = compas.getNotas();
+		final ArrayList<Nota> notas = compas.getNotas();
 		final int numNotas = notas.size();
 
 		int mayorDistanciaX = 0;
 		
 		for (int i=0; i<numNotas; i++) 
 		{
-			int xDeNota = calcularPosicionesDeNota(compas, notas.get(i));
+			final int xDeNota = calcularPosicionesDeNota(compas, notas.get(i));
 
-			if (xDeNota > mayorDistanciaX) 
+			if (xDeNota > mayorDistanciaX) {
 				mayorDistanciaX = xDeNota;
+			}
 		}
 		
 		return mayorDistanciaX;
 	}
 	
-	private int calcularPosicionesDeNota(Compas compas, Nota nota) 
+	private int calcularPosicionesDeNota(final Compas compas, final Nota nota) 
 	{
 		int posicionX = nota.getPosition();
 		if (posicionX != -1) 
 		{
 			posicionX = calcularPosicionX(posicionX);
-			nota.setX(compas_margin_x + posicionX);
+			nota.setX(compasMarginX + posicionX);
 			
 			//  Si se coloca una clave en el compás, las notas anteriores
 			//  a esta clave deben colocarse según la clave vieja, y las
 			//  posteriores según la clave nueva
-			byte clave = compas.getClavePorPentagrama(nota);
-			if (clave > -1) 
+			final byte clave = compas.getClavePorPentagrama(nota);
+			if (clave > -1) {
 				claveActual[nota.getPentagrama() - 1] = clave;
+			}
 			
-			int posicionY = calcularCabezaDeNota(nota);
+			final int posicionY = calcularCabezaDeNota(nota);
 			nota.setY(posicionY);
 		}
 
 		return posicionX;
 	}
 
-	private int calcularCabezaDeNota(Nota nota) 
+	private int calcularCabezaDeNota(final Nota nota) 
 	{
-		int y = obtenerPosicionYDeNota(nota, 
+		final int y = obtenerPosicionYDeNota(nota, 
 				claveActual[nota.getPentagrama() - 1], partitura.getInstrument());
 		
 		return nota.notaDeGracia() ? y + config.margenNotaGracia : y;
 	}
 	
-	private int obtenerPosicionYDeNota(Nota nota, byte clave, byte instrumento)
+	private int obtenerPosicionYDeNota(final Nota nota, final byte clave, final byte instrumento)
 	{
-		int coo_y = 0;
-		int margenY = compas_margin_y + 
+		int cooY = 0;
+		final int margenY = compasMarginY + 
 				(config.distanciaLineasPentagrama * 4 + 
 						config.distanciaPentagramas) * (nota.getPentagrama() - 1);
 		
 		byte octava = nota.getOctava();
-		if (octava > 10) octava -= 12;
+		if (octava > 10) {
+			octava -= 12;
+		}
 		
-		if (nota.getStep() > 0) {
+		if (!nota.silencio()) {
 
 			switch (instrumento) {
 
@@ -462,50 +469,50 @@ public class Calculador {
 										case 1:
 										case 8:
 										case 15:
-											coo_y = margenY + config.distanciaLineasPentagrama * 5 + 
+											cooY = margenY + config.distanciaLineasPentagrama * 5 + 
 												config.distanciaLineasPentagramaMitad;
 											break;
 
 										case 2:
 										case 9:
 										case 16:
-											coo_y = margenY + config.distanciaLineasPentagrama * 5;
+											cooY = margenY + config.distanciaLineasPentagrama * 5;
 											break;
 
 										case 3:
 										case 10:
 										case 17:
-											coo_y = margenY + config.distanciaLineasPentagrama * 8;
+											cooY = margenY + config.distanciaLineasPentagrama * 8;
 											break;
 
 										case 4:
 										case 11:
 										case 18:
-											coo_y = margenY + config.distanciaLineasPentagrama * 7 + 
+											cooY = margenY + config.distanciaLineasPentagrama * 7 + 
 												config.distanciaLineasPentagramaMitad;
 											break;
 
 										case 5:
 										case 12:
 										case 19:
-											coo_y = margenY + config.distanciaLineasPentagrama * 7;
+											cooY = margenY + config.distanciaLineasPentagrama * 7;
 											break;
 
 										case 6:
 										case 13:
 										case 20:
-											coo_y = margenY + config.distanciaLineasPentagrama * 6 + 
+											cooY = margenY + config.distanciaLineasPentagrama * 6 + 
 												config.distanciaLineasPentagramaMitad;
 											break;
 
 										case 7:
 										case 14:
 										case 21:
-											coo_y = margenY + config.distanciaLineasPentagrama * 6;
+											cooY = margenY + config.distanciaLineasPentagrama * 6;
 											break;
 
 										default:
-											coo_y = 0;
+											cooY = 0;
 											break;
 									}
 									break;
@@ -517,51 +524,51 @@ public class Calculador {
 										case 1:
 										case 8:
 										case 15:
-											coo_y = margenY + config.distanciaLineasPentagrama * 2;
+											cooY = margenY + config.distanciaLineasPentagrama * 2;
 											break;
 
 										case 2:
 										case 9:
 										case 16:
-											coo_y = margenY + config.distanciaLineasPentagrama + 
+											cooY = margenY + config.distanciaLineasPentagrama + 
 												config.distanciaLineasPentagramaMitad;
 											break;
 
 										case 3:
 										case 10:
 										case 17:
-											coo_y = margenY + config.distanciaLineasPentagrama * 4 + 
+											cooY = margenY + config.distanciaLineasPentagrama * 4 + 
 												config.distanciaLineasPentagramaMitad;
 											break;
 
 										case 4:
 										case 11:
 										case 18:
-											coo_y = margenY + config.distanciaLineasPentagrama * 4;
+											cooY = margenY + config.distanciaLineasPentagrama * 4;
 											break;
 
 										case 5:
 										case 12:
 										case 19:
-											coo_y = margenY + config.distanciaLineasPentagrama * 3 + 
+											cooY = margenY + config.distanciaLineasPentagrama * 3 + 
 												config.distanciaLineasPentagramaMitad;
 											break;
 
 										case 6:
 										case 13:
 										case 20:
-											coo_y = margenY + config.distanciaLineasPentagrama * 3;
+											cooY = margenY + config.distanciaLineasPentagrama * 3;
 											break;
 
 										case 7:
 										case 14:
 										case 21:
-											coo_y = margenY + config.distanciaLineasPentagrama * 2 + 
+											cooY = margenY + config.distanciaLineasPentagrama * 2 + 
 												config.distanciaLineasPentagramaMitad;
 											break;
 
 										default:
-											coo_y = 0;
+											cooY = 0;
 											break;
 									}
 									break;
@@ -573,48 +580,48 @@ public class Calculador {
 										case 1:
 										case 8:
 										case 15:
-											coo_y = margenY - config.distanciaLineasPentagrama - 
+											cooY = margenY - config.distanciaLineasPentagrama - 
 												config.distanciaLineasPentagramaMitad;
 											break;
 
 										case 2:
 										case 9:
 										case 16:
-											coo_y = margenY - config.distanciaLineasPentagrama * 2;
+											cooY = margenY - config.distanciaLineasPentagrama * 2;
 											break;
 
 										case 3:
 										case 10:
 										case 17:
-											coo_y = margenY + config.distanciaLineasPentagrama;
+											cooY = margenY + config.distanciaLineasPentagrama;
 											break;
 
 										case 4:
 										case 11:
 										case 18:
-											coo_y = margenY + config.distanciaLineasPentagramaMitad;
+											cooY = margenY + config.distanciaLineasPentagramaMitad;
 											break;
 
 										case 5:
 										case 12:
 										case 19:
-											coo_y = margenY;
+											cooY = margenY;
 											break;
 
 										case 6:
 										case 13:
 										case 20:
-											coo_y = margenY - config.distanciaLineasPentagramaMitad;
+											cooY = margenY - config.distanciaLineasPentagramaMitad;
 											break;
 
 										case 7:
 										case 14:
 										case 21:
-											coo_y = margenY - config.distanciaLineasPentagrama;
+											cooY = margenY - config.distanciaLineasPentagrama;
 											break;
 
 										default:
-											coo_y = 0;
+											cooY = 0;
 											break;
 									}
 									break;
@@ -626,51 +633,51 @@ public class Calculador {
 										case 1:
 										case 8:
 										case 15:
-											coo_y = margenY - config.distanciaLineasPentagrama * 5;
+											cooY = margenY - config.distanciaLineasPentagrama * 5;
 											break;
 
 										case 2:
 										case 9:
 										case 16:
-											coo_y = margenY - config.distanciaLineasPentagrama * 5 - 
+											cooY = margenY - config.distanciaLineasPentagrama * 5 - 
 												config.distanciaLineasPentagramaMitad;
 											break;
 
 										case 3:
 										case 10:
 										case 17:
-											coo_y = margenY - config.distanciaLineasPentagrama * 2 - 
+											cooY = margenY - config.distanciaLineasPentagrama * 2 - 
 												config.distanciaLineasPentagramaMitad;
 											break;
 
 										case 4:
 										case 11:
 										case 18:
-											coo_y = margenY - config.distanciaLineasPentagrama * 3;
+											cooY = margenY - config.distanciaLineasPentagrama * 3;
 											break;
 
 										case 5:
 										case 12:
 										case 19:
-											coo_y = margenY - config.distanciaLineasPentagrama * 3 - 
+											cooY = margenY - config.distanciaLineasPentagrama * 3 - 
 												config.distanciaLineasPentagramaMitad;
 											break;
 
 										case 6:
 										case 13:
 										case 20:
-											coo_y = margenY - config.distanciaLineasPentagrama * 4;
+											cooY = margenY - config.distanciaLineasPentagrama * 4;
 											break;
 
 										case 7:
 										case 14:
 										case 21:
-											coo_y = margenY - config.distanciaLineasPentagrama * 4 - 
+											cooY = margenY - config.distanciaLineasPentagrama * 4 - 
 												config.distanciaLineasPentagramaMitad;
 											break;
 
 										default:
-											coo_y = 0;
+											cooY = 0;
 											break;
 									}
 									break;
@@ -697,51 +704,51 @@ public class Calculador {
 										case 1:
 										case 8:
 										case 15:
-											coo_y = margenY + config.distanciaLineasPentagrama * 9;
+											cooY = margenY + config.distanciaLineasPentagrama * 9;
 											break;
 
 										case 2:
 										case 9:
 										case 16:
-											coo_y = margenY + config.distanciaLineasPentagrama * 8 + 
+											cooY = margenY + config.distanciaLineasPentagrama * 8 + 
 												config.distanciaLineasPentagramaMitad;
 											break;
 
 										case 3:
 										case 10:
 										case 17:
-											coo_y = margenY + config.distanciaLineasPentagrama * 11 + 
+											cooY = margenY + config.distanciaLineasPentagrama * 11 + 
 												config.distanciaLineasPentagramaMitad;
 											break;
 
 										case 4:
 										case 11:
 										case 18:
-											coo_y = margenY + config.distanciaLineasPentagrama * 11;
+											cooY = margenY + config.distanciaLineasPentagrama * 11;
 											break;
 
 										case 5:
 										case 12:
 										case 19:
-											coo_y = margenY + config.distanciaLineasPentagrama * 10 + 
+											cooY = margenY + config.distanciaLineasPentagrama * 10 + 
 												config.distanciaLineasPentagramaMitad;
 											break;
 
 										case 6:
 										case 13:
 										case 20:
-											coo_y = margenY + config.distanciaLineasPentagrama * 10;
+											cooY = margenY + config.distanciaLineasPentagrama * 10;
 											break;
 
 										case 7:
 										case 14:
 										case 21:
-											coo_y = margenY + config.distanciaLineasPentagrama * 9 + 
+											cooY = margenY + config.distanciaLineasPentagrama * 9 + 
 												config.distanciaLineasPentagramaMitad;
 											break;
 
 										default:
-											coo_y = 0;
+											cooY = 0;
 											break;
 									}
 									break;
@@ -753,50 +760,50 @@ public class Calculador {
 										case 1:
 										case 8:
 										case 15:
-											coo_y = margenY + config.distanciaLineasPentagrama * 5 + 
+											cooY = margenY + config.distanciaLineasPentagrama * 5 + 
 												config.distanciaLineasPentagramaMitad;
 											break;
 
 										case 2:
 										case 9:
 										case 16:
-											coo_y = margenY + config.distanciaLineasPentagrama * 5;
+											cooY = margenY + config.distanciaLineasPentagrama * 5;
 											break;
 
 										case 3:
 										case 10:
 										case 17:
-											coo_y = margenY + config.distanciaLineasPentagrama * 8;
+											cooY = margenY + config.distanciaLineasPentagrama * 8;
 											break;
 
 										case 4:
 										case 11:
 										case 18:
-											coo_y = margenY + config.distanciaLineasPentagrama * 7 + 
+											cooY = margenY + config.distanciaLineasPentagrama * 7 + 
 												config.distanciaLineasPentagramaMitad;
 											break;
 
 										case 5:
 										case 12:
 										case 19:
-											coo_y = margenY + config.distanciaLineasPentagrama * 7;
+											cooY = margenY + config.distanciaLineasPentagrama * 7;
 											break;
 
 										case 6:
 										case 13:
 										case 20:
-											coo_y = margenY + config.distanciaLineasPentagrama * 6 + 
+											cooY = margenY + config.distanciaLineasPentagrama * 6 + 
 												config.distanciaLineasPentagramaMitad;
 											break;
 
 										case 7:
 										case 14:
 										case 21:
-											coo_y = margenY + config.distanciaLineasPentagrama * 6;
+											cooY = margenY + config.distanciaLineasPentagrama * 6;
 											break;
 
 										default:
-											coo_y = 0;
+											cooY = 0;
 											break;
 									}
 									break;
@@ -808,51 +815,51 @@ public class Calculador {
 										case 1:
 										case 8:
 										case 15:
-											coo_y = margenY + config.distanciaLineasPentagrama * 2;
+											cooY = margenY + config.distanciaLineasPentagrama * 2;
 											break;
 
 										case 2:
 										case 9:
 										case 16:
-											coo_y = margenY + config.distanciaLineasPentagrama + 
+											cooY = margenY + config.distanciaLineasPentagrama + 
 												config.distanciaLineasPentagramaMitad;
 											break;
 
 										case 3:
 										case 10:
 										case 17:
-											coo_y = margenY + config.distanciaLineasPentagrama * 4 + 
+											cooY = margenY + config.distanciaLineasPentagrama * 4 + 
 												config.distanciaLineasPentagramaMitad;
 											break;
 
 										case 4:
 										case 11:
 										case 18:
-											coo_y = margenY + config.distanciaLineasPentagrama * 4;
+											cooY = margenY + config.distanciaLineasPentagrama * 4;
 											break;
 
 										case 5:
 										case 12:
 										case 19:
-											coo_y = margenY + config.distanciaLineasPentagrama * 3 + 
+											cooY = margenY + config.distanciaLineasPentagrama * 3 + 
 												config.distanciaLineasPentagramaMitad;
 											break;
 
 										case 6:
 										case 13:
 										case 20:
-											coo_y = margenY + config.distanciaLineasPentagrama * 3;
+											cooY = margenY + config.distanciaLineasPentagrama * 3;
 											break;
 
 										case 7:
 										case 14:
 										case 21:
-											coo_y = margenY + config.distanciaLineasPentagrama * 2 + 
+											cooY = margenY + config.distanciaLineasPentagrama * 2 + 
 												config.distanciaLineasPentagramaMitad;
 											break;
 
 										default:
-											coo_y = 0;
+											cooY = 0;
 											break;
 									}
 									break;
@@ -864,48 +871,48 @@ public class Calculador {
 										case 1:
 										case 8:
 										case 15:
-											coo_y = margenY - config.distanciaLineasPentagrama - 
+											cooY = margenY - config.distanciaLineasPentagrama - 
 												config.distanciaLineasPentagramaMitad;
 											break;
 
 										case 2:
 										case 9:
 										case 16:
-											coo_y = margenY - config.distanciaLineasPentagrama * 2;
+											cooY = margenY - config.distanciaLineasPentagrama * 2;
 											break;
 
 										case 3:
 										case 10:
 										case 17:
-											coo_y = margenY + config.distanciaLineasPentagrama;
+											cooY = margenY + config.distanciaLineasPentagrama;
 											break;
 
 										case 4:
 										case 11:
 										case 18:
-											coo_y = margenY + config.distanciaLineasPentagramaMitad;
+											cooY = margenY + config.distanciaLineasPentagramaMitad;
 											break;
 
 										case 5:
 										case 12:
 										case 19:
-											coo_y = margenY;
+											cooY = margenY;
 											break;
 
 										case 6:
 										case 13:
 										case 20:
-											coo_y = margenY - config.distanciaLineasPentagramaMitad;
+											cooY = margenY - config.distanciaLineasPentagramaMitad;
 											break;
 
 										case 7:
 										case 14:
 										case 21:
-											coo_y = margenY - config.distanciaLineasPentagrama;
+											cooY = margenY - config.distanciaLineasPentagrama;
 											break;
 
 										default:
-											coo_y = 0;
+											cooY = 0;
 											break;
 									}
 									break;
@@ -917,51 +924,51 @@ public class Calculador {
 										case 1:
 										case 8:
 										case 15:
-											coo_y = margenY - config.distanciaLineasPentagrama * 5;
+											cooY = margenY - config.distanciaLineasPentagrama * 5;
 											break;
 
 										case 2:
 										case 9:
 										case 16:
-											coo_y = margenY - config.distanciaLineasPentagrama * 5 - 
+											cooY = margenY - config.distanciaLineasPentagrama * 5 - 
 												config.distanciaLineasPentagramaMitad;
 											break;
 
 										case 3:
 										case 10:
 										case 17:
-											coo_y = margenY - config.distanciaLineasPentagrama * 2 - 
+											cooY = margenY - config.distanciaLineasPentagrama * 2 - 
 												config.distanciaLineasPentagramaMitad;
 											break;
 
 										case 4:
 										case 11:
 										case 18:
-											coo_y = margenY - config.distanciaLineasPentagrama * 3;
+											cooY = margenY - config.distanciaLineasPentagrama * 3;
 											break;
 
 										case 5:
 										case 12:
 										case 19:
-											coo_y = margenY - config.distanciaLineasPentagrama * 3 - 
+											cooY = margenY - config.distanciaLineasPentagrama * 3 - 
 												config.distanciaLineasPentagramaMitad;
 											break;
 
 										case 6:
 										case 13:
 										case 20:
-											coo_y = margenY - config.distanciaLineasPentagrama * 4;
+											cooY = margenY - config.distanciaLineasPentagrama * 4;
 											break;
 
 										case 7:
 										case 14:
 										case 21:
-											coo_y = margenY - config.distanciaLineasPentagrama * 4 - 
+											cooY = margenY - config.distanciaLineasPentagrama * 4 - 
 												config.distanciaLineasPentagramaMitad;
 											break;
 
 										default:
-											coo_y = 0;
+											cooY = 0;
 											break;
 									}
 									break;
@@ -981,50 +988,50 @@ public class Calculador {
 										case 1:
 										case 8:
 										case 15:
-											coo_y = margenY + config.distanciaLineasPentagrama * 6 + 
+											cooY = margenY + config.distanciaLineasPentagrama * 6 + 
 												config.distanciaLineasPentagramaMitad;
 											break;
 
 										case 2:
 										case 9:
 										case 16:
-											coo_y = margenY + config.distanciaLineasPentagrama * 6;
+											cooY = margenY + config.distanciaLineasPentagrama * 6;
 											break;
 
 										case 3:
 										case 10:
 										case 17:
-											coo_y = margenY + config.distanciaLineasPentagrama * 9;
+											cooY = margenY + config.distanciaLineasPentagrama * 9;
 											break;
 
 										case 4:
 										case 11:
 										case 18:
-											coo_y = margenY + config.distanciaLineasPentagrama * 8 + 
+											cooY = margenY + config.distanciaLineasPentagrama * 8 + 
 												config.distanciaLineasPentagramaMitad;
 											break;
 
 										case 5:
 										case 12:
 										case 19:
-											coo_y = margenY + config.distanciaLineasPentagrama * 8;
+											cooY = margenY + config.distanciaLineasPentagrama * 8;
 											break;
 
 										case 6:
 										case 13:
 										case 20:
-											coo_y = margenY + config.distanciaLineasPentagrama * 7 + 
+											cooY = margenY + config.distanciaLineasPentagrama * 7 + 
 												config.distanciaLineasPentagramaMitad;
 											break;
 
 										case 7:
 										case 14:
 										case 21:
-											coo_y = margenY + config.distanciaLineasPentagrama * 7;
+											cooY = margenY + config.distanciaLineasPentagrama * 7;
 											break;
 
 										default:
-											coo_y = 0;
+											cooY = 0;
 											break;
 									}
 									break;
@@ -1036,51 +1043,51 @@ public class Calculador {
 										case 1:
 										case 8:
 										case 15:
-											coo_y = margenY + config.distanciaLineasPentagrama * 3;
+											cooY = margenY + config.distanciaLineasPentagrama * 3;
 											break;
 
 										case 2:
 										case 9:
 										case 16:
-											coo_y = margenY + config.distanciaLineasPentagrama * 2 + 
+											cooY = margenY + config.distanciaLineasPentagrama * 2 + 
 												config.distanciaLineasPentagramaMitad;
 											break;
 
 										case 3:
 										case 10:
 										case 17:
-											coo_y = margenY + config.distanciaLineasPentagrama * 5 + 
+											cooY = margenY + config.distanciaLineasPentagrama * 5 + 
 												config.distanciaLineasPentagramaMitad;
 											break;
 
 										case 4:
 										case 11:
 										case 18:
-											coo_y = margenY + config.distanciaLineasPentagrama * 5;
+											cooY = margenY + config.distanciaLineasPentagrama * 5;
 											break;
 
 										case 5:
 										case 12:
 										case 19:
-											coo_y = margenY + config.distanciaLineasPentagrama * 4 + 
+											cooY = margenY + config.distanciaLineasPentagrama * 4 + 
 												config.distanciaLineasPentagramaMitad;
 											break;
 
 										case 6:
 										case 13:
 										case 20:
-											coo_y = margenY + config.distanciaLineasPentagrama * 4;
+											cooY = margenY + config.distanciaLineasPentagrama * 4;
 											break;
 
 										case 7:
 										case 14:
 										case 21:
-											coo_y = margenY + config.distanciaLineasPentagrama * 3 + 
+											cooY = margenY + config.distanciaLineasPentagrama * 3 + 
 												config.distanciaLineasPentagramaMitad;
 											break;
 
 										default:
-											coo_y = 0;
+											cooY = 0;
 											break;
 									}
 									break;
@@ -1092,49 +1099,49 @@ public class Calculador {
 										case 1:
 										case 8:
 										case 15:
-											coo_y = margenY - config.distanciaLineasPentagramaMitad;
+											cooY = margenY - config.distanciaLineasPentagramaMitad;
 											break;
 
 										case 2:
 										case 9:
 										case 16:
-											coo_y = margenY - config.distanciaLineasPentagrama;
+											cooY = margenY - config.distanciaLineasPentagrama;
 											break;
 
 										case 3:
 										case 10:
 										case 17:
-											coo_y = margenY + config.distanciaLineasPentagrama * 2;
+											cooY = margenY + config.distanciaLineasPentagrama * 2;
 											break;
 
 										case 4:
 										case 11:
 										case 18:
-											coo_y = margenY + config.distanciaLineasPentagrama + 
+											cooY = margenY + config.distanciaLineasPentagrama + 
 												config.distanciaLineasPentagramaMitad;
 											break;
 
 										case 5:
 										case 12:
 										case 19:
-											coo_y = margenY + config.distanciaLineasPentagrama;
+											cooY = margenY + config.distanciaLineasPentagrama;
 											break;
 
 										case 6:
 										case 13:
 										case 20:
-											coo_y = margenY + config.distanciaLineasPentagrama - 
+											cooY = margenY + config.distanciaLineasPentagrama - 
 												config.distanciaLineasPentagramaMitad;
 											break;
 
 										case 7:
 										case 14:
 										case 21:
-											coo_y = margenY;
+											cooY = margenY;
 											break;
 
 										default:
-											coo_y = 0;
+											cooY = 0;
 											break;
 									}
 									break;
@@ -1146,51 +1153,51 @@ public class Calculador {
 										case 1:
 										case 8:
 										case 15:
-											coo_y = margenY - config.distanciaLineasPentagrama * 4;
+											cooY = margenY - config.distanciaLineasPentagrama * 4;
 											break;
 
 										case 2:
 										case 9:
 										case 16:
-											coo_y = margenY - config.distanciaLineasPentagrama * 4 - 
+											cooY = margenY - config.distanciaLineasPentagrama * 4 - 
 												config.distanciaLineasPentagramaMitad;
 											break;
 
 										case 3:
 										case 10:
 										case 17:
-											coo_y = margenY - config.distanciaLineasPentagrama - 
+											cooY = margenY - config.distanciaLineasPentagrama - 
 												config.distanciaLineasPentagramaMitad;
 											break;
 
 										case 4:
 										case 11:
 										case 18:
-											coo_y = margenY - config.distanciaLineasPentagrama * 2;
+											cooY = margenY - config.distanciaLineasPentagrama * 2;
 											break;
 
 										case 5:
 										case 12:
 										case 19:
-											coo_y = margenY - config.distanciaLineasPentagrama * 2 - 
+											cooY = margenY - config.distanciaLineasPentagrama * 2 - 
 												config.distanciaLineasPentagramaMitad;
 											break;
 
 										case 6:
 										case 13:
 										case 20:
-											coo_y = margenY - config.distanciaLineasPentagrama * 3;
+											cooY = margenY - config.distanciaLineasPentagrama * 3;
 											break;
 
 										case 7:
 										case 14:
 										case 21:
-											coo_y = margenY - config.distanciaLineasPentagrama * 3 - 
+											cooY = margenY - config.distanciaLineasPentagrama * 3 - 
 												config.distanciaLineasPentagramaMitad;
 											break;
 
 										default:
-											coo_y = 0;
+											cooY = 0;
 											break;
 									}
 									break;
@@ -1215,178 +1222,188 @@ public class Calculador {
 				case 7:
 				case 8:
 				case 9:
-					coo_y = margenY;
+					cooY = margenY;
 					break;
 					
 				case 10:
-					coo_y = margenY + config.distanciaLineasPentagrama + 
+					cooY = margenY + config.distanciaLineasPentagrama + 
 						config.distanciaLineasPentagramaMitad + config.ySilencioBlanca;
 					break;
 					
 				case 11:
-					coo_y = margenY + config.distanciaLineasPentagrama;
+					cooY = margenY + config.distanciaLineasPentagrama;
 					break;
 
 				default: break;
 			}
 		}
 
-		return coo_y;
+		return cooY;
 	}
 	
-	private void establecerPosicionFinalDeCompas(Compas compas)
+	private void establecerPosicionFinalDeCompas(final Compas compas)
 	{
 		compas.setXFin(compas.getXFin() + config.margenDerechoCompases);
-		compas.setYFin(compas_margin_y + 
+		compas.setYFin(compasMarginY + 
 				config.distanciaLineasPentagrama * 4 + 
 				(config.distanciaPentagramas + config.distanciaLineasPentagrama * 4) * 
 				(partitura.getStaves() - 1));
 		
-		compas_margin_x = compas.getXFin();
+		compasMarginX = compas.getXFin();
 	}
 
 	//  Si hay claves al final de un compás, las notas del siguiente compás
 	//  deben regirse por dichas claves. Aquí nos aseguramos de eso
-	private void actualizarClavesParaElCompasSiguiente(Compas compas)
+	private void actualizarClavesParaElCompasSiguiente(final Compas compas)
 	{
-		int[] clavesAlFinalDelCompas = compas.clavesAlFinalDelCompas(partitura.getStaves());
+		final int[] clavesAlFinalDelCompas = compas.clavesAlFinalDelCompas(partitura.getStaves());
 		for (int i=0; i<clavesAlFinalDelCompas.length; i++) {
 			if (clavesAlFinalDelCompas[i] > -1) {
-				Clave clave = compas.getClave(clavesAlFinalDelCompas[i]);
+				final Clave clave = compas.getClave(clavesAlFinalDelCompas[i]);
 				claveActual[i] = clave.getByteClave();
 			}
 		}
 	}
 	
-	private void recolocarCompases(Compas compas)
+	private void recolocarCompases(final Compas compas)
 	{
-		if (vista == Vista.VERTICAL) {
-			if (compas.getXFin() > config.xFinalPentagramas) {
-				moverCompasAlSiguienteRenglon(compas);
-				
-				ultimoCompas = compasActual - 1;
-				reajustarCompases();
-				primerCompas = compasActual;
-			}
+		if ( vista == Vista.VERTICAL && compas.getXFin() > config.xFinalPentagramas ) {
+			moverCompasAlSiguienteRenglon(compas);
+			
+			ultimoCompas = compasActual - 1;
+			reajustarCompases();
+			primerCompas = compasActual;
 		}
 	}
 	
-	private void moverCompasAlSiguienteRenglon(Compas compas) 
+	private void moverCompasAlSiguienteRenglon(final Compas compas) 
 	{
-		int distancia_x = compas.getXIni() - config.xInicialPentagramas;
-		int distancia_y = (config.distanciaLineasPentagrama * 4 + 
+		final int distanciaX = compas.getXIni() - config.xInicialPentagramas;
+		final int distanciaY = (config.distanciaLineasPentagrama * 4 + 
 				config.distanciaPentagramas) * partitura.getStaves();
 
 		compas.setXIni(config.xInicialPentagramas);
-		compas.setXFin(compas.getXFin() - distancia_x);
-		if (compas.getXFin() > config.xFinalPentagramas)
+		compas.setXFin(compas.getXFin() - distanciaX);
+		if (compas.getXFin() > config.xFinalPentagramas) {
 			compas.setXFin(config.xFinalPentagramas);
-		compas.setXIniNotas(compas.getXIniNotas() - distancia_x);
+		}
+		compas.setXIniNotas(compas.getXIniNotas() - distanciaX);
 
 		for (int i=0; i<compas.numClaves(); i++) {
-			compas.getClave(i).setX(compas.getClave(i).getX() - distancia_x);
-			compas.getClave(i).setY(compas.getClave(i).getY() + distancia_y);
+			compas.getClave(i).setX(compas.getClave(i).getX() - distanciaX);
+			compas.getClave(i).setY(compas.getClave(i).getY() + distanciaY);
 		}
 
 		for (int i=0; i<compas.numIntensidades(); i++) {
-			compas.getIntensidad(i).setX(compas.getIntensidad(i).getX() - distancia_x);
-			compas.getIntensidad(i).setY(compas.getIntensidad(i).getY() + distancia_y);
+			compas.getIntensidad(i).setX(compas.getIntensidad(i).getX() - distanciaX);
+			compas.getIntensidad(i).setY(compas.getIntensidad(i).getY() + distanciaY);
 		}
 		
 		for (int i=0; i<compas.numPedalesInicio(); i++) {
-			compas.getPedalInicio(i).setX(compas.getPedalInicio(i).getX() - distancia_x);
-			compas.getPedalInicio(i).setY(compas.getPedalInicio(i).getY() + distancia_y);
+			compas.getPedalInicio(i).setX(compas.getPedalInicio(i).getX() - distanciaX);
+			compas.getPedalInicio(i).setY(compas.getPedalInicio(i).getY() + distanciaY);
 		}
 
 		for (int i=0; i<compas.numPedalesFin(); i++) {
-			compas.getPedalFin(i).setX(compas.getPedalFin(i).getX() - distancia_x);
-			compas.getPedalFin(i).setY(compas.getPedalFin(i).getY() + distancia_y);
+			compas.getPedalFin(i).setX(compas.getPedalFin(i).getX() - distanciaX);
+			compas.getPedalFin(i).setY(compas.getPedalFin(i).getY() + distanciaY);
 		}
 		
 		if (compas.hayTempo()) {
-			compas.getTempo().setX(compas.getTempo().getX() - distancia_x);
-			compas.getTempo().setYNumerador(compas.getTempo().getYNumerador() + distancia_y);
-			compas.getTempo().setYDenominador(compas.getTempo().getYDenominador() + distancia_y);
+			compas.getTempo().setX(compas.getTempo().getX() - distanciaX);
+			compas.getTempo().setYNumerador(compas.getTempo().getYNumerador() + distanciaY);
+			compas.getTempo().setYDenominador(compas.getTempo().getYDenominador() + distanciaY);
 		}
 		
 		for (int i=0; i<compas.numTextos(); i++) {
-			compas.getTexto(i).setX(compas.getTexto(i).getX() - distancia_x);
-			compas.getTexto(i).setY(compas.getTexto(i).getY() + distancia_y);
+			compas.getTexto(i).setX(compas.getTexto(i).getX() - distanciaX);
+			compas.getTexto(i).setY(compas.getTexto(i).getY() + distanciaY);
 		}
 		
 		for (int i=0; i<compas.numCrescendos(); i++) {
-			compas.getCrescendo(i).setXIni(compas.getCrescendo(i).getXIni() - distancia_x);
-			compas.getCrescendo(i).setXFin(compas.getCrescendo(i).getXFin() - distancia_x);
-			compas.getCrescendo(i).setYIni(compas.getCrescendo(i).getYIni() + distancia_y);
+			compas.getCrescendo(i).setXIni(compas.getCrescendo(i).getXIni() - distanciaX);
+			compas.getCrescendo(i).setXFin(compas.getCrescendo(i).getXFin() - distanciaX);
+			compas.getCrescendo(i).setYIni(compas.getCrescendo(i).getYIni() + distanciaY);
 		}
 		
 		for (int i=0; i<compas.numDiminuendos(); i++) {
-			compas.getDiminuendo(i).setXIni(compas.getDiminuendo(i).getXIni() - distancia_x);
-			compas.getDiminuendo(i).setXFin(compas.getDiminuendo(i).getXFin() - distancia_x);
-			compas.getDiminuendo(i).setYIni(compas.getDiminuendo(i).getYIni() + distancia_y);
+			compas.getDiminuendo(i).setXIni(compas.getDiminuendo(i).getXIni() - distanciaX);
+			compas.getDiminuendo(i).setXFin(compas.getDiminuendo(i).getXFin() - distanciaX);
+			compas.getDiminuendo(i).setYIni(compas.getDiminuendo(i).getYIni() + distanciaY);
 		}
 		
-		compas_margin_x = compas.getXFin();
-		compas_margin_y = compas_margin_y + distancia_y;
+		compasMarginX = compas.getXFin();
+		compasMarginY = compasMarginY + distanciaY;
 
-		compas.setYIni(compas_margin_y);
-		compas.setYFin(compas_margin_y + 
+		compas.setYIni(compasMarginY);
+		compas.setYFin(compasMarginY + 
 				config.distanciaLineasPentagrama * 4 + 
 				(config.distanciaPentagramas + 
 						config.distanciaLineasPentagrama * 4) * (partitura.getStaves() - 1));
 		
-		int numNotas = compas.numNotas();
+		final int numNotas = compas.numNotas();
 		for (int i=0; i<numNotas; i++) {
-			compas.getNota(i).setX(compas.getNota(i).getX() - distancia_x);
-			compas.getNota(i).setY(compas.getNota(i).getY() + distancia_y);
+			compas.getNota(i).setX(compas.getNota(i).getX() - distanciaX);
+			compas.getNota(i).setY(compas.getNota(i).getY() + distanciaY);
 		}
 	}
 	
 	private void reajustarCompases() {
-		int espacioADistribuir = config.xFinalPentagramas - partitura.getCompas(ultimoCompas).getXFin();
+		final int espacioADistribuir = config.xFinalPentagramas - partitura.getCompas(ultimoCompas).getXFin();
 
-    	int numCompases = (ultimoCompas - primerCompas) + 1;
-        int anchoParaCadaCompas = espacioADistribuir / numCompases;
+    	final int numCompases = ultimoCompas - primerCompas + 1;
+        final int anchoParaCadaCompas = espacioADistribuir / numCompases;
         int posicionX = partitura.getCompas(primerCompas).getXFin() + anchoParaCadaCompas;
         
         //  Primer paso: reajustar ancho y posición de los compases
         for (int i=primerCompas; i<=ultimoCompas; i++) {
-        	Compas compas = partitura.getCompas(i);
+        	final Compas compas = partitura.getCompas(i);
         	
-        	if (i == primerCompas)
+        	if (i == primerCompas) {
         		compas.setXFin(posicionX);
+        	}
         	else {
-	        	int distanciaXIni = compas.getXIniNotas() - compas.getXIni();
+	        	final int distanciaXIni = compas.getXIniNotas() - compas.getXIni();
 	        	
 	        	compas.setXIni(posicionX);
 	        	compas.setXIniNotas(posicionX + distanciaXIni);
 	            
 	        	posicionX = compas.getXFin() + anchoParaCadaCompas;
-	            if (i == ultimoCompas) posicionX = config.xFinalPentagramas;
+	            if (i == ultimoCompas) {
+	            	posicionX = config.xFinalPentagramas;
+	            }
 	            compas.setXFin(posicionX);
 	            
-	            int numNotas = compas.numNotas();
-	            for (int j=0; j<numNotas; j++)
+	            final int numNotas = compas.numNotas();
+	            for (int j=0; j<numNotas; j++) {
 	            	compas.getNota(j).setX(compas.getNota(j).getX() + anchoParaCadaCompas);
+	            }
 
-    			for (int j=0; j<compas.numClaves(); j++)
-    				if (compas.getClave(j) != null)
+    			for (int j=0; j<compas.numClaves(); j++) {
+    				if (compas.getClave(j) != null) {
     					compas.getClave(j).setX(compas.getClave(j).getX() + anchoParaCadaCompas);
+    				}
+    			}
 	            
-    			for (int j=0; j<compas.numIntensidades(); j++)
+    			for (int j=0; j<compas.numIntensidades(); j++) {
             		compas.getIntensidad(j).setX(compas.getIntensidad(j).getX() + anchoParaCadaCompas);
+    			}
 	            
-            	for (int j=0; j<compas.numPedalesInicio(); j++)
+            	for (int j=0; j<compas.numPedalesInicio(); j++) {
             		compas.getPedalInicio(j).setX(compas.getPedalInicio(j).getX() + anchoParaCadaCompas);
+            	}
 	            
-            	for (int j=0; j<compas.numPedalesFin(); j++)
+            	for (int j=0; j<compas.numPedalesFin(); j++) {
             		compas.getPedalFin(j).setX(compas.getPedalFin(j).getX() + anchoParaCadaCompas);
+            	}
 	            
-	            if (compas.hayTempo())
+	            if (compas.hayTempo()) {
 	            	compas.getTempo().setX(compas.getTempo().getX() + anchoParaCadaCompas);
+	            }
 	            
-	            for (int j=0; j<compas.numTextos(); j++)
+	            for (int j=0; j<compas.numTextos(); j++) {
 	            	compas.getTexto(j).setX(compas.getTexto(j).getX() + anchoParaCadaCompas);
+	            }
 	            
 	            for (int j=0; j<compas.numCrescendos(); j++) {
 	            	compas.getCrescendo(j).setXIni(compas.getCrescendo(j).getXIni() + anchoParaCadaCompas);
@@ -1402,29 +1419,30 @@ public class Calculador {
         
         //  Segundo paso: reajustar posición de las notas y figuras gráficas
         for (int i=primerCompas; i<=ultimoCompas; i++) {
-        	Compas compas = partitura.getCompas(i);
-        	ArrayList<Integer> xsDeElementos = compas.saberXsDeElementos();
+        	final Compas compas = partitura.getCompas(i);
+        	final ArrayList<Integer> xsDeElementos = compas.saberXsDeElementos();
         	
-        	int lastX = xsDeElementos.get(xsDeElementos.size() - 1);
-        	int anchoADistribuir = compas.getXFin() - config.margenDerechoCompases - lastX;
+        	final int lastX = xsDeElementos.get(xsDeElementos.size() - 1);
+        	final int anchoADistribuir = compas.getXFin() - config.margenDerechoCompases - lastX;
         	
         	//  El primer elemento no lo vamos a mover, de ahí el -1
-        	int numElementos = xsDeElementos.size() - 1;
+        	final int numElementos = xsDeElementos.size() - 1;
         	int anchoPorElemento = 0;
-        	if (numElementos > 0)
+        	if (numElementos > 0) {
         		anchoPorElemento = anchoADistribuir / numElementos;
+        	}
         	
         	reajustarNotasYClaves(compas, xsDeElementos, anchoPorElemento);
         	reajustarFigurasGraficas(compas, anchoPorElemento);
         }
 	}
 
-	private void reajustarFigurasGraficas(Compas compas, int anchoPorNota) {
+	private void reajustarFigurasGraficas(final Compas compas, final int anchoPorNota) {
 		
 		int multiplicador = 0;
-		int xPrimeraNota = compas.saberXPrimeraNota();
+		final int xPrimeraNota = compas.saberXPrimeraNota();
 		
-		ArrayList<Integer> xsDelCompas = compas.saberXsDelCompas();
+		final ArrayList<Integer> xsDelCompas = compas.saberXsDelCompas();
 		
 		for (int i=0; i<compas.numIntensidades(); i++) {
     		if (compas.getIntensidad(i).getX() != xPrimeraNota) {
@@ -1477,14 +1495,15 @@ public class Calculador {
         }
 	}
 	
-	private void reajustarNotasYClaves(Compas compas, ArrayList<Integer> xsDeElementos, int anchoPorNota) {
+	private void reajustarNotasYClaves(final Compas compas, 
+			final ArrayList<Integer> xsDeElementos, final int anchoPorNota) {
 		
 		//  A cada elemento se le suma una distancia cada vez
     	//  mayor, ya que de lo contrario sólo estaríamos
     	//  desplazándolos todos pero manteniéndolos a la misma
     	//  distancia entre sí mismos que antes
-    	ArrayList<Nota> notas = compas.getNotas();
-    	int numNotas = notas.size();
+    	final ArrayList<Nota> notas = compas.getNotas();
+    	final int numNotas = notas.size();
     	int multiplicador = 0;
     	for (int j=0;j<numNotas;j++) {
 			multiplicador = xsDeElementos.indexOf(notas.get(j).getX());
@@ -1498,9 +1517,9 @@ public class Calculador {
     	
 	}
 	
-	public Bitmap obtenerImagenDeCabezaDeNota(Nota nota) 
+	public Bitmap obtenerImagenDeCabezaDeNota(final Nota nota) 
 	{
-		if (nota.getStep() == 0) {
+		if (nota.silencio()) {
 
 			switch (nota.getFiguracion()) {
 				case 5:
@@ -1522,20 +1541,24 @@ public class Calculador {
 		}
 		
 		else {
-			if (nota.getFiguracion() > 9) 
+			if (nota.getFiguracion() > 9) {
 				return bitmapManager.getWhiteHead();
-			else
+			}
+			else {
 				return nota.notaDeGracia() ? 
 						bitmapManager.getBlackHeadLittle() : bitmapManager.getBlackHead();
+			}
 		}
 	}
 
-	public Bitmap obtenerImagenDeCorcheteDeNota(Nota nota) 
+	public Bitmap obtenerImagenDeCorcheteDeNota(final Nota nota) 
 	{
-		if (nota.notaDeGracia())
+		if (nota.notaDeGracia()) {
 			return nota.haciaArriba() ? 
 					bitmapManager.getHeadLittle() : bitmapManager.getHeadInvLittle();
-		else
+		}
+		else {
 			return nota.haciaArriba() ? bitmapManager.getHead() : bitmapManager.getHeadInv();
+		}
 	}
 }

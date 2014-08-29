@@ -309,8 +309,8 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 		{
 			scroll.setOrientation(getResources().getConfiguration().orientation);
 			
-    		metronomo = new Metronome(bpm, context, vista, partitura, scroll);
-    		metronomo.run();
+    		metronomo = new Metronome(context, vista, partitura, scroll);
+    		metronomo.run(bpm);
 		}
 	}
 
