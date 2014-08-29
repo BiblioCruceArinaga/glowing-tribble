@@ -39,6 +39,9 @@ import com.rising.login.Login_Errors;
 import com.rising.login.Login_Utils;
 import com.rising.login.login.ProgressDialogFragment;
 import com.rising.money.MoneyActivity;
+import com.rising.money.MoneyUpdateConnectionNetwork;
+import com.rising.money.MoneyUpdateConnectionNetwork.OnFailUpdateMoney;
+import com.rising.money.MoneyUpdateConnectionNetwork.OnSuccessUpdateMoney;
 import com.rising.money.SocialBonificationNetworkConnection;
 import com.rising.money.SocialBonificationNetworkConnection.OnFailBonification;
 import com.rising.money.SocialBonificationNetworkConnection.OnSuccessBonification;
@@ -47,20 +50,23 @@ import com.rising.store.BuyNetworkConnection.OnBuyFailed;
 import com.rising.store.downloads.DownloadScores;
 import com.rising.store.downloads.DownloadScores.OnDownloadCompleted;
 import com.rising.store.downloads.DownloadScores.OnDownloadFailed;
+import com.rising.store.purchases.InfoCompra;
 
 //Clase que muestra toda la información de la partitura seleccionada
 public class ScoreProfile extends Activity{
 	
 	//Variables  
 	private Context ctx;
+	private Bundle b;
 	private String ID_BONIFICATION = "6";
 	private int Id;
 	private String name, author, year, instrument, description, URL, URL_Image, Id_User, Id_Score;
 	private float price;
-	private boolean comprado;
+	//private boolean comprado;
 	private Dialog NoMoneyDialog;
 	private Button B_Price, Buy_Money;
 	private ProgressDialog mProgressDialog;
+	private static boolean ButtonClicked;
 
 	//  private String style -> Dato para el futuro. Estilo musical
 	//  Al final del perfil de la partitura se recomienda al usuario más del mismo estilo
@@ -74,7 +80,9 @@ public class ScoreProfile extends Activity{
 	private DownloadScores DOWNLOAD;
 	private BuyNetworkConnection BUY_ASYNCTASK;	
 	private SocialBonificationNetworkConnection BONIFICATION_ASYNCTASK;
+	private MoneyUpdateConnectionNetwork MONEY_ASYNCTASK;
 	private Store_Utils UTILS;
+	private InfoCompra INFO;
 	
 	private OnSuccessBonification SuccessBonification = new OnSuccessBonification(){
 
@@ -96,11 +104,19 @@ public class ScoreProfile extends Activity{
 
 		@Override
 		public void onBuyCompleted() {
-			((MainActivityStore) ctx).StartMoneyUpdate(CONF.getUserEmail());
-			BONIFICATION_ASYNCTASK.execute(ID_BONIFICATION);     				
 			
-			DOWNLOAD.execute(URL, URL_Image, name + CONF.getUserId());
-			comprado = true;
+			INFO.setComprado(true);
+						
+			MONEY_ASYNCTASK = new MoneyUpdateConnectionNetwork(MoneyUpdateSuccess, MoneyUpdateFail, ctx);	
+			MONEY_ASYNCTASK.execute(CONF.getUserEmail());
+						
+			BONIFICATION_ASYNCTASK.execute(ID_BONIFICATION);
+			if(UTILS.spaceOnDisc()){
+				DOWNLOAD = new DownloadScores(SuccessedDownload, FailedDownload, ctx);
+				DOWNLOAD.execute(URL, URL_Image, name + CONF.getUserId());
+			}else{
+				new AlertDialog.Builder(ctx).setMessage(ctx.getString(R.string.no_space)).show();
+			}			
 		}
 	};
 		
@@ -110,17 +126,16 @@ public class ScoreProfile extends Activity{
 		public void onBuyFailed() {
 			Toast.makeText(ctx, ctx.getString(R.string.errbuy), Toast.LENGTH_LONG).show();
 		}
-		
 	};
 	
 	private OnDownloadCompleted SuccessedDownload = new OnDownloadCompleted(){
 		@Override
 		public void onDownloadCompleted() {
 			
-			B_Price.setText(R.string.open);
+			onResume();
+			
 			Toast.makeText(ctx,R.string.okdownload, Toast.LENGTH_SHORT).show();            
             Log.i("Custom", "Archivo descargado");
-            
 		}		
 	};
 		
@@ -131,6 +146,23 @@ public class ScoreProfile extends Activity{
 			Toast.makeText(ctx,R.string.errordownload, Toast.LENGTH_LONG).show();
 		}
 	};	
+	
+	private OnSuccessUpdateMoney MoneyUpdateSuccess = new OnSuccessUpdateMoney(){
+
+		@Override
+		public void onSuccessUpdateMoney() {							
+			CONF.setUserMoney(MONEY_ASYNCTASK.devolverDatos());
+			invalidateOptionsMenu();
+		}
+	};
+	
+	private OnFailUpdateMoney MoneyUpdateFail = new OnFailUpdateMoney(){
+
+		@Override
+		public void onFailUpdateMoney() {		
+			CONF.setUserMoney(CONF.getUserMoney());
+		}		
+	};
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -149,18 +181,21 @@ public class ScoreProfile extends Activity{
 		mProgressDialog.setIndeterminate(true);
 		mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
 		
-		Bundle b = getIntent().getExtras();
-		Id = b.getInt("id");
+		b = getIntent().getExtras();
+		Id = b.getInt("id");	
+		
+		this.INFO = new InfoCompra(Id);
+		
 		name = b.getString("name");
 		author = b.getString("author");
 		year = String.valueOf(b.getInt("year"));
 		instrument = b.getString("instrument");
 		price = b.getFloat("price");
 		description = b.getString("description");
-		comprado = b.getBoolean("comprado");
+		
 		URL = b.getString("url");
 		URL_Image = b.getString("url_imagen");
-		
+								
 		ActionBar ABar = getActionBar();
     	
     	ABar.setTitle(R.string.store);
@@ -190,6 +225,7 @@ public class ScoreProfile extends Activity{
         .displayer(new RoundedBitmapDisplayer(10))
         .build();
                
+		//Que al abrir las imagenes se abran desde el caché, no desde internet
 		IML.displayImage(URL_Image, IV_Partitura, options, new SimpleImageLoadingListener(){
 		   	 boolean cacheFound;
 	
@@ -254,68 +290,54 @@ public class ScoreProfile extends Activity{
 			}
 			
 		});
-				
-		if(comprado){
-			if(UTILS.buscarArchivos(UTILS.FileNameString(URL), path)){
-				B_Price.setText(R.string.open);
-			}else{
-				B_Price.setText(R.string.download);
-	    	}
-		}else{
-			if(price == 0.0){
-				B_Price.setText(R.string.free);
-				B_Price.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.money, 0);
-			}else{
-				B_Price.setText(price + "");
-	        	B_Price.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.money, 0);
-			}
-		}
-		
+						
 		final AlertDialog.Builder BuyDialog = new AlertDialog.Builder(ctx);  
         BuyDialog.setTitle(R.string.confirm_buy);  
         BuyDialog.setMessage(R.string.buy_agree);            
         BuyDialog.setCancelable(false);  
         BuyDialog.setPositiveButton(R.string.buy, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface BuyDialog, int id) {  
-                            	
-            	if(price == 0.0){	
-    					
-					BUY_ASYNCTASK.execute(Id_User, Id_Score, Locale.getDefault().getDisplayLanguage());
-	 			
-	 				BuyDialog.dismiss();
-							     						     								     							     							     				
-				}else{
-									 								 														 			
-	     			if(price < CONF.getUserMoney()){		 					
-	 							     								     				
-		     			BUY_ASYNCTASK.execute(Id_User, Id_Score, Locale.getDefault().getDisplayLanguage());
-		     			
-		     			BuyDialog.dismiss();					     							     			
+            	if(new Login_Utils(ctx).isOnline()){
+	            	if(price == 0.0){	
+	    					
+						BUY_ASYNCTASK.execute(Id_User, Id_Score, Locale.getDefault().getDisplayLanguage());
+		 			
+		 				BuyDialog.dismiss();
+								     						     								     							     							     				
 					}else{
-							
-						NoMoneyDialog = new Dialog(ctx, R.style.cust_dialog);
-							
-						NoMoneyDialog.setContentView(R.layout.store_nomoneydialog);
-						NoMoneyDialog.setTitle(R.string.not_enough_credit);
-							
-						Buy_Money = (Button)NoMoneyDialog.findViewById(R.id.b_buy_credit);
-							
-						Buy_Money.setOnClickListener(new OnClickListener(){
-	
-							@Override
-							public void onClick(View v) {
-								Intent i = new Intent(ctx, MoneyActivity.class);
-								startActivity(i);
-							}
+										 								 														 			
+		     			if(price < CONF.getUserMoney()){		 					
+		 							     								     				
+			     			BUY_ASYNCTASK.execute(Id_User, Id_Score, Locale.getDefault().getDisplayLanguage());
+			     			
+			     			BuyDialog.dismiss();					     							     			
+						}else{
 								
-						});
+							NoMoneyDialog = new Dialog(ctx, R.style.cust_dialog);
+								
+							NoMoneyDialog.setContentView(R.layout.store_nomoneydialog);
+							NoMoneyDialog.setTitle(R.string.not_enough_credit);
+								
+							Buy_Money = (Button)NoMoneyDialog.findViewById(R.id.b_buy_credit);
+								
+							Buy_Money.setOnClickListener(new OnClickListener(){
+		
+								@Override
+								public void onClick(View v) {
+									Intent i = new Intent(ctx, MoneyActivity.class);
+									startActivity(i);
+								}
+									
+							});
+								
+							NoMoneyDialog.show();			 						
+						}
 							
-						NoMoneyDialog.show();			 						
-					}
-						
-				}            	
-            	
-            }  
+					}            	
+	            }else{
+					new Login_Errors(ctx).errLogin(4);
+				}
+            }
         });  
         
         BuyDialog.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -325,17 +347,16 @@ public class ScoreProfile extends Activity{
         });            
         
 		B_Price.setOnClickListener(new OnClickListener(){
-
+			
 			@Override
 			public void onClick(View v) {
+				ButtonClicked = true;
+				
 				CONF = new Configuration(ctx);
         		Id_User = CONF.getUserId();
         		Id_Score = String.valueOf(Id);
                 
-                Id_User = CONF.getUserId();
-        		Id_Score = String.valueOf(Id);
-                
-        		if(comprado){
+        		if(INFO.isComprado()){
         			
         			if(UTILS.buscarArchivos(UTILS.FileNameString(URL), path)){
         				UTILS.AbrirFichero(name , UTILS.FileNameString(URL));				
@@ -348,7 +369,11 @@ public class ScoreProfile extends Activity{
         				}
         			}  				     				
         		}else{
-					BuyDialog.show();						
+        			if(new Login_Utils(ctx).isOnline()){
+        				BuyDialog.show();
+        			}else{
+    					new Login_Errors(ctx).errLogin(4);
+    				}
 				}
 			}
         });
@@ -361,9 +386,8 @@ public class ScoreProfile extends Activity{
 	} 
 			
 	@Override
-	protected void onResume() {
-		super.onResume();
-		
+	protected void onStart() {
+		super.onStart();
 		FragmentTransaction ft = getFragmentManager().beginTransaction();
 	    Fragment prev = getFragmentManager().findFragmentByTag("myDialog");
 	    if (prev != null) {
@@ -373,9 +397,44 @@ public class ScoreProfile extends Activity{
 	            
 	    ProgressDialogFragment dialog = ProgressDialogFragment.newInstance(getString(R.string.pleasewait));
 	    dialog.setCancelable(false);
-	    dialog.show(ft, "myDialog");	 
+	    dialog.show(ft, "myDialog");	
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+	    if(INFO.isComprado()){
+			if(UTILS.buscarArchivos(UTILS.FileNameString(URL), path)){
+				B_Price.setText(R.string.open);
+				B_Price.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+			}else{
+				B_Price.setText(R.string.download);
+				B_Price.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+	    	}
+		}else{
+			if(price == 0.0){
+				B_Price.setText(R.string.free);
+				B_Price.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.money, 0);
+			}else{
+				B_Price.setText(price + "");
+	        	B_Price.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.money, 0);
+			}
+		}
 	}
 	
+	@Override
+	public void onBackPressed() {
+		super.onBackPressed();
+		if(ButtonClicked){
+			new MainActivityStore().finish();
+			Intent i = new Intent(ctx, MainActivityStore.class);
+    		startActivity(i);
+    		finish();
+		}else{
+			finish();
+		}
+	}
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.menu_score_profile, menu); 
@@ -397,13 +456,21 @@ public class ScoreProfile extends Activity{
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    switch (item.getItemId()) {
 	    	case android.R.id.home:
-	    		finish();
+				Log.d("Entró", "ButtonClicked: " + ButtonClicked);
+	    		if(ButtonClicked){
+	    			new MainActivityStore().finish();
+	    			Intent i = new Intent(ctx, MainActivityStore.class);
+		    		startActivity(i);
+		    		finish();
+	    		}else{
+	    			finish();
+	    		}
 	    		return true;
 	        default:
 	            return super.onOptionsItemSelected(item);
 	    }
 	}
-		
+			
 	/*
 	//  Este método se utiliza en el menú. ShareActionProvider
 	private Intent createShareIntent() {

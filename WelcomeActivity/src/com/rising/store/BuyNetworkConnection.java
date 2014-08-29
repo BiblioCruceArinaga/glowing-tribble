@@ -59,7 +59,7 @@ public class BuyNetworkConnection extends AsyncTask<String, Integer, String>{
     			try{
     			    for(int i=0;i<jArray.length();i++){ 
     			    	json_data = jArray.getJSONObject(i);
-        		    	res = json_data.getString("BuyStatus");
+        		    	res = json_data.getString("buystatus");
     			    }
     			}catch(JSONException e1){
     				Log.d("JSONException BuyNetwork", "Pues eso, JSONException: " + e1.getMessage() + ", Result: " + res.toString());
@@ -75,17 +75,20 @@ public class BuyNetworkConnection extends AsyncTask<String, Integer, String>{
     		}
 	    
         }catch(Exception e){
-        	this.cancel(true);
         	Log.e("Gran Try BuyNetwork", e.getMessage());
+        	this.cancel(true);
         }
 		return "";
 	}
 	
+	@Override
     protected String doInBackground(String... params) {
         return BuyStatus(params[0], params[1], params[2]);    	
     }
 
+	@Override
     protected void onPostExecute(String result) {
+    	Log.i("PostEx", result);
     	if(result != null){
     		if (SuccessedBuy != null) SuccessedBuy.onBuyCompleted();
     	}else{

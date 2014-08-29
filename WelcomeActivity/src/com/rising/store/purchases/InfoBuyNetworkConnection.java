@@ -66,7 +66,7 @@ public class InfoBuyNetworkConnection extends AsyncTask<String, Integer, String>
     			
     		}else{	
     			Log.e("JSON InfoNetwork", "ERROR");
-    			this.cancel(true);
+    			//this.cancel(true);
     		}
 	    
         }catch(Exception e){

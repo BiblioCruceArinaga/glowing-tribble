@@ -82,7 +82,7 @@ public class MainActivityStore extends FragmentActivity implements OnQueryTextLi
 		    	
 		ImageOptions();
    	}
-		
+	
 	@Override
 	public void onRestoreInstanceState(Bundle savedInstanceState) {
 	    if (savedInstanceState.containsKey("tab")) {
@@ -145,6 +145,22 @@ public class MainActivityStore extends FragmentActivity implements OnQueryTextLi
 		return true;
 	}
 	
+	public void UpdateFragment(int i){
+		switch(i){
+		case 0:
+			getFragmentManager().beginTransaction().replace(R.id.fragment_container, new PianoFragment()).commit();
+			break;
+		case 1:
+			getFragmentManager().beginTransaction().replace(R.id.fragment_container, new GuitarFragment()).commit();
+			break;
+		case 2:
+			getFragmentManager().beginTransaction().replace(R.id.fragment_container, new FreeFragment()).commit();
+			break;
+		default:
+			super.onOptionsItemSelected(item);
+		}
+	}
+	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    switch (item.getItemId()) {
@@ -158,22 +174,7 @@ public class MainActivityStore extends FragmentActivity implements OnQueryTextLi
 	    	    return true;
        	    
 	    	case R.id.update_store:
-	    		
-	    		switch(ABar.getSelectedNavigationIndex()){
-	    			case 0:
-	    				getFragmentManager().beginTransaction().replace(R.id.fragment_container, new PianoFragment()).commit();
-	    				break;
-	    			case 1:
-	    				getFragmentManager().beginTransaction().replace(R.id.fragment_container, new GuitarFragment()).commit();
-	    				break;
-	    			case 2:
-	    				getFragmentManager().beginTransaction().replace(R.id.fragment_container, new FreeFragment()).commit();
-	    				break;
-	    			default:
-	    				super.onOptionsItemSelected(item);
-	    		
-	    		}
-	    			    		
+	    		UpdateFragment(ABar.getSelectedNavigationIndex());	    			    		
 	    		return true;
 	    		
 	    	case R.id.my_purchases:
