@@ -5,42 +5,46 @@ import android.view.SurfaceHolder;
 
 public class ScreenThread extends Thread {
 	
-    private SurfaceHolder msurfaceHolder;
-    private Screen screenView;
-	private boolean run;
-	private Vista vista = Vista.HORIZONTAL;
+    private transient final SurfaceHolder msurfaceHolder;
+    private transient final Screen screenView;
+	private transient boolean isRunning;
+	private transient Vista vista = Vista.HORIZONTAL;
 
-	public ScreenThread(SurfaceHolder SH, Screen screenView) {
-		this.msurfaceHolder = SH;
-		this.screenView = screenView;
-		run = false;
-	}
-	
-	public void setRunning(boolean run) {
-		this.run = run;
-	}
-	
-	public void run() {
-		Canvas c = null;
+	public ScreenThread(final SurfaceHolder surfaceHolder, final Screen screenView) 
+	{
+		super();
 		
-		while(run)
+		this.msurfaceHolder = surfaceHolder;
+		this.screenView = screenView;
+	}
+	
+	public void setRunning(final boolean run) 
+	{
+		this.isRunning = run;
+	}
+	
+	public void run() 
+	{
+		Canvas canvas = null;
+		
+		while(isRunning)
 		{
 			changeView(screenView.getVista());
 			
 			try {
-				c = msurfaceHolder.lockCanvas(null);			
+				canvas = msurfaceHolder.lockCanvas(null);			
 				synchronized(msurfaceHolder) {
-					screenView.draw(c);
+					screenView.draw(canvas);
 				}
 			} finally {
-				if (c != null) {
-					msurfaceHolder.unlockCanvasAndPost(c);
+				if (canvas != null) {
+					msurfaceHolder.unlockCanvasAndPost(canvas);
 				}
 			}
 		}
 	}
 	
-	private void changeView(Vista vista)
+	private void changeView(final Vista vista)
 	{
 		if (this.vista != vista) 
 		{

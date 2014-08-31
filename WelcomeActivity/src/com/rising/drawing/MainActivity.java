@@ -72,7 +72,7 @@ public class MainActivity extends Activity{
 		getWindowManager().getDefaultDisplay().getMetrics(display);
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		screen = new Screen(this, score, display.widthPixels, display.heightPixels, display.densityDpi);
-		if (screen.isValidScreen()) {
+		if (screen.validScreen()) {
 			new ScreenThread(holder, screen);
 			config = Config.getInstance();
 		}else{
@@ -115,11 +115,11 @@ public class MainActivity extends Activity{
 	    		break;
 	    	
 	    	case R.id.navigate_top:
-	    		screen.Back();
+	    		screen.back();
 	    		break;
 	    		
 	    	case R.id.navigate_bottom:
-	    		screen.Forward();
+	    		screen.forward();
 	    		break;
 	    		
 	    	case R.id.navigate_to_bar:
@@ -127,7 +127,7 @@ public class MainActivity extends Activity{
 				break;
 	    		
 	    	case android.R.id.home:
-	    		screen.Metronome_Stop();
+	    		screen.metronomeStop();
 	    		finish();
 	    		break;
 	    		
@@ -140,7 +140,7 @@ public class MainActivity extends Activity{
 
 	@Override
 	public void onActionModeFinished (final ActionMode mode) {
-		screen.Metronome_Stop();
+		screen.metronomeStop();
 	}
 	
 	private void changeView(final MenuItem item)
@@ -226,8 +226,8 @@ public class MainActivity extends Activity{
 				if ( tempo > 0 && tempo < 301 ) {
 					MainActivity.this.startActionMode(new ActionBarMetronome(screen, tempo));
 
-					screen.Back();
-					screen.Metronome_Play(tempo);
+					screen.back();
+					screen.metronomePlay(tempo);
 					mDialog.dismiss();
 				}
 				else {

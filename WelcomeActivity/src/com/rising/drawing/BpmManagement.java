@@ -18,33 +18,31 @@ import android.widget.Toast;
 import android.widget.NumberPicker.OnScrollListener;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 
-public class BpmManagement {
-
-	private final transient Vista vista;
+public class BpmManagement 
+{
 	private final transient Partitura partitura;
 	private final transient ArrayList<OrdenDibujo> ordenesDibujo;
 	private final transient Config config;
 	private final transient Context context;
 	private transient Dialog mDialog;
 	
-	public BpmManagement(final Vista vista, final Partitura partitura, 
+	public BpmManagement(final Partitura partitura, 
 			final ArrayList<OrdenDibujo> ordenesDibujo, final Context context) 
 	{
-		this.vista = vista;
 		this.config = Config.getInstance();
 		this.context = context;
 		this.partitura = partitura;
 		this.ordenesDibujo = ordenesDibujo;
 	}
 	
-	public void tapManagement(final MotionEvent evt, final Scroll scroll) 
+	public void tapManagement(final MotionEvent evt, final AbstractScroll scroll, final Vista vista) 
 	{
 		int compas;
 		
 		if (vista == Vista.VERTICAL) {
-			compas = compasAPartirDeTap(evt.getX(), - scroll.getYOffset() + scroll.getYDown());
+			compas = compasAPartirDeTap(evt.getX(), - scroll.getCooOffset() + scroll.getCooDown());
 		} else {
-			compas = compasAPartirDeTap(- scroll.getXOffset() + scroll.getXDown(), evt.getY());
+			compas = compasAPartirDeTap(- scroll.getCooOffset() + scroll.getCooDown(), evt.getY());
 		}
 		
 		establecerVelocidadAlCompas(compas);

@@ -22,13 +22,13 @@ public class ActionBarMetronome implements ActionMode.Callback {
     public boolean onActionItemClicked(final ActionMode mode, final MenuItem item) {
     	switch(item.getItemId()){
     		case R.id.close_metronome:
-    			screen.Metronome_Stop();
+    			screen.metronomeStop();
     			mode.finish();
     			tempo = 120;
     			break;
     		
     		case R.id.metronome_menu_back:    
-    			screen.Back();
+    			screen.back();
     			break;
     			
     		case R.id.metronome_menu_pause:
@@ -93,14 +93,14 @@ public class ActionBarMetronome implements ActionMode.Callback {
 			item.setIcon(R.drawable.pause_button);
     		
     		if (stop) {
-    			screen.Metronome_Play(tempo);
+    			screen.metronomePlay(tempo);
     		}
     		else {
-    			screen.Metronome_Pause();
+    			screen.metronomePause();
     		}	
     	}else{
     		item.setIcon(R.drawable.play_button);
-    		screen.Metronome_Pause();
+    		screen.metronomePause();
     	}
 	}
 
@@ -108,7 +108,7 @@ public class ActionBarMetronome implements ActionMode.Callback {
 		stop = true;
 		play = false;
 		
-		screen.Metronome_Stop();
+		screen.metronomeStop();
 		
 		final Menu menu = mode.getMenu();
         menu.getItem(2).setIcon(R.drawable.play_button);

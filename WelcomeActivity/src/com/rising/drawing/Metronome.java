@@ -9,30 +9,28 @@ import com.rising.drawing.figurasGraficas.Partitura;
 import android.content.Context;
 import android.media.AudioManager;
 import android.media.SoundPool;
+import android.util.Log;
 
 public class Metronome {
-	private Object mPauseLock;
-    private boolean mPaused;
-    private Thread th;
-    private Vista vista;
-    private Partitura partitura;
-    private OrdenDibujo bip = null;
-    private OrdenDibujo barra = null;
-    private Config config;
-    private Scroll scroll;
+	private transient final Object mPauseLock;
+    private transient boolean mPaused;
+    private transient Thread thread;
+    private transient final Partitura partitura;
+    private transient OrdenDibujo bip;
+    private transient OrdenDibujo barra;
+    private transient final Config config;
+    private transient final AbstractScroll scroll;
     
-    SoundPool bipAgudo = null;
-    SoundPool bipGrave = null;
-    int bipAgudoInt = 0;
-    int bipGraveInt = 0;
+    private transient final SoundPool bipAgudo;
+    private transient final SoundPool bipGrave;
+    private transient final int bipAgudoInt;
+    private transient final int bipGraveInt;
 
-    public Metronome(Context context, Vista vista,
-    		Partitura partitura, Scroll scroll) 
+    public Metronome(final Context context, final Partitura partitura, final AbstractScroll scroll) 
     {
         mPauseLock = new Object();
         mPaused = false;
 
-        this.vista = vista;
         this.partitura = partitura;
         config = Config.getInstance();
         this.scroll = scroll;
@@ -44,33 +42,34 @@ public class Metronome {
 		bipGraveInt = bipGrave.load(context, R.raw.bap, 0);
     }
 
-    public void run(final int bpm) 
+    public void run(final int bpm, final Vista vista) 
     {
-    	th = new Thread( new Runnable() {
+    	thread = new Thread( new Runnable() {
     		public void run() 
     		{	
     			try {
-                	long speed = ( (240000/bpm) / 4 );
+                	final long speed = (240000 / bpm / 4);
 
                 	bipsDePreparacion(speed, partitura.getCompas(0).numPulsos());
-                	dibujarPulsosDeMetronomo(speed);
+                	dibujarPulsosDeMetronomo(speed, vista);
                 } 
                 catch (InterruptedException e) {
-    				e.printStackTrace();
+                	Log.i("InterruptedException", "Interrupted Exception Error");
     				Thread.currentThread().interrupt();
 	    		} catch (IndexOutOfBoundsException e) {
-    				e.printStackTrace();
+    				Log.i("IndexOutOfBoundsException", "IndexOutOfBounds Exception Error");
     			}
     		}
     	});
     	
-    	th.start();
+    	thread.start();
     }
     
     //  El metrónomo no puede empezar de sopetón, ya que desconcertaría al músico. 
     //  Esta función emite unos bips iniciales que orientan al músico sobre la 
 	//  velocidad a la que deberá empezar a tocar
-	private void bipsDePreparacion(long speed, int pulsos) throws InterruptedException 
+	private void bipsDePreparacion(final long speed, final int pulsos) 
+			throws InterruptedException 
 	{
 		for (int j=0; j<pulsos; j++) 
 		{
@@ -83,27 +82,28 @@ public class Metronome {
 		bip = null;
 	}
 	
-	private void establecerOrdenDeDibujo(int numero)
+	private void establecerOrdenDeDibujo(final int numero)
 	{
 		if (bip == null) {
 			bip = new OrdenDibujo(config.tamanoLetraBipPreparacion, 
-					true, numero + "", partitura.getWidth() / 2, partitura.getHeight() / 2);
+					true, Integer.toString(numero), partitura.getWidth() / 2, partitura.getHeight() / 2);
 			bip.setARGBRed();
 		}
 		else {
-			bip.setTexto(numero + "");
+			bip.setTexto(Integer.toString(numero));
 		}
 	}
 	
-	private void emitirSonido(int pulso) 
+	private void emitirSonido(final int pulso) 
 	{
-		if (pulso == 0)
+		if (pulso == 0) {
 			bipAgudo.play(bipAgudoInt, 1, 1, 1, 0, 1);
-		else 
+		} else { 
 			bipGrave.play(bipGraveInt, 1, 1, 1, 0, 1);
+		}
 	}
 	
-	private void dibujarPulsosDeMetronomo(long speed) throws InterruptedException
+	private void dibujarPulsosDeMetronomo(long speed, final Vista vista) throws InterruptedException
 	{
 		int currentX = 0;
     	int primerCompas = 0;
@@ -111,10 +111,11 @@ public class Metronome {
     	
     	for (int i=0; i<numCompases; i++) 
     	{
-    		Compas compas = partitura.getCompas(i);
+    		final Compas compas = partitura.getCompas(i);
     		
-    		if (compas.hasBpm())
-    			speed = ( (240000/compas.getBpm()) / 4 );
+    		if (compas.hasBpm()) {
+    			speed = (240000 / compas.getBpm() / 4);
+    		}
 
 			//  Gestión del scroll
 			if (currentX != compas.getXFin()) 
@@ -123,12 +124,13 @@ public class Metronome {
 				final int currentY = compas.getYFin();
 				final int ultimoCompas = i;
 				
-				if (scroll.outOfBoundaries(currentX, currentY, vista)) {
+				int coo = vista == Vista.VERTICAL ? currentY : currentX;
+				if (scroll.outOfBoundaries(coo)) {
 					final int distanciaDesplazamiento = 
 						scroll.distanciaDesplazamiento(partitura, 
-							primerCompas, ultimoCompas, vista);
+							primerCompas, ultimoCompas);
 					
-					scroll.hacerScroll(vista, distanciaDesplazamiento);
+					scroll.hacerScroll(distanciaDesplazamiento);
 					
 					primerCompas = ultimoCompas;
 				}
@@ -138,7 +140,8 @@ public class Metronome {
     	}
 	}
 	
-	private void dibujarBarras(Compas compas, long speed) throws InterruptedException
+	private void dibujarBarras(final Compas compas, final long speed) 
+			throws InterruptedException
 	{
 		final ArrayList<Nota> notasConPulsos = compas.notasConPulsos();
 		final int numNotas = notasConPulsos.size();
@@ -170,9 +173,9 @@ public class Metronome {
 		}
 	}
 	
-	private void dibujarBarra(Compas compas, Nota nota) 
+	private void dibujarBarra(final Compas compas, final Nota nota) 
 	{
-		int x = nota.haciaArriba() ? nota.getX() + config.anchoCabezaNota : nota.getX();
+		final int x = nota.haciaArriba() ? nota.getX() + config.anchoCabezaNota : nota.getX();
 		
 		barra = new OrdenDibujo(5, x, compas.getYIni(), x, compas.getYFin());
 		barra.setARGBRed();
@@ -196,7 +199,7 @@ public class Metronome {
     public void onDestroy() 
     {
     	mPaused = false;
-    	th.interrupt();
+    	thread.interrupt();
     }
 
     public boolean paused() 

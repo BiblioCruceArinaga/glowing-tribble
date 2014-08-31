@@ -23,51 +23,39 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.widget.Toast;
 
-public class Screen extends SurfaceView implements SurfaceHolder.Callback, Observer {
-
-	private boolean isValidScreen = false;
-	private ScreenThread thread;
-	private Context context = null;
-	private Config config = null;
-	private String path_folder = "/.RisingScores/scores/";
+public class Screen extends SurfaceView implements SurfaceHolder.Callback, Observer 
+{
+	private transient boolean isValidScreen;
+	private transient ScreenThread thread;
+	private transient Context context;
+	private transient Config config;
+	private transient String pathFolder = "/.RisingScores/scores/";
 	
 	//  Gestión de las posibles vistas y su scroll
-	private Partitura partitura = new Partitura();
-	private DrawingMethods metodosDibujo;
-	private ArrayList<OrdenDibujo> ordenesDibujo = new ArrayList<OrdenDibujo>();
-	private Vista vista = Vista.VERTICAL;
-	private Scroll scroll;
-	
-	//  Gestión de la lectura de micrófono
-	private SoundReader soundReader = null;
-	private int compasActual = 0;
-	private int golpeSonidoActual = 0;
-	private int xActual = 0;
-	private int yActual = 0;
-	private int desplazamiento = 0;
-	private int primerCompas = 0;
-	
-	//  Metrónomo y su gestión
+	private transient Partitura partitura = new Partitura();
+	private transient ArrayList<OrdenDibujo> ordenesDibujo = new ArrayList<OrdenDibujo>();
+	private transient Vista vista = Vista.VERTICAL;
+	private transient AbstractScroll scroll;
 	private Metronome metronomo = null;
 	private Dialog MDialog = null;
-    
-	//  ========================================
-	//  Constructor y métodos heredados
-	//  ========================================
-	public Screen(Context context, String path, int width, int height, int densityDPI){
+	
+	//  Gestión de la lectura de micrófono
+	private transient SoundReader soundReader;
+	private transient int compasActual;
+	private transient int golpeSonidoActual;
+	private transient int xActual;
+	private transient int yActual;
+	private transient int desplazamiento;
+	private transient int primerCompas;
+
+	public Screen(final Context context, final String path, 
+			final int width, final int height, final int densityDPI)
+	{
 		super(context);
 		getHolder().addCallback(this);
 		
 		try {
-			this.context = context;
-			
-			FileMethods fileMethods = new FileMethods(path_folder, path);
-			fileMethods.cargarDatosDeFichero(partitura);
-
-			config = Config.getInstance(densityDPI, width, height);
-			scroll = new Scroll();			
-							
-			isValidScreen = true;
+			prepareScreenInstance(context, path, width, height, densityDPI);
 						
 		} catch (FileNotFoundException e) {
 			Log.e("FileNotFoundException: ", e.getMessage() + "\n");
@@ -76,170 +64,27 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 		} catch (IOException e) {
 			Log.i("IOException: ", e.getMessage() + "\n");
 		} catch (CloneNotSupportedException e) {
-			e.printStackTrace();
+			Log.i("CloneNotSupportedException: ", e.getMessage() + "\n");
 		}
     }
 	
-	@Override
-	public void surfaceChanged(SurfaceHolder arg0, int arg1, int arg2, int arg3) {}
+	private void prepareScreenInstance(
+		Context context, String path, int width, int height, int densityDPI) 
+			throws StreamCorruptedException, IOException, CloneNotSupportedException
+	{
+		this.context = context;
+		
+		FileMethods fileMethods = new FileMethods(pathFolder, path);
+		fileMethods.cargarDatosDeFichero(partitura);
 
-	@Override
-	public void surfaceCreated(SurfaceHolder holder) {
-		thread = new ScreenThread(getHolder(), this);
-		thread.setRunning(true);
-		thread.start();	
+		config = Config.getInstance(densityDPI, width, height);
+		scroll = vista == Vista.VERTICAL ? new ScrollVertical() : new ScrollHorizontal();		
+						
+		isValidScreen = true;
 	}
 
-	@Override
-	public void surfaceDestroyed(SurfaceHolder holder) {
-		thread.setRunning(false);
-		thread = null;
-		
-		if (metronomo != null) {
-			metronomo.onDestroy();
-			metronomo = null;
-		}
-		
-		isValidScreen = false;
-		
-		partitura.destruir();
-		partitura = null;
-		
-		ordenesDibujo.clear();
-		ordenesDibujo = null;
-		
-		scroll.back(vista);
-		scroll = null;
-		config = null;
-		
-		stopMicrophone();
-	}
-
-	@Override
-	public boolean onTouchEvent(MotionEvent e){		
-		switch (e.getAction()){
-			case MotionEvent.ACTION_DOWN:
-				scroll.down(e);
-	            break;
-	            
-	        case MotionEvent.ACTION_MOVE:
-	        	scroll.move(e, vista);
-	            break;
-	            
-	        case MotionEvent.ACTION_UP:
-	        	if (scroll.up(e)) {
-	        		BpmManagement bpmManagement = new BpmManagement(vista,
-	        				partitura, ordenesDibujo, context); 
-	    			bpmManagement.tapManagement(e, scroll);
-	        	}
-	        	break;
-	        	
-	        default:
-	        	break;
-	    }
-
-	    return true;
-	}
-	
-	@Override
-	public boolean dispatchTouchEvent(MotionEvent ev) {
-		if (MDialog != null) {
-		    Rect dialogBounds = new Rect();
-		    MDialog.getWindow().getDecorView().getHitRect(dialogBounds);
-	
-		    if (!dialogBounds.contains((int) ev.getX(), (int) ev.getY())) {
-		        MDialog.dismiss();
-		        MDialog = null;
-		    }
-		}
-		
-	    return super.dispatchTouchEvent(ev);
-	}
-
-	public boolean isValidScreen() {
+	public boolean validScreen() {
 		return isValidScreen;
-	}
-	
-	//  ========================================
-	//  Métodos de dibujo
-	//  ========================================
-	public void draw(Canvas canvas) {
-		if (canvas != null) {
-		
-			inicializarParametrosScroll(canvas);
-		
-			canvas.drawARGB(255, 255, 255, 255);
-			canvas.save();
-            
-			if (vista == Vista.VERTICAL) canvas.translate(0, scroll.getYOffset());
-			else canvas.translate(scroll.getXOffset(), 0);
-            
-			drawToCanvas(canvas);
-            scroll.dibujarBarra(canvas, vista);
-            
-            canvas.restore();
-		}
-    }
-	
-	private void drawToCanvas(Canvas canvas) 
-	{
-		int numOrdenes = ordenesDibujo.size();
-		for (int i=0; i<numOrdenes; i++) {
-			OrdenDibujo ordenDibujo = ordenesDibujo.get(i);
-			if (ordenDibujo == null) continue;
-			
-			switch (ordenDibujo.getOrden()) {
-				case DRAW_BITMAP:
-					canvas.drawBitmap(ordenDibujo.getImagen(), ordenDibujo.getX1(), 
-							ordenDibujo.getY1(), ordenDibujo.getPaint());
-					break;
-				case DRAW_CIRCLE:
-					canvas.drawCircle(ordenDibujo.getX1(), ordenDibujo.getY1(), 
-							ordenDibujo.getRadius(), ordenDibujo.getPaint());
-					break;
-				case DRAW_LINE:
-					canvas.drawLine(ordenDibujo.getX1(), ordenDibujo.getY1(), 
-							ordenDibujo.getX2(), ordenDibujo.getY2(), ordenDibujo.getPaint());
-					break;
-				case DRAW_TEXT:
-					canvas.drawText(ordenDibujo.getTexto(), ordenDibujo.getX1(), 
-							ordenDibujo.getY1(), ordenDibujo.getPaint());
-					break;
-				case DRAW_ARC:
-					RectF rectf = ordenDibujo.getRectF();
-					Matrix matrix = getMatrix(rectf, ordenDibujo.getAngulo());
-					
-					Path path = new Path();
-					
-					if (ordenDibujo.clockwiseAngle())
-						path.addArc(rectf, 0, -180);
-					else
-						path.addArc(rectf, 0, 180);
-					
-					path.transform(matrix, path);
-					
-					canvas.drawPath(path, ordenDibujo.getPaint());
-					break;
-				default:
-					break;
-			}
-		}
-		
-		//  Dibuja el número rojo que marca los pulsos encima del compás
-		if (metronomo != null) {
-			OrdenDibujo bip = metronomo.getBip();
-			OrdenDibujo barra = metronomo.getBarra();
-			
-			if (bip != null)
-				canvas.drawText(bip.getTexto(), bip.getX1(), bip.getY1(), bip.getPaint());	
-			if (barra != null)
-				canvas.drawLine(barra.getX1(), barra.getY1(), barra.getX2(), barra.getY2(), barra.getPaint());
-		}
-	}
-
-	public void cambiarVista(Vista vista) 
-	{
-		this.vista = vista;
 	}
 	
 	public Vista getVista()
@@ -249,31 +94,124 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 	
 	public void crearOrdenesDibujo(Vista vista)
 	{
-		metodosDibujo = new DrawingMethods(partitura, getResources());
-		if (metodosDibujo.isValid())
+		scroll = vista == Vista.VERTICAL ? new ScrollVertical() : new ScrollHorizontal();
+		
+		DrawingMethods metodosDibujo = new DrawingMethods(partitura, getResources());
+		if (metodosDibujo.canDraw())
 			ordenesDibujo = metodosDibujo.crearOrdenesDeDibujo(vista);
 	}
+
+	public void draw(final Canvas canvas) 
+	{
+		if (canvas != null) 
+		{
+			inicializarParametrosScroll(canvas);
+		
+			canvas.drawARGB(255, 255, 255, 255);
+			canvas.save();
+            
+			translateCanvas(canvas);
+			drawToCanvas(canvas);
+            scroll.dibujarBarra(canvas);
+            
+            canvas.restore();
+		}
+    }
 	
-	private void inicializarParametrosScroll(Canvas canvas) {
+	//  Scroll parameters are constantly initialized.
+	//  Check it out later on
+	private void inicializarParametrosScroll(Canvas canvas) 
+	{
 		partitura.setWidth(canvas.getWidth());
 		partitura.setHeight(canvas.getHeight());
-		
-		scroll.inicializarVertical(canvas.getHeight(), partitura.getLastMarginY());
-		
+
 		if (vista == Vista.HORIZONTAL) {
 			int xFin = partitura.getCompas(partitura.getNumeroDeCompases() - 1).getXFin();
-			scroll.inicializarHorizontal(canvas.getWidth(), xFin);
+			scroll.inicializar(canvas.getWidth(), xFin);
+		}
+		else {
+			scroll.inicializar(canvas.getHeight(), partitura.getLastMarginY());
 		}
 	}
 	
-	//  La rotación de una matriz produce una traslación
-	//  involuntaria e indeseada que debemos contrarrestar
-	//  manualmente para que el resultado quede bien.
-	//  Además, aquí controlamos que la rotación se haga en el sentido adecuado
+	private void translateCanvas(Canvas canvas)
+	{
+		if (vista == Vista.VERTICAL) {
+			canvas.translate(0, scroll.getCooOffset());
+		} else { 
+			canvas.translate(scroll.getCooOffset(), 0);
+		}
+	}
+	
+	private void drawToCanvas(final Canvas canvas) 
+	{
+		OrdenDibujo ordenDibujo;
+		
+		final int numOrdenes = ordenesDibujo.size();
+		for (int i=0; i<numOrdenes; i++) 
+		{
+			ordenDibujo = ordenesDibujo.get(i);
+			if (ordenDibujo == null) { 
+				continue;
+			}
+			
+			switch (ordenDibujo.getOrden()) {
+				case DRAW_BITMAP:
+					canvas.drawBitmap(ordenDibujo.getImagen(), ordenDibujo.getX1(), 
+							ordenDibujo.getY1(), ordenDibujo.getPaint());
+					break;
+					
+				case DRAW_CIRCLE:
+					canvas.drawCircle(ordenDibujo.getX1(), ordenDibujo.getY1(), 
+							ordenDibujo.getRadius(), ordenDibujo.getPaint());
+					break;
+					
+				case DRAW_LINE:
+					canvas.drawLine(ordenDibujo.getX1(), ordenDibujo.getY1(), 
+							ordenDibujo.getX2(), ordenDibujo.getY2(), ordenDibujo.getPaint());
+					break;
+					
+				case DRAW_TEXT:
+					canvas.drawText(ordenDibujo.getTexto(), ordenDibujo.getX1(), 
+							ordenDibujo.getY1(), ordenDibujo.getPaint());
+					break;
+					
+				case DRAW_ARC:
+					canvas.drawPath(preparePath(ordenDibujo), ordenDibujo.getPaint());
+					break;
+					
+				default:
+					break;
+			}
+		}
+		
+		drawMetronome(canvas);
+	}
+	
+	private Path preparePath(OrdenDibujo ordenDibujo)
+	{
+		RectF rectf = ordenDibujo.getRectF();
+		
+		Path path = new Path();
+		if (ordenDibujo.clockwiseAngle())
+			path.addArc(rectf, 0, -180);
+		else
+			path.addArc(rectf, 0, 180);
+		
+		Matrix matrix = getMatrix(rectf, ordenDibujo.getAngulo());
+		path.transform(matrix, path);
+		
+		return path;
+	}
+	
+	/*  
+	 * La rotación de una matriz produce una traslación
+	 * involuntaria e indeseada que debemos contrarrestar
+	 * manualmente para que el resultado quede bien.  
+	 */
 	public Matrix getMatrix(RectF rectf, float angulo) {
 		Matrix matrix = new Matrix();
 		
-		//  Rotación
 		if (angulo > 0) {
 			matrix.postRotate(angulo, rectf.left, rectf.bottom);
 		}
@@ -290,60 +228,71 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 		return matrix;
 	}
 	
-	/*
-	 * 
-	 * Gestión del metrónomo desde Main Activity
-	 * 
-	 */
-	public void Metronome_Pause(){
+	private void drawMetronome(Canvas canvas)
+	{
 		if (metronomo != null) {
-			if (metronomo.paused()) 
-				metronomo.onResume();
-			else 
-				metronomo.onPause();
-		}
-	}
-	
-	public void Metronome_Play(int bpm){
-		if (metronomo == null) 
-		{
-			scroll.setOrientation(getResources().getConfiguration().orientation);
+			OrdenDibujo bip = metronomo.getBip();
+			OrdenDibujo barra = metronomo.getBarra();
 			
-    		metronomo = new Metronome(context, vista, partitura, scroll);
-    		metronomo.run(bpm);
+			if (bip != null)
+				canvas.drawText(bip.getTexto(), bip.getX1(), bip.getY1(), bip.getPaint());	
+			if (barra != null)
+				canvas.drawLine(barra.getX1(), barra.getY1(), barra.getX2(), barra.getY2(), barra.getPaint());
 		}
 	}
 
-	public void Metronome_Stop(){
+	public void cambiarVista(final Vista vista) 
+	{
+		this.vista = vista;
+	}
+
+	public void metronomePause()
+	{
+		if (metronomo != null) {
+			if (metronomo.paused()) {
+				metronomo.onResume();
+			} else { 
+				metronomo.onPause();
+			}
+		}
+	}
+	
+	public void metronomePlay(final int bpm)
+	{
+		if (metronomo == null) {			
+    		metronomo = new Metronome(context, partitura, scroll);
+    		metronomo.run(bpm, vista);
+		}
+	}
+
+	public void metronomeStop()
+	{
 		if (metronomo != null) {
 			metronomo.onDestroy();
 			metronomo = null;
 		}
 	}
 
-	
-	/*
-	 * 
-	 * GESTIÓN DE LA LECTURA DEL MICRÓFONO
-	 * 
-	 */
-	public void readMicrophone(int sensibilidad, int velocidad) throws Exception {
-		soundReader = new SoundReader(velocidad);
-		soundReader.addObserver(this);
-		soundReader.setSensitivity(sensibilidad);
-
-		xActual = partitura.getCompas(0).getXIni();
+	public void readMicrophone(final int sensibilidad, final int velocidad) throws Exception 
+	{
+		prepareSoundReader(sensibilidad, velocidad);
 		
-		ArrayList<Integer> golpesSonido = new ArrayList<Integer>();
-		int numCompases = partitura.getCompases().size();
-		for (int i=0; i<numCompases; i++) 
-			golpesSonido.add(partitura.getCompas(i).golpesDeSonido());
+		xActual = partitura.getCompas(0).getXIni();
 		
 		Toast.makeText(context, R.string.startPlaying, Toast.LENGTH_SHORT).show();
 	}
 	
-	public void stopMicrophone() {
-		if (soundReader != null) {
+	private void prepareSoundReader(int sensibilidad, int velocidad) throws Exception
+	{
+		soundReader = new SoundReader(velocidad);
+		soundReader.addObserver(this);
+		soundReader.setSensitivity(sensibilidad);
+	}
+	
+	public void stopMicrophone() 
+	{
+		if (soundReader != null) 
+		{
 			soundReader.deleteObservers();
 			soundReader.onDestroy();
 			soundReader = null;
@@ -351,105 +300,203 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 	}
 
 	@Override
-	public void update(Observable observable, Object data) 
+	public void update(final Observable observable, final Object data) 
 	{
 		if ((Integer) data > 0) 
 		{
 			Compas compas = partitura.getCompas(compasActual);
-			int golpesSonido = compas.golpesDeSonido();
+			final int golpesSonido = compas.golpesDeSonido();
 			
-			if (golpeSonidoActual >= golpesSonido) {
+			if (golpeSonidoActual++ >= golpesSonido) 
+			{
 				compas = partitura.getCompas(++compasActual);
 				golpeSonidoActual = 0;
 				
-				//  Gestión del scroll
-				if (compas.getXIni() != xActual) {
-					xActual = compas.getXFin();
-					yActual = compas.getYFin();
-					
-					if (scroll.outOfBoundaries(xActual, yActual, vista)) {
-						
-						desplazamiento = 
-            				scroll.distanciaDesplazamiento(partitura, 
-            					primerCompas, compasActual, vista);
-						
-						scroll.hacerScroll(vista, desplazamiento);
-						
-						primerCompas = compasActual;
-					}
-				}
+				gestionScroll(compas);
 			}
-			else
-				golpeSonidoActual++;
 		}
 	}
 	
-	
-	/*
-	 * 
-	 *  Métodos de navegación
-	 *
-	 */
-	
-	public void Back(){
-		scroll.back(vista);
+	private void gestionScroll(Compas compas)
+	{
+		if (compas.getXIni() != xActual) 
+		{
+			xActual = compas.getXFin();
+			yActual = compas.getYFin();
+			
+			int coo = vista == Vista.VERTICAL ? yActual : xActual;
+			if (scroll.outOfBoundaries(coo)) 
+			{
+				desplazamiento = 
+    				scroll.distanciaDesplazamiento(partitura, 
+    					primerCompas, compasActual);
+				
+				scroll.hacerScroll(desplazamiento);
+				
+				primerCompas = compasActual;
+			}
+		}
 	}
 
-	public void Forward() {
-		scroll.forward(vista);
+	public void back()
+	{
+		scroll.back();
+	}
+
+	public void forward()
+	{
+		scroll.forward();
 	}
 	
 	public boolean goToBar(int bar) 
 	{
-		//  El número está fuera de los límites
-		if (bar > partitura.getNumeroDeCompases()) 
-			return false; 
-		if (bar < 0)
-			return false;
-		
 		Compas primerCompas = partitura.getCompas(0);
 		int numeroPrimerCompas = primerCompas.getNumeroCompas();
 		
-		//  A partir de aquí hay que comprobar los valores límite.
-		
-		//  Si el número del primer compás es 0, el rango válido
-		//  es [0, n - 1], donde n = número de compases
-		if (numeroPrimerCompas == 0)
-			if (bar == partitura.getNumeroDeCompases())
-				return false;
-		
-		//  Si el número del primer compás es 1, el rango válido
-		//  es [1, n], donde n = número de compases
-		if (numeroPrimerCompas == 1) {
-			if (bar == 0)
-				return false;
-			else
-				bar--;
+		if (!checkBoundaries(bar, numeroPrimerCompas)) {
+			return false;
 		}
 		
-		//  Si hemos llegado hasta aquí, el número introducido
-		//  es válido y podemos movernos al compás indicado
+		//  numeroPrimerCompas puede valer 1 ó 0. Si vale 1, 
+		//  hay que restar este valor a bar para que acceda 
+		//  al compás correcto dentro del array de compases
+		bar -= numeroPrimerCompas;
+		
 		if (vista == Vista.HORIZONTAL) {
-			float xOffset = - scroll.getXOffset();
-			float xIni = partitura.getCompas(bar).getXIni();
-			float distancia = Math.abs(xOffset - xIni);
-			
-			if (xIni < xOffset)
-				scroll.hacerScroll(vista, (int) -distancia);
-			else
-				scroll.hacerScroll(vista, (int) distancia);
+			moveHorizontal(bar);
 		}
 		else {
-			float yOffset = - scroll.getYOffset();
-			float yIni = partitura.getCompas(bar).getYIni();
-			float distancia = Math.abs(yOffset - yIni);
-			
-			if (yIni < yOffset)
-				scroll.hacerScroll(vista, (int) -distancia - config.distanciaPentagramas);
-			else
-				scroll.hacerScroll(vista, (int) distancia - config.distanciaPentagramas);
+			moveVertical(bar);
 		}
 		
 		return true;
+	}
+	
+	private boolean checkBoundaries(int bar, int numeroPrimerCompas)
+	{
+		boolean validBoundaries = true;
+		
+		if (bar > partitura.getNumeroDeCompases() || bar < 0) {
+			validBoundaries = false;
+		}
+
+		//  Rango [0, numeroCompases - 1]
+		if ( (numeroPrimerCompas == 0) && (bar == partitura.getNumeroDeCompases()) ) {
+			validBoundaries = false;
+		}
+		
+		//  Rango [1, numeroCompases]
+		if ( (numeroPrimerCompas == 1) && (bar == 0) ){
+			validBoundaries = false;
+		}
+		
+		return validBoundaries;
+	}
+	
+	private void moveHorizontal(int bar)
+	{
+		float xOffset = - scroll.getCooOffset();
+		float xIni = partitura.getCompas(bar).getXIni();
+		float distancia = Math.abs(xOffset - xIni);
+		
+		if (xIni < xOffset)
+			scroll.hacerScroll((int) -distancia);
+		else
+			scroll.hacerScroll((int) distancia);
+	}
+	
+	private void moveVertical(int bar)
+	{
+		float yOffset = - scroll.getCooOffset();
+		float yIni = partitura.getCompas(bar).getYIni();
+		float distancia = Math.abs(yOffset - yIni);
+		
+		if (yIni < yOffset)
+			scroll.hacerScroll((int) -distancia - config.distanciaPentagramas);
+		else
+			scroll.hacerScroll((int) distancia - config.distanciaPentagramas);
+	}
+	
+	@Override
+	public void surfaceChanged(SurfaceHolder arg0, int arg1, int arg2, int arg3) {}
+
+	@Override
+	public void surfaceCreated(SurfaceHolder holder) 
+	{
+		thread = new ScreenThread(getHolder(), this);
+		thread.setRunning(true);
+		thread.start();	
+	}
+
+	@Override
+	public void surfaceDestroyed(SurfaceHolder holder) 
+	{
+		thread.setRunning(false);
+		thread = null;
+		
+		if (metronomo != null) {
+			metronomo.onDestroy();
+			metronomo = null;
+		}
+		
+		isValidScreen = false;
+		
+		partitura.destruir();
+		partitura = null;
+		
+		ordenesDibujo.clear();
+		ordenesDibujo = null;
+		
+		scroll.back();
+		scroll = null;
+		config = null;
+		
+		stopMicrophone();
+	}
+
+	@Override
+	public boolean onTouchEvent(MotionEvent e)
+	{
+		final float coo = vista == Vista.VERTICAL ? e.getY() : e.getX();
+		
+		switch (e.getAction()){
+			case MotionEvent.ACTION_DOWN:
+				scroll.down(coo);
+	            break;
+	            
+	        case MotionEvent.ACTION_MOVE:
+	        	scroll.move(coo);
+	            break;
+	            
+	        case MotionEvent.ACTION_UP:
+	        	if (scroll.up(coo)) 
+	        	{
+	        		BpmManagement bpmManagement = 
+	        				new BpmManagement(partitura, ordenesDibujo, context); 
+	    			bpmManagement.tapManagement(e, scroll, vista);
+	        	}
+	        	break;
+	        	
+	        default:
+	        	break;
+	    }
+
+	    return true;
+	}
+	
+	@Override
+	public boolean dispatchTouchEvent(MotionEvent ev) 
+	{
+		if (MDialog != null) {
+		    Rect dialogBounds = new Rect();
+		    MDialog.getWindow().getDecorView().getHitRect(dialogBounds);
+	
+		    if (!dialogBounds.contains((int) ev.getX(), (int) ev.getY())) {
+		        MDialog.dismiss();
+		        MDialog = null;
+		    }
+		}
+		
+	    return super.dispatchTouchEvent(ev);
 	}
 }

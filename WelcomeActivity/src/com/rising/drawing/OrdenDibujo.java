@@ -5,24 +5,28 @@ import android.graphics.Paint;
 import android.graphics.Paint.Align;
 import android.graphics.RectF;
 
-public class OrdenDibujo {
-	
-	private Paint paint = new Paint();
+public class OrdenDibujo 
+{	
+	private transient final Paint paint = new Paint();
 	private String texto = "";
-	private Bitmap imagen = null;
-	private DrawOrder orden = null;
-	private RectF rectf = null;
-	private float angulo = 0;
-	private boolean clockwiseAngle = false;
+	private transient Bitmap imagen;
+	private transient DrawOrder orden;
+	private transient RectF rectf;
+	private transient float angulo;
+	private transient boolean isClockwiseAngle;
 	
-	private int x1 = -1;
-	private int y1 = -1;
-	private int x2 = -1;
-	private int y2 = -1;
-	private int radius = 0;
+	private transient int x1 = -1;
+	private transient int y1 = -1;
+	private transient int x2 = -1;
+	private transient int y2 = -1;
+	private transient int radius;
 	
-	//  Líneas
-	public OrdenDibujo(int strokeWidth, int x1, int y1, int x2, int y2) {
+	/**
+	 * Dibujar líneas
+	 */
+	public OrdenDibujo(final int strokeWidth, final int x1, 
+			final int y1, final int x2, final int y2) 
+	{
 		orden = DrawOrder.DRAW_LINE;
 		
 		paint.setStrokeWidth(strokeWidth);
@@ -32,8 +36,11 @@ public class OrdenDibujo {
 		this.y2 = y2;
 	}
 	
-	//  Imágenes
-	public OrdenDibujo(Bitmap bitmap, int x, int y) {
+	/**
+	 * Dibujar imágenes
+	 */
+	public OrdenDibujo(final Bitmap bitmap, final int x, final int y) 
+	{
 		orden = DrawOrder.DRAW_BITMAP;
 		
 		imagen = bitmap;
@@ -41,8 +48,11 @@ public class OrdenDibujo {
 		y1 = y;
 	}
 	
-	//  Círculos
-	public OrdenDibujo(int radius, int x, int y) {
+	/**
+	 * Dibujar círculos
+	 */
+	public OrdenDibujo(final int radius, final int x, final int y) 
+	{
 		orden = DrawOrder.DRAW_CIRCLE;
 		
 		this.radius = radius;
@@ -50,30 +60,41 @@ public class OrdenDibujo {
 		y1 = y;
 	}
 	
-	//  Textos
-	public OrdenDibujo(int textSize, boolean textAlign, String text, int x, int y) {
+	/**
+	 * Dibujar texto
+	 */
+	public OrdenDibujo(final int textSize, final boolean textAlign, 
+			final String text, final int x, final int y) 
+	{
 		orden = DrawOrder.DRAW_TEXT;
 		
 		paint.setTextSize(textSize);
-		if (textAlign) paint.setTextAlign(Align.CENTER);
+		if (textAlign) { 
+			paint.setTextAlign(Align.CENTER);
+		}
+		
 		texto = text;
 		x1 = x;
 		y1 = y;
 	}
 	
-	//  Arcos
-	public OrdenDibujo(int strokeWidth, RectF rectf, float angulo, boolean clockwise) {
+	/**
+	 * Dibujar arcos
+	 */
+	public OrdenDibujo(final int strokeWidth, final RectF rectf, 
+			final float angulo, final boolean clockwise) 
+	{
 		orden = DrawOrder.DRAW_ARC;
 		
 		paint.setStyle(Paint.Style.STROKE);
 		paint.setStrokeWidth(strokeWidth);
 		this.rectf = rectf;
 		this.angulo = angulo;
-		clockwiseAngle = clockwise;
+		isClockwiseAngle = clockwise;
 	}
 	
 	public boolean clockwiseAngle() {
-		return clockwiseAngle;
+		return isClockwiseAngle;
 	}
 	
 	public float getAngulo() {
@@ -124,7 +145,7 @@ public class OrdenDibujo {
 		paint.setARGB(255, 255, 0, 0);
 	}
 	
-	public void setTexto(String texto) {
+	public void setTexto(final String texto) {
 		this.texto = texto;
 	}
 }

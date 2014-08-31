@@ -21,35 +21,35 @@ import android.graphics.RectF;
 
 public class DrawingMethods {
 	
-	private boolean isValid = false;
+	private transient boolean drawable;
 
-	private ArrayList<OrdenDibujo> ordenesDibujo = new ArrayList<OrdenDibujo>();
-	private Partitura partitura;
-	private Config config;
-	private Calculador calculador;
-	private BitmapManager bitmapManager;
+	private transient final ArrayList<OrdenDibujo> ordenesDibujo = new ArrayList<OrdenDibujo>();
+	private transient Partitura partitura;
+	private transient final Config config;
+	private transient Calculador calculador;
+	private transient BitmapManager bitmapManager;
 
 	//  Variables para la gestión y el tratamiento dinámico de los múltiples compases
-	private int compasActual = 0;
-	private int notaActual = 0;
+	private transient int compasActual;
+	private transient int notaActual;
 	
 	//  Variables para la gestión de las múltiples notas
-	private ArrayList<IndiceNota> beams = new ArrayList<IndiceNota>();
-	private ArrayList<IndiceNota> ligaduras = new ArrayList<IndiceNota>();
-	private boolean buscandoLigaduraExpresion = false;
-	private int ligaduraExpresionYArriba = Integer.MAX_VALUE;
-	private int ligaduraExpresionYAbajo = 0;
-	private int octavarium = 0;
-	private int xIniOctavarium = 0;
-	private int yIniOctavarium = 0;
-	private int xFinOctavarium = 0;
-	private int yFinOctavarium = 0;
-	private int xIniSlide = 0;
-	private int xIniTresillo = 0;
-	private int yAnterior = 0;
-	private int yIniSlide = 0;
+	private transient final ArrayList<IndiceNota> beams = new ArrayList<IndiceNota>();
+	private transient final ArrayList<IndiceNota> ligaduras = new ArrayList<IndiceNota>();
+	private transient boolean buscandoLigaduraExpresion;
+	private transient int ligaduraExpresionYArriba = Integer.MAX_VALUE;
+	private transient int ligaduraExpresionYAbajo;
+	private transient int octavarium;
+	private transient int xIniOctavarium;
+	private transient int yIniOctavarium;
+	private transient int xFinOctavarium;
+	private transient int yFinOctavarium;
+	private transient int xIniSlide;
+	private transient int xIniTresillo;
+	private transient int yAnterior;
+	private transient int yIniSlide;
 	
-	public DrawingMethods(Partitura partitura, Resources resources) 
+	public DrawingMethods(final Partitura partitura, final Resources resources) 
 	{
 		this.config = Config.getInstance();
 		
@@ -57,16 +57,16 @@ public class DrawingMethods {
 		{
 			this.partitura = partitura;
 			bitmapManager = BitmapManager.getInstance(resources);
-			isValid = true;
+			drawable = true;
 		}
 	}
 	
-	public boolean isValid() 
+	public boolean canDraw() 
 	{
-		return isValid;
+		return drawable;
 	}
 
-	public ArrayList<OrdenDibujo> crearOrdenesDeDibujo(Vista vista) 
+	public ArrayList<OrdenDibujo> crearOrdenesDeDibujo(final Vista vista) 
 	{
 		clearMeasures();
 		
@@ -81,9 +81,10 @@ public class DrawingMethods {
 	//  previous values, so they don't interfiere with the new calculations
 	private void clearMeasures()
 	{
-		int numMeasures = partitura.getNumeroDeCompases();
-		for (int i=0; i<numMeasures; i++)
+		final int numMeasures = partitura.getNumeroDeCompases();
+		for (int i=0; i<numMeasures; i++) {
 			partitura.getCompas(i).clear();
+		}
 	}
 	
 	private void dibujarPartitura()
@@ -104,8 +105,8 @@ public class DrawingMethods {
 	
 	private void dibujarCompases() 
 	{
-		ArrayList<Compas> compases = partitura.getCompases();
-		int numCompases = compases.size();
+		final ArrayList<Compas> compases = partitura.getCompases();
+		final int numCompases = compases.size();
 		
 		for (int i=0; i<numCompases; i++) {
 			compasActual = i;
@@ -113,7 +114,7 @@ public class DrawingMethods {
 		}
 	}
 	
-	private void dibujarCompas(Compas compas)
+	private void dibujarCompas(final Compas compas)
 	{
 		dibujarNumeroDeCompas(compas);
 		dibujarLineasDePentagramaDeCompas(compas);
@@ -130,21 +131,22 @@ public class DrawingMethods {
 		dibujarBarlines(compas);
 	}
 	
-	private void dibujarNumeroDeCompas(Compas compas) 
+	private void dibujarNumeroDeCompas(final Compas compas) 
 	{
-		if (compas.getXIni() == config.xInicialPentagramas)
+		if (compas.getXIni() == config.xInicialPentagramas) {
 			ordenesDibujo.add( new OrdenDibujo(
 				config.tamanoLetraNumeroCompas, false, Integer.toString(compas.getNumeroCompas()), 
 					compas.getXIni() - config.xNumeroCompas, compas.getYIni() - config.yNumeroCompas));
+		}
 	}
 	
-	private void dibujarLineasDePentagramaDeCompas(Compas compas) 
+	private void dibujarLineasDePentagramaDeCompas(final Compas compas) 
 	{
 		dibujarLineasLaterales(compas);
 		dibujarLineasHorizontales(compas);
 	}
 	
-	private void dibujarLineasLaterales(Compas compas)
+	private void dibujarLineasLaterales(final Compas compas)
 	{
 		ordenesDibujo.add( new OrdenDibujo(
 				1, compas.getXIni(), compas.getYIni(), compas.getXIni(), compas.getYFin()));
@@ -152,7 +154,7 @@ public class DrawingMethods {
 				1, compas.getXFin(), compas.getYIni(), compas.getXFin(), compas.getYFin()));
 	}
 	
-	private void dibujarLineasHorizontales(Compas compas)
+	private void dibujarLineasHorizontales(final Compas compas)
 	{
 		int yLinea = compas.getYIni();
 		int pentagramasPendientes = partitura.getStaves();
@@ -170,22 +172,23 @@ public class DrawingMethods {
 		} while (pentagramasPendientes > 0);
 	}
 	
-	private void dibujarClaves(Compas compas) 
+	private void dibujarClaves(final Compas compas) 
 	{
 		for (int i=0; i<compas.numClaves(); i++) 
 		{
-			Clave clave = compas.getClave(i);
+			final Clave clave = compas.getClave(i);
 			ordenesDibujo.add( new OrdenDibujo(clave.getImagenClave(), clave.getX(), clave.getY()));
 		}
 	}
 	
-	private void dibujarQuintas(Compas compas) 
+	private void dibujarQuintas(final Compas compas) 
 	{
-		if (compas.hayQuintas()) 
+		if (compas.hayQuintas()) {
 			dibujarArmaduraReBemol(compas.getQuintas());
+		}
 	}
 
-	private void dibujarArmaduraReBemol(Quintas quintas)
+	private void dibujarArmaduraReBemol(final Quintas quintas)
 	{
 		ordenesDibujo.add( new OrdenDibujo(bitmapManager.getFlat(), quintas.getX(), 
 				quintas.getMargenY() + config.distanciaLineasPentagrama));
@@ -199,7 +202,7 @@ public class DrawingMethods {
 		ordenesDibujo.add( new OrdenDibujo(bitmapManager.getFlat(), quintas.getX() + 80, 
 				quintas.getMargenY() + config.distanciaLineasPentagrama * 2));
 
-		int offset = config.distanciaLineasPentagrama * 4 +
+		final int offset = config.distanciaLineasPentagrama * 4 +
 				config.distanciaPentagramas + config.distanciaLineasPentagrama;
 		ordenesDibujo.add( new OrdenDibujo(bitmapManager.getFlat(), quintas.getX(), 
 				quintas.getMargenY() + offset + config.distanciaLineasPentagrama));
@@ -214,77 +217,77 @@ public class DrawingMethods {
 				quintas.getMargenY() + offset + config.distanciaLineasPentagrama * 2));
 	}
 	
-	private void dibujarIntensidades(Compas compas) 
+	private void dibujarIntensidades(final Compas compas) 
 	{
 		for (int i=0; i<compas.numIntensidades(); i++) 
 		{
-			Intensidad intensidad = compas.getIntensidad(i);
+			final Intensidad intensidad = compas.getIntensidad(i);
 			ordenesDibujo.add( new OrdenDibujo(intensidad.getImagen(), 
 					intensidad.getX(), intensidad.getY()));
 		}
 	}
 	
-	private void dibujarPedales(Compas compas) 
+	private void dibujarPedales(final Compas compas) 
 	{
 		for (int i=0; i<compas.numPedalesInicio(); i++) 
 		{
-			Pedal pedalInicio = compas.getPedalInicio(i);
+			final Pedal pedalInicio = compas.getPedalInicio(i);
 			ordenesDibujo.add( new OrdenDibujo(pedalInicio.getImagen(), 
 					pedalInicio.getX(), pedalInicio.getY()));
 		}
 
 		for (int i=0; i<compas.numPedalesFin(); i++) 
 		{
-			Pedal pedalFin = compas.getPedalFin(i);
+			final Pedal pedalFin = compas.getPedalFin(i);
 			ordenesDibujo.add( new OrdenDibujo(pedalFin.getImagen(), 
 					pedalFin.getX(), pedalFin.getY()));
 		}
 	}
 	
-	private void dibujarTempo(Compas compas) 
+	private void dibujarTempo(final Compas compas) 
 	{
-		if (compas.hayTempo())
+		if (compas.hayTempo() && compas.getTempo().dibujar()) 
 		{
-			if (compas.getTempo().dibujar()) 
-			{
-				Tempo tempo = compas.getTempo();
-							
-				ordenesDibujo.add( new OrdenDibujo(config.tamanoLetraTempo, 
-						false, tempo.getNumeradorString(), tempo.getX(), tempo.getYNumerador()));
-				ordenesDibujo.add( new OrdenDibujo(config.tamanoLetraTempo, 
-						false, tempo.getDenominadorString(), tempo.getX(), tempo.getYDenominador()));
-		
-				if (partitura.getStaves() == 2) 
-				{
-					int margenY = config.distanciaLineasPentagrama * 4 + config.distanciaPentagramas;
-					
-					ordenesDibujo.add( new OrdenDibujo(config.tamanoLetraTempo, 
-							false, tempo.getNumeradorString(), tempo.getX(), tempo.getYNumerador() + margenY));
-					ordenesDibujo.add( new OrdenDibujo(config.tamanoLetraTempo, 
-							false, tempo.getDenominadorString(), tempo.getX(), tempo.getYDenominador() + margenY));
-				}
-			}
+			crearOrdenesDeDibujoDeTempo(compas.getTempo());	
 		}
 	}
 	
-	private void dibujarTextos(Compas compas) 
+	private void crearOrdenesDeDibujoDeTempo(Tempo tempo)
 	{
-		int numTextos = compas.numTextos();
+		ordenesDibujo.add( new OrdenDibujo(config.tamanoLetraTempo, 
+				false, tempo.getNumeradorString(), tempo.getX(), tempo.getYNumerador()));
+		ordenesDibujo.add( new OrdenDibujo(config.tamanoLetraTempo, 
+				false, tempo.getDenominadorString(), tempo.getX(), tempo.getYDenominador()));
+
+		if (partitura.getStaves() == 2) 
+		{
+			int margenY = config.distanciaLineasPentagrama * 4 + config.distanciaPentagramas;
+			
+			ordenesDibujo.add( new OrdenDibujo(config.tamanoLetraTempo, 
+					false, tempo.getNumeradorString(), tempo.getX(), tempo.getYNumerador() + margenY));
+			ordenesDibujo.add( new OrdenDibujo(config.tamanoLetraTempo, 
+					false, tempo.getDenominadorString(), tempo.getX(), tempo.getYDenominador() + margenY));
+		}
+	}
+	
+	private void dibujarTextos(final Compas compas) 
+	{
+		final int numTextos = compas.numTextos();
 		
 		for (int i=0; i<numTextos; i++) 
 		{
-			Texto texto = compas.getTexto(i);
+			final Texto texto = compas.getTexto(i);
 			ordenesDibujo.add( new OrdenDibujo(config.tamanoLetraWords, 
 					false, texto.getTexto(), texto.getX(), texto.getY()));
 		}
 	}
 	
-	private void dibujarCrescendosYDiminuendos(Compas compas) 
+	private void dibujarCrescendosYDiminuendos(final Compas compas) 
 	{
 		int num = compas.numCrescendos();
 		for (int i=0; i<num; i++) 
 		{
-			Wedge wedge = compas.getCrescendo(i);
+			final Wedge wedge = compas.getCrescendo(i);
 			
 			ordenesDibujo.add( new OrdenDibujo(2, wedge.getXIni(), 
 					wedge.getYIni() + config.alturaCrescendos / 2,
@@ -297,7 +300,7 @@ public class DrawingMethods {
 		num = compas.numDiminuendos();
 		for (int i=0; i<num; i++) 
 		{
-			Wedge wedge = compas.getDiminuendo(i);
+			final Wedge wedge = compas.getDiminuendo(i);
 			
 			ordenesDibujo.add( new OrdenDibujo(2, wedge.getXIni(), 
 					wedge.getYIni(), wedge.getXFin(), wedge.getYIni() + config.alturaCrescendos / 2));
@@ -307,10 +310,10 @@ public class DrawingMethods {
 		}
 	}
 	
-	private void dibujarNotas(Compas compas) 
+	private void dibujarNotas(final Compas compas) 
 	{
-		ArrayList<Nota> notas = compas.getNotas();
-		int numNotas = notas.size();
+		final ArrayList<Nota> notas = compas.getNotas();
+		final int numNotas = notas.size();
 		
 		for (int i=0; i<numNotas; i++) 
 		{
@@ -319,13 +322,13 @@ public class DrawingMethods {
 		}
 	}
 	
-	private void dibujarNota(Nota nota, int yIni)
+	private void dibujarNota(final Nota nota, final int yIni)
 	{
 		actualizarLimitesDeLigaduraDeExpresion(nota.getY());
 		actualizarYAnterior(nota);
 		
 		dibujarCabezaDeNota(nota);
-		int yBeams = dibujarCuerpoDeNota(nota);
+		final int yBeams = dibujarCuerpoDeNota(nota);
 
 		dibujarFigurasGraficasDeNota(nota, yBeams);
 		dibujarLineasFueraDelPentagrama(nota, yIni);
@@ -333,48 +336,54 @@ public class DrawingMethods {
 		gestionarOctavarium(nota, yIni - config.distanciaLineasPentagrama * 6);
 	}
 	
-	private void actualizarLimitesDeLigaduraDeExpresion(int y)
+	private void actualizarLimitesDeLigaduraDeExpresion(final int y)
 	{
 		if (buscandoLigaduraExpresion) {
-			if (ligaduraExpresionYArriba > y)
+			if (ligaduraExpresionYArriba > y) {
 				ligaduraExpresionYArriba = y;
-			if (ligaduraExpresionYAbajo < y)
+			}
+			if (ligaduraExpresionYAbajo < y) {
 				ligaduraExpresionYAbajo = y;
+			}
 		}
 	}
 	
-	private void actualizarYAnterior(Nota nota)
+	private void actualizarYAnterior(final Nota nota)
 	{
-		if (!nota.acorde()) yAnterior = nota.getY();
+		if (!nota.acorde()) {
+			yAnterior = nota.getY();
+		}
 	}
 	
-	private void dibujarCabezaDeNota(Nota nota) 
+	private void dibujarCabezaDeNota(final Nota nota) 
 	{
-		int desplazamiento = obtenerDesplazamientoDeNota(nota);
+		final int desplazamiento = obtenerDesplazamientoDeNota(nota);
 		ordenesDibujo.add( new OrdenDibujo(
 				calculador.obtenerImagenDeCabezaDeNota(nota), 
 				nota.getX() + desplazamiento, nota.getY()));
 	}
 	
-	private int obtenerDesplazamientoDeNota(Nota nota)
+	private int obtenerDesplazamientoDeNota(final Nota nota)
 	{
 		int desplazamiento = 0;
-		if (nota.desplazadaALaIzquierda()) desplazamiento -= config.anchoCabezaNota;
-		if (nota.desplazadaALaDerecha()) desplazamiento += config.anchoCabezaNota;
+		if (nota.desplazadaALaIzquierda()) {
+			desplazamiento -= config.anchoCabezaNota;
+		}
+		if (nota.desplazadaALaDerecha()) {
+			desplazamiento += config.anchoCabezaNota;
+		}
 		
 		return desplazamiento;
 	}
 	
-	private int dibujarCuerpoDeNota(Nota nota)
+	private int dibujarCuerpoDeNota(final Nota nota)
 	{
 		int yBeams = 0;
 		
-		if (nota.tieneBeams()) 
+		if (nota.tieneBeams()) {
 			yBeams = gestionarBeams(nota);
-		else
-		{
-			if (nota.tienePlica())
-			{
+		} else {
+			if (nota.tienePlica()) {
 				dibujarPlicaDeNota(nota, 0);
 				dibujarCorcheteDeNota(nota);
 			}
@@ -383,11 +392,11 @@ public class DrawingMethods {
 		return yBeams;
 	}
 	
-	private int gestionarBeams(Nota nota)
+	private int gestionarBeams(final Nota nota)
 	{
 		int yBeams = 0;
 		
-		int beamId = guardarBeamDeNota(nota);
+		final int beamId = guardarBeamDeNota(nota);
 		if (nota.beamFinal())
 		{
 			yBeams = colocarBeamsALaMismaAltura(beamId);
@@ -397,17 +406,17 @@ public class DrawingMethods {
 		return yBeams;
 	}
 	
-	private int guardarBeamDeNota(Nota nota)
+	private int guardarBeamDeNota(final Nota nota)
 	{
-		IndiceNota beam = new IndiceNota(compasActual, notaActual, (byte) 0, nota.getBeamId());
+		final IndiceNota beam = new IndiceNota(compasActual, notaActual, (byte) 0, nota.getBeamId());
 		beams.add(beam);
 		
 		return beam.getBeamId();
 	}
 
-	private int colocarBeamsALaMismaAltura(int beamId) 
+	private int colocarBeamsALaMismaAltura(final int beamId) 
 	{
-		int numBeams = beams.size();
+		final int numBeams = beams.size();
 		int yBeams = -1;
 		int pentagrama = -1;
 		
@@ -417,9 +426,9 @@ public class DrawingMethods {
 		for (int i=0; i<numBeams; i++) {
 			if (beamId == beams.get(i).getBeamId()) {
 				
-				int indCompas = beams.get(i).getCompas();
-				int indNota = beams.get(i).getNota();
-				Nota nota = partitura.getCompas(indCompas).getNota(indNota);
+				final int indCompas = beams.get(i).getCompas();
+				final int indNota = beams.get(i).getNota();
+				final Nota nota = partitura.getCompas(indCompas).getNota(indNota);
 				if (yBeams == -1) {
 					yBeams = nota.haciaArriba() ? Integer.MAX_VALUE : 0;
 					pentagrama = nota.getPentagrama();
@@ -435,25 +444,26 @@ public class DrawingMethods {
 				//  Previene que puedan haber notas normales y de gracia
 				//  mezcladas en un mismo beam, en cuyo caso la altura
 				//  la impondría la nota normal por ocupar más espacio
-				if (!notaNormal)
-					if (!nota.notaDeGracia()) 
-						notaNormal = true;
+				if ( !notaNormal && !nota.notaDeGracia() ) {
+					notaNormal = true;
+				}
 				
 				if (nota.haciaArriba()) {
-					if (yBeams > nota.getY())
+					if (yBeams > nota.getY()) {
 						yBeams = nota.getY();
+					}
 				}
 				else {
-					if (yBeams < nota.getY())
+					if (yBeams < nota.getY()) {
 						yBeams = nota.getY();
+					}
 				}
 				
 				if (i == numBeams - 1) {
-					int longitudPlica = notaNormal ? 
+					final int longitudPlica = notaNormal ? 
 							config.longitudPlica : config.longitudPlicaNotaGracia;
 					
-					if (nota.haciaArriba()) yBeams -= longitudPlica;
-					else yBeams += longitudPlica;
+					yBeams = nota.haciaArriba() ? yBeams - longitudPlica : yBeams + longitudPlica;
 				}
 			}
 		}
@@ -461,10 +471,9 @@ public class DrawingMethods {
 		return yBeams;
 	}
 	
-	//  Esta implementación está ignorando las plicas dobles
-	private void dibujarBeams(int yBeams, int beamId) 
+	private void dibujarBeams(final int yBeams, final int beamId) 
 	{
-		int numBeams = beams.size();
+		final int numBeams = beams.size();
 		
 		int indCompasAnt = 0;
 		int indNotaAnt = 0;
@@ -479,17 +488,19 @@ public class DrawingMethods {
 				break;
 			}
 		}
-		int primerBeam = i;
+		final int primerBeam = i;
 
 		while (beams.get(i).getBeamId() == beamId) {
 			
 			indCompasAnt = beams.get(i).getCompas();
 			indNotaAnt = beams.get(i).getNota();
-			Nota notaAnt = partitura.getCompas(indCompasAnt).getNota(indNotaAnt);
+			final Nota notaAnt = partitura.getCompas(indCompasAnt).getNota(indNotaAnt);
 			
 			distanciaBeams = partitura.getCompas(indCompasAnt).getNota(indNotaAnt).notaDeGracia() ? 
 					config.distanciaEntreBeamsNotaGracia : config.distanciaEntreBeams;
-			if (!notaAnt.haciaArriba()) distanciaBeams *= -1;
+			if (!notaAnt.haciaArriba()) {
+				distanciaBeams *= -1;
+			}
 			
 			anchoBeams = partitura.getCompas(indCompasAnt).getNota(indNotaAnt).notaDeGracia() ?
 					config.anchoBeamsNotaGracia : config.anchoBeams;
@@ -498,7 +509,7 @@ public class DrawingMethods {
 				
 				int xLastBeam = 0;
 				
-				int offset = notaAnt.haciaArriba() ? config.anchoCabezaNota : 0;
+				final int offset = notaAnt.haciaArriba() ? config.anchoCabezaNota : 0;
 				
 				//  Gestión de hooks en la última nota
 				switch (notaAnt.getBeam()) {
@@ -524,22 +535,22 @@ public class DrawingMethods {
 				}
 			}
 			else {
-				int indCompasSig = beams.get(i + 1).getCompas();
-				int indNotaSig = beams.get(i + 1).getNota();
+				final int indCompasSig = beams.get(i + 1).getCompas();
+				final int indNotaSig = beams.get(i + 1).getNota();
 				
 				int xAntBeams = notaAnt.getX();
-				Nota notaSig = partitura.getCompas(indCompasSig).getNota(indNotaSig);
+				final Nota notaSig = partitura.getCompas(indCompasSig).getNota(indNotaSig);
 				int xSigBeams = notaSig.getX();
 				
 				if (notaAnt.haciaArriba()) {
-					int anchoCabezaNota = 
+					final int anchoCabezaNota = 
 						partitura.getCompas(indCompasAnt).getNota(indNotaAnt).notaDeGracia() ? 
 							config.anchoCabezaNotaGracia : config.anchoCabezaNota;
 					xAntBeams += anchoCabezaNota;
 				}
 				
 				if (notaSig.haciaArriba()) {
-					int anchoCabezaNota = 
+					final int anchoCabezaNota = 
 							partitura.getCompas(indCompasSig).getNota(indNotaSig).notaDeGracia() ? 
 							config.anchoCabezaNotaGracia : config.anchoCabezaNota;
 					xSigBeams += anchoCabezaNota;
@@ -585,24 +596,27 @@ public class DrawingMethods {
 			}
 			
 			dibujarPlicaDeNota(partitura.getCompas(indCompasAnt).getNota(indNotaAnt), yBeams);
-			if (++i == numBeams) break;
+			if (++i == numBeams) {
+				break;
+			}
 		}
 		
-		for (int j = primerBeam; j<i; j++)
+		for (int j = primerBeam; j<i; j++) {
 			beams.remove(primerBeam);
+		}
 	}
 	
-	private void dibujarPlicaDeNota(Nota nota, int yBeams) 
+	private void dibujarPlicaDeNota(final Nota nota, final int yBeams) 
 	{
-		int mitadCabezaNota = nota.notaDeGracia() ? 
+		final int mitadCabezaNota = nota.notaDeGracia() ? 
 				config.mitadCabezaVerticalNotaGracia : config.mitadCabezaVertical;
-		int anchoCabezaNota = nota.notaDeGracia() ? 
+		final int anchoCabezaNota = nota.notaDeGracia() ? 
 				config.anchoCabezaNotaGracia : config.anchoCabezaNota;
-		int longitudPlica = nota.notaDeGracia() ? 
+		final int longitudPlica = nota.notaDeGracia() ? 
 				config.longitudPlicaNotaGracia : config.longitudPlica;
 		
 		int x1 = 0;
-		int y1 = nota.getY() + mitadCabezaNota;
+		final int y1 = nota.getY() + mitadCabezaNota;
 		int x2 = 0;
 		int y2 = 0;
 				
@@ -620,23 +634,26 @@ public class DrawingMethods {
 				nota.getY() + mitadCabezaNota + longitudPlica;
 		}
 		
-		if (yBeams != 0) y2 = yBeams;
+		if (yBeams != 0) { 
+			y2 = yBeams;
+		}
+		
 		ordenesDibujo.add( new OrdenDibujo(2, x1, y1, x2, y2));
 	}
 	
-	private void dibujarCorcheteDeNota(Nota nota) 
+	private void dibujarCorcheteDeNota(final Nota nota) 
 	{
 		//  Si la nota forma parte de un acorde, su corchete ya fue dibujado, 
 		//  por lo que no hay que dibujarlo de nuevo
 		if (!nota.acorde() && !nota.silencio()) 
 		{
-			int anchoCabezaNota = nota.notaDeGracia() ? 
+			final int anchoCabezaNota = nota.notaDeGracia() ? 
 					config.anchoCabezaNotaGracia : config.anchoCabezaNota;
-			int longitudPlica = nota.notaDeGracia() ? 
+			final int longitudPlica = nota.notaDeGracia() ? 
 					config.longitudPlicaNotaGracia : config.longitudPlica;
-			int anchoCorchete = nota.notaDeGracia() ? 
+			final int anchoCorchete = nota.notaDeGracia() ? 
 					config.largoImagenCorcheteNotaGracia : config.largoImagenCorchete;
-			int distanciaCorchete = nota.haciaArriba() ?
+			final int distanciaCorchete = nota.haciaArriba() ?
 					config.distanciaCorchetes : - config.distanciaCorchetes;
 
 			int x;
@@ -668,27 +685,28 @@ public class DrawingMethods {
 					break;
 			}
 			
-			if (nota.tieneSlash()) 
+			if (nota.tieneSlash()) {
 				dibujarSlash(x, y);
+			}
 		}
 	}
 	
-	private void dibujarCorcheteDeNotaCrearOrden(Nota nota, int x, int y, int distanciaCorchete) 
+	private void dibujarCorcheteDeNotaCrearOrden(final Nota nota, final int x, final int y, final int distanciaCorchete) 
 	{
 		ordenesDibujo.add( new OrdenDibujo(
 				calculador.obtenerImagenDeCorcheteDeNota(nota), x, y + distanciaCorchete));
 	}
 	
-	private void dibujarSlash(int x, int y) 
+	private void dibujarSlash(final int x, final int y) 
 	{
 		ordenesDibujo.add( new OrdenDibujo(2, x + config.xInicioSlash, 
 				y + config.yInicioSlash, x - config.xFinSlash, y + config.yFinSlash));
 	}
 	
-	private void dibujarFigurasGraficasDeNota(Nota nota, int yBeams) 
+	private void dibujarFigurasGraficasDeNota(final Nota nota, final int yBeams) 
 	{
-		ArrayList<Byte> figurasGraficas = nota.getFigurasGraficas();
-		int numFiguras = figurasGraficas.size();
+		final ArrayList<Byte> figurasGraficas = nota.getFigurasGraficas();
+		final int numFiguras = figurasGraficas.size();
 		int xAlteraciones = 0;
 		int numAlteraciones = 0;
 		
@@ -708,7 +726,7 @@ public class DrawingMethods {
 		}
 	}
 	
-	private void dibujarFiguraGrafica(Nota nota, byte figura, int yBeams, int xSillo) 
+	private void dibujarFiguraGrafica(final Nota nota, final byte figura, final int yBeams, final int xSillo) 
 	{
 		int x = 0;
 
@@ -718,10 +736,12 @@ public class DrawingMethods {
 				break;
 
 			case 4:
-				int margenTresillo = nota.haciaArriba() ? 
+				final int margenTresillo = nota.haciaArriba() ? 
 						- config.yTresilloArriba : config.yTresilloAbajo;
 				int x_tresillo = (nota.getX() + xIniTresillo) / 2;
-				if (nota.haciaArriba()) x_tresillo += config.xTresillo;
+				if (nota.haciaArriba()) {
+					x_tresillo += config.xTresillo;
+				}
 				
 				ordenesDibujo.add( new OrdenDibujo(config.tamanoLetraTresillo, 
 						false, Integer.toString(xSillo), x_tresillo, yBeams + margenTresillo));
@@ -737,12 +757,13 @@ public class DrawingMethods {
 				break;
 				
 			case 8:
-				if (nota.haciaArriba()) 
+				if (nota.haciaArriba()) {
 					ordenesDibujo.add( new OrdenDibujo(config.radioStaccatos, 
 							nota.getX() + config.xStaccato, nota.getY() + config.yStaccatoArriba));
-				else 
+				} else { 
 					ordenesDibujo.add( new OrdenDibujo(config.radioStaccatos, 
 							nota.getX() + config.xStaccato, nota.getY() - config.yStaccatoAbajo));
+				}
 				break;
 
 			case 9:
@@ -756,7 +777,7 @@ public class DrawingMethods {
 				break;
 				
 			case 11:
-				int indLigaduraUnion = encontrarIndiceLigadura(nota.getLigaduraUnion());
+				final int indLigaduraUnion = encontrarIndiceLigadura(nota.getLigaduraUnion());
 				dibujarLigadura(indLigaduraUnion, nota, true);
 				break;
 			
@@ -815,10 +836,7 @@ public class DrawingMethods {
 						false, "T", nota.getX(), nota.getY() + config.yTapping));
 				
 			case 30:
-				if (nota.haciaArriba()) 
-					x = nota.getX() - config.offsetAccent;
-				else
-					x = nota.getX();
+				x = nota.haciaArriba() ? nota.getX() - config.offsetAccent : nota.getX();
 				
 				ordenesDibujo.add( new OrdenDibujo(
 						bitmapManager.getAccent(), x, nota.getY() - config.yAccentUp));
@@ -836,7 +854,7 @@ public class DrawingMethods {
 				break;
 				
 			case 33:
-				int indLigaduraExpresion = encontrarIndiceLigadura(nota.getLigaduraExpresion());
+				final int indLigaduraExpresion = encontrarIndiceLigadura(nota.getLigaduraExpresion());
 				dibujarLigadura(indLigaduraExpresion, nota, false);
 				
 				ligaduraExpresionYArriba = Integer.MAX_VALUE;
@@ -881,7 +899,7 @@ public class DrawingMethods {
 		}
 	}
 	
-	private void dibujarSlide(Nota nota, int xIniSlide, int yIniSlide) 
+	private void dibujarSlide(final Nota nota, final int xIniSlide, final int yIniSlide) 
 	{
 		if (xIniSlide < nota.getX()) {
 			ordenesDibujo.add( new OrdenDibujo(
@@ -903,54 +921,56 @@ public class DrawingMethods {
 		}
 	}
 	
-	private void dibujarLigadura(int indLigadura, Nota notaFinal, boolean union) 
+	private void dibujarLigadura(final int indLigadura, final Nota notaFinal, final boolean union) 
 	{
-		int compasNotaInicio = ligaduras.get(indLigadura).getCompas();
-		int notaInicio = ligaduras.get(indLigadura).getNota();
-		Nota notaInicial = partitura.getCompas(compasNotaInicio).getNota(notaInicio);
+		final int compasNotaInicio = ligaduras.get(indLigadura).getCompas();
+		final int notaInicio = ligaduras.get(indLigadura).getNota();
+		final Nota notaInicial = partitura.getCompas(compasNotaInicio).getNota(notaInicio);
 
 		if (union) {
-			boolean clockwise = notaInicial.ligaduraUnionEncima();
+			final boolean clockwise = notaInicial.ligaduraUnionEncima();
 			dibujarLigaduraUnion(notaInicial, notaFinal, clockwise);
 		}
 		else {
-			boolean clockwise = notaInicial.ligaduraExpresionEncima();
+			final boolean clockwise = notaInicial.ligaduraExpresionEncima();
 			dibujarLigaduraExpresion(notaInicial, notaFinal, clockwise);
 		}
 		
 		ligaduras.remove(indLigadura);
 	}
 	
-	private void dibujarLigaduraExpresion(Nota notaInicial, Nota notaFinal, boolean clockwise) 
+	private void dibujarLigaduraExpresion(final Nota notaInicial, final Nota notaFinal, final boolean clockwise) 
 	{
-		if (notaInicial.getX() < notaFinal.getX())
+		if (notaInicial.getX() < notaFinal.getX()) {
 			dibujarLigaduraExpresionNormal(notaInicial, notaFinal, clockwise);
-		else
+		} else {
 			dibujarLigaduraExpresionPartida(notaInicial, notaFinal, clockwise);
+		}
 	}
 	
-	private void dibujarLigaduraExpresionNormal(Nota notaInicial, Nota notaFinal, boolean clockwise) 
+	private void dibujarLigaduraExpresionNormal(final Nota notaInicial, final Nota notaFinal, final boolean clockwise) 
 	{
-		int anchoCabezaNota = notaInicial.notaDeGracia() ? 
+		final int anchoCabezaNota = notaInicial.notaDeGracia() ? 
 				config.anchoCabezaNotaGracia : config.anchoCabezaNota;
 		RectF rectf = null;
-		int y = Math.min(notaInicial.getY(), notaFinal.getY());
+		final int y = Math.min(notaInicial.getY(), notaFinal.getY());
 		
-		if (notaInicial.ligaduraExpresionEncima())
+		if (notaInicial.ligaduraExpresionEncima()) {
 			rectf = new RectF(notaInicial.getX(), y - config.yLigadurasExpresion, 
 				notaFinal.getX() + anchoCabezaNota, y + config.alturaArcoLigadurasExpresion);
-		else 
+		} else { 
 			rectf = new RectF(notaInicial.getX(), y + config.yLigadurasExpresion / 2, 
 				notaFinal.getX() + anchoCabezaNota, 
 				y + config.yLigadurasExpresion / 2 + config.alturaArcoLigadurasExpresion);
+		}
 		
 		ordenesDibujo.add( new OrdenDibujo(2, rectf, 
 				notaFinal.getAnguloRotacionLigaduraExpresion(), clockwise));
 	}
 	
-	private void dibujarLigaduraExpresionPartida(Nota notaInicial, Nota notaFinal, boolean clockwise) 
+	private void dibujarLigaduraExpresionPartida(final Nota notaInicial, final Nota notaFinal, final boolean clockwise) 
 	{
-		int anchoCabezaNota = notaInicial.notaDeGracia() ? 
+		final int anchoCabezaNota = notaInicial.notaDeGracia() ? 
 				config.anchoCabezaNotaGracia : config.anchoCabezaNota;
 		
 		RectF rectf = new RectF(notaInicial.getX(), notaInicial.getY() - config.yLigadurasExpresion, 
@@ -962,42 +982,44 @@ public class DrawingMethods {
 		ordenesDibujo.add( new OrdenDibujo(2, rectf, 0, clockwise));
 	}
 	
-	private void dibujarLigaduraUnion(Nota notaInicial, Nota notaFinal, boolean clockwise) 
+	private void dibujarLigaduraUnion(final Nota notaInicial, final Nota notaFinal, final boolean clockwise) 
 	{
-		if (notaInicial.getX() < notaFinal.getX())
+		if (notaInicial.getX() < notaFinal.getX()) {
 			dibujarLigaduraUnionNormal(notaInicial, notaFinal, clockwise);
-		else
+		} else {
 			dibujarLigaduraUnionPartida(notaInicial, notaFinal, clockwise);
+		}
 	}
 	
-	private void dibujarLigaduraUnionNormal(Nota notaInicial, Nota notaFinal, boolean clockwise) 
+	private void dibujarLigaduraUnionNormal(final Nota notaInicial, final Nota notaFinal, final boolean clockwise) 
 	{
-		int anchoCabezaNota = notaInicial.notaDeGracia() ? 
+		final int anchoCabezaNota = notaInicial.notaDeGracia() ? 
 				config.anchoCabezaNotaGracia : config.anchoCabezaNota;
 		RectF rectf = null;
 		
-		if (notaInicial.ligaduraUnionEncima())
+		if (notaInicial.ligaduraUnionEncima()) {
 			rectf = new RectF(notaInicial.getX() + anchoCabezaNota +
 				config.xLigadurasUnion, notaFinal.getY() - config.yLigadurasUnion, 
 					notaFinal.getX() - config.xLigadurasUnion, 
 						notaFinal.getY() + config.alturaArcoLigadurasUnion);
-		else
+		} else {
 			rectf = new RectF(notaInicial.getX() + anchoCabezaNota +
 				config.xLigadurasUnion, notaFinal.getY(), 
 					notaFinal.getX() - config.xLigadurasUnion, 
 						notaFinal.getY() + config.alturaArcoLigadurasUnion);
+		}
 		
 		ordenesDibujo.add( new OrdenDibujo(2, rectf, 0, clockwise));
 	}
 	
-	private void dibujarLigaduraUnionPartida(Nota notaInicial, Nota notaFinal, boolean clockwise) 
+	private void dibujarLigaduraUnionPartida(final Nota notaInicial, final Nota notaFinal, final boolean clockwise) 
 	{
 		RectF rectf = new RectF(notaInicial.getX() + config.anchoCabezaNota +
 				config.xLigadurasUnion, notaInicial.getY() - config.yLigadurasUnion, 
 				config.xFinalPentagramas, notaInicial.getY() + config.alturaArcoLigadurasUnion);
 		ordenesDibujo.add( new OrdenDibujo(2, rectf, 0, clockwise));
 
-		int yFinal = notaInicial.getY() +
+		final int yFinal = notaInicial.getY() +
 				(config.distanciaLineasPentagrama * 4 + config.distanciaPentagramas) * 
 				(partitura.getStaves());
 		rectf = new RectF(config.xInicialPentagramas, yFinal - config.yLigadurasUnion, 
@@ -1005,7 +1027,7 @@ public class DrawingMethods {
 		ordenesDibujo.add( new OrdenDibujo(2, rectf, 0, clockwise));
 	}
 	
-	private int gestionarLigaduras(Nota nota, ArrayList<Byte> figurasGraficas, int ind, int yBeams) 
+	private int gestionarLigaduras(final Nota nota, final ArrayList<Byte> figurasGraficas, int ind, final int yBeams) 
 	{
 		if (figurasGraficas.get(ind + 1) == 0) {
 			if (nota.esLigaduraUnion(ind)) {
@@ -1024,20 +1046,22 @@ public class DrawingMethods {
 		return ind + 2;
 	}
 	
-	private void dibujarAlteraciones(Nota nota, Bitmap alteracion, int offset) 
+	private void dibujarAlteraciones(final Nota nota, final Bitmap alteracion, final int offset) 
 	{
-		int xAccidental = nota.notaDeGracia() ? 
+		final int xAccidental = nota.notaDeGracia() ? 
 				config.xAccidentalNotaGracia : config.xAccidental;
 		int x = nota.getX() - xAccidental - offset;
-		if (nota.desplazadaALaIzquierda()) x -= config.anchoCabezaNota - offset;
+		if (nota.desplazadaALaIzquierda()) {
+			x -= config.anchoCabezaNota - offset;
+		}
 		
 		ordenesDibujo.add( new OrdenDibujo(alteracion, x, nota.getY() - config.yAccidental));
 	}
 	
 	//  Busca, en el array de ligaduras de unión, el índice
 	//  del elemento que contiene el inicio de esta ligadura
-	private int encontrarIndiceLigadura(byte ligadura) {
-		int numLigaduras = ligaduras.size();
+	private int encontrarIndiceLigadura(final byte ligadura) {
+		final int numLigaduras = ligaduras.size();
 		int indice = -1;
 		
 		for (int i=0; i<numLigaduras; i++) {
@@ -1050,34 +1074,33 @@ public class DrawingMethods {
 		return indice;
 	}
 	
-	private void gestionarAlteracion(Nota nota, ArrayList<Byte> figurasGraficas, 
-			int ind, int yBeams, int xAlteraciones) 
+	private void gestionarAlteracion(final Nota nota, final ArrayList<Byte> figurasGraficas, 
+			final int ind, final int yBeams, final int xAlteraciones) 
 	{
-		if (nota.desplazadaALaIzquierda())
-			nota.setX(nota.getX() - config.anchoCabezaNota);
-		else if (nota.desplazadaALaDerecha())
-			nota.setX(nota.getX() + config.anchoCabezaNota);
+		final int desplazamiento = obtenerDesplazamientoDeNota(nota);
 		
+		nota.setX(nota.getX() + desplazamiento);
 		dibujarFiguraGrafica(nota, figurasGraficas.get(ind), yBeams, xAlteraciones);
 	}
 
-	private void dibujarLineasFueraDelPentagrama(Nota nota, int yIniCompas) 
+	private void dibujarLineasFueraDelPentagrama(final Nota nota, final int yIniCompas) 
 	{
-		int yMarginCustom = yIniCompas + 
+		final int yMarginCustom = yIniCompas + 
 				(config.distanciaLineasPentagrama * 4 + 
 						config.distanciaPentagramas) * (nota.getPentagrama() - 1);
 		
-		if (nota.getY() < yMarginCustom)
+		if (nota.getY() < yMarginCustom) {
 			dibujarLineasEncimaDelPentagrama(nota, yMarginCustom);
-		else
+		} else {
 			dibujarLineasDebajoDelPentagrama(nota, yMarginCustom);
+		}
 	}
 	
-	private void dibujarLineasEncimaDelPentagrama(Nota nota, int yMarginCustom)
+	private void dibujarLineasEncimaDelPentagrama(final Nota nota, final int yMarginCustom)
 	{
 		int currentYPosition = yMarginCustom;
-		int yNota = nota.notaDeGracia() ? nota.getY() - config.margenNotaGracia : nota.getY();
-		int threshold = currentYPosition - 
+		final int yNota = nota.notaDeGracia() ? nota.getY() - config.margenNotaGracia : nota.getY();
+		final int threshold = currentYPosition - 
 				config.distanciaLineasPentagrama - config.distanciaLineasPentagramaMitad;
 		
 		if (yNota <= threshold) {
@@ -1092,11 +1115,11 @@ public class DrawingMethods {
 		}
 	}
 	
-	private void dibujarLineasDebajoDelPentagrama(Nota nota, int yMarginCustom)
+	private void dibujarLineasDebajoDelPentagrama(final Nota nota, final int yMarginCustom)
 	{
 		int currentYPosition = yMarginCustom + config.distanciaLineasPentagrama * 4;
-		int yNota = nota.notaDeGracia() ? nota.getY() - config.margenNotaGracia : nota.getY();
-		int threshold = currentYPosition + config.distanciaLineasPentagramaMitad;
+		final int yNota = nota.notaDeGracia() ? nota.getY() - config.margenNotaGracia : nota.getY();
+		final int threshold = currentYPosition + config.distanciaLineasPentagramaMitad;
 		
 		if (yNota >= threshold) {
 			while (currentYPosition < yNota) {
@@ -1110,18 +1133,20 @@ public class DrawingMethods {
 		}
 	}
 
-	private void gestionarOctavarium(Nota nota, int marginY) 
+	private void gestionarOctavarium(final Nota nota, final int marginY) 
 	{
-		if (nota.octavada()) 
+		if (nota.octavada()) {
 			prepararValoresOctavarium(nota.getX(), marginY);
-		else 
+		}
+		else {
 			if (octavarium > 0) {
 				dibujarOctavarium();
 				inicializarValoresOctavarium();
 			}
+		}
 	}
 	
-	private void prepararValoresOctavarium(int x, int marginY)
+	private void prepararValoresOctavarium(final int x, final int marginY)
 	{
 		if (octavarium == 0) {
 			xIniOctavarium = x;
@@ -1169,10 +1194,10 @@ public class DrawingMethods {
 
 	//  Esta implementación por ahora sólo considera el barline de fin de partitura
 	//  Si en el futuro se añadieran más barlines, habría que usar un switch en el bucle
-	private void dibujarBarlines(Compas compas) 
+	private void dibujarBarlines(final Compas compas) 
 	{
-		ArrayList<ElementoGrafico> barlines = compas.getBarlines();
-		int numBarlines = barlines.size();
+		final ArrayList<ElementoGrafico> barlines = compas.getBarlines();
+		final int numBarlines = barlines.size();
 
 		for (int i=0; i<numBarlines; i++) {
 			ordenesDibujo.add( new OrdenDibujo(
