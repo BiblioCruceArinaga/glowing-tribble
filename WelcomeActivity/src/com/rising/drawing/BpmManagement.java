@@ -2,8 +2,8 @@ package com.rising.drawing;
 
 import java.util.ArrayList;
 
-import com.rising.drawing.figurasGraficas.Compas;
-import com.rising.drawing.figurasGraficas.Partitura;
+import com.rising.drawing.figurasgraficas.Compas;
+import com.rising.drawing.figurasgraficas.Partitura;
 
 import android.app.Dialog;
 import android.content.Context;

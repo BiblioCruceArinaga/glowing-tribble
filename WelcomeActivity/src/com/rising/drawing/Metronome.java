@@ -2,9 +2,9 @@ package com.rising.drawing;
 
 import java.util.ArrayList;
 
-import com.rising.drawing.figurasGraficas.Compas;
-import com.rising.drawing.figurasGraficas.Nota;
-import com.rising.drawing.figurasGraficas.Partitura;
+import com.rising.drawing.figurasgraficas.Compas;
+import com.rising.drawing.figurasgraficas.Nota;
+import com.rising.drawing.figurasgraficas.Partitura;
 
 import android.content.Context;
 import android.media.AudioManager;

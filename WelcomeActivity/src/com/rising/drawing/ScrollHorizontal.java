@@ -3,7 +3,7 @@ package com.rising.drawing;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 
-import com.rising.drawing.figurasGraficas.Partitura;
+import com.rising.drawing.figurasgraficas.Partitura;
 
 public class ScrollHorizontal extends AbstractScroll 
 {

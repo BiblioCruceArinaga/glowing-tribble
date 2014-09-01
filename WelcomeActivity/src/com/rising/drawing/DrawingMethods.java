@@ -3,17 +3,17 @@ package com.rising.drawing;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import com.rising.drawing.figurasGraficas.Clave;
-import com.rising.drawing.figurasGraficas.Compas;
-import com.rising.drawing.figurasGraficas.IndiceNota;
-import com.rising.drawing.figurasGraficas.Intensidad;
-import com.rising.drawing.figurasGraficas.Nota;
-import com.rising.drawing.figurasGraficas.Partitura;
-import com.rising.drawing.figurasGraficas.Pedal;
-import com.rising.drawing.figurasGraficas.Quintas;
-import com.rising.drawing.figurasGraficas.Tempo;
-import com.rising.drawing.figurasGraficas.Texto;
-import com.rising.drawing.figurasGraficas.Wedge;
+import com.rising.drawing.figurasgraficas.Clave;
+import com.rising.drawing.figurasgraficas.Compas;
+import com.rising.drawing.figurasgraficas.IndiceNota;
+import com.rising.drawing.figurasgraficas.Intensidad;
+import com.rising.drawing.figurasgraficas.Nota;
+import com.rising.drawing.figurasgraficas.Partitura;
+import com.rising.drawing.figurasgraficas.Pedal;
+import com.rising.drawing.figurasgraficas.Quintas;
+import com.rising.drawing.figurasgraficas.Tempo;
+import com.rising.drawing.figurasgraficas.Texto;
+import com.rising.drawing.figurasgraficas.Wedge;
 
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -1196,8 +1196,7 @@ public class DrawingMethods {
 	//  Si en el futuro se añadieran más barlines, habría que usar un switch en el bucle
 	private void dibujarBarlines(final Compas compas) 
 	{
-		final ArrayList<ElementoGrafico> barlines = compas.getBarlines();
-		final int numBarlines = barlines.size();
+		final int numBarlines = compas.numBarlines();
 
 		for (int i=0; i<numBarlines; i++) {
 			ordenesDibujo.add( new OrdenDibujo(

@@ -2,7 +2,7 @@ package com.rising.drawing;
 
 import android.graphics.Canvas;
 
-import com.rising.drawing.figurasGraficas.Partitura;
+import com.rising.drawing.figurasgraficas.Partitura;
 
 public abstract class AbstractScroll 
 {

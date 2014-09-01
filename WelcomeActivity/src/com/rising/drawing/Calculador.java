@@ -2,16 +2,16 @@ package com.rising.drawing;
 
 import java.util.ArrayList;
 
-import com.rising.drawing.figurasGraficas.Clave;
-import com.rising.drawing.figurasGraficas.Compas;
-import com.rising.drawing.figurasGraficas.Intensidad;
-import com.rising.drawing.figurasGraficas.Nota;
-import com.rising.drawing.figurasGraficas.Partitura;
-import com.rising.drawing.figurasGraficas.Pedal;
-import com.rising.drawing.figurasGraficas.Quintas;
-import com.rising.drawing.figurasGraficas.Tempo;
-import com.rising.drawing.figurasGraficas.Texto;
-import com.rising.drawing.figurasGraficas.Wedge;
+import com.rising.drawing.figurasgraficas.Clave;
+import com.rising.drawing.figurasgraficas.Compas;
+import com.rising.drawing.figurasgraficas.Intensidad;
+import com.rising.drawing.figurasgraficas.Nota;
+import com.rising.drawing.figurasgraficas.Partitura;
+import com.rising.drawing.figurasgraficas.Pedal;
+import com.rising.drawing.figurasgraficas.Quintas;
+import com.rising.drawing.figurasgraficas.Tempo;
+import com.rising.drawing.figurasgraficas.Texto;
+import com.rising.drawing.figurasgraficas.Wedge;
 
 import android.graphics.Bitmap;
 
@@ -419,7 +419,7 @@ public class Calculador {
 			//  Si se coloca una clave en el compás, las notas anteriores
 			//  a esta clave deben colocarse según la clave vieja, y las
 			//  posteriores según la clave nueva
-			final byte clave = compas.getClavePorPentagrama(nota);
+			final byte clave = compas.getClaveDeNota(nota);
 			if (clave > -1) {
 				claveActual[nota.getPentagrama() - 1] = clave;
 			}
@@ -1420,19 +1420,19 @@ public class Calculador {
         //  Segundo paso: reajustar posición de las notas y figuras gráficas
         for (int i=primerCompas; i<=ultimoCompas; i++) {
         	final Compas compas = partitura.getCompas(i);
-        	final ArrayList<Integer> xsDeElementos = compas.saberXsDeElementos();
+        	final ArrayList<Integer> xsDeNotasYClaves = compas.xsDeCompas(false);
         	
-        	final int lastX = xsDeElementos.get(xsDeElementos.size() - 1);
+        	final int lastX = xsDeNotasYClaves.get(xsDeNotasYClaves.size() - 1);
         	final int anchoADistribuir = compas.getXFin() - config.margenDerechoCompases - lastX;
         	
         	//  El primer elemento no lo vamos a mover, de ahí el -1
-        	final int numElementos = xsDeElementos.size() - 1;
+        	final int numElementos = xsDeNotasYClaves.size() - 1;
         	int anchoPorElemento = 0;
         	if (numElementos > 0) {
         		anchoPorElemento = anchoADistribuir / numElementos;
         	}
         	
-        	reajustarNotasYClaves(compas, xsDeElementos, anchoPorElemento);
+        	reajustarNotasYClaves(compas, xsDeNotasYClaves, anchoPorElemento);
         	reajustarFigurasGraficas(compas, anchoPorElemento);
         }
 	}
@@ -1442,7 +1442,7 @@ public class Calculador {
 		int multiplicador = 0;
 		final int xPrimeraNota = compas.saberXPrimeraNota();
 		
-		final ArrayList<Integer> xsDelCompas = compas.saberXsDelCompas();
+		final ArrayList<Integer> xsDelCompas = compas.xsDeCompas(true);
 		
 		for (int i=0; i<compas.numIntensidades(); i++) {
     		if (compas.getIntensidad(i).getX() != xPrimeraNota) {

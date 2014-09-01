@@ -12,30 +12,25 @@ import android.util.Log;
 public class SoundReader extends Observable implements AudioRecord.OnRecordPositionUpdateListener {
 
 	private static final int AUDIO_SAMPLING_RATE = 8000;
-	private static int AUDIO_DATA_SIZE = 2048;
-	private static int BUFFER_SIZE = 0;
+	private static final int AUDIO_DATA_SIZE = 2048;
+	private int bufferSize;
+	private static int notifyRate = 3200;
+	private static float threshold = (float) 15.0;
 	
-	//  Velocidad a la que se notifican las muestras y
-	//  volumen a partir del cual se considera un ruido válido
-	//  3040, 3120, 3200
-	private static int NOTIFY_RATE = 3200;
-	private static float THRESHOLD = (float) 15.0;
+	private transient AudioRecord audioRecord;
+	private transient Thread audioReaderThread;
+	private transient SilenceDetector silenceDetector;
 	
-	private AudioRecord audioRecord = null;
-	private Thread audioReaderThread = null;
-	private SilenceDetector silenceDetector = null;
-	
-	private int pitch = -1;
-	private int historyPitch = 0;
+	private transient int pitch = -1;
+	private transient int historyPitch;
 	
 	@Override
-	public void onMarkerReached(AudioRecord arg0) {
+	public void onMarkerReached(final AudioRecord arg0) {
 		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
-	public void onPeriodicNotification(AudioRecord arg0) {
+	public void onPeriodicNotification(final AudioRecord arg0) {
 		notifyObservers(pitch);
 	}
 	
@@ -51,16 +46,16 @@ public class SoundReader extends Observable implements AudioRecord.OnRecordPosit
 		//silenceDetector = null;
 	}
 
-	public SoundReader(int velocidad) throws Exception {
+	public SoundReader(final int velocidad) throws Exception {
 		
 		setSpeed(velocidad);
 		
-		BUFFER_SIZE = AudioRecord.getMinBufferSize(44100, AudioFormat.CHANNEL_IN_MONO, 
+		bufferSize = AudioRecord.getMinBufferSize(44100, AudioFormat.CHANNEL_IN_MONO, 
 					  AudioFormat.ENCODING_PCM_16BIT) * 2;
 			
 		audioRecord = new AudioRecord(MediaRecorder.AudioSource.MIC, 
 									  AUDIO_SAMPLING_RATE, AudioFormat.CHANNEL_IN_MONO, 
-									  AudioFormat.ENCODING_PCM_16BIT, BUFFER_SIZE);
+									  AudioFormat.ENCODING_PCM_16BIT, bufferSize);
 		audioRecord.setRecordPositionUpdateListener(this);
 		
 		if(audioRecord.getState() != AudioRecord.STATE_INITIALIZED) {
@@ -69,7 +64,7 @@ public class SoundReader extends Observable implements AudioRecord.OnRecordPosit
 		
 		startRecorder();
 		
-		if(audioRecord.setPositionNotificationPeriod(NOTIFY_RATE) != AudioRecord.SUCCESS) {
+		if(audioRecord.setPositionNotificationPeriod(notifyRate) != AudioRecord.SUCCESS) {
 			throw new Exception("Wrong notify rate.");
 		}
 		
@@ -87,18 +82,21 @@ public class SoundReader extends Observable implements AudioRecord.OnRecordPosit
 			@Override
 			public void run() {
 				while (true) {
-					if (audioRecord == null) break;
+					if (audioRecord == null) {
+						break;
+					}
 					
-					short[] audioData = new short[AUDIO_DATA_SIZE];
-					int shortsRead = audioRecord.read(audioData, 0, AUDIO_DATA_SIZE);
+					final short[] audioData = new short[AUDIO_DATA_SIZE];
+					final int shortsRead = audioRecord.read(audioData, 0, AUDIO_DATA_SIZE);
 					
 					if (shortsRead < 0) {
 						Log.e("NO READ", "Could not read audio data.");
 					} else {
-						if (silenceDetector.isSilence(turnToFloatArray(audioData), THRESHOLD))
+						if (silenceDetector.isSilence(turnToFloatArray(audioData), threshold)) {
 							pitch = 0;
-						else
+						} else {
 							pitch = ++historyPitch;
+						}
 						
 						setChanged();
 					}
@@ -110,161 +108,153 @@ public class SoundReader extends Observable implements AudioRecord.OnRecordPosit
 		audioReaderThread.start();
 	}
 	
-	private float[] turnToFloatArray(short[] shortArray) {
+	private float[] turnToFloatArray(final short[] shortArray) {
 		float[] floatArray = new float[shortArray.length];
 		
-		for (int i=0; i<shortArray.length; i++)
+		for (int i=0; i<shortArray.length; i++) {
 			floatArray[i] = shortArray[i];
+		}
 		
 		return floatArray;
 	}
-	
-	//  El músico podrá configurar el "volumen" al que
-	//  deberá tocar para que la aplicación considere el 
-	//  sonido recogido como válido. Esto permitirá al
-	//  músico usar la aplicación sin problemas en entornos
-	//  donde haya ruido de fondo
-	public void setSensitivity(int sensitivity) {
+
+	public void setSensitivity(final int sensitivity) {
 		switch (sensitivity) {
 			case 0:
-				THRESHOLD = 60;
+				threshold = 60;
 				break;
 			case 1:
-				THRESHOLD = 54;
+				threshold = 54;
 				break;
 			case 2:
-				THRESHOLD = 48;
+				threshold = 48;
 				break;
 			case 3:
-				THRESHOLD = 42;
+				threshold = 42;
 				break;
 			case 4:
-				THRESHOLD = 36;
+				threshold = 36;
 				break;
 			case 5:
-				THRESHOLD = 30;
+				threshold = 30;
 				break;
 			case 6:
-				THRESHOLD = 24;
+				threshold = 24;
 				break;
 			case 7:
-				THRESHOLD = 18;
+				threshold = 18;
 				break;
 			case 8:
-				THRESHOLD = 12;
+				threshold = 12;
 				break;
 			case 9:
-				THRESHOLD = 6;
+				threshold = 6;
 				break;
 			case 10:
-				THRESHOLD = 0;
+				threshold = 0;
 				break;
 				/*
 			case 11:
-				THRESHOLD = 27;
+				threshold = 27;
 				break;
 			case 12:
-				THRESHOLD = 24;
+				threshold = 24;
 				break;
 			case 13:
-				THRESHOLD = 21;
+				threshold = 21;
 				break;
 			case 14:
-				THRESHOLD = 18;
+				threshold = 18;
 				break;
 			case 15:
-				THRESHOLD = 15;
+				threshold = 15;
 				break;
 			case 16:
-				THRESHOLD = 12;
+				threshold = 12;
 				break;
 			case 17:
-				THRESHOLD = 9;
+				threshold = 9;
 				break;
 			case 18:
-				THRESHOLD = 6;
+				threshold = 6;
 				break;
 			case 19:
-				THRESHOLD = 3;
+				threshold = 3;
 				break;
 			case 20:
-				THRESHOLD = 0;
+				threshold = 0;
 				break;
 				*/
 			default:
 				break;
 		}
 	}
-	
-	//  El músico podrá elegir la velocidad a la que
-	//  se envían las muestras a la interfaz. Eso
-	//  permitirá que la partitura se mueva más rápida
-	//  o más lentamente
-	private void setSpeed(int speed) {
+
+	private void setSpeed(final int speed) {
 		switch (speed) {
 			case 0:
-				NOTIFY_RATE = 16000;
+				notifyRate = 16000;
 				break;
 			case 1:
-				NOTIFY_RATE = 14500;
+				notifyRate = 14500;
 				break;
 			case 2:
-				NOTIFY_RATE = 13000;
+				notifyRate = 13000;
 				break;
 			case 3:
-				NOTIFY_RATE = 11500;
+				notifyRate = 11500;
 				break;
 			case 4:
-				NOTIFY_RATE = 10000;
+				notifyRate = 10000;
 				break;
 			case 5:
-				NOTIFY_RATE = 8500;
+				notifyRate = 8500;
 				break;
 			case 6:
-				NOTIFY_RATE = 7000;
+				notifyRate = 7000;
 				break;
 			case 7:
-				NOTIFY_RATE = 5500;
+				notifyRate = 5500;
 				break;
 			case 8:
-				NOTIFY_RATE = 4000;
+				notifyRate = 4000;
 				break;
 			case 9:
-				NOTIFY_RATE = 2500;
+				notifyRate = 2500;
 				break;
 			case 10:
-				NOTIFY_RATE = 1000;
+				notifyRate = 1000;
 				break;
 				/*
 			case 11:
-				NOTIFY_RATE = 8200;
+				notifyRate = 8200;
 				break;
 			case 12:
-				NOTIFY_RATE = 7400;
+				notifyRate = 7400;
 				break;
 			case 13:
-				NOTIFY_RATE = 6600;
+				notifyRate = 6600;
 				break;
 			case 14:
-				NOTIFY_RATE = 5800;
+				notifyRate = 5800;
 				break;
 			case 15:
-				NOTIFY_RATE = 5000;
+				notifyRate = 5000;
 				break;
 			case 16:
-				NOTIFY_RATE = 4200;
+				notifyRate = 4200;
 				break;
 			case 17:
-				NOTIFY_RATE = 3400;
+				notifyRate = 3400;
 				break;
 			case 18:
-				NOTIFY_RATE = 2600;
+				notifyRate = 2600;
 				break;
 			case 19:
-				NOTIFY_RATE = 1800;
+				notifyRate = 1800;
 				break;
 			case 20:
-				NOTIFY_RATE = 1000;
+				notifyRate = 1000;
 				break;
 				*/
 			default:
