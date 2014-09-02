@@ -86,7 +86,7 @@ public class Compas {
 	{
 		claves.add(clave);
 		
-		updateXFin(clave.getX());
+		updateXFin(clave.x);
 	}
 
 	public void addClef(final ElementoGrafico clef) 
@@ -121,7 +121,7 @@ public class Compas {
 	{
 		intensidades.add(intensidad);
 		
-		updateXFin(intensidad.getX());
+		updateXFin(intensidad.x);
 	}
 	
 	public void addNote(final Nota note) 
@@ -133,14 +133,14 @@ public class Compas {
 	{
 		pedalesFin.add(pedalFin);
 		
-		updateXFin(pedalFin.getX());
+		updateXFin(pedalFin.x);
 	}
 	
 	public void addPedalInicio(final Pedal pedalInicio) 
 	{
 		pedalesInicio.add(pedalInicio);
 		
-		updateXFin(pedalInicio.getX());
+		updateXFin(pedalInicio.x);
 	}
 
 	public void addPedalStart(final ElementoGrafico pedalStart) 
@@ -157,7 +157,7 @@ public class Compas {
 	{
 		textos.add(texto);
 		
-		updateXFin(texto.getX());
+		updateXFin(texto.x);
 	}
 	
 	public void addWedge(final ElementoGrafico wedge) 
@@ -183,7 +183,7 @@ public class Compas {
 			clave = claves.get(i);
 			
 			if (noHayNotasDelanteDeClave(clave)) {
-				clavesAlFinal[clave.getPentagrama() - 1] = i;
+				clavesAlFinal[clave.pentagrama - 1] = i;
 			}
 		}
 		
@@ -205,8 +205,8 @@ public class Compas {
 	
 	private boolean notaDelanteDeClave(final Clave clave, final Nota nota)
 	{
-		return (clave.getPentagrama() == nota.getPentagrama()) &&
-			   (nota.getPosition() > clave.getPosition());
+		return (clave.pentagrama == nota.getPentagrama()) &&
+			   (nota.getPosition() > clave.position);
 	}
 
 	public ElementoGrafico getBarline(final int index) 
@@ -232,7 +232,7 @@ public class Compas {
 	public byte getClaveDeNota(final Nota nota) 
 	{
 		final int claveActual = obtenerClaveDeNota(nota);
-		return claveActual > -1 ? claves.get(claveActual).getByteClave() : (byte) claveActual;
+		return claveActual > -1 ? claves.get(claveActual).valorClave : (byte) claveActual;
 	}
 	
 	private byte obtenerClaveDeNota(final Nota nota)
@@ -251,8 +251,8 @@ public class Compas {
 	
 	private boolean posibleClaveActual(final Clave clave, final Nota nota)
 	{
-		return clave.getPentagrama() == nota.getPentagrama() &&
-			   clave.getX() <= nota.getX();
+		return clave.pentagrama == nota.getPentagrama() &&
+			   clave.x <= nota.getX();
 	}
 	
 	public ElementoGrafico getClef(final int index) 
@@ -300,6 +300,21 @@ public class Compas {
 		return numeroCompas;
 	}
 	
+	public Object[] getPedals()
+	{
+		return StaticMethods.joinToArrayListsIntoOneArray(pedalStarts, pedalStops);
+	}
+	
+	public Object[] getPedales()
+	{
+		return StaticMethods.joinToArrayListsIntoOneArray(pedalesInicio, pedalesFin);
+	}
+	
+	public Object[] getWedges()
+	{
+		return StaticMethods.joinToArrayListsIntoOneArray(crescendos, diminuendos);
+	}
+	
 	public Pedal getPedalFin(final int index) 
 	{
 		return pedalesFin.get(index);
@@ -344,7 +359,7 @@ public class Compas {
 	{
 		return wedges.get(index);
 	}
-	
+
 	public ElementoGrafico getWords(int index)
 	{
 		return words.get(index);
@@ -564,8 +579,8 @@ public class Compas {
 
 		for (int i=0; i<claves.size(); i++) 
 		{
-			if (!xEncontradas.contains(getClave(i).getX())) {
-				xEncontradas.add(getClave(i).getX());
+			if (!xEncontradas.contains(getClave(i).x)) {
+				xEncontradas.add(getClave(i).x);
 			}
 		}
 		
@@ -573,22 +588,22 @@ public class Compas {
 		{
 			for (int i=0; i<intensidades.size(); i++) 
 			{
-				if (!xEncontradas.contains(getIntensidad(i).getX())) {
-					xEncontradas.add(getIntensidad(i).getX());
+				if (!xEncontradas.contains(getIntensidad(i).x)) {
+					xEncontradas.add(getIntensidad(i).x);
 				}
 			}
 	
 			for (int i=0; i<pedalesInicio.size(); i++) 
 			{
-				if (!xEncontradas.contains(getPedalInicio(i).getX())) {
-					xEncontradas.add(getPedalInicio(i).getX());
+				if (!xEncontradas.contains(getPedalInicio(i).x)) {
+					xEncontradas.add(getPedalInicio(i).x);
 				}
 			}
 	
 			for (int i=0; i<pedalesFin.size(); i++) 
 			{
-				if (!xEncontradas.contains(getPedalFin(i).getX())) {
-					xEncontradas.add(getPedalFin(i).getX());
+				if (!xEncontradas.contains(getPedalFin(i).x)) {
+					xEncontradas.add(getPedalFin(i).x);
 				}
 			}
 			
@@ -598,8 +613,8 @@ public class Compas {
 			
 			for (int i=0; i<textos.size(); i++) 
 			{
-				if (!xEncontradas.contains(getTexto(i).getX())) {
-					xEncontradas.add(getTexto(i).getX());
+				if (!xEncontradas.contains(getTexto(i).x)) {
+					xEncontradas.add(getTexto(i).x);
 				}
 			}
 			
@@ -657,7 +672,7 @@ public class Compas {
 	{
 		this.quintas = quintas;
 		
-		updateXFin(quintas.getX());
+		updateXFin(quintas.x);
 	}
 
 	public void setTempo(final Tempo tempo) 

@@ -129,7 +129,11 @@ public class FileMethods {
 		elemento.addValue(figuraGrafica);
 		elemento.setPosition(leerHastaAlmohadilla());
 		
-		compas.addPedalStart(elemento);
+		if (figuraGrafica == 25) {
+			compas.addPedalStart(elemento);
+		} else {
+			compas.addPedalStop(elemento);
+		}
 	}
 	
 	private void leerIndicacionTextual(ElementoGrafico elemento) throws IOException 

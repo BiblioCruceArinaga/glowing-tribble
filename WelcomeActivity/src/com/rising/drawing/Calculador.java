@@ -106,12 +106,12 @@ public class Calculador {
 						config.distanciaPentagramas) * (pentagrama - 1);
 
 		final Clave clave = new Clave();
-		clave.setImagenClave(obtenerImagenDeClave(claveByte));
-		clave.setX(compasMarginX + posicionX);
-		clave.setY(marginY + obtenerPosicionYDeClave(claveByte));
-		clave.setClave(claveByte);
-		clave.setPentagrama(pentagrama);
-		clave.setPosition(clef.getPosition());
+		clave.imagenClave = obtenerImagenDeClave(claveByte);
+		clave.x = compasMarginX + posicionX;
+		clave.y = marginY + obtenerPosicionYDeClave(claveByte);
+		clave.valorClave = claveByte;
+		clave.pentagrama = pentagrama;
+		clave.position = clef.getPosition();
 		
 		return clave;
 	}
@@ -148,10 +148,10 @@ public class Calculador {
 			final int posicion = calcularPosicionX(fifths.getPosition());
 	
 			final Quintas quintas = new Quintas();
-			quintas.setNotaQuintas(notaQuintasByte);
-			quintas.setValorQuintas(valorQuintasByte);
-			quintas.setX(compasMarginX + posicion);
-			quintas.setMargenY(compasMarginY);
+			quintas.notaQuintas = notaQuintasByte;
+			quintas.valorQuintas = valorQuintasByte;
+			quintas.x = compasMarginX + posicion;
+			quintas.margenY = compasMarginY;
 	
 			compas.setQuintas(quintas);
 		}
@@ -241,9 +241,9 @@ public class Calculador {
 			final int posicionX = calcularPosicionX(compas.getWordsPosition(i));
 			
 			final Texto texto = new Texto();
-			texto.setTexto(compas.getWordsString(i));
-			texto.setX(compasMarginX + posicionX);
-			texto.setY(obtenerPosicionYDeElementoGrafico(compas.getWordsLocation(i)));
+			texto.texto = compas.getWordsString(i);
+			texto.x = compasMarginX + posicionX;
+			texto.y = obtenerPosicionYDeElementoGrafico(compas.getWordsLocation(i));
 			
 			compas.addTexto(texto);
 		}
@@ -282,9 +282,9 @@ public class Calculador {
 			final int posicion = calcularPosicionX(dynamics.getPosition());
 	
 			final Intensidad intensidad = new Intensidad();
-			intensidad.setImagen(obtenerImagenDeIntensidad(intensidadByte));
-			intensidad.setX(compasMarginX + posicion);
-			intensidad.setY(obtenerPosicionYDeElementoGrafico(location));
+			intensidad.imagen = obtenerImagenDeIntensidad(intensidadByte);
+			intensidad.x = compasMarginX + posicion;
+			intensidad.y = obtenerPosicionYDeElementoGrafico(location);
 	
 			compas.addIntensidad(intensidad);
 		}
@@ -316,34 +316,26 @@ public class Calculador {
 	
 	private void calcularPedals(final Compas compas) 
 	{
-		int numPedals = compas.numPedalStarts();
-		for (int i=0; i<numPedals; i++) 
+		final Object[] pedals = compas.getPedals();
+		ElementoGrafico pedalElement;
+		
+		for (int i=0; i<pedals.length; i++) 
 		{
-			final ElementoGrafico pedal = compas.getPedalStart(i);
-			final byte location = pedal.getValue(0);
-			final int posicion = calcularPosicionX(pedal.getPosition());
+			pedalElement = (ElementoGrafico) pedals[i];
+			final byte location = pedalElement.getValue(0);
+			final int posicion = calcularPosicionX(pedalElement.getPosition());
 
-			final Pedal pedalInicio = new Pedal();
-			pedalInicio.setImagen(bitmapManager.getPedalStart());
-			pedalInicio.setX(compasMarginX + posicion);
-			pedalInicio.setY(obtenerPosicionYDeElementoGrafico(location));
+			final Pedal pedal = new Pedal();
+			pedal.x = compasMarginX + posicion;
+			pedal.y = obtenerPosicionYDeElementoGrafico(location);
 			
-			compas.addPedalInicio(pedalInicio);
-		}
-
-		numPedals = compas.numPedalStops();
-		for (int i=0; i<numPedals; i++) 
-		{
-			final ElementoGrafico pedal = compas.getPedalStop(i);
-			final byte location = pedal.getValue(0);
-			final int posicion = calcularPosicionX(pedal.getPosition());
-
-			final Pedal pedalFin = new Pedal();
-			pedalFin.setImagen(bitmapManager.getPedalStop());
-			pedalFin.setX(compasMarginX + posicion);
-			pedalFin.setY(obtenerPosicionYDeElementoGrafico(location));
-			
-			compas.addPedalFin(pedalFin);
+			if (pedalElement.getValue(1) == 25) {
+				pedal.imagen = bitmapManager.getPedalStart();
+				compas.addPedalInicio(pedal);
+			} else {
+				pedal.imagen = bitmapManager.getPedalStop();
+				compas.addPedalFin(pedal);
+			}
 		}
 	}
 	
@@ -1260,7 +1252,7 @@ public class Calculador {
 		for (int i=0; i<clavesAlFinalDelCompas.length; i++) {
 			if (clavesAlFinalDelCompas[i] > -1) {
 				final Clave clave = compas.getClave(clavesAlFinalDelCompas[i]);
-				claveActual[i] = clave.getByteClave();
+				claveActual[i] = clave.valorClave;
 			}
 		}
 	}
@@ -1290,23 +1282,23 @@ public class Calculador {
 		compas.setXIniNotas(compas.getXIniNotas() - distanciaX);
 
 		for (int i=0; i<compas.numClaves(); i++) {
-			compas.getClave(i).setX(compas.getClave(i).getX() - distanciaX);
-			compas.getClave(i).setY(compas.getClave(i).getY() + distanciaY);
+			compas.getClave(i).x = compas.getClave(i).x - distanciaX;
+			compas.getClave(i).y = compas.getClave(i).y + distanciaY;
 		}
 
 		for (int i=0; i<compas.numIntensidades(); i++) {
-			compas.getIntensidad(i).setX(compas.getIntensidad(i).getX() - distanciaX);
-			compas.getIntensidad(i).setY(compas.getIntensidad(i).getY() + distanciaY);
+			compas.getIntensidad(i).x = compas.getIntensidad(i).x - distanciaX;
+			compas.getIntensidad(i).y = compas.getIntensidad(i).y + distanciaY;
 		}
 		
 		for (int i=0; i<compas.numPedalesInicio(); i++) {
-			compas.getPedalInicio(i).setX(compas.getPedalInicio(i).getX() - distanciaX);
-			compas.getPedalInicio(i).setY(compas.getPedalInicio(i).getY() + distanciaY);
+			compas.getPedalInicio(i).x = compas.getPedalInicio(i).x - distanciaX;
+			compas.getPedalInicio(i).y = compas.getPedalInicio(i).y + distanciaY;
 		}
 
 		for (int i=0; i<compas.numPedalesFin(); i++) {
-			compas.getPedalFin(i).setX(compas.getPedalFin(i).getX() - distanciaX);
-			compas.getPedalFin(i).setY(compas.getPedalFin(i).getY() + distanciaY);
+			compas.getPedalFin(i).x = compas.getPedalFin(i).x - distanciaX;
+			compas.getPedalFin(i).y = compas.getPedalFin(i).y + distanciaY;
 		}
 		
 		if (compas.hayTempo()) {
@@ -1316,8 +1308,8 @@ public class Calculador {
 		}
 		
 		for (int i=0; i<compas.numTextos(); i++) {
-			compas.getTexto(i).setX(compas.getTexto(i).getX() - distanciaX);
-			compas.getTexto(i).setY(compas.getTexto(i).getY() + distanciaY);
+			compas.getTexto(i).x = compas.getTexto(i).x - distanciaX;
+			compas.getTexto(i).y = compas.getTexto(i).y + distanciaY;
 		}
 		
 		for (int i=0; i<compas.numCrescendos(); i++) {
@@ -1381,20 +1373,20 @@ public class Calculador {
 
     			for (int j=0; j<compas.numClaves(); j++) {
     				if (compas.getClave(j) != null) {
-    					compas.getClave(j).setX(compas.getClave(j).getX() + anchoParaCadaCompas);
+    					compas.getClave(j).x = compas.getClave(j).x + anchoParaCadaCompas;
     				}
     			}
 	            
     			for (int j=0; j<compas.numIntensidades(); j++) {
-            		compas.getIntensidad(j).setX(compas.getIntensidad(j).getX() + anchoParaCadaCompas);
+            		compas.getIntensidad(j).x = compas.getIntensidad(j).x + anchoParaCadaCompas;
     			}
 	            
             	for (int j=0; j<compas.numPedalesInicio(); j++) {
-            		compas.getPedalInicio(j).setX(compas.getPedalInicio(j).getX() + anchoParaCadaCompas);
+            		compas.getPedalInicio(j).x = compas.getPedalInicio(j).x + anchoParaCadaCompas;
             	}
 	            
             	for (int j=0; j<compas.numPedalesFin(); j++) {
-            		compas.getPedalFin(j).setX(compas.getPedalFin(j).getX() + anchoParaCadaCompas);
+            		compas.getPedalFin(j).x = compas.getPedalFin(j).x + anchoParaCadaCompas;
             	}
 	            
 	            if (compas.hayTempo()) {
@@ -1402,7 +1394,7 @@ public class Calculador {
 	            }
 	            
 	            for (int j=0; j<compas.numTextos(); j++) {
-	            	compas.getTexto(j).setX(compas.getTexto(j).getX() + anchoParaCadaCompas);
+	            	compas.getTexto(j).x = compas.getTexto(j).x + anchoParaCadaCompas;
 	            }
 	            
 	            for (int j=0; j<compas.numCrescendos(); j++) {
@@ -1445,33 +1437,29 @@ public class Calculador {
 		final ArrayList<Integer> xsDelCompas = compas.xsDeCompas(true);
 		
 		for (int i=0; i<compas.numIntensidades(); i++) {
-    		if (compas.getIntensidad(i).getX() != xPrimeraNota) {
-	    		multiplicador = xsDelCompas.indexOf(compas.getIntensidad(i).getX());
-	        	compas.getIntensidad(i).setX( 
-	        			compas.getIntensidad(i).getX() + anchoPorNota * multiplicador);
+    		if (compas.getIntensidad(i).x != xPrimeraNota) {
+	    		multiplicador = xsDelCompas.indexOf(compas.getIntensidad(i).x);
+	        	compas.getIntensidad(i).x = compas.getIntensidad(i).x + anchoPorNota * multiplicador;
     		}
 		}
         
 		for (int i=0; i<compas.numPedalesInicio(); i++) {
-    		if (compas.getPedalInicio(i).getX() != xPrimeraNota) {
-	    		multiplicador = xsDelCompas.indexOf(compas.getPedalInicio(i).getX());
-	        	compas.getPedalInicio(i).setX( 
-	        			compas.getPedalInicio(i).getX() + anchoPorNota * multiplicador);
+    		if (compas.getPedalInicio(i).x != xPrimeraNota) {
+	    		multiplicador = xsDelCompas.indexOf(compas.getPedalInicio(i).x);
+	        	compas.getPedalInicio(i).x = compas.getPedalInicio(i).x + anchoPorNota * multiplicador;
     		}
 		}
         
     	for (int i=0; i<compas.numPedalesFin(); i++) {
-        	if (compas.getPedalFin(i).getX() != xPrimeraNota) {
-	        	multiplicador = xsDelCompas.indexOf(compas.getPedalFin(i).getX());
-	        	compas.getPedalFin(i).setX( 
-	        			compas.getPedalFin(i).getX() + anchoPorNota * multiplicador);
+        	if (compas.getPedalFin(i).x != xPrimeraNota) {
+	        	multiplicador = xsDelCompas.indexOf(compas.getPedalFin(i).x);
+	        	compas.getPedalFin(i).x = compas.getPedalFin(i).x + anchoPorNota * multiplicador;
         	}
     	}
 
     	for (int i=0; i<compas.numTextos(); i++) {
-    		multiplicador = xsDelCompas.indexOf(compas.getTexto(i).getX());
-        	compas.getTexto(i).setX( 
-        		compas.getTexto(i).getX() + anchoPorNota * multiplicador);
+    		multiplicador = xsDelCompas.indexOf(compas.getTexto(i).x);
+        	compas.getTexto(i).x = compas.getTexto(i).x + anchoPorNota * multiplicador;
     	}
         
         for (int i=0; i<compas.numCrescendos(); i++) {
@@ -1511,8 +1499,8 @@ public class Calculador {
     	}
     	
     	for (int j=0; j<compas.numClaves(); j++) {
-			multiplicador = xsDeElementos.indexOf(compas.getClave(j).getX());
-			compas.getClave(j).setX(compas.getClave(j).getX() + anchoPorNota * multiplicador);
+			multiplicador = xsDeElementos.indexOf(compas.getClave(j).x);
+			compas.getClave(j).x = compas.getClave(j).x + anchoPorNota * multiplicador;
 		}
     	
 	}
