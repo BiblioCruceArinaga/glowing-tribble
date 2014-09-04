@@ -8,7 +8,9 @@ import java.util.Observable;
 import java.util.Observer;
 
 import com.rising.drawing.figurasgraficas.Compas;
+import com.rising.drawing.figurasgraficas.OrdenDibujo;
 import com.rising.drawing.figurasgraficas.Partitura;
+import com.rising.drawing.figurasgraficas.Vista;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -44,8 +46,6 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 	private transient int compasActual;
 	private transient int golpeSonidoActual;
 	private transient int xActual;
-	private transient int yActual;
-	private transient int desplazamiento;
 	private transient int primerCompas;
 
 	public Screen(final Context context, final String path, 
@@ -329,19 +329,9 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 		if (compas.getXIni() != xActual) 
 		{
 			xActual = compas.getXFin();
-			yActual = compas.getYFin();
 			
-			final int coo = vista == Vista.VERTICAL ? yActual : xActual;
-			if (scroll.outOfBoundaries(coo)) 
-			{
-				desplazamiento = 
-    				scroll.distanciaDesplazamiento(partitura, 
-    					primerCompas, compasActual);
-				
-				scroll.hacerScroll(desplazamiento);
-				
-				primerCompas = compasActual;
-			}
+			primerCompas = StaticMethods.manageScroll(compas.getYFin(), vista, xActual, 
+					scroll, partitura, primerCompas, compasActual);
 		}
 	}
 
@@ -370,10 +360,10 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 		bar -= numeroPrimerCompas;
 		
 		if (vista == Vista.HORIZONTAL) {
-			moveHorizontal(bar);
+			move(partitura.getCompas(bar).getXIni(), 0);
 		}
 		else {
-			moveVertical(bar);
+			move(partitura.getCompas(bar).getYIni(), config.distanciaPentagramas);
 		}
 		
 		return true;
@@ -399,31 +389,14 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 		
 		return validBoundaries;
 	}
-	
-	private void moveHorizontal(final int bar)
+
+	private void move(final int cooIni, final int distanciaPentagramas)
 	{
-		final float xOffset = - scroll.getCooOffset();
-		final float xIni = partitura.getCompas(bar).getXIni();
-		final float distancia = Math.abs(xOffset - xIni);
+		final float cooOffset = - scroll.getCooOffset();
+		final float distancia = cooIni < cooOffset ? 
+				Math.abs(cooOffset - cooIni) * -1 : Math.abs(cooOffset - cooIni);
 		
-		if (xIni < xOffset) {
-			scroll.hacerScroll((int) -distancia);
-		} else {
-			scroll.hacerScroll((int) distancia);
-		}
-	}
-	
-	private void moveVertical(final int bar)
-	{
-		final float yOffset = - scroll.getCooOffset();
-		final float yIni = partitura.getCompas(bar).getYIni();
-		final float distancia = Math.abs(yOffset - yIni);
-		
-		if (yIni < yOffset) {
-			scroll.hacerScroll((int) -distancia - config.distanciaPentagramas);
-		} else {
-			scroll.hacerScroll((int) distancia - config.distanciaPentagramas);
-		}
+		scroll.hacerScroll((int) distancia - distanciaPentagramas);
 	}
 	
 	@Override

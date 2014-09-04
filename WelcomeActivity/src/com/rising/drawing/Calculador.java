@@ -11,6 +11,7 @@ import com.rising.drawing.figurasgraficas.Pedal;
 import com.rising.drawing.figurasgraficas.Quintas;
 import com.rising.drawing.figurasgraficas.Tempo;
 import com.rising.drawing.figurasgraficas.Texto;
+import com.rising.drawing.figurasgraficas.Vista;
 import com.rising.drawing.figurasgraficas.Wedge;
 
 import android.graphics.Bitmap;
@@ -196,8 +197,6 @@ public class Calculador {
 				break;
 			case 7:
 				inicializarTempo(tempo, time.getPosition(), 6, 4);
-				break;
-			default:
 				break;
 		}
 		
@@ -433,801 +432,109 @@ public class Calculador {
 	
 	private int obtenerPosicionYDeNota(final Nota nota, final byte clave, final byte instrumento)
 	{
+		final YPositionCalculator yPositionCalculator = new YPositionCalculator();
 		int cooY = 0;
+		
 		final int margenY = compasMarginY + 
 				(config.distanciaLineasPentagrama * 4 + 
 						config.distanciaPentagramas) * (nota.getPentagrama() - 1);
 		
-		byte octava = nota.getOctava();
-		if (octava > 10) {
-			octava -= 12;
-		}
+		byte octava = yPositionCalculator.prepararOctava(nota.getOctava());
 		
-		if (!nota.silencio()) {
-
-			switch (instrumento) {
-
-				case 1: {
-
-					switch (clave) {
-
-						case 1: {
-
-							switch (octava) {
-
-								case 3: {
-									
-									switch(nota.getStep()){
-										case 1:
-										case 8:
-										case 15:
-											cooY = margenY + config.distanciaLineasPentagrama * 5 + 
-												config.distanciaLineasPentagramaMitad;
-											break;
-
-										case 2:
-										case 9:
-										case 16:
-											cooY = margenY + config.distanciaLineasPentagrama * 5;
-											break;
-
-										case 3:
-										case 10:
-										case 17:
-											cooY = margenY + config.distanciaLineasPentagrama * 8;
-											break;
-
-										case 4:
-										case 11:
-										case 18:
-											cooY = margenY + config.distanciaLineasPentagrama * 7 + 
-												config.distanciaLineasPentagramaMitad;
-											break;
-
-										case 5:
-										case 12:
-										case 19:
-											cooY = margenY + config.distanciaLineasPentagrama * 7;
-											break;
-
-										case 6:
-										case 13:
-										case 20:
-											cooY = margenY + config.distanciaLineasPentagrama * 6 + 
-												config.distanciaLineasPentagramaMitad;
-											break;
-
-										case 7:
-										case 14:
-										case 21:
-											cooY = margenY + config.distanciaLineasPentagrama * 6;
-											break;
-
-										default:
-											cooY = 0;
-											break;
-									}
+		if (!nota.silencio()) 
+		{
+			switch (instrumento) 
+			{
+				case 1: 
+				{
+					switch (clave) 
+					{
+						case 1: 
+						{
+							switch (octava) 
+							{
+								case 3:
+									cooY = yPositionCalculator.guitarG2Octave3(nota.getStep(), margenY);
 									break;
-								}
 
-								case 4: {
-									
-									switch(nota.getStep()){
-										case 1:
-										case 8:
-										case 15:
-											cooY = margenY + config.distanciaLineasPentagrama * 2;
-											break;
-
-										case 2:
-										case 9:
-										case 16:
-											cooY = margenY + config.distanciaLineasPentagrama + 
-												config.distanciaLineasPentagramaMitad;
-											break;
-
-										case 3:
-										case 10:
-										case 17:
-											cooY = margenY + config.distanciaLineasPentagrama * 4 + 
-												config.distanciaLineasPentagramaMitad;
-											break;
-
-										case 4:
-										case 11:
-										case 18:
-											cooY = margenY + config.distanciaLineasPentagrama * 4;
-											break;
-
-										case 5:
-										case 12:
-										case 19:
-											cooY = margenY + config.distanciaLineasPentagrama * 3 + 
-												config.distanciaLineasPentagramaMitad;
-											break;
-
-										case 6:
-										case 13:
-										case 20:
-											cooY = margenY + config.distanciaLineasPentagrama * 3;
-											break;
-
-										case 7:
-										case 14:
-										case 21:
-											cooY = margenY + config.distanciaLineasPentagrama * 2 + 
-												config.distanciaLineasPentagramaMitad;
-											break;
-
-										default:
-											cooY = 0;
-											break;
-									}
+								case 4:
+									cooY = yPositionCalculator.guitarG2Octave4(nota.getStep(), margenY);
 									break;
-								}
 
-								case 5: {
-									
-									switch(nota.getStep()){
-										case 1:
-										case 8:
-										case 15:
-											cooY = margenY - config.distanciaLineasPentagrama - 
-												config.distanciaLineasPentagramaMitad;
-											break;
-
-										case 2:
-										case 9:
-										case 16:
-											cooY = margenY - config.distanciaLineasPentagrama * 2;
-											break;
-
-										case 3:
-										case 10:
-										case 17:
-											cooY = margenY + config.distanciaLineasPentagrama;
-											break;
-
-										case 4:
-										case 11:
-										case 18:
-											cooY = margenY + config.distanciaLineasPentagramaMitad;
-											break;
-
-										case 5:
-										case 12:
-										case 19:
-											cooY = margenY;
-											break;
-
-										case 6:
-										case 13:
-										case 20:
-											cooY = margenY - config.distanciaLineasPentagramaMitad;
-											break;
-
-										case 7:
-										case 14:
-										case 21:
-											cooY = margenY - config.distanciaLineasPentagrama;
-											break;
-
-										default:
-											cooY = 0;
-											break;
-									}
+								case 5:
+									cooY = yPositionCalculator.guitarG2Octave5(nota.getStep(), margenY);
 									break;
-								}
 
-								case 6: {
-									
-									switch(nota.getStep()){
-										case 1:
-										case 8:
-										case 15:
-											cooY = margenY - config.distanciaLineasPentagrama * 5;
-											break;
-
-										case 2:
-										case 9:
-										case 16:
-											cooY = margenY - config.distanciaLineasPentagrama * 5 - 
-												config.distanciaLineasPentagramaMitad;
-											break;
-
-										case 3:
-										case 10:
-										case 17:
-											cooY = margenY - config.distanciaLineasPentagrama * 2 - 
-												config.distanciaLineasPentagramaMitad;
-											break;
-
-										case 4:
-										case 11:
-										case 18:
-											cooY = margenY - config.distanciaLineasPentagrama * 3;
-											break;
-
-										case 5:
-										case 12:
-										case 19:
-											cooY = margenY - config.distanciaLineasPentagrama * 3 - 
-												config.distanciaLineasPentagramaMitad;
-											break;
-
-										case 6:
-										case 13:
-										case 20:
-											cooY = margenY - config.distanciaLineasPentagrama * 4;
-											break;
-
-										case 7:
-										case 14:
-										case 21:
-											cooY = margenY - config.distanciaLineasPentagrama * 4 - 
-												config.distanciaLineasPentagramaMitad;
-											break;
-
-										default:
-											cooY = 0;
-											break;
-									}
+								case 6:
+									cooY = yPositionCalculator.guitarG2Octave6(nota.getStep(), margenY);
 									break;
-								}
-								default: break;
 							}
+							
+							break;
 						}
-						default: break;
 					}	
 					break;
 				}
-
-				case 2: {
-
-					switch (clave) {
-
-						case 1: {
-
-							switch (octava) {
-
-								case 2: {
-									
-									switch(nota.getStep()){
-										case 1:
-										case 8:
-										case 15:
-											cooY = margenY + config.distanciaLineasPentagrama * 9;
-											break;
-
-										case 2:
-										case 9:
-										case 16:
-											cooY = margenY + config.distanciaLineasPentagrama * 8 + 
-												config.distanciaLineasPentagramaMitad;
-											break;
-
-										case 3:
-										case 10:
-										case 17:
-											cooY = margenY + config.distanciaLineasPentagrama * 11 + 
-												config.distanciaLineasPentagramaMitad;
-											break;
-
-										case 4:
-										case 11:
-										case 18:
-											cooY = margenY + config.distanciaLineasPentagrama * 11;
-											break;
-
-										case 5:
-										case 12:
-										case 19:
-											cooY = margenY + config.distanciaLineasPentagrama * 10 + 
-												config.distanciaLineasPentagramaMitad;
-											break;
-
-										case 6:
-										case 13:
-										case 20:
-											cooY = margenY + config.distanciaLineasPentagrama * 10;
-											break;
-
-										case 7:
-										case 14:
-										case 21:
-											cooY = margenY + config.distanciaLineasPentagrama * 9 + 
-												config.distanciaLineasPentagramaMitad;
-											break;
-
-										default:
-											cooY = 0;
-											break;
-									}
+				case 2: 
+				{
+					switch (clave) 
+					{
+						case 1: 
+						{
+							switch (octava) 
+							{
+								case 2:
+									cooY = yPositionCalculator.pianoG2Octave2(nota.getStep(), margenY);
 									break;
-								}
 
-								case 3: {
-									
-									switch(nota.getStep()){
-										case 1:
-										case 8:
-										case 15:
-											cooY = margenY + config.distanciaLineasPentagrama * 5 + 
-												config.distanciaLineasPentagramaMitad;
-											break;
-
-										case 2:
-										case 9:
-										case 16:
-											cooY = margenY + config.distanciaLineasPentagrama * 5;
-											break;
-
-										case 3:
-										case 10:
-										case 17:
-											cooY = margenY + config.distanciaLineasPentagrama * 8;
-											break;
-
-										case 4:
-										case 11:
-										case 18:
-											cooY = margenY + config.distanciaLineasPentagrama * 7 + 
-												config.distanciaLineasPentagramaMitad;
-											break;
-
-										case 5:
-										case 12:
-										case 19:
-											cooY = margenY + config.distanciaLineasPentagrama * 7;
-											break;
-
-										case 6:
-										case 13:
-										case 20:
-											cooY = margenY + config.distanciaLineasPentagrama * 6 + 
-												config.distanciaLineasPentagramaMitad;
-											break;
-
-										case 7:
-										case 14:
-										case 21:
-											cooY = margenY + config.distanciaLineasPentagrama * 6;
-											break;
-
-										default:
-											cooY = 0;
-											break;
-									}
+								case 3:
+									cooY = yPositionCalculator.pianoG2Octave3(nota.getStep(), margenY);
 									break;
-								}
 
-								case 4: {
-									
-									switch(nota.getStep()){
-										case 1:
-										case 8:
-										case 15:
-											cooY = margenY + config.distanciaLineasPentagrama * 2;
-											break;
-
-										case 2:
-										case 9:
-										case 16:
-											cooY = margenY + config.distanciaLineasPentagrama + 
-												config.distanciaLineasPentagramaMitad;
-											break;
-
-										case 3:
-										case 10:
-										case 17:
-											cooY = margenY + config.distanciaLineasPentagrama * 4 + 
-												config.distanciaLineasPentagramaMitad;
-											break;
-
-										case 4:
-										case 11:
-										case 18:
-											cooY = margenY + config.distanciaLineasPentagrama * 4;
-											break;
-
-										case 5:
-										case 12:
-										case 19:
-											cooY = margenY + config.distanciaLineasPentagrama * 3 + 
-												config.distanciaLineasPentagramaMitad;
-											break;
-
-										case 6:
-										case 13:
-										case 20:
-											cooY = margenY + config.distanciaLineasPentagrama * 3;
-											break;
-
-										case 7:
-										case 14:
-										case 21:
-											cooY = margenY + config.distanciaLineasPentagrama * 2 + 
-												config.distanciaLineasPentagramaMitad;
-											break;
-
-										default:
-											cooY = 0;
-											break;
-									}
+								case 4:
+									cooY = yPositionCalculator.pianoG2Octave4(nota.getStep(), margenY);
 									break;
-								}
 
-								case 5: {
-									
-									switch(nota.getStep()){
-										case 1:
-										case 8:
-										case 15:
-											cooY = margenY - config.distanciaLineasPentagrama - 
-												config.distanciaLineasPentagramaMitad;
-											break;
-
-										case 2:
-										case 9:
-										case 16:
-											cooY = margenY - config.distanciaLineasPentagrama * 2;
-											break;
-
-										case 3:
-										case 10:
-										case 17:
-											cooY = margenY + config.distanciaLineasPentagrama;
-											break;
-
-										case 4:
-										case 11:
-										case 18:
-											cooY = margenY + config.distanciaLineasPentagramaMitad;
-											break;
-
-										case 5:
-										case 12:
-										case 19:
-											cooY = margenY;
-											break;
-
-										case 6:
-										case 13:
-										case 20:
-											cooY = margenY - config.distanciaLineasPentagramaMitad;
-											break;
-
-										case 7:
-										case 14:
-										case 21:
-											cooY = margenY - config.distanciaLineasPentagrama;
-											break;
-
-										default:
-											cooY = 0;
-											break;
-									}
+								case 5:
+									cooY = yPositionCalculator.pianoG2Octave5(nota.getStep(), margenY);
 									break;
-								}
 
-								case 6: {
-									
-									switch(nota.getStep()){
-										case 1:
-										case 8:
-										case 15:
-											cooY = margenY - config.distanciaLineasPentagrama * 5;
-											break;
-
-										case 2:
-										case 9:
-										case 16:
-											cooY = margenY - config.distanciaLineasPentagrama * 5 - 
-												config.distanciaLineasPentagramaMitad;
-											break;
-
-										case 3:
-										case 10:
-										case 17:
-											cooY = margenY - config.distanciaLineasPentagrama * 2 - 
-												config.distanciaLineasPentagramaMitad;
-											break;
-
-										case 4:
-										case 11:
-										case 18:
-											cooY = margenY - config.distanciaLineasPentagrama * 3;
-											break;
-
-										case 5:
-										case 12:
-										case 19:
-											cooY = margenY - config.distanciaLineasPentagrama * 3 - 
-												config.distanciaLineasPentagramaMitad;
-											break;
-
-										case 6:
-										case 13:
-										case 20:
-											cooY = margenY - config.distanciaLineasPentagrama * 4;
-											break;
-
-										case 7:
-										case 14:
-										case 21:
-											cooY = margenY - config.distanciaLineasPentagrama * 4 - 
-												config.distanciaLineasPentagramaMitad;
-											break;
-
-										default:
-											cooY = 0;
-											break;
-									}
+								case 6:
+									cooY = yPositionCalculator.pianoG2Octave6(nota.getStep(), margenY);
 									break;
-								}
-								default: break;
 							}
+							
 							break;
 						}
-
-						case 2: {
-
-							switch (octava) {
-
-								case 1: {
-									
-									switch(nota.getStep()){
-										case 1:
-										case 8:
-										case 15:
-											cooY = margenY + config.distanciaLineasPentagrama * 6 + 
-												config.distanciaLineasPentagramaMitad;
-											break;
-
-										case 2:
-										case 9:
-										case 16:
-											cooY = margenY + config.distanciaLineasPentagrama * 6;
-											break;
-
-										case 3:
-										case 10:
-										case 17:
-											cooY = margenY + config.distanciaLineasPentagrama * 9;
-											break;
-
-										case 4:
-										case 11:
-										case 18:
-											cooY = margenY + config.distanciaLineasPentagrama * 8 + 
-												config.distanciaLineasPentagramaMitad;
-											break;
-
-										case 5:
-										case 12:
-										case 19:
-											cooY = margenY + config.distanciaLineasPentagrama * 8;
-											break;
-
-										case 6:
-										case 13:
-										case 20:
-											cooY = margenY + config.distanciaLineasPentagrama * 7 + 
-												config.distanciaLineasPentagramaMitad;
-											break;
-
-										case 7:
-										case 14:
-										case 21:
-											cooY = margenY + config.distanciaLineasPentagrama * 7;
-											break;
-
-										default:
-											cooY = 0;
-											break;
-									}
+						
+						case 2: 
+						{
+							switch (octava) 
+							{
+								case 1:
+									cooY = yPositionCalculator.pianoF4Octave1(nota.getStep(), margenY);
 									break;
-								}
 
-								case 2: {
-									
-									switch(nota.getStep()){
-										case 1:
-										case 8:
-										case 15:
-											cooY = margenY + config.distanciaLineasPentagrama * 3;
-											break;
-
-										case 2:
-										case 9:
-										case 16:
-											cooY = margenY + config.distanciaLineasPentagrama * 2 + 
-												config.distanciaLineasPentagramaMitad;
-											break;
-
-										case 3:
-										case 10:
-										case 17:
-											cooY = margenY + config.distanciaLineasPentagrama * 5 + 
-												config.distanciaLineasPentagramaMitad;
-											break;
-
-										case 4:
-										case 11:
-										case 18:
-											cooY = margenY + config.distanciaLineasPentagrama * 5;
-											break;
-
-										case 5:
-										case 12:
-										case 19:
-											cooY = margenY + config.distanciaLineasPentagrama * 4 + 
-												config.distanciaLineasPentagramaMitad;
-											break;
-
-										case 6:
-										case 13:
-										case 20:
-											cooY = margenY + config.distanciaLineasPentagrama * 4;
-											break;
-
-										case 7:
-										case 14:
-										case 21:
-											cooY = margenY + config.distanciaLineasPentagrama * 3 + 
-												config.distanciaLineasPentagramaMitad;
-											break;
-
-										default:
-											cooY = 0;
-											break;
-									}
+								case 2:
+									cooY = yPositionCalculator.pianoF4Octave2(nota.getStep(), margenY);
 									break;
-								}
 
-								case 3: {
-									
-									switch(nota.getStep()){
-										case 1:
-										case 8:
-										case 15:
-											cooY = margenY - config.distanciaLineasPentagramaMitad;
-											break;
-
-										case 2:
-										case 9:
-										case 16:
-											cooY = margenY - config.distanciaLineasPentagrama;
-											break;
-
-										case 3:
-										case 10:
-										case 17:
-											cooY = margenY + config.distanciaLineasPentagrama * 2;
-											break;
-
-										case 4:
-										case 11:
-										case 18:
-											cooY = margenY + config.distanciaLineasPentagrama + 
-												config.distanciaLineasPentagramaMitad;
-											break;
-
-										case 5:
-										case 12:
-										case 19:
-											cooY = margenY + config.distanciaLineasPentagrama;
-											break;
-
-										case 6:
-										case 13:
-										case 20:
-											cooY = margenY + config.distanciaLineasPentagrama - 
-												config.distanciaLineasPentagramaMitad;
-											break;
-
-										case 7:
-										case 14:
-										case 21:
-											cooY = margenY;
-											break;
-
-										default:
-											cooY = 0;
-											break;
-									}
+								case 3:
+									cooY = yPositionCalculator.pianoF4Octave3(nota.getStep(), margenY);
 									break;
-								}
 
-								case 4: {
-									
-									switch(nota.getStep()){
-										case 1:
-										case 8:
-										case 15:
-											cooY = margenY - config.distanciaLineasPentagrama * 4;
-											break;
-
-										case 2:
-										case 9:
-										case 16:
-											cooY = margenY - config.distanciaLineasPentagrama * 4 - 
-												config.distanciaLineasPentagramaMitad;
-											break;
-
-										case 3:
-										case 10:
-										case 17:
-											cooY = margenY - config.distanciaLineasPentagrama - 
-												config.distanciaLineasPentagramaMitad;
-											break;
-
-										case 4:
-										case 11:
-										case 18:
-											cooY = margenY - config.distanciaLineasPentagrama * 2;
-											break;
-
-										case 5:
-										case 12:
-										case 19:
-											cooY = margenY - config.distanciaLineasPentagrama * 2 - 
-												config.distanciaLineasPentagramaMitad;
-											break;
-
-										case 6:
-										case 13:
-										case 20:
-											cooY = margenY - config.distanciaLineasPentagrama * 3;
-											break;
-
-										case 7:
-										case 14:
-										case 21:
-											cooY = margenY - config.distanciaLineasPentagrama * 3 - 
-												config.distanciaLineasPentagramaMitad;
-											break;
-
-										default:
-											cooY = 0;
-											break;
-									}
+								case 4:
+									cooY = yPositionCalculator.pianoF4Octave4(nota.getStep(), margenY);
 									break;
-								}
-								default: break;
 							}
 						}
-						default: break;
 					}
+					
 					break;
 				}
-				default: break;
 			}
-		}
-
-		else {
-
-			switch (nota.getFiguracion()) {
-
-				case 5:		
-				case 6:
-				case 7:
-				case 8:
-				case 9:
-					cooY = margenY;
-					break;
-					
-				case 10:
-					cooY = margenY + config.distanciaLineasPentagrama + 
-						config.distanciaLineasPentagramaMitad + config.ySilencioBlanca;
-					break;
-					
-				case 11:
-					cooY = margenY + config.distanciaLineasPentagrama;
-					break;
-
-				default: break;
-			}
+		} else {
+			cooY = yPositionCalculator.silence(nota.getFiguracion(), margenY);
 		}
 
 		return cooY;
@@ -1259,250 +566,23 @@ public class Calculador {
 	
 	private void recolocarCompases(final Compas compas)
 	{
-		if ( vista == Vista.VERTICAL && compas.getXFin() > config.xFinalPentagramas ) {
-			moverCompasAlSiguienteRenglon(compas);
+		if (hayQueReajustar(compas.getXFin())) 
+		{
+			MeasureReadjuster measureReadjuster = new MeasureReadjuster(compasMarginY);
+			measureReadjuster.moverCompasAlSiguienteRenglon(compas, partitura.getStaves());
+			
+			compasMarginX = compas.getXFin();
+			compasMarginY = measureReadjuster.getUpdatedCompasMarginY();
 			
 			ultimoCompas = compasActual - 1;
-			reajustarCompases();
+			measureReadjuster.reajustarCompases(partitura, primerCompas, ultimoCompas);
 			primerCompas = compasActual;
 		}
 	}
 	
-	private void moverCompasAlSiguienteRenglon(final Compas compas) 
+	private boolean hayQueReajustar(final int xFin)
 	{
-		final int distanciaX = compas.getXIni() - config.xInicialPentagramas;
-		final int distanciaY = (config.distanciaLineasPentagrama * 4 + 
-				config.distanciaPentagramas) * partitura.getStaves();
-
-		compas.setXIni(config.xInicialPentagramas);
-		compas.setXFin(compas.getXFin() - distanciaX);
-		if (compas.getXFin() > config.xFinalPentagramas) {
-			compas.setXFin(config.xFinalPentagramas);
-		}
-		compas.setXIniNotas(compas.getXIniNotas() - distanciaX);
-
-		for (int i=0; i<compas.numClaves(); i++) {
-			compas.getClave(i).x = compas.getClave(i).x - distanciaX;
-			compas.getClave(i).y = compas.getClave(i).y + distanciaY;
-		}
-
-		for (int i=0; i<compas.numIntensidades(); i++) {
-			compas.getIntensidad(i).x = compas.getIntensidad(i).x - distanciaX;
-			compas.getIntensidad(i).y = compas.getIntensidad(i).y + distanciaY;
-		}
-		
-		for (int i=0; i<compas.numPedalesInicio(); i++) {
-			compas.getPedalInicio(i).x = compas.getPedalInicio(i).x - distanciaX;
-			compas.getPedalInicio(i).y = compas.getPedalInicio(i).y + distanciaY;
-		}
-
-		for (int i=0; i<compas.numPedalesFin(); i++) {
-			compas.getPedalFin(i).x = compas.getPedalFin(i).x - distanciaX;
-			compas.getPedalFin(i).y = compas.getPedalFin(i).y + distanciaY;
-		}
-		
-		if (compas.hayTempo()) {
-			compas.getTempo().setX(compas.getTempo().getX() - distanciaX);
-			compas.getTempo().setYNumerador(compas.getTempo().getYNumerador() + distanciaY);
-			compas.getTempo().setYDenominador(compas.getTempo().getYDenominador() + distanciaY);
-		}
-		
-		for (int i=0; i<compas.numTextos(); i++) {
-			compas.getTexto(i).x = compas.getTexto(i).x - distanciaX;
-			compas.getTexto(i).y = compas.getTexto(i).y + distanciaY;
-		}
-		
-		for (int i=0; i<compas.numCrescendos(); i++) {
-			compas.getCrescendo(i).setXIni(compas.getCrescendo(i).getXIni() - distanciaX);
-			compas.getCrescendo(i).setXFin(compas.getCrescendo(i).getXFin() - distanciaX);
-			compas.getCrescendo(i).setYIni(compas.getCrescendo(i).getYIni() + distanciaY);
-		}
-		
-		for (int i=0; i<compas.numDiminuendos(); i++) {
-			compas.getDiminuendo(i).setXIni(compas.getDiminuendo(i).getXIni() - distanciaX);
-			compas.getDiminuendo(i).setXFin(compas.getDiminuendo(i).getXFin() - distanciaX);
-			compas.getDiminuendo(i).setYIni(compas.getDiminuendo(i).getYIni() + distanciaY);
-		}
-		
-		compasMarginX = compas.getXFin();
-		compasMarginY = compasMarginY + distanciaY;
-
-		compas.setYIni(compasMarginY);
-		compas.setYFin(compasMarginY + 
-				config.distanciaLineasPentagrama * 4 + 
-				(config.distanciaPentagramas + 
-						config.distanciaLineasPentagrama * 4) * (partitura.getStaves() - 1));
-		
-		final int numNotas = compas.numNotas();
-		for (int i=0; i<numNotas; i++) {
-			compas.getNota(i).setX(compas.getNota(i).getX() - distanciaX);
-			compas.getNota(i).setY(compas.getNota(i).getY() + distanciaY);
-		}
-	}
-	
-	private void reajustarCompases() {
-		final int espacioADistribuir = config.xFinalPentagramas - partitura.getCompas(ultimoCompas).getXFin();
-
-    	final int numCompases = ultimoCompas - primerCompas + 1;
-        final int anchoParaCadaCompas = espacioADistribuir / numCompases;
-        int posicionX = partitura.getCompas(primerCompas).getXFin() + anchoParaCadaCompas;
-        
-        //  Primer paso: reajustar ancho y posición de los compases
-        for (int i=primerCompas; i<=ultimoCompas; i++) {
-        	final Compas compas = partitura.getCompas(i);
-        	
-        	if (i == primerCompas) {
-        		compas.setXFin(posicionX);
-        	}
-        	else {
-	        	final int distanciaXIni = compas.getXIniNotas() - compas.getXIni();
-	        	
-	        	compas.setXIni(posicionX);
-	        	compas.setXIniNotas(posicionX + distanciaXIni);
-	            
-	        	posicionX = compas.getXFin() + anchoParaCadaCompas;
-	            if (i == ultimoCompas) {
-	            	posicionX = config.xFinalPentagramas;
-	            }
-	            compas.setXFin(posicionX);
-	            
-	            final int numNotas = compas.numNotas();
-	            for (int j=0; j<numNotas; j++) {
-	            	compas.getNota(j).setX(compas.getNota(j).getX() + anchoParaCadaCompas);
-	            }
-
-    			for (int j=0; j<compas.numClaves(); j++) {
-    				if (compas.getClave(j) != null) {
-    					compas.getClave(j).x = compas.getClave(j).x + anchoParaCadaCompas;
-    				}
-    			}
-	            
-    			for (int j=0; j<compas.numIntensidades(); j++) {
-            		compas.getIntensidad(j).x = compas.getIntensidad(j).x + anchoParaCadaCompas;
-    			}
-	            
-            	for (int j=0; j<compas.numPedalesInicio(); j++) {
-            		compas.getPedalInicio(j).x = compas.getPedalInicio(j).x + anchoParaCadaCompas;
-            	}
-	            
-            	for (int j=0; j<compas.numPedalesFin(); j++) {
-            		compas.getPedalFin(j).x = compas.getPedalFin(j).x + anchoParaCadaCompas;
-            	}
-	            
-	            if (compas.hayTempo()) {
-	            	compas.getTempo().setX(compas.getTempo().getX() + anchoParaCadaCompas);
-	            }
-	            
-	            for (int j=0; j<compas.numTextos(); j++) {
-	            	compas.getTexto(j).x = compas.getTexto(j).x + anchoParaCadaCompas;
-	            }
-	            
-	            for (int j=0; j<compas.numCrescendos(); j++) {
-	            	compas.getCrescendo(j).setXIni(compas.getCrescendo(j).getXIni() + anchoParaCadaCompas);
-	            	compas.getCrescendo(j).setXFin(compas.getCrescendo(j).getXFin() + anchoParaCadaCompas);
-	            }
-	            
-	            for (int j=0; j<compas.numDiminuendos(); j++) {
-	            	compas.getDiminuendo(j).setXIni(compas.getDiminuendo(j).getXIni() + anchoParaCadaCompas);
-	            	compas.getDiminuendo(j).setXFin(compas.getDiminuendo(j).getXFin() + anchoParaCadaCompas);
-	            }
-        	}
-        }
-        
-        //  Segundo paso: reajustar posición de las notas y figuras gráficas
-        for (int i=primerCompas; i<=ultimoCompas; i++) {
-        	final Compas compas = partitura.getCompas(i);
-        	final ArrayList<Integer> xsDeNotasYClaves = compas.xsDeCompas(false);
-        	
-        	final int lastX = xsDeNotasYClaves.get(xsDeNotasYClaves.size() - 1);
-        	final int anchoADistribuir = compas.getXFin() - config.margenDerechoCompases - lastX;
-        	
-        	//  El primer elemento no lo vamos a mover, de ahí el -1
-        	final int numElementos = xsDeNotasYClaves.size() - 1;
-        	int anchoPorElemento = 0;
-        	if (numElementos > 0) {
-        		anchoPorElemento = anchoADistribuir / numElementos;
-        	}
-        	
-        	reajustarNotasYClaves(compas, xsDeNotasYClaves, anchoPorElemento);
-        	reajustarFigurasGraficas(compas, anchoPorElemento);
-        }
-	}
-
-	private void reajustarFigurasGraficas(final Compas compas, final int anchoPorNota) {
-		
-		int multiplicador = 0;
-		final int xPrimeraNota = compas.saberXPrimeraNota();
-		
-		final ArrayList<Integer> xsDelCompas = compas.xsDeCompas(true);
-		
-		for (int i=0; i<compas.numIntensidades(); i++) {
-    		if (compas.getIntensidad(i).x != xPrimeraNota) {
-	    		multiplicador = xsDelCompas.indexOf(compas.getIntensidad(i).x);
-	        	compas.getIntensidad(i).x = compas.getIntensidad(i).x + anchoPorNota * multiplicador;
-    		}
-		}
-        
-		for (int i=0; i<compas.numPedalesInicio(); i++) {
-    		if (compas.getPedalInicio(i).x != xPrimeraNota) {
-	    		multiplicador = xsDelCompas.indexOf(compas.getPedalInicio(i).x);
-	        	compas.getPedalInicio(i).x = compas.getPedalInicio(i).x + anchoPorNota * multiplicador;
-    		}
-		}
-        
-    	for (int i=0; i<compas.numPedalesFin(); i++) {
-        	if (compas.getPedalFin(i).x != xPrimeraNota) {
-	        	multiplicador = xsDelCompas.indexOf(compas.getPedalFin(i).x);
-	        	compas.getPedalFin(i).x = compas.getPedalFin(i).x + anchoPorNota * multiplicador;
-        	}
-    	}
-
-    	for (int i=0; i<compas.numTextos(); i++) {
-    		multiplicador = xsDelCompas.indexOf(compas.getTexto(i).x);
-        	compas.getTexto(i).x = compas.getTexto(i).x + anchoPorNota * multiplicador;
-    	}
-        
-        for (int i=0; i<compas.numCrescendos(); i++) {
-    		multiplicador = xsDelCompas.indexOf(compas.getCrescendo(i).getXIni());
-    		compas.getCrescendo(i).setXIni( 
-        			compas.getCrescendo(i).getXIni() + anchoPorNota * multiplicador);
-    		
-    		multiplicador = xsDelCompas.indexOf(compas.getCrescendo(i).getXFin());
-    		compas.getCrescendo(i).setXFin( 
-        			compas.getCrescendo(i).getXFin() + anchoPorNota * multiplicador);
-        }
-        
-        for (int i=0; i<compas.numDiminuendos(); i++) {
-    		multiplicador = xsDelCompas.indexOf(compas.getDiminuendo(i).getXIni());
-    		compas.getDiminuendo(i).setXIni( 
-        			compas.getDiminuendo(i).getXIni() + anchoPorNota * multiplicador);
-    		
-    		multiplicador = xsDelCompas.indexOf(compas.getDiminuendo(i).getXFin());
-    		compas.getDiminuendo(i).setXFin( 
-        			compas.getDiminuendo(i).getXFin() + anchoPorNota * multiplicador);
-        }
-	}
-	
-	private void reajustarNotasYClaves(final Compas compas, 
-			final ArrayList<Integer> xsDeElementos, final int anchoPorNota) {
-		
-		//  A cada elemento se le suma una distancia cada vez
-    	//  mayor, ya que de lo contrario sólo estaríamos
-    	//  desplazándolos todos pero manteniéndolos a la misma
-    	//  distancia entre sí mismos que antes
-    	final ArrayList<Nota> notas = compas.getNotas();
-    	final int numNotas = notas.size();
-    	int multiplicador = 0;
-    	for (int j=0;j<numNotas;j++) {
-			multiplicador = xsDeElementos.indexOf(notas.get(j).getX());
-			notas.get(j).setX(notas.get(j).getX() + anchoPorNota * multiplicador);
-    	}
-    	
-    	for (int j=0; j<compas.numClaves(); j++) {
-			multiplicador = xsDeElementos.indexOf(compas.getClave(j).x);
-			compas.getClave(j).x = compas.getClave(j).x + anchoPorNota * multiplicador;
-		}
-    	
+		return vista == Vista.VERTICAL && xFin > config.xFinalPentagramas;
 	}
 	
 	public Bitmap obtenerImagenDeCabezaDeNota(final Nota nota) 

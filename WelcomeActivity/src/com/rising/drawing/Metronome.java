@@ -4,7 +4,9 @@ import java.util.ArrayList;
 
 import com.rising.drawing.figurasgraficas.Compas;
 import com.rising.drawing.figurasgraficas.Nota;
+import com.rising.drawing.figurasgraficas.OrdenDibujo;
 import com.rising.drawing.figurasgraficas.Partitura;
+import com.rising.drawing.figurasgraficas.Vista;
 
 import android.content.Context;
 import android.media.AudioManager;
@@ -121,19 +123,9 @@ public class Metronome {
 			if (currentX != compas.getXFin()) 
 			{
 				currentX = compas.getXFin();
-				final int currentY = compas.getYFin();
-				final int ultimoCompas = i;
 				
-				int coo = vista == Vista.VERTICAL ? currentY : currentX;
-				if (scroll.outOfBoundaries(coo)) {
-					final int distanciaDesplazamiento = 
-						scroll.distanciaDesplazamiento(partitura, 
-							primerCompas, ultimoCompas);
-					
-					scroll.hacerScroll(distanciaDesplazamiento);
-					
-					primerCompas = ultimoCompas;
-				}
+				primerCompas = StaticMethods.manageScroll(compas.getYFin(), 
+						vista, currentX, scroll, partitura, primerCompas, i);
 			}
     		
     		dibujarBarras(compas, speed);

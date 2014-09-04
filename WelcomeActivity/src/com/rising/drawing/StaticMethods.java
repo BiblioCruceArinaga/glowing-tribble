@@ -3,6 +3,17 @@ package com.rising.drawing;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
+import android.app.Dialog;
+import android.content.Context;
+import android.util.Log;
+import android.widget.NumberPicker;
+import android.widget.NumberPicker.OnScrollListener;
+import android.widget.SeekBar.OnSeekBarChangeListener;
+import android.widget.SeekBar;
+
+import com.rising.drawing.figurasgraficas.Partitura;
+import com.rising.drawing.figurasgraficas.Vista;
+
 /**
  * Bunch of helper methods used by different classes.
  * These methods allow us to avoid duplicity
@@ -78,5 +89,77 @@ public class StaticMethods
 		}
 		
 		return joinedArrays;
+	}
+	
+	public static int manageScroll(final int yFin, final Vista vista, final int xActual,
+			final AbstractScroll scroll, final Partitura partitura, int primerCompas, final int compasActual)
+	{
+		final int yActual = yFin;
+		final int coo = vista == Vista.VERTICAL ? yActual : xActual;
+		
+		if (scroll.outOfBoundaries(coo)) 
+		{
+			final int desplazamiento = 
+				scroll.distanciaDesplazamiento(partitura, 
+					primerCompas, compasActual);
+			
+			scroll.hacerScroll(desplazamiento);
+			
+			primerCompas = compasActual;
+		}
+		
+		return primerCompas;
+	}
+	
+	public static Dialog initializeDialog(final Context context, final int layout)
+	{
+		Dialog dialog = new Dialog(context, R.style.cust_dialog);	
+		dialog.setContentView(layout);
+		dialog.setTitle(R.string.metronome);
+
+		return dialog;
+	}
+	
+	public static void initializeMetronomeSpeed(final NumberPicker metronomeSpeed,
+			final SeekBar seekBarMetronome, final int value)
+	{
+		metronomeSpeed.setMaxValue(300);
+		metronomeSpeed.setMinValue(1);
+		metronomeSpeed.setValue(value);
+		metronomeSpeed.setWrapSelectorWheel(true);
+		metronomeSpeed.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
+		metronomeSpeed.setOnScrollListener(new OnScrollListener() 
+		{
+			@Override
+			public void onScrollStateChange(final NumberPicker arg0, final int arg1) 
+			{
+				seekBarMetronome.setProgress(arg0.getValue());
+			}
+		});
+	}
+	
+	public static void initializeSeekBarMetronome(final SeekBar seekBarMetronome, 
+			final NumberPicker metronomeSpeed, final int value)
+	{
+		seekBarMetronome.setMax(300);
+		seekBarMetronome.setProgress(value);
+		seekBarMetronome.setOnSeekBarChangeListener(new OnSeekBarChangeListener()
+		{
+			@Override
+			public void onProgressChanged(final SeekBar seekBar, final int progress, final boolean fromUser) {
+				metronomeSpeed.setValue(progress);
+				Log.i("Progress", Integer.toString(progress));
+			}
+
+			@Override
+			public void onStartTrackingTouch(final SeekBar seekBar) {
+				Log.i("Seek", "StartTracking");
+			}
+
+			@Override
+			public void onStopTrackingTouch(final SeekBar seekBar) {
+				Log.i("Seek", "StopTracking");
+			}
+		});
 	}
 }

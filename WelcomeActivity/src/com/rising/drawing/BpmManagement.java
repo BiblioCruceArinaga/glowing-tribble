@@ -3,11 +3,12 @@ package com.rising.drawing;
 import java.util.ArrayList;
 
 import com.rising.drawing.figurasgraficas.Compas;
+import com.rising.drawing.figurasgraficas.OrdenDibujo;
 import com.rising.drawing.figurasgraficas.Partitura;
+import com.rising.drawing.figurasgraficas.Vista;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -15,8 +16,6 @@ import android.widget.ImageButton;
 import android.widget.NumberPicker;
 import android.widget.SeekBar;
 import android.widget.Toast;
-import android.widget.NumberPicker.OnScrollListener;
-import android.widget.SeekBar.OnSeekBarChangeListener;
 
 public class BpmManagement 
 {
@@ -45,7 +44,7 @@ public class BpmManagement
 			compas = compasAPartirDeTap(- scroll.getCooOffset() + scroll.getCooDown(), evt.getY());
 		}
 		
-		establecerVelocidadAlCompas(compas);
+		establecerVelocidadAlCompas(compas, 120);
 	}
 	
 	//  Devuelve el índice del compás que se encuentra
@@ -73,65 +72,29 @@ public class BpmManagement
 			 ( compas.getXIni() <= x && x < compas.getXFin() );
 	}
 	
-	private void establecerVelocidadAlCompas(final int index) {
-		mDialog = new Dialog(context,  R.style.cust_dialog);	
-		mDialog.setContentView(R.layout.metronome_dialog_compas);
-		mDialog.setTitle(R.string.metronome);
-		mDialog.getWindow().setLayout(config.anchoDialogBpm, config.altoDialogBpm);	
+	private void establecerVelocidadAlCompas(final int index, final int value) 
+	{
+		mDialog = StaticMethods.initializeDialog(context, R.layout.metronome_dialog_compas);
+		mDialog.getWindow().setLayout(config.anchoDialogBpm, config.altoDialogBpm);
 
-		final SeekBar seekBar_metronome = (SeekBar)mDialog.findViewById(R.id.seekBar_metronome);
+		final SeekBar seekBarMetronome = (SeekBar)mDialog.findViewById(R.id.seekBar_metronome);
+		final NumberPicker metronomeSpeed = (NumberPicker)mDialog.findViewById(R.id.nm_metronome);
 		
-		final NumberPicker metronome_speed = (NumberPicker)mDialog.findViewById(R.id.nm_metronome);
-		metronome_speed.setMaxValue(300);
-		metronome_speed.setMinValue(1);
-		metronome_speed.setValue(120);
-		metronome_speed.setWrapSelectorWheel(true);
-		metronome_speed.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
-		metronome_speed.setOnScrollListener(new OnScrollListener() {
-
-			@Override
-			public void onScrollStateChange(final NumberPicker arg0, final int arg1) {
-				// TODO Auto-generated method stub
-				seekBar_metronome.setProgress(arg0.getValue());
-			}
-		});
-		
-		seekBar_metronome.setMax(300);
-		seekBar_metronome.setProgress(120);
-		seekBar_metronome.setOnSeekBarChangeListener(new OnSeekBarChangeListener(){
-
-			@Override
-			public void onProgressChanged(final SeekBar seekBar, final int progress, final boolean fromUser) {
-				metronome_speed.setValue(progress);
-				Log.i("Progress", Integer.toString(progress));
-				
-			}
-
-			@Override
-			public void onStartTrackingTouch(final SeekBar seekBar) {
-				Log.i("Seek", "StartTracking");
-				
-			}
-
-			@Override
-			public void onStopTrackingTouch(final SeekBar seekBar) {
-				Log.i("Seek", "StopTracking");
-				
-			}
-		});
+		StaticMethods.initializeMetronomeSpeed(metronomeSpeed, seekBarMetronome, value);
+		StaticMethods.initializeSeekBarMetronome(seekBarMetronome, metronomeSpeed, value);
 		
 		final ImageButton playButton = (ImageButton)mDialog.findViewById(R.id.playButton1);
-		playButton.setOnClickListener(new OnClickListener(){
-
+		playButton.setOnClickListener(new OnClickListener()
+		{
 			@Override
 			public void onClick(final View view) {
-				establecerBpm(metronome_speed, index);
+				establecerBpm(metronomeSpeed, index);
 			}
 		});
 		
 		final ImageButton deleteButton = (ImageButton)mDialog.findViewById(R.id.playButton2);
-		deleteButton.setOnClickListener(new OnClickListener(){
-
+		deleteButton.setOnClickListener(new OnClickListener()
+		{
 			@Override
 			public void onClick(final View view) {
 				borrarBpm(index);
@@ -141,15 +104,15 @@ public class BpmManagement
 		mDialog.show();
 	}
 	
-	private void establecerBpm(final NumberPicker metronome_speed, int index)
+	private void establecerBpm(final NumberPicker metronomeSpeed, int index)
 	{
-		final int bpm = metronome_speed.getValue();
+		final int bpm = metronomeSpeed.getValue();
 		
 		if ( bpm < 1 || bpm > 300 ) {
 			final Toast toast1 = Toast.makeText(context,
 		                    R.string.speed_allowed, Toast.LENGTH_SHORT);
 		    toast1.show();
-		}
+		} 
 		else {
 			final Compas compas = partitura.getCompas(index);
 			compas.setBpm(bpm);

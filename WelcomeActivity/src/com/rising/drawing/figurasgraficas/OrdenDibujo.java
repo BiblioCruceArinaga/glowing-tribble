@@ -1,4 +1,5 @@
-package com.rising.drawing;
+package com.rising.drawing.figurasgraficas;
+
 
 import android.graphics.Bitmap;
 import android.graphics.Paint;

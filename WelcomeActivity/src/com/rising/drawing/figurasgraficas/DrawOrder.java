@@ -1,4 +1,4 @@
-package com.rising.drawing;
+package com.rising.drawing.figurasgraficas;
 
 /**
  * Types of drawings we can do: lines, images,

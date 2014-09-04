@@ -1,5 +1,7 @@
 package com.rising.drawing;
 
+import com.rising.drawing.figurasgraficas.Vista;
+
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Dialog;
@@ -20,9 +22,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.NumberPicker;
-import android.widget.NumberPicker.OnScrollListener;
 import android.widget.SeekBar;
-import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.Toast;
 
 public class MainActivity extends Activity{
@@ -34,14 +34,11 @@ public class MainActivity extends Activity{
 	private transient String score;
 	private transient Config config;
 	private transient Dialog mDialog;
-
-	//  Gestión del metrónomo
-	private transient NumberPicker metronomeSpeed;
-	private transient SeekBar seekBarMetronome;
 	private transient int tempo = 120;
 	
 	@Override
-	protected void onCreate(final Bundle savedInstance){
+	protected void onCreate(final Bundle savedInstance)
+	{
 		super.onCreate(savedInstance);	
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, 
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);		
@@ -65,7 +62,8 @@ public class MainActivity extends Activity{
 	}
 	
 	@Override
-	public void onResume(){
+	public void onResume()
+	{
 		super.onResume();
 		
 		final DisplayMetrics display = new DisplayMetrics();
@@ -160,7 +158,8 @@ public class MainActivity extends Activity{
 		MainActivity.this.startActionMode(new ActionBarMicrophone(screen, MainActivity.this));
 	}
 	
-	private void metronomeOptions(final int value){
+	private void metronomeOptions(final int value)
+	{
 		final WindowManager windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
 		final Display display = windowManager.getDefaultDisplay();
 		final Point screenSize = new Point();
@@ -169,58 +168,21 @@ public class MainActivity extends Activity{
 		final int screenHeight = screenSize.y;
 		Log.i("Window", screenWith + ", " + screenHeight);
 		
-		mDialog = new Dialog(MainActivity.this, R.style.cust_dialog);	
-		mDialog.setContentView(R.layout.metronome_dialog);
-		mDialog.setTitle(R.string.metronome);
+		mDialog = StaticMethods.initializeDialog(MainActivity.this, R.layout.metronome_dialog);
 		mDialog.getWindow().setLayout(config.anchoDialogBpm, config.altoDialogBpm);
 		
-		seekBarMetronome = (SeekBar)mDialog.findViewById(R.id.seekBar_metronome);
-		metronomeSpeed = (NumberPicker)mDialog.findViewById(R.id.nm_metronome);
-					
-		metronomeSpeed.setMaxValue(300);
-		metronomeSpeed.setMinValue(1);
-		metronomeSpeed.setValue(value);
-		metronomeSpeed.setWrapSelectorWheel(true);
-		metronomeSpeed.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
-		metronomeSpeed.setOnScrollListener(new OnScrollListener() {
-
-			@Override
-			public void onScrollStateChange(final NumberPicker arg0, final int arg1) {
-				// TODO Auto-generated method stub
-				seekBarMetronome.setProgress(arg0.getValue());
-			}
-		});
-			 
-		seekBarMetronome.setMax(300);
-		seekBarMetronome.setProgress(value);
-		seekBarMetronome.setOnSeekBarChangeListener(new OnSeekBarChangeListener(){
-
-			@Override
-			public void onProgressChanged(final SeekBar seekBar, final int progress, final boolean fromUser) {
-				metronomeSpeed.setValue(progress);
-				Log.i("Progress", Integer.toString(progress));
-				
-			}
-
-			@Override
-			public void onStartTrackingTouch(final SeekBar seekBar) {
-				Log.i("Seek", "StartTracking");
-				
-			}
-
-			@Override
-			public void onStopTrackingTouch(final SeekBar seekBar) {
-				Log.i("Seek", "StopTracking");
-				
-			}
-		});
-				
+		final SeekBar seekBarMetronome = (SeekBar)mDialog.findViewById(R.id.seekBar_metronome);
+		final NumberPicker metronomeSpeed = (NumberPicker)mDialog.findViewById(R.id.nm_metronome);
+		
+		StaticMethods.initializeMetronomeSpeed(metronomeSpeed, seekBarMetronome, value);
+		StaticMethods.initializeSeekBarMetronome(seekBarMetronome, metronomeSpeed, value);
+		
 		final ImageButton playButton = (ImageButton)mDialog.findViewById(R.id.playButton1);
-		playButton.setOnClickListener(new OnClickListener(){
- 
+		playButton.setOnClickListener(new OnClickListener()
+		{
 			@Override
-			public void onClick(final View view) {
-				
+			public void onClick(final View view) 
+			{
 				tempo = metronomeSpeed.getValue();
 				
 				if ( tempo > 0 && tempo < 301 ) {
@@ -229,8 +191,7 @@ public class MainActivity extends Activity{
 					screen.back();
 					screen.metronomePlay(tempo);
 					mDialog.dismiss();
-				}
-				else {
+				} else {
 					Toast.makeText(getApplicationContext(),
 				                    R.string.speed_allowed, Toast.LENGTH_SHORT).show();
 				}
@@ -239,7 +200,7 @@ public class MainActivity extends Activity{
 		
 		mDialog.show();
 	}
-	
+
 	private void navigateToBar()
 	{
 		mDialog = new Dialog(MainActivity.this, R.style.cust_dialog);	

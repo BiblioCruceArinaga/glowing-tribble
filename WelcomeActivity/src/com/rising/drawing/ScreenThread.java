@@ -1,5 +1,7 @@
 package com.rising.drawing;
 
+import com.rising.drawing.figurasgraficas.Vista;
+
 import android.graphics.Canvas;
 import android.view.SurfaceHolder;
 
