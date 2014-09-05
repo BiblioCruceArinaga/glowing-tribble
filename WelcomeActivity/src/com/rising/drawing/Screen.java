@@ -19,6 +19,7 @@ import android.graphics.Matrix;
 import android.graphics.Path;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -34,7 +35,7 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 	private transient final String pathFolder = "/.RisingScores/scores/";
 	
 	//  Gestión de las posibles vistas y su scroll
-	private transient Partitura partitura = new Partitura();
+	private transient Partitura partitura;
 	private transient ArrayList<OrdenDibujo> ordenesDibujo = new ArrayList<OrdenDibujo>();
 	private transient Vista vista = Vista.VERTICAL;
 	private transient AbstractScroll scroll;
@@ -48,14 +49,13 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 	private transient int xActual;
 	private transient int primerCompas;
 
-	public Screen(final Context context, final String path, 
-			final int width, final int height, final int densityDPI)
+	public Screen(final Context context, final String path, final DisplayMetrics display)
 	{
 		super(context);
 		getHolder().addCallback(this);
 		
 		try {
-			prepareScreenInstance(context, path, width, height, densityDPI);
+			prepareScreenInstance(context, path, display);
 						
 		} catch (FileNotFoundException e) {
 			Log.e("FileNotFoundException: ", e.getMessage() + "\n");
@@ -69,21 +69,23 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
     }
 	
 	private void prepareScreenInstance(
-			final Context context, final String path, final int width, final int height, final int densityDPI) 
+			final Context context, final String path, final DisplayMetrics display) 
 			throws StreamCorruptedException, IOException, CloneNotSupportedException
 	{
 		this.context = context;
+		partitura = new Partitura();
 		
 		final FileMethods fileMethods = new FileMethods(pathFolder, path);
 		fileMethods.cargarDatosDeFichero(partitura);
 
-		config = Config.getInstance(densityDPI, width, height);
+		config = Config.getInstance(display);
 		scroll = vista == Vista.VERTICAL ? new ScrollVertical() : new ScrollHorizontal();		
 						
 		isValidScreen = true;
 	}
 
-	public boolean validScreen() {
+	public boolean validScreen() 
+	{
 		return isValidScreen;
 	}
 	
@@ -106,6 +108,9 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 	{
 		if (canvas != null) 
 		{
+			//  Scroll parameters are constantly initialized.
+			//  This doesn't affect performance, but it might
+			//  be worth checking it out in the future
 			inicializarParametrosScroll(canvas);
 		
 			canvas.drawARGB(255, 255, 255, 255);
@@ -118,9 +123,7 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
             canvas.restore();
 		}
     }
-	
-	//  Scroll parameters are constantly initialized.
-	//  Check it out later on
+
 	private void inicializarParametrosScroll(final Canvas canvas) 
 	{
 		partitura.setWidth(canvas.getWidth());
@@ -233,7 +236,8 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 	
 	private void drawMetronome(final Canvas canvas)
 	{
-		if (metronomo != null) {
+		if (metronomo != null) 
+		{
 			final OrdenDibujo bip = metronomo.getBip();
 			final OrdenDibujo barra = metronomo.getBarra();
 			
@@ -405,7 +409,7 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 	@Override
 	public void surfaceCreated(final SurfaceHolder holder) 
 	{
-		thread = new ScreenThread(getHolder(), this);
+		thread = new ScreenThread(getHolder(), this, getResources());
 		thread.setRunning(true);
 		thread.start();	
 	}
@@ -422,10 +426,7 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 		}
 		
 		isValidScreen = false;
-		
-		partitura.destruir();
-		partitura = null;
-		
+
 		ordenesDibujo.clear();
 		ordenesDibujo = null;
 		
@@ -457,6 +458,8 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 	        				new BpmManagement(partitura, ordenesDibujo, context); 
 	    			bpmManagement.tapManagement(event, scroll, vista);
 	        	}
+	        	
+	        	performClick();
 	        	break;
 	        	
 	        default:
@@ -465,6 +468,13 @@ public class Screen extends SurfaceView implements SurfaceHolder.Callback, Obser
 
 	    return true;
 	}
+	
+	@Override
+    public boolean performClick() 
+	{
+        super.performClick();
+        return true;
+    }
 	
 	@Override
 	public boolean dispatchTouchEvent(final MotionEvent event) 

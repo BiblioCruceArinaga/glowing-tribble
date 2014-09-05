@@ -69,9 +69,10 @@ public class MainActivity extends Activity{
 		final DisplayMetrics display = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(display);
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-		screen = new Screen(this, score, display.widthPixels, display.heightPixels, display.densityDpi);
+		
+		screen = new Screen(this, score, display);
 		if (screen.validScreen()) {
-			new ScreenThread(holder, screen);
+			new ScreenThread(holder, screen, getResources());
 			config = Config.getInstance();
 		}else{
 			Log.e("Valid Screen", "Is not a valid screen");

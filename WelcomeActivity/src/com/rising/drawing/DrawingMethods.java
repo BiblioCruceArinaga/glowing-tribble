@@ -21,8 +21,8 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.RectF;
 
-public class DrawingMethods {
-	
+public class DrawingMethods 
+{
 	private transient boolean drawable;
 
 	private transient final ArrayList<OrdenDibujo> ordenesDibujo = new ArrayList<OrdenDibujo>();
@@ -100,6 +100,7 @@ public class DrawingMethods {
 		ordenesDibujo.add( new OrdenDibujo(config.tamanoLetraObra, 
 				true, partitura.getWork(), config.width / 2, 
 				config.margenSuperior + config.margenObra));
+		
 		ordenesDibujo.add( new OrdenDibujo(config.tamanoLetraAutor, 
 				true, partitura.getCreator(), config.width / 2, 
 				config.margenSuperior + config.margenAutor));
@@ -135,7 +136,8 @@ public class DrawingMethods {
 	
 	private void dibujarNumeroDeCompas(final Compas compas) 
 	{
-		if (compas.getXIni() == config.xInicialPentagramas) {
+		if (compas.getXIni() == config.xInicialPentagramas) 
+		{
 			ordenesDibujo.add( new OrdenDibujo(
 				config.tamanoLetraNumeroCompas, false, Integer.toString(compas.getNumeroCompas()), 
 					compas.getXIni() - config.xNumeroCompas, compas.getYIni() - config.yNumeroCompas));

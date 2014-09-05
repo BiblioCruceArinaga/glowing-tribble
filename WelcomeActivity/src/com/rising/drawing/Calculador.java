@@ -16,8 +16,8 @@ import com.rising.drawing.figurasgraficas.Wedge;
 
 import android.graphics.Bitmap;
 
-public class Calculador {
-	
+public class Calculador 
+{
 	private transient final Vista vista;
 	private transient final Config config;
 	private transient final Partitura partitura;

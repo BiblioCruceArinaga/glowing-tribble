@@ -1,7 +1,9 @@
 package com.rising.drawing;
 
-public final class Config {
-	
+import android.util.DisplayMetrics;
+
+public final class Config 
+{
 	private static Config configInstance;
 	private boolean supportedConfig = true;
 	
@@ -105,9 +107,12 @@ public final class Config {
 	public transient int yTresilloArriba;
 	public transient int yTrill;
 	
-	private Config(final int densityDPI, final int width, final int height) {
+	private Config(final DisplayMetrics display) {
 		
-		switch (densityDPI) {
+		height = display.heightPixels;
+		
+		switch (display.densityDpi) 
+		{
 			case 120:
 				break;
 			case 160:
@@ -120,7 +125,8 @@ public final class Config {
 				
 			case 320:
 				
-				switch(height){
+				switch (height)
+				{
 					case 720:
 						altoDialogBpm = 850;
 						alturaArcoLigadurasExpresion = 30;
@@ -179,7 +185,7 @@ public final class Config {
 						tamanoLetraTempo = 45;
 						tamanoLetraWords = 30;
 						unidadDesplazamiento = 50;
-						this.width = width;
+						width = display.widthPixels;
 						
 						xAccidental = 20;
 						xAccidental2 = 10;
@@ -285,7 +291,7 @@ public final class Config {
 						tamanoLetraTempo = 45;
 						tamanoLetraWords = 30;
 						unidadDesplazamiento = 50;
-						this.width = width;
+						width = display.widthPixels;
 						
 						xAccidental = 20;
 						xAccidental2 = 10;
@@ -342,10 +348,10 @@ public final class Config {
 		return supportedConfig;
 	}
 	
-	public static synchronized Config getInstance(final int densityDPI, final int width, final int height)
+	public static synchronized Config getInstance(final DisplayMetrics display)
 	{
 		if (configInstance == null) {
-			configInstance = new Config(densityDPI, width, height);
+			configInstance = new Config(display);
 		}
 		
 		return configInstance;
@@ -354,5 +360,16 @@ public final class Config {
 	public static synchronized Config getInstance()
 	{
 		return configInstance;
+	}
+	
+	public void changeOrientation()
+	{
+		//  Al cambiar la orientación, el width pasa 
+		//  a tener el valor de height y viceversa
+		width = width + height;
+		height = width - height;
+		width = width - height;
+		
+		xFinalPentagramas = width - xInicialPentagramas;
 	}
 }
