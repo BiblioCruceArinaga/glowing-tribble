@@ -13,7 +13,8 @@ import android.media.AudioManager;
 import android.media.SoundPool;
 import android.util.Log;
 
-public class Metronome {
+public class Metronome 
+{
 	private transient final Object mPauseLock;
     private transient boolean mPaused;
     private transient Thread thread;
@@ -50,10 +51,18 @@ public class Metronome {
     		public void run() 
     		{	
     			try {
+                	scroll.back();
+                	
+                	final int startingY = config.margenSuperior + 
+                			config.margenInferiorAutor - config.distanciaPentagramas; 
+                	scroll.hacerScroll(startingY);
+                	
+                	AutoScrollCalculator autoScrollCalculator = new AutoScrollCalculator(vista);
+                	final int arrayScrolls[] = autoScrollCalculator.calculateScrolls(partitura);
+                	
                 	final long speed = (240000 / bpm / 4);
-
                 	bipsDePreparacion(speed, partitura.getCompas(0).numPulsos());
-                	dibujarPulsosDeMetronomo(speed, vista);
+                	dibujarPulsosDeMetronomo(speed, arrayScrolls);
                 } 
                 catch (InterruptedException e) {
                 	Log.i("InterruptedException", "Interrupted Exception Error");
@@ -105,47 +114,39 @@ public class Metronome {
 		}
 	}
 	
-	private void dibujarPulsosDeMetronomo(long speed, final Vista vista) throws InterruptedException
+	private void dibujarPulsosDeMetronomo(long speed, final int[] arrayScrolls) 
+			throws InterruptedException
 	{
-		int currentX = 0;
-    	int primerCompas = 0;
+		Compas compas;
+		
     	final int numCompases = partitura.getCompases().size();
-    	
     	for (int i=0; i<numCompases; i++) 
     	{
-    		final Compas compas = partitura.getCompas(i);
+    		compas = partitura.getCompas(i);
     		
     		if (compas.hasBpm()) {
     			speed = (240000 / compas.getBpm() / 4);
     		}
 
-			//  Gestión del scroll
-			if (currentX != compas.getXFin()) 
-			{
-				currentX = compas.getXFin();
-				
-				primerCompas = StaticMethods.manageScroll(compas.getYFin(), 
-						vista, currentX, scroll, partitura, primerCompas, i);
-			}
-    		
-    		dibujarBarras(compas, speed);
+    		dibujarBarras(compas, speed, arrayScrolls[i]);
     	}
 	}
 	
-	private void dibujarBarras(final Compas compas, final long speed) 
+	private void dibujarBarras(final Compas compas, final long speed, final int distance) 
 			throws InterruptedException
 	{
 		final ArrayList<Nota> notasConPulsos = compas.notasConPulsos();
-		final int numNotas = notasConPulsos.size();
 		
+		final int numNotas = notasConPulsos.size();
 		for (int j=0; j<numNotas; j++) 
 		{
 			final Nota nota = notasConPulsos.get(j);
-			final int numPulsos = nota.getPulsos();
 			
+			final int numPulsos = nota.getPulsos();
 			for (int k=0; k<numPulsos; k++) 
 			{
 				dibujarBarra(compas, nota);
+				scroll.hacerScroll(distance);
     			emitirSonido(j + k);
     			
     			Thread.sleep(speed);

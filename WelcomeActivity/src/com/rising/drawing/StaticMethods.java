@@ -96,18 +96,19 @@ public class StaticMethods
 	{
 		final int yActual = yFin;
 		final int coo = vista == Vista.VERTICAL ? yActual : xActual;
-		
+		/*
 		if (scroll.outOfBoundaries(coo)) 
 		{
+			
 			final int desplazamiento = 
 				scroll.distanciaDesplazamiento(partitura, 
 					primerCompas, compasActual);
-			
-			scroll.hacerScroll(desplazamiento);
-			
+			*/
+			scroll.hacerScroll(10);
+			/*
 			primerCompas = compasActual;
 		}
-		
+		*/
 		return primerCompas;
 	}
 	
