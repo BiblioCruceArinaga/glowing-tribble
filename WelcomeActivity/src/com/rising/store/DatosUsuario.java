@@ -1,5 +1,12 @@
 package com.rising.store;
 
+/**Clase para los datos del usuario
+* 
+* @author Ayo
+* @version 2.0
+* 
+*/
+
 public class DatosUsuario {
 
 	private String id;

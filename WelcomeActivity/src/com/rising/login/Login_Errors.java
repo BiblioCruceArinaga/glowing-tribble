@@ -14,25 +14,31 @@ import android.widget.TextView;
 import com.facebook.Session;
 import com.rising.drawing.R;
 
-//Clase que muestra los errores e informaciones en Dialog de todos los botones y Dialogs de la pantalla de Login
+/**Clase que muestra los errores e informaciones 
+ * en Dialog de todos los botones y Dialogs de la pantalla de Login
+* 
+* @author Ayo
+* @version 2.0
+* 
+*/
 public class Login_Errors {
 
-	private Context ctx;
-	private Dialog EDialog;
+	private final transient Context ctx;
+	private transient Dialog eDialog;
 	
-	public Login_Errors(Context context){
+	public Login_Errors(final Context context){
 		this.ctx = context;
 	}
 	
-    public void errLogin(int code){
+    public void errLogin(final int code){
     	    	
-    	EDialog = new Dialog(ctx, R.style.cust_dialog);
-    	EDialog.getWindow();
-        EDialog.requestWindowFeature(Window.FEATURE_NO_TITLE); 
-		EDialog.setContentView(R.layout.error_errordialog);
-		EDialog.getWindow().setLayout(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
+    	eDialog = new Dialog(ctx, R.style.cust_dialog);
+    	eDialog.getWindow();
+        eDialog.requestWindowFeature(Window.FEATURE_NO_TITLE); 
+		eDialog.setContentView(R.layout.error_errordialog);
+		eDialog.getWindow().setLayout(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
 		
-		TextView tv_E = (TextView)EDialog.findViewById(R.id.error_tV);
+		final TextView tv_E = (TextView)eDialog.findViewById(R.id.error_tV);
 		
 		switch (code) {
 			case 0:
@@ -54,27 +60,27 @@ public class Login_Errors {
 				tv_E.setText(R.string.err_login_unknown);
 		}
 		
-		Button  Login_Error_Close_Button = (Button)EDialog.findViewById(R.id.error_button);
+		final Button  Login_Error_CloseButton = (Button)eDialog.findViewById(R.id.error_button);
 		
-		Login_Error_Close_Button.setOnClickListener(new OnClickListener(){
+		Login_Error_CloseButton.setOnClickListener(new OnClickListener(){
 
 			@Override
 			public void onClick(View v) {		
-				EDialog.dismiss();				
+				eDialog.dismiss();				
 			}
 		});
     	
-		EDialog.show();	
+		eDialog.show();	
     }
 
-    public void errFacebook(int code){
+    public void errFacebook(final int code){
     	
     	if(Session.getActiveSession() != null){
 			Session.getActiveSession().closeAndClearTokenInformation();
 		}
     	
-    	Intent i = new Intent(ctx, Login.class);
-    	ctx.startActivity(i);
+    	final Intent intent = new Intent(ctx, Login.class);
+    	ctx.startActivity(intent);
     	((Activity)ctx).finish();  	
 
     	errLogin(code); 
@@ -83,13 +89,13 @@ public class Login_Errors {
     
     public void errRegistro(final int code){
 
-		EDialog = new Dialog(ctx, R.style.cust_dialog);
-    	EDialog.getWindow();
-        EDialog.requestWindowFeature(Window.FEATURE_NO_TITLE); 
-		EDialog.setContentView(R.layout.error_errordialog);
-		EDialog.getWindow().setLayout(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
+		eDialog = new Dialog(ctx, R.style.cust_dialog);
+    	eDialog.getWindow();
+        eDialog.requestWindowFeature(Window.FEATURE_NO_TITLE); 
+		eDialog.setContentView(R.layout.error_errordialog);
+		eDialog.getWindow().setLayout(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
 		
-		TextView tv_E = (TextView)EDialog.findViewById(R.id.error_tV);
+		final TextView tv_E = (TextView)eDialog.findViewById(R.id.error_tV);
 		
 		switch (code) {
 			case 0:
@@ -118,34 +124,34 @@ public class Login_Errors {
 				break;
 		}
 		
-		Button  Login_Error_Close_Button = (Button)EDialog.findViewById(R.id.error_button);
+		final Button  Login_Error_CloseButton = (Button)eDialog.findViewById(R.id.error_button);
 		
-		Login_Error_Close_Button.setOnClickListener(new OnClickListener(){
+		Login_Error_CloseButton.setOnClickListener(new OnClickListener(){
 
 			@Override
 			public void onClick(View v) {	
 				if(code == 1 || code == 3){
-					Intent i = new Intent(ctx, Login.class);
-					ctx.startActivity(i);
+					final Intent intent = new Intent(ctx, Login.class);
+					ctx.startActivity(intent);
 					((Activity)ctx).finish();
 				}else{
-					EDialog.dismiss();
+					eDialog.dismiss();
 				}
 			}
 		});
     	
-		EDialog.show();	
+		eDialog.show();	
 	}
 
-    public void errOlvidaPass(int code){
+    public void errOlvidaPass(final int code){
     	
-    	EDialog = new Dialog(ctx, R.style.cust_dialog);
-    	EDialog.getWindow();
-        EDialog.requestWindowFeature(Window.FEATURE_NO_TITLE); 
-		EDialog.setContentView(R.layout.error_errordialog);
-		EDialog.getWindow().setLayout(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
+    	eDialog = new Dialog(ctx, R.style.cust_dialog);
+    	eDialog.getWindow();
+        eDialog.requestWindowFeature(Window.FEATURE_NO_TITLE); 
+		eDialog.setContentView(R.layout.error_errordialog);
+		eDialog.getWindow().setLayout(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
 		
-		TextView tv_E = (TextView)EDialog.findViewById(R.id.error_tV);
+		final TextView tv_E = (TextView)eDialog.findViewById(R.id.error_tV);
 		
 		switch (code) {
 	        case 0:
@@ -167,27 +173,27 @@ public class Login_Errors {
 	    		tv_E.setText(R.string.err_olvidopass_unknown);
 	    }
 		
-		Button OlvidaPass_Error_Close_Button = (Button)EDialog.findViewById(R.id.error_button);
+		final Button OlvidaPass_Error_CloseButton = (Button)eDialog.findViewById(R.id.error_button);
 		
-		OlvidaPass_Error_Close_Button.setOnClickListener(new OnClickListener(){
+		OlvidaPass_Error_CloseButton.setOnClickListener(new OnClickListener(){
 
 			@Override
 			public void onClick(View v) {		
-				EDialog.dismiss();				
+				eDialog.dismiss();				
 			}
 		});
     	
-		EDialog.show();	
+		eDialog.show();	
     }
 
     public void errSession(int code){
-    	EDialog = new Dialog(ctx, R.style.cust_dialog);
-    	EDialog.getWindow();
-        EDialog.requestWindowFeature(Window.FEATURE_NO_TITLE); 
-		EDialog.setContentView(R.layout.error_errordialog);
-		EDialog.getWindow().setLayout(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
+    	eDialog = new Dialog(ctx, R.style.cust_dialog);
+    	eDialog.getWindow();
+        eDialog.requestWindowFeature(Window.FEATURE_NO_TITLE); 
+		eDialog.setContentView(R.layout.error_errordialog);
+		eDialog.getWindow().setLayout(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
 		
-		TextView tv_E = (TextView)EDialog.findViewById(R.id.error_tV);
+		final TextView tv_E = (TextView)eDialog.findViewById(R.id.error_tV);
 		
 		switch (code) {
 	        case 0:
@@ -200,16 +206,16 @@ public class Login_Errors {
 	    		tv_E.setText(R.string.err_olvidopass_unknown);
 	    }
 		
-		Button OlvidaPass_Error_Close_Button = (Button)EDialog.findViewById(R.id.error_button);
+		final Button OlvidaPassError_CloseButton = (Button)eDialog.findViewById(R.id.error_button);
 		
-		OlvidaPass_Error_Close_Button.setOnClickListener(new OnClickListener(){
+		OlvidaPassError_CloseButton.setOnClickListener(new OnClickListener(){
 
 			@Override
 			public void onClick(View v) {		
-				EDialog.dismiss();				
+				eDialog.dismiss();				
 			}
 		});
     	
-		EDialog.show();	
+		eDialog.show();	
     }
 }

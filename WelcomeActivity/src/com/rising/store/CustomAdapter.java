@@ -44,99 +44,90 @@ import com.rising.store.downloads.DownloadScores.OnDownloadCompleted;
 import com.rising.store.downloads.DownloadScores.OnDownloadFailed;
 import com.rising.store.purchases.InfoCompra;
 
-//Adaptador de la vista de la tienda de partituras. Alberga toda la lógica de las descargas
+/**Adaptador de la vista de la tienda de partituras. Alberga toda la lógica de las descargas
+ * 
+ * @author Ayo
+ * @version 2.0
+ * 
+ */
 public class CustomAdapter extends BaseAdapter {
 
 	//Variables  
-	private Context ctx;
-	private ViewHolder holder;
-	private LayoutInflater inflater;
-	private String Id_User = "";
-	private String Id_Score = "";
-	private List<PartituraTienda> lista;	
-    private ArrayList<PartituraTienda> infoPartituras;   
+	private final transient Context ctx;
+	private transient ViewHolder holder;
+	private final transient LayoutInflater inflater;
+	private transient String idUser = "";
+	private transient String idScore = "";
+	private final transient List<PartituraTienda> lista;	
+    private final transient List<PartituraTienda> infoPartituras;   
 	private static String selectedURL = "";
 	private static String imagenURL = "";
 	private static int selected = -1; 
-	//private String ID_BONIFICATION = "6";
-	private Button Buy_Money;
-	private Dialog NoMoneyDialog;
-	private AlertDialog.Builder BuyDialog;
+	private transient Button buyMoney;
+	private transient Dialog noMoneyDialog;
+	private transient AlertDialog.Builder buyDialog;
 		
 	//Folder
-	private String path = "/.RisingScores/scores/";
+	private final transient String path = "/.RisingScores/scores/";
 	
 	//Clases usadas
-	private Configuration CONF; 
-	private BuyNetworkConnection BUY_ASYNCTASK;	
-	private DownloadScores DOWNLOAD;
-	private MoneyUpdateConnectionNetwork MONEY_ASYNCTASK;
-	//private SocialBonificationNetworkConnection BONIFICATION_ASYNCTASK;
-	private ImageLoader IML;
-	private Store_Utils UTILS;
+	private final transient Configuration mCONF; 
+	private transient BuyNetworkConnection mBUYASYNCTASK;	
+	private transient DownloadScores mDOWNLOAD;
+	private transient MoneyUpdateConnectionNetwork mMONEYASYNCTASK;
+	private transient ImageLoader mIML;
+	private final transient Store_Utils mUTILS;
 	
-	private OnSuccessUpdateMoney MoneyUpdateSuccess = new OnSuccessUpdateMoney(){
+	private final transient OnSuccessUpdateMoney moneyUpdateSuccess = new OnSuccessUpdateMoney(){
 
 		@Override
 		public void onSuccessUpdateMoney() {							
-			CONF.setUserMoney(MONEY_ASYNCTASK.devolverDatos());
+			mCONF.setUserMoney(mMONEYASYNCTASK.devolverDatos());
 			notifyDataSetChanged();
 		}
 	};
 	
-	private OnFailUpdateMoney MoneyUpdateFail = new OnFailUpdateMoney(){
+	private final OnFailUpdateMoney moneyUpdateFail = new OnFailUpdateMoney(){
 
 		@Override
 		public void onFailUpdateMoney() {		
-			CONF.setUserMoney(CONF.getUserMoney());
+			mCONF.setUserMoney(mCONF.getUserMoney());
 		}		
 	};
-	
-	/*private OnSuccessBonification SuccessBonification = new OnSuccessBonification(){
-
-		@Override
-		public void onSuccessBonification() {
-			Toast.makeText(ctx, R.string.win_buy, Toast.LENGTH_LONG).show();
-		}		
-	};
-	
-	private OnFailBonification FailBonification = new OnFailBonification(){
-
-		@Override
-		public void onFailBonification() {
-			Toast.makeText(ctx, R.string.fail_social, Toast.LENGTH_LONG).show();
-		}		
-	};*/
-	
-	private OnBuyCompleted RegisterCompletedBuyAndDownload = new OnBuyCompleted(){
+		
+	private OnBuyCompleted registerCompletedBuyAndDownload = new OnBuyCompleted(){
 
 		@Override
 		public void onBuyCompleted() {
 			try{
-				((MainActivityStore)ctx).StartMoneyUpdate(CONF.getUserEmail());
+				((MainActivityStore)ctx).StartMoneyUpdate(mCONF.getUserEmail());
 			}catch(Exception e){
-				MONEY_ASYNCTASK = new MoneyUpdateConnectionNetwork(MoneyUpdateSuccess, MoneyUpdateFail, ctx);	
-				MONEY_ASYNCTASK.execute(CONF.getUserEmail());
+				mMONEYASYNCTASK = new MoneyUpdateConnectionNetwork(moneyUpdateSuccess, moneyUpdateFail, ctx);	
+				mMONEYASYNCTASK.execute(mCONF.getUserEmail());
 			}
-			//BONIFICATION_ASYNCTASK = new SocialBonificationNetworkConnection(SuccessBonification, FailBonification, ctx);
-			//BONIFICATION_ASYNCTASK.execute(ID_BONIFICATION);
+			
+			if(mBUYASYNCTASK.Resultado().equals("2")){
+				Toast.makeText(ctx, R.string.win_buy, Toast.LENGTH_LONG).show();
+			}else{
+				Toast.makeText(ctx, R.string.fail_social, Toast.LENGTH_LONG).show();
+			}
 												
-			if(UTILS.spaceOnDisc()){
-				DOWNLOAD = new DownloadScores(SuccessedDownload, FailedDownload, ctx);
-				DOWNLOAD.execute(selectedURL, imagenURL, String.valueOf(lista.get(selected).getNombre()) + CONF.getUserId());
+			if(mUTILS.spaceOnDisc()){
+				mDOWNLOAD = new DownloadScores(successedDownload, failedDownload, ctx);
+				mDOWNLOAD.execute(selectedURL, imagenURL, lista.get(selected).getNombre() + mCONF.getUserId());
 			}else{
 				new AlertDialog.Builder(ctx).setMessage(ctx.getString(R.string.no_space)).show();
 			}
 									
 			lista.get(selected).setComprado(true);
 			
-			ButtonText(selected);
+			buttonText(selected);
 			
 			notifyDataSetChanged();
 		}
 	};
 	
-	private OnBuyFailed FailedBuy = new OnBuyFailed(){
+	private final transient OnBuyFailed failedBuy = new OnBuyFailed(){
 
 		@Override
 		public void onBuyFailed() {
@@ -144,12 +135,12 @@ public class CustomAdapter extends BaseAdapter {
 		}
 	};
 			
-	private OnDownloadCompleted SuccessedDownload = new OnDownloadCompleted(){
+	private final transient OnDownloadCompleted successedDownload = new OnDownloadCompleted(){
 		
 		@Override
 		public void onDownloadCompleted() {
 						
-			ButtonText(selected);
+			buttonText(selected);
 			
 			notifyDataSetChanged();
 			
@@ -159,7 +150,7 @@ public class CustomAdapter extends BaseAdapter {
 		}
 	};
 			
-	private OnDownloadFailed FailedDownload = new OnDownloadFailed(){
+	private final transient OnDownloadFailed failedDownload = new OnDownloadFailed(){
 		
 		@Override
 		public void onDownloadFailed() {
@@ -172,10 +163,11 @@ public class CustomAdapter extends BaseAdapter {
 	};	
 		
 	
-	public CustomAdapter(Context context, List<PartituraTienda> partituras) {
+	public CustomAdapter(final Context context, final List<PartituraTienda> partituras) {
+		super();
 		this.ctx = context;
-		this.CONF = new Configuration(ctx);	
-		this.UTILS = new Store_Utils(ctx);
+		this.mCONF = new Configuration(ctx);	
+		this.mUTILS = new Store_Utils(ctx);
 		this.lista = partituras;
 		this.infoPartituras = new ArrayList<PartituraTienda>();
 		this.infoPartituras.addAll(partituras);
@@ -199,12 +191,12 @@ public class CustomAdapter extends BaseAdapter {
 	}
 	
 	public class ViewHolder {
-        TextView Author;
-        TextView Title;
-        ImageView image;
-        TextView intrumento;
-        Button botonCompra;
-        Button botonInfo;
+        private transient TextView author;
+        private transient TextView title;
+        private transient ImageView image;
+        private transient TextView intrumento;
+        private transient Button botonCompra;
+        private transient Button botonInfo;
     }
 		
 	@Override
@@ -214,8 +206,8 @@ public class CustomAdapter extends BaseAdapter {
         	holder = new ViewHolder();
         	view = inflater.inflate(R.layout.store_gridelement, parent, false);
         	
-            holder.Title = (TextView) view.findViewById(R.id.nombrePartitura);
-            holder.Author = (TextView) view.findViewById(R.id.autorPartitura);
+            holder.title = (TextView) view.findViewById(R.id.nombrePartitura);
+            holder.author = (TextView) view.findViewById(R.id.autorPartitura);
             holder.intrumento = (TextView) view.findViewById(R.id.instrumentoPartitura);
             holder.botonCompra = (Button) view.findViewById(R.id.comprar);
             holder.botonInfo = (Button) view.findViewById(R.id.masInfo);
@@ -226,19 +218,19 @@ public class CustomAdapter extends BaseAdapter {
         	holder = (ViewHolder) view.getTag();
         }
 
-        holder.Title.setText(lista.get(position).getNombre());
-        holder.Author.setText(lista.get(position).getAutor());
+        holder.title.setText(lista.get(position).getNombre());
+        holder.author.setText(lista.get(position).getAutor());
         holder.intrumento.setText(lista.get(position).getInstrumento());
                         
-        ShowImage(position);
+        showImage(position);
                          
-	    ButtonText(position);
+	    buttonText(position);
 	    	     			
 		holder.image.setOnClickListener(new OnClickListener(){
 
 			@Override
 			public void onClick(View v) {
-				LoadImageActivity(position);
+				loadImageActivity(position);
 			}
 			
 		});
@@ -247,7 +239,7 @@ public class CustomAdapter extends BaseAdapter {
         	 
 			@Override
 			public void onClick(View v) {
-				LoadScoreProfileActivity(position);
+				loadScoreProfileActivity(position);
 			}
         	
          });
@@ -256,7 +248,7 @@ public class CustomAdapter extends BaseAdapter {
         	
         	 @Override
  			public void onClick(View v) {
-        		AccionesBotonCompra(position);
+        		accionesBotonCompra(position);
  			}
         	 
          });
@@ -286,11 +278,11 @@ public class CustomAdapter extends BaseAdapter {
         notifyDataSetChanged();
     }
     
-    private void ButtonText(int position){
+    private void buttonText(int position){
     	
     	if(lista.get(position).getComprado()){  
 
-	    	if(UTILS.buscarArchivos(UTILS.FileNameString(lista.get(position).getUrl()), path)){
+	    	if(mUTILS.buscarArchivos(mUTILS.FileNameString(lista.get(position).getUrl()), path)){
 				holder.botonCompra.setText(R.string.open);
 				holder.botonCompra.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
 			}else{
@@ -303,14 +295,14 @@ public class CustomAdapter extends BaseAdapter {
 	        	holder.botonCompra.setText(R.string.free);	        	
 	        	holder.botonCompra.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.money, 0);
 	        }else{
-	        	holder.botonCompra.setText(lista.get(position).getPrecio() + "");
+	        	holder.botonCompra.setText(lista.get(position).getPrecio()+"");
 	        	holder.botonCompra.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.money, 0);
 	        }
 	    } 
     }
     
-    private void ShowImage(int position){
-    	IML = ImageLoader.getInstance();
+    private void showImage(int position){
+    	mIML = ImageLoader.getInstance();
     	
     	 final DisplayImageOptions options = new DisplayImageOptions.Builder()
          .showImageOnLoading(R.drawable.cover)
@@ -319,15 +311,15 @@ public class CustomAdapter extends BaseAdapter {
          .cacheInMemory(true).considerExifParams(true)
          .displayer(new RoundedBitmapDisplayer(10)).build();
                    
-         IML.displayImage(lista.get(position).getImagen(), holder.image, options, new SimpleImageLoadingListener(){
+         mIML.displayImage(lista.get(position).getImagen(), holder.image, options, new SimpleImageLoadingListener(){
          	 boolean cacheFound;
 
               @Override
               public void onLoadingStarted(String url, View view) {
-                  List<String> memCache = MemoryCacheUtils.findCacheKeysForImageUri(url, IML.getMemoryCache());
+                  List<String> memCache = MemoryCacheUtils.findCacheKeysForImageUri(url, mIML.getMemoryCache());
                   cacheFound = !memCache.isEmpty();
                   if (!cacheFound) {
-                      File discCache = DiskCacheUtils.findInCache(url, IML.getDiskCache());
+                      File discCache = DiskCacheUtils.findInCache(url, mIML.getDiskCache());
                       if (discCache != null) {
                           cacheFound = discCache.exists();
                       }
@@ -337,10 +329,10 @@ public class CustomAdapter extends BaseAdapter {
               @Override
               public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
                   if (cacheFound) {
-                      MemoryCacheUtils.removeFromCache(imageUri, IML.getMemoryCache());
-                      DiskCacheUtils.removeFromCache(imageUri, IML.getDiskCache());
+                      MemoryCacheUtils.removeFromCache(imageUri, mIML.getMemoryCache());
+                      DiskCacheUtils.removeFromCache(imageUri, mIML.getDiskCache());
 
-                      IML.displayImage(imageUri, (ImageView) view, options);
+                      mIML.displayImage(imageUri, (ImageView) view, options);
                   }
                   
                   //Por si quiero que el ProgressDialog se cierre después de que se hayan cargado las imagenes
@@ -351,26 +343,26 @@ public class CustomAdapter extends BaseAdapter {
          });
     }
     
-    private void ConfirmCompraDialog(final int position){
+    private void confirmCompraDialog(final int position){
 
-    	BuyDialog = new AlertDialog.Builder(ctx);  
-        BuyDialog.setTitle(R.string.confirm_buy);  
-        BuyDialog.setMessage(R.string.buy_agree);            
-        BuyDialog.setCancelable(false);  
-        BuyDialog.setPositiveButton(R.string.buy, new DialogInterface.OnClickListener() {
+    	buyDialog = new AlertDialog.Builder(ctx);  
+        buyDialog.setTitle(R.string.confirm_buy);  
+        buyDialog.setMessage(R.string.buy_agree);            
+        buyDialog.setCancelable(false);  
+        buyDialog.setPositiveButton(R.string.buy, new DialogInterface.OnClickListener() {
         	public void onClick(DialogInterface BuyDialog, int id) { 
-        		AccionesConfirmaCompra(position, BuyDialog);
+        		accionesConfirmaCompra(position, BuyDialog);
         	}
         });  
          
-        BuyDialog.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+        buyDialog.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
         	public void onClick(DialogInterface BuyDialog, int id) {  
         		BuyDialog.cancel();
             }  
         });  
     }
     
-    private void LoadImageActivity(int position){
+    private void loadImageActivity(int position){
     	if(new Login_Utils(ctx).isOnline()){
 			Intent i = new Intent(ctx, ImageActivity.class);
 			i.putExtra("imagen", lista.get(position).getImagen());
@@ -381,7 +373,7 @@ public class CustomAdapter extends BaseAdapter {
 		}
     } 
 
-    private void LoadScoreProfileActivity(int position){
+    private void loadScoreProfileActivity(int position){
     	if(new Login_Utils(ctx).isOnline()){
 			
 			if(lista.get(position).getComprado()){
@@ -407,24 +399,24 @@ public class CustomAdapter extends BaseAdapter {
 		}
     }
 
-    private void AccionesBotonCompra(int position){
+    private void accionesBotonCompra(int position){
     	
-    	Id_User = CONF.getUserId();
-		Id_Score = String.valueOf(lista.get(position).getId());
+    	idUser = mCONF.getUserId();
+		idScore = String.valueOf(lista.get(position).getId());
 		selected = position;
 				
-		ConfirmCompraDialog(position);	
+		confirmCompraDialog(position);	
 		
 		if(lista.get(position).getComprado()){
 			
-			if(UTILS.buscarArchivos(UTILS.FileNameString(lista.get(position).getUrl()), path)){ 
-				UTILS.AbrirFichero(lista.get(position).getNombre(), UTILS.FileNameString(lista.get(position).getUrl()));	
+			if(mUTILS.buscarArchivos(mUTILS.FileNameString(lista.get(position).getUrl()), path)){ 
+				mUTILS.AbrirFichero(lista.get(position).getNombre(), mUTILS.FileNameString(lista.get(position).getUrl()));	
 			}else{
 				if(new Login_Utils(ctx).isOnline()){
-    				if(UTILS.spaceOnDisc()){
-    					DOWNLOAD = new DownloadScores(SuccessedDownload, FailedDownload, ctx);
-     					DOWNLOAD.execute(lista.get(position).getUrl(), lista.get(position).getImagen(), 
-     							String.valueOf(lista.get(position).getNombre())+CONF.getUserId());
+    				if(mUTILS.spaceOnDisc()){
+    					mDOWNLOAD = new DownloadScores(successedDownload, failedDownload, ctx);
+     					mDOWNLOAD.execute(lista.get(position).getUrl(), lista.get(position).getImagen(), 
+     							String.valueOf(lista.get(position).getNombre())+mCONF.getUserId());
     				}else{
     					new AlertDialog.Builder(ctx).setMessage(ctx.getString(R.string.no_space)).show();
     				}
@@ -435,42 +427,42 @@ public class CustomAdapter extends BaseAdapter {
 		}else{
     			
 			if(new Login_Utils(ctx).isOnline()){
-				BuyDialog.show();
+				buyDialog.show();
    			}else{
 				new Login_Errors(ctx).errLogin(4);
 			}	
 		}
     }
 
-    private void AccionesConfirmaCompra(int position, DialogInterface BuyDialog){
+    private void accionesConfirmaCompra(int position, DialogInterface BuyDialog){
     	    	
     	if(new Login_Utils(ctx).isOnline()){
         	selectedURL = lista.get(position).getUrl();
 			imagenURL = lista.get(position).getImagen();
 			
 				if(lista.get(position).getPrecio() == 0.0){	
-					BUY_ASYNCTASK = new BuyNetworkConnection(RegisterCompletedBuyAndDownload, FailedBuy);					     							     							     					
- 				BUY_ASYNCTASK.execute(Id_User, Id_Score, Locale.getDefault().getDisplayCountry());
- 				
- 				BuyDialog.dismiss();
+					mBUYASYNCTASK = new BuyNetworkConnection(registerCompletedBuyAndDownload, failedBuy);					     							     							     					
+	 				mBUYASYNCTASK.execute(idUser, idScore, Locale.getDefault().getISO3Language());
+	 				
+	 				BuyDialog.dismiss();
 							     						     								     							     							     				
 				}else{
 								 								 					
-     			if(lista.get(position).getPrecio() < CONF.getUserMoney()){		 					
-     				BUY_ASYNCTASK = new BuyNetworkConnection(RegisterCompletedBuyAndDownload, FailedBuy);   								     				
-	     			BUY_ASYNCTASK.execute(Id_User, Id_Score, Locale.getDefault().getDisplayCountry());
+     			if(lista.get(position).getPrecio() < mCONF.getUserMoney()){		 					
+     				mBUYASYNCTASK = new BuyNetworkConnection(registerCompletedBuyAndDownload, failedBuy);   								     				
+	     			mBUYASYNCTASK.execute(idUser, idScore, Locale.getDefault().getISO3Language());
 	     			
 	     			BuyDialog.dismiss();					     							     			
 					}else{
 						
-						NoMoneyDialog = new Dialog(ctx, R.style.cust_dialog);
+						noMoneyDialog = new Dialog(ctx, R.style.cust_dialog);
 						
-						NoMoneyDialog.setContentView(R.layout.store_nomoneydialog);
-						NoMoneyDialog.setTitle(R.string.not_enough_credit);
+						noMoneyDialog.setContentView(R.layout.store_nomoneydialog);
+						noMoneyDialog.setTitle(R.string.not_enough_credit);
 						
-						Buy_Money = (Button)NoMoneyDialog.findViewById(R.id.b_buy_credit);
+						buyMoney = (Button)noMoneyDialog.findViewById(R.id.b_buy_credit);
 						
-						Buy_Money.setOnClickListener(new OnClickListener(){
+						buyMoney.setOnClickListener(new OnClickListener(){
 
 							@Override
 							public void onClick(View v) {
@@ -479,7 +471,7 @@ public class CustomAdapter extends BaseAdapter {
 							}						
 						});
 						
-						NoMoneyDialog.show();			 						
+						noMoneyDialog.show();			 						
 					}
 			}            	
         }else{

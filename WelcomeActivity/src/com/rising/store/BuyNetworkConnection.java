@@ -14,7 +14,12 @@ import android.util.Log;
 
 import com.rising.conexiones.HttpPostAux;
 
-//Clase que registra la compra de partituras en la correspondiente tabla de la base de datos
+/**Clase que registra la compra de partituras en la correspondiente tabla de la base de datos
+* 
+* @author Ayo
+* @version 2.0
+* 
+*/
 public class BuyNetworkConnection extends AsyncTask<String, Integer, String>{
 
 	//Variables	

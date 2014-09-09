@@ -1,6 +1,11 @@
 package com.rising.store;
 
-
+/**Clase para los datos de las partituras de la tienda
+* 
+* @author Ayo
+* @version 2.0
+* 
+*/
 public class PartituraTienda {
 	
 	private int id;

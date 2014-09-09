@@ -72,16 +72,18 @@ public class DeleteAccount_Fragment extends Activity implements AsyncTask_Delete
 					final Bundle bundle = new Bundle();
 					
 					if (Clave.getText().length() > 0) {
-						UTILS.HideKeyboard();						
+						UTILS.hideKeyboard();						
 						
 						bundle.putString("mail", SESSION.getMail());
 						bundle.putString("pass", Clave.getText().toString());
+						bundle.putString("fid", "-1");
 						
 						InicioFragment(bundle);
 					}else{
 						if (SESSION.getFacebookId() > -1) {
 							bundle.putString("mail", SESSION.getMail());
 							bundle.putString("pass", String.valueOf(SESSION.getFacebookId()));
+							bundle.putString("fid", String.valueOf(SESSION.getFacebookId()));
 							
 							InicioFragment(bundle);
 						}else{

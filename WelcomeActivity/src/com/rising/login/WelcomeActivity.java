@@ -9,6 +9,12 @@ import android.view.Window;
 import com.rising.drawing.R;
 import com.rising.mainscreen.MainScreenActivity;
 
+/** Clase que inicia la aplicación. Inicia la sesión y muestra durante 3 segundo el logo de Rising
+* 
+* @author Ayo
+* @version 2.0
+* 
+*/
 public class WelcomeActivity extends Activity{
 
 	private SessionManager session;

@@ -9,7 +9,12 @@ import android.content.SharedPreferences.Editor;
 
 import com.facebook.Session;
 
-//Clase que se encarga de la gestión de las sesiones
+/**Clase que se encarga de la gestión de las sesiones
+* 
+* @author Ayo
+* @version 2.0
+* 
+*/
 public class SessionManager {
 		
 	private SharedPreferences sPref;

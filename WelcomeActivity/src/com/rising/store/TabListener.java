@@ -7,7 +7,12 @@ import android.app.FragmentTransaction;
 
 import com.rising.drawing.R;
 
-//Clase necesaria para implementar las pestañas en la aplicación.
+/**Clase necesaria para implementar las pestañas en la aplicación.
+* 
+* @author Ayo
+* @version 2.0
+* 
+*/
 public class TabListener implements ActionBar.TabListener {
 	public Fragment fragment;
 		

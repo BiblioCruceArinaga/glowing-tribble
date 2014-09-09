@@ -14,6 +14,12 @@ import com.rising.store.instruments.FreeFragment;
 import com.rising.store.instruments.GuitarFragment;
 import com.rising.store.instruments.PianoFragment;
 
+/** Clase que muestra el fragment en caso de error
+* 
+* @author Ayo
+* @version 2.0
+* 
+*/
 public class ErrorFragment extends Fragment{
 
 	//Variables

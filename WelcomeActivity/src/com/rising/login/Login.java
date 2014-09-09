@@ -27,7 +27,12 @@ import com.rising.login.login.Login_Fragment;
 import com.rising.login.olvidapass.OlvidoPass_Fragment;
 import com.rising.login.registro.Registro_Fragment;
 
-//Clase login. Permite al usuario loguearse y registrarse, con la aplicación o con Facebook, y cambiar la contraseña
+/**Clase login. Permite al usuario loguearse y registrarse, con la aplicación o con Facebook, y cambiar la contraseña
+* 
+* @author Ayo
+* @version 2.0
+* 
+*/
 public class Login extends FragmentActivity {
 	
 	//Necesario para el botón de Facebook
@@ -68,7 +73,7 @@ public class Login extends FragmentActivity {
 
 			@Override
 			public void onClick(View v) {
-				UTILS.Open_Fragment(Login_Fragment.class);
+				UTILS.openFragment(Login_Fragment.class);
 			}  
 		});
 		
@@ -76,7 +81,7 @@ public class Login extends FragmentActivity {
 			
 			@Override
 			public void onClick(View v) {
-				UTILS.Open_Fragment(OlvidoPass_Fragment.class);
+				UTILS.openFragment(OlvidoPass_Fragment.class);
 			}
 		});
 	 
@@ -84,7 +89,7 @@ public class Login extends FragmentActivity {
 
 			@Override
 			public void onClick(View v) {
-				UTILS.Open_Fragment(Registro_Fragment.class);	
+				UTILS.openFragment(Registro_Fragment.class);	
 			}
 		});
 			

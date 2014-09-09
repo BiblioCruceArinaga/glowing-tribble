@@ -3,6 +3,12 @@ package com.rising.login;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+/**Clase que guarda los datos del usuario necesarios para diversas clases y métodos
+* 
+* @author Ayo
+* @version 2.0
+* 
+*/
 public class Configuration {
 
 	private final String SHARED_PREFS_FILE = "RSPrefs";

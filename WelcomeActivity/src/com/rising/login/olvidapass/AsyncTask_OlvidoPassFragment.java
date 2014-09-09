@@ -84,7 +84,7 @@ public class AsyncTask_OlvidoPassFragment extends Fragment {
     		JSONArray jData = null;
     		
     		if(language != null && language != ""){
-    			if(language.equals("español")){
+    			if(language.equals("spa")){
     				jData = HPA.getServerData(postparameters2send, URL_connect);
     			}else{
     				jData = HPA.getServerData(postparameters2send, URL_connect_en);

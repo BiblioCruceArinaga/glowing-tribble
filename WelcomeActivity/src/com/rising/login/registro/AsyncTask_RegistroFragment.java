@@ -65,7 +65,6 @@ public class AsyncTask_RegistroFragment extends Fragment {
     	
     	//URLs
     	private String URL_connect = "http://www.scores.rising.es/registro-mobile";
-    	private String URL_connect_en = "http://www.scores.rising.es/en/registro-mobile";
     	
         @Override
         protected void onPreExecute() {
@@ -86,17 +85,10 @@ public class AsyncTask_RegistroFragment extends Fragment {
     		postparameters2send.add(new BasicNameValuePair("mail", mail));
     		postparameters2send.add(new BasicNameValuePair("name", name));
     		postparameters2send.add(new BasicNameValuePair("pass", pass));
+    		postparameters2send.add(new BasicNameValuePair("language", language));
     		
-    		JSONArray jData;
-    		
-    		if(language.equals("español")){
-    			
-    			//  Se realiza una peticion, y como respuesta se obtiene un array JSON
-    			jData = HPA.getServerData(postparameters2send, URL_connect);
-    		}else{
-    			jData = HPA.getServerData(postparameters2send, URL_connect_en);
-    		}
-    		 
+    		JSONArray jData = HPA.getServerData(postparameters2send, URL_connect);
+    		    		 
     		if(jData!=null && jData.length() > 0){
 
     			JSONObject json_data;

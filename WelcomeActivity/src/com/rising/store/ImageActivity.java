@@ -23,7 +23,14 @@ import com.nostra13.universalimageloader.utils.DiskCacheUtils;
 import com.nostra13.universalimageloader.utils.MemoryCacheUtils;
 import com.rising.drawing.R;
 
-//Clase que muestra en pantalla completa una imagen
+/**Clase que muestra en pantalla completa una imagen
+ * 
+ * 
+ * @author Ayo
+ * @version 2.0
+ * 
+ */
+
 public class ImageActivity extends Activity{
 	
 	//Variables

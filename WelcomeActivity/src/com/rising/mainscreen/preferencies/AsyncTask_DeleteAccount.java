@@ -1,6 +1,7 @@
 package com.rising.mainscreen.preferencies;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -36,16 +37,18 @@ public class AsyncTask_DeleteAccount extends Fragment {
 
         String Mail = "";
         String Pass = "";
+        String FId = "";
                
         Bundle args = getArguments();
         if (args  != null && args.containsKey("mail")){
         	Mail = args.getString("mail");
         	Pass = args.getString("pass");
+        	FId = args.getString("fid");
         }
         
         // Create and execute the background task.
         mTask = new Task();
-        mTask.execute(Mail, Pass);
+        mTask.execute(Mail, Pass, FId);
     }
 
     @Override
@@ -73,7 +76,7 @@ public class AsyncTask_DeleteAccount extends Fragment {
             mCallbacks.onPostExecute(i);
         }
         
-        public int DeleteStatus(String mail, String Pass) {
+        public int DeleteStatus(String mail, String Pass, String fid) {
         	int status=-1;
         
         	Log.i("Data", mail + ", " + Pass);
@@ -81,6 +84,8 @@ public class AsyncTask_DeleteAccount extends Fragment {
 			ArrayList<NameValuePair> postparameters2send= new ArrayList<NameValuePair>();
 			postparameters2send.add(new BasicNameValuePair("mail", mail));
 			postparameters2send.add(new BasicNameValuePair("pass", Pass));
+			postparameters2send.add(new BasicNameValuePair("fid", fid));
+			postparameters2send.add(new BasicNameValuePair("language", Locale.getDefault().getISO3Language()));
 			
 			JSONArray jData = HPA.getServerData(postparameters2send, URL_Delete_Account);    		
 			
@@ -94,9 +99,9 @@ public class AsyncTask_DeleteAccount extends Fragment {
 					
 					Log.e("DeleteAccount","DeleteAccount = " + status);
 				}catch (JSONException e) {
-					e.printStackTrace();
+					Log.e("BigTry DeleteAccount", e.getMessage());
+					this.cancel(true);
 				}		            
-
 			}else{	
 				Log.e("JSON", "ERROR");
 			}
@@ -111,7 +116,7 @@ public class AsyncTask_DeleteAccount extends Fragment {
 		
 		@Override
 		protected Integer doInBackground(String... params) {
-			return DeleteStatus(params[0],params[1]);
+			return DeleteStatus(params[0],params[1], params[2]);
 		}
     }
 

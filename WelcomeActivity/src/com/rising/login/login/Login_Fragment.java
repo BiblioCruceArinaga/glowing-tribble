@@ -28,6 +28,12 @@ import com.rising.login.login.UserDataNetworkConnection.OnNetworkDown;
 import com.rising.mainscreen.MainScreenActivity;
 import com.rising.store.DatosUsuario;
 
+/**Clase principal del login que permite introducir correo y contraseña al usuario 
+* 
+* @author Ayo
+* @version 2.0
+* 
+*/
 public class Login_Fragment extends Activity implements AsyncTask_LoginFragment.TaskCallbacks {
     private AsyncTask_LoginFragment task;
 	private Button Confirm_Login;
@@ -87,7 +93,6 @@ public class Login_Fragment extends Activity implements AsyncTask_LoginFragment.
 		}
 		
 	};
-   
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -117,7 +122,7 @@ public class Login_Fragment extends Activity implements AsyncTask_LoginFragment.
 				
 				if(UTILS.checkLoginData(Mail.getText().toString(), Pass.getText().toString())==true) {	
 				
-					UTILS.HideKeyboard();
+					UTILS.hideKeyboard();
 					
 					final Bundle bundle = new Bundle();
 					bundle.putString("mail", Mail.getText().toString());
@@ -175,7 +180,7 @@ public class Login_Fragment extends Activity implements AsyncTask_LoginFragment.
         if(result == 1) {
         	dunc = new UserDataNetworkConnection(listenerUser, NetworkDown);
         	
-        	dunc.execute(Mail.getText().toString());            		
+        	dunc.execute(Mail.getText().toString(), "-1");            		
         }else{
         	   
         	task = null;

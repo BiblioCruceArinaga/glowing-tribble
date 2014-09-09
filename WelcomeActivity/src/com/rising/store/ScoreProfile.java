@@ -52,7 +52,12 @@ import com.rising.store.downloads.DownloadScores.OnDownloadCompleted;
 import com.rising.store.downloads.DownloadScores.OnDownloadFailed;
 import com.rising.store.purchases.InfoCompra;
 
-//Clase que muestra toda la información de la partitura seleccionada
+/**Clase que muestra toda la información de la partitura seleccionada
+* 
+* @author Ayo
+* @version 2.0
+* 
+*/
 public class ScoreProfile extends Activity{
 	
 	//Variables  

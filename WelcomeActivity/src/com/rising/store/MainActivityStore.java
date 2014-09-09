@@ -30,18 +30,23 @@ import com.rising.store.instruments.PianoFragment;
 import com.rising.store.purchases.MyPurchases;
 import com.rising.store.search.SearchStoreActivity;
 
-//Clase principal de la tienda. Sirve de contenedor para el fragment de los instrumentos
+/**Clase principal de la tienda. Sirve de contenedor para el fragment de los instrumentos
+* 
+* @author Ayo
+* @version 2.0
+* 
+*/
 public class MainActivityStore extends FragmentActivity implements OnQueryTextListener{
 
 	//Variables
 	public Context ctx;
 	private ActionBar ABar;
 	public MenuItem item;	
-	
+
 	//Clases usadas
 	private MoneyUpdateConnectionNetwork MONEY_ASYNCTASK;
 	private Configuration CONF;
-			
+
 	private OnSuccessUpdateMoney MoneyUpdateSuccess = new OnSuccessUpdateMoney(){
 
 		@Override
@@ -50,7 +55,7 @@ public class MainActivityStore extends FragmentActivity implements OnQueryTextLi
 			invalidateOptionsMenu();
 		}
 	};
-	
+
 	private OnFailUpdateMoney MoneyUpdateFail = new OnFailUpdateMoney(){
 
 		@Override
@@ -58,69 +63,69 @@ public class MainActivityStore extends FragmentActivity implements OnQueryTextLi
 			CONF.setUserMoney(CONF.getUserMoney());
 		}		
 	};
-				
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);				
 		setContentView(R.layout.store_storeactivity);		
-				
+
 		ctx = this;
 		this.CONF = new Configuration(this);
-		
+
 		StartMoneyUpdate(CONF.getUserEmail());
-    	
+
 		ABar = getActionBar();
-    	ABar.setIcon(R.drawable.ic_menu);
-    	ABar.setTitle(R.string.store);
-    	ABar.setDisplayHomeAsUpEnabled(true);
-    	ABar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS); 
-    	     	    	
-       	ABar.addTab(ABar.newTab().setText(R.string.piano).setTabListener(new TabListener(new PianoFragment())));
-    	ABar.addTab(ABar.newTab().setText(R.string.guitar).setTabListener(new TabListener(new GuitarFragment())));
-    	ABar.addTab(ABar.newTab().setText(R.string.free).setTabListener(new TabListener(new FreeFragment())));
-		    	
+		ABar.setIcon(R.drawable.ic_menu);
+		ABar.setTitle(R.string.store);
+		ABar.setDisplayHomeAsUpEnabled(true);
+		ABar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS); 
+
+		ABar.addTab(ABar.newTab().setText(R.string.piano).setTabListener(new TabListener(new PianoFragment())));
+		ABar.addTab(ABar.newTab().setText(R.string.guitar).setTabListener(new TabListener(new GuitarFragment())));
+		ABar.addTab(ABar.newTab().setText(R.string.free).setTabListener(new TabListener(new FreeFragment())));
+
 		ImageOptions();
-   	}
-	
+	}
+
 	@Override
 	public void onRestoreInstanceState(Bundle savedInstanceState) {
-	    if (savedInstanceState.containsKey("tab")) {
-	    	getActionBar().setSelectedNavigationItem(savedInstanceState.getInt("tab"));
-	    }
+		if (savedInstanceState.containsKey("tab")) {
+			getActionBar().setSelectedNavigationItem(savedInstanceState.getInt("tab"));
+		}
 	}
-	
+
 	public void StartMoneyUpdate(String user){
 		MONEY_ASYNCTASK = new MoneyUpdateConnectionNetwork(MoneyUpdateSuccess, MoneyUpdateFail, ctx);	
 		MONEY_ASYNCTASK.execute(user);
 	}
-	
+
 	@Override
 	public void onBackPressed() {
-	   Intent setIntent = new Intent(this, MainScreenActivity.class);
-	   startActivity(setIntent);
-	   finish();
+		Intent setIntent = new Intent(this, MainScreenActivity.class);
+		startActivity(setIntent);
+		finish();
 	}
-	
+
 	public void ImageOptions(){
 		DisplayImageOptions options = new DisplayImageOptions.Builder()
-        .showImageOnLoading(R.drawable.cover)
-        .showImageForEmptyUri(R.drawable.cover)
-        .showImageOnFail(R.drawable.cover)
-        .cacheInMemory(true).considerExifParams(true)
-        .displayer(new RoundedBitmapDisplayer(10)).build();
-		
+		.showImageOnLoading(R.drawable.cover)
+		.showImageForEmptyUri(R.drawable.cover)
+		.showImageOnFail(R.drawable.cover)
+		.cacheInMemory(true).considerExifParams(true)
+		.displayer(new RoundedBitmapDisplayer(10)).build();
+
 		ImageLoaderConfiguration config = new ImageLoaderConfiguration.
-		Builder(this).defaultDisplayImageOptions(options).build();
+				Builder(this).defaultDisplayImageOptions(options).build();
 		ImageLoader.getInstance().init(config);
 	}
-	
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putInt("tab", getActionBar().getSelectedNavigationIndex());
-    }   
-	    		
+
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		outState.putInt("tab", getActionBar().getSelectedNavigationIndex());
+	}   
+
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu){
 		item = menu.findItem(R.id.money);
@@ -128,23 +133,23 @@ public class MainActivityStore extends FragmentActivity implements OnQueryTextLi
 		item.setTitle(s);
 		return true;
 	}
-	
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.main_store, menu);
-		
+
 		//Crea el buscador
-	    SearchView searchView = (SearchView) menu.findItem(R.id.action_search_store).getActionView();
-	    searchView.setOnQueryTextListener(this);
-	    	  	
-	    //Crea y muestra el saldo del usuario
-	    item = menu.findItem(R.id.money);    
-	    item.setTitle("" + CONF.getUserMoney());
-	    item.setIcon(R.drawable.money);
-	    
+		SearchView searchView = (SearchView) menu.findItem(R.id.action_search_store).getActionView();
+		searchView.setOnQueryTextListener(this);
+
+		//Crea y muestra el saldo del usuario
+		item = menu.findItem(R.id.money);    
+		item.setTitle("" + CONF.getUserMoney());
+		item.setIcon(R.drawable.money);
+
 		return true;
 	}
-	
+
 	public void UpdateFragment(int i){
 		switch(i){
 		case 0:
@@ -160,48 +165,48 @@ public class MainActivityStore extends FragmentActivity implements OnQueryTextLi
 			super.onOptionsItemSelected(item);
 		}
 	}
-	
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-	    switch (item.getItemId()) {
-	    	case R.id.money:
-	    		if(new Login_Utils(ctx).isOnline()){
-		    		Intent i = new Intent(this, MoneyActivity.class);
-		    	    startActivity(i);
-	    		}else{
-	    			new Login_Errors(ctx).errLogin(4);
-	    		}
-	    	    return true;
-       	    
-	    	case R.id.update_store:
-	    		UpdateFragment(ABar.getSelectedNavigationIndex());	    			    		
-	    		return true;
-	    		
-	    	case R.id.my_purchases:
-		    	if(new Login_Utils(ctx).isOnline()){
-		    		Intent intent = new Intent(this, MyPurchases.class);
-		    		startActivity(intent);
-		    		finish();
-		    	}else{
-	    			new Login_Errors(ctx).errLogin(4);
-	    		}
-	    		return true;
-	        
-	    	case android.R.id.home:
-	    		Intent in = new Intent(this, MainScreenActivity.class);
-	    		startActivity(in);
-	    		finish();
-	    	
-	    	default:
-	            return super.onOptionsItemSelected(item);
-	    }
+		switch (item.getItemId()) {
+		case R.id.money:
+			if(new Login_Utils(ctx).isOnline()){
+				Intent i = new Intent(this, MoneyActivity.class);
+				startActivity(i);
+			}else{
+				new Login_Errors(ctx).errLogin(4);
+			}
+			return true;
+
+		case R.id.update_store:
+			UpdateFragment(ABar.getSelectedNavigationIndex());	    			    		
+			return true;
+
+		case R.id.my_purchases:
+			if(new Login_Utils(ctx).isOnline()){
+				Intent intent = new Intent(this, MyPurchases.class);
+				startActivity(intent);
+				finish();
+			}else{
+				new Login_Errors(ctx).errLogin(4);
+			}
+			return true;
+
+		case android.R.id.home:
+			Intent in = new Intent(this, MainScreenActivity.class);
+			startActivity(in);
+			finish();
+
+		default:
+			return super.onOptionsItemSelected(item);
+		}
 	}
-	
+
 	/*************************Bloque de métodos de busqueda************************/
 	@Override
 	public boolean onQueryTextSubmit(String text) {
 		if(new Login_Utils(ctx).isOnline()){
-			new Login_Utils(ctx).HideKeyboard();
+			new Login_Utils(ctx).hideKeyboard();
 			Intent i = new Intent(this, SearchStoreActivity.class);
 			Bundle b = new Bundle();
 			b.putString("SearchText", text);
@@ -213,7 +218,7 @@ public class MainActivityStore extends FragmentActivity implements OnQueryTextLi
 		}
 		return false;
 	}
-		
+
 	@Override
 	public boolean onQueryTextChange(String newText) {
 		return false;

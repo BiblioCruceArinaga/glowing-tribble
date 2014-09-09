@@ -16,6 +16,12 @@ import android.util.Log;
 
 import com.rising.conexiones.HttpPostAux;
 
+/** Clase que consulta en la base de datos si son correctos los datos que se le pasan e inicia sesión si lo son
+* 
+* @author Ayo
+* @version 2.0
+* 
+*/
 public class AsyncTask_LoginFragment extends Fragment {
     private TaskCallbacks mCallbacks;
     private Task mTask;

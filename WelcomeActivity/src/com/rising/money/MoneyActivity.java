@@ -217,7 +217,7 @@ public class MoneyActivity extends Activity implements IabHelper.OnIabSetupFinis
 
         if (result.isSuccess()) {
         	        	
-        	BUYMONEY_ASYNCTASK.execute(PayMethod, Money, Locale.getDefault().getDisplayLanguage());
+        	BUYMONEY_ASYNCTASK.execute(PayMethod, Money, Locale.getDefault().getISO3Language());
         }
         else {
             Toast.makeText(this, R.string.buy_fail, Toast.LENGTH_LONG).show();

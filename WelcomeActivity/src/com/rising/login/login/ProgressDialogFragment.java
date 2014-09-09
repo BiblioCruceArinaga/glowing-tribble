@@ -5,6 +5,12 @@ import android.app.DialogFragment;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 
+/**Clase que crea un DialogFragment con el mensaje que se le pase
+* 
+* @author Ayo
+* @version 2.0
+* 
+*/
 public class ProgressDialogFragment extends DialogFragment {
     private String message;
 

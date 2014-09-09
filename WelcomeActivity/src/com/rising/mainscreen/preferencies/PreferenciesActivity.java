@@ -67,7 +67,7 @@ public class PreferenciesActivity extends Activity{
 
 			@Override
 			public void onClick(View v) {
-				new Login_Utils(ctx).Open_Fragment(ChangePassword_Fragment.class);
+				new Login_Utils(ctx).openFragment(ChangePassword_Fragment.class);
 			}
 	
 		});
@@ -94,7 +94,7 @@ public class PreferenciesActivity extends Activity{
 
 			@Override
 			public void onClick(View v) {
-				new Login_Utils(ctx).Open_Fragment(DeleteAccount_Fragment.class);				
+				new Login_Utils(ctx).openFragment(DeleteAccount_Fragment.class);				
 			}
 			
 		});

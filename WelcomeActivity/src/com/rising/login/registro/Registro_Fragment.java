@@ -94,14 +94,14 @@ public class Registro_Fragment extends Activity implements AsyncTask_RegistroFra
 				RMail = Mail.getText().toString();
 				RPass = Pass.getText().toString();
 				RConfipass = ConfiPass.getText().toString();
-				RLanguage = Locale.getDefault().getDisplayLanguage();
+				RLanguage = Locale.getDefault().getISO3Language();
 				
 				if(RName.equals("") && RMail.toString().equals("") && RPass.equals("") && RConfipass.equals("")) {			
 					ERRORS.errRegistro(5);
 		        }else{
 		        	if(UTILS.isOnline()){
 						if(UTILS.checkPass(RPass, RConfipass)){	            
-							UTILS.HideKeyboard();
+							UTILS.hideKeyboard();
 							
 							final Bundle bundle = new Bundle();
 							bundle.putString("mail", RMail);

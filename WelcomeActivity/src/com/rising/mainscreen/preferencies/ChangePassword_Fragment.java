@@ -78,7 +78,7 @@ public class ChangePassword_Fragment extends Activity implements AsyncTask_Chang
 									ERRORS.errChangePass(6);
 								}else{
 									
-								UTILS.HideKeyboard();
+								UTILS.hideKeyboard();
 								
 								final Bundle bundle = new Bundle();
 								bundle.putString("mail", SESSION.getMail());

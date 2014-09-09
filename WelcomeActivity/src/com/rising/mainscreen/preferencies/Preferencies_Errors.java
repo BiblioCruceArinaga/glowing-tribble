@@ -109,6 +109,8 @@ public class Preferencies_Errors {
 			case 4:
 				tv_E.setText(R.string.connection_err);
 				break;
+			case 5:
+				break;
 			default:
 				tv_E.setText(R.string.error_eliminar_cuenta);
 		}

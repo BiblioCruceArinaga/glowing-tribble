@@ -13,6 +13,12 @@ import com.rising.login.Configuration;
 import com.rising.mainscreen.MainScreen_Errors;
 import com.rising.security.DownloadScoresEncrypter;
 
+/** Clase con métodos útiles para varias clases de la tienda
+* 
+* @author Ayo
+* @version 2.0
+* 
+*/
 public class Store_Utils {
 	
 	//Variables

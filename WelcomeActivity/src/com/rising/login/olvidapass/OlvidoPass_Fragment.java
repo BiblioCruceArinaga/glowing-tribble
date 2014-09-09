@@ -58,12 +58,12 @@ public class OlvidoPass_Fragment extends Activity implements AsyncTask_OlvidoPas
 			public void onClick(View v) {
 				
 				String mail = Mail_OlvidoPass.getText().toString();
-				String Language = Locale.getDefault().getDisplayLanguage();
+				String Language = Locale.getDefault().getISO3Language();
 				
 				if (mail.equals("")) {
 					ERRORS.errLogin(0);
 				} else {
-					UTILS.HideKeyboard();
+					UTILS.hideKeyboard();
 					
 					final Bundle bundle = new Bundle();
 					bundle.putString("mail", Mail_OlvidoPass.getText().toString());

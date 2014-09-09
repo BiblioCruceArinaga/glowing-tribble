@@ -9,6 +9,7 @@ import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 
@@ -68,16 +69,19 @@ public class Facebook_Fragment extends Activity implements AsyncTask_FacebookFra
 
 		@Override
 		public void onNetworkDown() {
-			
-			task = null;
-        	
-        	ProgressDialogFragment dialog = (ProgressDialogFragment) getFragmentManager().findFragmentByTag("myDialog");
-	     	
-	        if (dialog!=null) {
-	            dialog.dismiss();
-	        }
-			
-	        ERRORS.errFacebook(5);		
+			try{
+				task = null;
+	        	
+	        	ProgressDialogFragment dialog = (ProgressDialogFragment) getFragmentManager().findFragmentByTag("myDialog");
+		     	
+		        if (dialog!=null) {
+		            dialog.dismiss();
+		        }
+				
+		        ERRORS.errFacebook(5);
+			}catch(Exception e){
+				Log.e("Exception Facebook_Fragment NetworkDown", e.getMessage());
+			}
 		}
 		
 	};
@@ -135,7 +139,7 @@ public class Facebook_Fragment extends Activity implements AsyncTask_FacebookFra
     	dunc = new UserDataNetworkConnection(listenerUser, NetworkDown);
     	
     	if(result == 1 || result == 3) {
-    		dunc.execute(FMail);      		
+    		dunc.execute(FMail,FId);      		
         }else{
          	                	
          	ProgressDialogFragment dialog = (ProgressDialogFragment) getFragmentManager().findFragmentByTag("myDialog");
@@ -147,7 +151,7 @@ public class Facebook_Fragment extends Activity implements AsyncTask_FacebookFra
  	        ERRORS.errFacebook(result);
         }    	
     }
-
+ 
 	@Override
 	public void onCancelled() {
 

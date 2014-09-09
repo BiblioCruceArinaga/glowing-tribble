@@ -65,7 +65,7 @@ public class SendFeedback_Fragment extends Activity implements AsyncTask_SendFee
 						ERRORS.errFeedback(0);
 					} else {
 								
-						UTILS.HideKeyboard();
+						UTILS.hideKeyboard();
 												
 						final Bundle bundle = new Bundle();
 						bundle.putString("mail", SESSION.getMail());
