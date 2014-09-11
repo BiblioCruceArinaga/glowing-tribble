@@ -129,6 +129,7 @@ public class AutoScrollCalculator
 	
 	private void reassignValuesX(final int compasXIni)
 	{
+		golpesSonido = 0;
 		currentX = compasXIni;
 		firstMeasure = false;
 	}
