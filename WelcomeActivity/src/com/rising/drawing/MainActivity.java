@@ -169,7 +169,7 @@ public class MainActivity extends Activity{
 		final int screenHeight = screenSize.y;
 		Log.i("Window", screenWith + ", " + screenHeight);
 		
-		mDialog = StaticMethods.initializeDialog(MainActivity.this, R.layout.metronome_dialog);
+		mDialog = StaticMethods.initializeDialog(MainActivity.this, R.layout.drawing_metronomedialog);
 		mDialog.getWindow().setLayout(config.anchoDialogBpm, config.altoDialogBpm);
 		
 		final SeekBar seekBarMetronome = (SeekBar)mDialog.findViewById(R.id.seekBar_metronome);
@@ -205,7 +205,7 @@ public class MainActivity extends Activity{
 	private void navigateToBar()
 	{
 		mDialog = new Dialog(MainActivity.this, R.style.cust_dialog);	
-		mDialog.setContentView(R.layout.gotobar);
+		mDialog.setContentView(R.layout.drawing_gotobar);
 		mDialog.setTitle(R.string.navigate_to_bar);	
 
 		final EditText barEditText = (EditText) mDialog.findViewById(R.id.editTextNumberOfBar);

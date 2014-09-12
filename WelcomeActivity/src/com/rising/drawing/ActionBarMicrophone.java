@@ -98,7 +98,7 @@ public class ActionBarMicrophone implements ActionMode.Callback {
 	
 	private void gestionarSensibilidad() {
 		microphoneDialog = new Dialog(context, R.style.cust_dialog);	
-		microphoneDialog.setContentView(R.layout.microphone_sensitivity_dialog);
+		microphoneDialog.setContentView(R.layout.drawing_microphonesensitivitydialog);
 		microphoneDialog.setTitle(R.string.setSensitivity);	
 		microphoneDialog.getWindow().setLayout(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 					
@@ -137,7 +137,7 @@ public class ActionBarMicrophone implements ActionMode.Callback {
 	
 	private void gestionarVelocidad() {
 		microphoneDialog = new Dialog(context, R.style.cust_dialog);	
-		microphoneDialog.setContentView(R.layout.microphone_speed_dialog);
+		microphoneDialog.setContentView(R.layout.drawing_microphonespeeddialog);
 		microphoneDialog.setTitle(R.string.setSpeed);	
 		
 		final TextView texto = (TextView) microphoneDialog.findViewById(R.id.speedValue);

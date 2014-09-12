@@ -74,7 +74,7 @@ public class BpmManagement
 	
 	private void establecerVelocidadAlCompas(final int index, final int value) 
 	{
-		mDialog = StaticMethods.initializeDialog(context, R.layout.metronome_dialog_compas);
+		mDialog = StaticMethods.initializeDialog(context, R.layout.drawing_metronomecompasdialog);
 		mDialog.getWindow().setLayout(config.anchoDialogBpm, config.altoDialogBpm);
 
 		final SeekBar seekBarMetronome = (SeekBar)mDialog.findViewById(R.id.seekBar_metronome);
