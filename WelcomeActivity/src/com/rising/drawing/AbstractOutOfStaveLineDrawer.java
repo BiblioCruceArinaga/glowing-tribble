@@ -36,8 +36,8 @@ public abstract class AbstractOutOfStaveLineDrawer
 		}
 	}
 	
-	public abstract int getThreshold(final int currentYPosition);
-	public abstract boolean noteUnderThreshold(final int yNota, final int threshold);
-	public abstract boolean notEndOfLoop(final int currentYPosition, final int yNota);
-	public abstract int updateCurrentYPosition();
+	protected abstract int getThreshold(final int currentYPosition);
+	protected abstract boolean noteUnderThreshold(final int yNota, final int threshold);
+	protected abstract boolean notEndOfLoop(final int currentYPosition, final int yNota);
+	protected abstract int updateCurrentYPosition();
 }

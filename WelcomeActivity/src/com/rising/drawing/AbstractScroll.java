@@ -95,7 +95,7 @@ public abstract class AbstractScroll
 		}
 	}
 
-	public abstract void dibujarBarra(Canvas canvas);
+	protected abstract void dibujarBarra(Canvas canvas);
 	
 	public final boolean outOfBoundaries(final int coo) {
 		return coo > - limiteVisibleFinal;

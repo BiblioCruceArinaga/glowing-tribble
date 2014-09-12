@@ -51,18 +51,11 @@ public class Metronome
     		public void run() 
     		{	
     			try {
-                	scroll.back();
-                	
-                	final int startingY = config.margenSuperior + 
-                			config.margenInferiorAutor - config.distanciaPentagramas; 
-                	scroll.hacerScroll(startingY);
-                	
-                	AutoScrollCalculator autoScrollCalculator = new AutoScrollCalculator(vista);
-                	final int arrayScrolls[] = autoScrollCalculator.calculateScrolls(partitura);
-                	
+    				moveScrollToBeginning();
+
                 	final long speed = (240000 / bpm / 4);
                 	bipsDePreparacion(speed, partitura.getCompas(0).numPulsos());
-                	dibujarPulsosDeMetronomo(speed, arrayScrolls);
+                	dibujarPulsosDeMetronomo(speed, getArrayScrolls(vista));
                 } 
                 catch (InterruptedException e) {
                 	Log.i("InterruptedException", "Interrupted Exception Error");
@@ -74,6 +67,15 @@ public class Metronome
     	});
     	
     	thread.start();
+    }
+    
+    private void moveScrollToBeginning()
+    {
+    	scroll.back();
+    	
+    	final int startingY = config.margenSuperior + 
+    			config.margenInferiorAutor - config.distanciaPentagramas; 
+    	scroll.hacerScroll(startingY);
     }
     
     //  El metrónomo no puede empezar de sopetón, ya que desconcertaría al músico. 
@@ -164,6 +166,16 @@ public class Metronome
 	            }
 			}
 		}
+	}
+	
+	private int[] getArrayScrolls(final Vista vista)
+	{
+		AbstractAutoScrollCalculator autoScrollCalculator = 
+			vista == Vista.HORIZONTAL ? 
+				new HorizontalAutoScrollCalculator() : 
+				new VerticalAutoScrollCalculator();
+    			
+    	return autoScrollCalculator.calculate(partitura.getCompases());
 	}
 	
 	private void dibujarBarra(final Compas compas, final Nota nota) 
