@@ -1,4 +1,4 @@
-package com.rising.drawing;
+package com.rising.drawing.figurasgraficas;
 
 public enum PaintOptions {
 	SET_STROKE_WIDTH,

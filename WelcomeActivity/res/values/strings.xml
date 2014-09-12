@@ -179,96 +179,286 @@ You can buy scores in our store.</string>
     
     <string name="terminos_condiciones">Terms and conditions</string>
     	<string name="terminos">
-    	    TERMS OF USE OF THE APPLICATION\n\n;
-
-			1. ACCEPTANCE OF CONDITIONS OF USE\n\n
-
-			When you install the APPLICATION, you accept the terms of use.\n\n
-
-			2. DEFINITION\n\n
-
-			2.1. The APPLICATION offers to the user access to an online store (hereinafter SHOP) 
-			from which the user can acquire at the price given in the SHOP, existing in the catalog 
-			offered by RISING scores. You may download scores you purchased on your device and 
-			can be used in two ways: by moving them manually or by selecting a metronome speed 
-			from which the score will automatically move throughout the piece.\n\n
-
-			2.2. The APPLICATIOM is distributed for free. In addition, RISING will publish
-			APPLICATION periodic updates that not accrue any cost to the user.\n\n
-
-			3. DATA PROTECTION\n\n
-
-			Any personal information provided to RISING while using the APPLICATION only be 
-			used in accordance with the Privacy Policy RISING.\n\n
-
-			4. LICENSE AND COPYRIGHT\n\n
-
-			4.1. All trademarks, copyrights, database rights and other APPLICATION intellectual 
-			property, whatever its nature, as the source code are property of RISING.\n\n
-
-			4.2. Hereby RISING offers a revocable, free, nonexclusive and international licence 
-			to use this APPLICATION on a personal or professional level within the limits set by these 
-			conditions.\n\n
-
-			5. TERMS OF USE\n\n
-
-			5.1. The user will not act or allow third parties acting on their behalf to:\n\n
-
-				a) Make and distribute copies of the APPLICATION. \n\n
-				b) Attempting to copy, reproduce, alter, modify, reverse engineer, disassemble,
-				decompile, transfer, exchange or translate APPLICATION. \n\n
-				c) Create any kind of project derived from the APPLICATION. \n\n
-
-			5.2. The application provides the user free for personal use and not commercial. 
-			RISING reserves the right to modify or disable the APPLICATION any time for any 
-			reason. \n\n
-
-			5.3. You agree that the terms of the agreement with the vendor of your mobile network
-			("Mobile Service Provider") will continue to apply for the use of the APPLICATION.
-			Accordingly, the Supplier may charge for Mobile Services services
-			connection to the network while the APPLICATION remain connected to the network, or that
-			produce economic positions of others. The user accepts the responsibility of
-			charges that may arise. \n\n
-
-			5.4. If the user is not the owner\'s billing phone or mobile device used to access to the 
-			APPLICATION, will assume that you have permission from the owner to use the APPLICATION. \n\n
-
-			6. AVAILABILITY\n\n
-
-			6.1. The application is available for mobile handheld devices operating with Android OS operating 
-			systems. RISING will make all reasonable efforts to APPLICATION is available at all time. However, 
-			you agree that the APPLICATION delivery will be made through internet and mobile networks and,
-			therefore, the quality and availability of the APPLICATIOM can be affected by factors beyond the control
-			responsible of RISING. \n\n
-
-			6.2. To use the APPLICATION, the user must have a compatible mobile device with internet access 
-			and meets the minimum specifications ("Software Requirements"). \n\n
-
-			6.3. The software requirements are: OS Android Devices over 7 inches and the Android OS 4.1 to OS 4.4 
-			operating systems. Languages: On devices with languages ​​not supported by the APPLICATION, this will 
-			be show in English. \n\n
-
-			7. ACCOUNT DELETING\n\n
-
-			3.2.7.1. You are permitted to terminate your account at any time through tool offered in the 
-			APPLICATION for this purpose, and without pre notice to RISING. \ n \ n
-
-			3.2.7.2. The account deletion by the user is an irreversible process that has result in the removal of all 
-			user information contained in the RISING database. This information includes the record of purchases 
-			made ​​by the user in the STORE. However, the scores that the user has downloaded to the device
-			have been acquired through the STORE not be removed from the device, but the user
-			must create a new account if want to use. \n\n
-
-			3.2.7.3. The account deletion by the user results in loss of balance that had accumulated in your account, 
-			as well as the end of their contractual relationship with RISING. \n\n
-
-			8. TERMINATION\n\n
-
-			8.1. RISING may terminate the use of the APPLICATION at any time, previous notice, which will be published on 
-			the BLOG. \n\n
-
-			8.2. At the end of such use, shall also order all rights and licenses granted to the user, which means that the user 
-			must stop using the software. \n\n
+			To comply with the provisions of Articles 9 and 10 of Law 34/2002 of July 11th, Information 
+			Society and Electronic Commerce Services, presented below is the general information of 
+			this website:\n\n
+			
+			Holder: RISING S.C.P.\n
+			Address: Princesa Tenesoya street, number 75, 35118, Cruce de Arinaga, Agüimes, Las Palmas.\n
+			E-Mail: info@rising.es\n
+			VAT: J76167253\n\n
+			
+			TERMS OF USE\n\n
+			
+			1. ACKNOWLEDGMENT AND ACCEPTANCE OF TERMS OF SERVICE\n\n
+			
+			1.1 RISING SCP (hereinafter RISING), spanish company with business address in Princesa Tenesoya 
+			street, number 75, 35118, Cruce de Arinaga, Agüimes, Las Palmas, Spain and VAT J76167253 is owner 
+			of the products and services offered through the website scores.rising.es (hereinafter the 
+			SERVICES).\n\n
+			
+			1.2 SERVICES are provided to the user under the terms and conditions of this Agreement of Terms 
+			and Conditions of the SERVICES and in accordance with the rules and regulations published 
+			periodically by RISING. This terms govern the contractual relationship between RISING and 
+			customers.\n\n
+			
+			1.3 RISING is empowered to modify at any time the Terms of Use. Likewise, clients will be 
+			communicated about the changes that occur in the Terms of use by notice that will be published 
+			in the blog of the company (rising.es/ blog, hereinafter BLOG). The customer has the opportunity 
+			to object to these changes (eg by letter or email) within six weeks after the publication of the 
+			notice, without declaring their motives. If the customer does not object to these changes within 
+			this period, shall be deemed to have consented. RISING will specifically inform the client of 
+			the result of the modification notice.\n\n
+			
+			1.4 The use of whatever products or services offered through scores.rising.es (hereinafter the 
+			WEB or PLATFORM) implies the acceptance of these terms and conditions. These general conditions 
+			are applicable to purchases of products by consumers.\n\n
+			
+			1.5 This document represents the entire agreement between the user and RISING and supersedes any 
+			previous agreement signed by the parties regarding the subject of this contract.\n\n
+			
+			2. CELEBRATION OF CONTRACT\n\n
+			
+			The contractual relationship with RISING regarding the use of the web is confirmed with the 
+			acknowledgement by RISING of the sign up in the PLATFORM as a client or beta tester of 
+			the application provided by the WEB(hereafter the APPLICATION), producing full effect since 
+			then. Similarly, the relationship is also confirmed by downloading the APPLICATION, even if 
+			the user has not been identified or registered in the PLATFORM. This APPLICATION download 
+			confirms the contractual relationship with RISING regarding the use of the APPLICATION.\n\n
+			
+			3. SERVICES DESCRIPTION\n\n
+			
+			3.1. WEB DESCRIPTION\n\n
+			
+			The WEB provides the user with a variety of information, made available by RISING, and also 
+			provides the following services:\n\n
+			
+			- A link that takes the user to the download page of the APPLICATION.\n
+			- A form whereby the user can create a beta tester account that allows access to the APPLICATION.\n
+			- A form whereby the user can contact Rising.\n\n
+			
+			The provision of the PLATAFORM services listed above is free of charge.\n\n
+			
+			3.1.1. LINK TO DOWNLOAD PAGE\n\n
+			
+			3.1.1.1. RISING offers in its WEB a link that allows the user to access the download page of 
+			the APPLICATION, with no restrictions in the process.\n\n
+			
+			3.1.1.2. The APPLICATION’s download page is hosted on third party servers. Therefore, RISING is 
+			not responsible for technical failures or incompatibilities that may result from this 
+			circumstance.\n\n
+			
+			3.1.2. SIGN UP FORM AS BETA TESTER\n\n
+			
+			3.1.2.1. RISING offers in its WEB a form that allows users to create an account on the WEB as 
+			a beta tester. This beta tester account allows exclusive access to the APPLICATION.\n\n
+			
+			3.1.2.2. User registered as beta testers users accessing the APPLICATION contract commitment to 
+			inform RISING about all bugs they discover during use. They may also send suggestions or opinions 
+			on those aspects of the APPLICATION consider that can be added, modified or deleted to enhance 
+			your user experience. To do this, they may use the contact form available on the website or send 
+			an email to info@rising.es.\n\n
+			
+			3.1.2.3. Beta testers, when contacting RISING, are required to submit accurate information on the 
+			outcome of the user experience. Not fulfilling this request may result in the elimination of the 
+			beta tester account.\n\n
+			
+			3.1.3. CONTACT FORM\n\n
+			
+			RISING offers in its WEB a form that allows users contact to RISING. To do so, the user must 
+			provide his name and email. This form is available to users so they can send RISING any question, 
+			suggestion, comment, complaint or any other necessary communication.\n\n
+			
+			3.2. APPLICATION DESCRIPTION\n\n
+			
+			3.2.1. ACCEPTANCE OF TERMS OF USE\n\n
+			
+			When installing the application, the user accepts these terms of use.\n\n
+			
+			3.2.2. DEFINITION\n\n
+			
+			3.2.2.1. La APLICACIÓN ofrece al usuario el acceso a una tienda online (en adelante, la TIENDA) 
+			desde la cual el usuario podrá adquirir las partituras existentes en el catálogo ofrecido por 
+			RISING. El usuario podrá descargar en su dispositivo las partituras que haya adquirido y las 
+			podrá utilizar de dos formas posibles: moviéndolas manualmente o automáticamente, ya sea 
+			seleccionando una velocidad de metrónomo o bien usando el micrófono del dispositivo.\n\n
+			
+			3.2.2.2. The APPLICATION is distributed for free. In addition, RISING will publish periodic 
+			updates ot the APPLICATION that will not accrue any cost to the user.\n\n
+			
+			3.2.3. DATA PROTECTION\n\n
+			
+			Any personal information provided to RISING while using the APPLICATION will only be used in 
+			accordance with the privacy policy statement of RISING.\n\n
+			
+			3.2.4. MICROPHONE USE\n\n
+			
+			The use of the microphone is limited exclusively for the purpose of moving automatically the 
+			scores that the musician is using. RISING, in no way whatsoever and under no circumstances, 
+			will use the microphone to collect personal information.\n\n
+			
+			3.2.5. LICENSE AND COPYRIGHT\n\n
+			
+			3.2.5.1. All trademarks, copyrights, databases and other intellectual property rights of the 
+			APPLICATION, whatever its nature, as well as the source code, are property of RISING.\n\n
+			
+			3.2.5.2. Hereby RISING offers a revocable, free, nonexclusive and international licence to use 
+			this APPLICATION on a personal or professional level within the limits set by these conditions.\n\n
+			
+			3.2.6. COPYRIGHT\n\n
+			
+			3.2.6.1. RISING does not own copyright of any of the scores sold through the STORE. All copyrights 
+			of these scores belong to their respective authors and publishers.\n\n
+			
+			3.2.6.2. The price that RISING applies to scores that are marketed in their STORE corresponds 
+			to RISING\'s work invested in digitizing the scores and adding them to the store. Under no 
+			circumstances RISING will receive any remuneration for copyrights belonging to scores that 
+			are not owned by RISING.\n\n
+			
+			3.2.7. TERMS OF USE\n\n
+			
+			3.2.7.1. The user will not act or allow third parties acting on their behalf to:\n\n
+			
+			- Make and distribute copies of the APPLICATION.\n
+			- Attempting to copy, reproduce, alter, modify, reverse engineer, disassemble, decompile, 
+			transfer, exchange or translate APPLICATION.\n
+			- Create any kind of project derived from the APPLICATION.\n\n
+			
+			3.2.7.2. The APPLICATION is provided to the user for free, for personal and not commercial use. 
+			RISING keeps the right to modify or disable the APPLICATION any time with the purpose of 
+			protecting it against the actions listed in the previous section.\n\n
+			
+			3.2.7.3. The user agrees that the terms of the agreement with the vendor of his mobile network 
+			(\'Mobile Service Provider\') will continue to apply for the use of the APPLICATION. Accordingly, 
+			it is possible that the Supplier may charge for Mobile Services connection to the network 
+			while the APPLICATION remains connected to the network, or that third party economic charges 
+			are produced. The user accepts the responsibility of charges that may arise.\n\n
+			
+			3.2.7.4. If the user is not the owner\'s billing phone or mobile device used to access the 
+			APPLICATION, it will be assumed that you have permission from the owner to use the APPLICATION.\n\n
+			
+			3.2.8. AVAILABILITY\n\n
+			
+			3.2.8.1. The application is available for mobile handheld devices operating with Android OS 
+			operating systems. RISING will make all reasonable efforts so the APPLICATION is available at 
+			all times. However, the user accepts that the APPLICATION delivery will be made through internet 
+			and mobile networks and, therefore, the quality and availability of the APPLICATION can be 
+			affected by factors beyond the responsible control of RISING.\n\n
+			
+			3.2.8.2. To use the APPLICATION, the user must have a compatible mobile device with internet 
+			access and meets the minimum specifications (\'Software Requirements\').\n\n
+			
+			3.2.8.3. Los requisitos del software son los siguientes: Dispositivos Android OS con los 
+			sistemas operativos Android OS 4.1 a OS 4.4. Idiomas: español e inglés. En dispositivos 
+			con lenguaje no soportado por la aplicación, ésta se mostrará en inglés.\n\n
+			
+			3.2.9. ACCOUNT DELETING\n\n
+			
+			3.2.9.1. The user is permitted to terminate his account at any time through the tool offered 
+			in the APPLICATION for this purpose, and without notifying RISING.\n\n
+			
+			3.2.9.2. The account deletion by the user is an irreversible process that results in the 
+			removal of all user information contained in the RISING database. This information includes 
+			the record of purchases made by the user in the STORE.\n\n
+			
+			3.2.9.3. The account deletion by the user results in loss of the balance accumulated in his 
+			account and the scores that were downloaded in his device, as well as the end of their 
+			contractual relationship with RISING.\n\n
+			
+			3.2.10. FINALIZATION\n\n
+			
+			3.2.10.1. RISING may terminate the use of the APPLICATION at any time, previous notice, which 
+			will be published on the BLOG.\n\n
+			
+			3.2.10.2. In case of this termination, RISING will refund all the money invested in the 
+			APPLICATION by the user. If the economical circumstances of RISING could not allow this 
+			full refund, RISING will refund as much as possible.\n\n
+			
+			3.2.10.3. At the end of such use, all rights and licenses granted to the user will also 
+			be terminated.\n\n
+			
+			4. INTELLECTUAL AND INDUSTRIAL PROPERTY\n\n
+			
+			4.1. Intellectual and industrial property on the web, graphic design and computer codes, 
+			as well as trade names, trademarks and logos are owned by RISING unless stated therein 
+			that the property of another.\n\n
+			
+			4.2. Any reproduction, distribution, commercialization or transformation of the contents that 
+			are not expressly authorized by the owners, is a violation of the rights of intellectual 
+			property protected by law.\n\n
+			
+			5. CONTENT AND PROPER USE\n\n
+			
+			5.1. RISING ensures that all content and services offered on the WEB respect the principle 
+			of human dignity, the principle of non-discrimination based on race, sex, religion, nationality, 
+			disability or any other personal or social circumstance and the principle of the protection 
+			of youth and childhood.\n\n
+			
+			5.2. Also, the user undertakes to make proper use of the contents and services of the WEB, 
+			which can never be used for illegal purposes, or which may be contrary to public policy, 
+			national defense or public health. Any use by the USER of content and services must respect 
+			the principles of the previous paragraph.\n\n
+			
+			6. PERSONAL DATA PROTECT\n\n
+			
+			6.1. RISING guarantees the security and confidentiality of the data provided by the user, 
+			in compliance with the provisions of Law 15/1999 of December 13, Protection of Personal Data, 
+			and in accordance with the commitment it undertakes to apply its Privacy Policy.\n\n
+			
+			6.2. The data provided by the user in the course of browsing, form filling and use of the WEB 
+			will be incorporated into a file responsibility of RISING, residing at Princesa Tenesoya street, 
+			number 75, 35118, Cruce de Arinaga, Agüimes, Las Palmas, Gran Canaria, Canary Islands, Spain, 
+			who deal directly or through the manager to be appointed under the laws and regulations and 
+			with the purpose of information, statistical and marketing as well as for carrying out 
+			promotional and advertising activities by any means, including by electronic means (including 
+			SMS, MMS, etc..) of the products offered on the website or by other companies of RISING, 
+			which may be of interest to the user to expand and improve products of RISING.\n\n
+			
+			6.3. All details about the nature and scope of the data collected and stored and its use 
+			can be read in the privacy policy statement and data protection.\n\n
+			
+			7. DURATION AND TERMINATION\n\n
+			
+			7.1. The provision of services of the PLATFORM and the APPLICATION is indefinite. RISING, 
+			however, is entitled to terminate, suspend or terminate unilaterally at any time and without 
+			notice, the service of the APPLICATION or any of the SERVICES.\n\n
+			
+			7.2. In case of termination of the services provided by the APPLICATION, RISING will refund all 
+			the money invested in the APPLICATION by the user. If the economical circumstances of RISING 
+			could not allow this full refund, RISING will refund as much as possible.
+			
+			7.3. The condition of registered user in the provided services through the PLATFORM or the 
+			APPLICATION involves the creation of a special contractual link between the user and RISING 
+			running indefinitely, so that either party may terminate the same in any time without notice 
+			by notice in writing or by email or through the tools made available in the PLATFORM for this 
+			purpose.\n\n
+			
+			7.4. RISING keeps the right to temporarily access the usage record, in order to identify 
+			evidence of misuse in the PLATFORM or the APPLICATION. RISING can temporarily or permanently 
+			disable the user\'s account and therefore the contractual relationship, in the following cases:\n\n
+			
+			- When the data provided in the registration are false or incomplete.\n
+			- Duplicated accounts registered by the same user.\n
+			- Excessive and unusual use of the SERVICES entailing disproportionate costs for the user.\n
+			- Improper use of the PLATFORM, the APPLICATION or any of its SERVICES.\n
+			- Violation of these provisions in the terms and conditions.\n
+			- When the statutory rights or rights of others are violated or infringed.\n
+			- For any legitimate interest of RISING in general and, in particular, to protect the rights of 
+			other users.\n\n
+			
+			8.JURISDICTION AND LAW\n\n
+			
+			8.1 These Terms of Use shall be governed by the provisions of Spanish legislation.\n\n
+			
+			8.2 In the case that any discrepancy or dispute arising from the interpretation or application of 
+			these Terms of Use, RISING and the CLIENT expressly waiving any other jurisdiction that may apply, 
+			subject to the jurisdiction of the Courts and Tribunals of RISING\’s address. And in the event that 
+			the USER resides outside of Spain, RISING and the USER, expressly waiving any other jurisdiction 
+			that may apply, subject to the jurisdiction of the Courts of Las Palmas.\n\n
+			
+			8.3 In the event of a misunderstanding caused by the translation of these Terms of Use or any other 
+			document of the WEB, the original document prevails at all times, in this case written in 
+			Spanish.\n\n
     	</string>
     
     <string name="condiciones_compra">Term of purchase</string>
@@ -315,8 +505,8 @@ You can buy scores in our store.</string>
 
 			4.3. If the CLIENT does not have enough CRDIT to purchase a score, can not buy it.
 			In this case, if the CLIENT wish to acquire this score should add more CREDIT into the account. \n\n
-
-			4.4. RISING don\'t handlecCREDIT returns.\n\n
+		
+			4.4. RISING does not handle CREDIT returns.\n\n			
 
 			5. DELIVERY\n\n
 
@@ -357,7 +547,11 @@ You can buy scores in our store.</string>
 			Terms of Use, RISING and the CLIENT expressly waiving any other jurisdiction he could be entitled, 
 			subject to the jurisdiction of the Courts and Tribunals of RISING address. And in the case that the CLIENT is 
 			resident outside of Spain, RISING and CLIENT expressly waive any other jurisdiction that may apply, 
-			subject to the jurisdiction of the Courts of Las Palmas de Gran Canaria. \n\n    	    
+			subject to the jurisdiction of the Courts of Las Palmas de Gran Canaria. \n\n
+			
+			9.3 In the event of a misunderstanding caused by the translation of these Terms of Use or any other 
+			document of the WEB, the original document prevails at all times, in this case written in 
+			Spanish.\n\n	    
     	</string>
 
     <string name="cambiar_pass">Change password</string>	

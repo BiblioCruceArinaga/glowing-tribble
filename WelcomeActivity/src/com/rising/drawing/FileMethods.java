@@ -7,36 +7,41 @@ import java.io.ObjectInputStream;
 import java.io.StreamCorruptedException;
 import java.util.ArrayList;
 
+import com.rising.drawing.figurasgraficas.Compas;
+import com.rising.drawing.figurasgraficas.Nota;
+import com.rising.drawing.figurasgraficas.Partitura;
+
 import android.os.Environment;
 
 public class FileMethods {
 
-	private ObjectInputStream fichero;
-	private Compas compas;
+	private transient final ObjectInputStream fichero;
+	private transient Compas compas;
 	
-	public FileMethods(String path_folder, String path) throws StreamCorruptedException, IOException {		
-		File f = new File(Environment.getExternalStorageDirectory() + path_folder + path);
-        FileInputStream is = new FileInputStream(f);
-		fichero = new ObjectInputStream(is);
-		
+	public FileMethods(final String pathFolder, final String path) 
+			throws StreamCorruptedException, IOException 
+	{		
+		final File file = new File(Environment.getExternalStorageDirectory() + pathFolder + path);
+
+        fichero = new ObjectInputStream(new FileInputStream(file));
 		compas = new Compas();
 	}
 	
-	public void cargarDatosDeFichero(Partitura horizontal, Partitura vertical) 
-			throws IOException, CloneNotSupportedException {
-		leerDatosBasicosDePartitura(horizontal, vertical);
+	public void cargarDatosDeFichero(final Partitura partitura) 
+			throws IOException, CloneNotSupportedException 
+	{
+		leerDatosBasicosDePartitura(partitura);
 		
 		byte byteLeido = fichero.readByte();
-		while (byteLeido != -128) {
-			
+		while (byteLeido != -128) 
+		{	
 			switch (byteLeido) {			
 				case 126:
 					leerFiguraGraficaCompas();
 					break;
 					
 				case 127:
-					horizontal.addCompas(compas);
-					vertical.addCompas(compas.clonar());
+					partitura.addCompas(compas);
 					compas = new Compas();
 					break;
 				
@@ -50,114 +55,150 @@ public class FileMethods {
 		
 		fichero.close();
 	}
-
-	private ArrayList<Byte> leerClaves() throws IOException {
-		ArrayList<Byte> arrayBytes = new ArrayList<Byte>();
+	
+	private void leerDatosBasicosDePartitura(final Partitura partitura) 
+			throws IOException 
+	{
+		final ArrayList<Byte> work = leerHastaAlmohadilla();
+		final ArrayList<Byte> creator = leerHastaAlmohadilla();
+		final byte staves = fichero.readByte();
+		final byte instrument = fichero.readByte();
+		final int numeroCompas = fichero.readByte();
 		
-		byte pentagrama = 0;
-		byte clave = 0;
-		byte alteracion = 0;
-		
-		byte numClefs = fichero.readByte();
-		arrayBytes.add(numClefs);
-		
-		for (int i=0; i<numClefs; i++) {
-			pentagrama = fichero.readByte();
-			clave = fichero.readByte();
-			alteracion = fichero.readByte();
-			
-			arrayBytes.add(pentagrama);
-			arrayBytes.add(clave);
-			arrayBytes.add(alteracion);
-		}
-
-		return arrayBytes;
+		partitura.setWork(work);
+		partitura.setCreator(creator);
+		partitura.setStaves(staves);
+		partitura.setInstrument(instrument);
+		partitura.setFirstNumber(numeroCompas);
 	}
 	
-	private void leerDatosBasicosDePartitura(Partitura horizontal, Partitura vertical) 
-			throws IOException {
-		ArrayList<Byte> work = leerHastaAlmohadilla();
-		ArrayList<Byte> creator = leerHastaAlmohadilla();
-		byte staves = fichero.readByte();
-		byte instrument = fichero.readByte();
-		ArrayList<Byte> divisions = leerHastaAlmohadilla();
-		int numeroCompas = fichero.readByte();
-		
-		vertical.setWork(work);
-		vertical.setCreator(creator);
-		vertical.setStaves(staves);
-		vertical.setInstrument(instrument);
-		vertical.setDivisions(divisions);
-		vertical.setFirstNumber(numeroCompas);
-		
-		horizontal.setWork(work);
-		horizontal.setCreator(creator);
-		horizontal.setStaves(staves);
-		horizontal.setInstrument(instrument);
-		horizontal.setDivisions(divisions);
-		horizontal.setFirstNumber(numeroCompas);
-	}
-	
-	private void leerFiguraGraficaCompas() throws IOException {
-		ElementoGrafico elemento = new ElementoGrafico();
+	private void leerFiguraGraficaCompas() throws IOException 
+	{
+		final ElementoGrafico elemento = new ElementoGrafico();
 
-		byte posicionFiguraGrafica = fichero.readByte();
+		final byte posicionFiguraGrafica = fichero.readByte();
 		elemento.addValue(posicionFiguraGrafica);
 		
-		byte figuraGrafica = fichero.readByte();
-		switch (figuraGrafica) {
-			case 1:
-			case 2:
-			case 3:
-			case 4:
-				elemento.addValue(figuraGrafica);
-				elemento.setPosition(leerHastaAlmohadilla());
-				compas.setDynamics(elemento);
-				break;
-
+		final byte figuraGrafica = fichero.readByte();
+		switch (figuraGrafica) 
+		{
 			case 25:
-				elemento.addValue(figuraGrafica);
-				elemento.setPosition(leerHastaAlmohadilla());
-				compas.setPedalStart(elemento);
+				leerPedal(elemento, figuraGrafica);
 				break;
 
 			case 26:
-				elemento.addValue(figuraGrafica);
-				elemento.setPosition(leerHastaAlmohadilla());
-				compas.setPedalStop(elemento);
+				leerPedal(elemento, figuraGrafica);
 				break;
 
 			case 27:
-				elemento.addAllValues(leerHastaAlmohadilla());
-				elemento.setPosition(leerHastaAlmohadilla());
-				compas.setWords(elemento);
+				leerIndicacionTextual(elemento);
 				break;
 
 			case 28:
-				elemento.addValue(fichero.readByte());
-				elemento.setPosition(leerHastaAlmohadilla());
-				compas.addBarline(elemento);
+				leerBarraVertical(elemento);
 				break;
 
 			case 30:
-				elemento.addAllValues(leerClaves());
-				elemento.setPosition(leerHastaAlmohadilla());
-				compas.addClef(elemento);
+				leerClave(elemento);
 				break;
 		
 			case 31:
-				elemento.addValue(fichero.readByte());
-				elemento.setPosition(leerHastaAlmohadilla());
-				compas.setTime(elemento);
+				leerTempo(elemento);
 				break;
 				
-			default: 
+			case 32:
+				leerQuintas(elemento);
+				break;
+				
+			case 33:
+			case 34:
+			case 35:
+			case 36:
+				leerCrescendoODiminuendo(elemento, figuraGrafica);
+				break;
+				
+			default:
+				leerIntensidad(elemento, figuraGrafica);
 				break;
 		}
 	}
 	
-	private ArrayList<Byte> leerHastaAlmohadilla() throws IOException {
-		ArrayList<Byte> bytesArray = new ArrayList<Byte>();
+	private void leerPedal(ElementoGrafico elemento, byte figuraGrafica) 
+			throws IOException
+	{
+		elemento.addValue(figuraGrafica);
+		elemento.setPosition(leerHastaAlmohadilla());
+		
+		if (figuraGrafica == 25) {
+			compas.addPedalStart(elemento);
+		} else {
+			compas.addPedalStop(elemento);
+		}
+	}
+	
+	private void leerIndicacionTextual(ElementoGrafico elemento) throws IOException 
+	{
+		elemento.addAllValues(leerHastaAlmohadilla());
+		elemento.setPosition(leerHastaAlmohadilla());
+		
+		compas.addWords(elemento);
+	}
+	
+	private void leerBarraVertical(ElementoGrafico elemento) throws IOException
+	{
+		elemento.addValue(fichero.readByte());
+		elemento.setPosition(leerHastaAlmohadilla());
+		
+		compas.addBarline(elemento);
+	}
+	
+	private void leerClave(ElementoGrafico elemento) throws IOException
+	{
+		elemento.addValue(fichero.readByte());
+		elemento.addValue(fichero.readByte());
+		elemento.setPosition(leerHastaAlmohadilla());
+		
+		compas.addClef(elemento);
+	}
+	
+	private void leerTempo(ElementoGrafico elemento) throws IOException
+	{
+		elemento.addValue(fichero.readByte());
+		elemento.setPosition(leerHastaAlmohadilla());
+		
+		compas.setTime(elemento);
+	}
+	
+	private void leerQuintas(ElementoGrafico elemento) throws IOException
+	{
+		elemento.addValue(fichero.readByte());
+		elemento.addValue(fichero.readByte());
+		elemento.setPosition(leerHastaAlmohadilla());
+		
+		compas.setFifths(elemento);
+	}
+	
+	private void leerCrescendoODiminuendo(ElementoGrafico elemento, byte figuraGrafica) 
+			throws IOException
+	{
+		elemento.addValue(figuraGrafica);
+		elemento.setPosition(leerHastaAlmohadilla());
+		
+		compas.addWedge(elemento);
+	}
+	
+	private void leerIntensidad(ElementoGrafico elemento, byte figuraGrafica)
+			throws IOException
+	{
+		elemento.addValue(figuraGrafica);
+		elemento.setPosition(leerHastaAlmohadilla());
+		
+		compas.addDynamics(elemento);
+	}
+	
+	private ArrayList<Byte> leerHastaAlmohadilla() throws IOException 
+	{
+		final ArrayList<Byte> bytesArray = new ArrayList<Byte>();
 		byte byteLeido = 0;
 		
 		do {
@@ -169,20 +210,21 @@ public class FileMethods {
 		return bytesArray;
 	}
 	
-	private void leerInfoNota(byte nota) throws IOException {
-		byte octava = fichero.readByte();
-		byte figuracion = fichero.readByte();
-		byte union = fichero.readByte();
-		byte idUnion = fichero.readByte();
-		byte plica = fichero.readByte();
-		byte voz = fichero.readByte();
-		byte pentagrama = fichero.readByte();
+	private void leerInfoNota(final byte nota) throws IOException 
+	{
+		final byte octava = fichero.readByte();
+		final byte figuracion = fichero.readByte();
+		final byte pulsos = fichero.readByte();
+		final byte union = fichero.readByte();
+		final byte idUnion = fichero.readByte();
+		final byte plica = fichero.readByte();
+		final byte voz = fichero.readByte();
+		final byte pentagrama = fichero.readByte();
 		
-		ArrayList<Byte> figurasGraficas = leerHastaAlmohadilla();
-		ArrayList<Byte> posicionEjeX = leerHastaAlmohadilla();
+		final ArrayList<Byte> figurasGraficas = leerHastaAlmohadilla();
+		final ArrayList<Byte> posicionEjeX = leerHastaAlmohadilla();
 
-		compas.addNote(new Nota(nota, octava, figuracion, union, 
-				idUnion, plica, voz, pentagrama, figurasGraficas, 
-				posicionEjeX));
+		compas.addNote(new Nota(nota, octava, figuracion, pulsos, union, 
+				idUnion, plica, voz, pentagrama, figurasGraficas, posicionEjeX));
 	}
 }
