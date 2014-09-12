@@ -30,8 +30,9 @@ import java.util.ArrayList;
  * 
  * El entero x representa la posición real del elemento.
  */
-public class ElementoGrafico {
-	private ArrayList<Byte> values;
+public class ElementoGrafico 
+{
+	private transient final ArrayList<Byte> values;
    
 	private int position;
     private int x;
@@ -41,11 +42,12 @@ public class ElementoGrafico {
         position = 0;
     }
     
-    private String bytesArrayToString(ArrayList<Byte> array) {
+    private String bytesArrayToString(final ArrayList<Byte> array) 
+    {
     	String string = "";
-        int num = array.size();
         int intToASCII = 0;
         
+        final int num = array.size();
         for (int i=0; i<num; i++) {
         	intToASCII = array.get(i);
         	string += Character.toString((char) intToASCII);
@@ -54,42 +56,52 @@ public class ElementoGrafico {
         return string;
     }
     
-    public int getPosition() {
+    public int getPosition() 
+    {
         return position;
     }
     
-    public byte getValue(int index) {
+    public byte getValue(final int index) 
+    {
         return values.get(index);
     }
     
-    public int getX() {
+    public int getX() 
+    {
     	return x;
     }
     
-    public ArrayList<Byte> getValues() {
+    public ArrayList<Byte> getValues() 
+    {
         return values;
     }
     
-    public void setX(int x) {
+    public void setX(final int x) 
+    {
     	this.x = x;
     }
     
-    public void setPosition(int position) {
+    public void setPosition(final int position) 
+    {
     	this.position = position;
     }
     
-    public void setPosition(ArrayList<Byte> position) {
-        String positionString = bytesArrayToString(position);
+    public void setPosition(final ArrayList<Byte> position) 
+    {
+        final String positionString = bytesArrayToString(position);
         
-        if (!positionString.equals("")) 
+        if (!"".equals(positionString)) {
         	this.position = Integer.parseInt(positionString);
+        }
     }
     
-    public void addValue(byte value) {
+    public void addValue(final byte value) 
+    {
         values.add(value);
     }
     
-    public void addAllValues(ArrayList<Byte> allValues) {
+    public void addAllValues(final ArrayList<Byte> allValues) 
+    {
         values.addAll(allValues);
     }
 }

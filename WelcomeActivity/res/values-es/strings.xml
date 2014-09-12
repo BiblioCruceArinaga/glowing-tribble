@@ -184,13 +184,13 @@
     
     <string name="terminos_condiciones">Términos y condiciones</string>
     	<string name="terminos">
-    	    AVISO LEGAL\n\n
 
-			Para dar cumplimiento con lo establecido en los artículos 9 y 10 de la Ley 34/2002, de 11 de julio, de 
-			Servicios de la Sociedad de la Información y de Comercio Electrónico, a continuación se indican los datos de 
-			información general de este sitio web:\n\n
+			Para dar cumplimiento con lo establecido en los artículos 9 y 10 de la Ley 34/2002, 
+			de 11 de julio, de Servicios de la Sociedad de la Información y de Comercio Electrónico, 
+			a continuación se indican los datos de información general de este sitio web:\n\n
 			
-			Titular: RISING S.C.P. \n
+			Titular: RISING S.C.P.\n
+
 			Dirección: C/ Princesa Tenesoya 75, 35118, Cruce de Arinaga, Agüimes, Las Palmas.\n
 			Correo electrónico: info@rising.es\n
 			CIF: J76167253\n\n
@@ -238,26 +238,42 @@
 			-Un enlace que lleva al usuario a la página de descarga de la APLICACIÓN.\n
 			-Un formulario mediante el cual el usuario puede crear una cuenta de beta tester que le permite acceder a la APLICACIÓN.\n
 			-Un formulario mediante el cual el usuario puede contactar con RISING.\n\n
+
 			
 			La prestación de los servicios de la PLATAFORMA enunciados anteriormente tiene carácter gratuito.\n\n
 			
 			3.1.1. ENLACE A LA PÁGINA DE DESCARGA\n\n
 			
-			3.1.1.1. RISING ofrece en su WEB un enlace que permite al usuario acceder a la página de descarga de la APLICACIÓN, sin restricciones de ningún tipo.\n\n
+			3.1.1.1. RISING ofrece en su WEB un enlace que permite al usuario acceder a la página de descarga 
+			de la APLICACIÓN, sin restricciones de ningún tipo.\n\n
 			
-			3.1.1.2. La página de descarga de la APLICACIÓN se encuentra alojada en servidores de terceros. Por tanto, RISING no se responsabiliza de los fallos técnicos o incompatibilidades que se puedan derivar de esta circunstancia.\n\n
+			3.1.1.2. La página de descarga de la APLICACIÓN se encuentra alojada en servidores de terceros. 
+			Por tanto, RISING no se responsabiliza de los fallos técnicos o incompatibilidades que se puedan 
+			derivar de esta circunstancia.\n\n
 			
-			3.1.2. FORMULARIO DE REGISTRO COMO BETA TESTER \n\n
+			3.1.2. FORMULARIO DE REGISTRO COMO BETA TESTER\n\n
 			
-			3.1.2.1. RISING ofrece en su WEB un formulario que permite al usuario crear una cuenta en la WEB como beta tester. La cuenta de beta tester permite al usuario acceder en exclusiva a la APLICACIÓN.\n\n
+			3.1.2.1. RISING ofrece en su WEB un formulario que permite al usuario crear una cuenta en la 
+			WEB como beta tester. La cuenta de beta tester permite al usuario acceder en exclusiva a la 
+			APLICACIÓN.\n\n
 			
-			3.1.2.2. Los beta testers que accedan a la APLICACIÓN están facultados para informar a RISING acerca de todos los fallos de funcionamiento que descubran durante su uso. Asimismo, también podrán enviar sugerencias u opiniones personales sobre aquellos aspectos de la APLICACIÓN que consideren que pueden ser añadidos, modificados o eliminados para mejorar su experiencia de uso. Para ello, podrán hacer uso de la opción habilitada para ello en la propia APLICACIÓN, del formulario de contacto disponible en la WEB o enviar un correo electrónico a info@rising.es.\n\n
+			3.1.2.2. Los beta testers que accedan a la APLICACIÓN están facultados para informar a RISING 
+			acerca de todos los fallos de funcionamiento que descubran durante su uso. Asimismo, también 
+			podrán enviar sugerencias u opiniones personales sobre aquellos aspectos de la APLICACIÓN que 
+			consideren que pueden ser añadidos, modificados o eliminados para mejorar su experiencia de uso. 
+			Para ello, podrán hacer uso de la opción habilitada para ello en la propia APLICACIÓN, del 
+			formulario de contacto disponible en la WEB o enviar un correo electrónico a info@rising.es.\n\n
 			
-			3.1.2.3. Los usuarios registrados como beta testers, en el momento de contactar con RISING, deben enviar información veraz sobre el resultado de su experiencia de uso. El incumplimiento de este requisito puede conllevar la eliminación de la cuenta de beta tester.\n\n 
+			3.1.2.3. Los usuarios registrados como beta testers, en el momento de contactar con RISING, 
+			deben enviar información veraz sobre el resultado de su experiencia de uso. El incumplimiento 
+			de este requisito puede conllevar la eliminación de la cuenta de beta tester.\n\n
 			
 			3.1.3. FORMULARIO DE CONTACTO\n\n
 			
-			RISING ofrece en su WEB un formulario que permite al usuario contactar con RISING. Para ello, el usuario deberá facilitar su nombre y su correo electrónico. Este formulario se pone a disposición de los usuarios para que puedan enviar a RISING cualquier duda, sugerencia, comentario, reclamación o cualquier otra comunicación que fuere menester.\n\n
+			RISING ofrece en su WEB un formulario que permite al usuario contactar con RISING. Para ello, 
+			el usuario deberá facilitar su nombre y su correo electrónico. Este formulario se pone a 
+			disposición de los usuarios para que puedan enviar a RISING cualquier duda, sugerencia, 
+			comentario, reclamación o cualquier otra comunicación que fuere menester.\n\n
 			
 			3.2. DESCRIPCIÓN DE LA APLICACIÓN\n\n
 			
@@ -267,127 +283,222 @@
 			
 			3.2.2. DEFINICIÓN\n\n
 			
-			3.2.2.1. La APLICACIÓN ofrece al usuario el acceso a una tienda online (en adelante, la TIENDA) desde la cual el usuario podrá adquirir las partituras existentes en el catálogo ofrecido por RISING. El usuario podrá descargar en su dispositivo las partituras que haya adquirido y las podrá utilizar de dos formas posibles: moviéndolas manualmente o automáticamente, ya sea seleccionando una velocidad de metrónomo o bien usando el micrófono del dispositivo.\n\n
+			3.2.2.1. La APLICACIÓN ofrece al usuario el acceso a una tienda online (en adelante, la TIENDA) 
+			desde la cual el usuario podrá adquirir las partituras existentes en el catálogo ofrecido 
+			por RISING. El usuario podrá descargar en su dispositivo las partituras que haya adquirido 
+			y las podrá utilizar de dos formas posibles: moviéndolas manualmente o automáticamente, ya 
+			sea seleccionando una velocidad de metrónomo o bien usando el micrófono del dispositivo.\n\n
 			
-			3.2.2.2. La APLICACIÓN se distribuye de forma gratuita. Además, RISING publicará actualizaciones periódicas de la APLICACIÓN que tampoco devengarán coste alguno por parte del usuario.\n\n
+			3.2.2.2. La APLICACIÓN se distribuye de forma gratuita. Además, RISING publicará actualizaciones 
+			periódicas de la APLICACIÓN que tampoco devengarán coste alguno por parte del usuario.\n\n
 			
 			3.2.3. PROTECCIÓN DE DATOS\n\n
 			
-			Cualquier información personal que se facilite a RISING durante el uso de la APLICACIÓN se utilizará únicamente en conformidad con la política de privacidad de RISING.\n\n
+			Cualquier información personal que se facilite a RISING durante el uso de la APLICACIÓN se 
+			utilizará únicamente en conformidad con la política de privacidad de RISING.\n\n
 			
 			3.2.4. USO DEL MICRÓFONO\n\n
 			
-			El uso del micrófono está limitado exclusivamente a la finalidad de mover automáticamente las partituras que el músico esté usando. RISING, en ningún caso y bajo ningún concepto, hará uso del micrófono para recoger información personal sobre el usuario.\n\n
+			El uso del micrófono está limitado exclusivamente a la finalidad de mover automáticamente 
+			las partituras que el músico esté usando. RISING, en ningún caso y bajo ningún concepto, 
+			hará uso del micrófono para recoger información personal sobre el usuario.\n\n
 			
 			3.2.5. LICENCIA Y DERECHOS DE PROPIEDAD\n\n
 			
-			3.2.5.1. Todas las marcas, derechos de autor, bases de datos y otros derechos de propiedad intelectual de la APLICACIÓN, cualquiera que sea su naturaleza, así como el código fuente, son propiedad de RISING.\n\n
+			3.2.5.1. Todas las marcas, derechos de autor, bases de datos y otros derechos de propiedad 
+			intelectual de la APLICACIÓN, cualquiera que sea su naturaleza, así como el código fuente, 
+			son propiedad de RISING.\n\n
 			
-			3.2.5.2. Por el presente, RISING ofrece una licencia revocable, gratuita, no exclusiva y de carácter internacional para utilizar esta APLICACIÓN en el ámbito personal o profesional dentro de los límites establecidos por estas condiciones de la APLICACIÓN.\n\n
+			3.2.5.2. Por el presente, RISING ofrece una licencia revocable, gratuita, no exclusiva y de 
+			carácter internacional para utilizar esta APLICACIÓN en el ámbito personal o profesional 
+			dentro de los límites establecidos por estas condiciones de la APLICACIÓN.\n\n
 			
 			3.2.6. COPYRIGHT\n\n
 			
-			3.2.6.1. RISING no es propietaria de los derechos de autor de ninguna de las partituras comercializadas a través de la TIENDA. Todos los derechos de autor de dichas partituras corresponden a sus respectivos autores y editores.\n\n
+			3.2.6.1. RISING no es propietaria de los derechos de autor de ninguna de las partituras 
+			comercializadas a través de la TIENDA. Todos los derechos de autor de dichas partituras 
+			corresponden a sus respectivos autores y editores.\n\n
 			
-			3.2.6.2. El precio que RISING aplica a las partituras que comercializa en su TIENDA corresponde al trabajo invertido por RISING en digitalizar dicha partitura e incorporarla a su tienda. En ningún momento RISING percibirá ninguna retribución por derechos de autor correspondientes a partituras que no sean propiedad de RISING.\n\n
+			3.2.6.2. El precio que RISING aplica a las partituras que comercializa en su TIENDA corresponde 
+			al trabajo invertido por RISING en digitalizar dicha partitura e incorporarla a su tienda. 
+			En ningún momento RISING percibirá ninguna retribución por derechos de autor correspondientes 
+			a partituras que no sean propiedad de RISING.\n\n
 			
 			3.2.7. CONDICIONES DE USO\n\n
 			
 			3.2.7.1. El usuario no actuará ni permitirá que terceras personas actúen en su nombre para:\n\n
 			
-			-Hacer y distribuir copias de la APLICACIÓN\n
-			-Intentar copiar, reproducir, alterar, modificar, hacer ingeniería inversa, desarmar, descompilar, transferir, intercambiar o traducir la APLICACIÓN\n
-			-Crear ninguna clase de proyecto derivado de la APLICACIÓN.\n\n
+			- Hacer y distribuir copias de la APLICACIÓN\n
+			- Intentar copiar, reproducir, alterar, modificar, hacer ingeniería inversa, desarmar, descompilar, 
+			transferir, intercambiar o traducir la APLICACIÓN\n
+			- Crear ninguna clase de proyecto derivado de la APLICACIÓN.\n\n
 			
-			3.2.7.2. La APLICACIÓN se entrega al usuario de manera gratuita para su uso personal y no comercial. RISING se reserva el derecho a modificar o deshabilitar la APLICACIÓN en cualquier momento con el fin de protegerla frente a las acciones listadas en el apartado anterior.\n\n
+			3.2.7.2. La APLICACIÓN se entrega al usuario de manera gratuita para su uso personal y no comercial. 
+			RISING se reserva el derecho a modificar o deshabilitar la APLICACIÓN en cualquier momento 
+			con el fin de protegerla frente a las acciones listadas en el apartado anterior.\n\n
 			
-			3.2.7.3. El usuario acepta que los términos del acuerdo con el proveedor de su red móvil («Proveedor de Servicios Móviles») continuarán en vigor durante el uso de la APLICACIÓN. En consecuencia, es posible que el Proveedor de Servicios Móviles cobre por los servicios de conexión a la red mientras la APLICACIÓN permanezca conectada a la red, o que se produzcan cargos económicos de terceros. El usuario acepta la responsabilidad de los cargos que pudieran surgir.\n\n
+			3.2.7.3. El usuario acepta que los términos del acuerdo con el proveedor de su red móvil 
+			(«Proveedor de Servicios Móviles») continuarán en vigor durante el uso de la APLICACIÓN. 
+			En consecuencia, es posible que el Proveedor de Servicios Móviles cobre por los servicios 
+			de conexión a la red mientras la APLICACIÓN permanezca conectada a la red, o que se produzcan 
+			cargos económicos de terceros. El usuario acepta la responsabilidad de los cargos que pudieran 
+			surgir.\n\n
 			
-			3.2.7.4. Si el usuario no es el titular de facturación del teléfono o dispositivo móvil utilizado para acceder a la APLICACIÓN, se asumirá que tiene permiso del titular para utilizar la APLICACIÓN.\n\n
+			3.2.7.4. Si el usuario no es el titular de facturación del teléfono o dispositivo móvil 
+			utilizado para acceder a la APLICACIÓN, se asumirá que tiene permiso del titular para 
+			utilizar la APLICACIÓN.\n\n
 			
 			3.2.8. DISPONIBILIDAD\n\n
 			
-			3.2.8.1. La APLICACIÓN está disponible para los dispositivos móviles portátiles que funcionen con los sistemas operativos Android OS. RISING hará todos los esfuerzos razonables para que la APLICACIÓN esté disponible en todo momento. No obstante, el usuario acepta que la entrega de la APLICACIÓN se realizará a través de internet y de las redes móviles y que, en consecuencia, la calidad y disponibilidad de la APLICACIÓN pueden verse afectadas por factores ajenos al control responsable de RISING.\n\n
+			3.2.8.1. La APLICACIÓN está disponible para los dispositivos móviles portátiles que funcionen 
+			con los sistemas operativos Android OS. RISING hará todos los esfuerzos razonables para que 
+			la APLICACIÓN esté disponible en todo momento. No obstante, el usuario acepta que la entrega 
+			de la APLICACIÓN se realizará a través de internet y de las redes móviles y que, en consecuencia, 
+			la calidad y disponibilidad de la APLICACIÓN pueden verse afectadas por factores ajenos al 
+			control responsable de RISING.\n\n
 			
-			3.2.8.2. Para poder utilizar la APLICACIÓN, el usuario debe tener un dispositivo móvil compatible, con conexión a internet y que cumpla las especificaciones mínimas («Requisitos del software»).\n\n
+			3.2.8.2. Para poder utilizar la APLICACIÓN, el usuario debe tener un dispositivo móvil compatible, 
+			con conexión a internet y que cumpla las especificaciones mínimas («Requisitos del software»).\n\n
 			
-			3.2.8.3. Los requisitos del software son los siguientes: Dispositivos Android OS con los sistemas operativos Android OS 4.1 a OS 4.4. Idiomas: español e inglés. En dispositivos con lenguaje no soportado por la aplicación, ésta se mostrará en inglés.\n\n
+			3.2.8.3. Los requisitos del software son los siguientes: Dispositivos Android OS con los 
+			sistemas operativos Android OS 4.1 a OS 4.4. Idiomas: español e inglés. En dispositivos con 
+			lenguaje no soportado por la aplicación, ésta se mostrará en inglés.\n\n
 			
 			3.2.9. ELIMINACIÓN DE LA CUENTA\n\n
 			
-			3.2.9.1. El usuario está facultado para dar de baja su cuenta en cualquier momento a través de la herramienta que se ofrece en la APLICACIÓN para tal fin, y sin necesidad de notificación previa a RISING.\n\n
+			3.2.9.1. El usuario está facultado para dar de baja su cuenta en cualquier momento a través de 
+			la herramienta que se ofrece en la APLICACIÓN para tal fin, y sin necesidad de notificación 
+			previa a RISING.\n\n
 			
-			3.2.9.2. La eliminación de la cuenta por parte del usuario es un proceso irreversible que tiene como consecuencia la eliminación de toda la información relativa al usuario contenida en la base de datos de RISING. Esta información incluye el registro de las compras efectuadas por el usuario en la TIENDA.\n\n
+			3.2.9.2. La eliminación de la cuenta por parte del usuario es un proceso irreversible que tiene 
+			como consecuencia la eliminación de toda la información relativa al usuario contenida en la base 
+			de datos de RISING. Esta información incluye el registro de las compras efectuadas por el usuario 
+			en la TIENDA.\n\n
 			
-			3.2.9.3. La eliminación de la cuenta por parte del usuario supone la pérdida tanto del saldo que tuviera acumulado en su cuenta, como de las partituras que tuviera descargadas en su dispositivo, así como el fin de su relación contractual con RISING.\n\n
+			3.2.9.3. La eliminación de la cuenta por parte del usuario supone la pérdida tanto del saldo 
+			que tuviera acumulado en su cuenta, como de las partituras que tuviera descargadas en su dispositivo, 
+			así como el fin de su relación contractual con RISING.\n\n
 			
 			3.2.10. FINALIZACIÓN\n\n
 			
-			3.2.10.1. RISING puede finalizar el uso de la APLICACIÓN en cualquier momento previa notificación, que será publicada en su BLOG.\n\n
+			3.2.10.1. RISING puede finalizar el uso de la APLICACIÓN en cualquier momento previa 
+			notificación, que será publicada en su BLOG.\n\n
 			
-			3.2.10.2. En caso de que se produzca dicha finalización, RISING se compromete a reembolsar el importe monetario invertido por el usuario en la APLICACIÓN. Si la situación económica de RISING impidiera hacer frente a la totalidad de dicho reembolso, RISING devolverá el máximo posible.\n\n
+			3.2.10.2. En caso de que se produzca dicha finalización, RISING se compromete a reembolsar el 
+			importe monetario invertido por el usuario en la APLICACIÓN. Si la situación económica de RISING 
+			impidiera hacer frente a la totalidad de dicho reembolso, RISING devolverá el máximo posible.\n\n
 			
-			3.2.10.3. Al finalizar dicho uso, también se pondrá fin a todos los derechos y licencias otorgados al usuario, lo que significa que el usuario deberá dejar de utilizar el software. \n\n
+			3.2.10.3. Al finalizar dicho uso, también se pondrá fin a todos los derechos y licencias 
+			otorgados al usuario, lo que significa que el usuario deberá dejar de utilizar el software.\n\n
 			
 			4. PROPIEDAD INTELECTUAL E INDUSTRIAL\n\n
 			
-			4.1. Los derechos de propiedad intelectual e industrial contenidos en la WEB, su diseño gráfico y códigos informáticos, así como los nombres comerciales, marcas y signos distintivos son titularidad de RISING, salvo que en las mismas se indique que pertenecen a otro titular.\n\n
+			4.1. Los derechos de propiedad intelectual e industrial contenidos en la WEB, su diseño gráfico 
+			y códigos informáticos, así como los nombres comerciales, marcas y signos distintivos son 
+			titularidad de RISING, salvo que en las mismas se indique que pertenecen a otro titular.\n\n
 			
-			4.2. Cualquier reproducción, distribución, comercialización o transformación de los contenidos que no haya sido expresamente autorizada por sus titulares, constituye una infracción de los derechos de propiedad intelectual e industrial protegidos por la Ley.\n\n
+			4.2. Cualquier reproducción, distribución, comercialización o transformación de los contenidos 
+			que no haya sido expresamente autorizada por sus titulares, constituye una infracción de los 
+			derechos de propiedad intelectual e industrial protegidos por la Ley.\n\n
 			
 			5. CONTENIDO Y USO ADECUADO\n\n
 			
-			5.1. RISING garantiza que todos los contenidos y servicios que se ofrecen en la WEB respetan el principio de dignidad de la persona, el principio de no-discriminación por motivos de raza, sexo, religión, opinión, nacionalidad, discapacidad o cualquier otra circunstancia personal y social, así como el principio de protección de la juventud y de la infancia.\n\n
+			5.1. RISING garantiza que todos los contenidos y servicios que se ofrecen en la WEB respetan el 
+			principio de dignidad de la persona, el principio de no-discriminación por motivos de raza, sexo, 
+			religión, opinión, nacionalidad, discapacidad o cualquier otra circunstancia personal y social, 
+			así como el principio de protección de la juventud y de la infancia.\n\n
 			
-			5.2. Asimismo, el usuario se compromete a realizar un buen uso de los contenidos y servicios de la WEB, que nunca podrán ser utilizados para actividades ilícitas, o que puedan ser contrarias al orden público, la defensa nacional o la salud pública. Cualquier utilización por parte del USUARIO de los contenidos y servicios habrá de respetar los principios indicados en el párrafo anterior.\n\n
+			5.2. Asimismo, el usuario se compromete a realizar un buen uso de los contenidos y servicios de 
+			la WEB, que nunca podrán ser utilizados para actividades ilícitas, o que puedan ser contrarias al 
+			orden público, la defensa nacional o la salud pública. Cualquier utilización por parte del 
+			USUARIO de los contenidos y servicios habrá de respetar los principios indicados en el párrafo 
+			anterior.\n\n
 			
 			6. PROTECIÓN DE DATOS PERSONALES\n\n
 			
-			6.1. RISING garantiza la seguridad y confidencialidad de los datos facilitados por el usuario, cumpliendo con lo dispuesto en la Ley Orgánica 15/1999, de 13 de Diciembre, de Protección de Datos de Carácter Personal y conforme al compromiso que adquiere al aplicar su Política de Privacidad.\n\n
+			6.1. RISING garantiza la seguridad y confidencialidad de los datos facilitados por el usuario, 
+			cumpliendo con lo dispuesto en la Ley Orgánica 15/1999, de 13 de Diciembre, de Protección de 
+			Datos de Carácter Personal y conforme al compromiso que adquiere al aplicar su Política de 
+			Privacidad.\n\n
 			
-			6.2. Los datos que el usuario facilite en el curso de su navegación, cumplimentación de formularios y uso de la WEB serán incorporados a un fichero responsabilidad de RISING, con domicilio en Calle Princesa Tenesoya nº75, 35118, Cruce de Arinaga, Agüimes, Las Palmas, Islas Canarias, España, quien los tratará directamente o a través del encargado que se designe con arreglo a la legislación vigente y con las finalidades de información, estadísticos y comercialización, así como para la realización de actividades promocionales y publicitarias mediante cualquier medio, incluso por medios electrónicos (incluyendo SMS, MMS, etc.), de los productos ofrecidos en el sitio web o por otras empresas de RISING, que puedan ser de interés del usuario para ampliar y mejorar los productos de RISING.\n\n
+			6.2. Los datos que el usuario facilite en el curso de su navegación, cumplimentación de 
+			formularios y uso de la WEB serán incorporados a un fichero responsabilidad de RISING, 
+			con domicilio en Calle Princesa Tenesoya nº75, 35118, Cruce de Arinaga, Agüimes, 
+			Las Palmas, Islas Canarias, España, quien los tratará directamente o a través del 
+			encargado que se designe con arreglo a la legislación vigente y con las finalidades de 
+			información, estadísticos y comercialización, así como para la realización de actividades 
+			promocionales y publicitarias mediante cualquier medio, incluso por medios electrónicos 
+			(incluyendo SMS, MMS, etc.), de los productos ofrecidos en el sitio web o por otras empresas 
+			de RISING, que puedan ser de interés del usuario para ampliar y mejorar los productos 
+			de RISING.\n\n
 			
-			6.3. Todos los detalles sobre la naturaleza y el alcance de los datos recogidos y almacenados así como de su utilización se pueden leer en la declaración de política de privacidad y protección de datos.\n\n
+			6.3. Todos los detalles sobre la naturaleza y el alcance de los datos recogidos y almacenados 
+			así como de su utilización se pueden leer en la declaración de política de privacidad y 
+			protección de datos.\n\n
 			
 			7. DURACIÓN Y TERMINACIÓN\n\n
 			
-			7.1. La prestación de los servicios de la PLATAFORMA y de la APLICACIÓN tiene una duración indefinida. RISING, no obstante, está facultada para dar por terminada, suspender o interrumpir unilateralmente, en cualquier momento y sin necesidad de preaviso, la prestación del servicio de la APLICACIÓN o de cualquiera de los SERVICIOS.\n\n
+			7.1. La prestación de los servicios de la PLATAFORMA y de la APLICACIÓN tiene una duración 
+			indefinida. RISING, no obstante, está facultada para dar por terminada, suspender o interrumpir 
+			unilateralmente, en cualquier momento y sin necesidad de preaviso, la prestación del servicio 
+			de la APLICACIÓN o de cualquiera de los SERVICIOS.\n\n
 			
-			7.2. En caso de que se produzca la terminación de los servicios prestados por la APLICACIÓN, RISING se compromete a reembolsar el importe monetario invertido por el usuario en la APLICACIÓN. Si la situación económica de RISING impidiera hacer frente a la totalidad de dicho reembolso, RISING devolverá el máximo posible.\n\n
+			7.2. En caso de que se produzca la terminación de los servicios prestados por la APLICACIÓN, 
+			RISING se compromete a reembolsar el importe monetario invertido por el usuario en la APLICACIÓN. 
+			Si la situación económica de RISING impidiera hacer frente a la totalidad de dicho reembolso, 
+			RISING devolverá el máximo posible.\n\n
 			
-			7.3. La condición de usuario registrado en los servicios prestados a través de la PLATAFORMA o de la APLICACIÓN supone la creación de un vinculo contractual especial entre el usuario y RISING que se ejecuta con carácter indefinido, por lo que cualquiera de las partes podrán denunciar el mismo en cualquier momento sin previo aviso notificándolo por escrito o por correo electrónico o a través de las herramientas puestas a disposición en la PLATAFORMA para tal fin.\n\n
+			7.3. La condición de usuario registrado en los servicios prestados a través de la PLATAFORMA o 
+			de la APLICACIÓN supone la creación de un vinculo contractual especial entre el usuario y RISING 
+			que se ejecuta con carácter indefinido, por lo que cualquiera de las partes podrán denunciar el 
+			mismo en cualquier momento sin previo aviso notificándolo por escrito o por correo electrónico 
+			o a través de las herramientas puestas a disposición en la PLATAFORMA para tal fin.\n\n
 			
-			7.4. RISING se reserva el derecho de acceder con carácter temporal al registro de uso habido, con objeto de aclarar indicios de uso incorrecto de la PLATAFORMA o de la APLICACIÓN, pudiendo desactivar temporalmente o incluso de forma permanente su cuenta y, en consecuencia, la relación contractual, en los siguientes casos:\n\n
+			7.4. RISING se reserva el derecho de acceder con carácter temporal al registro de uso habido, 
+			con objeto de aclarar indicios de uso incorrecto de la PLATAFORMA o de la APLICACIÓN, pudiendo 
+			desactivar temporalmente o incluso de forma permanente su cuenta y, en consecuencia, la relación 
+			contractual, en los siguientes casos:\n\n
 			
-			-Cuando los datos aportados en el registro sean falsos o incompletos.\n
-			-Por duplicidad de cuentas registradas por un mismo usuario.\n
-			-Por un uso excesivo e inusual de los SERVICIOS que suponga un gasto desproporcionado para el usuario.\n
-			-Por un incorrecto uso malintencionado de la PLATAFORMA, de la aplicación o de cualquiera de sus SERVICIOS.\n
-			-Por la violación de las presentes disposiciones contenidas en los términos y condiciones.\n
-			-Cuando los derechos legales o derechos de terceros son violados o vulnerados.\n
-			-En el caso de cualquier interés legítimo de RISING en general y, en particular, para proteger los derechos de los demás usuarios.\n\n
+			- Cuando los datos aportados en el registro sean falsos o incompletos.\n
+			- Por duplicidad de cuentas registradas por un mismo usuario.\n
+			- Por un uso excesivo e inusual de los SERVICIOS que suponga un gasto desproporcionado 
+			para el usuario.\n
+			- Por un incorrecto uso malintencionado de la PLATAFORMA, de la aplicación o de cualquiera de 
+			sus SERVICIOS.\n
+			- Por la violación de las presentes disposiciones contenidas en los términos y condiciones.\n
+			- Cuando los derechos legales o derechos de terceros son violados o vulnerados.\n
+			- En el caso de cualquier interés legítimo de RISING en general y, en particular, para proteger 
+			los derechos de los demás usuarios.\n
 			
-			8.JURISDICCION Y LEGISLACION APLICABLE\n
+			8.JURISDICCION Y LEGISLACION APLICABLE\n\n
 			
-			8.1 Las presentes Condiciones de Uso se regirán por lo dispuesto en la legislación española.\n
+			8.1 Las presentes Condiciones de Uso se regirán por lo dispuesto en la legislación española.\n\n
 			
-			8.2 En el caso de que se produzca cualquier discrepancia o controversia con motivo de la interpretación o la aplicación de las presentes Condiciones de Uso, RISING y el CLIENTE, con renuncia expresa a cualquier otro fuero que pudiera corresponderles, se someten a la jurisdicción de los Juzgados y Tribunales del domicilio de RISING. Y en el supuesto de que el USUARIO tenga su domicilio fuera de España, RISING y el USUARIO, con renuncia expresa a cualquier otro fuero que pudiera corresponderles, se someten a la jurisdicción de los Juzgados y Tribunales de Las Palmas.\n
+			8.2 En el caso de que se produzca cualquier discrepancia o controversia con motivo de la 
+			interpretación o la aplicación de las presentes Condiciones de Uso, RISING y el CLIENTE, con 
+			renuncia expresa a cualquier otro fuero que pudiera corresponderles, se someten a la jurisdicción 
+			de los Juzgados y Tribunales del domicilio de RISING. Y en el supuesto de que el USUARIO tenga 
+			su domicilio fuera de España, RISING y el USUARIO, con renuncia expresa a cualquier otro fuero 
+			que pudiera corresponderles, se someten a la jurisdicción de los Juzgados y Tribunales de Las 
+			Palmas.\n\n
 			
-			8.3 En el caso de que se produzca una mala interpretación provocada por una traducción de las presentes Condiciones de Uso, o cualquier otro documento de la WEB, prevalecerá en todo momento el documento original, en este caso escrito en español.\n
-    	    
+			8.3 En caso de que se produzca una mala interpretación provocada por una traducción de las 
+			presentes Condiciones de Uso, o cualquier otro documento de la WEB, prevalecerá en todo momento 
+			el documento original, en este caso escrito en español.\n\n
     	</string>
     
     <string name="condiciones_compra">Política de privacidad</string>
     	<string name="condiciones">
+
     	    Mediante el presente comunicado, RISING S.C.P. (en adelante, RISING) con domicilio en C/ Princesa Tenesoya 75, 35118, Cruce de Arinaga, Agüimes, Las Palmas, pone en conocimiento de los consumidores y usuarios del sitio web www.scores.rising.es su Política de Protección de Datos de Carácter Personal para que los usuarios determinen libre y voluntariamente si desean facilitar a RISING los datos personales que se les requieran por cualquier medio en relación a una solicitud de suscripción, registro o cumplimentación de cualesquiera formulario de datos online.\n\n\n
 			
 			¿Qué información recopilamos?\n
 			
 			Te solicitamos información cuando rellenas el formulario para registrarte como beta tester en nuestra aplicación. Concretamente, tu dirección de correo electrónico, un nombre para tu cuenta (que no tiene por qué ser tu verdadero nombre) y una contraseña.\n\n
-			
 			Cuando contactas con nosotros a través de nuestro formulario de contacto, también te solicitamos tu nombre y tu dirección de correo electrónico. Por lo demás, puedes visitar nuestro sitio web de forma anónima.\n\n
 			
 			¿Para qué usamos tus datos?\n
+
 			
 			Toda la información que nos proporcionas se usará para los siguientes supuestos:\n
 			
@@ -401,24 +512,31 @@
 			
 			Implementamos una serie de medidas destinadas a mantener la seguridad de tu información personal cuando introduces, envías o accedes a tu información personal.\n\n
 			
+
 			Toda la información relativa a tu tarjeta de débito / crédito o a la cuenta de tu servicio de pago online es transmitida mediante la tecnología Secure Socket Layer (SSL) y luego encriptada en la base de datos de nuestro proveedor de pasarela de pago, y sólo accesible por aquéllos autorizados de forma especial a esos sistemas, que mantienen la información confidencial.\n\n
+
 			
 			Después de una transacción, tu información privada (tarjetas de débito / crédito, números de seguridad social, etc.) no se almacenará en nuestros servidores.\n\n
 			
 			¿Usamos cookies?\n
+
 			
 			No usamos cookies.\n\n
 			
 			¿Revelamos información a terceros?\n
 			
 			No vendemos, comerciamos ni transferimos tu información personal a terceros. No obstante, podremos revelar tu información cuando sea necesario para cumplir la ley o para proteger nuestros derechos o los de otros, nuestra propiedad y nuestra seguridad.\n\n
+
 			
 			Términos y condiciones\n
 			
+
 			Puedes leer nuestros términos y condiciones en nuestra web rising.es.\n\n
+
 			
 			Tu consentimiento\n
 			
+
 			Al hacer uso de nuestro sitio web, manifiestas estar de acuerdo con esta política de privacidad.\n\n
 			
 			Cambios en la Política de Privacidad\n
@@ -430,6 +548,7 @@
 			Si tienes alguna pregunta en relación con esta política de privacidad, puedes contactar con nosotros usando la información a continuación:\n\n
 			
 			Correo electrónico: info@rising.es\n\n    	    
+
     	</string>
 
     <string name="cambiar_pass">Cambiar contraseña</string>	
