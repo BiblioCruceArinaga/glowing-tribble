@@ -133,7 +133,10 @@ public class MeasureReadjuster
 	 * El segundo paso consiste en, siguiendo con la analogía del word,
 	 * "justificar" las figuras gráficas. Para ello hay que calcular,
 	 * del ancho sobrante de la derecha, cuánto le corresponde a cada
-	 * una y asignárselo.
+	 * una y asignárselo. A cada elemento se le suma una distancia cada 
+	 * vez mayor, ya que de lo contrario sólo estaríamos desplazándolos 
+	 * todos pero manteniéndolos a la misma distancia entre sí mismos 
+	 * que antes
 	 */
 	
 	public void reajustarCompases(final Partitura partitura, final int primerCompas, final int ultimoCompas) 
@@ -235,8 +238,8 @@ public class MeasureReadjuster
         	final int numElementos = xsDeNotasYClaves.size() - 1;
         	final int anchoPorElemento = numElementos > 0 ? anchoADistribuir / numElementos : 0;
         	
-        	reajustarNotasYClaves(compas, xsDeNotasYClaves, anchoPorElemento);
         	reajustarFigurasGraficas(compas, anchoPorElemento);
+        	reajustarNotasYClaves(compas, xsDeNotasYClaves, anchoPorElemento);
         }
 	}
 
@@ -271,8 +274,10 @@ public class MeasureReadjuster
 
     	for (int i=0; i<compas.numTextos(); i++) 
     	{
-    		final int multiplicador = xsDelCompas.indexOf(compas.getTexto(i).x);
-        	compas.getTexto(i).x = compas.getTexto(i).x + anchoPorNota * multiplicador;
+    		if (compas.getTexto(i).x != xPrimeraNota) {
+	    		final int multiplicador = xsDelCompas.indexOf(compas.getTexto(i).x);
+	        	compas.getTexto(i).x = compas.getTexto(i).x + anchoPorNota * multiplicador;
+    		}
     	}
         
         for (int i=0; i<compas.numCrescendos(); i++) 
@@ -298,20 +303,18 @@ public class MeasureReadjuster
         }
 	}
 	
-	//  A cada elemento se le suma una distancia cada vez
-	//  mayor, ya que de lo contrario sólo estaríamos
-	//  desplazándolos todos pero manteniéndolos a la misma
-	//  distancia entre sí mismos que antes
 	private void reajustarNotasYClaves(final Compas compas, 
 			final ArrayList<Integer> xsDeElementos, final int anchoPorNota) 
 	{
+		final int xPrimeraNota = compas.saberXPrimeraNota();
     	final ArrayList<Nota> notas = compas.getNotas();
-    	final int numNotas = notas.size();
     	
-    	for (int j=0;j<numNotas;j++) 
+    	for (int j=0;j<notas.size();j++) 
     	{
-			final int multiplicador = xsDeElementos.indexOf(notas.get(j).getX());
-			notas.get(j).setX(notas.get(j).getX() + anchoPorNota * multiplicador);
+    		if (notas.get(j).getX() != xPrimeraNota) {
+				final int multiplicador = xsDeElementos.indexOf(notas.get(j).getX());
+				notas.get(j).setX(notas.get(j).getX() + anchoPorNota * multiplicador);
+    		}
     	}
     	
     	for (int j=0; j<compas.numClaves(); j++) 

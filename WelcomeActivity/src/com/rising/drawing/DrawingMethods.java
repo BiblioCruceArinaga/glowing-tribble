@@ -357,13 +357,14 @@ public class DrawingMethods
 	{
 		final int desplazamiento = obtenerDesplazamientoDeNota(nota);
 		ordenesDibujo.add( new OrdenDibujo(
-				calculador.obtenerImagenDeCabezaDeNota(nota), 
+			calculador.obtenerImagenDeCabezaDeNota(nota), 
 				nota.getX() + desplazamiento, nota.getY()));
 	}
 	
 	private int obtenerDesplazamientoDeNota(final Nota nota)
 	{
 		int desplazamiento = 0;
+		
 		if (nota.desplazadaALaIzquierda()) {
 			desplazamiento -= config.anchoCabezaNota;
 		}
@@ -569,9 +570,8 @@ public class DrawingMethods
 		int xSiguienteBeams = notaSig.getX();
 		if (notaSig.haciaArriba()) 
 		{
-			final int anchoCabezaNota = 
-				partitura.getCompas(indCompasSig).getNota(indNotaSig).notaDeGracia() ? 
-					config.anchoCabezaNotaGracia : config.anchoCabezaNota;
+			final int anchoCabezaNota = notaSig.notaDeGracia() ? 
+				config.anchoCabezaNotaGracia : config.anchoCabezaNota;
 			
 			xSiguienteBeams += anchoCabezaNota;
 		}

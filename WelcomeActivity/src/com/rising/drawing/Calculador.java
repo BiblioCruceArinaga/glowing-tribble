@@ -382,11 +382,11 @@ public class Calculador
 	
 	private int calcularPosicionesDeNotas(final Compas compas) 
 	{
-		final ArrayList<Nota> notas = compas.getNotas();
-		final int numNotas = notas.size();
-
 		int mayorDistanciaX = 0;
 		
+		final ArrayList<Nota> notas = compas.getNotas();
+
+		final int numNotas = notas.size();
 		for (int i=0; i<numNotas; i++) 
 		{
 			final int xDeNota = calcularPosicionesDeNota(compas, notas.get(i));
